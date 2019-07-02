@@ -268,6 +268,24 @@ estate_burghers =
 		}
 	}
 	custom_name = {
+		desc = estate_elysian_burghers_delfini
+		trigger = {
+			has_country_flag = nhs_new_flight_sold_morea_to_venice
+			has_country_flag = nhs_new_flight_taken_venetians
+			has_country_modifier = nhs_no_merchant_class
+			nhs_is_elysia = yes
+		}
+	}
+	custom_name = {
+		desc = estate_elysian_burghers_trevisano
+		trigger = {
+			NOT = { has_country_flag = nhs_new_flight_sold_morea_to_venice }
+			has_country_flag = nhs_new_flight_taken_venetians
+			has_country_modifier = nhs_no_merchant_class
+			nhs_is_elysia = yes
+		}
+	}
+	custom_name = {
 		desc = estate_elysian_burghers
 		trigger = {
 			nhs_is_elysia = yes
@@ -573,6 +591,59 @@ estate_burghers =
 		}
 	}
 	interaction = {
+		name = "NHS_GRANT_AUTONOMY"
+		icon = 24
+		
+		years_between_use = 10
+		potential = {
+			has_country_flag = nhs_new_flight_taken_venetians
+		}
+		trigger = {
+			estate_influence = {
+				estate = estate_burghers
+				influence = 40
+			}
+			any_owned_province = {
+				has_estate = estate_burghers
+			}
+		}
+		
+		effect = {
+			custom_tooltip = nhs_venerian_autonomy_tt
+			hidden_effect = {
+				every_owned_province = {
+					limit = { has_estate = estate_burghers }
+					add_local_autonomy = 25
+					add_province_modifier = {
+						name = "nhs2_venetian_benign_neglect"
+						duration = 3650
+					}
+				}
+			}
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 25
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = EST_VAL_VENETIAN_AUTONOMY
+				influence = 10
+				duration = 3650
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_maratha
+					loyalty = 30
+				}				
+			}
+		}
+	}
+	interaction = {
 		name = "RECRUIT_MINISTER"
 		icon = 10
 		
@@ -875,13 +946,82 @@ estate_burghers =
 		}
 		
 		effect = {
-			create_admiral = {
-				tradition = 40
+			if = {
+				limit = {
+					has_country_flag = nhs_new_flight_taken_venetians
+				}
+				create_admiral = {
+					tradition = 60
+					add_manuever = 1
+				}
+			}
+			else = {
+				create_admiral = {
+					tradition = 40
+				}
 			}
 			add_estate_influence_modifier = {
 				estate = estate_burghers
 				desc = EST_VAL_GRANTED_ADMIRALSHIP
 				influence = 20
+				duration = 3650
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	interaction = {
+		name = "NHS_RECRUIT_EXPLORER"
+		icon = 5
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_nhs_nobility_disaster }
+			NOT = { has_disaster = estate_nhs_apogonoi_disaster }
+			NOT = { has_disaster = estate_nhs_pipiltin_disaster }
+			has_country_flag = nhs_new_flight_taken_venetians
+			num_of_ports = 1
+		}
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}	
+			estate_influence = {
+				estate = estate_burghers
+				influence = 40
+			}			
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = nhs_new_flight_taken_venetians
+				}
+				create_explorer = {
+					tradition = 60
+					add_manuever = 1
+				}
+			}
+			else = {
+				create_explorer = {
+					tradition = 40
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = EST_VAL_RECRUIT_EXPLORER
+				influence = 15
 				duration = 3650
 			}
 		}
@@ -994,6 +1134,60 @@ estate_burghers =
 		
 		ai_will_do = {
 			factor = 0
+		}
+	}
+	
+	interaction = {
+		name = "PROCURE_LOANS"
+		icon = 35
+		
+		years_between_use = 5
+		
+		trigger = {
+			is_bankrupt = no
+			estate_influence = {
+				estate = estate_burghers
+				influence = 15
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						estate_influence = {
+							estate = estate_burghers
+							influence = 50
+						}
+					}
+				}
+				add_loan = {
+					interest_modifier = -0.5
+					fixed_interest = yes
+					duration = 60
+				}
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 50
+					}
+				}
+				add_loan = {
+					interest_modifier = -1
+					fixed_interest = yes
+					duration = 60
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = EST_VAL_JAIN_LOANS
+				influence = 10
+				duration = 3650
+			}
+		}
+		ai_will_do = {
 		}
 	}
 }
