@@ -241,6 +241,29 @@ country_event = {
 			manuever = 6
 		}
 		1499 = { change_province_name = "Pythean Bay" }
+		# if = {
+			# limit = {
+				# any_province = {
+					# trade_goods = skoros_silk
+				# }
+			# }
+			# change_price = {
+				# trade_goods = skoros_silk
+				# key = NHS_SKOROS_FALLS
+				# value = 0.5
+				# duration = -1
+			# }
+		# }
+		# else = {
+			# hidden_effect = {
+				# change_price = {
+					# trade_goods = skoros_silk
+					# key = NHS_SKOROS_FALLS
+					# value = 0.5
+					# duration = -1
+				# }
+			# }
+		# }
 	}
 	
 	option = {
@@ -253,6 +276,29 @@ country_event = {
 			cost_multiplier = 0.5
 		}
 		1499 = { change_province_name = "Pythean Bay" }
+		# if = {
+			# limit = {
+				# any_province = {
+					# trade_goods = skoros_silk
+				# }
+			# }
+			# change_price = {
+				# trade_goods = skoros_silk
+				# key = NHS_SKOROS_FALLS
+				# value = 0.5
+				# duration = -1
+			# }
+		# }
+		# else = {
+			# hidden_effect = {
+				# change_price = {
+					# trade_goods = skoros_silk
+					# key = NHS_SKOROS_FALLS
+					# value = 0.5
+					# duration = -1
+				# }
+			# }
+		# }
 	}
 }
 
@@ -1302,7 +1348,6 @@ country_event = {
 }
 
 # Establish local militia/elysian-greek nation
-
 country_event = {
 	id = nhs2_mainlandevents.19
 	title = nhs2_mainlandevents19.t
@@ -1317,6 +1362,34 @@ country_event = {
 				culture = greek
 				continent = europe
 				NOT = { has_province_modifier = nhs2_base_of_operations }
+				NOT = {
+					OR = {
+						AND = {
+							ROOT = {
+								has_country_flag = nhs_bo_athens
+							}
+							province_id = 146
+						}
+						AND = {
+							ROOT = {
+								has_country_flag = nhs_bo_macedonia
+							}
+							province_id = 148
+						}
+						AND = {
+							ROOT = {
+								has_country_flag = nhs_bo_sparta
+							}
+							province_id = 145
+						}
+						AND = {
+							ROOT = {
+								has_country_flag = nhs_bo_rhodes
+							}
+							province_id = 320
+						}
+					}
+				}
 				NOT = { province_id = 151 }
 			}
 			NOT = { has_construction = missionary }
@@ -2355,7 +2428,7 @@ country_event = {
 		clr_country_flag = nhs_supply_lines
 		clr_country_flag = nhs_supply_lines_secured
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
 					has_province_modifier = nhs2_base_of_operations
 				}
@@ -2689,7 +2762,104 @@ country_event = {
 #	}
 #}
 
-
+# Regain secrets after recapturing Constantinople (triggers from mission)
+country_event = {
+	id = nhs2_mainlandevents.27
+	title = nhs2_mainlandevents.27.t
+	desc = nhs2_mainlandevents.27.d
+	picture = palailogos_eventPicture
+	
+	is_triggered_only = yes
+	
+	# trigger = {
+		# nhs_condition_all_ely = { KOMANDA = tag }
+		# owns_core_province = 151
+		# OR = {
+			# NOT = { has_country_flag = nhs_new_flight_taken_fire }
+			# NOT = { has_country_flag = nhs_new_flight_taken_books }
+			# NOT = { has_country_flag = nhs_new_flight_taken_silk }
+		# }
+	# }
+	
+	option = {
+		name = "nhs2_mainlandevents.27.a"
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_new_flight_taken_fire }
+			}
+			set_country_flag = nhs_searching_for_naphtha
+			# add_country_modifier = {
+				# name = nhs_greekfire_update
+				# duration = -1
+			# }
+			custom_tooltip = nhs_naphtha_is_required_tt
+			set_country_flag = nhs_fire_discovery_delay
+			set_country_flag = nhs_fire_reform
+			set_country_flag = nhs2_had_greek_fire
+			# hidden_effect = {
+				# add_country_modifier = {
+					# name = nhs2_depleting_fire_fuel_timer
+					# duration = 3650
+					# hidden = yes
+				# }
+			# }
+			custom_tooltip = nhs_new_line_tt
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_new_flight_taken_books }
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							has_province_modifier = nhs_alexandrian_library_no_books_tm
+							has_province_modifier = nhs_alexandrian_library_no_books_tm_decay
+						}
+					}
+				}
+				custom_tooltip = nhs_upgrade_alexandrian_library_tt
+				hidden_effect = {
+					remove_province_triggered_modifier = nhs_alexandrian_library_no_books_tm
+					add_province_triggered_modifier = nhs_alexandrian_library_tm
+					if = {
+						limit = {
+							has_province_modifier = nhs_alexandrian_library_no_books_tm_decay
+						}
+						remove_province_triggered_modifier = nhs_alexandrian_library_no_books_tm_decay
+						clr_province_flag = nhs_ei_alexandrian_library_no_books_decay
+						set_province_flag = nhs_ei_alexandrian_library_decay
+						add_province_triggered_modifier = nhs_alexandrian_library_tm_decay
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = "nhs_secrets_books"
+					duration = -1
+				}
+				if = {
+					limit = {
+						any_province = {
+							OR = {
+								has_province_modifier = nhs_alexandrian_library_no_books_tm
+								has_province_modifier = nhs_alexandrian_library_no_books_tm_decay
+							}
+						}
+					}
+					custom_tooltip = nhs_books_delivered_later_tt
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_new_flight_taken_silk }
+			}
+			custom_tooltip = nhs_silk_from_europe_tt
+		}
+	}
+}
 
 
 # Regain claims

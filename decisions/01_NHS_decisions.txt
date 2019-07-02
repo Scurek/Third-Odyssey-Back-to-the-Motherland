@@ -583,12 +583,15 @@ country_decisions = {
 		major = yes
 		potential = {
 			nhs_is_elysia = yes
-			is_year = 1500
+			#is_year = 1500
+			NOT = { has_country_modifier = nhs_handicap_settlers }
 			NOT = {
 				2554 = {
 					OR = {
 						has_province_modifier = nhs_alexandrian_library_tm
 						has_province_modifier = nhs_alexandrian_library_tm_decay
+						has_province_modifier = nhs_alexandrian_library_no_books_tm
+						has_province_modifier = nhs_alexandrian_library_no_books_tm_decay
 					}
 				}
 			}
@@ -661,17 +664,36 @@ country_decisions = {
 				add_adm_power = -75
 				add_mil_power = -75
 			}
-			remove_country_modifier = nhs_secrets_books
-			2554 = {
-				tooltip = {
-					add_permanent_province_modifier = {
-						name = "nhs_alexandrian_library"
-						duration = -1
+			if = {
+				limit = {
+					has_country_modifier = nhs_secrets_books
+				}
+				remove_country_modifier = nhs_secrets_books
+				2554 = {
+					tooltip = {
+						add_permanent_province_modifier = {
+							name = "nhs_alexandrian_library"
+							duration = -1
+						}
+					}
+					add_base_tax = 2
+					hidden_effect = {
+						add_province_triggered_modifier = nhs_alexandrian_library_tm
 					}
 				}
-				add_base_tax = 2
-				hidden_effect = {
-					add_province_triggered_modifier = nhs_alexandrian_library_tm
+			}
+			else = {
+				2554 = {
+					tooltip = {
+						add_permanent_province_modifier = {
+							name = "nhs_alexandrian_library_no_books"
+							duration = -1
+						}
+					}
+					add_base_tax = 2
+					hidden_effect = {
+						add_province_triggered_modifier = nhs_alexandrian_library_no_books_tm
+					}
 				}
 			}
 		}
@@ -931,6 +953,8 @@ country_decisions = {
 				}
 				hidden_effect = {
 					add_province_triggered_modifier = nhs_seagate_guardians_tm
+					show_ambient_object = wonder_statue
+					show_ambient_object = wonder_statue_2
 				}
 			}
 			clr_country_flag = nhs_enable_guardians_decision

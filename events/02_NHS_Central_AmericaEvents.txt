@@ -362,7 +362,14 @@ country_event = {
 					limit = {
 						has_global_flag = nhs_msg_opm
 					}
-					country_event = { id = msg_arrival_events.4 days = 10 }
+					country_event = { id = msg_arrival_events.4 days = 5 }
+				}
+				capital_scope = {
+					cavalry = MSG
+					build_to_forcelimit = {
+						infantry = 1
+					}
+					transport = MSG
 				}
 				mesoamerica_pgroup = {
 					add_permanent_claim = MSG
@@ -454,7 +461,7 @@ country_event = {
 		add_prestige = -5
 		hidden_effect = {
 			MSG = {
-				country_event = { id = msg_arrival_events.4 days = 10 }
+				country_event = { id = msg_arrival_events.4 days = 5 }
 			}
 		}
 	}
@@ -491,25 +498,41 @@ country_event = {
 			add_government_reform = spartan_army
 		}
 		add_prestige = 10
-		random_owned_province = {
+		if = {
 			limit = {
-				has_port = yes
+				NOT = { army_size_percentage = 1 }
 			}
-			cavalry = ROOT
-			build_to_forcelimit = {
-				infantry = 1
+			random_owned_province = {
+				limit = {
+					has_port = yes
+				}
+				build_to_forcelimit = {
+					infantry = 1
+				}
 			}
-			transport = ROOT
 		}
 		if = {
 			limit = {
 				NOT = { has_global_flag = nhs_msg_opm }
 				is_at_war = no
-				exists = FROM
+				FROM = {
+					num_of_cities = 1
+				}
 			}
 			declare_war_with_cb = {
 				who = FROM
 				casus_belli = cb_annex
+			}
+			hidden_effect = {
+				every_province = {
+					limit = {
+						owned_by = FROM
+					}
+					every_country = {
+						limit = { tag = ROOT }
+						discover_province = PREV
+					}
+				}
 			}
 		}
 	}

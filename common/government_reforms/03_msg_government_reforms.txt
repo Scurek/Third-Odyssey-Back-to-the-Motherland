@@ -103,10 +103,7 @@ spartan_kingdom = {
 		custom_trigger_tooltip = {
 			tooltip = msg_cushed_nobility_not_tt
 			NOT = {
-				OR = {
-					has_reform = spartan_sovreignty
-					has_reform = msg_crush_nobles_ref
-				}
+				has_reform = spartan_sovreignty
 			}
 		}
 	}
@@ -139,10 +136,7 @@ spartan_sovreignty = {
 	trigger = {
 		custom_trigger_tooltip = {
 			tooltip = msg_cushed_nobility_tt
-			OR = {
-				has_reform = spartan_sovreignty
-				has_reform = msg_crush_nobles_ref
-			}
+			has_reform = spartan_sovreignty
 		}
 	}
 	legacy_equivalent = spartan_sovreignty_legacy
@@ -292,6 +286,9 @@ msg_economy1_ref = {
 		NOT = { has_reform = msg_economy2_ref }
 		NOT = { has_reform = msg_economy3_ref }
 	}
+	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
+	}
 	modifiers = {
 		dip_tech_cost_modifier = 0.1
 		production_efficiency = -0.20
@@ -334,6 +331,9 @@ msg_economy2_ref = {
 		}
 		NOT = { has_reform = msg_economy3_ref }
 	}
+	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
+	}
 	modifiers = {
 		production_efficiency = -0.15
 		build_time = 0.05
@@ -353,6 +353,7 @@ msg_economy3_ref = {
 		has_reform = msg_reformed_gold_mine
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		custom_tooltip = msg_pass_crush_to_remove_debuffs_tt
 		if = {
 			limit = {
@@ -361,7 +362,7 @@ msg_economy3_ref = {
 			if = {
 				limit = {
 					has_reform = msg_hellenic3_ref
-					has_reform = msg_economy3_ref
+					has_reform = msg_government3_ref
 				}
 				change_government_reform_progress = 700
 			}
@@ -376,7 +377,7 @@ msg_economy3_ref = {
 			if = {
 				limit = {
 					has_reform = msg_aztlan3_ref
-					has_reform = msg_economy3_ref
+					has_reform = msg_government3_ref
 				}
 				change_government_reform_progress = 700
 			}
@@ -387,8 +388,8 @@ msg_economy3_ref = {
 		else = {
 			if = {
 				limit = {
-					has_reform = msg_aztlan3_ref
 					has_reform = msg_christian3_ref
+					has_reform = msg_government3_ref
 				}
 				change_government_reform_progress = 700
 			}
@@ -530,6 +531,7 @@ msg_reformed_land = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve economy
 		if = {
 			limit = {
@@ -643,6 +645,7 @@ msg_reformed_trade_ports = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve economy
 		if = {
 			limit = {
@@ -760,6 +763,7 @@ msg_reformed_gold_mine = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve economy
 		if = {
 			limit = {
@@ -843,6 +847,9 @@ msg_government1_ref = {
 		NOT = { has_reform = msg_government2_ref }
 		NOT = { has_reform = msg_government3_ref }
 	}
+	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
+	}
 	modifiers = {
 		mil_tech_cost_modifier = 0.10
 		advisor_pool = -1
@@ -885,6 +892,9 @@ msg_government2_ref = {
 		}
 		NOT = { has_reform = msg_government3_ref }
 	}
+	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
+	}
 	modifiers = {
 		advisor_pool = -1
 		naval_forcelimit_modifier = -0.3
@@ -903,6 +913,7 @@ msg_government3_ref = {
 		has_reform = msg_naval_reform_yes
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		custom_tooltip = msg_pass_crush_to_remove_debuffs_tt
 		if = {
 			limit = {
@@ -937,8 +948,8 @@ msg_government3_ref = {
 		else = {
 			if = {
 				limit = {
-					has_reform = msg_aztlan3_ref
 					has_reform = msg_christian3_ref
+					has_reform = msg_economy3_ref
 				}
 				change_government_reform_progress = 700
 			}
@@ -1042,6 +1053,7 @@ msg_court_reform_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve government
 		if = {
 			limit = {
@@ -1092,22 +1104,29 @@ msg_diplomats_ref = {
 				}
 				stability = 1
 				treasury = 100
-			}
-			dip_power = 50
-			custom_trigger_tooltip = {
-				tooltip = msg_no_dips_before_conquest
-				NOT = {
-					any_country = {
-						technology_group = mesoamerican
-						capital_scope = {
-							province_group = mesoamerica_pgroup
-						}
-						NOT = {
-							is_subject_of = ROOT
+				custom_trigger_tooltip = {
+					tooltip = msg_no_dips_before_conquest
+					NOT = {
+						any_country = {
+							technology_group = mesoamerican
+							capital_scope = {
+								province_group = mesoamerica_pgroup
+							}
+							NOT = {
+								is_subject_of = ROOT
+							}
 						}
 					}
 				}
 			}
+			else = {
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 25
+					province_group = mesoamerica_pgroup
+					is_city = yes
+				}
+			}
+			dip_power = 50
 			government_reform_progress = 25
 			custom_trigger_tooltip = {
 				tooltip = msg_no_reform_in_past_year_tt
@@ -1166,6 +1185,7 @@ msg_diplomats_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve government
 		if = {
 			limit = {
@@ -1277,6 +1297,7 @@ msg_naval_reform_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve government
 		if = {
 			limit = {
@@ -1364,6 +1385,9 @@ msg_hellenic1_ref = {
 		NOT = { has_reform = msg_hellenic2_ref }
 		NOT = { has_reform = msg_hellenic3_ref }
 	}
+	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
+	}
 	modifiers = {
 		adm_tech_cost_modifier = 0.1
 		global_missionary_strength = -0.03
@@ -1406,6 +1430,9 @@ msg_hellenic2_ref = {
 		}
 		NOT = { has_reform = msg_hellenic3_ref }
 	}
+	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
+	}
 	modifiers = {
 		global_missionary_strength = -0.02
 		tolerance_own = -1
@@ -1425,6 +1452,7 @@ msg_hellenic3_ref = {
 		has_reform = msg_deify_leonidas_yes
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		custom_tooltip = msg_pass_crush_to_remove_debuffs_tt
 		custom_tooltip = msg_gain_700_rp_if_has_all_rel_tt
 		if = {
@@ -1537,6 +1565,7 @@ msg_spartan_heralds_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve religion
 		if = {
 			limit = {
@@ -1683,6 +1712,7 @@ msg_native_deities_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve religion
 		if = {
 			limit = {
@@ -1781,6 +1811,7 @@ msg_deify_leonidas_ref = {
 			add_corruption = -10
 		}
 		add_stability = 1
+		#custom_tooltip = msg_add_stability_after
 		add_adm_power = -50
 		country_event = { id = msg_reforms.5 }
 		change_government_reform_progress = -25
@@ -1828,6 +1859,7 @@ msg_deify_leonidas_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve religion
 		if = {
 			limit = {
@@ -1914,6 +1946,9 @@ msg_aztlan1_ref = {
 		NOT = { has_reform = msg_aztlan2_ref }
 		NOT = { has_reform = msg_aztlan3_ref }
 	}
+	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
+	}
 	modifiers = {
 		adm_tech_cost_modifier = 0.1
 		global_missionary_strength = -0.03
@@ -1956,6 +1991,9 @@ msg_aztlan2_ref = {
 		}
 		NOT = { has_reform = msg_aztlan3_ref }
 	}
+	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
+	}
 	modifiers = {
 		global_missionary_strength = -0.02
 		tolerance_own = -1
@@ -1975,6 +2013,7 @@ msg_aztlan3_ref = {
 		has_reform = msg_sacrifice_yes
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		custom_tooltip = msg_pass_crush_to_remove_debuffs_tt
 		custom_tooltip = msg_gain_700_rp_if_has_all_rel_tt
 		if = {
@@ -2097,6 +2136,7 @@ msg_aztlan_priesthood_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve religion
 		if = {
 			limit = {
@@ -2233,6 +2273,7 @@ msg_old_faith_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve religion
 		if = {
 			limit = {
@@ -2316,6 +2357,7 @@ msg_sacrifice_ref = {
 			add_corruption = -10
 		}
 		add_stability = 1
+		#custom_tooltip = msg_add_stability_after
 		add_adm_power = -50
 		add_legitimacy = -20
 		country_event = { id = msg_reforms.10 }
@@ -2364,6 +2406,7 @@ msg_sacrifice_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve religion
 		if = {
 			limit = {
@@ -2486,6 +2529,9 @@ msg_christian1_ref = {
 		NOT = { has_reform = msg_christian2_ref }
 		NOT = { has_reform = msg_christian3_ref }
 	}
+	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
+	}
 	modifiers = {
 		adm_tech_cost_modifier = 0.1
 		global_missionary_strength = -0.03
@@ -2551,6 +2597,9 @@ msg_christian2_ref = {
 		}
 		NOT = { has_reform = msg_christian3_ref }
 	}
+	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
+	}
 	modifiers = {
 		global_missionary_strength = -0.02
 		tolerance_own = -1
@@ -2581,6 +2630,7 @@ msg_christian3_ref = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		custom_tooltip = msg_pass_crush_to_remove_debuffs_tt
 		custom_tooltip = msg_gain_700_rp_if_has_all_rel_tt
 		if = {
@@ -2719,6 +2769,7 @@ msg_spartan_patriarch_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve religion
 		if = {
 			limit = {
@@ -2868,6 +2919,7 @@ msg_holy_army_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve religion
 		if = {
 			limit = {
@@ -3019,6 +3071,7 @@ msg_saint_leo_yes = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve religion
 		if = {
 			limit = {
@@ -3075,6 +3128,7 @@ msg_saint_leo_yes_sinner = {
 		}
 	}
 	effect = {
+		custom_tooltip = msg_ignore_reform_corr_tt
 		#improve religion
 		if = {
 			limit = {

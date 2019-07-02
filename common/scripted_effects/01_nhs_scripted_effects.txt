@@ -167,6 +167,67 @@ nhs_load_previous_goods = {
 	clr_province_flag = nhs_had_norse_mead_tg
 }
 
+nhs_reduce_skoros_silk_price = {
+	if = {
+		limit = {
+			any_province = {
+				trade_goods = skoros_silk
+			}
+			NOT = { has_global_flag = nhs_skoros_silk_falls }
+		}
+		change_price = {
+			trade_goods = skoros_silk
+			key = NHS_SKOROS_FALLS
+			value = -0.5
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_global_flag = nhs_skoros_silk_falls }
+		}
+		hidden_effect = {
+			change_price = {
+				trade_goods = skoros_silk
+				key = NHS_SKOROS_FALLS
+				value = -0.5
+				duration = -1
+			}
+		}
+	}
+	set_global_flag = nhs_skoros_silk_falls
+}
+
+nhs_increase_skoros_silk_price = {
+	if = {
+		limit = {
+			has_global_flag = nhs_skoros_silk_falls
+			any_province = {
+				trade_goods = skoros_silk
+			}
+		}
+		change_price = {
+			trade_goods = skoros_silk
+			key = NHS_SKOROS_ISOLATIONISM
+			value = 0.5
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = nhs_skoros_silk_falls
+		}
+		hidden_effect = {
+			change_price = {
+				trade_goods = skoros_silk
+				key = NHS_SKOROS_ISOLATIONISM
+				value = 0.5
+				duration = -1
+			}
+		}
+	}
+}
+
 nhs_set_native_governments = {
 	PIA = {
 		if = {
@@ -859,6 +920,7 @@ nhs_assign_provinces_to_marches = {
 				region = $REGIONN$
 				development = 25
 				NOT = { province_has_center_of_trade_of_level = 1 }
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 			
 		}
@@ -870,6 +932,7 @@ nhs_assign_provinces_to_marches = {
 				region = $REGIONN$
 				development = 25
 				NOT = { province_has_center_of_trade_of_level = 1 }
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 			tooltip = {
 				cede_province = $TAGG$
@@ -890,6 +953,7 @@ nhs_assign_provinces_to_marches = {
 				region = $REGIONN$
 				development = 25
 				NOT = { province_has_center_of_trade_of_level = 1 }
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 		}
 		random_owned_province = {
@@ -899,33 +963,7 @@ nhs_assign_provinces_to_marches = {
 				region = $REGIONN$
 				development = 25
 				NOT = { province_has_center_of_trade_of_level = 1 }
-			}
-			tooltip = {
-				cede_province = $TAGG$
-			}
-			add_core = $TAGG$
-			hidden_effect = {
-				ROOT = {
-					release = $TAGG$
-				}
-			}
-		}
-	}
-	else_if = {
-		limit = {
-			any_owned_province = {
-				region = $REGIONN$
-				NOT = { is_core = ROOT }
-				NOT = { has_province_flag = nhs_exarch_province_exemption }
-				religion = ROOT
-			}
-		}
-		random_owned_province = {
-			limit = {
-				region = $REGIONN$
-				NOT = { is_core = ROOT }
-				NOT = { has_province_flag = nhs_exarch_province_exemption }
-				religion = ROOT
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 			tooltip = {
 				cede_province = $TAGG$
@@ -944,6 +982,8 @@ nhs_assign_provinces_to_marches = {
 				region = $REGIONN$
 				NOT = { is_core = ROOT }
 				NOT = { has_province_flag = nhs_exarch_province_exemption }
+				NOT = { has_province_modifier = nhs2_supply_lines }
+				religion = ROOT
 			}
 		}
 		random_owned_province = {
@@ -951,6 +991,35 @@ nhs_assign_provinces_to_marches = {
 				region = $REGIONN$
 				NOT = { is_core = ROOT }
 				NOT = { has_province_flag = nhs_exarch_province_exemption }
+				NOT = { has_province_modifier = nhs2_supply_lines }
+				religion = ROOT
+			}
+			tooltip = {
+				cede_province = $TAGG$
+			}
+			add_core = $TAGG$
+			hidden_effect = {
+				ROOT = {
+					release = $TAGG$
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				region = $REGIONN$
+				NOT = { is_core = ROOT }
+				NOT = { has_province_flag = nhs_exarch_province_exemption }
+				NOT = { has_province_modifier = nhs2_supply_lines }
+			}
+		}
+		random_owned_province = {
+			limit = {
+				region = $REGIONN$
+				NOT = { is_core = ROOT }
+				NOT = { has_province_flag = nhs_exarch_province_exemption }
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 			tooltip = {
 				cede_province = $TAGG$
@@ -971,6 +1040,7 @@ nhs_assign_provinces_to_marches = {
 				religion = ROOT
 				development = 25
 				NOT = { province_has_center_of_trade_of_level = 1 }
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 		}
 		random_owned_province = {
@@ -980,6 +1050,7 @@ nhs_assign_provinces_to_marches = {
 				religion = ROOT
 				development = 25
 				NOT = { province_has_center_of_trade_of_level = 1 }
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 			tooltip = {
 				cede_province = $TAGG$
@@ -999,6 +1070,7 @@ nhs_assign_provinces_to_marches = {
 				region = $REGIONN$
 				development = 25
 				NOT = { province_has_center_of_trade_of_level = 1 }
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 		}
 		random_owned_province = {
@@ -1007,6 +1079,7 @@ nhs_assign_provinces_to_marches = {
 				region = $REGIONN$
 				development = 25
 				NOT = { province_has_center_of_trade_of_level = 1 }
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 			tooltip = {
 				cede_province = $TAGG$
@@ -1025,6 +1098,7 @@ nhs_assign_provinces_to_marches = {
 				region = $REGIONN$
 				NOT = { has_province_flag = nhs_exarch_province_exemption }
 				religion = ROOT
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 		}
 		random_owned_province = {
@@ -1032,6 +1106,7 @@ nhs_assign_provinces_to_marches = {
 				region = $REGIONN$
 				NOT = { has_province_flag = nhs_exarch_province_exemption }
 				religion = ROOT
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 			tooltip = {
 				cede_province = $TAGG$
@@ -1049,12 +1124,14 @@ nhs_assign_provinces_to_marches = {
 			any_owned_province = {
 				NOT = { has_province_flag = nhs_exarch_province_exemption }
 				region = $REGIONN$
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 		}
 		random_owned_province = {
 			limit = {
 				NOT = { has_province_flag = nhs_exarch_province_exemption }
 				region = $REGIONN$
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 			tooltip = {
 				cede_province = $TAGG$
@@ -1084,6 +1161,7 @@ nhs_assign_provinces_to_marches = {
 						is_subject_of = ROOT
 					}
 				}
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 		}
 		every_province = {
@@ -1098,6 +1176,7 @@ nhs_assign_provinces_to_marches = {
 						is_subject_of = ROOT
 					}
 				}
+				NOT = { has_province_modifier = nhs2_supply_lines }
 			}
 			cede_province = $TAGG$
 		}
@@ -7169,4 +7248,69 @@ nhs_assign_names_effect = {
 		}
 		nhs_assign_names_ely = yes
 	}
+}
+
+# Province scope
+nhs_increase_special_trade_good = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = nhs_$REGION1$_$TRADE_GOOD$_$MAX$ }
+		}
+		if = {
+			limit = {
+				has_global_flag = nhs_$REGION1$_$TRADE_GOOD$_1
+			}
+			clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_1
+			set_global_flag = nhs_$REGION1$_$TRADE_GOOD$_2
+		}
+		else_if = {
+			limit = {
+				has_global_flag = nhs_$REGION1$_$TRADE_GOOD$_2
+			}
+			clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_2
+			set_global_flag = nhs_$REGION1$_$TRADE_GOOD$_3
+		}
+		else_if = {
+			limit = {
+				has_global_flag = nhs_$REGION1$_$TRADE_GOOD$_3
+			}
+			clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_3
+			set_global_flag = nhs_$REGION1$_$TRADE_GOOD$_4
+		}
+		else_if = {
+			limit = {
+				has_global_flag = nhs_$REGION1$_$TRADE_GOOD$_4
+			}
+			clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_4
+			set_global_flag = nhs_$REGION1$_$TRADE_GOOD$_5
+		}
+		else_if = {
+			limit = {
+				has_global_flag = nhs_$REGION1$_$TRADE_GOOD$_5
+			}
+			clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_5
+			set_global_flag = nhs_$REGION1$_$TRADE_GOOD$_6
+		}
+		else_if = {
+			limit = {
+				has_global_flag = nhs_$REGION1$_$TRADE_GOOD$_6
+			}
+			clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_6
+			set_global_flag = nhs_$REGION1$_$TRADE_GOOD$_7
+		}
+		else = {
+			set_global_flag = nhs_$REGION1$_$TRADE_GOOD$_1
+		}
+	}
+}
+
+nhs_end_trade_good_region = {
+	clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_1
+	clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_2
+	clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_3
+	clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_4
+	clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_5
+	clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_6
+	clr_global_flag = nhs_$REGION1$_$TRADE_GOOD$_7
+	set_global_flag = nhs_$REGION1$_$TRADE_GOOD$_$MAX$
 }
