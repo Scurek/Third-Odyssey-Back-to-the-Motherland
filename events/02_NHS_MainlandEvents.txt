@@ -1,0 +1,2934 @@
+namespace = nhs2_mainlandevents
+
+# 1-25, 30
+
+# Removes the overseas penalty from Constantinople
+province_event = {
+	id = nhs2_mainlandevents.1
+	title = nhs2_mainlandevents1.t
+	desc = nhs2_mainlandevents1.d
+	picture = CITY_VIEW_eventPicture
+
+    trigger = {
+		province_id = 151
+		is_territory = yes
+		NOT = { is_state = yes }
+		owner = {
+			nhs_is_elysia_late = yes
+			NOT = {
+				OR = {
+					capital_scope = {
+						continent = europe
+					}
+					capital_scope = {
+						continent = asia
+					}
+					capital_scope = {
+						continent = africa
+					}
+				}
+			}
+		}
+		NOT = { has_province_modifier = newnhs_no_overseas }
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	option = {
+		name = "nhs2_mainlandevents1.a"
+		add_permanent_province_modifier = {
+			name = "newnhs_no_overseas"
+			duration = -1
+		}
+	}
+}
+
+# Removes the removal of overseas penalty from Constantinople
+province_event = {
+	id = nhs2_mainlandevents.2
+	title = nhs2_mainlandevents2.t
+	desc = nhs2_mainlandevents2.d
+	picture = CITY_VIEW_eventPicture
+	
+	hidden = yes
+
+    trigger = {
+		has_province_modifier = newnhs_no_overseas
+		OR = {
+			owner = {
+				OR = {
+					NOT = { nhs_is_elysia_late = yes }
+					OR = {
+						capital_scope = {
+							continent = europe
+						}
+						capital_scope = {
+							continent = asia
+						}
+						capital_scope = {
+							continent = africa
+						}
+					}
+				}
+			}
+			is_state = yes
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		remove_province_modifier = newnhs_no_overseas
+	}
+
+	option = {
+		name = "nhs2_mainlandevents2.a"
+		#add_permanent_province_modifier = {
+		#	name = "nhs2_angry_greeks"
+		#	duration = 7300  #20 yrs
+		#}	
+	}
+	#option = {
+	#	name = "nhs2_mainlandevents2.b"
+	#	remove_province_modifier = newnhs_no_overseas
+	#	add_local_autonomy = 50
+	#}
+}
+
+# Great Sailor
+
+country_event = {
+	id = nhs2_mainlandevents.3
+	title = nhs2_mainlandevents3.t
+	desc = nhs2_mainlandevents3.d
+	picture = ELYSHIP_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		is_year = 1510
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents3.a"
+		set_country_flag = nhs_the_explorer_went
+	}
+}
+
+# Great Sailor returns
+country_event = {
+	id = nhs2_mainlandevents.4
+	title = nhs2_mainlandevents4.t
+	desc = nhs2_mainlandevents4.d
+	picture = ELYSHIP_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		is_year = 1520
+		OR = {
+			had_country_flag = { flag = nhs_the_explorer_went days = 3650 }
+			is_year = 1525
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			# reverse_add_opinion = {
+				# who = POR
+				# modifier = insulted
+			# }
+			reverse_add_opinion = {
+				who = TUR
+				modifier = insulted
+			}
+			europe = {
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			european_seas_lakes = {
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			every_province = {
+				limit = {
+					region = maghreb_region
+					NOT = { area = tafilalt_area }
+					NOT = { area = north_saharan_area }
+					NOT = { area = fezzan_area }
+				}
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			every_province = {
+				limit = {
+					region = egypt_region
+					NOT = { area = lower_nubia_area }
+				}
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			palestine_area = {
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			syria_area = {
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			rakka_area = {
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			discover_province = 1572
+			discover_province = 1570
+			discover_province = 1582
+			discover_province = 1580
+			discover_province = 1568
+			discover_province = 1567
+			discover_province = 1583
+			discover_province = 1575
+			discover_province = 1564
+			discover_province = 1579
+			discover_province = 1563
+			discover_province = 1566
+			discover_province = 1573
+			discover_province = 1569
+			discover_province = 1565
+			discover_province = 1578
+			discover_province = 1500
+			set_global_flag = nhs_europe_discovered
+			set_country_flag = nhs_europe_discovered_got
+			set_country_flag = nhs_cant_think_of_a_name
+		}
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents4.a"
+		add_prestige = 10
+		define_explorer = {
+			name = "Pytheas"
+			fire = 2
+			shock = 2
+			manuever = 6
+		}
+		1499 = { change_province_name = "Pythean Bay" }
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents4.b"
+		add_legitimacy = 5
+		define_advisor = {
+			type = navigator
+			name = "Pytheas"
+			skill = 3
+			cost_multiplier = 0.5
+		}
+		1499 = { change_province_name = "Pythean Bay" }
+	}
+}
+
+#Great explorer for everybody else
+
+country_event = {
+	id = nhs2_mainlandevents.5
+	title = nhs2_mainlandevents5.t
+	desc = nhs2_mainlandevents5.d
+	picture = ELYSHIP_eventPicture
+	
+	trigger = {
+		had_global_flag = { flag = nhs_europe_discovered days = 30 }
+		NOT = { has_country_flag = nhs_europe_discovered_got }
+		NOT = { has_country_flag = nhs_cant_think_of_a_name }
+		OR = {
+			technology_group = modern_greek
+			technology_group = modern_spartan
+			technology_group = exiled_spartan
+			technology_group = exiled_greek
+			technology_group = hellenised_american
+			technology_group = viking
+			technology_group = modern_vinlandic
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = nhs_europe_discovered_got
+			europe = {
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			european_seas_lakes = {
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			every_province = {
+				limit = {
+					region = maghreb_region
+					NOT = { area = tafilalt_area }
+					NOT = { area = north_saharan_area }
+					NOT = { area = fezzan_area }
+				}
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			every_province = {
+				limit = {
+					region = egypt_region
+					NOT = { area = lower_nubia_area }
+				}
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			palestine_area = {
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			syria_area = {
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			rakka_area = {
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			discover_province = 1572
+			discover_province = 1570
+			discover_province = 1582
+			discover_province = 1580
+			discover_province = 1568
+			discover_province = 1567
+			discover_province = 1583
+			discover_province = 1575
+			discover_province = 1564
+			discover_province = 1579
+			discover_province = 1563
+			discover_province = 1566
+			discover_province = 1573
+			discover_province = 1569
+			discover_province = 1565
+			discover_province = 1578
+			discover_province = 1500
+		}
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents5.a"
+	}
+}
+
+# First Event
+
+country_event = {
+	id = nhs2_mainlandevents.6
+	title = nhs2_mainlandevents6.t
+	desc = nhs2_mainlandevents6.d
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	is_triggered_only = yes
+
+	option = { # Supply lines
+		name = "nhs2_mainlandevents6.a"
+		trigger = {
+			NOT = {
+				any_owned_province = {
+					nhs_supply_lines_province = yes
+				}
+			}
+		}
+		country_event = { id = nhs2_mainlandevents.7 }
+	}
+	
+	option = {
+		trigger = {
+			any_owned_province = {
+				nhs_supply_lines_province = yes
+			}
+		}
+		name = "nhs2_mainlandevents6.b"
+		country_event = { id = nhs2_mainlandevents.9 }
+		set_country_flag = nhs_invasion_second_part_begins
+		set_country_flag = nhs_invasion_second_part
+	}
+	
+	option = { # Back
+		name = "nhs2_mainlandevents6.c"
+		ai_chance = { factor = 0 }
+		if = {
+			limit = {
+				NOT = {
+					any_owned_province = {
+						nhs_supply_lines_province = yes
+					}
+				}
+			}
+			clr_country_flag = nhs_invasion_begins
+			if = {
+				limit = {
+					NOT = { mil = 4 }
+				}
+				add_mil_power = 50
+			}
+		}
+		if = {
+			limit = {
+				any_owned_province = {
+					nhs_supply_lines_province = yes
+				}
+			}
+			set_country_flag = nhs_invasion_second_part
+		}
+	}
+}
+
+# Supply lines
+
+country_event = {
+	id = nhs2_mainlandevents.7
+	title = nhs2_mainlandevents7.t
+	desc = nhs2_mainlandevents7.d
+	picture = HARBOUR_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = {
+			any_owned_province = {
+				nhs_supply_lines_province = yes
+			}
+		}
+	}
+	
+	immediate = {
+		set_country_flag = nhs_supply_lines
+		hidden_effect = {
+			every_province = {
+				limit = {
+					area = cap_verde_area
+					has_port = yes
+				}
+				every_country = {
+					limit = { tag = ROOT }
+					discover_province = PREV
+				}
+			}
+			discover_province = 1472
+			discover_province = 1471
+			discover_province = 1470
+			discover_province = 1469
+			discover_province = 1468
+			discover_province = 1467
+			discover_province = 367
+			discover_province = 368
+			discover_province = 366
+			discover_province = 1096
+			discover_province = 1114
+			discover_province = 1111
+		}
+	}
+	
+	option = {           # Western Isles
+		name = "nhs2_mainlandevents7.a"
+		ai_chance = { factor = 1 }
+		set_country_flag = nhs_supply_lines1
+		add_permanent_claim = 1247
+		add_permanent_claim = 127
+		add_permanent_claim = 2986
+		add_permanent_claim = 124
+		add_permanent_claim = 125
+		add_permanent_claim = 2982
+		add_permanent_claim = 126
+		add_permanent_claim = 333
+		
+	}
+	
+	option = {           # Eastern Isles
+		name = "nhs2_mainlandevents7.b"
+		ai_chance = { factor = 1 }
+		set_country_flag = nhs_supply_lines2
+		add_permanent_claim = 163
+		add_permanent_claim = 321
+		add_permanent_claim = 142
+		add_permanent_claim = 164
+		add_permanent_claim = 2348
+	}
+	
+	option = {           # North-Westren Africa
+		name = "nhs2_mainlandevents7.c"
+		ai_chance = { factor = 3 }
+		set_country_flag = nhs_supply_lines3
+		every_province = {
+			limit = {
+				region = maghreb_region
+				has_port = yes
+			}
+			add_permanent_claim = ROOT
+		}
+	}
+	
+	option = {           # West Africa and Isles
+		name = "nhs2_mainlandevents7.e"
+		ai_chance = { factor = 2 }
+		set_country_flag = nhs_supply_lines4
+		if = {
+			limit = {
+				OR = {
+					1096 = {
+						is_empty = yes
+					}
+					1111 = {
+						is_empty = yes
+					}
+				}
+			}
+			custom_tooltip = nhs_supply_linest4
+		}
+		add_permanent_claim = 367
+		add_permanent_claim = 368
+		add_permanent_claim = 366
+		add_permanent_claim = 1096
+		add_permanent_claim = 1114
+		every_province = {
+			limit = {
+				area = cap_verde_area
+				has_port = yes
+			}
+			add_permanent_claim = ROOT
+		}
+	}
+	
+	option = {             # Back
+		name = "nhs2_mainlandevents7.f"
+		ai_chance = { factor = 0 }
+		hidden_effect = {
+			country_event = { id = nhs2_mainlandevents.6 days = 1 }
+		}
+	}
+}
+
+
+# Supply lines secured
+
+country_event = {
+	id = nhs2_mainlandevents.8
+	title = nhs2_mainlandevents8.t
+	desc = nhs2_mainlandevents8.d
+	picture = VICTORY_eventPicture
+	
+	trigger = {
+		nhs_is_elysia = yes
+		has_country_flag = nhs_invasion_begins
+		NOT = { has_country_flag = nhs_supply_lines_secured }
+		NOT = { has_country_flag = nhs_invasion_over }
+		NOT = {
+			any_province = {
+				has_province_modifier = nhs2_supply_lines
+			}
+		}
+		any_owned_province = {
+			nhs_supply_lines_province = yes
+		}
+	}
+	
+	immediate = {
+		clr_country_flag = nhs_supply_lines
+		set_country_flag = nhs_supply_lines_secured
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents8.a"
+		random_owned_province = {
+			limit = {
+				nhs_supply_lines_province = yes
+			}
+			add_core = ROOT
+			add_province_modifier = {
+				name = "nhs2_supply_lines"
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_invasion_second_part }
+				NOT = { has_country_flag = nhs_invasion_second_part_begins }
+			}
+			country_event = { id = nhs2_mainlandevents.9 }
+		}
+		hidden_effect = {
+			every_province = {
+				limit = {
+					AND = {
+						owner = {
+							NOT = {
+								war_with = ROOT
+							}
+						}
+						NOT = { owned_by = ROOT }
+						nhs_supply_lines_province = yes
+					}
+				}
+				remove_claim = ROOT
+			}
+		}
+		set_country_flag = nhs_invasion_second_part_begins
+		set_country_flag = nhs_invasion_second_part		
+	}
+}
+
+# Actual Invasion establishing a base of operations
+
+country_event = {
+	id = nhs2_mainlandevents.9
+	title = nhs2_mainlandevents9.t
+	desc = nhs2_mainlandevents9.d
+	picture = ATHENS_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = nhs_bo
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents9.a"
+		set_country_flag = nhs_bo
+		set_country_flag = nhs_claims_greek
+		146 = {
+			add_core = ROOT
+			if = {
+				limit = {
+					owner = {
+						religion_group = christian
+						AND = {
+							culture_group = byzantine
+							NOT = { primary_culture = turkish }
+						}
+					}
+				}
+				owner = {
+					country_event = { id = nhs2_mainlandevents.10 }
+				}
+				ROOT = {
+					if = {
+						limit = {
+							NOT = {
+								religion_group = christian
+							}
+						}
+						add_dip_power = -50
+					}
+				}
+			}
+		}
+		set_country_flag = nhs_bo_athens
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_bo2 }
+			}
+			add_country_modifier = {
+				name = "nhs2_bo_athens"
+				duration = 7300
+			}
+		}
+		set_country_flag = nhs_bo2
+		hidden_effect = {
+			every_province = {
+				limit = {
+					owner = {
+						NOT = { 
+							AND = {
+								culture_group = byzantine
+								NOT = { primary_culture = turkish }
+							}
+						}
+					}
+					nhs_greek_areas = yes
+					continent = europe
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	option = { 
+		name = "nhs2_mainlandevents9.b"
+		set_country_flag = nhs_bo
+		set_country_flag = nhs_claims_greek
+		148 = {
+			add_core = ROOT
+			if = {
+				limit = {
+					owner = {
+						religion_group = christian
+						AND = {
+							culture_group = byzantine
+							NOT = { primary_culture = turkish }
+						}
+					}
+				}
+				owner = {
+					country_event = { id = nhs2_mainlandevents.10 }
+				}
+				ROOT = {
+					if = {
+						limit = {
+							NOT = {
+								religion_group = christian
+							}
+						}
+						add_dip_power = -50
+					}
+				}
+			}
+		}
+		set_country_flag = nhs_bo_macedonia
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_bo2 }
+			}
+			add_country_modifier = {
+				name = "nhs2_bo_macedonia"
+				duration = 7300
+			}
+		}
+		set_country_flag = nhs_bo2
+		hidden_effect = {
+			every_province = {
+				limit = {
+					owner = {
+						NOT = { 
+							AND = {
+								culture_group = byzantine
+								NOT = { primary_culture = turkish }
+							}
+						}
+					}
+					nhs_greek_areas = yes
+					continent = europe
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	option = { 
+		name = "nhs2_mainlandevents9.c"
+		set_country_flag = nhs_bo
+		set_country_flag = nhs_claims_greek
+		145 = {
+			add_core = ROOT
+			if = {
+				limit = {
+					owner = {
+						religion_group = christian
+						AND = {
+							culture_group = byzantine
+							NOT = { primary_culture = turkish }
+						}
+					}
+				}
+				owner = {
+					country_event = { id = nhs2_mainlandevents.10 }
+				}
+				ROOT = {
+					if = {
+						limit = {
+							NOT = {
+								religion_group = christian
+							}
+						}
+						add_dip_power = -50
+					}
+				}
+			}
+		}
+		set_country_flag = nhs_bo_sparta
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_bo2 }
+			}
+			add_country_modifier = {
+				name = "nhs2_bo_sparta"
+				duration = 7300
+			}
+		}
+		set_country_flag = nhs_bo2
+		hidden_effect = {
+			every_province = {
+				limit = {
+					owner = {
+						NOT = { 
+							AND = {
+								culture_group = byzantine
+								NOT = { primary_culture = turkish }
+							}
+						}
+					}
+					nhs_greek_areas = yes
+					continent = europe
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	option = { 
+		name = "nhs2_mainlandevents9.e"
+		set_country_flag = nhs_bo
+		set_country_flag = nhs_claims_greek
+		320 = {
+			add_core = ROOT
+			if = {
+				limit = {
+					owner = {
+						religion_group = christian
+						AND = {
+							culture_group = byzantine
+							NOT = { primary_culture = turkish }
+						}
+					}
+				}
+				owner = {
+					country_event = { id = nhs2_mainlandevents.10 }
+				}
+				ROOT = {
+					if = {
+						limit = {
+							NOT = {
+								religion_group = christian
+							}
+						}
+						add_dip_power = -50
+					}
+				}
+			}
+		}
+		set_country_flag = nhs_bo_rhodes
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_bo2 }
+			}
+			add_country_modifier = {
+				name = "nhs2_bo_rhodes"
+				duration = 7300
+			}
+		}
+		set_country_flag = nhs_bo2
+		hidden_effect = {
+			every_province = {
+				limit = {
+					owner = {
+						NOT = { 
+							AND = {
+								culture_group = byzantine
+								NOT = { primary_culture = turkish }
+							}
+						}
+					}
+					nhs_greek_areas = yes
+					continent = europe
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	option = { 
+		name = "nhs2_mainlandevents9.f"
+		trigger = {
+			has_country_flag = nhs_supply_lines_secured
+		}
+		clr_country_flag = nhs_invasion_second_part_begins
+		clr_country_flag = nhs_bo
+	}
+	
+	option = { 
+		name = "nhs2_mainlandevents9.m"   # back without supply lines
+		trigger = {
+			NOT = { has_country_flag = nhs_supply_lines_secured }
+		}
+		clr_country_flag = nhs_invasion_second_part_begins
+		clr_country_flag = nhs_bo
+		clr_country_flag = nhs_invasion_begins
+		#add_years_of_income = 0.5
+		if = {
+			limit = {
+				NOT = { mil = 4 }
+			}
+			add_mil_power = 50
+		}
+	}
+}
+
+# Greeks for base of operations
+country_event = {
+	id = nhs2_mainlandevents.10
+	title = nhs2_mainlandevents10.t
+	desc = nhs2_mainlandevents10.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "nhs2_mainlandevents10.a"
+		every_owned_province = {
+			limit = {
+				is_core = FROM
+			}
+			cede_province = FROM
+		}
+		reverse_add_opinion = {
+			who = FROM
+			modifier = returned_core_to_me
+		}
+		FROM = {
+			country_event = { id = nhs2_mainlandevents.11 days = 1 }
+		}
+		ai_chance = { factor = 100 }
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents10.b"
+		FROM = {
+			country_event = { id = nhs2_mainlandevents.12 days = 1 }
+		}
+		ai_chance = { factor = 0 }
+	}
+}
+
+# Yea
+country_event = {
+	id = nhs2_mainlandevents.11
+	title = nhs2_mainlandevents11.t
+	desc = nhs2_mainlandevents11.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "nhs2_mainlandevents11.a"
+		FROM = {
+			every_owned_province = {
+				limit = {
+					is_core = FROM
+				}
+				cede_province = FROM
+			}
+		}
+		reverse_add_opinion = {
+			who = FROM
+			modifier = opinion_diplomatic_solution
+		}
+	}
+}
+
+# Nope
+country_event = {
+	id = nhs2_mainlandevents.12
+	title = nhs2_mainlandevents12.t
+	desc = nhs2_mainlandevents12.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "nhs2_mainlandevents12.a"
+	}
+}
+
+# Base of operations secured
+
+country_event = {
+	id = nhs2_mainlandevents.13
+	title = nhs2_mainlandevents13.t
+	desc = nhs2_mainlandevents13.d
+	picture = BATTLE_eventPicture
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		OR = {
+			AND = {
+				has_country_flag = nhs_bo_athens
+				owns = 146
+			}
+			AND = {
+				has_country_flag = nhs_bo_macedonia
+				owns = 148
+			}
+			AND = {
+				has_country_flag = nhs_bo_sparta
+				owns = 145
+			}
+			AND = {
+				has_country_flag = nhs_bo_rhodes
+				owns = 320
+			}
+		}
+		NOT = { has_country_flag = nhs_invasion_over }
+		NOT = {
+			any_owned_province = {
+				has_province_modifier = nhs2_base_of_operations
+			}
+		}
+		OR = {
+			has_country_flag = nhs_bo_athens
+			has_country_flag = nhs_bo_macedonia
+			has_country_flag = nhs_bo_sparta
+			has_country_flag = nhs_bo_rhodes
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		clr_country_flag = nhs_bo
+		set_country_flag = nhs_bo_secured
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents13.a"
+		if = {
+			limit = {
+				has_country_flag = nhs_bo_athens
+			}
+			146 = {
+				add_province_modifier = {
+					name = "nhs2_base_of_operations"
+					duration = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_bo_macedonia
+			}
+			148= {
+				add_province_modifier = {
+					name = "nhs2_base_of_operations"
+					duration = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_bo_sparta
+			}
+			145 = {
+				add_province_modifier = {
+					name = "nhs2_base_of_operations"
+					duration = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_bo_rhodes
+			}
+			320 = {
+				add_province_modifier = {
+					name = "nhs2_base_of_operations"
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+# Conquest of Constantinople
+
+country_event = {
+	id = nhs2_mainlandevents.14
+	title = nhs2_mainlandevents14.t
+	desc = nhs2_mainlandevents14.d
+	picture = CIVIL_WAR_eventPicture
+	
+	major = yes
+	
+	trigger = {
+		NOT = { has_country_modifier = nhs2_timer_constantinople }
+		nhs_is_elysia_late = yes
+		151 = {
+			owner = {
+				NOT = { culture_group = spartakian_group }
+				NOT = { culture_group = elysian_group }
+				NOT = { 
+					AND = {
+						culture_group = byzantine
+						NOT = { primary_culture = turkish }
+					}
+				}
+			}
+			NOT = { owned_by = ROOT }
+			controlled_by = ROOT
+		}		
+	}
+	
+	
+	option = {
+		name = "nhs2_mainlandevents14.a"	
+		every_country = {
+			limit = {
+				tag = TUR
+				capital = 151
+				owns = 151
+			}
+			tooltip = {
+				add_prestige = -25
+				add_legitimacy = -10
+				add_war_exhaustion = 10			
+			}
+			country_event = { id = nhs2_mainlandevents.15 days = 1 }
+		}
+		every_country = {
+			limit = {
+				OR = {
+					NOT = { tag = TUR }
+					AND = {
+						tag = TUR
+						NOT = { capital = 151 }
+					}
+				}
+				owns = 151
+			}
+			tooltip = {
+				add_prestige = -10
+				add_war_exhaustion = 2
+			}
+			country_event = { id = nhs2_mainlandevents.16 days = 1 }			
+		}
+		151 = {
+			add_core = ROOT
+			cede_province = ROOT
+			change_religion = ROOT
+			change_culture = greek
+			add_unrest = -20
+		}
+		add_prestige = 15
+		add_war_exhaustion = -5
+		add_legitimacy = 10
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_modifier = nhs2_timer_constantinople
+				}
+				remove_country_modifier = nhs2_timer_constantinople
+			}
+		}
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents14.b"
+		hidden_effect = {
+			add_country_modifier = {
+				name = nhs2_timer_constantinople
+				duration =  365
+				hidden = yes
+			}
+		}
+	}
+}
+
+# Conquest of Constantinople for turks
+
+country_event = {
+	id = nhs2_mainlandevents.15
+	title = nhs2_mainlandevents15.t
+	desc = nhs2_mainlandevents15.d
+	picture = CIVIL_WAR_eventPicture
+	
+	is_triggered_only = yes
+	
+	
+	immediate = {
+		set_country_flag = nhs_constantinople_was_capital
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents15.a"
+		add_prestige = -25
+		add_war_exhaustion = 10
+		add_legitimacy = -10
+		tooltip = {
+			151 = {
+				add_core = FROM
+				cede_province = FROM
+				change_religion = FROM
+				change_culture = greek
+			}
+		}
+	}
+}
+
+# Conquest of Constantinople for previous owner
+
+country_event = {
+	id = nhs2_mainlandevents.16
+	title = nhs2_mainlandevents16.t
+	desc = nhs2_mainlandevents16.d
+	picture = CIVIL_WAR_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "nhs2_mainlandevents16.a"
+		add_prestige = -10
+		add_war_exhaustion = 2
+		tooltip = {
+			151 = {
+				add_core = FROM
+				cede_province = FROM
+				change_religion = FROM
+				change_culture = greek
+			}
+		}
+	}
+}
+
+# Reconquest of Constantinople for turks
+
+country_event = {
+	id = nhs2_mainlandevents.17
+	title = nhs2_mainlandevents17.t
+	desc = nhs2_mainlandevents17.d
+	picture = AWESOMECITY_eventPicture
+	
+	trigger = {
+		has_country_flag = nhs_constantinople_was_capital
+		tag = TUR
+		owns = 151
+		151 = {
+			controlled_by = ROOT
+		}
+		NOT = { nhs_at_war_with_ely = yes }
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents17.a"
+		hidden_effect = {
+			every_country = {
+				limit = {
+					nhs_is_elysia_late = yes
+					owns = 151
+				}
+				country_event = { id = nhs2_mainlandevents.18 days = 1 }
+			}
+		}
+		151 = {
+			add_core = ROOT
+			cede_province = ROOT
+			change_religion = ROOT
+			change_culture = turkish
+			add_unrest = -10
+			add_base_tax = -1
+		}
+		set_capital = 151
+		add_prestige = 15
+		add_war_exhaustion = -5
+		add_legitimacy = 10
+	}
+}
+
+# Reconquest of Constantinople for elysians
+
+country_event = {
+	id = nhs2_mainlandevents.18
+	title = nhs2_mainlandevents18.t
+	desc = nhs2_mainlandevents18.d
+	picture = CIVIL_WAR_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "nhs2_mainlandevents18.a"
+		add_prestige = -10
+		add_war_exhaustion = 2
+		151 = {
+			tooltip = {
+				add_base_tax = -1
+				add_core = FROM
+				cede_province = FROM
+				change_religion = FROM
+				change_culture = turkish
+			}
+		}
+	}
+}
+
+# Establish local militia/elysian-greek nation
+
+country_event = {
+	id = nhs2_mainlandevents.19
+	title = nhs2_mainlandevents19.t
+	desc = nhs2_mainlandevents19.d
+	picture = ARMY_CHARGE_eventPicture
+
+	trigger = {
+		nhs_is_elysia_late = yes
+		has_country_flag = nhs_invasion_second_part_begins
+		any_owned_province = {
+			AND = {
+				culture = greek
+				continent = europe
+				NOT = { has_province_modifier = nhs2_base_of_operations }
+				NOT = { province_id = 151 }
+			}
+			NOT = { has_construction = missionary }
+		}
+		NOT = { exists = ELG }
+		NOT = { has_country_flag = nhs_formed_greek }
+		NOT = { has_country_modifier = nhs2_timer_formed_greek }
+		NOT = { has_country_flag = nhs_invasion_over }
+		NOT = { has_country_flag = nhs_no_greek_nation }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 0.9
+			stability = 1
+		}
+		modifier = {
+			factor = 0.9
+			stability = 2
+		}
+		modifier = {
+			factor = 0.9
+			stability = 3
+		}
+		modifier = {
+			factor = 2
+			is_at_war = yes
+		}
+		modifier = {
+			factor = 0.9
+			army_tradition = 30
+		}
+		modifier = {
+			factor = 0.8
+			army_tradition = 50
+		}
+		modifier = {
+			factor = 0.75
+			army_tradition = 75
+		}
+	}
+	
+	immediate = {
+		set_country_flag = nhs_formed_greek1
+	}
+	
+	option = { # Form
+		name = "nhs2_mainlandevents19.a"
+		custom_tooltip = nhs_no_missionary_provinces
+		set_country_flag = nhs_formed_greek
+		every_owned_province = {
+			limit = {
+				AND = {
+					nhs_greek_areas = yes
+					NOT = { has_province_modifier = nhs2_base_of_operations }
+					NOT = { province_id = 151 }
+					continent = europe
+				}
+				NOT = { has_construction = missionary }
+			}
+			#if = {
+			#	limit = {
+			#		is_core = ROOT
+			#	}
+			#	remove_core = ROOT
+			#}
+			tooltip = {
+				cede_province = ELG
+			}
+			add_core = ELG
+		}
+		hidden_effect = {
+			release = ELG
+		}
+		create_subject = {
+			subject_type = elysian_subject
+			subject = ELG
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				country_event = {
+					id = nhs2_mainlandevents.21
+					days = 2
+					tooltip = nhs2_mainlandevents.21.t
+				}
+			}
+		}
+		hidden_effect = {
+			ELG = {
+				nhs_change_government = { GOV = monarchy }
+				nhs_add_gov_reform = { REF = autocracy_reform }
+				#add_government_reform = autocracy_reform
+				change_technology_group = eastern
+				change_unit_type = eastern
+				add_manpower = 10
+				change_primary_culture = greek
+				change_religion = orthodox
+				reverse_add_opinion = {
+					who = ROOT
+					modifier = nhs_formed_greeko
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = nhs_formed_greeko
+				}
+				add_treasury = 200
+				add_mil_power = 100
+				add_dip_power = 100
+				add_adm_power = 100
+				random_owned_province = {
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+				}
+				every_owned_province = {
+					add_core = ELG
+				}
+				if = {
+					limit = {
+						ROOT = {
+							has_country_modifier = nhs_secrets_greekfire
+						}
+					}
+					add_country_modifier = {
+						name = nhs_secrets_greekfire
+						duration = -1
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							has_country_modifier = nhs_greekfire_update
+						}
+					}				
+					add_country_modifier = {
+						name = nhs_greekfire_update
+						duration = -1
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							has_country_modifier = nhs_noble_cataphracts
+						}
+					}
+					add_country_modifier = {
+						name = nhs_noble_cataphracts
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+	
+	option = { # Nope
+		name = "nhs2_mainlandevents19.b"
+		hidden_effect = {
+			add_country_modifier = {
+				name = nhs2_timer_formed_greek
+				duration =  1825
+				hidden = yes
+			}
+		}
+	}
+}
+
+# Question about greek provinces after invasion if you formed greek militia
+
+country_event = {
+	id = nhs2_mainlandevents.20
+	title = nhs2_mainlandevents20.t
+	desc = nhs2_mainlandevents20.d
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	fire_only_once = yes
+
+	trigger = {
+		nhs_is_elysia_late = yes
+		NOT = { has_country_flag = nhs_invasion_second_part_begins }
+		has_country_flag = nhs_invasion_over
+		has_country_flag = nhs_formed_greek
+		OR = {
+			AND = {
+				exists = ELG
+				ELG = {
+					is_subject_of = ROOT
+				}
+			}
+			any_owned_province = {
+				nhs_greek_areas = yes
+				NOT = { province_id = 151 }
+				NOT = { has_construction = missionary }
+			}
+		}
+		NOT = { has_country_flag = nhs_no_greek_nation }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents20.a"  # Expand the current greek militia sistem
+		trigger = {
+			ELG = {
+				is_subject_of_type = elysian_subject
+				is_subject_of = ROOT
+			}
+			exists = ELG
+		}
+		set_country_flag = nhs_formed_greek
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					AND = {
+						nhs_greek_areas = yes
+						NOT = { province_id = 151 }
+						NOT = { has_construction = missionary }
+					}
+				}
+				#if = {
+				#	limit = {
+				#		is_core = ROOT
+				#	}
+				#	remove_core = ROOT
+				#}
+				tooltip = {
+					cede_province = ELG
+				}
+				add_core = ELG
+			}
+			if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				country_event = {
+					id = nhs2_mainlandevents.21
+					days = 1
+					tooltip = nhs2_mainlandevents.21.t
+				}
+			}
+			ELG = {
+				add_manpower = 10
+				reverse_add_opinion = {
+					who = ROOT
+					modifier = nhs_formed_greeko
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = nhs_formed_greeko
+				}
+				every_owned_province = {
+					limit = {
+						nhs_greek_areas = yes
+					}
+					add_core = ELG
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents20.b"  # Vassal
+		trigger = {
+			OR = {
+				ELG = {
+					AND = {
+						NOT = { is_subject_of_type = elysian_subject }
+						is_subject_of = ROOT
+					}
+				}
+				NOT = { exists = ELG }
+			}
+		}
+		if = {
+			limit = {
+				ELG = {
+					AND = {
+						NOT = { is_subject_of_type = elysian_subject }
+						is_subject_of = ROOT
+					}
+				}
+			}
+			hidden_effect = {
+				free_vassal = ELG
+			}
+			create_subject = {
+				subject_type = elysian_subject
+				subject = ELG
+			}
+		}
+		set_country_flag = nhs_formed_greek
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					AND = {
+						nhs_greek_areas = yes
+						NOT = { province_id = 151 }
+						NOT = { has_construction = missionary }
+					}
+				}
+				#if = {
+				#	limit = {
+				#		is_core = ROOT
+				#	}
+				#	remove_core = ROOT
+				#}
+				tooltip = {
+					cede_province = ELG
+				}
+				add_core = ELG
+			}
+		}
+		if = {
+			limit = {
+				NOT = { exists = ELG }
+			}
+			release = ELG
+			create_subject = {
+				subject_type = elysian_subject
+				subject = ELG
+			}
+			ELG = {
+				change_primary_culture = greek
+				nhs_change_government = { GOV = monarchy }
+				#add_government_reform = autocracy_reform
+				nhs_add_gov_reform = { REF = autocracy_reform }
+				change_technology_group = eastern
+				change_unit_type = eastern
+				reverse_add_opinion = {
+					who = ROOT
+					modifier = nhs_formed_greeko
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = nhs_formed_greeko
+				}
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							nhs_greek_areas = yes
+						}
+						add_core = ELG
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				country_event = {
+					id = nhs2_mainlandevents.21
+					days = 1
+					tooltip = nhs2_mainlandevents.21.t
+				}
+			}
+			ELG = {
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							nhs_greek_areas = yes
+						}
+						add_core = ELG
+					}
+				}
+			}
+		}
+	}
+	
+	option = { # We have no need of them anymore
+		name = "nhs2_mainlandevents20.c"
+		set_country_flag = nhs_no_greek_nation
+		if = {
+			limit = {
+				exists = ELG
+				ELG = { is_subject_of = ROOT }
+			}
+			inherit = ELG
+		}
+	}
+}
+
+# Question of religion later
+country_event = {
+	id = nhs2_mainlandevents.25
+	title = nhs2_mainlandevents25.t
+	desc = nhs2_mainlandevents25.d
+	picture = PANTHEON_eventPicture
+	
+	trigger = {
+		religion = pantheon_worship
+		tag = ELG
+		any_owned_province = {
+			NOT = { has_province_flag = nhs_got_question_of_religion }
+			religion = orthodox
+			nhs_greek_areas = yes
+		}
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents22.a"
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					religion = orthodox
+					NOT = { has_province_flag = nhs_got_question_of_religion }
+					nhs_greek_areas = yes
+				}
+				set_province_flag = nhs_got_question_of_religion
+				random_list = {
+					40 = {
+						add_province_modifier = {
+							name = "nhs2_greek_deny_religion"
+							duration = 7300
+						}
+					}
+					40 = { 
+						add_province_modifier = {
+							name = "nhs2_greek_accept_religion"
+							duration = 7300
+						}
+					}
+					10 = { change_religion = ROOT }
+					10 = { 
+						add_province_modifier = {
+							name = "missionary_failure"
+							duration = 7300
+						}
+					}
+				}
+			}		
+		}
+	}
+}
+
+# Question of religion
+country_event = {
+	id = nhs2_mainlandevents.21
+	title = nhs2_mainlandevents21.t
+	desc = nhs2_mainlandevents21.d
+	picture = PANTHEON_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = { #Convert them
+		name = "nhs2_mainlandevents21.a"
+		set_country_flag = nhs_converted_greeks
+		add_legitimacy = 10
+		ELG = {
+			change_religion = ROOT
+			add_country_modifier = {
+				name = religious_tolerance
+				duration =  3650
+			}
+			capital_scope = {
+				add_province_triggered_modifier = religious_center_pantheon
+			}
+		}
+		hidden_effect = {
+			ELG = {
+				capital_scope = {
+					change_religion = ROOT
+				}
+				random_owned_province = {
+					limit = {
+						religion = orthodox
+						nhs_greek_areas = yes
+					}
+					change_religion = ROOT
+				}
+				random_owned_province = {
+					limit = {
+						religion = orthodox
+						nhs_greek_areas = yes
+					}
+					change_religion = ROOT
+				}
+				every_owned_province = {
+					limit = {
+						religion = orthodox
+						NOT = { has_province_flag = nhs_got_question_of_religion }
+						nhs_greek_areas = yes
+					}
+					set_province_flag = nhs_got_question_of_religion
+					random_list = {
+						40 = {
+							add_province_modifier = {
+								name = "nhs2_greek_deny_religion"
+								duration = 7300
+							}
+						}
+						40 = { 
+							add_province_modifier = {
+								name = "nhs2_greek_accept_religion"
+								duration = 7300
+							}
+						}
+						10 = { change_religion = ROOT }
+						10 = { 
+							add_province_modifier = {
+								name = "missionary_failure"
+								duration = 7300
+							}
+						}
+					}
+				}
+			}			
+		}
+	}
+	
+	option = { # Let them be orthodox
+		name = "nhs2_mainlandevents21.b"
+		add_prestige = -5
+		add_legitimacy = -5
+	}
+}
+
+# Question about greek provinces before invasion or if you did not form greek militia
+
+country_event = {
+	id = nhs2_mainlandevents.22
+	title = nhs2_mainlandevents22.t
+	desc = nhs2_mainlandevents22.d
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	fire_only_once = yes
+
+	trigger = {
+		nhs_is_elysia_late = yes
+		NOT = { has_country_flag = nhs_invasion_second_part_begins }
+		OR = {
+			has_country_flag = nhs_invasion_over
+			NOT = { has_country_flag = nhs_invasion_begins }
+		}
+		NOT = { has_country_flag = nhs_formed_greek }
+		any_owned_province = {
+			nhs_greek_areas = yes
+			continent = europe
+			NOT = { province_id = 151 }
+			NOT = { has_construction = missionary }
+		}
+		NOT = { has_country_flag = nhs_no_greek_nation }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents22.a"  # Give it to local lord
+		custom_tooltip = nhs_no_missionary_provinces
+		set_country_flag = nhs_formed_greek
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					AND = {
+						nhs_greek_areas = yes
+						NOT = { province_id = 151 }
+						NOT = { has_construction = missionary }
+					}
+				}
+				#if = {
+				#	limit = {
+				#		is_core = ROOT
+				#	}
+				#	remove_core = ROOT
+				#}
+				hidden_effect = {
+					if = {
+						limit = {
+							is_claim = ROOT
+						}
+						remove_claim = ROOT
+					}
+				}
+				tooltip = {
+					cede_province = ELG
+				}
+				add_core = ELG
+			}
+			release = ELG
+		}
+		create_subject = {
+			subject_type = elysian_subject
+			subject = ELG
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				country_event = {
+					id = nhs2_mainlandevents.21
+					days = 1
+					tooltip = nhs2_mainlandevents.21.t
+				}
+			}
+		}
+		hidden_effect = {
+			ELG = {
+				change_primary_culture = greek
+				nhs_change_government = { GOV = monarchy }
+				nhs_add_gov_reform = { REF = autocracy_reform }
+				change_technology_group = eastern
+				change_unit_type = eastern
+				change_religion = orthodox
+				add_manpower = 10
+				reverse_add_opinion = {
+					who = ROOT
+					modifier = nhs_formed_greeko
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = nhs_formed_greeko
+				}
+				every_owned_province = {
+					limit = {
+						nhs_greek_areas = yes
+					}
+					add_core = ELG
+				}
+				add_treasury = 200
+				add_mil_power = 100
+				add_dip_power = 100
+				add_adm_power = 100
+				random_owned_province = {
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents22.b"  # Vassal
+		trigger = {
+			always = no
+		}
+		set_country_flag = nhs_formed_greek
+		every_owned_province = {
+			limit = {
+				AND = {
+					nhs_greek_areas = yes
+					NOT = { province_id = 151 }
+					NOT = { has_construction = missionary }
+				}
+			}
+			#if = {
+			#	limit = {
+			#		is_core = ROOT
+			#	}
+			#	remove_core = ROOT
+			#}
+			tooltip = {
+				cede_province = ELG
+			}
+			add_core = ELG
+		}
+		hidden_effect = {
+			release = ELG
+		}
+		create_subject = {
+			subject_type = elysian_subject
+			subject = ELG
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				country_event = {
+					id = nhs2_mainlandevents.21
+					days = 1
+					tooltip = nhs2_mainlandevents.21.t
+				}
+			}
+		}
+		hidden_effect = {
+			ELG = {
+				change_primary_culture = greek
+				nhs_change_government = { GOV = monarchy }
+				nhs_add_gov_reform = { REF = autocracy_reform }
+				change_technology_group = eastern
+				change_unit_type = eastern
+				change_religion = orthodox
+				add_manpower = 10
+				reverse_add_opinion = {
+					who = ROOT
+					modifier = nhs_formed_greeko
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = nhs_formed_greeko
+				}
+				every_owned_province = {
+					limit = {
+						nhs_greek_areas = yes
+					}
+					add_core = ELG
+				}
+				add_treasury = 200
+				add_mil_power = 100
+				add_dip_power = 100
+				add_adm_power = 100
+				random_owned_province = {
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+				}
+			}
+		}
+	}
+	
+	option = { # We will control the land ourselves
+		name = "nhs2_mainlandevents22.c"
+		set_country_flag = nhs_no_greek_nation
+	}
+}
+
+# Greek Elysia gets a province
+
+province_event = {
+	id = nhs2_mainlandevents.23
+	title = nhs2_mainlandevents23.t
+	desc = nhs2_mainlandevents23.d
+	picture = DIPLOMACY_eventPicture
+
+	trigger = {
+		nhs_greek_areas = yes
+		continent = europe
+		NOT = { has_construction = missionary }
+		NOT = { province_id = 151 }
+		NOT = { has_province_modifier = nhs2_supply_lines }
+		OR = {
+			owner = {
+				has_country_flag = nhs_invasion_over
+			}
+			NOT = { has_province_modifier = nhs2_base_of_operations }
+		}
+		OR = {
+			NOT = { has_province_flag = nhs_invasion_keep_province }
+			owner = {
+				has_country_flag = nhs_invasion_over
+			}
+		}
+		owner = {
+			AND = {
+				nhs_is_elysia_late = yes
+				has_country_flag = nhs_formed_greek
+				NOT = { has_country_flag = nhs_no_greek_nation }
+			}
+			OR = {
+				NOT = { exists = ELG }
+				ELG = {
+					is_subject_of = PREV
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents23.a"
+		trigger = {
+			owner = {
+				OR = {
+					NOT = { has_country_flag = nhs_invasion_begins }
+					has_country_flag = nhs_invasion_over
+				}
+			}
+		}
+		#if = {
+		#	limit = {
+		#		is_core = ROOT
+		#	}
+		#	remove_core = ROOT
+		#}
+		if = {
+			limit = {
+				NOT = { exists = ELG }
+			}
+			add_core = ELG
+			tooltip = {
+				release = ELG
+				create_subject = {
+					subject_type = elysian_subject
+					subject = ELG
+				}
+			}
+			hidden_effect = {
+				owner = {
+					release = ELG
+					create_subject = {
+						subject_type = elysian_subject
+						subject = ELG
+					}
+				}
+				ELG = {
+					nhs_change_government = { GOV = monarchy }
+					nhs_add_gov_reform = { REF = autocracy_reform }
+				}
+			}
+		}
+		else = {
+			add_core = ELG
+			cede_province = ELG
+		}
+		hidden_effect = {
+			add_unrest = -5
+			if = {
+				limit = {
+					owner = {
+						religion = pantheon_worship
+					}
+					NOT = { has_province_flag = nhs_got_question_of_religion }
+					nhs_greek_areas = yes
+				}
+				set_province_flag = nhs_got_question_of_religion
+				random_list = {
+					40 = {
+						add_province_modifier = {
+						name = "nhs2_greek_deny_religion"
+							duration = 7300
+						}
+					}
+					40 = {
+						add_province_modifier = {
+							name = "nhs2_greek_accept_religion"
+							duration = 7300
+						}
+					}
+					10 = { change_religion = ROOT }
+					10 = { 
+						add_province_modifier = {
+							name = "missionary_failure"
+							duration = 7300
+						}
+					}
+				}
+			}
+		}		
+	}
+	
+	option = {     # Only works during the invasion
+		name = "nhs2_mainlandevents23.b"
+		trigger = {
+			owner = {
+				has_country_flag = nhs_invasion_begins
+				NOT = { has_country_flag = nhs_invasion_over }
+			}
+		}
+		#if = {
+		#	limit = {
+		#		is_core = ROOT
+		#	}
+		#	remove_core = ROOT
+		#}
+		if = {
+			limit = {
+				NOT = { exists = ELG }
+			}
+			tooltip = {
+				release = ELG
+				create_subject = {
+					subject_type = elysian_subject
+					subject = ELG
+				}
+			}
+			hidden_effect = {
+				owner = {
+					release = ELG
+					create_subject = {
+						subject_type = elysian_subject
+						subject = ELG
+					}
+				}
+				ELG = {
+					nhs_change_government = { GOV = monarchy }
+					nhs_add_gov_reform = { REF = autocracy_reform }
+				}
+			}
+		}
+		else = {
+			add_core = ELG
+			cede_province = ELG
+		}
+		add_unrest = -5
+		set_province_flag = nhs_invasion_keep_province
+	}
+	
+	option = {     # Only works during the invasion
+		name = "nhs2_mainlandevents23.c"
+		trigger = {
+			owner = {
+				has_country_flag = nhs_invasion_begins
+				NOT = { has_country_flag = nhs_invasion_over }
+			}
+		}
+		add_unrest = -5
+		set_province_flag = nhs_invasion_keep_province
+	}
+	
+}
+
+# Greek Elysia gets a province  give core
+
+province_event = {
+	id = nhs2_mainlandevents.50
+	title = nhs2_mainlandevents50.t
+	desc = nhs2_mainlandevents50.d
+	picture = DIPLOMACY_eventPicture
+
+	trigger = {
+		owner = {
+			tag = ELG		
+		}
+		nhs_greek_areas = yes
+		continent = europe
+		NOT = { province_id = 151 }
+		NOT = { is_core = ELG }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents50.a"
+		add_core = ELG
+		add_unrest = -5
+		hidden_effect = {	
+			if = {
+				limit = {
+					owner = {
+						religion = pantheon_worship
+					}
+					NOT = { has_province_flag = nhs_got_question_of_religion }
+					nhs_greek_areas = yes
+				}
+				set_province_flag = nhs_got_question_of_religion
+				random_list = {
+					40 = {
+						add_province_modifier = {
+						name = "nhs2_greek_deny_religion"
+							duration = 7300
+						}
+					}
+					40 = { 
+						add_province_modifier = {
+							name = "nhs2_greek_accept_religion"
+							duration = 7300
+						}
+					}
+					10 = { change_religion = ROOT }
+					10 = { 
+						add_province_modifier = {
+							name = "missionary_failure"
+							duration = 7300
+						}
+					}
+				}
+			}
+		}		
+	}
+}
+
+# INVASION IS OVER
+
+country_event = {
+	id = nhs2_mainlandevents.24
+	title = nhs2_mainlandevents24.t
+	desc = nhs2_mainlandevents24.d
+	picture = VICTORY_eventPicture
+	
+	major = yes
+	
+	fire_only_once = yes
+	
+	trigger = {
+		owns_or_vassal_of = 151
+		nhs_is_elysia_late = yes
+		#has_country_flag = nhs_invasion_second_part_begins
+		NOT = { has_country_flag = nhs_invasion_over }
+		NOT = {
+			any_province = {
+				AND = {
+					culture = greek
+					continent = europe
+					NOT = {
+						owner = {
+							OR = {
+								nhs_is_elysia_late = yes
+								is_subject_of = ROOT
+								primary_culture = greek
+								primary_culture = pontic_greek
+								primary_culture = goths
+							}
+						}			
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_country_flag = nhs_invasion_over
+		clr_country_flag = nhs_bo_sparta
+		clr_country_flag = nhs_bo_rhodes
+		clr_country_flag = nhs_bo_macedonia
+		clr_country_flag = nhs_bo_athens
+		clr_country_flag = nhs_bo
+		clr_country_flag = nhs_bo2
+		clr_country_flag = nhs_invasion_second_part_begins
+		clr_country_flag = nhs_invasion_second_part
+		clr_country_flag = nhs_supply_lines
+		clr_country_flag = nhs_supply_lines_secured
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					has_province_modifier = nhs2_base_of_operations
+				}
+				remove_province_modifier = nhs2_base_of_operations
+			}
+		}
+		
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents24.a"  # Rejoice!
+		add_prestige = 50
+		add_legitimacy = 50
+		add_army_tradition = 50
+		add_country_modifier = {
+			name = "nhs2_invasion_succeseful"
+			duration = -1
+		}
+		random_owned_province = {
+			limit = {
+				has_province_modifier = nhs2_supply_lines
+			}
+			remove_province_modifier = nhs2_supply_lines
+			nhs_set_center_of_trade_1 = yes
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					culture = greek
+					continent = europe
+				}
+				add_unrest = -5
+			}
+		}
+	}
+}
+
+# Constantinia is now mandatory, not anymore
+#
+#country_event = {
+#	id = nhs2_mainlandevents.26
+#	title = nhs2_mainlandevents22.t
+#	desc = nhs2_mainlandevents22.d
+#	picture = GOOD_WITH_MONARCH_eventPicture
+#
+#	trigger = {
+#		nhs_is_elysia_late = yes
+#		NOT = { has_country_flag = nhs_invasion_second_part_begins }
+#		OR = {
+#			has_country_flag = nhs_invasion_over
+#			NOT = { has_country_flag = nhs_invasion_begins }
+#		}
+#		NOT = { has_country_flag = nhs_formed_greek }
+#		any_owned_province = {
+#			OR = {
+#				culture = greek
+#				region = greece_region
+#			}
+#			continent = europe
+#			NOT = { province_id = 151 }
+#		}
+#		has_country_flag = nhs_no_greek_nation
+#	}
+#	
+#	mean_time_to_happen = {
+#		days = 1
+#	}
+#	
+#	option = {
+#		name = "nhs2_mainlandevents22.a"  # March
+#		set_country_flag = nhs_formed_greek
+#		every_owned_province = {
+#			limit = {
+#				AND = {
+#					OR = {
+#						culture = greek
+#						area = macedonia_area
+#						area = northern_greece_area
+#						area = morea_area
+#						area = western_aegean_area
+#						area = thrace_area
+#						area = bulgaria_area
+#					}
+#					NOT = { province_id = 151 }
+#				}
+#			}
+#			if = {
+#				limit = {
+#					is_core = ROOT
+#				}
+#				remove_core = ROOT
+#			}
+#			cede_province = ELG
+#			add_core = ELG
+#		}
+#		create_march = ELG
+#		hidden_effect = {
+#			if = {
+#				limit = {
+#					religion = pantheon_worship
+#				}
+#				country_event = {
+#					id = nhs2_mainlandevents.21
+#					days = 1
+#					tooltip = nhs2_mainlandevents.21.t
+#				}
+#			}
+#		}
+#		hidden_effect = {
+#			ELG = {
+#				add_government_reform = elysian_kingdom
+#				change_primary_culture = greek
+#				change_technology_group = modern_greek
+#				change_unit_type = modern_greek
+#				change_religion = orthodox
+#				add_manpower = 10
+#				reverse_add_opinion = {
+#					who = ROOT
+#					modifier = nhs_formed_greeko
+#				}
+#				add_opinion = {
+#					who = ROOT
+#					modifier = nhs_formed_greeko
+#				}
+#				every_owned_province = {
+#					limit = {
+#						OR = {
+#							culture = greek
+#							region = greece_region
+#						}
+#					}
+#					add_core = ELG
+#				}
+#				if = {
+#					limit = {
+#						ROOT = {
+#							has_country_modifier = nhs_secrets_silk
+#						}
+#					}
+#					add_country_modifier = {
+#						name = nhs_secrets_silk
+#						duration = -1
+#					}
+#				}
+#				if = {
+#					limit = {
+#						ROOT = {
+#							has_country_modifier = nhs_secrets_books
+#						}
+#					}				
+#					add_country_modifier = {
+#						name = nhs_secrets_books
+#						duration = -1
+#					}
+#				}
+#				add_treasury = 200
+#				add_mil_power = 100
+#				add_dip_power = 100
+#				add_adm_power = 100
+#				random_owned_province = {
+#					infantry = ROOT
+#					infantry = ROOT
+#					infantry = ROOT
+#					infantry = ROOT
+#					infantry = ROOT
+#				}
+#				if = {
+#					limit = {
+#						ROOT = {
+#							has_country_modifier = nhs_secrets_greekfire
+#						}
+#					}
+#					add_country_modifier = {
+#						name = nhs_secrets_greekfire
+#						duration = -1
+#					}
+#				}
+#				if = {
+#					limit = {
+#						ROOT = {
+#							has_country_modifier = nhs_greekfire_update
+#						}
+#					}				
+#					add_country_modifier = {
+#						name = nhs_greekfire_update
+#						duration = -1
+#					}
+#				}
+#				if = {
+#					limit = {
+#						ROOT = {
+#							has_country_modifier = nhs_noble_cataphracts
+#						}
+#					}
+#					add_country_modifier = {
+#						name = nhs_noble_cataphracts
+#						duration = -1
+#					}
+#				}
+#			}
+#		}
+#	}
+#	option = {
+#		name = "nhs2_mainlandevents22.b"  # Vassal
+#		set_country_flag = nhs_formed_greek
+#		every_owned_province = {
+#			limit = {
+#				AND = {
+#					OR = {
+#						culture = greek
+#						region = greece_region
+#					}
+#					NOT = { province_id = 151 }
+#				}
+#			}
+#			if = {
+#				limit = {
+#					is_core = ROOT
+#				}
+#				remove_core = ROOT
+#			}
+#			cede_province = ELG
+#			add_core = ELG
+#		}
+#		vassalize = ELG
+#		hidden_effect = {
+#			if = {
+#				limit = {
+#					religion = pantheon_worship
+#				}
+#				country_event = {
+#					id = nhs2_mainlandevents.21
+#					days = 1
+#					tooltip = nhs2_mainlandevents.21.t
+#				}
+#			}
+#		}
+#		hidden_effect = {
+#			ELG = {
+#				add_government_reform = elysian_kingdom
+#				change_primary_culture = greek
+#				change_technology_group = modern_greek
+#				change_unit_type = modern_greek
+#				change_religion = orthodox
+#				add_manpower = 10
+#				reverse_add_opinion = {
+#					who = ROOT
+#					modifier = nhs_formed_greeko
+#				}
+#				add_opinion = {
+#					who = ROOT
+#					modifier = nhs_formed_greeko
+#				}
+#				every_owned_province = {
+#					limit = {
+#						OR = {
+#							culture = greek
+#							region = greece_region
+#						}
+#					}
+#					add_core = ELG
+#				}
+#				if = {
+#					limit = {
+#						ROOT = {
+#							has_country_modifier = nhs_secrets_silk
+#						}
+#					}
+#					add_country_modifier = {
+#						name = nhs_secrets_silk
+#						duration = -1
+#					}
+#				}
+#				if = {
+#					limit = {
+#						ROOT = {
+#							has_country_modifier = nhs_secrets_books
+#						}
+#					}				
+#					add_country_modifier = {
+#						name = nhs_secrets_books
+#						duration = -1
+#					}
+#				}
+#				add_treasury = 200
+#				add_mil_power = 100
+#				add_dip_power = 100
+#				add_adm_power = 100
+#				random_owned_province = {
+#					infantry = ROOT
+#					infantry = ROOT
+#					infantry = ROOT
+#					infantry = ROOT
+#					infantry = ROOT
+#				}
+#				if = {
+#					limit = {
+#						ROOT = {
+#							has_country_modifier = nhs_secrets_greekfire
+#						}
+#					}
+#					add_country_modifier = {
+#						name = nhs_secrets_greekfire
+#						duration = -1
+#					}
+#				}
+#				if = {
+#					limit = {
+#						ROOT = {
+#							has_country_modifier = nhs_greekfire_update
+#						}
+#					}				
+#					add_country_modifier = {
+#						name = nhs_greekfire_update
+#						duration = -1
+#					}
+#				}
+#				if = {
+#					limit = {
+#						ROOT = {
+#							has_country_modifier = nhs_noble_cataphracts
+#						}
+#					}
+#					add_country_modifier = {
+#						name = nhs_noble_cataphracts
+#						duration = -1
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+
+
+
+
+# Regain claims
+
+country_event = {
+	id = nhs2_mainlandevents.30
+	title = nhs2_mainlandevents30.t
+	desc = nhs2_mainlandevents30.d
+	picture = VICTORY_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		NOT = { has_country_flag = nhs_invasion_over }
+		OR = {
+			AND = {
+				has_country_flag = nhs_supply_lines
+				has_country_flag = nhs_supply_lines1
+				any_province = {
+					OR = {
+						province_id = 1247
+						province_id = 127
+						province_id = 124
+						province_id = 125
+						province_id = 126
+					}
+					NOT = { nhs_is_elysia_claim = yes }
+				}
+			}
+			AND = {
+				has_country_flag = nhs_supply_lines
+				has_country_flag = nhs_supply_lines2
+				any_province = {
+					OR = {
+						province_id = 163
+						province_id = 321
+						province_id = 142
+						province_id = 164
+					}
+					NOT = { nhs_is_elysia_claim = yes }
+				}
+			}
+			AND = {
+				has_country_flag = nhs_supply_lines
+				has_country_flag = nhs_supply_lines3
+				any_province = {
+					region = maghreb_region
+					has_port = yes
+					NOT = { nhs_is_elysia_claim = yes }
+				}
+			}
+			AND = {
+				has_country_flag = nhs_supply_lines
+				has_country_flag = nhs_supply_lines4
+				any_province = {
+					OR = {
+						area = cap_verde_area
+						province_id = 1114
+						province_id = 1111
+						province_id = 367
+						province_id = 368
+						province_id = 366
+						province_id = 1096
+					}
+					has_port = yes
+					NOT = { nhs_is_elysia_claim = yes }
+				}
+			}
+			AND = {
+				has_country_flag = nhs_claims_greek
+				any_province = {
+					owner = {
+						NOT = { 
+							AND = {
+								culture_group = byzantine
+								NOT = { primary_culture = turkish }
+							}
+						}
+					}
+					nhs_greek_areas = yes
+					continent = europe
+					NOT = { nhs_is_elysia_claim = yes }
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					ROOT = {
+						has_country_flag = nhs_supply_lines
+						has_country_flag = nhs_supply_lines1
+					}
+					any_province = {
+						OR = {
+							province_id = 1247
+							province_id = 127
+							province_id = 124
+							province_id = 125
+							province_id = 126
+						}
+						NOT = { nhs_is_elysia_claim = yes }
+					}
+				}
+				ROOT = {
+					add_permanent_claim = 1247
+					add_permanent_claim = 127
+					add_permanent_claim = 124
+					add_permanent_claim = 125
+					add_permanent_claim = 126
+				}
+			}
+			if = {
+				limit = {
+					ROOT = {
+						has_country_flag = nhs_supply_lines
+						has_country_flag = nhs_supply_lines2
+					}
+					any_province = {
+						OR = {
+							province_id = 163
+							province_id = 321
+							province_id = 142
+							province_id = 164
+						}
+						NOT = { nhs_is_elysia_claim = yes }
+					}
+				}
+				ROOT = {
+					add_permanent_claim = 163
+					add_permanent_claim = 321
+					add_permanent_claim = 142
+					add_permanent_claim = 164
+				}
+			}
+			if = {
+				limit = {
+					ROOT = {
+						has_country_flag = nhs_supply_lines
+						has_country_flag = nhs_supply_lines3
+					}
+					any_province = {
+						region = maghreb_region
+						has_port = yes
+						NOT = { nhs_is_elysia_claim = yes }
+					}
+				}
+				every_province = {
+					limit = {
+						region = maghreb_region
+						has_port = yes
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					ROOT = {
+						has_country_flag = nhs_supply_lines
+						has_country_flag = nhs_supply_lines4
+					}
+					any_province = {
+						OR = {
+							area = cap_verde_area
+							province_id = 1114
+							province_id = 1111
+							province_id = 367
+							province_id = 368
+							province_id = 366
+							province_id = 1096
+						}
+						has_port = yes
+						NOT = { nhs_is_elysia_claim = yes }
+					}
+				}
+				every_province = {
+					limit = {
+						OR = {
+							area = cap_verde_area
+							province_id = 1114
+							province_id = 1111
+							province_id = 367
+							province_id = 368
+							province_id = 366
+							province_id = 1096
+						}
+						has_port = yes
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					ROOT = {
+						has_country_flag = nhs_claims_greek
+					}
+					any_province = {
+						owner = {
+							NOT = { 
+								AND = {
+									culture_group = byzantine
+									NOT = { primary_culture = turkish }
+								}
+							}
+						}
+						nhs_greek_areas = yes
+						continent = europe
+						NOT = { nhs_is_elysia_claim = yes }
+					}
+				}
+				every_province = {
+					limit = {
+						owner = {
+							NOT = { 
+								AND = {
+									culture_group = byzantine
+									NOT = { primary_culture = turkish }
+								}
+							}
+						}
+						nhs_greek_areas = yes
+						continent = europe
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents30.a"
+	}
+}
+
+

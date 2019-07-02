@@ -1,0 +1,1147 @@
+country_decisions = {
+	
+	#Main Menu
+	msg_reforms_menu = {
+		major = yes
+		potential = {
+			tag = MSN
+			NOT = { has_dlc = "Dharma" }
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started
+			}
+			NOT = { has_global_flag = msg_reforms_done }
+			ai = no
+			NOT = { has_country_flag = msg_reform_menu_open }
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = msg_reforms_menu_tt
+				always = yes
+			}
+		}
+		effect = {
+			set_country_flag = msg_reform_menu_open
+		}
+		ai_will_do = { factor = 0 }
+	}
+	
+	msg_close_reforms_menu = {
+		major = yes
+		potential = {
+			tag = MSN
+			NOT = { has_dlc = "Dharma" }
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started
+			}
+			NOT = { has_global_flag = msg_reforms_done }
+			ai = no
+			has_country_flag = msg_reform_menu_open
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = msg_close_reforms_menu_tt
+				always = yes
+			}
+		}
+		effect = {
+			clr_country_flag = msg_reform_menu_open
+		}
+		ai_will_do = { factor = 0 }
+	}
+	
+	msg_reform_land = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_land_redistributed }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			#dip_power = 50
+			#custom_trigger_tooltip = {
+			#	tooltip = msg_owns_laconya
+			#	any_owned_province = {
+			#		has_province_flag = nhs_msg_original_capital
+			#		base_tax = 5
+			#	}
+			#}
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+				capital_scope = {
+					base_tax = 2
+				}
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = msg_less_than_100_contruction_cost_tt
+						NOT = {
+							has_global_modifier_value = {
+								which = build_cost
+								value = 0.91
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = msg_less_than_100_development_cost_tt
+						NOT = {
+							has_global_modifier_value = {
+								which = development_cost
+								value = 0.91
+							}
+						}
+					}
+				}
+			}
+			else = {
+				adm_power = 50
+			}
+		}
+		effect = {
+			if = {
+				limit = { ai = no }
+				add_stability = -1
+			}
+			else = {
+				add_adm_power = -50
+				if = {
+					limit = {
+						has_dlc = "Dharma"
+					}
+					add_government_reform = msg_reform_land_ref
+				}
+			}
+			#add_dip_power = -50
+			#tooltip = {
+				if = {
+					limit = {
+						OR = {
+							ai = no
+							capital_scope = {
+								base_tax = 2
+							}
+						}
+					}
+					capital_scope = {
+						add_base_tax = -1
+					}
+				}
+			#}
+			#hidden_effect = {
+				#random_owned_province = {
+				#	limit = {
+				#		has_province_flag = nhs_msg_original_capital
+				#	}
+				#	add_base_tax = -1
+				#}
+			#}
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.4 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_reform_trade_ports = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_trade_ports_done }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 2
+				treasury = 50
+			}
+			dip_power = 50
+			num_of_ports = 10
+		}
+		effect = {
+			if = {
+				limit = { ai = no }
+				add_treasury = -50
+				#add_stability = -1
+			}
+			else_if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				add_government_reform = msg_reform_trade_ports_ref
+			}
+			add_dip_power = -50
+			add_corruption = 2
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.3 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_reform_gold_mine = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_gold_sold }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+				treasury = 100
+			}
+			dip_power = 50
+			num_of_owned_provinces_with = {
+				value = 3
+				trade_goods = gold
+			}
+		}
+		effect = {
+			if = {
+				limit = { ai = no }
+				add_stability = -1
+				add_treasury = -100
+			}
+			else_if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				add_government_reform = msg_reformed_gold_mine
+			}
+			add_dip_power = -50
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.2 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_court_reform = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_court_done }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+			}
+			mil_power = 50
+			prestige = 20
+			num_of_cities = 25
+		}
+		effect = {
+			# if = {
+				# limit = { ai = no }
+				# add_stability = -1
+			# }
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+					ai = yes
+				}
+				add_government_reform = msg_court_reform_ref
+			}
+			add_mil_power = -50
+			add_prestige = -20
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.16 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_diplomats = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_diplomats_done }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+				treasury = 100
+			}
+			dip_power = 50
+			custom_trigger_tooltip = {
+				tooltip = msg_no_dips_before_conquest
+				NOT = {
+					any_country = {
+						technology_group = mesoamerican
+						capital_scope = {
+							province_group = mesoamerica_pgroup
+						}
+						NOT = {
+							is_subject_of = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = { ai = no }
+				#add_stability = -1
+				add_treasury = -100
+			}
+			else_if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				add_government_reform = msg_diplomats_ref
+			}
+			add_dip_power = -50
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.15 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_naval_reform = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_ships_done }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+			}
+			mil_power = 50
+			sailors = 500
+			num_of_ports = 10
+		}
+		effect = {
+			# if = {
+				# limit = { ai = no }
+				# add_stability = -1
+			# }
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+					ai = yes
+				}
+				add_government_reform = msg_naval_reform_ref
+			}
+			add_mil_power = -50
+			add_sailors = -500
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.14 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_spartan_heralds = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			religion = pantheon_worship
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_heralds_done }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+			}
+			adm_power = 50
+		}
+		effect = {
+			# if = {
+				# limit = { ai = no }
+				# add_stability = -1
+			# }
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+					ai = yes
+				}
+				add_government_reform = msg_spartan_heralds_ref
+			}
+			add_adm_power = -50
+			add_corruption = 3
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.6 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_native_deities = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			religion = pantheon_worship
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_native_deities }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+			}
+			adm_power = 50
+			prestige = 20
+			custom_trigger_tooltip = {
+				tooltip = msg_needs_aztlan_for_reform
+				OR = {
+					has_global_flag = aztlan_reformation
+					has_global_flag = msg_post_reformation
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = { ai = no }
+				add_stability = -1
+			}
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+					ai = yes
+				}
+				add_government_reform = msg_native_deities_ref
+			}
+			add_adm_power = -50
+			add_prestige = -20
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.7 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_deify_leonidas = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			religion = pantheon_worship
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_leonidas_done }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = msg_leonidas_dead
+				NOT = { has_ruler_modifier = msg_has_leonidas }
+			}
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 0
+			}
+			adm_power = 50
+			custom_trigger_tooltip = {
+				tooltip = msg_needs_aztlan_for_reform
+				OR = {
+					has_global_flag = aztlan_reformation
+					has_global_flag = msg_post_reformation
+				}
+			}
+		}
+		effect = {
+			add_stability = 1
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+					ai = yes
+				}
+				add_government_reform = msg_deify_leonidas_ref
+			}
+			add_adm_power = -50
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.5 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_aztlan_priesthood = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			religion = aztlan_worship
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_priesthood_done }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+			}
+			adm_power = 50
+		}
+		effect = {
+			# if = {
+				# limit = { ai = no }
+				# add_stability = -1
+			# }
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+					ai = yes
+				}
+				add_government_reform = msg_aztlan_priesthood_ref
+			}
+			add_adm_power = -50
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.8 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_old_faith = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			religion = aztlan_worship
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_old_faith }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+			}
+			adm_power = 50
+			prestige = 20
+		}
+		effect = {
+			if = {
+				limit = { ai = no }
+				add_stability = -1
+			}
+			else_if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				add_government_reform = msg_old_faith_ref
+			}
+			add_adm_power = -50
+			add_prestige = -20
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.9 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_sacrifice = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			religion = aztlan_worship
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_FUN }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 0
+			}
+			adm_power = 50
+			legitimacy = 70
+		}
+		effect = {
+			add_stability = 1
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+					ai = yes
+				}
+				add_government_reform = msg_sacrifice_ref
+			}
+			add_adm_power = -50
+			add_legitimacy = -20
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.10 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_spartan_patriarch = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			religion = elysian_orthodoxy
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = nhs_spartan_council }
+			#NOT = { has_global_flag = nhs2_patriarchate_south }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			#NOT = {
+			#	any_province = {
+			#		nhs_is_south = yes
+			#	}
+			#}
+			NOT = {
+				any_province = {
+					has_province_modifier = patriarchate_of_the_south1
+				}
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+			}
+			adm_power = 50
+		}
+		effect = {
+			# if = {
+				# limit = { ai = no }
+				# add_stability = -1
+			# }
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+					ai = yes
+				}
+				add_government_reform = msg_spartan_patriarch_ref
+			}
+			add_adm_power = -50
+			add_corruption = 3
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.11 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_holy_army = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			religion = elysian_orthodoxy
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_holy_army }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+			}
+			mil_power = 50
+			manpower = 5
+		}
+		effect = {
+			# if = {
+				# limit = { ai = no }
+				# add_stability = -1
+			# }
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+					ai = yes
+				}
+				add_government_reform = msg_holy_army_ref
+			}
+			add_mil_power = -50
+			add_manpower = -5
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.12 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	msg_saint_leo = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			religion = elysian_orthodoxy
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			NOT = { has_global_flag = msg_saint_leo }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 1
+			}
+			adm_power = 50
+			custom_trigger_tooltip = {
+				tooltip = msg_leonidas_dead
+				NOT = { has_ruler_modifier = msg_has_leonidas }
+			}
+		}
+		effect = {
+			# if = {
+				# limit = { ai = no }
+				# add_stability = -1
+			# }
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+					ai = yes
+				}
+				add_government_reform = msg_saint_leo_ref
+			}
+			add_adm_power = -50
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.13 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	msg_crush_nobles = {
+		major = yes
+		potential = {
+			tag = MSN
+			OR = {
+				NOT = { has_dlc = "Dharma" }
+				ai = yes
+			}
+			OR = {
+				num_of_cities = 3
+				has_global_flag = msg_reforms_started 
+			}
+			NOT = { has_global_flag = msg_reforms_done }
+			NOT = { has_country_flag = msg_reform_in_progress }
+			OR = {
+				ai = yes
+				has_country_flag = msg_reform_menu_open
+			}
+			# OR = {
+				# ai = no
+				# NOT = {
+					# is_in_war = {
+						# attacker_leader = ROOT
+					# }
+				# }
+			# }
+		}
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 2
+			}
+			mil_power = 100
+			adm_power = 100
+			dip_power = 100
+			custom_trigger_tooltip = {
+				tooltip = msg_all_reforms_done
+				AND = {
+					has_global_flag = msg_land_redistributed
+					has_global_flag = msg_gold_sold
+					has_global_flag = msg_trade_ports_done
+					has_global_flag = msg_ships_done
+					has_global_flag = msg_diplomats_done
+					has_global_flag = msg_court_done
+					OR = {
+						AND = {
+							religion = pantheon_worship
+							has_global_flag = msg_leonidas_done
+							has_global_flag = msg_heralds_done
+							has_global_flag = msg_native_deities
+						}
+						AND = {
+							religion = aztlan_worship
+							has_global_flag = msg_priesthood_done
+							has_global_flag = msg_old_faith
+							has_global_flag = msg_FUN
+						}
+						AND = {
+							religion_group = christian
+							has_global_flag = msg_saint_leo
+							has_global_flag = nhs2_patriarchate_south
+							has_global_flag = msg_holy_army
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					ai = no
+				}
+				add_stability = -2
+			}
+			else_if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				add_government_reform = msg_crush_nobles_ref
+			}
+			add_mil_power = -100
+			add_adm_power = -100
+			add_dip_power = -100
+			set_country_flag = msg_reform_in_progress
+			country_event = { id = msg_reforms.17 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}

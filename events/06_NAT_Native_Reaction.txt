@@ -1,0 +1,228 @@
+namespace = nhs2_native_reaction
+
+#Global Aggression
+#Aggression Groups: CAHOKIAN(Great Plains, Mississipi, South Elysian coast, Half the aggresion from IROQUOIS), IROQUOIS(Great Lakes, North Elysian Coast, Half the aggresion from CAHOKIAN), NORTHERN(Vinland, Coastal Thorfin Bay, Half the aggresion from IROQUOIS), WESTERN(Thorfin Bay, Hyperboreala), SOUTHERN(Hesperidian Fields, Mexico)
+
+### Natives move together
+#country_event = {
+#	id = nhs2_native_reaction.1
+#	title = nhs2_native_reaction.1.t
+#	desc = nhs2_native_reaction.1.d
+#	picture = cahokia_eventPicture
+#	
+#	is_triggered_only = yes
+#	
+#	trigger = {
+#		always = no #Disabled
+#		NOT = { num_of_cities = 2 }
+#		OR = {
+#			technology_group = north_american
+#			technology_group = hellenised_american
+#		}
+#		NOT = {
+#			any_neighbor_country = {
+#				OR = {
+#					technology_group = north_american
+#					technology_group = hellenised_american
+#				}
+#				alliance_with = ROOT
+#				is_at_war = no
+#			}
+#		}
+#		any_country = {
+#			OR = {
+#				technology_group = north_american
+#				technology_group = hellenised_american
+#			}
+#			alliance_with = ROOT
+#			is_at_war = no
+#		}
+#		is_at_war = no
+#		NOT = { has_global_flag = nhs_native_move }
+#		OR = {
+#			is_year = 1470
+#			REB = { check_variable = { which = nhs_global_aggression value = 25 } }
+#			nhs_15_local_aggression = yes
+#		}
+#	}
+#	
+#	mean_time_to_happen = {
+#		months = 120
+#		modifier = {
+#			factor = 2
+#			NOT = {
+#				any_neighbor_country = {
+#					nhs_exiles_tech = yes
+#				}
+#			}
+#		}
+#		modifier = {
+#			factor = 0.8
+#			any_neighbor_country = {
+#				OR = {
+#					check_variable = { which = nhs_own_aggression value = 15 }
+#					nhs_40_local_aggression = yes
+#				}
+#			}
+#		}
+#		modifier = {
+#			factor = 0.5
+#			any_neighbor_country = {
+#				OR = {
+#					check_variable = { which = nhs_own_aggression value = 25 }
+#					nhs_80_local_aggression = yes
+#				}
+#			}
+#		}
+#		modifier = {
+#			factor = 0.1
+#			any_neighbor_country = {
+#				OR = {
+#					check_variable = { which = nhs_own_aggression value = 25 }
+#					nhs_100_local_aggression = yes
+#				}
+#			}
+#		}
+#	}
+#	
+#	immediate = {
+#		set_global_flag = nhs_native_move
+#		if = {
+#			limit = {
+#				any_province = {
+#					any_neighbor_province = {
+#						owner = {
+#							alliance_with = ROOT
+#							NOT = { num_of_cities = 2 }
+#							is_at_war = no
+#						}
+#					}
+#					development = 12
+#				}
+#			}
+#			random_province = {
+#				limit = {
+#					any_neighbor_province = {
+#						owner = {
+#							alliance_with = ROOT
+#							NOT = { num_of_cities = 2 }
+#							is_at_war = no
+#						}
+#					}
+#					development = 12
+#				}
+#				save_event_target_as = native_migration_target
+#			}
+#			else = {
+#				if = {
+#					limit = {
+#						any_province = {
+#							any_neighbor_province = {
+#								owner = {
+#									alliance_with = ROOT
+#									NOT = { num_of_cities = 2 }
+#									is_at_war = no
+#								}
+#							}
+#							development = 10
+#						}
+#					}
+#					random_province = {
+#						limit = {
+#							any_neighbor_province = {
+#								owner = {
+#									alliance_with = ROOT
+#									NOT = { num_of_cities = 2 }
+#									is_at_war = no
+#								}
+#							}
+#							development = 10
+#						}
+#						save_event_target_as = native_migration_target
+#					}
+#					else = {
+#						if = {
+#							limit = {
+#								any_province = {
+#									any_neighbor_province = {
+#										owner = {
+#											alliance_with = ROOT
+#											NOT = { num_of_cities = 2 }
+#											is_at_war = no
+#										}
+#									}
+#									development = 6
+#								}
+#							}
+#							random_province = {
+#								limit = {
+#									any_neighbor_province = {
+#										owner = {
+#											alliance_with = ROOT
+#											NOT = { num_of_cities = 2 }
+#											is_at_war = no
+#										}
+#									}
+#									development = 6
+#								}
+#								save_event_target_as = native_migration_target
+#							}
+#							else = {
+#								if = {
+#									limit = {
+#										any_province = {
+#											any_neighbor_province = {
+#												owner = {
+#													alliance_with = ROOT
+#													NOT = { num_of_cities = 2 }
+#													is_at_war = no
+#												}
+#											}
+#										}
+#									}
+#									random_province = {
+#										limit = {
+#											any_neighbor_province = {
+#												owner = {
+#													alliance_with = ROOT
+#													NOT = { num_of_cities = 2 }
+#													is_at_war = no
+#												}
+#											}
+#										}
+#										save_event_target_as = native_migration_target
+#									}
+#								}
+#							}
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = "nhs2_native_reaction"
+#		clr_global_flag = nhs_native_move
+#		custom_tooltip = nhs_migrate_there
+#		hidden_effect = {
+#			event_target:native_migration_target = {
+#				cede_province = ROOT
+#				add_core = ROOT
+#				change_culture = ROOT
+#				change_religion = ROOT
+#			}								
+#			capital_scope = {
+#				remove_core = ROOT
+#				cede_province = ---
+#				add_colonysize = -1001
+#				change_native_size = 1
+#			}
+#		}
+#	}
+#	
+#	option = {
+#		name = "nhs2_native_reaction"
+#		clr_global_flag = nhs_native_move
+#	}
+#}

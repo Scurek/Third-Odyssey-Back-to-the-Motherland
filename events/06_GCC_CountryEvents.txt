@@ -1,0 +1,287 @@
+#namespace = gcc_countryevents
+#
+### Pre-Formation events (possible as Cahokia)
+#country_event = {
+#	id = gcc_countryevents.1
+#	title = gcc_countryevents.1.t
+#	desc = gcc_countryevents.1.d
+#	picture = cahokia_eventPicture
+#	
+#	fire_only_once = yes
+#	is_triggered_only = yes
+#	
+#	trigger = {
+#		OR = {
+#			tag = CAK
+#			tag = GCC
+#		}
+#		is_year = 9999 # Never, this is a template
+#	}
+#
+#	mean_time_to_happen = {
+#		months = 12
+#	}
+#
+#	option = {
+#		name = "GCC_COUNTRYEVENTS_NAME_1A"
+#	}
+#}
+#
+### GCC Formation event - simply after ELY is formed (=> Elysia strong enough to be severe threat)
+#country_event = {
+#	id = gcc_countryevents.100
+#	title = gcc_countryevents.100.t
+#	desc = gcc_countryevents.100.d
+#	picture = cahokia_eventPicture
+#	
+#	fire_only_once = yes
+#	is_triggered_only = yes
+#	
+#	trigger = {
+#		is_subject = no
+#		OR = {
+#			tag = CAK
+#			AND = {
+#				OR = {
+#					NOT = { exists = CAK }
+#					CAK = { is_subject = yes }
+#				}
+#				OR = {
+#					technology_group = north_american
+#					technology_group = hellenised_american
+#					technology_group = high_american
+#				}
+#				num_of_cities = 3
+#			}
+#		}
+#		exists = ELY
+#		OR = {
+#			religion = totemism
+#			AND = {
+#				NOT = { num_of_religion = { religion = elysian_orthodoxy value = 3 } }
+#				NOT = { num_of_religion = { religion = orthodox value = 3 } }
+#				NOT = { num_of_religion = { religion = pantheon_worship value = 3 } }
+#				capital_scope = {
+#					religion = totemism
+#				}
+#			}
+#		}
+#	}
+#
+#	mean_time_to_happen = {
+#		months = 6
+#	}
+#
+#	option = {
+#		name = "GCC_COUNTRYEVENTS_NAME_100A"
+#		change_tag = GCC
+#		swap_free_idea_group = yes
+#		change_religion = totemism
+#		add_country_modifier = {
+#			name = missionary_zeal
+#			duration = 7300
+#		}
+#		add_government_reform = great_clans_council
+#		GCC = {
+#			capital_scope = {
+#				add_base_tax = 2
+#				add_base_production = 2
+#				add_base_manpower = 3
+#			}
+#		}
+#		add_country_modifier = {
+#			name = gcc_rapid_expansion
+#			duration = 18250
+#		}
+#		hidden_effect = {
+#			ELY = { country_event = { id = gcc_elysianevents.1 days = 3 } }
+#		}
+#	}
+#}
+#
+### Nation can join the confederacy
+#country_event = {
+#	id = gcc_countryevents.101
+#	title = gcc_countryevents.101.t
+#	desc = gcc_countryevents.101.d
+#	picture = cahokia_eventPicture
+#	
+#	is_triggered_only = yes
+#	
+#	trigger = {
+#		is_subject = no
+#		OR = {
+#			technology_group = north_american
+#			technology_group = hellenised_american
+#			technology_group = high_american
+#		}
+#		exists = GCC
+#		NOT = { tag = GCC }
+#		NOT = { has_country_flag = gcc_countryevents_101_denied }
+#		is_at_war = no
+#		capital_scope = {
+#			OR = {
+#				region = great_lakes_region
+#				region = northeast_america_region
+#				region = southeast_america_region
+#				region = mississippi_region
+#				region = canada_region
+#			}
+#		}
+#		NOT = { has_country_modifier = gcc_integration_cd }
+#	}
+#	
+#	mean_time_to_happen = {
+#		months = 48
+#		modifier = {
+#			factor = 0.25
+#			technology_group = north_american
+#		}
+#		modifier = {
+#			factor = 1.5
+#			has_country_flag = gcc_countryevents_101
+#		}
+#	}
+#	
+#	immediate = {
+#		set_country_flag = gcc_countryevents_101
+#		hidden_effect = {
+#			add_country_modifier = {
+#				name = gcc_integration_cd
+#				duration = 7300
+#				hidden = yes
+#			}
+#			
+#		}
+#	}
+#	
+#	option = { # Join confederacy
+#		name = "GCC_COUNTRYEVENTS_NAME_101A"
+#		limit = { ai = yes }
+#		ai_chance = {
+#			factor = 50
+#			modifier = {
+#				factor = 4.0
+#				is_neighbor_of = ELY
+#				NOT = { ELY = { reverse_has_opinion = { who = ROOT value = 100 } } }
+#				NOT = { nhs_guaranteed_by_ely = yes }
+#			}
+#		}
+#		set_country_flag = gcc_countryevents_101_accept
+#		GCC = { country_event = { id = gcc_countryevents.102 days = 1 } }
+#	}
+#	option = { # Stay alone
+#		name = "GCC_COUNTRYEVENTS_NAME_101B"
+#		ai_chance = {
+#			factor = 50
+#			modifier = {
+#				factor = 2.0
+#				num_of_cities = 3
+#			}
+#			modifier = {
+#				factor = 2.0
+#				num_of_cities = 5
+#			}
+#			modifier = {
+#				factor = 4.0
+#				has_matching_religion = ELY # Same religion as ELY
+#			}
+#			modifier = {
+#				factor = 4.0
+#				OR = {
+#					ELY = { reverse_has_opinion = { who = ROOT value = 100 } }
+#					nhs_guaranteed_by_ely = yes
+#				}
+#			}
+#		}
+#	}
+#	option = { # Deny forever
+#		name = "GCC_COUNTRYEVENTS_NAME_101C"
+#		limit = { ai = no }
+#		set_country_flag = gcc_countryevents_101_denied
+#	}
+#}
+#
+###
+#country_event = {
+#	id = gcc_countryevents.102
+#	title = gcc_countryevents.102.t
+#	desc = gcc_countryevents.102.d
+#	picture = cahokia_eventPicture
+#	
+#	is_triggered_only = yes
+#	
+#	option = {
+#		name = "GCC_COUNTRYEVENTS_NAME_102A"
+#		ai_chance = { factor = 100 }
+#		if = {
+#			limit = {
+#				FROM = {
+#					ai = no
+#				}
+#			}
+#			vassalize = FROM
+#		}
+#		if = {
+#			limit = {
+#				FROM = {
+#					ai = yes
+#				}
+#			}
+#			inherit = FROM
+#		}
+#	}
+#	option = {
+#		name = "GCC_COUNTRYEVENTS_NAME_102B"
+#		ai_chance = { factor = 0 }
+#	}
+#}
+#
+### Elysian defectors -> get troops/manpower
+#country_event = {
+#	id = gcc_countryevents.200
+#	title = gcc_countryevents.200.t
+#	desc = gcc_countryevents.200.d
+#	picture = cahokia_eventPicture
+#	
+#	is_triggered_only = yes
+#	
+#	option = {
+#		name = "GCC_COUNTRYEVENTS_NAME_200A"
+#		ai_chance = { 
+#			factor = 100
+#			modifier = {
+#				factor = 0
+#				OR = {
+#					army_size_percentage = 0.8
+#					NOT = { treasury = 30 }
+#				}
+#			}
+#		}
+#		trigger = {
+#			any_owned_province = {
+#				controlled_by = ROOT
+#			}
+#		}
+#		add_treasury = -20
+#		random_owned_province = {
+#			limit = { controlled_by = ROOT }
+#			infantry = ROOT
+#			infantry = ROOT
+#			infantry = ROOT
+#			infantry = ROOT
+#		}
+#		add_country_modifier = {
+#			name = gcc_deploying_defectors
+#			duration = 1825
+#		}
+#	}
+#	
+#	option = {
+#		name = "GCC_COUNTRYEVENTS_NAME_200B"
+#		ai_chance = { factor = 1 }
+#		add_manpower = 4
+#	}
+#}
+#
+#

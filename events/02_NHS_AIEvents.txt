@@ -1,0 +1,539 @@
+namespace = nhs2_aievents
+
+
+# AI colonisation help 1 - Elysian homelands
+#province_event = {
+#	id = nhs2_aievents.1
+#	title = nhs2_countryevents.18.t
+#	desc = nhs2_countryevents.18.d
+#	picture = DIPLOMACY_eventPicture
+#	
+#	trigger = {
+#		owner = {
+#			OR = {
+#				tag = NHS
+#				nhs_is_elysia_late = yes
+#			}
+#		}
+#		has_empty_adjacent_province = yes
+#		owner = {
+#			any_owned_province = {
+#				any_empty_neighbor_province = {
+#					has_discovered = ROOT
+#					nhs_homelands = yes
+#				}
+#			}
+#		}
+#		owner = {
+#			any_owned_province = {
+#				NOT = {
+#					nhs_homelands = yes
+#				}
+#				NOT = { colonysize = 500 }
+#				is_colony = yes
+#			}
+#		}
+#		owner = { ai = yes }
+#		owner = { NOT = { has_country_modifier = nhs2_ai_colonising_timer }	}
+#		
+#	}
+#
+#	immediate = {
+#		owner = {
+#			add_country_modifier = {
+#				name = nhs2_ai_colonising_timer
+#				duration = 20
+#				hidden = yes
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = "nhs2_countryevents.18.a"
+#		owner = {
+#			if = {
+#				limit = {
+#					any_owned_province = {
+#						NOT = {
+#							nhs_homelands = yes
+#						}
+#						NOT = { colonysize = 500 }
+#						is_colony = yes
+#					}
+#				}
+#				random_owned_province = {
+#					limit = {
+#						NOT = {
+#							nhs_homelands = yes
+#						}
+#						is_colony = yes
+#						NOT = { colonysize = 500 }
+#					}
+#					add_colonysize = -1000
+#				}
+#			}
+#		}
+#		owner = {
+#			random_owned_province = {
+#				limit = {
+#					any_empty_neighbor_province = {
+#						has_discovered = ROOT
+#						nhs_homelands = yes
+#					}
+#				}
+#				random_empty_neighbor_province = {
+#					limit = {
+#						has_discovered = ROOT
+#						nhs_homelands = yes
+#					}
+#					create_colony = 200
+#				}
+#			}
+#		}	
+#	}
+#}
+
+# AI colonisation help 2 - Ports
+#province_event = {
+#	id = nhs2_aievents.2
+#	title = nhs2_countryevents.18.t
+#	desc = nhs2_countryevents.18.d
+#	picture = DIPLOMACY_eventPicture
+#	
+#	trigger = {
+#		owner = {
+#			OR = {
+#				tag = NHS
+#				nhs_is_elysia_late = yes
+#				AND = {
+#					tag = SHQ
+#					is_subject = no
+#				}
+#				AND = {
+#					tag = CM1
+#					is_subject = no
+#				}
+#			}
+#			NOT = { num_of_cities = 20 }
+#		}
+#		OR = {
+#			NOT = {
+#				owner = {
+#					any_owned_province = {
+#						any_empty_neighbor_province = {
+#							has_discovered = ROOT
+#							nhs_homelands = yes
+#						}
+#					}
+#				}
+#			}
+#			owner = {
+#				AND = {
+#					NOT = { tag = NHS }
+#					NOT = { nhs_is_elysia_late = yes }
+#				}
+#			}
+#		}
+#		owner = {
+#			any_owned_province = {
+#				has_port = no
+#				is_colony = yes
+#				NOT = { colonysize = 500 }
+#			}
+#		}
+#		has_empty_adjacent_province = yes
+#		any_owned_province = {
+#			any_empty_neighbor_province = {
+#				has_discovered = ROOT
+#				has_port = yes
+#			}
+#		}
+#		owner = { ai = yes }
+#		owner = { NOT = { has_country_modifier = nhs2_ai_colonising_timer }	}
+#	}
+#
+#	immediate = {
+#		owner = {
+#			add_country_modifier = {
+#				name = nhs2_ai_colonising_timer
+#				duration = 20
+#				hidden = yes
+#			}
+#		}
+#	}
+#	
+#	mean_time_to_happen = {
+#		days = 1
+#		modifier = {
+#			factor = 0.0001
+#			owner = {
+#				OR = {
+#					tag = NHS
+#					nhs_is_elysia_late = yes
+#					AND = {
+#						tag = SHQ
+#						is_subject = no
+#					}
+#					AND = {
+#						tag = CM1
+#						is_subject = no
+#					}
+#				}
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = "nhs2_countryevents.18.a"
+#		owner = {
+#			if = {
+#				limit = {
+#					any_owned_province = {
+#						has_port = no
+#						is_colony = yes
+#						NOT = { colonysize = 500 }
+#					}
+#				}
+#				random_owned_province = {
+#					limit = {
+#						has_port = no
+#						is_colony = yes
+#						NOT = { colonysize = 500 }
+#					}
+#					add_colonysize = -1000
+#				}
+#			}
+#		}
+#		owner = {
+#				random_owned_province = {
+#					limit = {
+#						any_empty_neighbor_province = {
+#							has_port = yes
+#							has_discovered = ROOT
+#						}
+#					}
+#					random_empty_neighbor_province = {
+#						limit = {
+#							has_port = yes
+#							has_discovered = ROOT
+#						}
+#						create_colony = 10
+#					}
+#				}
+#			}
+#	}
+#}
+
+
+
+# AI colonisation help 3 - Elysia make a colony
+province_event = {
+	id = nhs2_aievents.3
+	title = nhs2_countryevents.18.t
+	desc = nhs2_countryevents.18.d
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		owner = {
+			nhs_condition_all_ely = { KOMANDA = tag }
+			NOT = { num_of_cities = 20 }
+			num_of_colonists = 1
+		}
+		has_empty_adjacent_province = yes
+		any_empty_neighbor_province = {
+			nhs_has_discovered_elysia = yes
+		}
+		owner = { NOT = { num_of_colonies = 1 } }
+		owner = { ai = yes }
+		owner = { NOT = { has_country_modifier = nhs2_ai_colonising_timer }	}
+	}
+
+	immediate = {
+		owner = {
+			add_country_modifier = {
+				name = nhs2_ai_colonising_timer
+				duration = 20
+				hidden = yes
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 0.0001
+			owner = {
+				nhs_condition_all_ely = { KOMANDA = tag }
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents.18.a"
+		if = {
+			limit = {
+				any_empty_neighbor_province = {
+					nhs_has_discovered_elysia = yes
+					nhs_homelands_no_capital = yes
+				}
+			}
+			random_empty_neighbor_province = {
+				limit = {
+					nhs_has_discovered_elysia = yes
+					nhs_homelands_no_capital = yes
+				}
+				create_colony = 100
+			}
+		}
+		else_if = {
+			limit = {
+				any_empty_neighbor_province = {
+					has_port = yes
+					nhs_has_discovered_elysia = yes
+				}
+			}
+			random_empty_neighbor_province = {
+				limit = {
+					has_port = yes
+					nhs_has_discovered_elysia = yes
+				}
+				create_colony = 10
+			}
+		}
+		else = {
+			random_empty_neighbor_province = {
+				create_colony = 10
+			}
+		}
+	}
+}
+
+
+# AI colonisation help 4 - Others make a colony
+province_event = {
+	id = nhs2_aievents.4
+	title = nhs2_countryevents.18.t
+	desc = nhs2_countryevents.18.d
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		owner = {
+			OR = {
+				AND = {
+					tag = SHQ
+					is_subject = no
+				}
+				AND = {
+					tag = CM1
+					is_subject = no
+				}
+			}
+			NOT = { num_of_cities = 20 }
+		}
+		num_of_colonists = 1
+		has_empty_adjacent_province = yes
+		owner = { NOT = { num_of_colonies = 1 } }
+		owner = { ai = yes }
+		owner = { NOT = { has_country_modifier = nhs2_ai_colonising_timer }	}
+	}
+
+	immediate = {
+		owner = {
+			add_country_modifier = {
+				name = nhs2_ai_colonising_timer
+				duration = 20
+				hidden = yes
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 0.0001
+			owner = {
+				OR = {
+					nhs_condition_all_ely = { KOMANDA = tag }
+					AND = {
+						tag = SHQ
+						is_subject = no
+					}
+					AND = {
+						tag = CM1
+						is_subject = no
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents.18.a"
+		if = {
+			limit = {
+				owner = {
+					any_owned_province = {
+						any_empty_neighbor_province = {
+							has_port = yes
+							has_discovered = ROOT
+						}
+					}
+				}
+			}
+			owner = {
+				random_owned_province = {
+					limit = {
+						any_empty_neighbor_province = {
+							has_port = yes
+							has_discovered = ROOT
+						}
+					}
+					random_empty_neighbor_province = {
+						limit = {
+							has_port = yes
+							has_discovered = ROOT
+						}
+						create_colony = 10
+					}
+				}
+			}		
+		}
+		
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						any_owned_province = {
+							any_empty_neighbor_province = {
+								has_port = yes
+								has_discovered = ROOT
+							}
+						}
+					}
+				}
+			}
+			owner = {
+				random_owned_province = {
+					random_empty_neighbor_province = {
+						create_colony = 10
+					}
+				}
+			}	
+		}
+	}
+}
+
+# AI Move
+country_event = {
+	id = nhs2_aievents.5
+	title = nhs2_countryevents.18.t
+	desc = nhs2_countryevents.18.d
+	picture = COLONIZATION_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		NHS = {
+			NOT = {
+				any_owned_province = {
+					any_neighbor_province = {
+						is_empty = yes
+					}
+				}
+			}
+		}
+		NHS = {
+			any_neighbor_country = {
+				num_of_cities = 1
+				ai = yes
+			}
+		}
+		num_of_cities = 1
+		ai = yes
+		NHS = {
+			NOT = { num_of_cities = 3 }
+		}
+		any_owned_province = {
+			any_neighbor_province = {
+				owned_by = NHS
+			}
+		}
+		any_owned_province = {
+			has_empty_adjacent_province = yes
+		}
+	}
+
+	immediate = {
+		add_country_modifier = {
+			name = nhs_migration_cooldown_reduction
+			duration = 2000
+			hidden = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 0.0001
+			ROOT = {
+				exists = yes
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents.18.a"
+	}
+}
+
+# AI Move
+country_event = {
+	id = nhs2_aievents.6
+	title = nhs2_countryevents.18.t
+	desc = nhs2_countryevents.18.d
+	picture = COLONIZATION_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_modifier = nhs_migration_cooldown_reduction
+		OR = {
+			NHS = {
+				any_owned_province = {
+					any_neighbor_province = {
+						is_empty = yes
+					}
+				}
+			}
+			num_of_cities = 1
+			NHS = {
+				num_of_cities = 3
+			}
+			NOT = {
+				any_owned_province = {
+					any_neighbor_province = {
+						owned_by = NHS
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		remove_country_modifier = nhs_migration_cooldown_reduction
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 0.0001
+			ROOT = {
+				exists = yes
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents.18.a"
+	}
+}

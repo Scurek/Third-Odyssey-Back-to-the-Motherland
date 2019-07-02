@@ -1,0 +1,969 @@
+# OBS! Full modding not supported. Code support still needed to remove/rename the original subject types.
+# Custom ones CAN be created with scriptable diplomatic actions (see "dummy" at the bottom of this file), although this is not currently very functional.
+
+# If used, copy_from should be put at the very top ( things above it will be overwitten )
+
+# Triggers will be evaluated in the scope of the Subject, with the Overlord as its FROM scope.
+# Exception: is_potential_overlord is evaluated in the scope of the potential Overlord, with no particular subject in mind.
+
+# count = x is used (means it "counts as" x in some triggers).
+
+# copy_from copies everything except count, is_potential_overlord, and can_be_established
+
+# relative_power_class decides how Subjects are grouped together when considering relative strenghth towards overlord:
+# If it is 0 they won't consider relative power and if it is 1 they will only consider their own power (and those supporting their independence) compared to their Overlord's.
+# Otherwise they will sum up the power of every Subject of the same relative_power_class as themselves, and all countries who support either themselves or one of their allies in the same relative_power_class.
+
+# diplomacy_view_class decides how subjects are grouped together in diplomacy view and in foreign province view:
+# 0 means it won't be listed
+# 1 means it will be listed together only with the same subject type
+# Other values means it will be listed together with all subjects of the same diplomacy_view_class
+
+# The following status checks are considered in old triggers:
+
+# is_colonial_nation  & is_former_colonial_nation
+#        checks the 'has_colonial_parent = yes' attribute
+
+# is_lesser_in_union, junior_union_with, senior_union_with & years_in_union_under
+#		checks the 'has_overlords_ruler = yes' attribute
+
+
+# Forward declaring all subject types so they can refer to each other in triggers etc. 
+
+# Completely scripted subject type (no code used). Add any number of these. Check common/new_diplomatic_actions for how to make visible in game.
+elysian_subject_non_exarch =
+{
+	copy_from = default
+	
+	# Graphics:
+	sprite = GFX_icon_elysian_subject
+	diplomacy_overlord_sprite = GFX_diplomacy_leadelysian_subject
+	diplomacy_subject_sprite = GFX_diplomacy_amelysian_subject
+
+	# Properties:
+	transfer_trade_if_merchant_republic = yes
+	can_be_annexed = no
+	has_power_projection = no
+	gets_help_with_rebels = yes
+	can_have_subjects_of_other_types = yes
+	takes_diplo_slot = no
+	can_release_in_peace = no
+	can_transfer_in_peace = no
+	can_use_claims = yes
+
+	max_government_rank = 1
+
+	liberty_desire_development_ratio = 0.08
+	base_liberty_desire = -50.0
+	liberty_desire_same_dynasty = -5
+	pays_overlord = 1.2
+	forcelimit_bonus = 0
+	military_focus = 1.2
+
+	relative_power_class = 1
+	diplomacy_view_class = 5
+	
+	restoration_cb = cb_disloyal_vassal
+
+	# Subject Interactions:
+	scutage = yes
+	subsidize_armies = yes
+	divert_trade = yes
+	fortify_march = yes
+	conscript_general = yes
+	press_sailors = yes
+	send_additional_troops = yes
+	grant_province = yes
+	seize_territory = yes
+	grant_core_claim = yes
+
+	modifier_overlord = clear #We don't want to duplicate the ones inherited from vassal
+	modifier_subject = clear #Ditto
+	modifier_subject = {
+		modifier = subject_nation
+	}
+	modifier_subject = {
+		modifier = elysian_subject_bonus
+	}
+	overlord_opinion_modifier = is_vassal
+	subject_opinion_modifier = is_vassal
+}
+
+elysian_subject =
+{
+	copy_from = default
+	
+	# Graphics:
+	sprite = GFX_icon_elysian_subject
+	diplomacy_overlord_sprite = GFX_diplomacy_leadelysian_subject
+	diplomacy_subject_sprite = GFX_diplomacy_amelysian_subject
+
+	# Properties:
+	transfer_trade_if_merchant_republic = yes
+	can_be_annexed = no
+	has_power_projection = no
+	gets_help_with_rebels = yes
+	can_have_subjects_of_other_types = yes
+	takes_diplo_slot = no
+	can_release_in_peace = no
+	can_transfer_in_peace = no
+	can_use_claims = yes
+
+	max_government_rank = 1
+
+	liberty_desire_development_ratio = 0.08
+	base_liberty_desire = -50.0
+	liberty_desire_same_dynasty = -5
+	pays_overlord = 1.2
+	forcelimit_bonus = 0
+	military_focus = 1.2
+
+	relative_power_class = 1
+	diplomacy_view_class = 5
+	
+	restoration_cb = cb_disloyal_vassal
+
+	# Subject Interactions:
+	scutage = yes
+	subsidize_armies = yes
+	divert_trade = yes
+	fortify_march = yes
+	send_additional_troops = yes
+	conscript_general = yes
+	press_sailors = yes
+	send_additional_troops = yes
+	grant_province = no
+	seize_territory = yes
+	grant_core_claim = no
+
+	modifier_overlord = clear #We don't want to duplicate the ones inherited from vassal
+	modifier_subject = clear #Ditto
+	modifier_subject = {
+		modifier = subject_nation
+	}
+	modifier_subject = {
+		modifier = elysian_subject_bonus
+	}
+	modifier_subject = {
+		modifier = elysian_subject_maint1 #-10%
+		trigger = {
+			num_of_cities = 5
+			NOT = { num_of_cities = 10 }
+		}
+	}
+	modifier_subject = {
+		modifier = elysian_subject_maint2 #-20%
+		trigger = {
+			num_of_cities = 10
+			NOT = { num_of_cities = 15 }
+		}
+	}
+	modifier_subject = {
+		modifier = elysian_subject_maint3 #-30%
+		trigger = {
+			num_of_cities = 15
+			NOT = { num_of_cities = 20 }
+		}
+	}
+	modifier_subject = {
+		modifier = elysian_subject_maint4 #-40%
+		trigger = {
+			num_of_cities = 20
+			NOT = { num_of_cities = 25 }
+		}
+	}
+	modifier_subject = {
+		modifier = elysian_subject_maint5 #-50%
+		trigger = {
+			num_of_cities = 25
+		}
+	}
+	modifier_overlord = {
+		modifier = elysian_subject_maint_over
+	}
+	overlord_opinion_modifier = is_vassal
+	subject_opinion_modifier = is_vassal
+}
+
+elysian_subject_varangian =
+{
+	copy_from = default
+	
+	# Graphics:
+	sprite = GFX_icon_elysian_subject
+	diplomacy_overlord_sprite = GFX_diplomacy_leadelysian_subject
+	diplomacy_subject_sprite = GFX_diplomacy_amelysian_subject
+
+	# Properties:
+	transfer_trade_if_merchant_republic = yes
+	can_be_annexed = no
+	has_power_projection = no
+	gets_help_with_rebels = yes
+	overlord_can_attack = no
+	can_have_subjects_of_other_types = no
+	takes_diplo_slot = no
+	can_release_in_peace = no
+	can_transfer_in_peace = no
+	can_fight_independence_war = no
+
+	max_government_rank = 1
+
+	liberty_desire_development_ratio = 0
+	base_liberty_desire = -50
+	pays_overlord = 0
+	forcelimit_bonus = 0
+	military_focus = 2
+
+	relative_power_class = 0
+	diplomacy_view_class = 5
+	
+	restoration_cb = cb_disloyal_vassal
+
+	# Subject Interactions:
+	fortify_march = yes
+	send_additional_troops = yes
+	conscript_general = yes
+	press_sailors = yes
+	placate_rulers = no
+	grant_province = no
+	grant_core_claim = no
+	
+	modifier_overlord = clear #We don't want to duplicate the ones inherited from vassal
+	modifier_subject = clear #Ditto
+	modifier_subject = {
+		modifier = nhs2_varangian_guard_mod
+		
+	}
+	overlord_opinion_modifier = is_vassal
+	subject_opinion_modifier = is_vassal
+}
+
+nhs_imperial_associate =
+{
+	copy_from = default
+	
+	# Graphics:
+	sprite = GFX_icon_elysian_subject
+	diplomacy_overlord_sprite = GFX_diplomacy_leadelysian_subject
+	diplomacy_subject_sprite = GFX_diplomacy_amelysian_subject
+
+	# Properties:
+	has_overlords_ruler = no
+	can_fight_independence_war = yes
+	is_voluntary = no									# Whether they can leave the relationship whenever they want
+	transfer_trade_power = no
+	transfer_trade_if_merchant_republic = no
+	joins_overlords_wars = yes
+	joins_colonial_wars = no
+	can_be_integrated = no
+	can_be_annexed = yes #50 years timer
+	can_release_and_play = no							# "Release Colony" in SubjectView
+	uses_tariffs = no
+	dynamically_created_during_history = no				# If the country is automatically created. ( Makes for special checks during history )
+	eats_overlords_colonies = no						# Wheter subject assumes control of overlord's colonies in same colonial region.
+	has_colonial_parent = no							# Regulates most rules that should hold only for colonies
+	overlord_can_attack = yes
+	overlord_can_be_subject = no
+	can_have_subjects_of_other_types = yes
+	takes_diplo_slot = yes
+	has_power_projection = yes
+	can_release_in_peace = no
+	uses_military_focus = yes
+	overlord_protects_external = no						# Whether overlord always gets called (declinable) against countries without the same overlord. When this is 'no' overlord will only join if the defender would have been blocked (by its subject type) from attacking the attacker.
+	counts_for_borders = yes							# Whether distance between borders counts this subject type as part of its overlord's borders.
+	overlord_enforce_peace_attacking = no				# Whether the overlord can enforce peace on the subject's enemy even when the subject is the attacker
+	can_use_claims = yes								# Whether the overlord can use the subject's claims and cores for declaring war
+	gives_daimyo_bonuses = no
+	gets_help_with_rebels = no							# Only for AI. Bidirectional.
+	share_rebel_popup = yes								# Whether the Overlord gets popups about Subject's rebels and sees them in Stability View.
+	separatists_become_subjects = no					# Whether separatist rebels enforcing demands will become subjects of the overlord.
+	allows_taking_land_without_independence = no
+	can_transfer_in_peace = yes							# Whether this subject type can be made into a vassal with the "Transfer Subject" Age Ability.
+	can_set_mil_focus = yes
+	can_send_missionary_to_subject = yes				# Requires Cradle of Civilization
+	can_union_break = no								# Only works together with has_overlords_ruler
+	
+	liberty_desire_negative_prestige = 2.0
+	liberty_desire_development_ratio = 0.05
+	military_focus = 0.66
+
+	relative_power_class = 1
+	
+	restoration_cb = cb_restore_personal_union
+
+	# Subject Interactions:
+	embargo_rivals = yes
+	support_loyalists = yes
+	subsidize_armies = yes
+	scutage = no
+	send_officers = yes
+	divert_trade= yes
+	# (immediate)
+	placate_rulers = no
+	place_relative_on_throne = no
+	enforce_religion = no
+	customize_subject = no
+	replace_governor = no
+	grant_province = yes
+	enforce_culture = no
+	siphon_income = yes
+	fortify_march = yes
+	seize_territory = no
+	start_colonial_war = no
+	grant_core_claim = yes
+	sacrifice_ruler = no
+	sacrifice_heir = no
+	increase_tariffs = no
+	decrease_tariffs = no
+	takeondebt = yes
+	bestow_gifts = no
+	send_additional_troops = no
+	demand_artifacts = no
+	demand_additional_tribute = no
+	force_seppuku = no
+	press_sailors = no
+	contribute_to_capital = no
+	force_isolation = no
+	return_land = no
+	conscript_general = no
+	knowledge_sharing = yes
+	# (special)
+	sword_hunt = no
+	sankin_kotai = no
+	expel_ronin = no
+	
+	modifier_overlord = clear #We don't want to duplicate the ones inherited from vassal
+	modifier_subject = clear #Ditto
+	modifier_overlord = {
+		modifier = union_subject
+	}
+	overlord_opinion_modifier = is_iassociate
+	subject_opinion_modifier = is_iassociate
+}
+
+nhs_protectorate = {
+	copy_from = default
+	# Graphics:
+	sprite = GFX_icon_protectorate
+	diplomacy_overlord_sprite = GFX_diplomacy_leadprotectorates # The one that the overlord sees
+	diplomacy_subject_sprite = GFX_diplomacy_inprotectorate	# The one that the subject sees
+	
+	# Properties:
+	can_fight_independence_war = yes
+	is_voluntary = no									# Whether they can leave the relationship whenever they want
+	transfer_trade_power = yes
+	joins_overlords_wars = no
+	joins_colonial_wars = no
+	can_be_integrated = no
+	can_release_and_play = no							# "Release Colony" in SubjectView
+	uses_tariffs = no
+	dynamically_created_during_history = no				# If the country is automatically created. ( Makes for special checks during history )
+	eats_overlords_colonies = no						# Wheter subject assumes control of overlord's colonies in same colonial region.
+	has_colonial_parent = no							# Regulates most rules that should hold only for colonies
+	overlord_can_attack = yes
+	overlord_can_be_subject = no
+	can_have_subjects_of_other_types = no
+	can_be_annexed = no
+	takes_diplo_slot = no
+	has_power_projection = yes
+	can_release_in_peace = yes
+	uses_military_focus = no
+	overlord_protects_external = no						# Whether overlord always gets called (declinable) against countries without the same overlord. When this is 'no' overlord will only join if the defender would have been blocked (by its subject type) from attacking the attacker.
+	counts_for_borders = no							# Whether distance between borders counts this subject type as part of its overlord's borders.
+	overlord_enforce_peace_attacking = no				# Whether the overlord can enforce peace on the subject's enemy even when the subject is the attacker
+	can_use_claims = yes								# Whether the overlord can use the subject's claims and cores for declaring war
+	gives_daimyo_bonuses = no
+	gets_help_with_rebels = yes							# Only for AI. Bidirectional.
+	share_rebel_popup = yes								# Whether the Overlord gets popups about Subject's rebels and sees them in Stability View.
+	separatists_become_subjects = no					# Whether separatist rebels enforcing demands will become subjects of the overlord.
+	allows_taking_land_without_independence = yes
+	can_transfer_in_peace = no							# Whether this subject type can be made into a vassal with the "Transfer Subject" Age Ability.
+	can_set_mil_focus = no
+	can_send_missionary_to_subject = yes				# Requires Cradle of Civilization
+	can_union_break = no								# Only works together with has_overlords_ruler
+	
+	max_government_rank = 0								# 0 means no limit
+	trust_on_start = 0									# Overlord and subject will each get this much extra trust with each other at game start
+
+	base_liberty_desire = -25.0
+	liberty_desire_negative_prestige = 0.0
+	liberty_desire_development_ratio = 0.0
+	liberty_desire_same_dynasty = 0.0
+	pays_overlord = 0.0									# 1.0 represents the amount payed by vassals
+	forcelimit_bonus = 0.0								# 1.0 represents bonus from having a vassal
+	military_focus = 1.0								# How much the AI subject should spend etc. on army and forts. 0 should make them spend nothing. Very high values will probably not make a big difference since there will be sanity checks.
+
+	relative_power_class = 1 							# See description above
+	diplomacy_view_class = 1							# See description above
+
+	can_fight = {
+		independent_nations = yes
+		other_overlord = all
+	}
+	can_rival = {
+		independent_nations = yes
+		other_overlord = all
+	}
+	can_ally = {
+		
+	}
+	can_marry = {
+		same_overlord = nhs_protectorate
+	}
+
+	# Subject Interactions:
+	# (continuous)
+	embargo_rivals = yes
+	support_loyalists = no
+	subsidize_armies = no
+	scutage = no
+	send_officers = yes
+	divert_trade = yes
+	# (immediate)
+	placate_rulers = yes
+	place_relative_on_throne = no
+	enforce_religion = no
+	customize_subject = no
+	replace_governor = no
+	grant_province = yes
+	enforce_culture = no
+	siphon_income = no
+	fortify_march = no
+	seize_territory = yes
+	start_colonial_war = no
+	grant_core_claim = yes
+	sacrifice_ruler = no
+	sacrifice_heir = no
+	increase_tariffs = no
+	decrease_tariffs = no
+	takeondebt = yes
+	bestow_gifts = no
+	send_additional_troops = no
+	demand_artifacts = no
+	demand_additional_tribute = no
+	force_seppuku = no
+	press_sailors = no
+	contribute_to_capital = no
+	force_isolation = no
+	return_land = no
+	conscript_general = no
+	knowledge_sharing = yes
+	# (special)
+	sword_hunt = no
+	sankin_kotai = no
+	expel_ronin = no
+
+	# Modifiers:
+	modifier_subject = clear # Use this to clear after copy_from.
+	modifier_subject = { # Otherwise, this only adds modifiers, and doesn't remove previously added.
+		modifier = nhs_protectorate_mil_mod
+		trigger = {
+			OR = {
+				AND = {
+					mil_tech = 0
+					NOT = { mil_tech = 1 }
+					overlord = { mil_tech = 1 }
+				}
+				AND = {
+					mil_tech = 1
+					NOT = { mil_tech = 2 }
+					overlord = { mil_tech = 2 }
+				}
+				AND = {
+					mil_tech = 2
+					NOT = { mil_tech = 3 }
+					overlord = { mil_tech = 3 }
+				}
+				AND = {
+					mil_tech = 3
+					NOT = { mil_tech = 4 }
+					overlord = { mil_tech = 4 }
+				}
+				AND = {
+					mil_tech = 4
+					NOT = { mil_tech = 5 }
+					overlord = { mil_tech = 5 }
+				}
+				AND = {
+					mil_tech = 5
+					NOT = { mil_tech = 6 }
+					overlord = { mil_tech = 6 }
+				}
+				AND = {
+					mil_tech = 6
+					NOT = { mil_tech = 7 }
+					overlord = { mil_tech = 7 }
+				}
+				AND = {
+					mil_tech = 7
+					NOT = { mil_tech = 8 }
+					overlord = { mil_tech = 8 }
+				}
+				AND = {
+					mil_tech = 8
+					NOT = { mil_tech = 9 }
+					overlord = { mil_tech = 9 }
+				}
+				AND = {
+					mil_tech = 9
+					NOT = { mil_tech = 10 }
+					overlord = { mil_tech = 10 }
+				}
+				AND = {
+					mil_tech = 10
+					NOT = { mil_tech = 11 }
+					overlord = { mil_tech = 11 }
+				}
+				AND = {
+					mil_tech = 11
+					NOT = { mil_tech = 12 }
+					overlord = { mil_tech = 12 }
+				}
+				AND = {
+					mil_tech = 12
+					NOT = { mil_tech = 13 }
+					overlord = { mil_tech = 13 }
+				}
+				AND = {
+					mil_tech = 13
+					NOT = { mil_tech = 14 }
+					overlord = { mil_tech = 14 }
+				}
+				AND = {
+					mil_tech = 14
+					NOT = { mil_tech = 15 }
+					overlord = { mil_tech = 15 }
+				}
+				AND = {
+					mil_tech = 15
+					NOT = { mil_tech = 16 }
+					overlord = { mil_tech = 16 }
+				}
+				AND = {
+					mil_tech = 16
+					NOT = { mil_tech = 17 }
+					overlord = { mil_tech = 17 }
+				}
+				AND = {
+					mil_tech = 17
+					NOT = { mil_tech = 18 }
+					overlord = { mil_tech = 18 }
+				}
+				AND = {
+					mil_tech = 18
+					NOT = { mil_tech = 19 }
+					overlord = { mil_tech = 19 }
+				}
+				AND = {
+					mil_tech = 19
+					NOT = { mil_tech = 20 }
+					overlord = { mil_tech = 20 }
+				}
+				AND = {
+					mil_tech = 20
+					NOT = { mil_tech = 21 }
+					overlord = { mil_tech = 21 }
+				}
+				AND = {
+					mil_tech = 21
+					NOT = { mil_tech = 22 }
+					overlord = { mil_tech = 22 }
+				}
+				AND = {
+					mil_tech = 22
+					NOT = { mil_tech = 23 }
+					overlord = { mil_tech = 23 }
+				}
+				AND = {
+					mil_tech = 23
+					NOT = { mil_tech = 24 }
+					overlord = { mil_tech = 24 }
+				}
+				AND = {
+					mil_tech = 24
+					NOT = { mil_tech = 25 }
+					overlord = { mil_tech = 25 }
+				}
+				AND = {
+					mil_tech = 25
+					NOT = { mil_tech = 26 }
+					overlord = { mil_tech = 26 }
+				}
+				AND = {
+					mil_tech = 26
+					NOT = { mil_tech = 27 }
+					overlord = { mil_tech = 27 }
+				}
+				AND = {
+					mil_tech = 27
+					NOT = { mil_tech = 28 }
+					overlord = { mil_tech = 28 }
+				}
+				AND = {
+					mil_tech = 28
+					NOT = { mil_tech = 29 }
+					overlord = { mil_tech = 29 }
+				}
+				AND = {
+					mil_tech = 29
+					NOT = { mil_tech = 30 }
+					overlord = { mil_tech = 30 }
+				}
+				AND = {
+					mil_tech = 30
+					NOT = { mil_tech = 31 }
+					overlord = { mil_tech = 31 }
+				}
+				AND = {
+					mil_tech = 31
+					NOT = { mil_tech = 32 }
+					overlord = { mil_tech = 32 }
+				}
+			}
+		}
+		#expiration_message_overlord = MARCHTOOLARGE
+		#expiration_message_subject = MARCHTOOLARGEUS
+	}
+	modifier_subject = { # Otherwise, this only adds modifiers, and doesn't remove previously added.
+		modifier = nhs_protectorate_adm_mod
+		trigger = {
+			OR = {
+				AND = {
+					adm_tech = 0
+					NOT = { adm_tech = 1 }
+					overlord = { adm_tech = 1 }
+				}
+				AND = {
+					adm_tech = 1
+					NOT = { adm_tech = 2 }
+					overlord = { adm_tech = 2 }
+				}
+				AND = {
+					adm_tech = 2
+					NOT = { adm_tech = 3 }
+					overlord = { adm_tech = 3 }
+				}
+				AND = {
+					adm_tech = 3
+					NOT = { adm_tech = 4 }
+					overlord = { adm_tech = 4 }
+				}
+				AND = {
+					adm_tech = 4
+					NOT = { adm_tech = 5 }
+					overlord = { adm_tech = 5 }
+				}
+				AND = {
+					adm_tech = 5
+					NOT = { adm_tech = 6 }
+					overlord = { adm_tech = 6 }
+				}
+				AND = {
+					adm_tech = 6
+					NOT = { adm_tech = 7 }
+					overlord = { adm_tech = 7 }
+				}
+				AND = {
+					adm_tech = 7
+					NOT = { adm_tech = 8 }
+					overlord = { adm_tech = 8 }
+				}
+				AND = {
+					adm_tech = 8
+					NOT = { adm_tech = 9 }
+					overlord = { adm_tech = 9 }
+				}
+				AND = {
+					adm_tech = 9
+					NOT = { adm_tech = 10 }
+					overlord = { adm_tech = 10 }
+				}
+				AND = {
+					adm_tech = 10
+					NOT = { adm_tech = 11 }
+					overlord = { adm_tech = 11 }
+				}
+				AND = {
+					adm_tech = 11
+					NOT = { adm_tech = 12 }
+					overlord = { adm_tech = 12 }
+				}
+				AND = {
+					adm_tech = 12
+					NOT = { adm_tech = 13 }
+					overlord = { adm_tech = 13 }
+				}
+				AND = {
+					adm_tech = 13
+					NOT = { adm_tech = 14 }
+					overlord = { adm_tech = 14 }
+				}
+				AND = {
+					adm_tech = 14
+					NOT = { adm_tech = 15 }
+					overlord = { adm_tech = 15 }
+				}
+				AND = {
+					adm_tech = 15
+					NOT = { adm_tech = 16 }
+					overlord = { adm_tech = 16 }
+				}
+				AND = {
+					adm_tech = 16
+					NOT = { adm_tech = 17 }
+					overlord = { adm_tech = 17 }
+				}
+				AND = {
+					adm_tech = 17
+					NOT = { adm_tech = 18 }
+					overlord = { adm_tech = 18 }
+				}
+				AND = {
+					adm_tech = 18
+					NOT = { adm_tech = 19 }
+					overlord = { adm_tech = 19 }
+				}
+				AND = {
+					adm_tech = 19
+					NOT = { adm_tech = 20 }
+					overlord = { adm_tech = 20 }
+				}
+				AND = {
+					adm_tech = 20
+					NOT = { adm_tech = 21 }
+					overlord = { adm_tech = 21 }
+				}
+				AND = {
+					adm_tech = 21
+					NOT = { adm_tech = 22 }
+					overlord = { adm_tech = 22 }
+				}
+				AND = {
+					adm_tech = 22
+					NOT = { adm_tech = 23 }
+					overlord = { adm_tech = 23 }
+				}
+				AND = {
+					adm_tech = 23
+					NOT = { adm_tech = 24 }
+					overlord = { adm_tech = 24 }
+				}
+				AND = {
+					adm_tech = 24
+					NOT = { adm_tech = 25 }
+					overlord = { adm_tech = 25 }
+				}
+				AND = {
+					adm_tech = 25
+					NOT = { adm_tech = 26 }
+					overlord = { adm_tech = 26 }
+				}
+				AND = {
+					adm_tech = 26
+					NOT = { adm_tech = 27 }
+					overlord = { adm_tech = 27 }
+				}
+				AND = {
+					adm_tech = 27
+					NOT = { adm_tech = 28 }
+					overlord = { adm_tech = 28 }
+				}
+				AND = {
+					adm_tech = 28
+					NOT = { adm_tech = 29 }
+					overlord = { adm_tech = 29 }
+				}
+				AND = {
+					adm_tech = 29
+					NOT = { adm_tech = 30 }
+					overlord = { adm_tech = 30 }
+				}
+				AND = {
+					adm_tech = 30
+					NOT = { adm_tech = 31 }
+					overlord = { adm_tech = 31 }
+				}
+				AND = {
+					adm_tech = 31
+					NOT = { adm_tech = 32 }
+					overlord = { adm_tech = 32 }
+				}
+			}
+		}
+		#expiration_message_overlord = MARCHTOOLARGE
+		#expiration_message_subject = MARCHTOOLARGEUS
+	}
+	modifier_subject = { # Otherwise, this only adds modifiers, and doesn't remove previously added.
+		modifier = nhs_protectorate_dip_mod
+		trigger = {
+			OR = {
+				AND = {
+					dip_tech = 0
+					NOT = { dip_tech = 1 }
+					overlord = { dip_tech = 1 }
+				}
+				AND = {
+					dip_tech = 1
+					NOT = { dip_tech = 2 }
+					overlord = { dip_tech = 2 }
+				}
+				AND = {
+					dip_tech = 2
+					NOT = { dip_tech = 3 }
+					overlord = { dip_tech = 3 }
+				}
+				AND = {
+					dip_tech = 3
+					NOT = { dip_tech = 4 }
+					overlord = { dip_tech = 4 }
+				}
+				AND = {
+					dip_tech = 4
+					NOT = { dip_tech = 5 }
+					overlord = { dip_tech = 5 }
+				}
+				AND = {
+					dip_tech = 5
+					NOT = { dip_tech = 6 }
+					overlord = { dip_tech = 6 }
+				}
+				AND = {
+					dip_tech = 6
+					NOT = { dip_tech = 7 }
+					overlord = { dip_tech = 7 }
+				}
+				AND = {
+					dip_tech = 7
+					NOT = { dip_tech = 8 }
+					overlord = { dip_tech = 8 }
+				}
+				AND = {
+					dip_tech = 8
+					NOT = { dip_tech = 9 }
+					overlord = { dip_tech = 9 }
+				}
+				AND = {
+					dip_tech = 9
+					NOT = { dip_tech = 10 }
+					overlord = { dip_tech = 10 }
+				}
+				AND = {
+					dip_tech = 10
+					NOT = { dip_tech = 11 }
+					overlord = { dip_tech = 11 }
+				}
+				AND = {
+					dip_tech = 11
+					NOT = { dip_tech = 12 }
+					overlord = { dip_tech = 12 }
+				}
+				AND = {
+					dip_tech = 12
+					NOT = { dip_tech = 13 }
+					overlord = { dip_tech = 13 }
+				}
+				AND = {
+					dip_tech = 13
+					NOT = { dip_tech = 14 }
+					overlord = { dip_tech = 14 }
+				}
+				AND = {
+					dip_tech = 14
+					NOT = { dip_tech = 15 }
+					overlord = { dip_tech = 15 }
+				}
+				AND = {
+					dip_tech = 15
+					NOT = { dip_tech = 16 }
+					overlord = { dip_tech = 16 }
+				}
+				AND = {
+					dip_tech = 16
+					NOT = { dip_tech = 17 }
+					overlord = { dip_tech = 17 }
+				}
+				AND = {
+					dip_tech = 17
+					NOT = { dip_tech = 18 }
+					overlord = { dip_tech = 18 }
+				}
+				AND = {
+					dip_tech = 18
+					NOT = { dip_tech = 19 }
+					overlord = { dip_tech = 19 }
+				}
+				AND = {
+					dip_tech = 19
+					NOT = { dip_tech = 20 }
+					overlord = { dip_tech = 20 }
+				}
+				AND = {
+					dip_tech = 20
+					NOT = { dip_tech = 21 }
+					overlord = { dip_tech = 21 }
+				}
+				AND = {
+					dip_tech = 21
+					NOT = { dip_tech = 22 }
+					overlord = { dip_tech = 22 }
+				}
+				AND = {
+					dip_tech = 22
+					NOT = { dip_tech = 23 }
+					overlord = { dip_tech = 23 }
+				}
+				AND = {
+					dip_tech = 23
+					NOT = { dip_tech = 24 }
+					overlord = { dip_tech = 24 }
+				}
+				AND = {
+					dip_tech = 24
+					NOT = { dip_tech = 25 }
+					overlord = { dip_tech = 25 }
+				}
+				AND = {
+					dip_tech = 25
+					NOT = { dip_tech = 26 }
+					overlord = { dip_tech = 26 }
+				}
+				AND = {
+					dip_tech = 26
+					NOT = { dip_tech = 27 }
+					overlord = { dip_tech = 27 }
+				}
+				AND = {
+					dip_tech = 27
+					NOT = { dip_tech = 28 }
+					overlord = { dip_tech = 28 }
+				}
+				AND = {
+					dip_tech = 28
+					NOT = { dip_tech = 29 }
+					overlord = { dip_tech = 29 }
+				}
+				AND = {
+					dip_tech = 29
+					NOT = { dip_tech = 30 }
+					overlord = { dip_tech = 30 }
+				}
+				AND = {
+					dip_tech = 30
+					NOT = { dip_tech = 31 }
+					overlord = { dip_tech = 31 }
+				}
+				AND = {
+					dip_tech = 31
+					NOT = { dip_tech = 32 }
+					overlord = { dip_tech = 32 }
+				}
+			}
+		}
+		#expiration_message_overlord = MARCHTOOLARGE
+		#expiration_message_subject = MARCHTOOLARGEUS
+	}
+	modifier_overlord = clear
+
+	overlord_opinion_modifier = is_iprotectorate
+	subject_opinion_modifier = is_iprotectorate
+}

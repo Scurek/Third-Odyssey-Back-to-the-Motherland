@@ -1,0 +1,2357 @@
+#Native Estates Events
+namespace = natives_estate_events
+
+####Idea - Have the provinces with the native council estate and native culture not become proper elysian/vinlandic, only reaching elysameric/skraeling
+####Idea - Have the natives that modernize from the exiles get the estate as well calling it the "Old Council"
+##Formation of the Estate
+#For the Elysians
+country_event = {
+	id = natives_estate_events.100
+	title = natives_estate_events.100.t
+	desc = natives_estate_events.100.d
+	picture = NATIVE_CITY_VIEW_eventPicture
+	
+	#fire_only_once = yes
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		OR = {
+			culture_group = elysian_group
+			primary_culture = elysian
+		}
+		NOT = { has_country_flag = native_council_enabled }
+		calc_true_if = {
+			all_core_province = {
+				continent = north_america
+				NOT = {
+					province_group = mesoamerica_pgroup
+				}
+				NOT = { region = central_america_region }
+				NOT = { has_province_modifier = nhs2_albanian_majority }
+				NOT = { has_province_modifier = nhs2_albanian_majority2 }
+				owned_by = ROOT
+				NOT = { culture = high_elysian }
+				is_capital = no
+			}
+			amount = 5
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_country_flag = native_council_enabled
+		nhs_barbaroi_check_all = yes
+	}
+	
+	option = {
+		name = natives_estate_events.100.a
+		custom_tooltip = nhs_enable_nat_estate_ely_tt
+		if = {
+			limit = {
+				has_dlc = "Dharma"
+			}
+			custom_tooltip = nhs_enable_nat_reform_tt
+		}
+	}
+}
+#For the Vinlanders
+country_event = {
+	id = natives_estate_events.101
+	title = natives_estate_events.101.t
+	desc = natives_estate_events.101.d
+	picture = NATIVE_CITY_VIEW_eventPicture
+	
+	#fire_only_once = yes
+	
+	trigger = {
+		culture_group = norse_g
+		NOT = { has_country_flag = native_council_enabled }
+		calc_true_if = {
+			all_core_province = {
+				continent = north_america
+				NOT = {
+					province_group = mesoamerica_pgroup
+				}
+				NOT = { region = central_america_region }
+				NOT = { has_province_modifier = nhs2_albanian_majority }
+				NOT = { has_province_modifier = nhs2_albanian_majority2 }
+				owned_by = ROOT
+				NOT = { culture = high_elysian }
+				is_capital = no
+			}
+			amount = 5
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_country_flag = native_council_enabled
+		nhs_barbaroi_check_all = yes
+	}
+	
+	option = {
+		name = natives_estate_events.101.a
+		custom_tooltip = nhs_enable_nat_estate_nor_tt
+	}
+}
+#For the rest of Elysians
+country_event = {
+	id = natives_estate_events.103
+	title = natives_estate_events.100.t
+	desc = natives_estate_events.100.d
+	picture = NATIVE_CITY_VIEW_eventPicture
+	
+	#fire_only_once = yes
+	hidden = yes
+	
+	trigger = {
+		OR = {
+			culture_group = elysian_group
+			primary_culture = elysian
+		}
+		NOT = { 
+			nhs_condition_all_ely = { KOMANDA = tag } 
+		}
+		NOT = { has_country_flag = native_council_enabled }
+		calc_true_if = {
+			all_core_province = {
+				continent = north_america
+				NOT = {
+					province_group = mesoamerica_pgroup
+				}
+				NOT = { region = central_america_region }
+				NOT = { has_province_modifier = nhs2_albanian_majority }
+				NOT = { has_province_modifier = nhs2_albanian_majority2 }
+				owned_by = ROOT
+				NOT = { culture = high_elysian }
+				is_capital = no
+			}
+			amount = 5
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_country_flag = native_council_enabled
+		nhs_barbaroi_check_all = yes
+	}
+	
+	option = {
+		name = natives_estate_events.101.a
+		custom_tooltip = nhs_enable_nat_estate_ely_tt
+		
+	}
+}
+
+#Check every 5 years
+country_event = {
+	id = natives_estate_events.104
+	title = natives_estate_events.100.t
+	desc = natives_estate_events.100.d
+	picture = NATIVE_CITY_VIEW_eventPicture
+	
+	#fire_only_once = yes
+	hidden = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = native_council_enabled
+	}
+	
+	immediate = {
+		nhs_barbaroi_check_all = yes
+	}
+	
+	option = {
+		name = natives_estate_events.101.a
+	}
+}
+
+#Check for new states
+country_event = {
+	id = natives_estate_events.105
+	title = natives_estate_events.100.t
+	desc = natives_estate_events.100.d
+	picture = NATIVE_CITY_VIEW_eventPicture
+	
+	#fire_only_once = yes
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = native_council_enabled
+		any_owned_province = {
+			continent = north_america
+			NOT = { province_group = mesoamerica_pgroup }
+			NOT = { region = central_america_region }
+			NOT = { has_province_modifier = nhs2_albanian_majority }
+			NOT = { has_province_modifier = nhs2_albanian_majority2 }
+			NOT = { culture = high_elysian }
+			is_colony = no
+			OR = {
+				AND = {
+					is_state = yes
+					NOT = { has_province_flag = nhs_counted_province }
+				}
+				AND = {
+					is_state = no
+					has_province_flag = nhs_counted_province
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		every_owned_province = {
+			limit = {
+				continent = north_america
+				NOT = { province_group = mesoamerica_pgroup }
+				NOT = { region = central_america_region }
+				NOT = { has_province_modifier = nhs2_albanian_majority }
+				NOT = { has_province_modifier = nhs2_albanian_majority2 }
+				NOT = { culture = high_elysian }
+				is_colony = no
+				OR = {
+					AND = {
+						is_state = yes
+						NOT = { has_province_flag = nhs_counted_province }
+					}
+					AND = {
+						is_state = no
+						has_province_flag = nhs_counted_province
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_state = yes
+					NOT = { has_province_flag = nhs_counted_province }
+				}
+				set_province_flag = nhs_counted_province
+				ROOT = {
+					change_variable = {
+						which = nhs_nat_estate_na_provinces_10
+						value = 1
+					}
+					change_variable = {
+						which = nhs_nat_estate_na_provinces_20
+						value = 1
+					}
+					if = {
+						limit = {
+							check_variable = {
+								which = nhs_nat_estate_na_provinces_10
+								value = 8
+							}
+						}
+						change_variable = {
+							which = nhs_nat_estate_balance_10
+							value = 1
+						}
+						change_variable = {
+							which = nhs_nat_estate_total_na_provinces_10
+							value = 1
+						}
+						set_variable = {
+							which = nhs_nat_estate_na_provinces_10
+							value = 0
+						}
+					}
+					if = {
+						limit = {
+							check_variable = {
+								which = nhs_nat_estate_na_provinces_20
+								value = 4
+							}
+						}
+						change_variable = {
+							which = nhs_nat_estate_balance_20
+							value = 1
+						}
+						change_variable = {
+							which = nhs_nat_estate_total_na_provinces_20
+							value = 1
+						}
+						set_variable = {
+							which = nhs_nat_estate_na_provinces_20
+							value = 0
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					is_state = no
+					has_province_flag = nhs_counted_province
+				}
+				clr_province_flag = nhs_counted_province
+				ROOT = {
+					change_variable = {
+						which = nhs_nat_estate_na_provinces_10
+						value = -1
+					}
+					change_variable = {
+						which = nhs_nat_estate_na_provinces_20
+						value = -1
+					}
+					if = {
+						limit = {
+							NOT = {
+								check_variable = {
+									which = nhs_nat_estate_na_provinces_10
+									value = 0
+								}
+							}
+						}
+						change_variable = {
+							which = nhs_nat_estate_balance_10
+							value = -1
+						}
+						change_variable = {
+							which = nhs_nat_estate_total_na_provinces_10
+							value = -1
+						}
+						set_variable = {
+							which = nhs_nat_estate_na_provinces_10
+							value = 7
+						}
+					}
+					if = {
+						limit = {
+							NOT = {
+								check_variable = {
+									which = nhs_nat_estate_na_provinces_20
+									value = 0
+								}
+							}
+						}
+						change_variable = {
+							which = nhs_nat_estate_balance_20
+							value = -1
+						}
+						change_variable = {
+							which = nhs_nat_estate_total_na_provinces_20
+							value = -1
+						}
+						set_variable = {
+							which = nhs_nat_estate_na_provinces_20
+							value = 3
+						}
+					}
+				}
+			}
+		}
+		calc_barbaroi_angerement = yes
+	}
+	
+	option = {
+		name = natives_estate_events.101.a
+	}
+}
+##For the Hellenised Natives
+#country_event = {
+#	id = natives_estate_events.102
+#	title = natives_estate_events.102.t
+#	desc = natives_estate_events.102.d
+#	picture = NATIVE_CITY_VIEW_eventPicture
+#	
+#	fire_only_once = yes
+#	
+#	trigger = {
+#		
+#		has_estate = estate_nhs_native_council
+#		technology_group = hellenised_american
+#		NOT = { tag = ROOT } ## Disabled
+#	}
+#	
+#	mean_time_to_happen = {
+#		days = 1
+#	}
+#	
+#	option = {
+#		name = natives_estate_events.102.a
+#	}
+#}
+##For everyone else
+#country_event = {
+#	id = natives_estate_events.103
+#	title = natives_estate_events.103.t
+#	desc = natives_estate_events.103.d
+#	picture = NATIVE_CITY_VIEW_eventPicture
+#	
+#	fire_only_once = yes
+#	
+#	trigger = {
+#		
+#		has_estate = estate_nhs_native_council
+#		AND = {  ## Disabled
+#			nhs_is_elysia_late = yes
+#			tag = NHS
+#			technology_group = hellenised_american
+#			culture_group = norse_g
+#		}
+#	}
+#	
+#	mean_time_to_happen = {
+#		days = 1
+#	}
+#	
+#	option = {
+#		name = natives_estate_events.103.a
+#	}
+#}
+
+###Events inspired by the Cossacks Estate events
+##Colonization of the New World
+#Natives vs Nobles - Nobles feel that the natives hold too much influence within the nation
+country_event = {
+	id = natives_estate_events.0
+	title = natives_estate_events.0.t
+	desc = natives_estate_events.0.d
+	picture = NATIVE_DEBATE_eventPicture
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+		has_estate = estate_nobles
+		estate_influence = {
+			estate = estate_nobles
+			influence = 50
+		}
+		estate_influence = {
+			estate = estate_nhs_native_council
+			influence = 25
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_SERFS_HUNTED
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_SERFS_TO_COUNCIL
+			}
+		}
+		any_owned_province = {
+			has_estate = estate_nhs_native_council
+		}
+		any_owned_province = {
+			OR = {
+				has_estate = estate_nobles
+				AND = {
+					NOT = { has_estate = estate_nhs_native_council }
+					any_neighbor_province = {
+						owned_by = ROOT
+						has_estate = estate_nhs_native_council
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = colonization_of_the_steppes_flag
+			random_owned_province = {
+				limit = {
+					has_estate = estate_nhs_native_council
+				}
+				set_province_flag = serfs_are_arriving
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_estate = estate_nobles
+						AND = {
+							NOT = { has_estate = estate_nhs_native_council }
+							any_neighbor_province = {
+								owned_by = ROOT
+								has_estate = estate_nhs_native_council
+							}
+						}
+					}
+					NOT = { has_province_flag = serfs_are_arriving }
+				}
+				set_province_flag = serfs_are_fleeing
+			}
+		}
+	}
+	
+	option = {
+		name = natives_estate_events.0.a #These Serfs must be brought back.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_nobles
+					influence = 60
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_SERFS_HUNTED
+			influence = -10
+			duration = 3650
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nobles
+			desc = EST_VAL_SERFS_BROUGHT_BACK
+			influence = 10
+			duration = 3650
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = serfs_are_fleeing
+			}
+			add_base_production = 1
+			clr_province_flag = serfs_are_fleeing
+		}
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_province_flag = serfs_are_arriving
+				}
+				clr_province_flag = serfs_are_arriving
+			}
+		}
+	}
+	option = {
+		name = natives_estate_events.0.b #We cannot afford to anger the Native Council.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.2
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_influence = {
+					estate = estate_nobles
+					influence = 60
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_SERFS_TO_COUNCIL
+			influence = 10
+			duration = 3650
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nobles
+			desc = EST_VAL_SERFS_DEFECTING
+			influence = -10
+			duration = 3650
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = serfs_are_arriving
+			}
+			add_base_manpower = 1
+			clr_province_flag = serfs_are_arriving
+		}
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_province_flag = serfs_are_fleeing
+				}
+				clr_province_flag = serfs_are_fleeing
+			}
+		}
+	}
+}
+
+#Natives vs Elysian Nobles - Nobles feel that the natives hold too much influence within the nation
+country_event = {
+	id = natives_estate_events.1
+	title = natives_estate_events.1.t
+	desc = natives_estate_events.1.d
+	picture = NATIVE_DEBATE_eventPicture
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+		has_estate = estate_nhs_nobles
+		estate_influence = {
+			estate = estate_nhs_nobles
+			influence = 50
+		}
+		estate_influence = {
+			estate = estate_nhs_native_council
+			influence = 25
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_SERFS_HUNTED
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_SERFS_TO_COUNCIL
+			}
+		}
+		any_owned_province = {
+			has_estate = estate_nhs_native_council
+		}
+		any_owned_province = {
+			OR = {
+				has_estate = estate_nhs_nobles
+				AND = {
+					NOT = { has_estate = estate_nhs_native_council }
+					any_neighbor_province = {
+						owned_by = ROOT
+						has_estate = estate_nhs_native_council
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_estate = estate_nhs_native_council
+				}
+				set_province_flag = serfs_are_arriving
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_estate = estate_nhs_nobles
+						AND = {
+							NOT = { has_estate = estate_nhs_native_council }
+							any_neighbor_province = {
+								owned_by = ROOT
+								has_estate = estate_nhs_native_council
+							}
+						}
+					}
+					NOT = { has_province_flag = serfs_are_arriving }
+				}
+				set_province_flag = serfs_are_fleeing
+			}
+		}
+	}
+	
+	option = {
+		name = natives_estate_events.1.a #These Serfs must be brought back.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_nhs_nobles
+					influence = 60
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_SERFS_HUNTED
+			influence = -10
+			duration = 3650
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_nobles
+			desc = EST_VAL_SERFS_BROUGHT_BACK
+			influence = 10
+			duration = 3650
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = serfs_are_fleeing
+			}
+			add_base_production = 1
+			clr_province_flag = serfs_are_fleeing
+		}
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_province_flag = serfs_are_arriving
+				}
+				clr_province_flag = serfs_are_arriving
+			}
+		}
+	}
+	option = {
+		name = natives_estate_events.1.b #We cannot afford to anger the Native Council.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.2
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_nobles
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_influence = {
+					estate = estate_nhs_nobles
+					influence = 60
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_nobles
+			loyalty = -15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_SERFS_TO_COUNCIL
+			influence = 10
+			duration = 3650
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_nobles
+			desc = EST_VAL_SERFS_DEFECTING
+			influence = -10
+			duration = 3650
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = serfs_are_arriving
+			}
+			add_base_manpower = 1
+			clr_province_flag = serfs_are_arriving
+		}
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_province_flag = serfs_are_fleeing
+				}
+				clr_province_flag = serfs_are_fleeing
+			}
+		}
+	}
+}
+
+#Natives vs Vikingar - Vikingar feel that the natives hold too much influence within the nation
+country_event = {
+	id = natives_estate_events.2
+	title = natives_estate_events.2.t
+	desc = natives_estate_events.2.d
+	picture = NATIVE_DEBATE_eventPicture
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+		has_faction = vin_vikingr
+		estate_influence = {
+			estate = estate_nhs_native_council
+			influence = 25
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_SERFS_HUNTED
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_SERFS_TO_COUNCIL
+			}
+		}
+		any_owned_province = {
+			has_estate = estate_nhs_native_council
+		}
+		any_owned_province = {
+			NOT = { has_estate = estate_nhs_native_council }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = colonization_of_the_steppes_flag
+			random_owned_province = {
+				limit = {
+					has_estate = estate_nhs_native_council
+				}
+				set_province_flag = serfs_are_arriving
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { has_estate = estate_nhs_native_council }
+					NOT = { has_province_flag = serfs_are_arriving }
+				}
+				set_province_flag = serfs_are_fleeing
+			}
+		}
+	}
+	
+	option = {
+		name = natives_estate_events.2.a #These Serfs must be brought back.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 0.5
+				faction_influence = {
+					faction = vin_vikingr
+					influence = 60
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_SERFS_HUNTED
+			influence = -10
+			duration = 3650
+		}
+		
+		
+		random_owned_province = {
+			limit = {
+				has_province_flag = serfs_are_fleeing
+			}
+			add_base_production = 1
+			clr_province_flag = serfs_are_fleeing
+		}
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_province_flag = serfs_are_arriving
+				}
+				clr_province_flag = serfs_are_arriving
+			}
+		}
+	}
+	option = {
+		name = natives_estate_events.2.b #We cannot afford to anger the Native Council.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.2
+				NOT = {
+					faction_influence = {
+						faction = vin_vikingr
+						influence = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 1.5
+				faction_influence = {
+					faction = vin_vikingr
+					influence = 60
+				}
+			}
+		}
+		add_faction_influence = { 
+			faction = vin_vikingr 
+			influence = -15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_SERFS_TO_COUNCIL
+			influence = 10
+			duration = 3650
+		}
+		
+		random_owned_province = {
+			limit = {
+				has_province_flag = serfs_are_arriving
+			}
+			add_base_manpower = 1
+			clr_province_flag = serfs_are_arriving
+		}
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_province_flag = serfs_are_fleeing
+				}
+				clr_province_flag = serfs_are_fleeing
+			}
+		}
+	}
+}
+
+#Migration into Barbaroi controlled provinces - Natives from the surrounding provinces gather in the big city centers of X-province - happens if there are native provinces around, increases development
+country_event = {
+	id = natives_estate_events.3
+	title = natives_estate_events.3.t
+	desc = natives_estate_events.3.d
+	picture = NATIVE_FARMING_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_estate = estate_nhs_native_council
+		any_owned_province = {
+			has_estate = estate_nhs_native_council
+			any_neighbor_province = {
+				native_culture = yes
+				NOT = {
+					has_estate = estate_nhs_native_council
+				}
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_NATIVE_INFLUX
+			}
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_estate = estate_nhs_native_council
+					any_neighbor_province = {
+						native_culture = yes
+						NOT = {
+							has_estate = estate_nhs_native_council
+						}
+					}
+				}
+				random_list = {
+					30 = { set_province_flag = influx_adm }
+					30 = { set_province_flag = influx_dip }
+					30 = { set_province_flag = influx_mil }
+					10 = { set_province_flag = influx_all }
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = natives_estate_events.3.a #Ok
+		random_owned_province = {
+			limit = {
+				OR = {
+					has_province_flag = influx_adm
+					has_province_flag = influx_dip
+					has_province_flag = influx_mil
+					has_province_flag = influx_all
+				}
+			}
+			trigger_switch = {
+				on_trigger = has_province_flag
+				influx_adm = {
+					add_estate_influence_modifier = {
+						estate = estate_nhs_native_council
+						desc = EST_VAL_NATIVE_INFLUX
+						influence = 5
+						duration = 5475
+					}
+					add_base_tax = 1
+					clr_province_flag = influx_adm
+				}
+				influx_dip = {
+					add_estate_influence_modifier = {
+						estate = estate_nhs_native_council
+						desc = EST_VAL_NATIVE_INFLUX
+						influence = 5
+						duration = 5475
+					}
+					add_base_production = 1
+					clr_province_flag = influx_dip
+				}
+				influx_mil = {
+					add_estate_influence_modifier = {
+						estate = estate_nhs_native_council
+						desc = EST_VAL_NATIVE_INFLUX
+						influence = 5
+						duration = 5475
+					}
+					add_base_manpower = 1
+					clr_province_flag = influx_mil
+				}
+				influx_all = {
+					add_estate_influence_modifier = {
+						estate = estate_nhs_native_council
+						desc = EST_VAL_NATIVE_INFLUX
+						influence = 10
+						duration = 5475
+					}
+					add_base_tax = 1
+					add_base_manpower = 1
+					add_base_production = 1
+					clr_province_flag = influx_all
+				}
+			}
+		}
+	}
+}
+
+
+#Growth of Native presence - More influence for the estate
+country_event = {
+	id = natives_estate_events.7
+	title = natives_estate_events.7.t
+	desc = natives_estate_events.7.d
+	picture = NATIVE_FEAST_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_estate = estate_nhs_native_council
+		any_owned_province = {
+			native_culture = yes
+			NOT = { culture = owner }
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_NATIVE_ADVANCES
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_NATIVE_DECLINES
+			}
+		}
+	}
+
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+
+	option = {
+		name = natives_estate_events.7.a #Ok
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_NATIVE_ADVANCES
+			influence = 10
+			duration = 5475
+		}
+	}
+}
+#Decline of Native presence - Less Influence for the estate
+country_event = {
+	id = natives_estate_events.8
+	title = natives_estate_events.8.t
+	desc = natives_estate_events.8.d
+	picture = NATIVE_FAMINE_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_native_council
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_NATIVE_ADVANCES
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_NATIVE_DECLINES
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = natives_estate_events.8.a #Ok
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_NATIVE_DECLINES
+			influence = -10
+			duration = 5475
+		}
+	}
+}
+##Petition for more land - Choice between random province with native culture gaining the estate and the natives gaining influence or losing native loyalty!!!!!!!!!!!!!! WRONG EVENT
+#country_event = {
+#	id = natives_estate_events.9
+#	title = natives_estate_events.9.t
+#	desc = natives_estate_events.9.d
+#	picture = NATIVE_EXPLORERS_eventPicture
+#	
+#	trigger = {
+#		always = no
+#		
+#		has_estate = estate_nhs_native_council
+#		NOT = { owner = { primary_culture = elysian } }
+#		NOT = { manpower_percentage = 0.95 }
+#		NOT = {
+#			has_estate_influence_modifier = {
+#				estate = estate_nhs_native_council
+#				modifier = EST_VAL_NATIVE_PRIVILEGES
+#			}
+#		}
+#		NOT = {
+#			has_estate_influence_modifier = {
+#				estate = estate_nhs_native_council
+#				modifier = EST_VAL_DENIED_NATIVE_PRIVILEGES
+#			}
+#		}
+#		any_owned_province = {
+#			has_estate = estate_nhs_native_council
+#		}
+#	}
+#	
+#	is_triggered_only = yes
+#	
+#	mean_time_to_happen = {
+#		days = 1
+#	}
+#	
+#	option = {
+#		name = natives_estate_events.9.a #We need more registered Natives!
+#		add_yearly_manpower = 1
+#		ai_chance = {
+#			factor = 50
+#			modifier = {
+#				factor = 1.5
+#				NOT = {
+#					estate_loyalty = {
+#						estate = estate_nhs_native_council
+#						loyalty = 40
+#					}
+#				}
+#			}
+#			modifier = {
+#				factor = 0.5
+#				estate_influence = {
+#					estate = estate_nhs_native_council
+#					influence = 60
+#				}
+#			}
+#		}
+#		add_estate_loyalty = {
+#			estate = estate_nhs_native_council
+#			loyalty = 10
+#		}
+#		add_estate_influence_modifier = {
+#			estate = estate_nhs_native_council
+#			desc = EST_VAL_NATIVE_PRIVILEGES
+#			influence = 10
+#			duration = 5475
+#		}
+#	}
+#	option = {
+#		name = natives_estate_events.8.b #Let them tend to their lands.
+#		ai_chance = {
+#			factor = 50
+#			modifier = {
+#				factor = 0.5
+#				NOT = {
+#					estate_loyalty = {
+#						estate = estate_nhs_native_council
+#						loyalty = 40
+#					}
+#				}
+#			}
+#			modifier = {
+#				factor = 1.5
+#				estate_influence = {
+#					estate = estate_nhs_native_council
+#					influence = 60
+#				}
+#			}
+#		}
+#		add_estate_loyalty = {
+#			estate = estate_nhs_native_council
+#			loyalty = -10
+#		}
+#		add_estate_influence_modifier = {
+#			estate = estate_nhs_native_council
+#			desc = EST_VAL_DENIED_NATIVE_PRIVILEGES
+#			influence = -10
+#			duration = 5475
+#		}
+#	}
+#}
+#Native integration - More natives are getting properly integrated and now hold high status within the nation - either gain loyalty and temporary influence or lose loyalty and temporary influence
+country_event = {
+	id = natives_estate_events.10
+	title = natives_estate_events.10.t
+	desc = natives_estate_events.10.d
+	picture = NATIVE_LIBERUM_VETO_eventPicture
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+		
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_SUPPLIED_NATIVE
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_NATIVE_FENDING_FOR_THEMSELVES
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = natives_estate_events.10.a #
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+		}
+		add_years_of_income = -0.25
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_SUPPLIED_NATIVE
+			influence = 10
+			duration = 5475
+		}
+	}
+	option = {
+		name = natives_estate_events.10.b #
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_NATIVE_FENDING_FOR_THEMSELVES
+			influence = -10
+			duration = 5475
+		}
+	}
+}
+#Natives attack merchants - Side with the natives or with the traders (if the nation uses the faction system it will lose power with the merchant faction instead of losing loyalty)
+country_event = {
+	id = natives_estate_events.11
+	title = natives_estate_events.11.t
+	desc = natives_estate_events.11.d
+	picture = NATIVE_MERCHANTS_TALKING_eventPicture
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+		NOT = { has_faction = vin_farmadr }
+		OR = {
+			has_estate = estate_burghers
+		}
+		
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_SUPPORTED_NATIVE
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_SUPPORTED_BURGHERS_VS_NATIVE
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = natives_estate_events.11.a #Support the $estate_nhs_native_council$.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = 10
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_SUPPORTED_NATIVE
+			influence = 10
+			duration = 5475
+		}
+		add_estate_influence_modifier = {
+			estate = estate_burghers
+			desc = EST_VAL_SUPPORTED_NATIVE
+			influence = -10
+			duration = 5475
+		}
+	}
+	option = {
+		name = natives_estate_events.11.b #Supports the $ESTATE_BURGHERS$.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_burghers
+					influence = 60
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -10
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_SUPPORTED_BURGHERS_VS_NATIVE
+			influence = -10
+			duration = 5475
+		}
+		add_estate_influence_modifier = {
+			estate = estate_burghers
+			desc = EST_VAL_SUPPORTED_BURGHERS_VS_NATIVE
+			influence = 10
+			duration = 5475
+		}
+	}
+}
+
+#Natives attack Farmadr - Side with the natives or with the traders (if the nation uses the faction system it will lose power with the merchant faction instead of losing loyalty)
+country_event = {
+	id = natives_estate_events.113
+	title = natives_estate_events.113.t
+	desc = natives_estate_events.113.d
+	picture = NATIVE_MERCHANTS_TALKING_eventPicture
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+		has_faction = vin_farmadr
+		
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_SUPPORTED_NATIVE
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_SUPPORTED_BURGHERS_VS_NATIVE
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = natives_estate_events.113.a #Support the $estate_nhs_native_council$.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					faction_influence = {
+						faction = vin_farmadr
+						influence = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = 10
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_SUPPORTED_NATIVE
+			influence = 10
+			duration = 5475
+		}
+		add_faction_influence = { 
+			faction = vin_farmadr
+			influence = -10 
+		}
+	}
+	option = {
+		name = natives_estate_events.113.b #Supports the $ESTATE_BURGHERS$.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				faction_influence = {
+					faction = vin_farmadr
+					influence = 50
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -10
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_SUPPORTED_FARMADR_VS_NATIVE
+			influence = -10
+			duration = 5475
+		}
+		add_faction_influence = { 
+			faction = vin_farmadr
+			influence = -10 
+		}
+	}
+}
+
+#The Settling of the Great Plains - The natives want the land in the Great Plains - If you accept you will gain a boost to colonization but they will gain more influence, loyalty and one random province in the great plains will gain the estate
+country_event = {
+	id = natives_estate_events.12
+	title = natives_estate_events.12.t
+	desc = natives_estate_events.12.d
+	picture = NATIVE_EXPLORERS_eventPicture
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+		num_of_colonists = 1
+		any_owned_province = {
+			region = great_plains_region
+			NOT = { has_estate = yes }
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_NATIVE_SETTLERS
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_NO_NATIVE_SETTLERS
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = natives_estate_events.12.a #Enlist $estate_nhs_native_council$ Settlers.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+		}
+		add_country_modifier = {
+			name = "native_settlers"
+			duration = 5475
+		}
+		random_owned_province = {
+			limit = {
+				NOT = { has_estate = yes }
+				OR = {
+					region = great_plains_region
+					region = mississippi_region
+				}
+			}
+			set_estate = estate_nhs_native_council
+			nhs_add_barbaroi_province = yes
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_NATIVE_SETTLERS
+			influence = 10
+			duration = 5475
+		}
+	}
+	option = {
+		name = natives_estate_events.12.b #We cannot trust the $estate_nhs_native_council$.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_NO_NATIVE_SETTLERS
+			influence = -10
+			duration = 5475
+		}
+	}
+}
+#Disloyal Council - If the natives have low loyalty they will either gain influence and their lands autonomy or they will lose influence and their lands will spawn rebels
+country_event = {
+	id = natives_estate_events.13
+	title = natives_estate_events.13.t
+	desc = natives_estate_events.13.d
+	picture = NATIVE_ANGRY_MOB_eventPicture
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+		
+		NOT = {
+			estate_loyalty = {
+				estate = estate_nhs_native_council
+				loyalty = 30
+			}
+		}
+		any_owned_province = {
+			has_estate = estate_nhs_native_council
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_NATIVE_INDEPENDENCE
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_NATIVE_UPRISING
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = natives_estate_events.13.a #
+		ai_chance = {
+			factor = 75
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 60
+				}
+			}
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_NATIVE_INDEPENDENCE
+			influence = 10
+			duration = 7300
+		}
+		every_owned_province = {
+			limit = {
+				has_estate = estate_nhs_native_council
+			}
+			add_local_autonomy = 30
+		}
+	}
+	option = {
+		name = natives_estate_events.13.b #
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 1.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 70
+				}
+			}
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_NATIVE_UPRISING
+			influence = -15
+			duration = 7300
+		}
+		every_owned_province = {
+			limit = {
+				has_estate = estate_nhs_native_council
+			}
+			if = {
+				limit = { can_spawn_rebels = nationalist_rebels }
+				spawn_rebels = {
+					type = nationalist_rebels
+					size = 1
+				}
+			}
+			if = {
+				limit = { NOT = { can_spawn_rebels = nationalist_rebels } }
+				spawn_rebels = {
+					type = particularist_rebels
+					size = 1
+				}
+			}
+		}
+	}
+}
+#Council wants Native Provinces
+country_event = {
+	id = natives_estate_events.14
+	title = natives_estate_events.14.t
+	desc = natives_estate_events.14.d
+	picture = NATIVE_CITY_VIEW_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_native_council
+		any_owned_province = {
+			native_culture = yes
+			is_capital = no
+			is_overseas = no
+			has_estate = no
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					native_culture = yes
+					is_capital = no
+					is_overseas = no
+					NOT = { has_estate = yes }
+				}
+				set_province_flag = growing_native_communities
+			}
+		}
+	}
+	
+	option = {
+		name = natives_estate_events.14.a
+		random_owned_province = {
+			limit = {
+				has_province_flag = growing_native_communities
+			}
+			set_estate = estate_nhs_native_council
+			add_base_manpower = 1
+			nhs_add_barbaroi_province = yes
+			clr_province_flag = growing_native_communities
+		}
+	}
+	option = {
+		name = natives_estate_events.14.b
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -10
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = growing_native_communities
+			}
+			clr_province_flag = growing_native_communities
+			random = {
+				chance = 25
+				if = {
+					limit = { can_spawn_rebels = nationalist_rebels }
+					spawn_rebels = {
+						type = nationalist_rebels
+						size = 1
+					}
+				}
+				if = {
+					limit = { NOT = { can_spawn_rebels = nationalist_rebels } }
+					spawn_rebels = {
+						type = particularist_rebels
+						size = 1
+					}
+				}
+			}
+		}
+	}
+}
+#Demands at high influence 
+country_event = {
+	id = natives_estate_events.15
+	title = natives_estate_events.15.t
+	desc = natives_estate_events.15.d
+	picture = COURT_eventPicture
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+		
+		estate_influence = {
+			estate = estate_nhs_native_council
+			influence = 70
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_EXTENDED_NATIVE_PRIVILEGES
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_native_council
+				modifier = EST_VAL_NO_EXTENDED_NATIVE_PRIVILEGES
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = natives_estate_events.15.a #Preposterous.
+		ai_chance = {
+			factor = 1
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_NO_EXTENDED_NATIVE_PRIVILEGES
+			influence = -10
+			duration = 3650
+		}
+	}
+	option = {
+		name = natives_estate_events.15.b #Give in to their demands.
+		ai_chance = {
+			factor = 0
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_EXTENDED_NATIVE_PRIVILEGES
+			influence = 10
+			duration = 7300
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -20
+		}
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -20
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -20
+		}
+	}
+}
+#Local revolt - If you revoke the estate from a province and they have low loyalty a small revolt occurs - NEED TO BE TRIGGERED "on action"
+province_event = {
+	id = natives_estate_events.16
+	title = natives_estate_events.16.t
+	desc = natives_estate_events.16.d
+	picture = ACCUSATION_eventPicture
+	
+	is_triggered_only = yes
+
+	option = {
+		name = natives_estate_events.16.a #Ok.
+		
+	}
+}
+#Random loyalty hit after 50 loyalty - Just because
+country_event = {
+	id = natives_estate_events.17
+	title = natives_estate_events.17.t
+	desc = natives_estate_events.17.d
+	picture = ADVISOR_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+		
+		estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = 50
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			total_development = 250
+			NOT = { total_development = 500 }
+		}
+		modifier = {
+			factor = 2.0
+			total_development = 500
+			NOT = { total_development = 750 }
+		}
+		modifier = {
+			factor = 2.5
+			total_development = 750
+			NOT = { total_development = 1000 }
+		}
+		modifier = {
+			factor = 3.0
+			total_development = 1000
+		}
+	}
+	
+
+	option = {
+		name = natives_estate_events.17.a #Ok
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -10
+		}
+	}
+}
+###Events inspired by the Tribes Estate events
+#Tension between Natives and Citizens
+country_event = {
+	id = natives_estate_events.18
+	title = natives_estate_events.18.t
+	desc = natives_estate_events.18.d
+	picture = RELIGION_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_native_council
+		num_of_cities = 5
+		any_owned_province = {
+			has_estate = estate_nhs_native_council
+			can_spawn_rebels = nationalist_rebels
+		}
+	}
+
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_estate = estate_nhs_native_council
+					can_spawn_rebels = nationalist_rebels
+				}
+				area = {
+					limit = {
+						can_spawn_rebels = nationalist_rebels
+						owned_by = ROOT
+					}
+					set_province_flag = conflict_regarding_tax_collection
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = natives_estate_events.18.a #	Reprimand the Chiefs.
+		ai_chance = {
+			factor = 75
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 65
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_NATIVE_REPRIMANDED
+			influence = -10
+			duration = 5475
+		}
+	}
+	option = {
+		name = natives_estate_events.18.b #	Let it Slide
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				estate_influence = {
+					estate = estate_nhs_native_council
+					influence = 65
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = conflict_regarding_tax_collection
+			}
+			spawn_rebels = {
+				size = 1
+				type = nationalist_rebels
+			}
+			clr_province_flag = conflict_regarding_tax_collection
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = conflict_regarding_tax_collection
+				owner = { num_of_cities = 10 }
+			}
+			spawn_rebels = {
+				size = 1
+				type = nationalist_rebels
+			}
+			clr_province_flag = conflict_regarding_tax_collection
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = conflict_regarding_tax_collection
+				owner = { num_of_cities = 15 }
+			}
+			spawn_rebels = {
+				size = 1
+				type = nationalist_rebels
+			}
+			clr_province_flag = conflict_regarding_tax_collection
+		}
+		every_owned_province = {
+			clr_province_flag = conflict_regarding_tax_collection
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = 15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_NATIVE_ALLOWED_FREE_REIGN
+			influence = 10
+			duration = 5475
+		}
+	}
+}
+#Local Chief Complains
+country_event = {
+	id = natives_estate_events.19
+	title = natives_estate_events.19.t
+	desc = natives_estate_events.19.d
+	picture = NATIVE_ADVISOR_eventPicture
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = natives_estate_events.19.a
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 2.0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+		}
+		add_army_tradition = -10
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = 10
+		}
+	}
+	option = {
+		name = natives_estate_events.19.b
+		ai_chance = {
+			factor = 75
+			modifier = {
+				factor = 0.25
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_native_council
+						loyalty = 40
+					}
+				}
+			}
+		}
+		add_army_tradition = 10
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -10
+		}
+	}
+}
+
+##Events for culture flips
+#Natives want more control over their province - Remove this one if not needed
+country_event = {
+	id = natives_estate_events.20
+	title = natives_estate_events.20.t
+	desc = natives_estate_events.20.d
+	picture = NATIVE_LIBERUM_VETO_eventPicture
+	
+	trigger = {
+		
+		has_estate = estate_nhs_native_council
+		OR = {
+			culture_group = norse_g
+			culture_group = elysian_group
+		}
+		estate_influence = {
+			estate = estate_nhs_native_council
+			influence = 60
+		}
+		any_owned_province = {
+			has_estate = estate_nhs_native_council
+			NOT = { base_manpower = 10 }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_estate = estate_nhs_native_council
+					is_capital = no
+					is_overseas = no
+				}
+				set_province_flag = growing_native_communities
+			}
+		}
+	}
+	
+	option = {
+		name = natives_estate_events.20.a #Fine
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_native_council
+			desc = EST_VAL_NATIVE_INFLUX
+			influence = 10
+			duration = 3650
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = growing_native_communities
+			}		
+			add_base_manpower = 2
+			clr_province_flag = growing_native_communities
+		}
+	}
+	option = {
+		name = natives_estate_events.20.b #The natives will not overtake the province!
+		add_estate_loyalty = {
+			estate = estate_nhs_native_council
+			loyalty = -10
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = growing_native_communities
+			}
+			clr_province_flag = growing_native_communities
+			random_list =  {
+				40 = {
+					spawn_rebels = {
+						size = 1
+						type = particularist_rebels
+					}
+				}
+				60 = { }
+			}
+			
+		}
+	}
+	
+}

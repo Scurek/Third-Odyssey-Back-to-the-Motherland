@@ -1,0 +1,1045 @@
+nhs_left_start = {
+	slot = 1 
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ELY
+			tag = NHS
+		}
+	}
+	has_country_shield = yes
+	
+	take_powhatan = {
+		icon = nhs_mission_pf_soldier
+		position = 1
+		provinces_to_highlight = {
+			province_id = 952
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns = 952
+		}
+		effect = {
+			953 = {
+				change_culture = ROOT
+				change_religion = ROOT
+			}
+			add_adm_power = 50
+			add_prestige = 5
+		}
+	}
+	
+	nhs_form_colonial_institution_mission = {
+		required_missions = {
+			nhs_settling_mission
+		}
+		icon = mission_establish_high_seas_navy
+		position = 3
+		trigger = {
+			treasury = 100
+			adm_power = 25
+			dip_power = 50
+			mil_power = 50
+			stability = 1
+			OR = {
+				full_idea_group = exploration_ideas
+				full_idea_group = expansion_ideas
+				full_idea_group = development_ideas
+				full_idea_group = discovery_ideas
+				full_idea_group = domination_ideas
+			}
+		}
+		effect = {
+			remove_country_modifier = nhs_constrained_resources
+			add_country_modifier = {
+				name = "nhs_organised_expansion"
+				duration = -1
+			}
+			add_treasury = -100
+			add_adm_power = -25
+			add_dip_power = -50
+			add_mil_power = -50
+		}
+	}
+}
+
+nhs_right_start = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ELY
+			tag = NHS
+		}
+	}
+	has_country_shield = yes
+	
+	control_the_elysian_homelands = {
+		icon = nhs_mission_pf_map_table
+		position = 1
+		provinces_to_highlight = {
+			area = chesapeake_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			chesapeake_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_prestige = 10
+		}
+	}
+}
+
+nhs_centre_start = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ELY
+			tag = NHS
+		}
+	}
+	has_country_shield = yes
+	
+	nhs_reestablish_merchant_class_mission = {
+		icon = mission_dominate_home_trade_node
+		position = 1
+		trigger = {
+			is_year = 1450
+			years_of_income = 0.4
+			dip_power = 200
+			stability = 1
+			OR = {
+				is_year = 1480
+				advisor = trader
+				dip = 4
+				capital_scope = { has_building = marketplace }
+			}
+		}
+		effect = {
+			remove_country_modifier = nhs_no_merchant_class
+			add_years_of_income = -0.4
+			add_dip_power = -200
+			capital_scope = {
+				add_permanent_province_modifier = {
+					name = center_of_trade_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	nhs_settling_mission = {
+		required_missions = {
+			nhs_reestablish_merchant_class_mission
+			take_powhatan
+			control_the_elysian_homelands
+		}
+		icon = Eflag
+		position = 2
+		trigger = {
+			if = {
+				limit = {
+					has_country_modifier = nhs_handicap_settlers
+					NOT = { has_country_flag = nhs_settled_mission }
+				}
+				OR = {
+					is_year = 1520
+					custom_trigger_tooltip = {
+						has_country_flag = nhs_aqueducts_finished
+						tooltip = nhs_settling_counteraque
+					}
+					AND = {
+						is_year = 1500
+						num_of_cities = 5
+						stability = 1
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_modifier = nhs_handicap_settlers
+					NOT = { has_country_flag = nhs_settled_mission }
+				}
+				country_event = { id = nhs_countryevents.7 }
+				tooltip = {
+					remove_country_modifier = nhs_handicap_settlers
+				}
+			}
+		}
+	}
+}
+
+nhs_centre_end = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ELY
+			tag = NHS
+		}
+	}
+	has_country_shield = yes
+	
+	nhs_back_to_the_motherland = {
+		icon = mission_sea_battles
+		required_missions = {
+			nhs_settling_mission
+		}
+		provinces_to_highlight = {
+			province_id = 151
+		}
+		position = 5
+		provinces_to_highlight = {
+			province_id = 151
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 151
+		}
+		effect = {
+			#TO DO
+			#Potential Exarchates Also get claims
+			custom_tooltip = nhs_potential_exarchate_claims
+			hudavendigar_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			aydin_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			karaman_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			rum_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kastamonu_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			erzurum_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			dulkadir_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			cukurova_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ankara_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			aegean_archipelago_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			germiyan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					exists = ELG
+					ELG = {
+						is_subject_of = ROOT
+					}
+					has_global_flag = nhs_elg_got_balkans
+				}
+				hudavendigar_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				aydin_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				karaman_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				rum_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				kastamonu_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				erzurum_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				dulkadir_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				cukurova_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				ankara_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				aegean_archipelago_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				germiyan_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+			}
+		}
+	}
+	
+	nhs_heir_of_justinian = {
+		required_missions = {
+			nhs_back_to_the_motherland
+			nhs_ancestral_lands
+			nhs_push_them_back
+		}
+		icon = nhs_mission_pf_soldier
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = aleppo_area
+				area = syria_area
+				area = palestine_area
+				area = delta_area
+				area = bahari_area
+				area = vostani_area
+				area = cyrenaica_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_completed_outward_focus_tt
+				NOT = { has_country_flag = nhs_completed_outward_focus }
+			}
+			custom_trigger_tooltip = {
+				tooltip = nhs_completed_inward_focus_tt
+				NOT = { has_country_flag = nhs_completed_inward_focus }
+			}
+			aleppo_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			syria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			palestine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			delta_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			bahari_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			vostani_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			cyrenaica_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		
+		effect = {
+			#TO DO
+			set_country_flag = nhs_completed_restoration_focus
+		}
+	}
+	
+	nhs_spqe = {
+		required_missions = {
+			nhs_heir_of_justinian
+		}
+		icon = mission_rb_mediterranean_authority
+		position = 10
+		provinces_to_highlight = {
+
+		}
+		trigger = {
+		
+		}
+		
+		effect = {
+			#TO DO
+			set_country_flag = nhs_completed_restoration_focus
+		}
+	}
+	
+	nhs_rome_restored = {
+		required_missions = {
+			nhs_the_old_gods
+			nhs_pentarchy
+			nhs_spqe
+		}
+		icon = ROMflag
+		position = 11
+		provinces_to_highlight = {
+
+		}
+		trigger = {
+		
+		}
+		
+		effect = {
+			#TO DO
+			set_country_flag = nhs_completed_restoration_focus
+		}
+	}
+}
+
+nhs_left_end = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ELY
+			tag = NHS
+		}
+	}
+	has_country_shield = yes
+	
+	nhs_ancestral_lands = {
+		required_missions = {
+			nhs_back_to_the_motherland
+		}
+		icon = mission_conquer_50_development
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = macedonia_area
+				area = northern_greece_area
+				area = morea_area
+				area = western_aegean_area
+				area = thrace_area
+				area = bulgaria_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			macedonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			northern_greece_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			morea_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			western_aegean_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			thrace_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			bulgaria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			#Potential Exarchates Also get claims
+			custom_tooltip = nhs_potential_exarchate_claims
+			balkan_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					exists = ELG
+					ELG = {
+						is_subject_of = ROOT
+					}
+					has_global_flag = nhs_elg_got_balkans
+				}
+				balkan_region = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+			}
+		}
+	}
+	
+	nhs_inward_focus = {
+		required_missions = {
+			nhs_ancestral_lands
+		}
+		icon = mission_rb_the_thirteen_colonies
+		position = 7
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_completed_outward_focus_tt
+				NOT = { has_country_flag = nhs_completed_outward_focus }
+			}
+			custom_trigger_tooltip = {
+				tooltip = nhs_completed_restoration_focus_tt
+				NOT = { has_country_flag = nhs_completed_restoration_focus }
+			}
+		}
+		effect = {
+			#Add building cost reduction modifier
+			every_province = {
+				limit = {
+					OR = {
+						owned_by = MSG
+						owned_by = MSN
+						is_core = MSG
+						is_core = MSN
+					}
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					province_group = mesoamerica_pgroup
+				}
+				add_permanent_claim = ROOT
+			}
+			set_country_flag = nhs_completed_inward_focus
+		}
+	}
+	
+	nhs_development_of_the_true_homeland = {
+		required_missions = {
+			nhs_inward_focus
+		}
+		icon = mission_colonial
+		position = 8
+		trigger = {
+			workshop = 5
+			#TO DO
+		}
+		effect = {
+			#Add building cost reduction modifier
+			#Starts Migration events
+			set_country_flag = nhs_locked_inward_focus
+		}
+	}
+	nhs_the_city_of_cities = {
+		required_missions = {
+			nhs_development_of_the_true_homeland
+		}
+		icon = mission_early_game_buildings
+		position = 9
+		trigger = {
+			#Every possible_upgrade?
+		}
+		effect = {
+			#Add building cost reduction modifier
+		}
+	}
+	
+	nhs_the_promised_land = {
+		required_missions = {
+			nhs_the_city_of_cities
+			nhs_continent_of_elysia
+		}
+		icon = EoEflag
+		position = 10
+		trigger = {
+			#Every possible_upgrade?
+		}
+		effect = {
+			#Expands Migration events
+		}
+	}
+}
+
+nhs_left_mid_end = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ELY
+			tag = NHS
+		}
+	}
+	has_country_shield = yes
+
+	nhs_expanding_south = {
+		required_missions = {
+			nhs_inward_focus
+		}
+		icon = mission_assemble_an_army
+		position = 8
+		trigger = {
+			OR = {
+				if = {
+					limit = {
+						exists = MSG
+					}
+					MSG = {
+						is_subject_of = ROOT
+					}
+				}
+				if = {
+					limit = {
+						exists = MSN
+					}
+					MSN = {
+						is_subject_of = ROOT
+					}
+				}
+			}
+			all_province = {
+				limit = {
+					province_group = mesoamerica_pgroup
+				}
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			#Add building cost reduction modifier
+			set_country_flag = nhs_locked_inward_focus
+			custom_tooltip = nhs_gain_claims_upon_declaring_NA
+		}
+	}
+	
+	nhs_continent_of_elysia = {
+		required_missions = {
+			nhs_expanding_south
+		}
+		icon = nhs_mission_pf_map_table
+		position = 9
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 320
+				continent = north_america
+				is_city = yes
+			}
+		}
+		effect = {
+			#Add building cost reduction modifier
+			custom_tooltip = nhs_gain_claims_upon_declaring_NA
+		}
+	}
+	
+	nhs_pentarchy = {
+		required_missions = {
+			#nhs_heir_of_justinian
+			#nhs_spqe
+		}
+		icon = nhs_mission_pf_cross
+		position = 10
+		provinces_to_highlight = {
+
+		}
+		trigger = {
+		
+		}
+		
+		effect = {
+			#TO DO
+			set_country_flag = nhs_completed_restoration_focus
+		}
+	}
+}
+
+nhs_right_end = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ELY
+			tag = NHS
+		}
+	}
+	has_country_shield = yes
+	
+	nhs_push_them_back = {
+		required_missions = {
+			nhs_back_to_the_motherland
+		}
+		icon = mission_unite_home_region
+		position = 6
+		provinces_to_highlight = {
+			region = anatolia_region
+			NOT = { area = north_kurdistan_area }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			hudavendigar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			aydin_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			karaman_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			rum_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kastamonu_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			erzurum_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			dulkadir_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			cukurova_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			ankara_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			aegean_archipelago_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			germiyan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			#TO DO
+			#Potential Exarchates Also get claims
+			custom_tooltip = nhs_potential_exarchate_claims
+			aleppo_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			syria_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			palestine_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					exists = EEO
+					EEO = {
+						is_subject_of = ROOT
+					}
+				}
+				aleppo_area = {
+					limit = {
+						NOT = { is_core = EEO }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = EEO
+				}
+				syria_area = {
+					limit = {
+						NOT = { is_core = EEO }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = EEO
+				}
+				palestine_area = {
+					limit = {
+						NOT = { is_core = EEO }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = EEO
+				}
+			}
+			delta_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bahari_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			vostani_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			cyrenaica_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					exists = EEE
+					EEE = {
+						is_subject_of = ROOT
+					}
+				}
+				aleppo_area = {
+					limit = {
+						NOT = { is_core = EEE }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = EEE
+				}
+				syria_area = {
+					limit = {
+						NOT = { is_core = EEE }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = EEE
+				}
+				palestine_area = {
+					limit = {
+						NOT = { is_core = EEE }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = EEE
+				}
+			}
+		}
+	}
+	
+	nhs_outward_focus = {
+		required_missions = {
+			nhs_push_them_back
+		}
+		icon = mission_invade_island
+		position = 7
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_completed_inward_focus_tt
+				NOT = { has_country_flag = nhs_completed_inward_focus }
+			}
+			custom_trigger_tooltip = {
+				tooltip = nhs_completed_restoration_focus_tt
+				NOT = { has_country_flag = nhs_completed_restoration_focus }
+			}
+		}
+		effect = {
+			#TO DO
+			set_country_flag = nhs_completed_outward_focus
+		}
+	}
+	
+	nhs_hercules_gates = {
+		required_missions = {
+			nhs_outward_focus
+		}
+		icon = mission_rb_take_gibraltar
+		position = 8
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_completed_outward_focus_tt
+				NOT = { has_country_flag = nhs_completed_outward_focus }
+			}
+		}
+		effect = {
+			#TO DO
+			set_country_flag = nhs_completed_outward_focus
+		}
+	}
+	nhs_indian_ambition = {
+		required_missions = {
+			#nhs_outward_focus
+			nhs_hercules_gates
+		}
+		icon = mission_rb_take_indian_coast
+		position = 9
+		trigger = {
+			
+		}
+		effect = {
+			#TO DO
+			set_country_flag = nhs_completed_outward_focus
+		}
+	}
+	
+	nhs_nova_lingua_franca = {
+		required_missions = {
+			nhs_indian_ambition
+			#nhs_hercules_gates
+			#nhs_at_every_continent
+		}
+		icon = mission_establish_high_seas_navy
+		position = 10
+		trigger = {
+			
+		}
+		effect = {
+			#TO DO
+			set_country_flag = nhs_completed_outward_focus
+		}
+	}
+}
+
+nhs_right_mid_end = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ELY
+			tag = NHS
+		}
+	}
+	has_country_shield = yes
+	
+	nhs_at_every_continent = {
+		required_missions = {
+			nhs_outward_focus
+		}
+		icon = mission_trade_company_region_abroad
+		position = 8
+		trigger = {
+			
+		}
+		effect = {
+			#TO DO
+			set_country_flag = nhs_completed_outward_focus
+		}
+	}
+	
+	nhs_the_old_gods = {
+		required_missions = {
+			#nhs_heir_of_justinian
+			#nhs_spqe
+		}
+		icon = nhs_pantheon_temple_mp
+		position = 10
+		provinces_to_highlight = {
+
+		}
+		trigger = {
+		
+		}
+		
+		effect = {
+			#TO DO
+			set_country_flag = nhs_completed_restoration_focus
+		}
+	}
+}

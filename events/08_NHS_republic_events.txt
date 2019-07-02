@@ -1,0 +1,297 @@
+namespace = nhs_republic_events
+
+#Elections
+country_event = {
+	id = nhs_republic_events.1
+	title = "nhs_republic_events.1.t"
+	desc = "nhs_republic_events.1.d"
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_reform = elysian_republic
+			has_reform = nhs_noble_republic
+			has_reform = elysian_revolutionary_republic
+		}
+	}
+		
+	option = {
+		name = "nhs_republic_events.1.a"		# Keep [Root.Monarch.GetName]
+		trigger = {
+			has_regency = no
+		}
+		ai_chance = {
+			factor = 60
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 25 }
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { republican_tradition = 50 }
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { republican_tradition = 75 }
+			}
+			modifier = {
+				factor = 2.0
+				NOT = { republican_tradition = 90 }
+			}
+		}
+		custom_tooltip = remains_ruler
+		change_adm = 1
+		change_dip = 1
+		change_mil = 1
+			
+		add_scaled_republican_tradition = -10
+		random_list = {
+			10 = {
+				add_adm_power = 50
+			}
+			10 = {
+				add_dip_power = 50
+			}
+			10 = {
+				add_mil_power = 50
+			}
+		}
+	}
+	option = {
+		name = "nhs_republic_events.1.b"	# An administrator type
+		ai_chance = { factor = 20 }
+		define_ruler = {
+			mil = 1
+			adm = 3
+			dip = 1
+			max_random_dip = 3
+			max_random_mil = 3
+		}
+	}
+	option = {
+		name = "nhs_republic_events.1.c"	#A diplomat
+		ai_chance = { factor = 20 }
+		define_ruler = {
+			dip = 3
+			adm = 1
+			mil = 1
+			max_random_mil = 3
+			max_random_adm = 3
+		}
+	}
+	option = {
+		name = "nhs_republic_events.1.od"	# A military man
+		ai_chance = { factor = 20 }
+		define_ruler = {
+			mil = 3
+			adm = 1
+			dip = 1
+			max_random_dip = 3
+			max_random_adm = 3
+		}
+	}
+}
+
+#Elections upon death
+country_event = {
+	id = nhs_republic_events.2
+	title = "nhs_republic_events.1.t"
+	desc = "nhs_republic_events.2.d"
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_reform = elysian_republic
+			has_reform = nhs_noble_republic
+			has_reform = elysian_revolutionary_republic
+		}
+	}
+	
+	option = {
+		name = "nhs_republic_events.1.b"		# An administrator type
+		ai_chance = { factor = 40 }
+		define_ruler = {
+			mil = 1
+			adm = 3
+			dip = 1
+			max_random_dip = 3
+			max_random_mil = 3
+		}
+	}
+	option = {
+		name = "nhs_republic_events.1.c" 		# A diplomat
+		ai_chance = { factor = 30 }
+		define_ruler = {
+			dip = 3
+			adm = 1
+			mil = 1
+			max_random_mil = 3
+			max_random_adm = 3
+		}
+	}
+	option = {
+		name = "nhs_republic_events.1.od"		# A military man
+		ai_chance = { factor = 30 }
+		define_ruler = {
+			mil = 3
+			adm = 1
+			dip = 1
+			max_random_dip = 3
+			max_random_adm = 3
+		}
+	}
+}
+
+#Revolutionary Empire
+country_event = {
+	id = nhs_republic_events.3
+	title = "nhs_republic_events.3.t"			# Rise of a Despot
+	desc = "nhs_republic_events.3.d"			# The lack of respect for the republic has slowly eroded its foundations. To preserve the stability of the state, [leader] has proclaimed him/herself Emperor
+	picture = COURT_eventPicture
+	
+	trigger = {
+		has_reform = elysian_revolutionary_republic
+		OR = {
+			AND = {
+				has_dlc = "Rights of Man"
+				faction_in_power = rr_royalists
+				NOT = { republican_tradition = 40 }
+			}
+			NOT = { republican_tradition = 1 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+		
+		modifier = {
+			factor = 0.5
+			NOT = { republican_tradition = 20 }
+		}
+	}
+	
+	option = {
+		name = "nhs_republic_events.3.a"		# The Second Elysian Republic is dead...
+		hidden_effect = {
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				if = {
+					limit = {
+						OR = {
+							has_reform = nepotism_reform
+							has_reform = landholders_reform
+						 }
+					}
+					set_country_flag = nhs_enforce_noble_privileges
+				}
+				else_if = {
+					limit = {
+						has_reform = union_of_states_reform
+					}
+					set_country_flag = nhs_enforce_trader_privileges
+				}
+				if = {
+					limit = {
+						has_reform = administrative_divisions_reform
+					}
+					set_country_flag = nhs_centralize
+				}
+			}
+		}
+		nhs_change_government = { GOV = monarchy }
+		add_government_reform = elysian_revolutionary_empire
+		if = {
+			limit = {
+				has_dlc = "Dharma"
+			}
+			if = {
+				limit = {
+					has_country_flag = nhs_enforce_noble_privileges
+				}
+				add_government_reform = enforce_privileges_reform
+			}
+			else_if = {
+				limit = {
+					has_country_flag = nhs_enforce_trader_privileges
+				}
+				add_government_reform = enforce_trader_privileges_reform
+			}
+			else = {
+				add_government_reform = quash_noble_power_reform
+			}
+			if = {
+				limit = {
+					has_country_flag = nhs_centralize
+				}
+				add_government_reform = centralize_reform
+			}
+			else = {
+				add_government_reform = decentralize_reform
+			}
+			if = {
+				limit = {
+					has_country_flag = nhs_enforce_noble_privileges
+				}
+				add_government_reform = of_noble_bearing_reform
+				add_government_reform = aristocratic_court_reform
+			}
+			else = {
+				add_government_reform = meritocratic_focus_reform
+				add_government_reform = royal_decree_reform
+			}
+			set_country_flag = nhs_no_reduce_senate_effect
+			add_government_reform = nhs_reduce_senate_reform
+			clr_country_flag = nhs_no_reduce_senate_effect
+		}
+		clr_country_flag = nhs_enforce_noble_privileges
+		clr_country_flag = nhs_enforce_trader_privileges
+		clr_country_flag = nhs_centralize
+	}
+}
+
+#Restoration of Monarchy
+country_event = {
+    id = nhs_republic_events.4
+    title = "nhs_republic_events.4.t"
+    desc = "nhs_republic_events.4.d"
+    picture = GOOD_WITH_MONARCH_eventPicture
+    
+    is_triggered_only = yes
+    
+    option = {
+        name = "nhs_republic_events.4.a"
+        custom_tooltip = nhs_republic_events.4.tt
+    }
+}
+
+#Restoration of Monarchy via Noble Republic
+country_event = {
+    id = nhs_republic_events.5
+    title = "nhs_republic_events.5.t"
+    desc = "nhs_republic_events.5.d"
+    picture = GOOD_WITH_MONARCH_eventPicture
+    
+    is_triggered_only = yes
+	hidden = yes
+	
+	immediate = {
+		hidden_effect = {
+			nhs_restore_ruler = {
+				HEIR_FLAG = nhs_has_exiled_heir
+				RULER_FLAG = nhs_has_exiled_ruler
+				HEIR_EXILE = nhs_rev_exiled_heir
+				RULER_EXILE = nhs_rev_exiled_ruler
+			}
+		}
+	}
+    
+    option = {
+        name = "nhs_republic_events.5.a"
+    }
+}

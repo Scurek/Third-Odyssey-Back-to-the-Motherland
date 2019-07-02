@@ -1,0 +1,2878 @@
+#Pipiltin and Apogonoi Estates Events
+namespace = spartan_nobility_estates_events
+
+
+#Pipiltin/Apogonoi officer dispute - Apogonoi wish to be the only ones that can be high ranking officers - Choose one side to get extra influence and loyalty
+country_event = {
+	id = spartan_nobility_estates_events.1
+	title = spartan_nobility_estates_events.1.t
+	desc = spartan_nobility_estates_events.1.d
+	picture = Spartan_Nobility_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_apogonoi
+		has_estate = estate_nhs_pipiltin
+		estate_influence = {
+			estate = estate_nhs_apogonoi
+			influence = 60
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_EXCLUSIVE_RIGHT_TO_BE_OFFICERS_APOGONOI
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_NO_EXCLUSIVE_RIGHT_TO_BE_OFFICERS_APOGONOI
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.1.a #
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 1.2
+				estate_loyalty = {
+					estate = estate_nhs_apogonoi
+					loyalty = 50
+				}
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 60
+					}
+				}
+			}
+			modifier = {
+				factor = 0.2
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 30
+					}
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = 10
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -15
+		}
+		add_country_modifier = {
+			name = "only_apogonoi_officers"
+			duration = 7300
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = EST_VAL_EXCLUSIVE_RIGHT_TO_BE_OFFICERS_APOGONOI
+			influence = 10
+			duration = 7300
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.1.b #
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.1
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 30
+					}
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -15
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = EST_VAL_NO_EXCLUSIVE_RIGHT_TO_BE_OFFICERS_APOGONOI
+			influence = -5
+			duration = 7300
+		}
+	}
+}
+
+
+#Apogonoi encrounching in Pipiltin ancestral land - Have a province with the pipiltin estate flip to the apogonoi or fight against it
+country_event = {
+	id = spartan_nobility_estates_events.2
+	title = spartan_nobility_estates_events.2.t
+	desc = spartan_nobility_estates_events.2.d
+	picture = Apogonoi_City_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_apogonoi
+		has_estate = estate_nhs_pipiltin
+		num_of_cities = 15
+		any_owned_province = {
+			has_estate = estate_nhs_pipiltin
+			is_overseas = no
+			is_capital = no
+			has_seat_in_parliament = no
+		}
+		estate_influence = {
+			estate = estate_nhs_apogonoi
+			influence = 50
+		}
+		NOT = {
+			estate_influence = {
+				estate = estate_nhs_pipiltin
+				influence = 50
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_estate = estate_nhs_pipiltin
+					is_capital = no
+					is_overseas = no
+					has_seat_in_parliament = no
+					msg_is_major_city = no
+				}
+				set_province_flag = apogonoi_encroachment
+			}
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.2.a #Allow it.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.25
+				estate_territory = {
+					estate = estate_nhs_apogonoi
+					territory = 0.12
+				}
+			}
+			modifier = {
+				factor = 0.25
+				estate_influence = {
+					estate = estate_nhs_apogonoi
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				estate_territory = {
+					estate = estate_nhs_pipiltin
+					territory = 0.12
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 30
+					}
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = apogonoi_encroachment
+			}
+			remove_estate = yes
+			hidden_effect = {
+				msg_calc_remove_estate = yes
+			}
+			set_estate = estate_nhs_apogonoi
+			hidden_effect = {
+				msg_calc_assign_estate = yes
+			}
+			clr_province_flag = apogonoi_encroachment
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.2.b #Leave it to the Locals.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.25
+				estate_territory = {
+					estate = estate_nhs_apogonoi
+					territory = 0.12
+				}
+			}
+			modifier = {
+				factor = 1.25
+				estate_influence = {
+					estate = estate_nhs_apogonoi
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 0.25
+				estate_territory = {
+					estate = estate_nhs_pipiltin
+					territory = 0.12
+				}
+			}
+			modifier = {
+				factor = 0.25
+				estate_influence = {
+					estate = estate_nhs_pipiltin
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 30
+					}
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = apogonoi_encroachment
+			}
+			random_list = {
+				50 = {
+					spawn_rebels = {
+						type = particularist_rebels
+						size = 1
+					}
+				}
+				50 = {  }
+			}
+			clr_province_flag = apogonoi_encroachment
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = 10
+		}
+	}
+}
+#Apogonoi family loses power to locals - Same as above but reversed
+country_event = {
+	id = spartan_nobility_estates_events.3
+	title = spartan_nobility_estates_events.3.t
+	desc = spartan_nobility_estates_events.3.d
+	picture = Pipiltin_Market_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_apogonoi
+		has_estate = estate_nhs_pipiltin
+		num_of_cities = 15
+		any_owned_province = {
+			has_estate = estate_nhs_apogonoi
+			is_state = yes
+			is_overseas = no
+			is_capital = no
+			has_seat_in_parliament = no
+		}
+		estate_influence = {
+			estate = estate_nhs_pipiltin
+			influence = 50
+		}
+		NOT = {
+			estate_influence = {
+				estate = estate_nhs_apogonoi
+				influence = 50
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_estate = estate_nhs_apogonoi
+					is_capital = no
+					is_state = yes
+					is_overseas = no
+					has_seat_in_parliament = no
+					msg_is_major_city = no
+				}
+				set_province_flag = pipiltin_encroachment
+			}
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.3.a #Allow it.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.25
+				estate_territory = {
+					estate = estate_nhs_apogonoi
+					territory = 0.12
+				}
+			}
+			modifier = {
+				factor = 0.25
+				estate_influence = {
+					estate = estate_nhs_apogonoi
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				estate_territory = {
+					estate = estate_nhs_pipiltin
+					territory = 0.12
+				}
+			}
+			modifier = {
+				factor = 1.25
+				estate_influence = {
+					estate = estate_nhs_pipiltin
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 30
+					}
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = pipiltin_encroachment
+			}
+			remove_estate = yes
+			hidden_effect = {
+				msg_calc_remove_estate = yes
+			}
+			set_estate = estate_nhs_pipiltin
+			hidden_effect = {
+				msg_calc_assign_estate = yes
+			}
+			clr_province_flag = pipiltin_encroachment
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.3.b #Reinforce the Apogonoi position.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.25
+				estate_territory = {
+					estate = estate_nhs_apogonoi
+					territory = 0.12
+				}
+			}
+			modifier = {
+				factor = 0.25
+				estate_influence = {
+					estate = estate_nhs_apogonoi
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				estate_territory = {
+					estate = estate_nhs_pipiltin
+					territory = 0.12
+				}
+			}
+			modifier = {
+				factor = 1.25
+				estate_influence = {
+					estate = estate_nhs_pipiltin
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 30
+					}
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = pipiltin_encroachment
+			}
+			random_list = {
+				50 = {
+					spawn_rebels = {
+						type = particularist_rebels
+						size = 1
+					}
+				}
+				50 = {  }
+			}
+			clr_province_flag = pipilti_encroachment
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = 10
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+	}
+}
+#Apogonoi and Pipiltin Nobles encrounching in state lands - choose to give the land to the apogonoi, the pipiltin or to remain with the land 
+country_event = {
+	id = spartan_nobility_estates_events.4
+	title = spartan_nobility_estates_events.4.t
+	desc = spartan_nobility_estates_events.4.d
+	picture = Spartan_Nobility_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_pipiltin
+		has_estate = estate_nhs_apogonoi
+		num_of_cities = 15
+		any_owned_province = {
+			NOT = { has_estate = yes }
+			is_overseas = no
+			is_state = yes
+			is_capital = no
+			has_seat_in_parliament = no
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					NOT = { has_estate = yes }
+					is_state = yes
+					is_capital = no
+					is_overseas = no
+					has_seat_in_parliament = no
+					msg_is_major_city = no
+				}
+				set_province_flag = spartan_encroachment
+			}
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.4.a #Give it to the locals
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.25
+				estate_territory = {
+					estate = estate_nhs_pipiltin
+					territory = 0.12
+				}
+			}
+			modifier = {
+				factor = 0.25
+				estate_influence = {
+					estate = estate_nhs_pipiltin
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 1.1
+				NOT = {
+					estate_territory = {
+						estate = estate_nhs_apogonoi
+						territory = 0.15
+					}
+				}
+			}
+			modifier = {
+				factor = 0.25
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 35
+					}
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = spartan_encroachment
+			}
+			set_estate = estate_nhs_pipiltin
+			hidden_effect = {
+				msg_calc_assign_estate = yes
+			}
+			clr_province_flag = spartan_encroachment
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = 5
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.4.b #Give it to the High Nobility
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.25
+				estate_territory = {
+					estate = estate_nhs_apogonoi
+					territory = 0.12
+				}
+			}
+			modifier = {
+				factor = 0.25
+				estate_influence = {
+					estate = estate_nhs_apogonoi
+					influence = 60
+				}
+			}
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 1.1
+				NOT = {
+					estate_territory = {
+						estate = estate_nhs_pipiltin
+						territory = 0.15
+					}
+				}
+			}
+			modifier = {
+				factor = 0.25
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 35
+					}
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = spartan_encroachment
+			}
+			set_estate = estate_nhs_apogonoi
+			hidden_effect = {
+				msg_calc_assign_estate = yes
+			}
+			clr_province_flag = spartan_encroachment
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = 5
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.4.c #Take it Back.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.1
+				NOT = {
+					estate_territory = {
+						estate = estate_nhs_pipiltin
+						territory = 0.15
+					}
+				}
+			}
+			modifier = {
+				factor = 0.25
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 35
+					}
+				}
+			}
+			modifier = {
+				factor = 1.1
+				NOT = {
+					estate_territory = {
+						estate = estate_nhs_apogonoi
+						territory = 0.15
+					}
+				}
+			}
+			modifier = {
+				factor = 0.25
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 35
+					}
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = spartan_encroachment
+			}
+			random_list = {
+				50 = {
+					spawn_rebels = {
+						type = particularist_rebels
+						size = 1
+					}
+				}
+				50 = {  }
+			}
+			clr_province_flag = spartan_encroachment
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+	}
+}
+#Appointment of new minister
+country_event = {
+	id = spartan_nobility_estates_events.41
+	title = spartan_nobility_estates_events.41.t
+	desc = spartan_nobility_estates_events.41.d
+	picture = Spartan_Nobility_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_pipiltin
+		has_estate = estate_nhs_apogonoi
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_MINISTER_PIPILTIN
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_MINISTER_APOGONOI
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_burghers
+				modifier = EST_VAL_MINISTER_BURGHERS
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_church
+				modifier = EST_VAL_MINISTER_CHURCH
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.41.a #Pipiltin
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_loyalty = {
+					estate = estate_nhs_pipiltin
+					loyalty = 50
+				}
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 60
+					}
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_nhs_pipiltin
+						influence = 60
+					}
+				}
+			}
+		}
+		add_country_modifier = {
+			name = "pipiltin_minister"
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = 10
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nobles
+			desc = EST_VAL_MINISTER_PIPILTIN
+			influence = 15
+			duration = 3650
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.41.b #Apogonoi
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_loyalty = {
+					estate = estate_nhs_apogonoi
+					loyalty = 50
+				}
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 60
+					}
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_nhs_apogonoi
+						influence = 60
+					}
+				}
+			}
+		}
+		add_country_modifier = {
+			name = "apogonoi_minister"
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = 10
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nobles
+			desc = EST_VAL_MINISTER_APOGONOI
+			influence = 15
+			duration = 3650
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.41.c #Burgher
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 50
+				}
+				NOT = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 60
+					}
+				}
+			}
+		}
+		add_country_modifier = {
+			name = "burgher_minister"
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -7
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -7
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_burghers
+			desc = EST_VAL_MINISTER_BURGHERS
+			influence = 15
+			duration = 3650
+		}
+		
+	}
+	option = {
+		name = spartan_nobility_estates_events.41.e #Clergy
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 30
+					}
+				}
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 50
+				}
+				NOT = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 60
+					}
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_church
+						influence = 60
+					}
+				}
+			}
+		}
+		add_country_modifier = {
+			name = "church_minister"
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -7
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -7
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = EST_VAL_MINISTER_CHURCH
+			influence = 15
+			duration = 3650
+		}
+	}
+	
+}
+#Decline of Apogonoi Power
+country_event = {
+	id = spartan_nobility_estates_events.5
+	title = spartan_nobility_estates_events.5.t
+	desc = spartan_nobility_estates_events.5.d
+	picture = Apogonoi_City_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_apogonoi
+		estate_influence = {
+			estate = estate_nhs_apogonoi
+			influence = 15
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_APOGONOI_DECLINES
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_APOGONOI_ADVANCES
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_APOGONOI_ADVANCES_20
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.5.a #Ok
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = EST_VAL_APOGONOI_DECLINES
+			influence = -10
+			duration = 5475
+		}
+	}
+}
+#Decline of Pipiltin Power
+country_event = {
+	id = spartan_nobility_estates_events.6
+	title = spartan_nobility_estates_events.6.t
+	desc = spartan_nobility_estates_events.6.d
+	picture = Pipiltin_Market_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_pipiltin
+		estate_influence = {
+			estate = estate_nhs_pipiltin
+			influence = 15
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_PIPILTIN_DECLINES
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_PIPILTIN_ADVANCES
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_PIPILTIN_ADVANCES_20
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.6.a #Ok
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = EST_VAL_PIPILTIN_DECLINES
+			influence = -10
+			duration = 5475
+		}
+	}
+}
+#Apogonoi Tyrant - Lose tax in one province with the Apogonoi estate and gain their loyalty or lose loyalty
+country_event = {
+	id = spartan_nobility_estates_events.7
+	title = spartan_nobility_estates_events.7.t
+	desc = spartan_nobility_estates_events.7.d
+	picture = Apogonoi_City_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_apogonoi
+		any_owned_province = {
+			has_estate = estate_nhs_apogonoi
+			base_tax = 2
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 1.1
+			estate_influence = {
+				estate = estate_nhs_apogonoi
+				influence = 80
+			}
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.7.a #Allow local tyranny.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 35
+					}
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_estate = estate_nhs_apogonoi
+				base_tax = 2
+			}
+			add_base_tax = -1
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = 15
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.7.b #Chastise the Apogonos.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 35
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_loyalty = {
+					estate = estate_nhs_apogonoi
+					loyalty = 70
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+	}
+}
+#Pipiltin Extremist - Lose production  in one province with the Pipiltin estate and gain their loyalty or lose loyalty
+country_event = {
+	id = spartan_nobility_estates_events.8
+	title = spartan_nobility_estates_events.8.t
+	desc = spartan_nobility_estates_events.8.d
+	picture = Pipiltin_Market_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_pipiltin
+		any_owned_province = {
+			has_estate = estate_nhs_pipiltin
+			base_tax = 2
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 1.1
+			estate_influence = {
+				estate = estate_nhs_pipiltin
+				influence = 80
+			}
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.8.a #Allow destruction of infrastructure.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 35
+					}
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_estate = estate_nhs_pipiltin
+				base_production = 2
+			}
+			add_base_production = -1
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = 15
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.8.b #Chastise the Local Leaders.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 35
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				estate_loyalty = {
+					estate = estate_nhs_pipiltin
+					loyalty = 70
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+	}
+}
+##Gaining Influence
+#Apogonoi Gains influence
+country_event = {
+	id = spartan_nobility_estates_events.9
+	title = spartan_nobility_estates_events.9.t
+	desc = spartan_nobility_estates_events.9.d
+	picture = ADVISOR_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_estate = estate_nhs_apogonoi
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_APOGONOI_DECLINES
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_APOGONOI_ADVANCES
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_APOGONOI_ADVANCES_20
+			}
+		}
+	}
+
+	
+	immediate = {
+		hidden_effect = {
+			random_list = {
+				80 = { set_country_flag = growing_influence_apogonoi_10 }
+				20 = { set_country_flag = growing_influence_apogonoi_20 }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+
+	option = {
+		name = spartan_nobility_estates_events.9.a #Ok
+		trigger_switch = {
+			on_trigger = has_country_flag
+			growing_influence_apogonoi_10 = {
+				add_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				desc = EST_VAL_APOGONOI_ADVANCES
+				influence = 10
+				duration = 5475
+				}
+				clr_country_flag = growing_influence_apogonoi_10
+			}
+			growing_influence_apogonoi_20 = {
+				add_estate_influence_modifier = {
+					estate = estate_nhs_apogonoi
+					desc = EST_VAL_APOGONOI_ADVANCES_20
+					influence = 20
+					duration = 5475
+				}
+				clr_country_flag = growing_influence_apogonoi_20
+			}
+		}
+	}
+}
+#Pipiltin Gains influence
+country_event = {
+	id = spartan_nobility_estates_events.10
+	title = spartan_nobility_estates_events.10.t
+	desc = spartan_nobility_estates_events.10.d
+	picture = ADVISOR_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_estate = estate_nhs_pipiltin
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_PIPILTIN_DECLINES
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_PIPILTIN_ADVANCES
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_PIPILTIN_ADVANCES_20
+			}
+		}
+	}
+
+	
+	immediate = {
+		hidden_effect = {
+			random_list = {
+				80 = { set_country_flag = growing_influence_pipiltin_10 }
+				20 = { set_country_flag = growing_influence_pipiltin_20 }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+
+	option = {
+		name = spartan_nobility_estates_events.10.a #Ok
+		trigger_switch = {
+			on_trigger = has_country_flag
+			growing_influence_pipiltin_10 = {
+				add_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				desc = EST_VAL_PIPILTIN_ADVANCES
+				influence = 10
+				duration = 5475
+				}
+				clr_country_flag = growing_influence_pipiltin_10
+			}
+			growing_influence_pipiltin_20 = {
+				add_estate_influence_modifier = {
+					estate = estate_nhs_pipiltin
+					desc = EST_VAL_PIPILTIN_ADVANCES_20
+					influence = 20
+					duration = 5475
+				}
+				clr_country_flag = growing_influence_pipiltin_20
+			}
+		}
+	}
+}
+##Losing Loyalty
+#Apogonoi Loses Loyalty after 50 Loyalty
+country_event = {
+	id = spartan_nobility_estates_events.16
+	title = spartan_nobility_estates_events.16.t
+	desc = spartan_nobility_estates_events.16.d
+	picture = ADVISOR_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_estate = estate_nhs_apogonoi
+		estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = 50
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+
+	option = {
+		name = spartan_nobility_estates_events.16.a #Ok
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+	}
+}
+#Pipiltin Loses Loyalty after 50 Loyalty
+country_event = {
+	id = spartan_nobility_estates_events.17
+	title = spartan_nobility_estates_events.17.t
+	desc = spartan_nobility_estates_events.17.d
+	picture = ADVISOR_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_estate = estate_nhs_pipiltin
+		estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = 50
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+
+	option = {
+		name = spartan_nobility_estates_events.17.a #Ok
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+	}
+}
+##Good events
+#Loyal Pipiltin levee - Extra manpower modifier and gain a good random advisor
+country_event = {
+	id = spartan_nobility_estates_events.11
+	title = spartan_nobility_estates_events.11.t
+	desc = spartan_nobility_estates_events.11.d
+	picture = Pipiltin_Market_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_estate = estate_nhs_pipiltin
+		estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = 80
+		}
+		estate_influence = {
+			estate = estate_nhs_pipiltin
+			influence = 60
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = { num_of_ports = 1 }
+				random_list = {
+					25 = { set_country_flag = spartan_quartermaster }
+					25 = { set_country_flag = spartan_naval_reformer }
+					25 = { set_country_flag = spartan_statesman }
+					25 = { set_country_flag = spartan_army_reformer }
+				}
+			}
+			if = {
+				limit = { NOT = { num_of_ports = 1 } }
+				random_list = {
+					33 = { set_country_flag = spartan_quartermaster }
+					33 = { set_country_flag = spartan_statesman }
+					33 = { set_country_flag = spartan_army_reformer }
+				}
+			}
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.11.a
+		trigger_switch = {
+			on_trigger = has_country_flag
+			spartan_quartermaster = {
+				if = {
+					limit = {
+						monthly_income = 25
+					}
+					define_advisor = {
+						type = quartermaster
+						skill = 3
+						discount = yes
+					}
+				}
+				if = {
+					limit = { NOT = { monthly_income = 25} }
+					define_advisor = {
+						type = quartermaster
+						skill = 2
+						discount = yes
+					}
+				}
+				clr_country_flag = spartan_quartermaster
+			}
+			spartan_naval_reformer = {
+				if = {
+					limit = {
+						monthly_income = 25
+					}
+					define_advisor = {
+						type = naval_reformer
+						skill = 3
+						discount = yes
+					}
+				}
+				if = {
+					limit = { NOT = { monthly_income = 25} }
+					define_advisor = {
+						type = naval_reformer
+						skill = 2
+						discount = yes
+					}
+				}
+				clr_country_flag = spartan_naval_reformer
+			}
+			spartan_statesman = {
+				if = {
+					limit = {
+						monthly_income = 25
+					}
+					define_advisor = {
+						type = statesman
+						skill = 3
+						discount = yes
+					}
+				}
+				if = {
+					limit = { NOT = { monthly_income = 25} }
+					define_advisor = {
+						type = statesman
+						skill = 2
+						discount = yes
+					}
+				}
+				clr_country_flag = noble_statesman
+			}
+			noble_army_reformer = {
+				if = {
+					limit = {
+						monthly_income = 25
+					}
+					define_advisor = {
+						type = army_reformer
+						skill = 3
+						discount = yes
+					}
+				}
+				if = {
+					limit = { NOT = { monthly_income = 25 } }
+					define_advisor = {
+						type = army_reformer
+						skill = 2
+						discount = yes
+					}
+				}
+				clr_country_flag = noble_army_reformer
+			}
+		}
+		add_yearly_manpower = 0.25
+	}
+}
+#Spartan Apogonoi Tradition - Extra army tradition and gain a general/admiral
+country_event = {
+	id = spartan_nobility_estates_events.12
+	title = spartan_nobility_estates_events.12.t
+	desc = spartan_nobility_estates_events.12.d
+	picture = Apogonoi_City_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_estate = estate_nhs_apogonoi
+		estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = 60
+		}
+		estate_influence = {
+			estate = estate_nhs_apogonoi
+			influence = 60
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = { num_of_ports = 1 }
+				random_list = {
+					50 = { set_country_flag = spartan_general }
+					50 = { set_country_flag = spartan_admiral }
+				}
+			}
+			if = {
+				limit = { NOT = { num_of_ports = 1 } }
+				set_country_flag = spartan_general
+			}
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.12.a
+		trigger_switch = {
+			on_trigger = has_country_flag
+			spartan_general = {
+				create_general = { tradition = 50 }
+				clr_country_flag = spartan_general
+			}
+			spartan_admiral = {
+				create_admiral = {
+					tradition = 50
+				}
+				clr_country_flag = spartan_admiral
+			}
+		}
+		add_army_tradition = 10
+	}
+}
+##Loyalty and Influence balance
+#Disloyal Apogonoi
+country_event = {
+	id = spartan_nobility_estates_events.13
+	title = spartan_nobility_estates_events.13.t
+	desc = spartan_nobility_estates_events.13.d
+	picture = ADVISOR_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_apogonoi
+		is_at_war = yes
+		NOT = {
+			estate_loyalty = {
+				estate = estate_nhs_apogonoi
+				loyalty = 30
+			}
+		}
+		NOT = { has_country_modifier = disloyal_apogonoi_officers }
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_BURGHER_OFFICERS
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_CHURCH_OFFICERS
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_apogonoi
+				modifier = EST_VAL_PIPILTIN_OFFICERS
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = { 
+		name = spartan_nobility_estates_events.13.a #This isn't ideal.
+		ai_chance = {
+			factor = 1
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = EST_VAL_APOGONOI_OFFICERS
+			influence = 10
+			duration = 3650
+		}
+		add_country_modifier = {
+			name = "disloyal_apogonoi_officers"
+			duration = 3650
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.13.b #It is high time we replaced them with men of true ability.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 35
+					}
+				}
+			}
+		}
+		trigger = {
+			has_estate = estate_burghers
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 60
+			}
+		}
+		add_estate_influence_modifier = {
+			estate = estate_burghers
+			desc = EST_VAL_BURGHER_OFFICERS
+			influence = 10
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = EST_VAL_BURGHER_OFFICERS
+			influence = -10
+			duration = 3650
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.13.c #Sometimes the locals are more thrustworhty than the power hungry Apogonoi.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 35
+					}
+				}
+			}
+		}
+		trigger = {
+			has_estate = estate_nhs_pipiltin
+			estate_loyalty = {
+				estate = estate_nhs_pipiltin
+				loyalty = 60
+			}
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = EST_VAL_PIPILTIN_OFFICERS
+			influence = 10
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = EST_VAL_PIPILTIN_OFFICERS
+			influence = -10
+			duration = 3650
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.13.e #Let us consult the Priests, some of these learned men are clearly fit to lead.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_apogonoi
+						loyalty = 35
+					}
+				}
+			}
+		}
+		trigger = {
+			has_estate = estate_church
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 60
+			}
+		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = EST_VAL_CHURCH_OFFICERS
+			influence = 10
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = EST_VAL_CHURCH_OFFICERS
+			influence = -10
+			duration = 3650
+		}
+	}
+}
+#Disloyal Pipiltin
+country_event = {
+	id = spartan_nobility_estates_events.14
+	title = spartan_nobility_estates_events.14.t
+	desc = spartan_nobility_estates_events.14.d
+	picture = ADVISOR_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_pipiltin
+		is_at_war = yes
+		NOT = {
+			estate_loyalty = {
+				estate = estate_nhs_pipiltin
+				loyalty = 30
+			}
+		}
+		NOT = { has_country_modifier = disloyal_pipiltin_officers }
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_BURGHER_OFFICERS
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_CHURCH_OFFICERS
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_APOGONOI_OFFICERS
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = { 
+		name = spartan_nobility_estates_events.14.a #This isn't ideal.
+		ai_chance = {
+			factor = 1
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = EST_VAL_PIPILTIN_OFFICERS
+			influence = 10
+			duration = 3650
+		}
+		add_country_modifier = {
+			name = "disloyal_pipiltin_officers"
+			duration = 3650
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.14.b #It is high time we replaced them with men of true ability.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 35
+					}
+				}
+			}
+		}
+		trigger = {
+			has_estate = estate_burghers
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 60
+			}
+		}
+		add_estate_influence_modifier = {
+			estate = estate_burghers
+			desc = EST_VAL_BURGHER_OFFICERS
+			influence = 10
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = EST_VAL_BURGHER_OFFICERS
+			influence = -10
+			duration = 3650
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.14.c #It is high time we replaced them with true Nobility.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 35
+					}
+				}
+			}
+		}
+		trigger = {
+			has_estate = estate_nhs_apogonoi
+			estate_loyalty = {
+				estate = estate_nhs_apogonoi
+				loyalty = 60
+			}
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = EST_VAL_APOGONOI_OFFICERS
+			influence = 10
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = EST_VAL_APOGONOI_OFFICERS
+			influence = -10
+			duration = 3650
+		}
+	}
+	option = {
+		name = spartan_nobility_estates_events.14.e #Let us consult the Priests, some of these learned men are clearly fit to lead.
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nhs_pipiltin
+						loyalty = 35
+					}
+				}
+			}
+		}
+		trigger = {
+			has_estate = estate_church
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 60
+			}
+		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = EST_VAL_CHURCH_OFFICERS
+			influence = 10
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = EST_VAL_CHURCH_OFFICERS
+			influence = -10
+			duration = 3650
+		}
+	}
+}
+
+#Both Apogonoi and Pipiltin with high influence - They demand the other to be brought down - Choose one and have the other lose loyalty and some province rebel or choose to have both lose influence and have a medium rebellion
+country_event = {
+	id = spartan_nobility_estates_events.15
+	title = spartan_nobility_estates_events.15.t
+	desc = spartan_nobility_estates_events.15.d
+	picture = Spartan_Nobility_eventPicture
+	
+	trigger = {
+		has_estate = estate_nhs_apogonoi
+		has_estate = estate_nhs_pipiltin
+		estate_influence = {
+			estate = estate_nhs_apogonoi
+			influence = 50
+		}
+		estate_influence = {
+			estate = estate_nhs_pipiltin
+			influence = 50
+		}	
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_SIDED_APOGONOI
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_SIDED_PIPILTIN
+			}
+		}
+		NOT = {
+			has_estate_influence_modifier = {
+				estate = estate_nhs_pipiltin
+				modifier = EST_VAL_SIDED_NONE
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.15.a #Bring the Apogonoi down a peg
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = EST_VAL_SIDED_PIPILTIN
+			influence = -10
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = EST_VAL_SIDED_PIPILTIN
+			influence = 10
+			duration = 3650
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.15.b #Bring the Pipiltin down
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = EST_VAL_SIDED_APOGONOI
+			influence = -10
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = EST_VAL_SIDED_APOGONOI
+			influence = 10
+			duration = 3650
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.15.c #Bring both down
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = EST_VAL_SIDED_NONE
+			influence = -10
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = EST_VAL_SIDED_NONE
+			influence = -10
+			duration = 3650
+		}
+	}
+}
+# The Apogonoi take control
+country_event = {
+	id = spartan_nobility_estates_events.18
+	title = spartan_nobility_estates_events.18.t
+	desc = spartan_nobility_estates_events.18.d
+	picture = LIBERUM_VETO_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = apogonoi_estate_in_power
+	}
+	
+	option = {
+		name = apogonoi_estate_events.18.a	
+		add_stability = -1
+		custom_tooltip = apogonoi_estate_events.18.a.tt
+	}
+}
+
+# Apogonoi brought to heel
+country_event = {
+	id = spartan_nobility_estates_events.19
+	title = spartan_nobility_estates_events.19.t
+	desc = spartan_nobility_estates_events.19.d
+	picture = LIBERUM_VETO_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = apogonoi_estate_events.19.a
+	}
+}
+# The Pipiltin take control
+country_event = {
+	id = spartan_nobility_estates_events.20
+	title = spartan_nobility_estates_events.20.t
+	desc = spartan_nobility_estates_events.20.d
+	picture = LIBERUM_VETO_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = pipiltin_estate_in_power
+	}
+	
+	option = {
+		name = pipiltin_estate_events.20.a	
+		add_stability = -1
+		custom_tooltip = pipiltin_estate_events.20.a.tt
+	}
+}
+
+# Pipiltin brought to heel
+country_event = {
+	id = spartan_nobility_estates_events.21
+	title = spartan_nobility_estates_events.21.t
+	desc = spartan_nobility_estates_events.21.d
+	picture = LIBERUM_VETO_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = pipiltin_estate_events.21.a
+	}
+}
+##Some "fun" references for flavour sake
+#Pyramus and Iztaccíhuatl - A Pyramus and Thisbe/Popocatépetl and Iztaccíhuatl reference about an Apogonoi noble and a Pipiltin lass running away and comminting suicide - only fires once - The two estates ask for your intervention and to repreend the other estate
+
+#The Apogonoi and the Priest - A reference to the weird aztec tale of a rag picker and a priest that find an ancient magical treasure, the priests asks the rag-picker to sell him his half of the treasure for he didn't know how to use them. The Rag-picker proceeds ot immediatly kill the preist with one of the artefacts saying "See, its not so hard to use them" - An apogonoi lesser noble killed a priest starting a conflict with the clergy, you have to choose a side.
+
+#Pipiltin desire territory (MSN only)
+country_event = {
+	id = spartan_nobility_estates_events.101
+	title = spartan_nobility_estates_events.101.t
+	desc = spartan_nobility_estates_events.101.d
+	picture = Pipiltin_Market_eventPicture
+	
+	trigger = {
+		tag = MSN
+		ai = no
+		has_estate = estate_nhs_pipiltin
+		num_of_provinces_in_states = 7
+		OR = {
+			AND = {
+				NOT = {
+					estate_territory = {
+						estate = estate_nhs_pipiltin
+						territory = 10
+					}
+				}
+				has_global_flag = msg_reforms_done
+				has_global_flag = msg_no_pipiltin_palace
+			}
+			AND = {
+				NOT = {
+					estate_territory = {
+						estate = estate_nhs_pipiltin
+						territory = 15
+					}
+				}
+				NOT = { has_global_flag = msg_reforms_done }
+			}
+		}
+		any_owned_province = {
+			NOT = { has_estate = yes }
+			is_state = yes
+			is_capital = no
+			#is_overseas = no
+			has_seat_in_parliament = no
+			msg_is_major_city = no
+		}
+		OR = {
+			NOT = { has_country_flag = msg_blocked_pippie_encroachment }
+			had_country_flag = { flag = msg_blocked_pippie_encroachment days = 1825 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					NOT = { has_estate = yes }
+					is_capital = no
+					is_state = yes
+					#is_overseas = no
+					has_seat_in_parliament = no
+					msg_is_major_city = no
+				}
+				set_province_flag = spartan_encroachment
+			}
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.101.a # Do nothing
+		random_owned_province = {
+			limit = {
+				has_province_flag = spartan_encroachment
+			}
+			set_estate = estate_nhs_pipiltin
+			hidden_effect = {
+				msg_calc_assign_estate = yes
+			}
+			clr_province_flag = spartan_encroachment
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.101.b # Block their encroachment!
+		if = {
+			limit = {	
+				has_global_flag = msg_reforms_done
+				has_global_flag = msg_no_pipiltin_palace
+			}
+			custom_tooltip = msg_block_pippie_encroachment_time_10_tooltip
+		}
+		else = {
+			custom_tooltip = msg_block_pippie_encroachment_time_15_tooltip
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = spartan_encroachment
+			}
+			clr_province_flag = spartan_encroachment
+		}
+		add_mil_power = -50
+		add_dip_power = -50
+		add_adm_power = -50
+		set_country_flag = msg_blocked_pippie_encroachment
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
+	}
+}
+
+#Apogonoi desire territory (MSN)
+country_event = {
+	id = spartan_nobility_estates_events.102
+	title = spartan_nobility_estates_events.102.t
+	desc = spartan_nobility_estates_events.102.d
+	picture = Apogonoi_City_eventPicture
+	
+	trigger = {
+		tag = MSN
+		ai = no
+		has_estate = estate_nhs_apogonoi
+		num_of_provinces_in_states = 7
+		OR = {
+			AND = { # The apogonoi have less than 10% territory, the final reform is done and they kept some influence.
+				NOT = {
+					estate_territory = {
+						estate = estate_nhs_apogonoi
+						territory = 10
+					}
+				}
+				has_global_flag = msg_reforms_done
+				has_global_flag = msg_no_apogonoi_palace
+			}
+			AND = { #The apogonoi have less than 15% territory and either the final reform isn't done or they kept their influence.
+				NOT = {
+					estate_territory = {
+						estate = estate_nhs_apogonoi
+						territory = 15
+					}
+				}
+				NOT = { has_global_flag = msg_reforms_done }
+			}
+		}
+		any_owned_province = {
+			NOT = { has_estate = yes }
+			is_state = yes
+			is_capital = no
+			#is_overseas = no
+			has_seat_in_parliament = no
+			msg_is_major_city = no
+		}
+		OR = {
+			NOT = { has_country_flag = msg_blocked_appie_encroachment }
+			had_country_flag = { flag = msg_blocked_appie_encroachment days = 1825 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					NOT = { has_estate = yes }
+					is_capital = no
+					is_state = yes
+					#is_overseas = no
+					has_seat_in_parliament = no
+					msg_is_major_city = no
+				}
+				set_province_flag = spartan_encroachment
+			}
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.101.a # Do nothing
+		random_owned_province = {
+			limit = {
+				has_province_flag = spartan_encroachment
+			}
+			set_estate = estate_nhs_apogonoi
+			hidden_effect = {
+				msg_calc_assign_estate = yes
+			}
+			clr_province_flag = spartan_encroachment
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.101.b # Block their encroachment!
+		if = {
+			limit = {	
+				has_global_flag = msg_reforms_done
+				has_global_flag = msg_no_apogonoi_palace
+			}
+			custom_tooltip = msg_block_appie_encroachment_time_10_tooltip
+		}
+		else = {
+			custom_tooltip = msg_block_appie_encroachment_time_15_tooltip
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = spartan_encroachment
+			}
+			clr_province_flag = spartan_encroachment
+		}
+		add_mil_power = -50
+		add_dip_power = -50
+		add_adm_power = -50
+		set_country_flag = msg_blocked_appie_encroachment
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+	}
+}
+
+#Apogonoi have more territory than Pipiltin, Pipiltin want land
+country_event = {
+	id = spartan_nobility_estates_events.103
+	title = spartan_nobility_estates_events.103.t
+	desc = spartan_nobility_estates_events.103.d
+	picture = Apogonoi_City_eventPicture
+	
+	trigger = {
+		tag = MSN
+		ai = no
+		has_estate = estate_nhs_pipiltin
+		has_estate = estate_nhs_apogonoi
+		num_of_provinces_in_states = 7
+		had_country_flag = { flag = msg_pips_discontent_apog_more days = 365 }
+		#NOT = {
+		#	check_variable = {
+		#		which = msg_pipiltin_provinces
+		#		which = msg_apogonoi_provinces
+		#	}
+		#}
+		any_owned_province = {
+			NOT = { has_estate = yes }
+			is_state = yes
+			is_capital = no
+			#is_overseas = no
+			has_seat_in_parliament = no
+			msg_is_major_city = no
+		}
+		OR = {
+			has_global_flag = msg_pipiltin_bribe
+			NOT = { has_global_flag = msg_reforms_done }
+		}
+		OR = {
+			NOT = { has_country_flag = msg_blocked_pippie_encroachment }
+			had_country_flag = { flag = msg_blocked_pippie_encroachment days = 1825 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					NOT = { has_estate = yes }
+					is_capital = no
+					is_state = yes
+					#is_overseas = no
+					has_seat_in_parliament = no
+					msg_is_major_city = no
+				}
+				set_province_flag = spartan_encroachment
+			}
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.103.a # Grant them the land
+		add_treasury = 50
+		random_owned_province = {
+			limit = {
+				has_province_flag = spartan_encroachment
+			}
+			set_estate = estate_nhs_pipiltin
+			hidden_effect = {
+				msg_calc_assign_estate = yes
+			}
+			clr_province_flag = spartan_encroachment
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.103.b # They will be weak and they'll like it
+		if = {
+			limit = {
+				OR = {
+					has_global_flag = msg_no_pipiltin_palace
+					NOT = { has_global_flag = msg_reforms_done }
+				}
+			}
+			if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 100 }
+				}
+				custom_tooltip = msg_block_pippie_encroachment_time_rivals_tooltip_3
+			}
+			else_if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 500 }
+				}
+				custom_tooltip = msg_block_pippie_encroachment_time_rivals_tooltip_10
+			}
+			else_if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 1000 }
+				}
+				custom_tooltip = msg_block_pippie_encroachment_time_rivals_tooltip_20
+			}
+			else_if = {
+				limit = {
+					num_of_provinces_in_states = 1000
+				}
+				custom_tooltip = msg_block_pippie_encroachment_time_rivals_tooltip_30
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 100 }
+				}
+				custom_tooltip = msg_block_pippie_encroachment_time_rivals_tooltip_6
+			}
+			else_if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 500 }
+				}
+				custom_tooltip = msg_block_pippie_encroachment_time_rivals_tooltip_20
+			}
+			else_if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 1000 }
+				}
+				custom_tooltip = msg_block_pippie_encroachment_time_rivals_tooltip_35
+			}
+			else_if = {
+				limit = {
+					num_of_provinces_in_states = 1000
+				}
+				custom_tooltip = msg_block_pippie_encroachment_time_rivals_tooltip_50
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = spartan_encroachment
+			}
+			clr_province_flag = spartan_encroachment
+		}
+		add_mil_power = -50
+		add_dip_power = -50
+		add_adm_power = -50
+		set_country_flag = msg_blocked_pippie_encroachment
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -15
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = 5
+		}
+	}
+}
+
+#Pipiltin have more territory than Apogonoi, Apogonoi want land
+country_event = {
+	id = spartan_nobility_estates_events.104
+	title = spartan_nobility_estates_events.104.t
+	desc = spartan_nobility_estates_events.104.d
+	picture = Pipiltin_Market_eventPicture
+	
+	trigger = {
+		tag = MSN
+		ai = no
+		has_estate = estate_nhs_apogonoi
+		has_estate = estate_nhs_pipiltin
+		num_of_provinces_in_states = 7
+		had_country_flag = { flag = msg_apog_discontent_pips_more days = 365 }
+		any_owned_province = {
+			NOT = { has_estate = yes }
+			is_state = yes
+			is_capital = no
+			#is_overseas = no
+			has_seat_in_parliament = no
+			msg_is_major_city = no
+		}
+		OR = {
+			has_global_flag = msg_apogonoi_bribe
+			NOT = { has_global_flag = msg_reforms_done }
+		}
+		OR = {
+			NOT = { has_country_flag = msg_blocked_appie_encroachment }
+			had_country_flag = { flag = msg_blocked_appie_encroachment days = 1825 }
+		}
+		
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					NOT = { has_estate = yes }
+					is_state = yes
+					is_capital = no
+					#is_overseas = no
+					has_seat_in_parliament = no
+					msg_is_major_city = no
+				}
+				set_province_flag = spartan_encroachment
+			}
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.103.a # Grant them the land
+		add_treasury = 50
+		random_owned_province = {
+			limit = {
+				has_province_flag = spartan_encroachment
+			}
+			set_estate = estate_nhs_apogonoi
+			hidden_effect = {
+				msg_calc_assign_estate = yes
+			}
+			clr_province_flag = spartan_encroachment
+		}
+	}
+	
+	option = {
+		name = spartan_nobility_estates_events.103.b # They will be weak and they'll like it
+		#custom_tooltip = msg_block_appie_encroachment_time_feud_tooltip
+		if = {
+			limit = {
+				OR = {
+					has_global_flag = msg_no_apogonoi_palace
+					NOT = { has_global_flag = msg_reforms_done }
+				}
+			}
+			if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 100 }
+				}
+				custom_tooltip = msg_block_appie_encroachment_time_rivals_tooltip_3
+			}
+			else_if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 500 }
+				}
+				custom_tooltip = msg_block_appie_encroachment_time_rivals_tooltip_10
+			}
+			else_if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 1000 }
+				}
+				custom_tooltip = msg_block_appie_encroachment_time_rivals_tooltip_20
+			}
+			else_if = {
+				limit = {
+					num_of_provinces_in_states = 1000
+				}
+				custom_tooltip = msg_block_appie_encroachment_time_rivals_tooltip_30
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 100 }
+				}
+				custom_tooltip = msg_block_appie_encroachment_time_rivals_tooltip_6
+			}
+			else_if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 500 }
+				}
+				custom_tooltip = msg_block_appie_encroachment_time_rivals_tooltip_20
+			}
+			else_if = {
+				limit = {
+					NOT = { num_of_provinces_in_states = 1000 }
+				}
+				custom_tooltip = msg_block_appie_encroachment_time_rivals_tooltip_35
+			}
+			else_if = {
+				limit = {
+					num_of_provinces_in_states = 1000
+				}
+				custom_tooltip = msg_block_appie_encroachment_time_rivals_tooltip_50
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = spartan_encroachment
+			}
+			clr_province_flag = spartan_encroachment
+		}
+		add_mil_power = -50
+		add_dip_power = -50
+		add_adm_power = -50
+		set_country_flag = msg_blocked_appie_encroachment
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = 5
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -15
+		}
+	}
+}
+
+#Territory counter maintenance
+country_event = {
+	id = spartan_nobility_estates_events.105
+	title = spartan_nobility_estates_events.104.t
+	desc = spartan_nobility_estates_events.104.d
+	picture = Pipiltin_Market_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+	
+	trigger = {
+		tag = MSN
+		has_estate = estate_nhs_apogonoi
+		has_estate = estate_nhs_pipiltin
+	}
+	
+	immediate = {
+		every_province = {
+			clr_province_flag = msg_pipiltin_province
+			clr_province_flag = msg_apogonoi_province
+		}
+		set_variable = {
+			which = msg_apogonoi_provinces
+			value = 0
+		}
+		set_variable = {
+			which = msg_pipiltin_provinces
+			value = 0
+		}
+		set_variable = {
+			which = msg_estate_provinces_balance
+			value = 0
+		}
+		set_variable = {
+			which = msg_estate_provinces_balance_apog_view
+			value = 0
+		}
+		every_owned_province = {
+			limit = {
+				has_estate = estate_nhs_apogonoi
+				NOT = { has_province_flag = msg_apogonoi_province }
+			}
+			set_province_flag = msg_apogonoi_province
+			ROOT = {
+				change_variable = {
+					which = msg_apogonoi_provinces
+					value = 1
+				}
+				change_variable = {
+					which = msg_estate_provinces_balance
+					value = 1
+				}
+				change_variable = {
+					which = msg_estate_provinces_balance_apog_view
+					value = -1
+			}
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_estate = estate_nhs_pipiltin
+				NOT = { has_province_flag = msg_pipiltin_province }
+			}
+			set_province_flag = msg_pipiltin_province
+			ROOT = {
+				change_variable = {
+					which = msg_pipiltin_provinces
+					value = 1
+				}
+				change_variable = {
+					which = msg_estate_provinces_balance
+					value = -1
+				}
+				change_variable = {
+					which = msg_estate_provinces_balance_apog_view
+					value = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+	}
+}

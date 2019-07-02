@@ -1,0 +1,198 @@
+namespace = msg_aztlan
+
+#THESE EVENTS ARE TEMPORARY
+
+#Events for if final reform is passed before aztlan conversion
+country_event = {
+	id = msg_aztlan.1
+	title = msg_aztlan.1.t
+	desc = msg_aztlan.1.d
+	picture = Aztlan_War_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = MSN
+		has_global_flag = msg_reforms_done
+		religion = aztlan_worship
+		OR = {
+			NOT = { has_global_flag = msg_FUN }
+			NOT = { has_global_flag = msg_old_faith }
+			NOT = { has_global_flag = msg_priesthood_done }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			country_event = { id = msg_aztlan.2 days = 30 }
+			country_event = { id = msg_aztlan.3 days = 60 }
+			country_event = { id = msg_aztlan.4 days = 90 }
+		}
+	}
+	
+	option = {
+		name = msg_aztlan.1.a
+	}
+}
+
+country_event = {
+	id = msg_aztlan.2
+	title = msg_reforms.8.t
+	desc = msg_reforms.8.d
+	picture = AZTEC_PYRAMID_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		tag = MSN
+		religion = aztlan_worship
+		NOT = { has_global_flag = msg_priesthood_done }
+	}
+	
+	option = {
+		name = msg_reforms.8.a # Establish the High Priesthood in Laconya!
+		set_global_flag = msg_yes_priesthood # Will determine how clergy estate works for other Aztlan nations
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 15
+		}
+		add_country_modifier = {
+			name = msg_yes_priesthood
+			duration = 1825
+		}
+		set_global_flag = msg_priesthood_done
+	}
+	
+	option = {
+		name = msg_reforms.8.b # On second thought big church is a bad idea
+		set_global_flag = msg_no_priesthood # Will determine how clergy estate works for other Aztlan nations
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -15
+		}
+		add_country_modifier = {
+			name = msg_no_priesthood
+			duration = 1825
+		}
+		set_global_flag = msg_priesthood_done
+	}
+}
+
+#What do with the Old Pantheon?
+country_event = {
+	id = msg_aztlan.3
+	title = msg_reforms.9.t
+	desc = msg_reforms.9.d
+	picture = Aztlan_War_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		tag = MSN
+		religion = aztlan_worship
+		NOT = { has_global_flag = msg_old_faith }
+	}
+	
+	option = { #The Old Believers are heretics and must be burned!
+		name = msg_reforms.9.a
+		every_owned_province = {
+			limit = { religion = pantheon_worship }
+			add_unrest = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = "msg_old_heretics"
+			influence = 10
+			duration = 1825
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty  = 10
+		}
+		set_global_flag = msg_old_faith
+	}
+	
+	option = {
+		name = msg_reforms.9.b #The Old Believers follow gods we once did, why the hate?
+		set_global_flag = msg_aztlan_zeus_deity
+		every_owned_province = {
+			limit = { religion = aztlan_worship }
+			add_unrest = 5
+		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = "msg_old_true"
+			influence = -10
+			duration = 1825
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		set_global_flag = msg_old_faith
+	}
+}
+
+#SA-CRI-FICE! SA-CRI-FICE!
+country_event = {
+	id = msg_aztlan.4
+	title = msg_reforms.10.t
+	desc = msg_reforms.10.d
+	picture = Mictlan_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		tag = MSN
+		religion = aztlan_worship
+		NOT = { has_global_flag = msg_FUN }
+	}
+	
+	option = {
+		name = msg_reforms.10.a #We're more civilized than that.
+		set_global_flag = msg_aztlan_no_sacrifice
+		custom_tooltip = msg_no_sacrifice_tooltip
+		add_stability = -1
+		set_global_flag = msg_FUN
+	}
+	
+	#immediate = {
+	#	nhs_make_event_target_elysia = yes
+	#}
+	
+	option = {
+		name = msg_reforms.10.b # Those... unsavory rituals should be confined to animals.
+		set_global_flag = msg_aztlan_animal_sacrifice
+		#add_opinion = { who = event_target:existing_elysia modifier = msg_animal_sacrifice }
+		every_country = {
+			limit = {
+				religion = pantheon_worship
+			}
+			reverse_add_opinion = { who = ROOT modifier = msg_animal_sacrifice }
+		}
+		custom_tooltip = msg_animal_sacrifice_tooltip
+		set_global_flag = msg_FUN
+	}
+	
+	option = {
+		name = msg_reforms.10.c # Give me the knife, I'm doing this one myself.
+		set_global_flag = msg_aztlan_human_sacrifice
+		every_country = {
+			limit = {
+				NOT = { religion = aztlan_worship }
+				NOT = { religion = mesoamerican_religion }
+				NOT = { religion = nahuatl }
+				has_discovered = ROOT
+			}
+			reverse_add_opinion = { who = ROOT modifier = msg_human_sacrifice }
+		}
+		add_legitimacy = 10
+		add_prestige = 10
+		custom_tooltip = msg_human_sacrifice_tooltip
+		set_global_flag = msg_FUN
+	}
+}

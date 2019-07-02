@@ -1,0 +1,1693 @@
+msg_initial = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MSN
+			tag = MSG
+		}
+	}
+	has_country_shield = yes
+	
+	msg_expand_zone_of_control = {
+		position = 1
+		icon = mission_assemble_an_army
+		required_missions = {} #This, in a sense, is the required mission
+		ai_weight = {
+			factor = 5
+		}
+		ai_priority = {
+			factor = 5
+		}
+		provinces_to_highlight = {
+			NOT = { country_or_vassal_holds = ROOT }
+			has_province_flag = nhs_msg_original_heartland
+			has_port = yes
+			#any_neighbor_province = {
+			#	is_capital_of = ROOT
+			#}
+		}
+		trigger = {
+			#OR = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_msg_expand_zone_of_control_tt
+				NOT = {
+					any_province = {
+						has_province_flag = nhs_msg_original_heartland
+						has_port = yes
+						NOT = { country_or_vassal_holds = ROOT }
+					}
+				}
+			}
+				#has_global_flag = nhs_started_at_bookmark
+			#}
+			#all_province = {
+			#	any_neighbor_province = {
+			#		is_capital_of = ROOT
+			#	}
+			#	country_or_vassal_holds = ROOT
+			#}
+		}
+		
+		effect = {
+			add_manpower = 5 # initial manpower buff removed
+		}
+	}
+}
+
+msg_west = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MSN
+			tag = MSG
+		}
+	}
+	has_country_shield = yes
+	
+	msg_demoralize_enemy = {
+		position = 2
+		icon = mission_cannons_firing
+		required_missions = { msg_expand_zone_of_control }
+		ai_weight = { factor = 5 }
+		ai_priority = { factor = 5 }
+		provinces_to_highlight = {
+			province_id = 2644 # Cholula
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 2644 # Cholula
+		}
+		effect = {
+			custom_tooltip = msg_natives_get_debuff_mission
+			hidden_effect = {
+				every_country = {
+					limit = {
+						technology_group = mesoamerican
+					}
+					add_country_modifier = {
+						name = decreased_morale
+						duration = 1850
+					}
+				}
+			}
+		}
+	}
+	msg_conquer_mexico = {
+		position = 3
+		icon = mission_unite_home_region
+		required_missions = { msg_demoralize_enemy }
+		ai_weight = { factor = 10 }
+		ai_priority = { factor = 10 }
+		provinces_to_highlight = {
+			#OR = {
+			#	province_id = 852
+			#	province_id = 2626
+			#	province_id = 853
+			#}
+			area = mexico_area
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			# owns_or_non_sovereign_subject_of = 852
+			# owns_or_non_sovereign_subject_of = 2626
+			# owns_or_non_sovereign_subject_of = 853
+			mexico_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+		}
+		effect = {
+			random_owned_province = {
+				limit = {
+					has_province_flag = nhs_msg_original_capital
+				}
+				add_base_tax = 1
+			}
+		}
+	}
+	
+	msg_conquer_far_west = {
+		position = 4
+		icon = mission_conquer_5_states
+		required_missions = { msg_conquer_mexico }
+		ai_weight = { factor = 15 }
+		ai_priority = { factor = 15 }
+		provinces_to_highlight = {
+			# OR = {
+				# province_id = 2623
+				# province_id = 2622
+				# province_id = 2624
+				# province_id = 2643
+				# province_id = 2621
+				# province_id = 851
+				# province_id = 2657
+				# province_id = 854
+			# }
+			OR = {
+				area = michoacan_area
+				area = tierra_caliente_area
+				province_id = 2621
+				province_id = 854
+				province_id = 4576
+				province_id = 2657
+				province_id = 4578
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			michoacan_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			tierra_caliente_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			owns_or_non_sovereign_subject_of = 2621
+			owns_or_non_sovereign_subject_of = 854
+			owns_or_non_sovereign_subject_of = 4576
+			owns_or_non_sovereign_subject_of = 2657
+			owns_or_non_sovereign_subject_of = 4578
+			# owns_or_non_sovereign_subject_of = 2623
+			# owns_or_non_sovereign_subject_of = 2622
+			# owns_or_non_sovereign_subject_of = 2624
+			# owns_or_non_sovereign_subject_of = 2643
+			# owns_or_non_sovereign_subject_of = 2621
+			# owns_or_non_sovereign_subject_of = 851
+			# owns_or_non_sovereign_subject_of = 2657
+			# owns_or_non_sovereign_subject_of = 854
+		}
+		effect = {
+			add_country_modifier = {
+				name = "military_victory"
+				duration = 1825
+			}
+			add_prestige = 10
+			add_mil_power = 100
+		}
+	}
+}
+
+msg_south = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MSN
+			tag = MSG
+		}
+	}
+	has_country_shield = yes
+	
+	msg_secure_southern_coast = {
+		position = 2
+		icon = mission_dominate_home_trade_node
+		required_missions = { msg_expand_zone_of_control }
+		ai_weight = { factor = 5 }
+		ai_priority = { factor = 5 }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 854
+				province_id = 2657
+				province_id = 851
+				province_id = 2627
+				province_id = 2648
+				province_id = 849
+				province_id = 847
+				province_id = 844
+				province_id = 2649
+				province_id = 2638
+				province_id = 841
+				province_id = 2653
+				province_id = 893
+				province_id = 4580
+				province_id = 4576
+				province_id = 4578
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				owns_or_non_sovereign_subject_of = 854
+				owns_or_non_sovereign_subject_of = 2657
+				owns_or_non_sovereign_subject_of = 851
+				owns_or_non_sovereign_subject_of = 2627
+				owns_or_non_sovereign_subject_of = 2648
+				owns_or_non_sovereign_subject_of = 849
+				owns_or_non_sovereign_subject_of = 847
+				owns_or_non_sovereign_subject_of = 844
+				owns_or_non_sovereign_subject_of = 2649
+				owns_or_non_sovereign_subject_of = 2638
+				owns_or_non_sovereign_subject_of = 841
+				owns_or_non_sovereign_subject_of = 2653
+				owns_or_non_sovereign_subject_of = 893
+				owns_or_non_sovereign_subject_of = 4580
+				owns_or_non_sovereign_subject_of = 4576
+				owns_or_non_sovereign_subject_of = 4578
+			}
+		}
+		effect = {
+			random_owned_province = {
+				limit = {
+					OR = {
+						province_id = 854
+						province_id = 2657
+						province_id = 851
+						province_id = 2627
+						province_id = 2648
+						province_id = 849
+						province_id = 847
+						province_id = 844
+						province_id = 2649
+						province_id = 2638
+						province_id = 841
+						province_id = 2653
+					}
+				}
+				add_base_production = 1
+			}
+		}
+	}
+	
+	msg_take_high_ground = {
+		position = 3
+		icon = mission_colonial
+		required_missions = { msg_secure_southern_coast }
+		ai_weight = { factor = 10 }
+		ai_priority = { factor = 10 }
+		provinces_to_highlight = {
+			OR = {
+				# province_id = 2645
+				province_id = 2646
+				province_id = 2629
+				province_id = 2628
+				province_id = 4581
+				province_id = 4582
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			# owns_or_non_sovereign_subject_of = 2645
+			owns_or_non_sovereign_subject_of = 2646
+			owns_or_non_sovereign_subject_of = 2629
+			owns_or_non_sovereign_subject_of = 2628
+			owns_or_non_sovereign_subject_of = 4581
+			owns_or_non_sovereign_subject_of = 4582
+		}
+		effect = {
+			add_adm_power = 100
+			add_country_modifier = {
+				name = improved_fort_defense
+				duration = 1825
+			}
+		}
+	}
+	
+	msg_conquer_otomi = {
+		position = 4
+		icon = mission_build_up_to_force_limit
+		required_missions = { msg_take_high_ground }
+		ai_weight = { factor = 15 }
+		ai_priority = { factor = 15 }
+		provinces_to_highlight = {
+			# OR = {
+				# province_id = 2645
+				# province_id = 2646
+				# province_id = 2629
+				# province_id = 2631
+				# province_id = 2630
+				# province_id = 2627
+				# province_id = 2648
+				# province_id = 849
+				# province_id = 847
+				# province_id = 844
+				# province_id = 2649
+			# }
+			OR = {
+				province_id = 851
+				province_id = 2627
+				province_id = 2648
+				province_id = 849
+				area = mixteca_area
+				area = oaxaca_area
+				province_id = 2649
+				province_id = 2638
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			# owns_or_non_sovereign_subject_of = 2645
+			# owns_or_non_sovereign_subject_of = 2646
+			# owns_or_non_sovereign_subject_of = 2629
+			# owns_or_non_sovereign_subject_of = 2631
+			# owns_or_non_sovereign_subject_of = 2630
+			# owns_or_non_sovereign_subject_of = 2627
+			# owns_or_non_sovereign_subject_of = 2648
+			# owns_or_non_sovereign_subject_of = 849
+			# owns_or_non_sovereign_subject_of = 847
+			# owns_or_non_sovereign_subject_of = 844
+			# owns_or_non_sovereign_subject_of = 2649
+			owns_or_non_sovereign_subject_of = 851
+			owns_or_non_sovereign_subject_of = 2627
+			owns_or_non_sovereign_subject_of = 2648
+			owns_or_non_sovereign_subject_of = 849
+			mixteca_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			oaxaca_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			owns_or_non_sovereign_subject_of = 2649
+			owns_or_non_sovereign_subject_of = 2638
+		}
+		effect = {
+			add_country_modifier = {
+				name = "military_victory"
+				duration = 1825
+			}
+			add_prestige = 10
+		}
+	}
+}
+
+msg_east = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MSN
+			tag = MSG
+		}
+	}
+	has_country_shield = yes
+	
+	msg_secure_peninsula = {
+		position = 2
+		icon = mission_galleys_in_port
+		required_missions = { msg_expand_zone_of_control }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 846
+				province_id = 2633
+				province_id = 2652
+				province_id = 2651
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 846
+			owns_or_non_sovereign_subject_of = 2633
+			owns_or_non_sovereign_subject_of = 2652
+			owns_or_non_sovereign_subject_of = 2651
+		}
+		effect = {
+			random_owned_province = {
+				limit = {
+					OR = {
+						province_id = 846
+						province_id = 2633
+						province_id = 2652
+						province_id = 2651
+					}
+				}
+				add_base_manpower = 1
+			}
+			add_prestige = 5
+		}
+	}
+	
+	msg_enter_the_jungle = {
+		position = 3
+		icon = mission_conquer_50_development
+		required_missions = { msg_secure_peninsula }
+		ai_priority = { factor = 10 }
+		ai_weight = { factor = 10 }
+		provinces_to_highlight = {
+			# OR = {
+				# province_id = 842
+				# province_id = 2635
+				# province_id = 843
+			# }
+			OR = {
+				province_id = 4590
+				province_id = 4591
+				province_id = 4588
+				province_id = 2634
+				area = guatemala_lowlands_area
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			# owns_or_non_sovereign_subject_of = 842
+			# owns_or_non_sovereign_subject_of = 2635
+			# owns_or_non_sovereign_subject_of = 843
+			owns_or_non_sovereign_subject_of = 4590
+			owns_or_non_sovereign_subject_of = 4591
+			owns_or_non_sovereign_subject_of = 4588
+			owns_or_non_sovereign_subject_of = 2634
+			guatemala_lowlands_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "military_victory"
+				duration = 1825
+			}
+			add_prestige = 10
+		}
+	}
+	
+	msg_profitable_exports = {
+		position = 4
+		icon = mission_war_chest
+		required_missions = { msg_enter_the_jungle }
+		ai_priority = { factor = 15 }
+		ai_weight = { factor = 15 }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2653
+				province_id = 2636
+				province_id = 2627
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			calc_true_if = {
+				owns_or_non_sovereign_subject_of = 846
+				owns_or_non_sovereign_subject_of = 2635
+				owns_or_non_sovereign_subject_of = 843
+				amount = 2
+			}
+		}
+		effect = {
+			random_owned_province = {
+				limit = {
+					OR = {
+						province_id = 2653
+						province_id = 2636
+						province_id = 2627
+					}
+				}
+				add_province_modifier = {
+					name = msg_gem_production
+					duration = 3650
+				}
+			}
+			add_dip_power = 100
+			add_country_modifier = {
+				name = trade_income_increase
+				duration = 1825
+			}
+		}
+	}
+}
+
+msg_end = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MSN
+			tag = MSG
+		}
+	}
+	has_country_shield = yes
+	
+	msg_finish_the_conquest = {
+		position = 5
+		icon = mission_empire
+		required_missions = { msg_profitable_exports msg_conquer_far_west msg_conquer_otomi }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		provinces_to_highlight = {
+			province_group = mesoamerica_pgroup
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			all_province = {
+				OR = {
+					NOT = { province_group = mesoamerica_pgroup }
+					country_or_vassal_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "msg_this_is_spartakon"
+				duration = 3650
+			}
+			add_prestige = 20
+			add_stability = 1
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+		}
+	}
+}
+
+msg_reforms = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = { tag = MSN }
+	has_country_shield = yes
+	
+	msg_finish_reforms = {
+		position = 6
+		icon = mission_monarch_in_throne_room
+		required_missions = { msg_finish_the_conquest }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = msg_reforms_done_tt
+				has_global_flag = msg_reforms_done
+			}
+		}
+		effect = {
+			custom_tooltip = msg_unlock_rest_of_tree_mission
+			add_stability = 2
+			swap_non_generic_missions = yes
+		}
+	}
+}
+
+msg_colonize_north = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = { tag = MSN }
+	has_country_shield = yes
+	
+	msg_go_north = {
+		position = 5
+		icon = mission_arabian_fort
+		required_missions = { msg_conquer_far_west }
+		ai_priority = { factor = 3 }
+		ai_weight = { factor = 3 }
+		provinces_to_highlight = {
+			# OR = {
+				# area = jalisco_area
+				# area = gran_chichimeca_area
+				# area = sonora_area
+				# area = northeast_mexico_area
+			# }
+			OR = {
+				area = durango_area
+				area = chihuahua_area
+				area = northeast_mexico_area
+				area = pecos_area
+				area = rio_grande_area
+				area = nayarit_area
+			}
+			
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			durango_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			chihuahua_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			northeast_mexico_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			OR = {
+				pecos_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				rio_grande_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				nayarit_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "colonial_enthusiasm"
+				duration = 1095
+			}
+		}
+	}
+	
+	msg_conquer_pueblo = {
+		position = 6
+		icon = mission_cannons_firing
+		required_missions = { msg_go_north }
+		ai_priority = { factor = 4 }
+		ai_weight = { factor = 4 }
+		provinces_to_highlight = {
+			OR = {
+				area = new_mexico_area
+				area = colorado_plateau_area
+				area = apacheria_area
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			new_mexico_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			colorado_plateau_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			apacheria_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+		}
+		effect = {
+			add_years_of_income = 0.5
+			add_prestige = 10
+			add_stability = 1
+		}
+	}
+}
+
+msg_colonize_south = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = { tag = MSN }
+	has_country_shield = yes
+	
+	msg_go_south = {
+		position = 5
+		icon = mission_rice_field
+		required_missions = { msg_profitable_exports }
+		ai_priority = { factor = 3 }
+		ai_weight = { factor = 3 }
+		provinces_to_highlight = {
+			OR = {
+				area = honduras_area
+				area = nicaragua_area
+				area = panama_area
+				area = costa_rica_area
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			honduras_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			nicaragua_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			costa_rica_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+			panama_area = {
+				type = all
+				country_or_vassal_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "colonial_enthusiasm"
+				duration = 1095
+			}
+		}
+	}
+	
+	msg_into_south_america = {
+		position = 6
+		icon = mission_colonial
+		required_missions = { msg_go_south }
+		ai_priority = { factor = 4 }
+		ai_weight = { factor = 4 }
+		provinces_to_highlight = {
+			OR = {
+				area = bogota_area
+				area = coquivacoa_area
+				area = maracaibo_area
+				area = popayan_area
+				area = western_llanos
+				area = eastern_llanos
+				area = venezuela_area
+				area = cordillera_occidental_area
+				area = colombian_amazonas_area
+				area = upper_guyana_area
+				area = guyana_area
+				area = suriname_area
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			calc_true_if = {
+				bogota_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				coquivacoa_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				maracaibo_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				popayan_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				western_llanos = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				eastern_llanos = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				venezuela_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				cordillera_occidental_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				colombian_amazonas_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				upper_guyana_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				guyana_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				suriname_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				amount = 2
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_stability = 1
+			random_owned_province = {
+				limit = {
+					OR = {
+						area = bogota_area
+						area = coquivacoa_area
+						area = maracaibo_area
+						area = popayan_area
+						area = western_llanos
+						area = eastern_llanos
+						area = venezuela_area
+						area = cordillera_occidental_area
+						area = colombian_amazonas_area
+						area = upper_guyana_area
+						area = guyana_area
+						area = suriname_area
+					}
+				}
+				add_base_manpower = 1
+				add_base_production = 1
+				add_base_tax = 1
+			}
+		}
+	}
+}
+
+msg_counterreform = {
+	slot = 2
+	generic = no
+	ai = no
+	potential = {
+		tag = MSN
+		OR = {
+			has_global_flag = aztlan_reformation # Frankly I'm not sure if this will work, but it's worth a shot
+			has_global_flag = msg_post_reformation
+		}
+		NOT = { has_global_flag = msg_joined_aztlan_missions_only }
+	}
+	has_country_shield = yes
+	
+	msg_stay_hellenic = {
+		position = 5
+		icon = mission_european_church
+		required_missions = {}
+		trigger = {
+			religion = pantheon_worship
+			custom_trigger_tooltip = {
+				tooltip = msg_has_weathered_the_aztlan_reformation_tt
+				has_global_flag = msg_post_reformation
+			}
+		}
+		effect = {
+			add_stability = 1
+			add_country_modifier = {
+				name = "theology"
+				duration = 1825
+			}
+			set_global_flag = msg_stayed_hellenic_missions_only
+			swap_non_generic_missions = yes # Can this work while in the mission script? So many mysteries
+		}
+	}
+	
+	msg_wipe_out_aztlan = {
+		position = 6
+		icon = mission_religious
+		required_missions = { msg_stay_hellenic }
+		trigger = {
+			all_owned_province = {
+				religion = ROOT
+			}
+		}
+		effect = {
+			add_stability = 1
+			add_adm_power = 100
+			add_legitimacy = 20
+		}
+	}
+}
+
+msg_reform = {
+	slot = 4
+	generic = no
+	ai = no
+	potential = {
+		tag = MSN
+		OR = {
+			has_global_flag = aztlan_reformation # Frankly I'm not sure if this will work, but it's worth a shot
+			has_global_flag = msg_post_reformation
+		}
+		NOT = { has_global_flag = msg_stayed_hellenic_missions_only }
+	}
+	has_country_shield = yes
+	
+	msg_join_aztlan = {
+		position = 5
+		icon = mission_hands_praying
+		required_missions = {}
+		trigger = {
+			religion = aztlan_worship
+			custom_trigger_tooltip = {
+				tooltip = msg_has_weathered_the_aztlan_reformation_tt
+				has_global_flag = msg_post_reformation
+			}
+		}
+		effect = {
+			add_stability = 1
+			add_country_modifier = {
+				name = "msg_completed_join_aztlan_mission"
+				duration = 1825
+			}
+			set_global_flag = msg_joined_aztlan_missions_only
+			swap_non_generic_missions = yes # Can this work while in the mission script? So many mysteries
+		}
+	}
+	
+	msg_wipe_out_hellenic = {
+		position = 6
+		icon = mission_religious
+		required_missions = { msg_join_aztlan }
+		trigger = {
+			all_owned_province = {
+				religion = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 30
+			add_legitimacy = 20
+			add_mil_power = 100
+		}
+	}
+}
+
+
+#SEVERENCE BRANCH
+#Mission path for if Sparta 
+
+msg_destroy_elysia = {
+	slot = 3
+	generic = no
+	ai = no
+	potential = {
+		tag = MSN
+		has_global_flag = msg_reforms_done
+		NOT = { has_global_flag = msg_elysia_enforced_exarchate }
+	}
+	has_country_shield = yes
+	
+	msg_sever_ties_with_elysia = {
+		position = 7
+		icon = mission_monarch_in_throne_room
+		required_missions = { msg_finish_reforms }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		#trigger = { always = yes }
+		effect = {
+			nhs_msg_sever_ties_with_elysia_effect = yes
+			#Event - Remove Patriarch
+			#Event - Remove Heralds
+			#Event - Remove Court
+		}
+	}
+	
+	msg_claim_elysian_throne = {
+		position = 10
+		icon = mission_invade_island
+		required_missions = { msg_sever_ties_with_elysia }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		trigger = {
+			is_subject = no
+			government = monarchy
+			NOT = { nhs_condition_all_ely_with_if = { KOMANDA = alliance_with } }
+			custom_trigger_tooltip = {
+				tooltip = msg_can_claim_elysian_throne_tooltip
+				NOT = { exists = NHS }
+				OR = {
+					NOT = { nhs_exists_elysia = yes }
+					nhs_msg_claim_elysian_throne_trigger_ely = yes
+					is_year = 1700
+				}
+			}
+			if = {
+				limit = {
+					ai = yes
+					nhs_exists_elysia = yes
+					NOT = { nhs_msg_claim_elysian_throne_trigger_ely = yes }
+					NOT = { nhs_condition_all_ely_with_if_army_size = yes }
+				}
+				always = no
+			}
+		}
+		effect = {
+			northeast_america_region = {
+				add_permanent_claim = ROOT
+			}
+			southeast_america_region = {
+				add_permanent_claim = ROOT
+			}
+			mississippi_region = {
+				limit = {
+					nhs_condition_all_ely_with_if = { KOMANDA = owned_by }
+				}
+				add_permanent_claim = ROOT
+			}
+			rio_grande_region = {
+				limit = {
+					nhs_condition_all_ely_with_if = { KOMANDA = owned_by }
+				}
+				add_permanent_claim = ROOT
+			}
+			nhs_elysia_reverse_add_opinion = { OPINION_MOD = claimed_our_throne }
+			nhs_trigger_event = { EVENT_ID = msg_mission.6 }
+		}
+	}
+	
+	msg_one_nation_under_sparta = {
+		position = 11
+		icon = mission_cannons_firing
+		required_missions = { msg_claim_elysian_throne }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		trigger = {
+			chesapeake_area = {
+				type = all
+				owned_by = ROOT #You have to directly own Elysia and the surrounding region
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_legitimacy = 25
+			set_global_flag = msg_did_one_nation_under_sparta_mission # Unlocks decision to break pact, if appliciable
+		}
+	}
+	
+	msg_end_the_cycle = {
+		position = 12
+		icon = mission_empire
+		required_missions = { msg_one_nation_under_sparta }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		trigger = {
+			owns_core_province = 953 #New Constantinople
+			custom_trigger_tooltip = {
+				tooltip = msg_owns_original_capital
+				any_owned_province = {
+					has_province_flag = nhs_msg_original_capital
+				}
+			}
+			owns_core_province = 151
+			owns_core_province = 118
+		}
+		effect = {
+			northeast_america_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			southeast_america_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			mexico_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			central_america_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			carribeans_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			italy_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			balkan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			anatolia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			every_owned_province = {
+				limit = {
+					NOT = { is_core = ROOT }
+					OR = {
+						region = northeast_america_region
+						region = southeast_america_region
+						region = mexico_region
+						region = central_america_region
+						region = carribeans_region
+						region = italy_region
+						region = balkan_region
+						region = anatolia_region
+					}
+				}
+				add_core = ROOT
+			}
+		}
+	}
+}
+
+msg_skythiai_barbaroi = {
+	slot = 1
+	generic = no
+	ai = no
+	potential = {
+		tag = MSN
+		has_global_flag = msg_reforms_done
+		NOT = { has_global_flag = msg_elysia_enforced_exarchate }
+	}
+	has_country_shield = yes
+	
+	msg_colonize_plains = {
+		position = 7
+		icon = mission_cossack_cavalry
+		required_missions = { msg_conquer_pueblo }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		provinces_to_highlight = {
+			OR = {
+				area = texas_area
+				area = llano_estacado_area
+				area = coastal_prarie_area
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			calc_true_if = {
+				texas_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				llano_estacado_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				coastal_prarie_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				amount = 2
+			}
+		}
+		effect = {
+			random_owned_province = {
+				limit = {
+					OR = {
+						area = texas_area
+						area = llano_estacado_area
+						area = coastal_prarie_area
+					}
+				}
+				add_base_manpower = 1
+				add_base_tax = 1
+				add_base_production = 1
+			}
+			country_event = { id = msg_mission.7 }
+		}
+	}
+	msg_incite_barbaroi_rebellion = {
+		position = 10
+		icon = mission_non-western_cavalry_raid
+		required_missions = { msg_barbaroi_pact }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		trigger = {
+			nhs_has_spy_network_ely = { VELIKOST = 90 }
+			custom_trigger_tooltip = {
+				tooltip = msg_did_not_do_one_nation_tooltip
+				NOT = { has_global_flag = msg_did_one_nation_under_sparta_mission }
+			}
+		}
+		effect = {
+			set_global_flag = msg_completed_incite_barbaroi_rebellion_flag_temp # triggers event on war declaration
+			nhs_msg_incite_barbaroi_rebellion_effect = yes
+			custom_tooltip = msg_barbaroi_uprising_tt
+		}
+	}
+}
+
+msg_retoria_varangians = {
+	slot = 5
+	generic = no
+	ai = no
+	potential = {
+		tag = MSN
+		has_global_flag = msg_reforms_done
+		NOT = { has_global_flag = msg_elysia_enforced_exarchate }
+	}
+	has_country_shield = yes
+	
+	msg_further_retorian_expansion = {
+		position = 7
+		icon = mission_colonial
+		required_missions = { msg_into_south_america }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		provinces_to_highlight = {
+			OR = {
+				area = bogota_area
+				area = coquivacoa_area
+				area = maracaibo_area
+				area = popayan_area
+				area = western_llanos
+				area = eastern_llanos
+				area = venezuela_area
+				area = cordillera_occidental_area
+				area = colombian_amazonas_area
+				area = upper_guyana_area
+				area = guyana_area
+				area = suriname_area
+			}
+			NOT = { country_or_vassal_holds = ROOT }
+		}
+		trigger = {
+			calc_true_if = {
+				bogota_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				coquivacoa_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				maracaibo_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				popayan_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				western_llanos = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				eastern_llanos = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				venezuela_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				cordillera_occidental_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				colombian_amazonas_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				upper_guyana_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				guyana_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				suriname_area = {
+					type = all
+					country_or_vassal_holds = ROOT
+				}
+				amount = 4
+			}
+		}
+		effect = {
+			random_owned_province = {
+				limit = {
+					OR = {
+						area = bogota_area
+						area = coquivacoa_area
+						area = maracaibo_area
+						area = popayan_area
+						area = western_llanos
+						area = eastern_llanos
+						area = venezuela_area
+						area = cordillera_occidental_area
+						area = colombian_amazonas_area
+						area = upper_guyana_area
+						area = guyana_area
+						area = suriname_area
+					}
+				}
+				add_base_manpower = 1
+				add_base_tax = 1
+				add_base_production = 1
+			}
+			country_event = { id = msg_mission.9 }
+		}
+	}
+	msg_purchase_varangian_mercenaries = {
+		position = 10
+		icon = mission_assemble_an_army
+		required_missions = { msg_viking_pact }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		trigger = {
+			NOT = { exists = NHS }
+			OR = {
+				VIN = { exists = yes }
+				MK1 = { exists = yes }
+				HLL = { exists = yes }
+				AND = {
+					VGD = { exists = yes }
+					NOT = { nhs_is_subject_of_ely = yes }
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = msg_did_not_do_one_nation_tooltip
+				NOT = { has_global_flag = msg_did_one_nation_under_sparta_mission }
+			}
+			treasury = 600
+		}
+		effect = {
+			add_treasury = -500
+			add_prestige = -25
+			set_global_flag = msg_purchased_varangian_mercs_ely_temp
+			custom_tooltip = msg_varangian_uprising_tt
+		}
+	}
+}
+
+msg_work_with_barbaroi = {
+	slot = 2
+	generic = no
+	ai = no
+	potential = {
+		tag = MSN
+		has_global_flag = msg_reforms_done
+		NOT = { has_global_flag = msg_elysia_enforced_exarchate }
+	}
+	has_country_shield = yes
+	
+	msg_skythian_line = {
+		position = 8
+		icon = mission_have_manufactories
+		required_missions = { msg_sever_ties_with_elysia msg_colonize_plains }
+		provinces_to_highlight = {
+			OR = {
+				area = texas_area
+				area = llano_estacado_area
+				area = coastal_prarie_area
+			}
+			#country_or_vassal_holds = ROOT
+		}
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = msg_has_3_forts_in_highlight_tooltip
+				calc_true_if = {
+					all_owned_province = {
+						OR = {
+							area = texas_area
+							area = llano_estacado_area
+							area = coastal_prarie_area
+						}
+						fort_level = 2 #implies fort building
+					}
+					amount = 3
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = msg_lonestar_tooltip
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = texas_area
+							area = llano_estacado_area
+							area = coastal_prarie_area
+						}
+						fort_level = 2 #implies fort building
+					}
+					add_province_modifier = {
+						name = "msg_completed_skythian_line_mission_province"
+						duration = -1
+					}
+				}
+			}
+			country_event = { id = msg_mission.8 }
+		}
+	}
+	msg_barbaroi_pact = {
+		position = 9
+		icon = mission_cossack_cavalry
+		required_missions = { msg_skythian_line }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		trigger = {
+			nhs_condition_all_ely_with_if = { KOMANDA = exists }
+			OR = {
+				#alliance_with = GCC
+				alliance_with = CAK
+				alliance_with = IRO
+				any_country = {
+					OR = {
+						technology_group = north_american
+						technology_group = hellenised_american
+					}
+					num_of_cities = 5
+					alliance_with = ROOT
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = msg_did_not_do_one_nation_tooltip
+				NOT = { has_global_flag = msg_did_one_nation_under_sparta_mission }
+			}
+			custom_trigger_tooltip = {
+				tooltip = msg_didnot_do_vikingpact_tooltip
+				NOT = { has_global_flag = msg_did_viking_pact }
+			}
+		}
+		effect = {
+			set_global_flag = msg_did_barbaroi_pact
+			custom_tooltip = msg_pact_details_tt
+			#if = {
+			#	limit = {
+			#		alliance_with = GCC
+			#	}
+			#	GCC = { 
+			#		add_historical_friend = MSN
+			#		nhs_add_historical_rival_effect = yes
+			#		set_country_flag = msg_in_barbaroi_pact_with_MSN
+			#	}
+			#}
+			if = {
+				limit = {
+					alliance_with = CAK
+				}
+				CAK = { 
+					add_historical_friend = MSN
+					nhs_add_historical_rival_effect = yes
+					set_country_flag = msg_in_barbaroi_pact_with_MSN
+				}
+			}
+			else_if = {
+				limit = {
+					alliance_with = IRO
+				}
+				IRO = { 
+					add_historical_friend = MSN
+					nhs_add_historical_rival_effect = yes
+					set_country_flag = msg_in_barbaroi_pact_with_MSN
+				}
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						OR = {
+							technology_group = north_american
+							technology_group = hellenised_american
+						}
+						num_of_cities = 5
+						alliance_with = ROOT
+					}
+				}
+				random_country = { 
+					limit = {
+						OR = {
+							technology_group = north_american
+							technology_group = hellenised_american
+						}
+						num_of_cities = 5
+						alliance_with = ROOT
+					}
+					add_historical_friend = MSN
+					nhs_add_historical_rival_effect = yes
+					set_country_flag = msg_in_barbaroi_pact_with_MSN
+				}
+			}
+		}
+	}
+	
+	msg_barbaroi_spartan_officers = {
+		position = 10
+		required_missions = { msg_barbaroi_pact }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		icon = mission_non-western_soldiers
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = msg_still_has_pact
+				any_ally = {
+					has_country_flag = msg_in_barbaroi_pact_with_MSN
+				}
+			}
+			treasury = 250
+			mil_power = 200
+			custom_trigger_tooltip = {
+				tooltip = msg_did_not_do_one_nation_tooltip
+				NOT = { has_global_flag = msg_did_one_nation_under_sparta_mission }
+			}
+		}
+		
+		effect = {
+			add_treasury = -200
+			add_mil_power = -200
+			custom_tooltip = msg_barbaroi_training_tooltip
+			every_country = {
+				limit = {
+					has_country_flag = msg_in_barbaroi_pact_with_MSN
+				}
+				set_country_flag = msg_spartan_training_permanent
+			}
+		}
+	}
+}
+
+msg_work_with_varangians = {
+	slot = 4
+	generic = no
+	ai = no
+	potential = {
+		tag = MSN
+		has_global_flag = msg_reforms_done
+		NOT = { has_global_flag = msg_elysia_enforced_exarchate }
+	}
+	has_country_shield = yes
+	
+	msg_into_kyklades = {
+		position = 8
+		icon = mission_invade_island
+		required_missions = { msg_sever_ties_with_elysia msg_further_retorian_expansion	}
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		provinces_to_highlight = {
+			region = carribeans_region
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 3
+				region = carribeans_region
+				is_city = yes
+				is_core = ROOT
+			}
+		}
+		effect = {
+			random_owned_province = {
+				limit = {
+					region = carribeans_region
+					is_city = yes
+					is_core = ROOT
+				}
+				add_province_modifier = {
+					name = "msg_completed_into_kyklades_mission_province"
+					duration = -1
+				}
+				change_province_name = "Gythion"
+				rename_capital = "Gythion"
+			}
+			country_event = { id = msg_mission.10 }
+		}
+	}
+	msg_viking_pact = {
+		position = 9
+		icon = mission_sea_battles
+		required_missions = { msg_into_kyklades }
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		trigger = {
+			OR = {
+				alliance_with = HLL
+				alliance_with = MK1
+				alliance_with = VIN
+				alliance_with = VGD
+			}
+			custom_trigger_tooltip = {
+				tooltip = msg_did_not_do_one_nation_tooltip
+				NOT = { has_global_flag = msg_did_one_nation_under_sparta_mission }
+			}
+			custom_trigger_tooltip = {
+				tooltip = msg_didnot_do_barbaroipact_tooltip
+				NOT = { has_global_flag = msg_did_barbaroi_pact }
+			}
+		}
+		effect = {
+			set_global_flag = msg_did_viking_pact
+			custom_tooltip = msg_pact_details_tt
+			if = {
+				limit = {
+					alliance_with = VIN
+				}
+				VIN = { 
+					add_historical_friend = MSN
+					nhs_add_historical_rival_effect = yes
+					set_country_flag = msg_in_viking_pact_with_MSN
+				}
+			}
+			else_if = {
+				limit = {
+					alliance_with = VGD
+				}
+				VGD = { 
+					add_historical_friend = MSN
+					nhs_add_historical_rival_effect = yes
+					set_country_flag = msg_in_viking_pact_with_MSN
+				}
+			}
+			else_if = {
+				limit = {
+					alliance_with = HLL
+				}
+				HLL = { 
+					add_historical_friend = MSN
+					nhs_add_historical_rival_effect = yes
+					set_country_flag = msg_in_viking_pact_with_MSN
+				}
+			}
+			else_if = {
+				limit = {
+					alliance_with = MK1
+				}
+				MK1 = { 
+					add_historical_friend = MSN
+					nhs_add_historical_rival_effect = yes
+					set_country_flag = msg_in_viking_pact_with_MSN
+				}
+			}
+		}
+	}
+	
+	msg_viking_spartan_officers = {
+		position = 10
+		required_missions = { msg_viking_pact }
+		icon = mission_trade_company_region_abroad
+		ai_priority = { factor = 5 }
+		ai_weight = { factor = 5 }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = msg_still_has_pact
+				any_ally = {
+					has_country_flag = msg_in_viking_pact_with_MSN
+				}
+			}
+			treasury = 250
+			mil_power = 200
+			custom_trigger_tooltip = {
+				tooltip = msg_did_not_do_one_nation_tooltip
+				NOT = { has_global_flag = msg_did_one_nation_under_sparta_mission }
+			}
+		}
+		
+		effect = {
+			add_treasury = -200
+			add_mil_power = -200
+			custom_tooltip = msg_viking_training_tooltip
+			every_country = {
+				limit = {
+					has_country_flag = msg_in_viking_pact_with_MSN
+				}
+				set_country_flag = msg_spartan_training_permanent
+			}
+		}
+	}
+}

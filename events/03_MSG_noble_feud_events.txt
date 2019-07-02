@@ -1,0 +1,273 @@
+namespace = msg_noble_feud
+
+#THESE EVENTS ARE TEMPORARY
+
+#Pipiltin attempt bribe
+country_event = {
+	id = msg_noble_feud.1
+	title = msg_noble_feud.1.t
+	desc = msg_noble_feud.1.d
+	picture = Pipiltin_Market_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = msg_noble_feud.1.a # Accept the bribe
+		set_global_flag = msg_pipiltin_bribe
+		#custom_tooltip = msg_consequences
+		add_treasury = 500
+		if = {
+			limit = {
+				NOT = {
+					check_pippie_power_3 = yes
+				}
+			}
+			custom_tooltip = msg_consequences_pips_bribe
+		}
+	}
+	
+	option = {
+		name = msg_noble_feud.1.b # Refuse the bribe
+		trigger = {
+			NOT = {
+				check_pippie_power_3 = yes
+			}
+		}
+		if = {
+			limit = {
+				ai = no
+			}
+			add_stability = -1
+			add_adm_power = -50
+			add_dip_power = -50
+			add_mil_power = -50
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -20
+		}
+		custom_tooltip = msg_consequences_pips_bribe_refuse
+		custom_tooltip = msg_effects_visible_at_the_end
+		#set_global_flag = msg_pipiltin_no_bribe
+	}
+	
+	option = {
+		name = msg_noble_feud.1.c # Remind them of how they got to where they are...
+		trigger = {
+			check_pippie_power_2 = yes
+			NOT = {
+				check_pippie_power_3 = yes
+			}
+		}
+		highlight = yes
+		#set_global_flag = msg_pipiltin_no_bribe
+		custom_tooltip = msg_consequences_pipiltin_good
+		add_prestige = -5
+		custom_tooltip = msg_consequences_pips_anti_bribe
+		custom_tooltip = msg_effects_visible_at_the_end
+		
+	}
+	
+	option = {
+		name = msg_noble_feud.1.e # We have no choice but to accept
+		trigger = {
+			check_pippie_power_3 = yes
+		}
+		custom_tooltip = msg_consequences_pipiltin_bad
+		add_treasury = 250
+		custom_tooltip = msg_consequences_pips_forced_bribe
+		set_global_flag = msg_pipiltin_bribe
+	}
+}
+	
+
+#Apogonoi attempt bribe
+country_event = {
+	id = msg_noble_feud.2
+	title = msg_noble_feud.2.t
+	desc = msg_noble_feud.2.d
+	picture = Apogonoi_City_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = msg_noble_feud.2.a # Accept the bribe
+		set_global_flag = msg_apogonoi_bribe
+		#custom_tooltip = msg_consequences
+		add_treasury = 500
+		if = {
+			limit = {
+				NOT = {
+					check_pippie_power_3 = yes
+				}
+			}
+			custom_tooltip = msg_consequences_apog_bribe
+		}
+	}
+	
+	option = {
+		name = msg_noble_feud.2.b # Refuse the bribe
+		trigger = {
+			NOT = {
+				check_appie_power_3 = yes
+			}
+		}
+		#set_global_flag = msg_apogonoi_no_bribe
+		if = {
+			limit = {
+				ai = no
+			}
+			add_stability = -1
+			add_adm_power = -50
+			add_dip_power = -50
+			add_mil_power = -50
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -20
+		}
+		custom_tooltip = msg_consequences_apog_bribe_refuse
+		custom_tooltip = msg_effects_visible_at_the_end
+	}
+	
+	option = {
+		name = msg_noble_feud.2.c # Remind them of how they got to where they are...
+		trigger = {
+			check_appie_power_2 = yes
+			NOT = {
+				check_appie_power_3 = yes
+			}
+		}
+		highlight = yes
+		custom_tooltip = msg_consequences_apogonoi_good
+		add_prestige = 5
+		custom_tooltip = msg_consequences_apog_anti_bribe
+		custom_tooltip = msg_effects_visible_at_the_end
+		#set_global_flag = msg_apogonoi_no_bribe
+	}
+	
+	option = {
+		name = msg_noble_feud.2.e # We have no choice but to accept
+		trigger = {
+			check_appie_power_3 = yes
+		}
+		custom_tooltip = msg_consequences_apogonoi_bad
+		add_treasury = 250
+		custom_tooltip = msg_consequences_apog_forced_bribe
+		set_global_flag = msg_apogonoi_bribe
+	}
+}
+
+#Construction of a great palace for Pipiltin
+country_event = {
+	id = msg_noble_feud.3
+	title = msg_noble_feud.3.t
+	desc = msg_noble_feud.3.d
+	picture = Pipiltin_Market_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = msg_noble_feud.3.a #Yes, of course.
+		trigger = {
+			NOT = { has_global_flag = msg_pipiltin_court }
+		}
+		if = {
+			limit = {
+				ai = no
+			}
+			add_treasury = -100
+			add_adm_power = -50
+			add_dip_power = -50
+			add_mil_power = -50
+		}
+		if = {
+			limit = {
+				has_global_flag = msg_pipiltin_bribe
+			}	
+			custom_tooltip = msg_consequences_palace_with_bribe_pips
+		}
+		else = {
+			custom_tooltip = msg_consequences_palace_pips
+		}
+		custom_tooltip = msg_effects_visible_at_the_end
+	}
+	
+	option = {
+		name = msg_noble_feud.3.b #No, it's too expensive
+		trigger = {
+			NOT = { has_global_flag = msg_pipiltin_court }
+		}
+		#custom_tooltip = msg_consequences
+		add_prestige = 5
+		set_global_flag = msg_no_pipiltin_palace
+	}
+	
+	option = {
+		name = msg_noble_feud.3.c # Powerful Pipiltin hear the plan and stop it
+		trigger = {
+			has_global_flag = msg_pipiltin_court
+		}
+		custom_tooltip = msg_consequences_court_bad
+		add_prestige = -25
+		custom_tooltip = msg_consequences_palace_forced
+		set_global_flag = msg_no_pipiltin_palace
+	}
+}
+
+
+#Construction of a great palace for Apogonoi
+country_event = {
+	id = msg_noble_feud.4
+	title = msg_noble_feud.4.t
+	desc = msg_noble_feud.4.d
+	picture = Apogonoi_City_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = msg_noble_feud.4.a #Yes, of course.
+		trigger = {
+			NOT = { has_global_flag = msg_apogonoi_court }
+		}
+		if = {
+			limit = {
+				ai = no
+			}
+			add_treasury = -100
+			add_adm_power = -50
+			add_dip_power = -50
+			add_mil_power = -50
+		}
+		if = {
+			limit = {
+				has_global_flag = msg_apogonoi_bribe
+			}	
+			custom_tooltip = msg_consequences_palace_with_bribe_apog
+		}
+		else = {
+			custom_tooltip = msg_consequences_palace_apog
+		}
+		custom_tooltip = msg_effects_visible_at_the_end
+	}
+	
+	option = {
+		name = msg_noble_feud.4.b #No, it's too expensive
+		trigger = {
+			NOT = { has_global_flag = msg_apogonoi_court }
+		}
+		#custom_tooltip = msg_consequences
+		add_prestige = -5
+		set_global_flag = msg_no_apogonoi_palace
+	}
+	
+	option = {
+		name = msg_noble_feud.4.c # Powerful Apogonoi hear the plan and stop it
+		trigger = {
+			has_global_flag = msg_apogonoi_court
+		}
+		custom_tooltip = msg_consequences_court_bad
+		add_prestige = -25
+		set_global_flag = msg_no_apogonoi_palace
+	}
+}

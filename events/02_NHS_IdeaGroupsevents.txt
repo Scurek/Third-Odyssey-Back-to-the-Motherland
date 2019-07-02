@@ -1,0 +1,1448 @@
+namespace = nhs2_ideagroupevents
+
+# Starting colonial pop
+province_event = {
+	id = nhs2_ideagroupevents.1
+	title = nhs2_countryevents2.t
+	desc = nhs2_countryevents2.d
+	picture = CITY_VIEW_eventPicture
+
+	hidden = yes
+	
+    trigger = {
+		is_colony = yes
+		owner = {
+			has_idea = planned_metropoles
+		}
+		NOT = { has_province_flag = nhs_got_boost }
+		NOT = { colonysize = 200 }
+		continent = north_america
+	}
+	
+	immediate = {
+		set_province_flag = nhs_got_boost
+		add_colonysize = 200
+	}
+
+	option = {
+		name = "nhs2_countryevents2.a"
+	}
+}
+
+# Starting colonial pop-remove flag on abandon colony
+province_event = {
+	id = nhs2_ideagroupevents.2
+	title = nhs2_countryevents2.t
+	desc = nhs2_countryevents2.d
+	picture = CITY_VIEW_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+	
+    trigger = {
+		has_province_flag = nhs_got_boost
+	}
+	
+	immediate = {
+		clr_province_flag = nhs_got_boost
+	}
+
+	option = {
+		name = "nhs2_countryevents2.a"
+	}
+}
+
+# Bonus on climate provinces
+province_event = {
+	id = nhs2_ideagroupevents.20
+	title = nhs2_countryevents2.t
+	desc = nhs2_countryevents2.d
+	picture = CITY_VIEW_eventPicture
+
+	hidden = yes
+	
+    trigger = {
+		OR = {
+			has_climate = tropical
+			has_climate = arid
+			has_climate = arctic
+		}
+		owner = {
+			has_idea = brave_the_elements
+		}
+		NOT = { has_province_modifier = nhs_brave_the_elements_modifier1 }
+		NOT = { has_province_modifier = nhs_brave_the_elements_modifier2 }
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					has_climate = tropical
+					has_climate = arid
+				}
+			}
+			add_province_modifier = {
+				name = nhs_brave_the_elements_modifier1
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_climate = arctic
+			}
+			add_province_modifier = {
+				name = nhs_brave_the_elements_modifier2
+				duration = -1
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents2.a"
+	}
+}
+
+# Bonus on climate provinces, remove on city
+province_event = {
+	id = nhs2_ideagroupevents.8
+	title = nhs2_countryevents2.t
+	desc = nhs2_countryevents2.d
+	picture = CITY_VIEW_eventPicture
+	
+	hidden = yes
+	
+    trigger = {
+		owner = {
+			NOT = { has_idea = brave_the_elements }
+		}
+		OR = {
+			has_province_modifier = nhs_brave_the_elements_modifier1
+			has_province_modifier = nhs_brave_the_elements_modifier2
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				has_province_modifier = nhs_brave_the_elements_modifier1
+			}
+			remove_province_modifier = nhs_brave_the_elements_modifier1
+		}
+		if = {
+			limit = {
+				has_province_modifier = nhs_brave_the_elements_modifier2
+			}
+			remove_province_modifier = nhs_brave_the_elements_modifier2
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents2.a"
+	}
+}
+
+# Bonus on climate provinces, remove on abandon colony
+province_event = {
+	id = nhs2_ideagroupevents.9
+	title = nhs2_countryevents2.t
+	desc = nhs2_countryevents2.d
+	picture = CITY_VIEW_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+	
+    trigger = {
+		OR = {
+			has_province_modifier = nhs_brave_the_elements_modifier1
+			has_province_modifier = nhs_brave_the_elements_modifier2
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				has_province_modifier = nhs_brave_the_elements_modifier1
+			}
+			remove_province_modifier = nhs_brave_the_elements_modifier1
+		}
+		if = {
+			limit = {
+				has_province_modifier = nhs_brave_the_elements_modifier2
+			}
+			remove_province_modifier = nhs_brave_the_elements_modifier2
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents2.a"
+	}
+}
+
+# Grand forestries start
+country_event = {
+	id = nhs2_ideagroupevents.10
+	title = nhs2_ideagroupevents.10.t
+	desc = nhs2_ideagroupevents.10.d
+	picture = Woodcutters_eventPicture
+	
+    trigger = {
+		has_idea = grand_forestries
+		NOT = { has_country_flag = nhs_had_first_f_event }
+		OR = {
+			any_owned_province = {
+				controlled_by = ROOT
+				OR = {
+					trade_goods = naval_supplies
+					trade_goods = maize
+					trade_goods = grain
+					trade_goods = fish
+				}
+				OR = {
+					has_terrain = forest
+					has_terrain = woods
+					has_terrain = jungle
+				}
+				NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+			}
+			any_owned_province = {
+				controlled_by = ROOT
+				OR = {
+					trade_goods = tropical_wood
+					trade_goods = maize
+					trade_goods = grain
+					trade_goods = fish
+				}
+				has_terrain = jungle
+				NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+			}
+		}
+	}
+	
+	immediate = {
+		set_country_flag = nhs_had_first_f_event
+		set_country_flag = nhs_f_development_next
+		if = {
+			limit = {
+				OR = {
+					any_owned_province = {
+						controlled_by = ROOT
+						trade_goods = naval_supplies
+						OR = {
+							has_terrain = forest
+							has_terrain = woods
+							has_terrain = jungle
+						}
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+					any_owned_province = {
+						controlled_by = ROOT
+						trade_goods = tropical_wood
+						has_terrain = jungle
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+				}
+			}
+			ROOT = {
+				if = {
+					limit = {
+						any_owned_province = {
+							has_port = yes
+							controlled_by = ROOT
+							trade_goods = naval_supplies
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+								has_terrain = jungle
+							}
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+						any_owned_province = {
+							has_port = yes
+							trade_goods = tropical_wood
+							has_terrain = jungle
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+					}
+					random_owned_province = {
+						limit = {
+							OR = {
+								AND = {
+									has_port = yes
+									controlled_by = ROOT
+									trade_goods = naval_supplies
+									OR = {
+										has_terrain = forest
+										has_terrain = woods
+										has_terrain = jungle
+									}
+									NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+								}
+								AND = {
+									has_port = yes
+									trade_goods = tropical_wood
+									has_terrain = jungle
+									NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+								}
+							}
+						}
+						set_province_flag = nhs_tradegood_target
+					}
+				}
+				if = {
+					limit = {
+						NOT = {
+							any_owned_province = {
+								has_port = yes
+								controlled_by = ROOT
+								trade_goods = naval_supplies
+								OR = {
+									has_terrain = forest
+									has_terrain = woods
+									has_terrain = jungle
+								}
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+							any_owned_province = {
+								has_port = yes
+								trade_goods = tropical_wood
+								has_terrain = jungle
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+						}
+					}
+					random_owned_province = {
+						limit = {
+							OR = {
+								AND = {
+									controlled_by = ROOT
+									trade_goods = naval_supplies
+									OR = {
+										has_terrain = forest
+										has_terrain = woods
+										has_terrain = jungle
+									}
+									NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+								}
+								AND = {
+									trade_goods = tropical_wood
+									has_terrain = jungle
+									NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+								}
+							}
+						}
+						set_province_flag = nhs_tradegood_target
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_ideagroupevents.10.a"
+		if = {
+			limit = {
+				OR = {
+					any_owned_province = {
+						controlled_by = ROOT
+						trade_goods = naval_supplies
+						OR = {
+							has_terrain = forest
+							has_terrain = woods
+							has_terrain = jungle
+						}
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+					any_owned_province = {
+						controlled_by = ROOT
+						trade_goods = tropical_wood
+						has_terrain = jungle
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					has_province_flag = nhs_tradegood_target
+				}
+				add_province_modifier = {
+					name = nhs_grand_forestries_modifier
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					clr_province_flag = nhs_tradegood_target
+				}
+				clr_country_flag = nhs_has_already_good_f
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						any_owned_province = {
+							controlled_by = ROOT
+							trade_goods = naval_supplies
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+								has_terrain = jungle
+							}
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+						any_owned_province = {
+							controlled_by = ROOT
+							trade_goods = tropical_wood
+							has_terrain = jungle
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+					}
+				}
+				OR = {
+					any_owned_province = {
+						controlled_by = ROOT
+						OR = {
+							trade_goods = maize
+							trade_goods = grain
+							trade_goods = fish
+						}
+						OR = {
+							has_terrain = forest
+							has_terrain = woods
+						}
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+					any_owned_province = {
+						controlled_by = ROOT
+						OR = {
+							trade_goods = maize
+							trade_goods = grain
+							trade_goods = fish
+						}
+						has_terrain = jungle
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+				}
+			}
+			########
+			
+			if = {
+				limit = {
+					OR = {
+						any_owned_province = {
+							controlled_by = ROOT
+							has_port = yes
+							OR = {
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+							}
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+						any_owned_province = {
+							controlled_by = ROOT
+							has_port = yes
+							OR = {
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							has_terrain = jungle
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							AND = {
+								controlled_by = ROOT
+								has_port = yes
+								OR = {
+									trade_goods = maize
+									trade_goods = grain
+									trade_goods = fish
+								}
+								OR = {
+									has_terrain = forest
+									has_terrain = woods
+								}
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+							AND = {
+								controlled_by = ROOT
+								has_port = yes
+								OR = {
+									trade_goods = maize
+									trade_goods = grain
+									trade_goods = fish
+								}
+								has_terrain = jungle
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+						}
+					}
+					if = {
+						limit = {
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+							}
+						}
+						change_trade_goods = naval_supplies
+					}
+					if = {
+						limit = {
+							has_terrain = jungle
+						}
+						change_trade_goods = tropical_wood
+					}
+					add_province_modifier = {
+						name = nhs_grand_forestries_modifier
+						duration = -1
+					}
+				}
+			}
+			########
+			if = {
+				limit = {
+					NOT = {
+						OR = {
+							any_owned_province = {
+								controlled_by = ROOT
+								has_port = yes
+								OR = {
+									trade_goods = maize
+									trade_goods = grain
+									trade_goods = fish
+								}
+								OR = {
+									has_terrain = forest
+									has_terrain = woods
+								}
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+							any_owned_province = {
+								controlled_by = ROOT
+								has_port = yes
+								OR = {
+									trade_goods = maize
+									trade_goods = grain
+									trade_goods = fish
+								}
+								has_terrain = jungle
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							AND = {
+								controlled_by = ROOT
+								OR = {
+									trade_goods = maize
+									trade_goods = grain
+									trade_goods = fish
+								}
+								OR = {
+									has_terrain = forest
+									has_terrain = woods
+								}
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+							AND = {
+								controlled_by = ROOT
+								OR = {
+									trade_goods = maize
+									trade_goods = grain
+									trade_goods = fish
+								}
+								has_terrain = jungle
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+						}
+					}
+					if = {
+						limit = {
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+							}
+						}
+						change_trade_goods = naval_supplies
+					}
+					if = {
+						limit = {
+							has_terrain = jungle
+						}
+						change_trade_goods = tropical_wood
+					}
+					add_province_modifier = {
+						name = nhs_grand_forestries_modifier
+						duration = -1
+					}
+				}
+			}
+			hidden_effect = {
+				clr_country_flag = nhs_not_has_already_good_f
+			}
+		}
+	}
+}
+
+# Grand forestries tradegood change
+country_event = {
+	id = nhs2_ideagroupevents.3
+	title = nhs2_countryevents2.t
+	desc = nhs2_countryevents2.d
+	picture = CITY_VIEW_eventPicture
+
+	hidden = yes
+	is_triggered_only = yes
+	
+    trigger = {
+		has_idea = grand_forestries
+		has_country_flag = nhs_f_tradegood_next
+		has_country_flag = nhs_had_first_f_event
+		NOT = { has_country_modifier = nhs_forestries_tradegood_cooldown }
+	}
+	
+	immediate = {
+		clr_country_flag = nhs_f_tradegood_next
+		set_country_flag = nhs_f_development_next
+		add_country_modifier = {
+			name = nhs_forestries_tradegood_cooldown
+			duration = 10
+			hidden = yes
+		}
+		if = {
+			limit = {
+				OR = {
+					any_owned_province = {
+						controlled_by = ROOT
+						trade_goods = naval_supplies
+						OR = {
+							has_terrain = forest
+							has_terrain = woods
+							has_terrain = jungle
+						}
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+					any_owned_province = {
+						controlled_by = ROOT
+						trade_goods = tropical_wood
+						has_terrain = jungle
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+				}
+			}
+			ROOT = { 
+				country_event = { id = nhs2_ideagroupevents.5 }
+			}
+		}
+		#####
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						any_owned_province = {
+							controlled_by = ROOT
+							trade_goods = naval_supplies
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+								has_terrain = jungle
+							}
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+						any_owned_province = {
+							controlled_by = ROOT
+							trade_goods = tropical_wood
+							has_terrain = jungle
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+					}
+				}
+				OR = {
+					any_owned_province = {
+						controlled_by = ROOT
+						OR = {
+							trade_goods = maize
+							trade_goods = grain
+							trade_goods = fish
+						}
+						OR = {
+							has_terrain = forest
+							has_terrain = woods
+						}
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+					any_owned_province = {
+						controlled_by = ROOT
+						OR = {
+							trade_goods = maize
+							trade_goods = grain
+							trade_goods = fish
+						}
+						has_terrain = jungle
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+				}
+			}
+			ROOT = { 
+				country_event = { id = nhs2_ideagroupevents.6 }
+			}
+		}
+		#####
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						any_owned_province = {
+							controlled_by = ROOT
+							trade_goods = naval_supplies
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+								has_terrain = jungle
+							}
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+						any_owned_province = {
+							controlled_by = ROOT
+							trade_goods = tropical_wood
+							has_terrain = jungle
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+					}
+				}
+				NOT = {
+					OR = {
+						any_owned_province = {
+							controlled_by = ROOT
+							OR = {
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+							}
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+						any_owned_province = {
+							controlled_by = ROOT
+							OR = {
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							has_terrain = jungle
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+					}
+				}
+				any_owned_province = {
+					controlled_by = ROOT
+					has_province_modifier = nhs_grand_forestries_modifier
+					OR = {
+						AND = {
+							NOT = { has_province_flag = nhs_developed3 }
+							has_port = no
+						}
+						NOT = { has_province_flag = nhs_developed2 }
+					}
+				}
+			}
+			ROOT = {
+				remove_country_modifier = nhs_forestries_tradegood_cooldown
+				country_event = { id = nhs2_ideagroupevents.4 }
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						any_owned_province = {
+							controlled_by = ROOT
+							OR = {
+								trade_goods = naval_supplies
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+								has_terrain = jungle
+							}
+							OR = {
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+								OR = {
+									AND = {
+										NOT = { has_province_flag = nhs_developed3 }
+										has_port = no
+									}
+									NOT = { has_province_flag = nhs_developed2 }
+								}
+							}
+						}
+						any_owned_province = {
+							controlled_by = ROOT
+							OR = {
+								trade_goods = tropical_wood
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							has_terrain = jungle
+							OR = {
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+								OR = {
+									AND = {
+										NOT = { has_province_flag = nhs_developed3 }
+										has_port = no
+									}
+									NOT = { has_province_flag = nhs_developed2 }
+								}
+							}
+						}
+					}
+				}
+			}
+			ROOT = {
+				clr_country_flag = nhs_f_development_next
+				set_country_flag = nhs_f_tradegood_next
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents2.a"
+	}
+}
+
+
+# Grand forestries development change
+country_event = {
+	id = nhs2_ideagroupevents.4
+	title = nhs2_countryevents2.t
+	desc = nhs2_countryevents2.d
+	picture = Woodcutters_eventPicture
+
+	hidden = yes
+	is_triggered_only = yes
+	
+    trigger = {
+		has_idea = grand_forestries
+		has_country_flag = nhs_f_development_next
+		has_country_flag = nhs_had_first_f_event
+		NOT = { has_country_modifier = nhs_forestries_tradegood_cooldown }
+	}
+	
+	immediate = {
+		clr_country_flag = nhs_f_development_next
+		set_country_flag = nhs_f_tradegood_next
+		add_country_modifier = {
+			name = nhs_forestries_tradegood_cooldown
+			duration = 10
+			hidden = yes
+		}
+		if = {
+			limit = {
+				any_owned_province = {
+					controlled_by = ROOT
+					has_province_modifier = nhs_grand_forestries_modifier
+					OR = {
+						AND = {
+							NOT = { has_province_flag = nhs_developed3 }
+							has_port = no
+						}
+						NOT = { has_province_flag = nhs_developed2 }
+					}
+				}
+			}
+			ROOT = {
+				country_event = { id = nhs2_ideagroupevents.7 }
+			}
+		}
+		#####
+		if = {
+			limit = {
+				NOT = {
+					any_owned_province = {
+						controlled_by = ROOT
+						has_province_modifier = nhs_grand_forestries_modifier
+						OR = {
+							AND = {
+								NOT = { has_province_flag = nhs_developed3 }
+								has_port = no
+							}
+							NOT = { has_province_flag = nhs_developed2 }
+						}
+					}
+				}
+				OR = {
+					any_owned_province = {
+						controlled_by = ROOT
+						OR = {
+							trade_goods = naval_supplies
+							trade_goods = maize
+							trade_goods = grain
+							trade_goods = fish
+						}
+						OR = {
+							has_terrain = forest
+							has_terrain = woods
+							has_terrain = jungle
+						}
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+					any_owned_province = {
+						controlled_by = ROOT
+						OR = {
+							trade_goods = tropical_wood
+							trade_goods = maize
+							trade_goods = grain
+							trade_goods = fish
+						}
+						has_terrain = jungle
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+				}
+			}
+			ROOT = {
+				remove_country_modifier = nhs_forestries_tradegood_cooldown
+				country_event = { id = nhs2_ideagroupevents.3 }
+			}
+		}
+		#####
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						any_owned_province = {
+							controlled_by = ROOT
+							OR = {
+								trade_goods = naval_supplies
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+								has_terrain = jungle
+							}
+							OR = {
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+								OR = {
+									AND = {
+										NOT = { has_province_flag = nhs_developed3 }
+										has_port = no
+									}
+									NOT = { has_province_flag = nhs_developed2 }
+								}
+							}
+						}
+						any_owned_province = {
+							controlled_by = ROOT
+							OR = {
+								trade_goods = tropical_wood
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							has_terrain = jungle
+							OR = {
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+								OR = {
+									AND = {
+										NOT = { has_province_flag = nhs_developed3 }
+										has_port = no
+									}
+									NOT = { has_province_flag = nhs_developed2 }
+								}
+							}
+						}
+					}
+				}
+			}
+			ROOT = {
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents2.a"
+	}
+}
+
+
+
+# Forestries on already there tradegood
+country_event = {
+	id = nhs2_ideagroupevents.5
+	title = nhs2_ideagroupevents.5.t
+	desc = nhs2_ideagroupevents.5.d
+	picture = Woodcutters_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+					any_owned_province = {
+						controlled_by = ROOT
+						trade_goods = naval_supplies
+						OR = {
+							has_terrain = forest
+							has_terrain = woods
+							has_terrain = jungle
+						}
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+					any_owned_province = {
+						trade_goods = tropical_wood
+						has_terrain = jungle
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						any_owned_province = {
+							has_port = yes
+							controlled_by = ROOT
+							trade_goods = naval_supplies
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+								has_terrain = jungle
+							}
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+						any_owned_province = {
+							has_port = yes
+							trade_goods = tropical_wood
+							has_terrain = jungle
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							AND = {
+								has_port = yes
+								controlled_by = ROOT
+								trade_goods = naval_supplies
+								OR = {
+									has_terrain = forest
+									has_terrain = woods
+									has_terrain = jungle
+								}
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+							AND = {
+								has_port = yes
+								trade_goods = tropical_wood
+								has_terrain = jungle
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+						}
+					}
+					set_province_flag = nhs_tradegood_target
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						OR = {
+							any_owned_province = {
+								has_port = yes
+								controlled_by = ROOT
+								trade_goods = naval_supplies
+								OR = {
+									has_terrain = forest
+									has_terrain = woods
+									has_terrain = jungle
+								}
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+							any_owned_province = {
+								has_port = yes
+								trade_goods = tropical_wood
+								has_terrain = jungle
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							AND = {
+								controlled_by = ROOT
+								trade_goods = naval_supplies
+								OR = {
+									has_terrain = forest
+									has_terrain = woods
+									has_terrain = jungle
+								}
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+							AND = {
+								trade_goods = tropical_wood
+								has_terrain = jungle
+								NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+							}
+						}
+					}
+					set_province_flag = nhs_tradegood_target
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_ideagroupevents.5.a"
+		random_owned_province = {
+			limit = {
+				has_province_flag = nhs_tradegood_target
+			}
+			add_province_modifier = {
+				name = nhs_grand_forestries_modifier
+				duration = -1
+			}
+		}
+		hidden_effect = {
+			every_owned_province = {
+				clr_province_flag = nhs_tradegood_target
+			}
+		}
+	}
+	
+	option = {
+		name = "nhs2_ideagroupevents.5.b"
+		trigger = {
+			any_owned_province = {
+				has_province_flag = nhs_tradegood_target
+				trade_goods = naval_supplies
+				has_terrain = jungle
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_flag = nhs_tradegood_target
+				trade_goods = naval_supplies
+				has_terrain = jungle
+			}
+			change_trade_goods = tropical_wood
+			add_province_modifier = {
+				name = nhs_grand_forestries_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+# Forestries on different tradegood
+country_event = {
+	id = nhs2_ideagroupevents.6
+	title = nhs2_ideagroupevents.5.t
+	desc = nhs2_ideagroupevents.5.d
+	picture = Woodcutters_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+					any_owned_province = {
+						controlled_by = ROOT
+						OR = {
+							trade_goods = maize
+							trade_goods = grain
+							trade_goods = fish
+						}
+						OR = {
+							has_terrain = forest
+							has_terrain = woods
+						}
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+					any_owned_province = {
+						controlled_by = ROOT
+						OR = {
+							trade_goods = maize
+							trade_goods = grain
+							trade_goods = fish
+						}
+						has_terrain = jungle
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+		}
+	}
+
+	option = {
+		name = "nhs2_ideagroupevents.5.a"
+		if = {
+			limit = {
+				OR = {
+					any_owned_province = {
+						controlled_by = ROOT
+						has_port = yes
+						OR = {
+							trade_goods = maize
+							trade_goods = grain
+							trade_goods = fish
+						}
+						OR = {
+							has_terrain = forest
+							has_terrain = woods
+						}
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+					any_owned_province = {
+						controlled_by = ROOT
+						has_port = yes
+						OR = {
+							trade_goods = maize
+							trade_goods = grain
+							trade_goods = fish
+						}
+						has_terrain = jungle
+						NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						AND = {
+							controlled_by = ROOT
+							has_port = yes
+							OR = {
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+							}
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+						AND = {
+							controlled_by = ROOT
+							has_port = yes
+							OR = {
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							has_terrain = jungle
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_terrain = forest
+							has_terrain = woods
+						}
+					}
+					change_trade_goods = naval_supplies
+				}
+				if = {
+					limit = {
+						has_terrain = jungle
+					}
+					change_trade_goods = tropical_wood
+				}
+				add_province_modifier = {
+					name = nhs_changed_trade_good
+					duration = 1825
+				}
+				add_province_modifier = {
+					name = nhs_grand_forestries_modifier
+					duration = -1
+				}
+			}
+		}
+		########
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						any_owned_province = {
+							controlled_by = ROOT
+							has_port = yes
+							OR = {
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+							}
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+						any_owned_province = {
+							controlled_by = ROOT
+							has_port = yes
+							OR = {
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							has_terrain = jungle
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						AND = {
+							controlled_by = ROOT
+							OR = {
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							OR = {
+								has_terrain = forest
+								has_terrain = woods
+							}
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+						AND = {
+							controlled_by = ROOT
+							OR = {
+								trade_goods = maize
+								trade_goods = grain
+								trade_goods = fish
+							}
+							has_terrain = jungle
+							NOT = { has_province_modifier = nhs_grand_forestries_modifier }
+						}
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_terrain = forest
+							has_terrain = woods
+						}
+					}
+					change_trade_goods = naval_supplies
+				}
+				if = {
+					limit = {
+						has_terrain = jungle
+					}
+					change_trade_goods = tropical_wood
+				}
+				add_province_modifier = {
+					name = nhs_changed_trade_good
+					duration = 1825
+				}
+				add_province_modifier = {
+					name = nhs_grand_forestries_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+# Forestries development boost
+country_event = {
+	id = nhs2_ideagroupevents.7
+	title = nhs2_ideagroupevents.7.t
+	desc = nhs2_ideagroupevents.7.d
+	picture = Woodcutters_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+				any_owned_province = {
+					controlled_by = ROOT
+					has_province_modifier = nhs_grand_forestries_modifier
+					OR = {
+						AND = {
+							NOT = { has_province_flag = nhs_developed3 }
+							has_port = no
+						}
+						NOT = { has_province_flag = nhs_developed2 }
+					}
+				}
+	}
+
+	option = {
+		name = "nhs2_ideagroupevents.7.a"
+		random_owned_province = {
+			limit = {
+				AND = {
+					controlled_by = ROOT
+					has_province_modifier = nhs_grand_forestries_modifier
+					OR = {
+						AND = {
+							NOT = { has_province_flag = nhs_developed3 }
+							has_port = no
+						}
+						NOT = { has_province_flag = nhs_developed2 }
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_port = yes
+				}
+				add_base_production = 2
+			}
+			if = {
+				limit = {
+					has_port = no
+				}
+				add_base_production = 1
+			}
+			if = {
+				limit = {
+					has_province_flag = nhs_developed2
+					NOT = { has_province_flag = nhs_developed3 }
+				}
+				set_province_flag = nhs_developed3
+			}
+			if = {
+				limit = {
+					has_province_flag = nhs_developed1
+					NOT = { has_province_flag = nhs_developed2 }
+				}
+				set_province_flag = nhs_developed2
+			}
+			if = {
+				limit = {
+					NOT = { has_province_flag = nhs_developed1 }
+				}
+				set_province_flag = nhs_developed1
+			}
+		}
+	}
+}

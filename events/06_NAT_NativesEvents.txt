@@ -1,0 +1,462 @@
+namespace = nhs2_nativesevents
+
+### Events for american natives regarding the Elysians
+
+# Strange new people
+country_event = {
+	id = nhs2_nativesevents.1
+	title = nhs2_nativesevents.1.t
+	desc = nhs2_nativesevents.1.d
+	picture = COURT_eventPicture
+	
+	trigger = {
+		OR = {
+			technology_group = north_american
+			technology_group = mesoamerican
+			technology_group = south_american
+			technology_group = andean
+		}
+		any_known_country = {
+			OR = {
+				technology_group = exiled_greek
+				technology_group = modern_greek
+				technology_group = exiled_spartan
+				technology_group = modern_spartan
+			}
+		}
+		OR = {
+			any_neighbor_country = {
+				OR = {
+					technology_group = exiled_greek
+					technology_group = modern_greek
+					technology_group = exiled_spartan
+					technology_group = modern_spartan
+				}
+			}
+			technology_group = north_american
+			AND = {
+				technology_group = mesoamerican
+				any_known_country = {
+					OR = {
+						technology_group = exiled_greek
+						technology_group = modern_greek
+						technology_group = exiled_spartan
+						technology_group = modern_spartan
+					}
+					capital_scope = {
+						OR = {
+							region = central_america_region
+							area = eastern_mexico_area
+							area = mexico_area
+							area = michoacan_area
+							area = guerrero_area
+							area = oaxaca_area
+							area = jalisco_area
+							area = gran_chichimeca_area
+						}
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				technology_group = exiled_greek
+				technology_group = modern_greek
+				technology_group = exiled_spartan
+				technology_group = modern_spartan
+			}
+			ROOT = { capital_scope = { has_discovered = PREV } }
+		}
+		is_at_war = no
+		NOT = { has_country_flag = nhs_techgroupchange1 }
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		set_country_flag = nhs_techgroupchange1
+	}
+
+	option = {		# Perhaps we can learth something from them?
+		name = "nhs2_nativesevents.1.a"
+	}
+}
+
+# Change of has_reform following getting a new tech group
+country_event = {
+	id = nhs2_nativesevents.2
+	title = nhs2_nativesevents.2.t
+	desc = nhs2_nativesevents.2.d
+	picture = COURT_eventPicture
+	
+	trigger = {
+		technology_group = north_american
+		is_at_war = no
+		is_year = 1465
+		OR = {
+			AND = {
+				num_of_cities = 4
+				any_owned_province = {
+					feudalism = 100
+				}
+			}
+			NOT = {
+				any_owned_province = {
+					NOT = { feudalism = 100 }
+				}
+			}
+			has_institution = feudalism
+		}
+		is_native_council = yes
+		NOT = { has_country_modifier = nhs2_n_r_c }
+	}
+
+	mean_time_to_happen = {
+		months = 60
+		modifier = {
+			factor = 0.0001
+			ai = no
+		}
+		modifier = {
+			factor = 0.9
+			stability = 1
+		}
+		modifier = {
+			factor = 0.9
+			stability = 2
+		}
+		modifier = {
+			factor = 0.9
+			stability = 3
+		}
+		modifier = {
+			factor = 0.01
+			has_idea_group = innovativeness_ideas
+		}
+		modifier = {
+			factor = 0.8
+			adm = 4
+		}
+		modifier = {
+			factor = 0.8
+			adm = 5
+		}
+		modifier = {
+			factor = 0.8
+			adm = 6
+		}
+		modifier = {
+			factor = 0.25
+			OR = {
+				religion = pantheon_worship
+				religion = aztlan_worship
+			}
+		}
+		modifier = {
+			factor = 0.25
+			religion_group = christian
+		}
+	}
+
+	option = {		# Reform
+		name = "nhs2_nativesevents.2.a"
+		ai_chance = { 
+			factor = 50
+			modifier = {
+				factor = 2
+				NOT = { religion = totemism }
+				NOT = { religion = animism }
+				NOT = { religion = shamanism }
+			}
+			modifier = {
+				factor = 1.2
+				any_neighbor_country = {
+					OR = {
+						technology_group = exiled_greek
+						technology_group = modern_greek
+						technology_group = exiled_spartan
+						technology_group = modern_spartan
+						technology_group = viking
+						technology_group = modern_vinlandic
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				is_year = 1500
+			}
+			modifier = {
+				factor = 1.5
+				is_year = 1530
+			}
+			modifier = {
+				factor = 1.5
+				is_year = 1560
+			}
+			modifier = {
+				factor = 3
+				is_year = 1600
+			}
+		}
+		change_technology_group = hellenised_american
+		change_unit_type = hellenised_american
+		if = {
+			limit = {
+				is_native_council = yes
+			}
+			nhs_change_government = { GOV = republic }
+			add_government_reform = native_council_after
+		}
+		#if = {
+		#	limit = {
+		#		primitives = yes
+		#	}
+		#	set_primitive = no
+		#}
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						religion = pantheon_worship
+						religion = aztlan_worship
+						religion_group = christian
+					}
+				}
+			}
+			add_stability = -1
+			add_country_modifier = {
+				name = "nhs_alienated_higher_circles"
+				duration = 7300
+			}
+		}
+	}
+	option = {		# Don't Reform
+		name = "nhs2_nativesevents.2.b"
+		ai_chance = { 
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = { religion = totemism }
+				NOT = { religion = animism }
+				NOT = { religion = shamanism }
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					primary_culture = iroquois
+					tag = CAK
+				}
+			}
+		}
+		add_stability = 1
+		add_prestige = 15
+		every_owned_province = {
+			limit = {
+				religion = totemism
+			}
+			add_unrest = -10
+		}
+		hidden_effect = {
+			add_country_modifier = {
+				name = nhs2_n_r_c
+				duration = 10950
+				hidden = yes
+			}
+		}
+	}
+}
+
+# Unprimitive
+#country_event = {
+#	id = nhs2_nativesevents.3
+#	title = nhs2_nativesevents.2.t
+#	desc = nhs2_nativesevents.2.d
+#	picture = COURT_eventPicture
+#	
+#	hidden = yes
+#	is_triggered_only = yes
+#	trigger = {
+#		NOT = { tag = ROOT } #Disabled
+#		OR = {
+#			technology_group = north_american
+#			technology_group = hellenised_american
+#		}
+#		is_at_war = no
+#		is_year = 1465
+#		primitives = yes
+#		is_native_council_of_fed = yes
+#		
+#	}
+#	
+#	immediate = {
+#		if = {
+#			limit = {
+#				primitives = yes
+#			}
+#			set_primitive = no
+#		}
+#		if = {
+#			limit = {
+#				is_native_council = yes
+#			}
+#			add_government_reform = native_council_after
+#		}
+#	}
+#
+#	option = {
+#		name = "nhs2_nativesevents.2.a"	
+#	}
+#}
+
+#Informative event
+country_event = {
+	id = nhs2_nativesevents.4
+	title = nhs2_nativesevents.4.t
+	desc = nhs2_nativesevents.4.d
+	picture = NATIVE_EXPLORERS_eventPicture
+	
+	trigger = {
+		NOT = { has_country_flag = nhs_got_informedn }
+		OR = {
+			technology_group = exiled_greek
+			technology_group = modern_greek
+			technology_group = exiled_spartan
+			technology_group = modern_spartan
+			technology_group = viking
+			technology_group = modern_vinlandic
+		}
+		capital_scope = {
+			OR = {
+				continent = north_america
+				continent = south_america
+			}
+		}
+		any_country = {
+			OR = {
+				technology_group = hellenised_american
+				has_country_flag = nhs_was_native
+			}
+			OR = {
+				is_year = 1530
+				has_institution = renaissance
+			}
+			NOT = { num_of_colonists = 2 }
+			NOT = {
+				AND = {
+					NOT = { has_country_modifier = nhs2_native_colonist }
+					num_of_colonists = 1
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		set_country_flag = nhs_got_informedn
+	}
+
+	option = {
+		name = nhs2_nativesevents.4.a
+	}
+}
+
+#native fed election
+country_event = {
+	id = nhs2_nativesevents.5
+	title = nhs2_nativesevents.5.t
+	desc = nhs2_nativesevents.5.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = native_council_after
+		has_dlc = "Res Publica"
+	}
+
+	option = {
+		name = nhs2_nativesevents.5.a
+		if = {
+			limit = { has_active_policy = mandatory_service }
+			define_ruler = {
+				min_age = 40
+				mil = 1
+				adm = 1
+				dip = 1
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else = {
+			define_ruler = {
+				min_age = 40
+				mil = 1
+				adm = 1
+				dip = 1
+			}
+		}
+		change_statists_vs_orangists = -0.33
+		#if = {
+		#	limit = {
+		#		has_country_flag = nat_chief_in_power
+		#	}
+		#	clr_country_flag = nat_chief_in_power
+		#}
+	}
+	
+	option = {
+		name = nhs2_nativesevents.5.b
+		add_republican_tradition = -6
+		change_statists_vs_orangists = 0.33
+		#if = {
+		#	limit = {
+		#		NOT = { has_country_flag = nat_chief_in_power }
+		#	}
+		#	set_country_flag = nat_chief_in_power
+		#}
+	}
+}
+
+#native fed election-death
+country_event = {
+	id = nhs2_nativesevents.6
+	title = nhs2_nativesevents.6.t
+	desc = nhs2_nativesevents.6.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = native_council_after
+		has_dlc = "Res Publica"
+	}
+
+	option = {
+		name = nhs2_nativesevents.6.a
+		if = {
+			limit = { has_active_policy = mandatory_service }
+			define_ruler = {
+				min_age = 40
+				mil = 1
+				adm = 1
+				dip = 1
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else = {
+			define_ruler = {
+				min_age = 40
+				mil = 1
+				adm = 1
+				dip = 1
+			}
+		}
+		change_statists_vs_orangists = -0.10
+		#if = {
+		#	limit = {
+		#		has_country_flag = nat_chief_in_power
+		#	}
+		#	clr_country_flag = nat_chief_in_power
+		#}
+	}
+}

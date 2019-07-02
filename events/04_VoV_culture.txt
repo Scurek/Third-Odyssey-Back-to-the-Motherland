@@ -1,0 +1,1316 @@
+namespace = nhs_vov_culture
+
+#Norse to Vinlandic
+country_event = {
+	id = nhs_vov_culture.1
+	title = nhs_vov_culture.1.t
+	desc = nhs_vov_culture.1.d
+	picture = norse_district_eventPicture
+	
+	trigger = {
+		primary_culture = norse
+		is_year = 1470
+		capital_scope = {
+			continent = north_america
+		}
+	}
+	mean_time_to_happen = {
+		months = 1
+		modifier = {
+			factor = 0.000001
+			has_global_flag = nhs_vov_vinland_culture
+		}
+	}
+	option = {
+		name = "nhs_vov_culture.1.a"
+		change_primary_culture = vinlandic
+		if = {
+			limit = {
+				ruler_culture = norse
+			}
+			set_ruler_culture = vinlandic
+		}
+		if = {
+			limit = {
+				consort_culture = norse
+				has_consort = yes
+			}
+			set_consort_culture = vinlandic
+		}
+		if = {
+			limit = {
+				heir_culture = norse
+				has_heir = yes
+			}
+			set_heir_culture = vinlandic
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+						continent = north_america
+						culture = norse
+				}
+				change_culture = vinlandic
+			}
+		}
+		set_global_flag = nhs_vov_vinland_culture
+	}
+}
+#Native american to Skraeling
+province_event = {
+	id = nhs_vov_culture.2
+	title = nhs_vov_culture.2.t
+	desc = nhs_vov_culture.2.d
+	picture = norse_district_eventPicture
+	
+	trigger = {
+		owner = {
+			culture_group = norse_g
+			NOT = { primary_culture = norse }
+		}
+		native_culture = yes
+		is_colony = no
+		NOT = { culture = skraeling }
+	}
+
+	mean_time_to_happen = {
+		months = 50
+		modifier = {
+			factor = 0.9
+			owner = { stability = 1 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { stability = 2 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { stability = 3 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { adm = 3 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { adm = 4 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { adm = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			owner = { adm = 6 }
+		}
+	}
+
+	option = {		# Great news
+		name = "nhs_vov_culture.2.a"
+		change_culture = skraeling
+	}
+}
+#Native to other culture depending on region
+province_event = {
+	id = nhs_vov_culture.3
+	title = nhs_vov_culture.3.t
+	desc = nhs_vov_culture.3.d
+	picture = norse_district_eventPicture
+	
+	trigger = {
+		is_colony = no
+		OR = {
+			AND = {
+				owner = {
+					culture_group = norse_g
+					NOT = { primary_culture = norse }
+				}
+			}
+		}
+		culture = skraeling
+		OR = {
+			continent = north_america
+			continent = south_america
+		}
+		NOT = { has_estate = estate_nhs_native_council }
+	}
+
+	mean_time_to_happen = {
+		months = 300
+		modifier = {
+			factor = 0.9
+			stability = 1
+		}
+		modifier = {
+			factor = 0.9
+			stability = 2
+		}
+		modifier = {
+			factor = 0.9
+			stability = 3
+		}
+		modifier = {
+			factor = 3.0
+			is_at_war = yes
+		}
+		
+	}
+
+	option = {		# Vinlandic
+		name = "nhs_vov_culture.3.a"
+		trigger = {
+			NOT = {
+				region = great_lakes_region
+				region = northeast_america_region
+				region = cascadia_region
+				region = great_plains_region
+				region = california_region
+				OR = {
+					region = central_america_region
+					region = mexico_region
+				}
+				region = carribeans_region
+				continent = south_america
+			}
+		}
+		change_culture = vinlandic
+	}
+	option = {
+		name = "nhs_vov_culture.3.b"
+		trigger = {
+			region = great_lakes_region
+		}
+		change_culture = vatnmadr
+	}
+	option = {
+		name = "nhs_vov_culture.3.c"
+		trigger = {
+			region = northeast_america_region
+		}
+		change_culture = varangian_n
+	}
+	option = {
+		name = "nhs_vov_culture.3.e"
+		trigger = {
+			region = cascadia_region
+		}
+		change_culture = west_vinlandic
+	}
+	option = {
+		name = "nhs_vov_culture.3.f"
+		trigger = {
+			region = great_plains_region
+		}
+		change_culture = vollrmadr
+	}
+	option = {
+		name = "nhs_vov_culture.3.g"
+		trigger = {
+			region = california_region
+		}
+		change_culture = rusnidr
+	}
+
+	option = {
+		name = "nhs_vov_culture.3.i"
+		trigger = {
+			OR = {
+				region = central_america_region
+				region = mexico_region
+			}
+		}
+		change_culture = arimadr
+	}
+	option = {
+		name = "nhs_vov_culture.3.j"
+		trigger = {
+			OR = {
+				region = carribeans_region
+			}
+		}
+		change_culture = islander
+	}
+	option = {
+		name = "nhs_vov_culture.3.k"
+		trigger = {
+			continent = south_america
+		}
+		change_culture = south_vinlandic
+	}
+	
+}
+##No difference between norse varangian or elysian varangian ( auto culture convertion depending on culture of country and they have the same name "Varangian", to represent how both see varangian as both foreign and simillar)
+#Vinlandic to norse varangian
+province_event = {
+	id = nhs_vov_culture.4
+	title = nhs_vov_culture.4.t
+	desc = nhs_vov_culture.4.d
+	picture = elysian_varangian_eventPicture
+	
+	trigger = {
+		OR = {
+			AND = {
+				is_core = ROOT
+				owner = {
+					culture_group = norse_g
+					NOT = { primary_culture = norse }
+					NOT = { primary_culture = varangian_n }
+				}
+			}
+		}
+		culture_group = norse_g
+		region = northeast_america_region
+		NOT = { culture = skraeling }
+		owner = {
+			NOT = { has_country_flag = nhs_vov_varangian_culture }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = "nhs_vov_culture.4.a"
+		owner = {
+			every_owned_province = {
+				limit = {
+					is_core = ROOT
+					culture_group = norse_g
+					region = northeast_america_region
+					NOT = { culture = varangian_n }
+					NOT = { culture = skraeling }
+				}
+				change_culture = varangian_n
+			}
+			set_country_flag = nhs_vov_varangian_culture
+		}
+	}
+}
+
+#Norse varangian to elysian varangian
+province_event = {
+	id = nhs_vov_culture.100
+	title = nhs_vov_culture.100.t
+	desc = nhs_vov_culture.5.d
+	picture = elysian_varangian_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		culture = varangian_n
+		owner = {
+			culture_group = elysian_group
+		}
+	}
+	
+	immediate = {
+		change_culture = varangian_e
+	}
+	option = {
+		name = "nhs_vov_culture.100.a"
+		
+	}
+}
+#Elysian varangian to norse varangian
+province_event = {
+	id = nhs_vov_culture.101
+	title = nhs_vov_culture.101.t
+	desc = nhs_vov_culture.101.d
+	picture = elysian_varangian_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		culture = varangian_e
+		owner = {
+			NOT = { culture_group = elysian_group }
+		}
+	}
+	
+	immediate = {
+		change_culture = varangian_n
+	}
+	option = {
+		name = "nhs_vov_culture.101.a"
+		
+	}
+}
+#Whatever else to Vinlandic
+province_event = {
+	id = nhs_vov_culture.5
+	title = nhs_vov_culture.5.t
+	desc = nhs_vov_culture.5.d
+	picture = awesome_viking_city_eventPicture
+	
+	trigger = {
+		is_colony = no
+		OR = {
+			AND = {
+				owner = {
+					culture_group = norse_g
+					NOT = { primary_culture = norse }
+				}
+			}
+			
+		}
+		culture_group = norse_g
+		OR = {
+			region = canada_region
+			region = greenland_region
+		}
+		NOT = {
+			OR = {
+				culture = varangian_e
+				culture = varangian_n
+			}
+		}
+		NOT = { culture = norse }
+		NOT = { culture = vinlandic }
+		NOT = { culture = skraeling }
+		owner = {
+			NOT = { has_country_flag = nhs_vov_vinlandic_culture }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+		
+	}
+	
+	option = {
+		name = "nhs_vov_culture.5.a"
+		owner = {
+			every_owned_province = {
+				limit = {
+					is_core = ROOT
+					OR = {
+						region = canada_region
+						region = greenland_region
+					}
+					NOT = {
+						
+						OR = {
+							culture = varangian_e
+							culture = varangian_n
+						}
+					}
+					NOT = { culture = vinlandic }
+					NOT = { culture = skraeling }
+					NOT = { culture = norse }
+				}
+				change_culture = vinlandic			
+			}
+			set_country_flag = nhs_vov_vinlandic_culture
+		}
+	}
+}
+#Vinlandic to Vatnmadr
+province_event = {
+	id = nhs_vov_culture.6
+	title = nhs_vov_culture.6.t
+	desc = nhs_vov_culture.6.d
+	picture = niagara_falls_eventPicture
+	
+	trigger = {
+		is_colony = no
+		OR = {
+			AND = {
+				owner = {
+					culture_group = norse_g
+					NOT = { primary_culture = norse }
+				}
+			}
+			
+		}
+		culture_group = norse_g
+		region = great_lakes_region
+		NOT = { culture = norse }
+		NOT = { culture = skraeling }
+		owner = {
+			NOT = { has_country_flag = nhs_vov_vatnmadr_culture }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+	
+	option = {
+		name = "nhs_vov_culture.6.a"
+		owner = {
+			every_owned_province = {
+				limit = {
+					is_core = ROOT
+					culture_group = norse_g
+					region = great_lakes_region
+					NOT = { culture = norse }
+					NOT = { culture = vatnmadr }
+					NOT = { culture = skraeling }
+				}
+				change_culture = vatnmadr
+			}
+			set_country_flag = nhs_vov_vatnmadr_culture
+		}
+	}
+}
+#Vinlandic to West Vinlandic
+province_event = {
+	id = nhs_vov_culture.7
+	title = nhs_vov_culture.7.t
+	desc = nhs_vov_culture.7.d
+	picture = northern_moutains_eventPicture
+	
+	trigger = {
+		is_colony = no
+		OR = {
+			AND = {
+				owner = {
+					culture_group = norse_g
+					NOT = { primary_culture = norse }
+				}
+			}
+			
+		}
+		culture_group = norse_g
+		region = cascadia_region
+		NOT = { culture = norse }
+		NOT = { culture = skraeling }
+		owner = {
+			NOT = { has_country_flag = nhs_vov_west_vinlandic_culture }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+	
+	option = {
+		name = "nhs_vov_culture.7.a"
+		owner = {
+			every_owned_province = {
+				limit = {
+					is_core = ROOT
+					culture_group = norse_g
+					region = cascadia_region
+					NOT = { culture = norse }
+					NOT = { culture = west_vinlandic }
+					NOT = { culture = skraeling }
+				}
+				change_culture = west_vinlandic
+			}
+			set_country_flag = nhs_vov_west_vinlandic_culture
+		}
+	}
+}
+#Vinlandic to Vollrmadr
+province_event = {
+	id = nhs_vov_culture.8
+	title = nhs_vov_culture.8.t
+	desc = nhs_vov_culture.8.d
+	picture = skythian_plains_eventPicture
+	
+	trigger = {
+		is_colony = no
+		OR = {
+			AND = {
+				owner = {
+					culture_group = norse_g
+					NOT = { primary_culture = norse }
+				}
+			}
+			
+		}
+		culture_group = norse_g
+		region = great_plains_region
+		NOT = { culture = norse }
+		NOT = { culture = skraeling }
+		owner = {
+			NOT = { has_country_flag = nhs_vov_vollrmadr_culture }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+	
+	option = {
+		name = "nhs_vov_culture.8.a"
+		owner = {
+			every_owned_province = {
+				limit = {
+					is_core = ROOT
+					culture_group = norse_g
+					region = great_plains_region
+					NOT = { culture = vollrmadr }
+					NOT = { culture = norse }
+					NOT = { culture = skraeling }
+				}
+				change_culture = vollrmadr
+			}
+			set_country_flag = nhs_vov_vollrmadr_culture
+		}
+	}
+}
+#Vinlandic to Rusnidr
+province_event = {
+	id = nhs_vov_culture.9
+	title = nhs_vov_culture.9.t
+	desc = nhs_vov_culture.9.d
+	picture = western_coast_eventPicture
+	
+	trigger = {
+		is_colony = no
+		OR = {
+			AND = {
+				owner = {
+					culture_group = norse_g
+					NOT = { primary_culture = norse }
+				}
+			}
+			
+		}
+		culture_group = norse_g
+		region = california_region
+		NOT = { culture = norse }
+		NOT = { culture = skraeling }
+		owner = {
+			NOT = { has_country_flag = nhs_vov_rusnidr_culture }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+	
+	option = {
+		name = "nhs_vov_culture.9.a"
+		owner = {
+			every_owned_province = {
+				limit = {
+					is_core = ROOT
+					culture_group = norse_g
+					region = california_region
+					NOT = { culture = norse }
+					NOT = { culture = rusnidr }
+					NOT = { culture = skraeling }
+				}
+				change_culture = rusnidr
+			}
+			set_country_flag = nhs_vov_rusnidr_culture
+		}
+	}
+}
+#Vinlandic to Islander
+province_event = {
+	id = nhs_vov_culture.10
+	title = nhs_vov_culture.10.t
+	desc = nhs_vov_culture.10.d
+	picture = caribbean_arrival_eventPicture
+	
+	trigger = {
+		is_colony = no
+		OR = {
+			AND = {
+				owner = {
+					culture_group = norse_g
+					NOT = { primary_culture = norse }
+				}
+			}
+			
+		}
+		culture_group = norse_g
+		OR = {
+			region = carribeans_region
+		}
+		NOT = { culture = norse }
+		NOT = { culture = skraeling }
+		owner = {
+			NOT = { has_country_flag = nhs_vov_islander_culture }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+	
+	option = {
+		name = "nhs_vov_culture.10.a"
+		owner = {
+			every_owned_province = {
+				limit = {
+					is_core = ROOT
+					culture_group = norse_g
+					OR = {
+						region = carribeans_region
+
+					}
+					NOT = { culture = norse }
+					NOT = { culture = islander }
+					NOT = { culture = skraeling }
+				}
+				change_culture = islander
+			}
+			set_country_flag = nhs_vov_islander_culture
+		}
+	}
+}
+#Vinlandic to Arimadr
+province_event = {
+	id = nhs_vov_culture.11
+	title = nhs_vov_culture.11.t
+	desc = nhs_vov_culture.11.d
+	picture = meso_american_city_eventPicture
+	
+	trigger = {
+		is_colony = no
+		OR = {
+			AND = {
+				owner = {
+					culture_group = norse_g
+					NOT = { primary_culture = norse }
+				}
+			}
+			
+		}
+		culture_group = norse_g
+		OR = {
+			region = central_america_region
+			region = mexico_region
+		}
+		NOT = { culture = norse }
+		NOT = { culture = skraeling }
+		owner = {
+			NOT = { has_country_flag = nhs_vov_arimadr_culture }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+	
+	option = {
+		name = "nhs_vov_culture.11.a"
+		owner = {
+			every_owned_province = {
+				limit = {
+					is_core = ROOT
+					culture_group = norse_g
+					OR = {
+						region = central_america_region
+						region = mexico_region
+					}
+					NOT = { culture = norse }
+					NOT = { culture = arimadr }
+					NOT = { culture = skraeling }
+				}
+				change_culture = arimadr
+			}
+			set_country_flag = nhs_vov_arimadr_culture
+		}
+	}
+}
+
+#Vinlandic to South Vinlandic
+country_event = {
+	id = nhs_vov_culture.13
+	title = nhs_vov_culture.13.t
+	desc = nhs_vov_culture.13.d
+	picture = caribbean_arrival_2_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		NOT = { primary_culture = norse }
+		culture_group = norse_g
+		any_owned_province = {
+			continent = south_america
+			is_colony = no
+			NOT = { culture = norse }
+			NOT = { culture = skraeling }
+		}
+		NOT = { has_country_flag = nhs_vov_south_vinlandic_culture }
+	}
+	mean_time_to_happen = {
+		months = 2
+	}
+	
+	option = {
+		name = "nhs_vov_culture.13.a"	
+		owner = {
+			every_owned_province = {
+				limit = {
+					is_core = ROOT
+					culture_group = norse_g
+					continent = south_america
+					NOT = { culture = norse }
+					NOT = { culture = south_vinlandic }
+					NOT = { culture = skraeling }
+				}
+				change_culture = south_vinlandic
+			}
+			set_country_flag = nhs_vov_south_vinlandic_culture
+		}
+	}
+}
+#Elysamerican to Skraeling
+province_event = {
+	id = nhs_vov_culture.14
+	title = nhs_vov_culture.14.t
+	desc = nhs_vov_culture.14.d
+	picture = norse_district_eventPicture
+	
+	trigger = {
+		is_colony = no
+		owner = {
+			culture_group = norse_g
+			NOT = { primary_culture = norse }
+		}
+		culture = elysameric
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+		modifier = {
+			factor = 0.9
+			owner = { stability = 1 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { stability = 2 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { stability = 3 }
+		}
+		
+	}
+	
+	immediate = {
+		hidden_effect = {
+			change_culture = skraeling
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_culture.14.a"
+	}
+}
+##########################
+###Silent Culture Flips###
+##########################
+#Vinlandic to norse varangian
+country_event = {
+	id = nhs_vov_culture.20
+	title = nhs_vov_culture.20.t
+	desc = nhs_vov_culture.20.d
+	picture = norse_district_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = nhs_vov_varangian_culture
+		culture_group = norse_g
+		NOT = { primary_culture = norse }
+		NOT = { primary_culture = varangian_n }
+		any_owned_province = {
+			NOT = { culture = skraeling }
+			is_colony = no
+			culture_group = norse_g
+			region = northeast_america_region
+			NOT = { culture = varangian_n }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		every_owned_province = {
+			limit = {
+				culture_group = norse_g
+				is_colony = no
+				region = northeast_america_region
+				NOT = { culture = varangian_n }
+				NOT = { culture = skraeling }
+			}
+			change_culture = varangian_n
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_culture.20.a"
+	}
+}
+#Whatever else to Vinlandic
+country_event = {
+	id = nhs_vov_culture.21
+	title = nhs_vov_culture.21.t
+	desc = nhs_vov_culture.21.d
+	picture = norse_district_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = nhs_vov_vinlandic_culture
+		culture_group = norse_g
+		NOT = { primary_culture = norse }
+		any_owned_province = {
+			NOT = { culture = skraeling }
+			is_colony = no
+			culture_group = norse_g
+			OR = {
+				region = canada_region
+				region = greenland_region
+			}
+			NOT = {
+
+				OR = {
+					culture = varangian_e
+					culture = varangian_n
+					}
+				}
+			NOT = { culture = vinlandic }
+			NOT = { culture = norse }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+		
+	}
+	
+	immediate = {
+		every_owned_province = {
+			limit = {
+				culture_group = norse_g
+				OR = {
+					region = canada_region
+					region = greenland_region
+				}
+				is_colony = no
+				NOT = {
+					
+					OR = {
+						culture = varangian_e
+						culture = varangian_n
+						}
+					}
+				NOT = { culture = vinlandic }
+				NOT = { culture = norse }
+				NOT = { culture = skraeling }
+				NOT = { has_estate = estate_nhs_native_council }
+			}
+			change_culture = vinlandic
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_culture.21.a"
+	}
+}
+#Vinlandic to Vatnmadr
+country_event = {
+	id = nhs_vov_culture.22
+	title = nhs_vov_culture.22.t
+	desc = nhs_vov_culture.22.d
+	picture = norse_district_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = nhs_vov_vatnmadr_culture
+		culture_group = norse_g
+		NOT = { primary_culture = norse }
+		any_owned_province = {
+			NOT = { culture = skraeling }
+			culture_group = norse_g
+			is_colony = no
+			region = great_lakes_region
+			NOT = { culture = vatnmadr }
+			NOT = { culture = norse }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		every_owned_province = {
+			limit = {
+				culture_group = norse_g
+				is_colony = no
+				region = great_lakes_region
+				NOT = { culture = vatnmadr }
+				NOT = { culture = norse }
+				NOT = { culture = skraeling }
+			}
+			change_culture = vatnmadr
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_culture.22.a"
+	}
+}
+#Vinlandic to West Vinlandic
+country_event = {
+	id = nhs_vov_culture.23
+	title = nhs_vov_culture.23.t
+	desc = nhs_vov_culture.23.d
+	picture = norse_district_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = nhs_vov_west_vinlandic_culture
+		culture_group = norse_g
+		NOT = { primary_culture = norse }
+		any_owned_province = {
+			is_colony = no
+			NOT = { culture = skraeling }
+			culture_group = norse_g
+			region = cascadia_region
+			NOT = { culture = west_vinlandic }
+			NOT = { culture = norse }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		every_owned_province = {
+			limit = {
+				culture_group = norse_g
+				is_colony = no
+				region = cascadia_region
+				NOT = { culture = west_vinlandic }
+				NOT = { culture = norse }
+				NOT = { culture = skraeling }
+			}
+			change_culture = west_vinlandic
+		}
+		
+	}
+	
+	option = {
+		name = "nhs_vov_culture.23.a"
+	}
+}
+#Vinlandic to Vollrmadr
+country_event = {
+	id = nhs_vov_culture.24
+	title = nhs_vov_culture.24.t
+	desc = nhs_vov_culture.24.d
+	picture = norse_district_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = nhs_vov_vollrmadr_culture
+		culture_group = norse_g
+		NOT = { primary_culture = norse }
+		any_owned_province = {
+			is_colony = no
+			NOT = { culture = skraeling }
+			culture_group = norse_g
+			region = great_plains_region
+			NOT = { culture = vollrmadr }
+			NOT = { culture = norse }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		every_owned_province = {
+			limit = {
+				culture_group = norse_g
+				is_colony = no
+				region = great_plains_region
+				NOT = { culture = vollrmadr }
+				NOT = { culture = norse }
+				NOT = { culture = skraeling }
+			}
+			change_culture = vollrmadr
+		}
+		
+	}
+	
+	option = {
+		name = "nhs_vov_culture.24.a"
+	}
+}
+#Vinlandic to Rusnidr
+country_event = {
+	id = nhs_vov_culture.25
+	title = nhs_vov_culture.25.t
+	desc = nhs_vov_culture.25.d
+	picture = norse_district_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = nhs_vov_rusnidr_culture
+		culture_group = norse_g
+		NOT = { primary_culture = norse }
+		any_owned_province = {
+			is_colony = no
+			NOT = { culture = skraeling }
+			culture_group = norse_g
+			region = california_region
+			NOT = { culture = rusnidr }
+			NOT = { culture = norse }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		every_owned_province = {
+			limit = {
+				culture_group = norse_g
+				is_colony = no
+				region = california_region
+				NOT = { culture = rusnidr }
+				NOT = { culture = norse }
+				NOT = { culture = skraeling }
+			}
+			change_culture = rusnidr
+		}
+		
+	}
+	
+	option = {
+		name = "nhs_vov_culture.25.a"
+	}
+}
+#Vinlandic to Islander
+country_event = {
+	id = nhs_vov_culture.26
+	title = nhs_vov_culture.26.t
+	desc = nhs_vov_culture.26.d
+	picture = norse_district_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = nhs_vov_islander_culture
+		culture_group = norse_g
+		NOT = { primary_culture = norse }
+		any_owned_province = {
+			is_colony = no
+			NOT = { culture = skraeling }
+			culture_group = norse_g
+			OR = {
+				region = carribeans_region
+			}
+			NOT = { culture = islander }
+			NOT = { culture = norse }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		every_owned_province = {
+			limit = {
+				culture_group = norse_g
+				OR = {
+					region = carribeans_region
+				}
+				is_colony = no
+				NOT = { culture = islander }
+				NOT = { culture = norse }
+				NOT = { culture = skraeling }
+			}
+			change_culture = islander
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_culture.26.a"
+	}
+}
+#Vinlandic to Arimadr
+country_event = {
+	id = nhs_vov_culture.27
+	title = nhs_vov_culture.27.t
+	desc = nhs_vov_culture.27.d
+	picture = norse_district_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = nhs_vov_arimadr_culture
+		culture_group = norse_g
+		is_colony = no
+		NOT = { primary_culture = norse }
+		any_owned_province = {
+			NOT = { culture = skraeling }
+			is_colony = no
+			culture_group = norse_g
+			OR = {
+				region = central_america_region
+				region = mexico_region
+			}
+			NOT = { culture = arimadr }
+			NOT = { culture = norse }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {	
+		every_owned_province = {
+			limit = {
+				culture_group = norse_g
+				is_colony = no
+				OR = {
+					region = central_america_region
+					region = mexico_region
+				}
+				NOT = { culture = arimadr }
+				NOT = { culture = norse }
+				NOT = { culture = skraeling }
+			}
+			change_culture = arimadr
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_culture.27.a"
+	}
+}
+#Vinlandic to Sandrmadr
+#country_event = {
+#	id = nhs_vov_culture.28
+#	title = nhs_vov_culture.28.t
+#	desc = nhs_vov_culture.28.d
+#	picture = norse_district_eventPicture
+#	
+#	hidden = yes
+#	
+#	trigger = {
+#		has_country_flag = nhs_vov_sandrmadr_culture
+#		owner = {
+#			culture_group = norse_g
+#			NOT = { primary_culture = norse }
+#		}
+#		culture_group = norse_g
+#		region = north_sparta_region
+#		NOT = { culture = arimadr }
+#		NOT = { culture = norse }
+#	}
+#	
+#	mean_time_to_happen = {
+#		days = 1
+#	}
+#	
+#	immediate = {
+#		change_culture = arimadr
+#	}
+#	
+#	option = {
+#		name = "nhs_vov_culture.28.a"
+#	}
+#}
+
+#Vinlandic to South Vinlandic
+country_event = {
+	id = nhs_vov_culture.29
+	title = nhs_vov_culture.29.t
+	desc = nhs_vov_culture.29.d
+	picture = norse_district_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = nhs_vov_south_vinlandic_culture
+		culture_group = norse_g
+		NOT = { primary_culture = norse }
+		any_owned_province = {
+			is_colony = no
+			NOT = { culture = skraeling }
+			culture_group = norse_g
+			continent = south_america
+			NOT = { culture = south_vinlandic }
+			NOT = { culture = norse }
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		
+		every_owned_province = {
+			limit = {
+				is_colony = no
+				culture_group = norse_g
+				continent = south_america
+				NOT = { culture = south_vinlandic }
+				NOT = { culture = norse }
+				NOT = { culture = skraeling }
+			}
+			change_culture = south_vinlandic
+		}
+		
+	}
+	
+	option = {
+		name = "nhs_vov_culture.29.a"
+	}
+}
+
+#Change Culture of South American Colonies
+country_event = {
+	id = nhs_vov_culture.40
+	title = nhs_vov_culture.40.t
+	desc = nhs_vov_culture.40.d
+	picture = norse_district_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		primary_culture = vinlandic
+		OR = {
+			is_colonial_nation = yes
+			is_former_colonial_nation = yes
+		}
+		capital_scope = {
+			continent = south_america
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate = {
+		change_primary_culture = south_vinlandic
+		every_owned_province = {
+			limit = {
+				NOT = { culture = skraeling }
+				culture_group = norse_g
+				continent = south_america
+				NOT = { culture = south_vinlandic }
+				NOT = { culture = norse }
+			}
+			change_culture = south_vinlandic
+		}
+	}
+	option = {
+		name = "nhs_vov_culture.40.a"
+	}
+}

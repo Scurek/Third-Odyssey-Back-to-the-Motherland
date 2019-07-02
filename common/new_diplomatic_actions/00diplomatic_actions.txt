@@ -1,0 +1,2438 @@
+# Triggers and effects will be given the Actor's scope, with the Recipient's as FROM
+
+static_actions = # static_actions is a reserved token.
+{
+	# alert_index maps to the frame of the alert icon
+	royal_marriage = 										{ alert_index = 1 alert_tooltip = ICON_RM }
+	requestpeace = 										{ alert_index = 2 alert_tooltip = ICON_PEACE  } # alert_index will be overwritten in code for this one.
+	allianceaction = 										{ alert_index = 3 alert_tooltip = ICON_ALLIANCE }
+# 4 is currently unused.
+	integrationaction = 									{ alert_index = 5 alert_tooltip = ICON_ANNEX }
+	annexationaction =									{ alert_index = 5 alert_tooltip = ICON_ANNEX }
+	vassalaction = 										{ alert_index = 6 alert_tooltip = ICON_VASSAL }
+	milaccess = 											{ alert_index = 7 alert_tooltip = ICON_ASKMIL }
+	fleet_access = 										{ alert_index = 8 alert_tooltip = ICON_ASKFLEET }
+	offermilaccess = 										{ alert_index = 9 alert_tooltip = ICON_OFFACC }
+	callaction = 											{ alert_index = 10 alert_tooltip = ICON_CALLALLY } # This one is referred to in the code (settings.cpp)
+	offerloan = 												{ alert_index = 11 alert_tooltip = ICON_OFFERLOAN }
+	sellprov = 												{ alert_index = 12 alert_tooltip = ICON_PROVSALE }
+		#13 is cursed
+	request_to_join_federation = 						{ alert_index = 14 alert_tooltip = ICON_FEDERATIONREQUEST }
+	invite_to_federation = 								{ alert_index = 15 alert_tooltip = ICON_FEDERATIONINVITE }
+	transfer_trade_power = 							{ alert_index = 16 alert_tooltip = TRANSFER_TRADE_POWER }
+	religious_unity_action = 							{ alert_index = 17 alert_tooltip = ICON_RELIGIOUS_UNITY }
+		# 18 is used by requestpeace
+	form_coalition = 										{ alert_index = 19 alert_tooltip = ICON_FORM_COALITION }
+	enforce_peace = 										{ alert_index = 20 alert_tooltip = ICON_ENFORCE_PEACE } # This one may be overwritten in code.
+	grant_electorate = 									{ alert_index = 21 alert_tooltip = ICON_GRANT_ELECTORATE }
+	demand_unlawful_territory_action = 			{ alert_index = 22 alert_tooltip = ICON_DEMAND_UNLAWFUL_TERRITORY }
+		# 23 is used by requestpeace
+		# 24 is used by requestpeace
+		# 25 is used by requestpeace
+		# 26 is used by requestpeace
+		# 27 is used by enforce_peace (when actor is coalition leader) with tooltip "ICON_ENFORCE_PEACE_COALITION_LEADER"
+	support_independence_action = 					{ alert_index = 28 alert_tooltip = support_independence }
+	steer_trade = 										{ alert_index = 29 alert_tooltip = ICON_STEER_TRADE }
+	ask_for_march = 										{ alert_index = 30 alert_tooltip = ICON_MARCH }
+	sell_ships_action = 									{ alert_index = 31 alert_tooltip = ICON_FLEETSALE }
+	grant_freecity = 										{ alert_index = 32 alert_tooltip = ICON_GRANT_FREECITY }
+# 33 is currently unused
+	invite_to_trade_league = 							{ alert_index = 34 alert_tooltip = ICON_TRADELEAGUEINVITE }
+	request_to_join_trade_league = 					{ alert_index = 35 alert_tooltip = ICON_TRADELEAGUEREQUEST }
+	sharemap = 											{ alert_index = 36 alert_tooltip = ICON_REQUESTSHAREMAP } # alert_tooltip gets special treatment in the code
+	condottieri_action = 								{ alert_index = 37 alert_tooltip = ICON_CONDOTTIERI }
+	offer_fleet_access = 								{ alert_index = 38 alert_tooltip = ICON_OFFERFLEET }
+	break_alliance = 										{ alert_index = 39 alert_tooltip = ICON_BREAK_ALLIANCE }
+	tributary_state_action = 							{ alert_index = 40 alert_tooltip = ICON_TRIBUTARY }
+	ask_for_tributary_state_action = 				{ alert_index = 41 alert_tooltip = ICON_ASK_TRIBUTARY }
+	knowledge_sharing = 								{ alert_index = 42 alert_tooltip = ICON_KNOWLEDGESHARE } #The answer to life
+# 43 is currently unused
+	charter_company = 								{ alert_index = 44 alert_tooltip = ICON_CHARTERCOMPANY }
+}
+
+# # Create new diplomatic actions like this. AI will currently never send them.
+# demand_dummy = {
+	# category = influence
+
+	# alert_index = 40
+	# alert_tooltip = demand_dummy_alert_tooltip
+
+	# require_acceptance = yes # Whether the recipient gets an option to decline
+
+	# is_visible = {
+		# always = no ############################ Remove this line to unleash the magic ########################################
+		# religion_group = christian
+		# is_subject = no
+		# FROM = {
+			# is_subject = no
+		# }
+	# }
+	# is_allowed = {
+		# variable_arithmetic_trigger = {
+			# custom_tooltip = HAS_OLDER_RULER_THAN_THEIR_HEIR
+			# export_to_variable = { # All export to variable will happen first. Then the other effects and triggers will be executed/evaluated in order
+				# variable_name = my_age
+				# value = trigger_value:ruler_age
+			# }
+			# export_to_variable = {
+				# variable_name = their_age
+				# value = trigger_value:heir_age
+				# who = FROM
+			# }
+			# ruler_age = 0 # This is a normal trigger.
+			# FROM = {
+				# heir_age = 0 # This is a normal trigger too.
+			# }
+			# check_variable = { # This trigger is only allowed inside a variable_arithmetic_trigger.
+				# which = my_age
+				# which = their_age
+			# }
+		# }
+		# religion = catholic
+	# }
+	# on_accept = {
+		# add_trust = {
+			# who = FROM
+			# value = 20
+			# mutual = yes
+		# }
+		# create_subject = {
+			# subject_type = dummy
+			# subject = FROM
+		# }
+	# }
+	# on_decline =
+	# {
+		# add_trust = {
+			# who = FROM
+			# value = -100
+			# mutual = no
+		# }
+	# }
+
+	# ai_acceptance = { # This works similarly to variable_arithmetic_trigger, but does not support triggers generally. Instead, "limit" will be evaluated first and the rest ignored if it isn't passed.
+		# add_entry = {
+			# name = TRUST
+			# limit = { religion = catholic }
+			# export_to_variable = {
+				# variable_name = ai_value # Each "add_entry" must create one variable called "ai_value", the value of which will be extracted after executing all effects
+				# value = trust
+				# who = FROM
+				# with = THIS
+			# }
+			# subtract_variable = { which = ai_value value = 50 }
+			# multiply_variable = { which = ai_value value = 2 }
+		# }
+		# add_entry = {
+			# name = TRUST
+			# limit = { NOT = { religion = catholic } }
+			# export_to_variable = {
+				# variable_name = ai_value
+				# value = trust
+				# who = FROM
+				# with = THIS
+			# }
+			# export_to_variable = {
+				# variable_name = is_defender
+				# value = trigger_value:is_defender_of_faith # This sets is_defender to either 0.0 or 1.0
+			# }
+			# multiply_variable = {
+				# which = is_defender
+				# value = 10
+			# }
+			# change_variable = {
+				# which = ai_value
+				# which = is_defender # This adds 10 to ai_value if you are defender of faith
+			# }
+			# subtract_variable = { which = ai_value value = 50 }
+		# }
+		# add_entry = {
+			# name = OPINION
+			# export_to_variable = {
+				# variable_name = ai_value
+				# value = opinion
+				# who = FROM
+				# with = THIS
+			# }
+			# divide_variable = { which = ai_value value = 4 }
+		# }
+	# }
+
+	# ai_will_do = { # this is a trigger
+		# has_opinion_modifier = {
+			# modifier = insulted
+			# who = FROM
+		# }
+	# }
+# }
+
+# cancel_dummy =  {
+	# category = influence
+	# require_acceptance = no
+	# is_visible = {
+		# overlord_of = FROM
+		# FROM = {
+			# is_subject_of_type = dummy
+		# }
+	# }
+	# is_allowed = {
+		# reverse_has_opinion_modifier = {
+			# modifier = insulted
+			# who = FROM
+		# }
+	# }
+	# on_accept = {
+		# add_trust = {
+			# who = FROM
+			# value = -100
+			# mutual = yes
+		# }
+		# FROM = {
+			# grant_independence = yes
+		# }
+	# }
+	# ai_will_do = {
+		# always = no
+	# }
+# }
+
+cancel_nhs_protectorate =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			is_subject_of_type = nhs_protectorate
+		}
+	}
+	is_allowed = {
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+	}
+	on_accept = {
+		add_trust = {
+			who = FROM
+			value = -50
+			mutual = yes
+		}
+		FROM = {
+			grant_independence = yes
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+cancel_nhs_associate =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			is_subject_of_type = nhs_imperial_associate
+		}
+	}
+	is_allowed = {
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+	}
+	on_accept = {
+		FROM = {
+			grant_independence = yes
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_limit_expansion_CTM_on =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		nhs_is_elysia = yes
+		overlord_of = FROM
+		FROM = {
+			OR = {
+				tag = CM1
+				tag = KYK
+			}
+			NOT = { has_country_flag = nhs_restricted_expansion_s }
+		}
+	}
+	is_allowed = {
+		FROM = {
+			num_of_colonists = 1
+		}
+	}
+	on_accept = {
+		FROM = {
+			set_country_flag = nhs_restricted_expansion_s
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_limit_expansion_off =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		nhs_is_elysia = yes
+		overlord_of = FROM
+		FROM = {
+			OR = {
+				tag = SHQ
+				tag = CM1
+				tag = KYK
+			}
+			has_country_flag = nhs_restricted_expansion_s
+		}
+	}
+	is_allowed = {
+		always = yes
+	}
+	on_accept = {
+		FROM = {
+			clr_country_flag = nhs_restricted_expansion_s
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_limit_expansion_SHQ_on =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		nhs_is_elysia = yes
+		overlord_of = FROM
+		FROM = {
+			tag = SHQ
+			NOT = { has_country_flag = nhs_restricted_expansion_s }
+		}
+	}
+	is_allowed = {
+		FROM = {
+			num_of_colonists = 1
+		}
+	}
+	on_accept = {
+		FROM = {
+			set_country_flag = nhs_restricted_expansion_s
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_send_missionaries =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		ai = no
+		OR = {
+			capital_scope = {
+				continent = north_america
+			}
+			capital_scope = {
+				continent = south_america
+			}
+		}
+		OR = {
+			nhs_is_elysia = yes
+			num_of_cities = 20
+		}
+		religion = elysian_orthodoxy
+		FROM = {
+			religion = totemism
+			OR = {
+				capital_scope = {
+					continent = north_america
+				}
+				capital_scope = {
+					continent = south_america
+				}
+			}
+		}
+		
+	}
+	is_allowed = {
+		custom_trigger_tooltip = {
+			NOT = { has_country_modifier = nhs2_missionaries_cooldown }
+			tooltip = missionary_cooldown_tooltip
+		}
+		NOT = { war_with = FROM }
+		religion = elysian_orthodoxy
+		FROM = {
+			religion = totemism
+			has_opinion = { who = ROOT value = 0 }
+			NOT = { border_distance = { who = ROOT distance = 200 } }
+			custom_trigger_tooltip = {
+				tooltip = nhs_not_recently_send_missionaries_to_tt
+				NOT = { has_country_modifier = nhs2_missionaries_cooldown_target }
+			}
+		}
+	}
+	on_accept = {
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						adm = 3
+						dip = 3
+						patriarch_authority = 0.75
+					}
+				}
+			}
+			add_dip_power = -25
+		}
+		add_country_modifier = {
+			name = nhs2_missionaries_cooldown
+			duration = 1825
+			hidden = yes
+		}
+		FROM = {
+			country_event = { id = nhs2_religionevents.10 }
+			add_country_modifier = {
+				name = nhs2_missionaries_cooldown_target
+				duration = 3650
+				hidden = yes
+			}
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_send_preachers =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		ai = no
+		OR = {
+			capital_scope = {
+				continent = north_america
+			}
+			capital_scope = {
+				continent = south_america
+			}
+		}
+		OR = {
+			tag = MSN
+			num_of_cities = 20
+		}
+		religion = aztlan_worship
+		FROM = {
+			OR = {
+				religion = totemism
+				religion = nahuatl
+				religion = mesoamerican_religion
+			}
+			OR = {
+				capital_scope = {
+					continent = north_america
+				}
+				capital_scope = {
+					continent = south_america
+				}
+			}
+		}
+		
+	}
+	is_allowed = {
+		custom_trigger_tooltip = {
+			NOT = { has_country_modifier = nhs2_missionaries_cooldown }
+			tooltip = missionary_cooldown_tooltip
+		}
+		if = {
+			limit = {
+				tag = MSN
+				has_reform = spartan_kingdom
+				NOT = { has_global_flag = msg_reforms_done }
+			}
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				has_reform = msg_aztlan_priesthood_yes
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = msg_has_reformed_priesthood_tt
+					has_global_flag = msg_priesthood_done
+				}
+			}
+		}
+		NOT = { war_with = FROM }
+		FROM = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = nhs_is_totemist_tt
+					religion = totemism
+				}
+				custom_trigger_tooltip = {
+					tooltip = nhs_is_nahuatl_tt
+					religion = nahuatl
+				}
+				custom_trigger_tooltip = {
+					tooltip = nhs_is_mesoamerican_religion_tt
+					religion = mesoamerican_religion
+				}
+			}
+			has_opinion = { who = ROOT value = 0 }
+			NOT = { border_distance = { who = ROOT distance = 200 } }
+			custom_trigger_tooltip = {
+				tooltip = nhs_not_recently_send_missionaries_to_tt
+				NOT = { has_country_modifier = nhs2_missionaries_cooldown_target }
+			}
+		}
+	}
+	on_accept = {
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						adm = 4
+						dip = 4
+					}
+				}
+			}
+			add_dip_power = -50
+		}
+		add_country_modifier = {
+			name = nhs2_missionaries_cooldown
+			duration = 1825
+			hidden = yes
+		}
+		FROM = {
+			country_event = { id = msg_religionevents.60 }
+			add_country_modifier = {
+				name = nhs2_missionaries_cooldown_target
+				duration = 3650
+				hidden = yes
+			}
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+# nhs_send_heralds =  {
+	# category = influence
+	# require_acceptance = no
+	# is_visible = {
+		# NOT = { has_dlc = "The Cossacks" }
+		# ai = no
+		# OR = {
+			# capital_scope = {
+				# continent = north_america
+			# }
+			# capital_scope = {
+				# continent = south_america
+			# }
+		# }
+		# OR = {
+			# nhs_is_elysia = yes
+			# num_of_cities = 20
+		# }
+		# religion = pantheon_worship
+		# has_global_flag = nhs_heralds_enabled
+		# has_country_flag = nhs_heralds_enabledc
+		# FROM = {
+			# religion = totemism
+			# OR = {
+				# capital_scope = {
+					# continent = north_america
+				# }
+				# capital_scope = {
+					# continent = south_america
+				# }
+			# }
+		# }
+		
+	# }
+	# is_allowed = {
+		# religion = pantheon_worship
+		# #custom_trigger_tooltip = {
+		# #	NOT = { has_country_modifier = nhs2_missionaries_cooldown }
+		# #	tooltip = missionary_cooldown_tooltip
+		# #}
+		# has_heralds = yes
+		# has_no_decision = yes
+		# NOT = { war_with = FROM }
+		# FROM = {
+			# custom_trigger_tooltip = {
+				# tooltip = nhs_not_recently_send_missionaries_to_tt
+				# NOT = { has_country_modifier = nhs2_missionaries_cooldown_target }
+			# }
+			# religion = totemism
+			# NOT = { border_distance = { who = ROOT distance = 200 } }
+		# }
+	# }
+	# on_accept = {
+		# if = {
+			# limit = {
+				# NOT = {
+					# OR = {
+						# adm = 3
+						# dip = 3
+						# has_personal_deity = Zeus
+					# }
+				# }
+			# }
+			# add_dip_power = -25
+		# }
+		# add_country_modifier = {
+			# name = nhs2_missionaries_cooldown
+			# duration = 1825
+			# hidden = yes
+		# }
+		# FROM = {
+			# country_event = { id = nhs2_religionevents.6 }
+			# add_country_modifier = {
+				# name = nhs2_missionaries_cooldown_target
+				# duration = 1825
+				# hidden = yes
+			# }
+		# }
+		# #custom_tooltip = nhs_herald_missionary_tooltip
+		# #set_country_flag = nhs_herals_open_decision
+		# hidden_effect = {
+			# #add_country_modifier = {
+			# #	name = nhs2_missionaries_cooldown
+			# #	duration = 1800
+			# #	hidden = yes
+			# #}
+			# nhs_set_herald_7300 = yes
+		# }
+	# }
+	# ai_will_do = {
+		# always = no
+	# }
+# }
+
+nhs_send_heralds_with_dlc =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		has_estate = estate_nhs_church_hellenic
+		ai = no
+		OR = {
+			capital_scope = {
+				continent = north_america
+			}
+			capital_scope = {
+				continent = south_america
+			}
+		}
+		OR = {
+			nhs_is_elysia = yes
+			num_of_cities = 20
+		}
+		religion = pantheon_worship
+		has_global_flag = nhs_heralds_enabled
+		has_country_flag = nhs_heralds_enabledc
+		FROM = {
+			religion = totemism
+			OR = {
+				capital_scope = {
+					continent = north_america
+				}
+				capital_scope = {
+					continent = south_america
+				}
+			}
+		}
+		
+	}
+	is_allowed = {
+		#custom_trigger_tooltip = {
+		#	NOT = { has_country_modifier = nhs2_missionaries_cooldown }
+		#	tooltip = missionary_cooldown_tooltip
+		#}
+		if = {
+			limit = {
+				OR = {
+					tag = MSG
+					tag = MSN
+				}
+				NOT = { has_global_flag = msg_heralds_done }
+			}
+			custom_trigger_tooltip = {
+				tooltip = msg_no_heralds_tt
+				always = no
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = nhs_too_many_herads_recently_tt
+			OR = {
+				NOT = {
+					has_estate_influence_modifier = {
+						estate = estate_nhs_church_hellenic
+						modifier = NHS_HERALD_ACTIVE_MISSIONARY
+					}
+				}
+				NOT = {
+					has_estate_influence_modifier = {
+						estate = estate_nhs_church_hellenic
+						modifier = NHS_HERALD_ACTIVE_MISSIONARY_2
+					}
+				}
+				NOT = {
+					has_estate_influence_modifier = {
+						estate = estate_nhs_church_hellenic
+						modifier = NHS_HERALD_ACTIVE_MISSIONARY_3
+					}
+				}
+			}
+		}
+		NOT = { war_with = FROM }
+		religion = pantheon_worship
+		FROM = {
+			religion = totemism
+			has_opinion = { who = ROOT value = 0 }
+			NOT = { border_distance = { who = ROOT distance = 200 } }
+			custom_trigger_tooltip = {
+				tooltip = nhs_not_recently_send_missionaries_to_tt
+				NOT = { has_country_modifier = nhs2_missionaries_cooldown_target }
+			}
+		}
+	}
+	on_accept = {
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						adm = 3
+						dip = 3
+						has_personal_deity = Zeus
+					}
+				}
+			}
+			add_dip_power = -25
+		}
+		#add_country_modifier = {
+		#	name = nhs2_missionaries_cooldown
+		#	duration = 1825
+		#	hidden = yes
+		#}
+		if = {
+			limit = {
+				NOT = {
+					has_estate_influence_modifier = {
+						estate = estate_nhs_church_hellenic
+						modifier = NHS_HERALD_ACTIVE_MISSIONARY
+					}
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_nhs_church_hellenic
+				desc = NHS_HERALD_ACTIVE_MISSIONARY
+				influence = 5
+				duration = 3650
+			}
+		}
+		else_if = {
+			limit = {
+					has_estate_influence_modifier = {
+						estate = estate_nhs_church_hellenic
+						modifier = NHS_HERALD_ACTIVE_MISSIONARY
+					}
+				NOT = {
+					has_estate_influence_modifier = {
+						estate = estate_nhs_church_hellenic
+						modifier = NHS_HERALD_ACTIVE_MISSIONARY_2
+					}
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_nhs_church_hellenic
+				desc = NHS_HERALD_ACTIVE_MISSIONARY_2
+				influence = 5
+				duration = 3650
+			}
+		}
+		else_if = {
+			limit = {
+				has_estate_influence_modifier = {
+						estate = estate_nhs_church_hellenic
+						modifier = NHS_HERALD_ACTIVE_MISSIONARY
+					}
+				has_estate_influence_modifier = {
+						estate = estate_nhs_church_hellenic
+						modifier = NHS_HERALD_ACTIVE_MISSIONARY_2
+					}
+				NOT = {
+					has_estate_influence_modifier = {
+						estate = estate_nhs_church_hellenic
+						modifier = NHS_HERALD_ACTIVE_MISSIONARY_3
+					}
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_nhs_church_hellenic
+				desc = NHS_HERALD_ACTIVE_MISSIONARY_3
+				influence = 5
+				duration = 3650
+			}
+		}
+		FROM = {
+			country_event = { id = nhs2_religionevents.6 }
+			add_country_modifier = {
+				name = nhs2_missionaries_cooldown_target
+				duration = 3650
+				hidden = yes
+			}
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_annex_exarchate =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			is_subject_of_type = elysian_subject
+			NOT = { tag = ELG }
+			NOT = { tag = CM1 }
+			NOT = { tag = KYK }
+		}
+	}
+	is_allowed = {
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+		adm_power = 150
+		dip_power = 150
+	}
+	on_accept = {
+		inherit = FROM
+		add_adm_power = -150
+		add_dip_power = -150
+		every_province = {
+			limit = {
+				is_core = FROM
+			}
+			remove_core = FROM
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_annex_constantinia =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			tag = ELG
+			is_subject_of_type = elysian_subject
+		}
+	}
+	is_allowed = {
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+		adm_tech = 18
+		adm_power = 200
+		dip_power = 200
+	}
+	on_accept = {
+		set_country_flag = nhs_no_greek_nation
+		inherit = FROM
+		add_adm_power = -200
+		add_dip_power = -200
+		every_owned_province = {
+			limit = {
+				is_core = ELG
+			}
+			add_unrest = 15
+			add_local_autonomy = 30
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_annex_creta =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			OR = {
+				tag = CM1
+				tag = KYK
+			}
+			OR = {
+				is_subject_of_type = elysian_subject
+				is_subject_of_type = elysian_subject_non_exarch
+			}
+		}
+	}
+	is_allowed = {
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+		adm_tech = 18
+		adm_power = 200
+		dip_power = 200
+	}
+	on_accept = {
+		inherit = FROM
+		add_adm_power = -200
+		add_dip_power = -200
+		every_owned_province = {
+			limit = {
+				OR = {
+					is_core = CM1
+					is_core = KYK
+				}
+			}
+			add_unrest = 15
+			add_local_autonomy = 30
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_annex_colony =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		OR = {
+			technology_group = exiled_greek
+			technology_group = modern_greek
+			technology_group = exiled_spartan
+			technology_group = modern_spartan
+			technology_group = hellenised_american
+			technology_group = viking
+			technology_group = modern_vinlandic
+		}
+		
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = colony
+		}
+		capital_scope = {
+			OR = {
+				continent = north_america
+				continent = south_america
+			}
+		}
+		FROM = {
+			any_owned_province = {
+				any_neighbor_province = {
+					is_in_capital_area = yes
+					owned_by = ROOT
+				}
+			}
+		}
+	}
+	is_allowed = {
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+			any_neighbor_country = {
+				tag = ROOT
+			}
+		}
+		adm_power = 150
+		dip_power = 150
+	}
+	on_accept = {
+		inherit = FROM
+		add_adm_power = -150
+		add_dip_power = -150
+		every_province = {
+			limit = {
+				is_core = FROM
+			}
+			remove_core = FROM
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_carribean_to_kykladia = {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			tag = KYK
+			OR = {
+				is_subject_of_type = elysian_subject
+				is_subject_of_type = elysian_subject_non_exarch
+			}
+		}
+		any_owned_province = {
+			region = carribeans_region
+		}
+	}
+	is_allowed = {
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+	}
+	on_accept = {
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					region = carribeans_region
+				}
+				cede_province = FROM
+				if = {
+					limit = {
+						is_core = ROOT
+					}
+					add_core = FROM
+					#hidden_effect = {
+					#	remove_core = ROOT
+					#}
+				}
+			}
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_grant_all_local_land = {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			is_subject_of_type = elysian_subject
+			NOT = { tag = ELG }
+			NOT = { tag = CM1 }
+			NOT = { tag = KYK }
+		}
+		any_owned_province = {
+			NOT = { has_province_flag = nhs_exarch_province_exemption }
+			OR = {
+				AND = {
+					FROM = { tag = EEA }
+					region = caucasia_region
+				}
+				AND = {
+					FROM = { tag = EEB }
+					region = british_isles_region
+				}
+				AND = {
+					FROM = { tag = EEC }
+					region = scandinavia_region
+				}
+				AND = {
+					FROM = { tag = EED }
+					region = carpathia_region
+				}
+				AND = {
+					FROM = { tag = EEE }
+					region = egypt_region
+				}
+				AND = {
+					FROM = { tag = EEF }
+					region = maghreb_region
+				}
+				AND = {
+					FROM = { tag = EEG }
+					region = france_region
+				}
+				AND = {
+					FROM = { tag = EEH }
+					region = iberia_region
+				}
+				AND = {
+					FROM = { tag = EEI }
+					region = south_german_region
+				}
+				AND = {
+					FROM = { tag = EEJ }
+					region = baltic_region
+				}
+				AND = {
+					FROM = { tag = EEL }
+					OR = {
+						region = russia_region
+						region = ural_region
+					}
+				}
+				AND = {
+					FROM = { tag = EEM }
+					region = ruthenia_region
+				}
+				AND = {
+					FROM = { tag = EEO }
+					region = mashriq_region
+				}
+				AND = {
+					FROM = { tag = EER }
+					region = italy_region
+				}
+				AND = {
+					FROM = { tag = EES }
+					region = crimea_region
+				}
+				AND = {
+					FROM = { tag = EET }
+					region = low_countries_region
+				}
+				AND = {
+					FROM = { tag = EEU }
+					region = north_german_region
+					NOT = { area = bohemia_area }
+					NOT = { area = erzgebirge_area }
+				}
+				AND = {
+					FROM = { tag = EEV }
+					OR = {
+						region = poland_region
+						area = bohemia_area
+						area = erzgebirge_area
+					}
+				}
+				AND = {
+					FROM = { tag = EEQ }
+					region = arabia_region
+				}
+				AND = {
+					FROM = { tag = EEP }
+					OR = {
+						region = persia_region
+						region = khorasan_region
+					}
+				}
+			}
+		}
+	}
+	is_allowed = {
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+	}
+	on_accept = {
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					NOT = { has_province_flag = nhs_exarch_province_exemption }
+					OR = {
+						AND = {
+							FROM = { tag = EEA }
+							region = caucasia_region
+						}
+						AND = {
+							FROM = { tag = EEB }
+							region = british_isles_region
+						}
+						AND = {
+							FROM = { tag = EEC }
+							region = scandinavia_region
+						}
+						AND = {
+							FROM = { tag = EED }
+							region = carpathia_region
+						}
+						AND = {
+							FROM = { tag = EEE }
+							region = egypt_region
+						}
+						AND = {
+							FROM = { tag = EEF }
+							region = maghreb_region
+						}
+						AND = {
+							FROM = { tag = EEG }
+							region = france_region
+						}
+						AND = {
+							FROM = { tag = EEH }
+							region = iberia_region
+						}
+						AND = {
+							FROM = { tag = EEI }
+							region = south_german_region
+						}
+						AND = {
+							FROM = { tag = EEJ }
+							region = baltic_region
+						}
+						AND = {
+							FROM = { tag = EEL }
+							OR = {
+								region = russia_region
+								region = ural_region
+							}
+						}
+						AND = {
+							FROM = { tag = EEM }
+							region = ruthenia_region
+						}
+						AND = {
+							FROM = { tag = EEO }
+							region = mashriq_region
+						}
+						AND = {
+							FROM = { tag = EER }
+							region = italy_region
+						}
+						AND = {
+							FROM = { tag = EES }
+							region = crimea_region
+						}
+						AND = {
+							FROM = { tag = EET }
+							region = low_countries_region
+						}
+						AND = {
+							FROM = { tag = EEU }
+							region = north_german_region
+							NOT = { area = bohemia_area }
+							NOT = { area = erzgebirge_area }
+						}
+						AND = {
+							FROM = { tag = EEV }
+							OR = {
+								region = poland_region
+								area = bohemia_area
+								area = erzgebirge_area
+							}
+						}
+						AND = {
+							FROM = { tag = EEQ }
+							region = arabia_region
+						}
+						AND = {
+							FROM = { tag = EEP }
+							OR = {
+								region = persia_region
+								region = khorasan_region
+							}
+						}
+					}
+				}
+				cede_province = FROM
+				if = {
+					limit = {
+						is_core = ROOT
+					}
+					add_core = FROM
+					#hidden_effect = {
+					#	remove_core = ROOT
+					#}
+				}
+				if = {
+					limit = { culture_group = FROM }
+					add_nationalism = -10
+				}
+			}
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_vgd_grant_area = {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		nhs_is_elysia = yes
+		NOT = { has_country_flag = nhs_v_settled_on_malta }
+		overlord_of = FROM
+		FROM = {
+			tag = VGD
+		}
+		# FROM = {
+			# capital_scope = {
+				# any_neighbor_province = {
+					# area = PREV
+					# owned_by = ROOT
+				# }
+			# }
+		# }
+		any_owned_province = {
+			any_province = {
+				area = PREV
+				is_capital = yes
+				owned_by = FROM
+			}
+		}
+	}
+	is_allowed = {
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+	}
+	on_accept = {
+		set_country_flag = nhs_var_area
+		# FROM = {
+			# capital_scope = {
+				# every_neighbor_province = {
+					# limit = {
+						# area = PREV
+						# owned_by = ROOT
+					# }
+					# if = {
+						# limit = {
+							# is_core = ROOT
+						# }
+						# add_core = FROM
+					# }
+					# if = {
+						# limit = {
+							# culture_group = elysian_group
+						# }
+						# change_culture = varangian_n
+					# }
+					# cede_province = FROM
+				# }
+			# }
+		# }
+		every_owned_province = {
+			limit = {
+				any_province = {
+					area = PREV
+					is_capital = yes
+					owned_by = FROM
+				}
+			}
+			if = {
+				limit = {
+					is_core = ROOT
+				}
+				add_core = FROM
+			}
+			if = {
+				limit = {
+					culture_group = elysian_group
+				}
+				change_culture = varangian_n
+			}
+			cede_province = FROM
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+#nhs_change_setting = {
+#	category = influence
+#	require_acceptance = no
+#	is_visible = {
+#		overlord_of = FROM
+#		FROM = {
+#			is_subject_of_type = elysian_subject
+#		}
+#		NOT = { has_country_flag = nhs_changing_settings }
+#		always = no
+#	}
+#	is_allowed = {
+#		always = yes
+#	}
+#	on_accept = {
+#		hidden_effect = {
+#			FROM = { country_event = { id = nhs2_ely_marches.1 } }
+#			set_country_flag = nhs_changing_settings
+#		}
+#		tooltip = {
+#			country_event = { id = nhs2_ely_marches.2 }
+#		}
+#	}
+#	ai_will_do = {
+#		always = no
+#	}
+#}
+
+nhs_change_setting_all_land = {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			is_subject_of_type = elysian_subject
+			NOT = { tag = ELG }
+			NOT = { tag = CM1 }
+			NOT = { tag = KYK }
+			NOT = { has_country_flag = nhs_ely_march_all }
+		}
+	}
+	is_allowed = {
+		always = yes
+	}
+	on_accept = {
+		FROM = {
+			clr_country_flag = nhs_ely_march_territory
+			clr_country_flag = nhs_ely_march_no_core
+			clr_country_flag = nhs_ely_march_no
+			set_country_flag = nhs_ely_march_all
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_change_setting_territory = {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			is_subject_of_type = elysian_subject
+			NOT = { tag = ELG }
+			NOT = { tag = CM1 }
+			NOT = { tag = KYK }
+			NOT = { has_country_flag = nhs_ely_march_territory }
+		}
+	}
+	is_allowed = {
+		always = yes
+	}
+	on_accept = {
+		FROM = {
+			clr_country_flag = nhs_ely_march_all
+			clr_country_flag = nhs_ely_march_no_core
+			clr_country_flag = nhs_ely_march_no
+			set_country_flag = nhs_ely_march_territory
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_change_setting_no_core = {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			is_subject_of_type = elysian_subject
+			NOT = { tag = ELG }
+			NOT = { tag = CM1 }
+			NOT = { tag = KYK }
+			NOT = { has_country_flag = nhs_ely_march_no_core }
+		}
+	}
+	is_allowed = {
+		always = yes
+	}
+	on_accept = {
+		FROM = {
+			clr_country_flag = nhs_ely_march_all
+			clr_country_flag = nhs_ely_march_territory
+			clr_country_flag = nhs_ely_march_no
+			set_country_flag = nhs_ely_march_no_core
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_change_setting_no = {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			is_subject_of_type = elysian_subject
+			NOT = { tag = ELG }
+			NOT = { tag = CM1 }
+			NOT = { tag = KYK }
+			NOT = { has_country_flag = nhs_ely_march_no }
+		}
+	}
+	is_allowed = {
+		always = yes
+	}
+	on_accept = {
+		FROM = {
+			clr_country_flag = nhs_ely_march_all
+			clr_country_flag = nhs_ely_march_territory
+			clr_country_flag = nhs_ely_march_no_core
+			set_country_flag = nhs_ely_march_no 
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+nhs_fabricate_exarch_claim = {
+	category = covert
+	require_acceptance = no
+	is_visible = {
+		ROOT = {
+			nhs_is_elysia_late = yes
+		}
+		FROM = {
+			OR = {
+				any_owned_province = {
+					region = caucasia_region
+					any_neighbor_province = {
+						owned_by = EEA
+						EEA = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = british_isles_region
+					any_neighbor_province = {
+						owned_by = EEB
+						EEB = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = scandinavia_region
+					any_neighbor_province = {
+						owned_by = EEC
+						EEC = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = carpathia_region
+					any_neighbor_province = {
+						owned_by = EED
+						EED = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = egypt_region
+					NOT = { has_province_flag = nhs_exarch_province_exemption }
+					any_neighbor_province = {
+						owned_by = EEE
+						EEE = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = maghreb_region
+					any_neighbor_province = {
+						owned_by = EEF
+						EEF = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = france_region
+					any_neighbor_province = {
+						owned_by = EEG
+						EEG = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = iberia_region
+					NOT = { has_province_flag = nhs_exarch_province_exemption }
+					any_neighbor_province = {
+						owned_by = EEH
+						EEH = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = south_german_region
+					any_neighbor_province = {
+						owned_by = EEI
+						EEI = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = baltic_region
+					any_neighbor_province = {
+						owned_by = EEJ
+						EEJ = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					OR = {
+						region = russia_region
+						region = ural_region
+					}
+					any_neighbor_province = {
+						owned_by = EEL
+						EEL = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = ruthenia_region
+					any_neighbor_province = {
+						owned_by = EEM
+						EEM = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = mashriq_region
+					any_neighbor_province = {
+						owned_by = EEO
+						EEO = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = italy_region
+					any_neighbor_province = {
+						owned_by = EER
+						EER = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = crimea_region
+					any_neighbor_province = {
+						owned_by = EES
+						EES = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = low_countries_region
+					any_neighbor_province = {
+						owned_by = EET
+						EET = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					region = north_german_region
+					NOT = { area = bohemia_area }
+					NOT = { area = erzgebirge_area }
+					any_neighbor_province = {
+						owned_by = EEU
+						EEU = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+				any_owned_province = {
+					OR = {
+						region = poland_region
+						area = bohemia_area
+						area = erzgebirge_area
+					}
+					any_neighbor_province = {
+						owned_by = EEV
+						EEV = {
+							is_subject_of = ROOT
+							is_subject_of_type = elysian_subject
+						}
+					}
+				}
+			}
+		}
+		FROM = {
+			NOT = { is_subject_of = ROOT }
+		}
+		FROM = {
+			NOT = { war_with = ROOT }
+		}
+	}
+	is_allowed = {
+		has_spy_network_in = {
+			who = FROM
+			value = 20
+		}
+		custom_trigger_tooltip = {
+			tooltip = nhs_fabricate_exarch_claim_tt
+			FROM = {
+				OR = {
+					any_owned_province = {
+						region = caucasia_region
+						NOT = { is_claim = EEA }
+						any_neighbor_province = {
+							owned_by = EEA
+							EEA = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = british_isles_region
+						NOT = { is_claim = EEB }
+						any_neighbor_province = {
+							owned_by = EEB
+							EEB = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = scandinavia_region
+						NOT = { is_claim = EEC }
+						any_neighbor_province = {
+							owned_by = EEC
+							EEC = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = carpathia_region
+						NOT = { is_claim = EED }
+						any_neighbor_province = {
+							owned_by = EED
+							EED = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = egypt_region
+						NOT = { is_claim = EEE }
+						any_neighbor_province = {
+							owned_by = EEE
+							EEE = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = maghreb_region
+						NOT = { is_claim = EEF }
+						any_neighbor_province = {
+							owned_by = EEF
+							EEF = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = france_region
+						NOT = { is_claim = EEG }
+						any_neighbor_province = {
+							owned_by = EEG
+							EEG = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = iberia_region
+						NOT = { is_claim = EEH }
+						any_neighbor_province = {
+							owned_by = EEH
+							EEH = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = south_german_region
+						NOT = { is_claim = EEI }
+						any_neighbor_province = {
+							owned_by = EEI
+							EEI = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = baltic_region
+						NOT = { is_claim = EEJ }
+						any_neighbor_province = {
+							owned_by = EEJ
+							EEJ = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						OR = {
+							region = russia_region
+							region = ural_region
+						}
+						NOT = { is_claim = EEL }
+						any_neighbor_province = {
+							owned_by = EEL
+							EEL = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = ruthenia_region
+						NOT = { is_claim = EEM }
+						any_neighbor_province = {
+							owned_by = EEM
+							EEM = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = mashriq_region
+						NOT = { is_claim = EEO }
+						any_neighbor_province = {
+							owned_by = EEO
+							EEO = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = italy_region
+						NOT = { is_claim = EER }
+						any_neighbor_province = {
+							owned_by = EER
+							EER = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = crimea_region
+						NOT = { is_claim = EES }
+						any_neighbor_province = {
+							owned_by = EES
+							EES = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = low_countries_region
+						NOT = { is_claim = EET }
+						any_neighbor_province = {
+							owned_by = EET
+							EET = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						region = north_german_region
+						NOT = { area = bohemia_area }
+						NOT = { area = erzgebirge_area }
+						NOT = { is_claim = EEU }
+						any_neighbor_province = {
+							owned_by = EEU
+							EEU = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					any_owned_province = {
+						OR = {
+							region = poland_region
+							area = bohemia_area
+							area = erzgebirge_area
+						}
+						NOT = { is_claim = EEV }
+						any_neighbor_province = {
+							owned_by = EEV
+							EEV = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	on_accept = {
+		add_spy_network_in = {
+			who = FROM
+			value = -20
+		}
+		FROM = {
+			if = {
+				limit = {
+					any_owned_province = {
+						region = caucasia_region
+						any_neighbor_province = {
+							owned_by = EEA
+							EEA = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = caucasia_region
+						any_neighbor_province = {
+							owned_by = EEA
+							EEA = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEA
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = british_isles_region
+						any_neighbor_province = {
+							owned_by = EEB
+							EEB = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = british_isles_region
+						any_neighbor_province = {
+							owned_by = EEB
+							EEB = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEB
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = scandinavia_region
+						any_neighbor_province = {
+							owned_by = EEC
+							EEC = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = scandinavia_region
+						any_neighbor_province = {
+							owned_by = EEC
+							EEC = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEC
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = carpathia_region
+						any_neighbor_province = {
+							owned_by = EED
+							EED = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = carpathia_region
+						any_neighbor_province = {
+							owned_by = EED
+							EED = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EED
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = egypt_region
+						any_neighbor_province = {
+							owned_by = EEE
+							EEE = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = egypt_region
+						any_neighbor_province = {
+							owned_by = EEE
+							EEE = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEE
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = maghreb_region
+						any_neighbor_province = {
+							owned_by = EEF
+							EEF = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = maghreb_region
+						any_neighbor_province = {
+							owned_by = EEF
+							EEF = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEF
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = france_region
+						any_neighbor_province = {
+							owned_by = EEG
+							EEG = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = france_region
+						any_neighbor_province = {
+							owned_by = EEG
+							EEG = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEG
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = iberia_region
+						any_neighbor_province = {
+							owned_by = EEH
+							EEH = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = iberia_region
+						any_neighbor_province = {
+							owned_by = EEH
+							EEH = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEH
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = south_german_region
+						any_neighbor_province = {
+							owned_by = EEI
+							EEI = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = south_german_region
+						any_neighbor_province = {
+							owned_by = EEI
+							EEI = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEI
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = baltic_region
+						any_neighbor_province = {
+							owned_by = EEJ
+							EEJ = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = baltic_region
+						any_neighbor_province = {
+							owned_by = EEJ
+							EEJ = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEJ
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							region = russia_region
+							region = ural_region
+						}
+						any_neighbor_province = {
+							owned_by = EEL
+							EEL = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						OR = {
+							region = russia_region
+							region = ural_region
+						}
+						any_neighbor_province = {
+							owned_by = EEL
+							EEL = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEL
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = ruthenia_region
+						any_neighbor_province = {
+							owned_by = EEM
+							EEM = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = ruthenia_region
+						any_neighbor_province = {
+							owned_by = EEM
+							EEM = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEM
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = mashriq_region
+						any_neighbor_province = {
+							owned_by = EEO
+							EEO = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = mashriq_region
+						any_neighbor_province = {
+							owned_by = EEO
+							EEO = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEO
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = italy_region
+						any_neighbor_province = {
+							owned_by = EER
+							EER = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = italy_region
+						any_neighbor_province = {
+							owned_by = EER
+							EER = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EER
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = crimea_region
+						any_neighbor_province = {
+							owned_by = EES
+							EES = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = crimea_region
+						any_neighbor_province = {
+							owned_by = EES
+							EES = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EES
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = low_countries_region
+						any_neighbor_province = {
+							owned_by = EET
+							EET = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = low_countries_region
+						any_neighbor_province = {
+							owned_by = EET
+							EET = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EET
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						region = north_german_region
+						NOT = { area = bohemia_area }
+						NOT = { area = erzgebirge_area }
+						any_neighbor_province = {
+							owned_by = EEU
+							EEU = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						region = north_german_region
+						NOT = { area = bohemia_area }
+						NOT = { area = erzgebirge_area }
+						any_neighbor_province = {
+							owned_by = EEU
+							EEU = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEU
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							region = poland_region
+							area = bohemia_area
+							area = erzgebirge_area
+						}
+						any_neighbor_province = {
+							owned_by = EEV
+							EEV = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						OR = {
+							region = poland_region
+							area = bohemia_area
+							area = erzgebirge_area
+						}
+						any_neighbor_province = {
+							owned_by = EEV
+							EEV = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+					}
+					add_claim = EEV
+				}
+			}
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}

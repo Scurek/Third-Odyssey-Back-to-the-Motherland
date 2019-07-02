@@ -1,0 +1,2197 @@
+namespace = msg_religionevents
+
+#Oracle found!
+country_event = {
+	id = msg_religionevents.0
+	title = msg_religionevents.0.t
+	desc = msg_religionevents.0.d
+	picture = Oracle_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		OR = {
+			tag = MSN
+			tag = MSG
+		}
+		religion_group = pagan
+		OR = {
+			had_country_flag = { flag = nhs_msg_land1 days = 3650 }
+			AND = {
+				had_country_flag = { flag = nhs_msg_land1 days = 1825 }
+				has_global_flag = nhs_started_at_bookmark
+			}
+		}
+	}
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 0.1
+			has_global_flag = nhs_started_at_bookmark
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = nhs2_oracle_cooldown
+				duration = 3650
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = msg_religionevents.0.a
+		add_country_modifier = {
+			name = "msg_oracle_before"
+			duration = -1
+		}
+	}
+}
+#Oracle envisions the rise of the great serpent
+country_event = {
+	id = msg_religionevents.1
+	title = msg_religionevents.1.t
+	desc = msg_religionevents.1.d
+	picture = Oracle_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		OR = {
+			tag = MSN
+			tag = MSG
+		}
+		religion_group = pagan
+		has_country_modifier = msg_oracle_before
+		has_country_modifier = nhs_high_priests
+		OR = {
+			had_country_flag = { flag = nhs_msg_land1 days = 7300 }
+			AND = {
+				had_country_flag = { flag = nhs_msg_land1 days = 5475 }
+				has_global_flag = nhs_started_at_bookmark
+			}
+		}
+		NOT = { has_country_flag = aztlan_reformation }
+		NOT = { has_global_flag = msg_post_reformation }
+	}
+	mean_time_to_happen = {
+		months = 5 
+	}
+	option = {
+		name = msg_religionevents.1.a
+		if = {
+			limit = {
+				OR = {
+					NOT = {	has_country_modifier = nhs_expanded_pantheon }
+					NOT = {	has_country_modifier = nhs_consolidated_pantheon }
+				}	
+			}
+			add_country_modifier = {
+				name = nhs_consolidated_pantheon
+				duration = -1
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_owner_religion = no
+			}
+			add_unrest = 5
+		}
+	}
+	option = {
+		name = msg_religionevents.1.b
+		if = {
+			limit = {
+				OR = {
+					NOT = {	has_country_modifier = nhs_expanded_pantheon }
+					NOT = {	has_country_modifier = nhs_consolidated_pantheon }
+				}	
+			}
+			add_country_modifier = {
+				name = nhs_expanded_pantheon
+				duration = -1
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_owner_religion = yes
+			}
+			add_unrest = 5
+		}
+	}
+	option = {
+		name = msg_religionevents.1.c
+		add_prestige = 50
+		add_stability = -1
+	}
+	
+}
+
+#Cities start to embrace the Aztlan religion 
+province_event = {
+	id = msg_religionevents.2
+	title = msg_religionevents.2.t
+	desc = msg_religionevents.2.d
+	picture = STREET_SPEECH_eventPicture
+	
+
+	fire_only_once = yes
+	
+	trigger = {
+		owned_by = MSN
+		MSN = {
+			religion_group = pagan
+		}
+		owner = { 
+			OR = {
+				had_country_flag = { flag = nhs_msg_land1 days = 18250 }
+				AND = {
+					had_country_flag = { flag = nhs_msg_land1 days = 16425 }
+					has_global_flag = nhs_started_at_bookmark
+				}
+				AND = {
+					has_country_flag = nhs_msg_land3
+					is_year = 1520
+				}
+				is_year = 1540
+			}
+		}
+		religion_group = pagan
+		OR = {
+			area = gran_chichimeca_area
+			area = jalisco_area
+			area = oaxaca_area
+			area = guerrero_area
+			area = michoacan_area
+			area = mexico_area
+			area = eastern_mexico_area
+			region = central_america_region
+		}
+		NOT = {
+			is_religion_enabled = aztlan_worship
+			province_id = 842
+			province_id = 846
+			province_id = 848
+			province_id = 852
+		}
+		OR = {
+			AND = {
+				religion = pantheon_worship
+				any_neighbor_province = {
+					OR = {
+						religion = mesoamerican_religion
+						religion = nahuatl
+					}
+				}
+			}
+			AND = {
+				OR = {
+						religion = mesoamerican_religion
+						religion = nahuatl
+					}
+				any_neighbor_province = {
+					religion = pantheon_worship
+				}
+			}
+			owner = {
+				NOT = {
+					any_owned_province = {
+						NOT = { religion = ROOT }
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 5 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 6 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 7 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_allows_polygamy }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_high_priests }
+		}
+		modifier = {
+			factor = 1.5
+			OR = { 
+				owner = { has_country_modifier = nhs_ares_worship }
+				owner = { has_country_modifier = nhs_poseidon_worship }
+				}
+		}
+		modifier = {
+			factor = 0.8
+			owner = { has_idea = humanist_tolerance }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { NOT = { nhs_ely_has_opinion_X = { MNENJE = -50 } } }
+		}
+		modifier = {
+			factor = 0.85
+			owner = { NOT = { nhs_ely_has_opinion_X = { MNENJE = -100 } } }
+		}
+		modifier = {
+			factor = 0.75
+			owner = { NOT = { nhs_ely_has_opinion_X = { MNENJE = -150 } } }
+		}	
+		modifier = {
+			factor = 0.5
+			owner = { num_of_revolts = 1 }
+		}
+		modifier = {
+			factor = 0.5
+			OR = {
+				AND = {
+					religion = pantheon_worship
+					any_neighbor_province = {
+						OR = {
+							religion = mesoamerican_religion
+							religion = nahuatl
+						}
+					}
+				}
+				AND = {
+					OR = {
+							religion = mesoamerican_religion
+							religion = nahuatl
+						}
+					any_neighbor_province = {
+						religion = pantheon_worship
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = aztlan_reformation
+	}
+	
+	option = {
+		name = msg_religionevents.2.a
+		enable_religion = aztlan_worship
+		change_religion = aztlan_worship
+		add_permanent_province_modifier = {
+			name = religious_center
+			duration = -1
+		}
+		add_permanent_province_modifier = {
+			name = religious_zeal_at_conv
+			duration = 9000
+		}
+		owner = {
+			remove_country_modifier = msg_oracle_before
+			swap_non_generic_missions = yes
+		}
+	}
+}
+
+#Tenochtitlan converts to Aztlan
+province_event = {
+	id = msg_religionevents.3
+	title = msg_religionevents.3.t
+	desc = msg_religionevents.3.d
+	picture = STREET_SPEECH_eventPicture
+	
+	fire_only_once = yes
+
+	
+	trigger = {
+		province_id = 852
+		NOT = { religion = aztlan_worship }
+		had_global_flag = {
+			flag = aztlan_reformation days = 60
+		}
+		OR = {
+				AND = {
+					religion = pantheon_worship
+					any_neighbor_province = {
+						OR = {
+							religion = mesoamerican_religion
+							religion = nahuatl
+							religion = aztlan_worship
+						}
+					}
+				}
+				AND = {
+					OR = {
+						religion = mesoamerican_religion
+						religion = nahuatl
+					}
+					any_neighbor_province = {
+						OR = {
+							religion = pantheon_worship
+							religion = aztlan_worship
+						}
+					}
+				}
+			}
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+		
+		modifier = {
+			factor = 0.9
+			OR = {
+				has_province_modifier = msg_teno_repaired
+				has_province_modifier = msg_teno_expanding
+				has_province_modifier = msg_floating_city
+			}
+		}
+		
+		modifier = {
+			factor = 0.25
+			any_neighbor_province = {
+				religion = aztlan_worship
+				has_province_modifier = religious_center
+			}
+		
+		}
+		
+		modifier = {
+			factor = 0.5
+			OR = {
+				AND = {
+					religion = pantheon_worship
+					any_neighbor_province = {
+						OR = {
+							religion = mesoamerican_religion
+							religion = nahuatl
+							religion = aztlan_worship
+						}
+					}
+				}
+				AND = {
+					OR = {
+						religion = mesoamerican_religion
+						religion = nahuatl
+					}
+					any_neighbor_province = {
+						OR = {
+							religion = pantheon_worship
+							religion = aztlan_worship
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 5 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 6 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 7 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_allows_polygamy }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_high_priests }
+		}
+		modifier = {
+			factor = 1.5
+			OR = { 
+				owner = { has_country_modifier = nhs_ares_worship }
+				owner = { has_country_modifier = nhs_poseidon_worship }
+				}
+		}
+		modifier = {
+			factor = 0.8
+			owner = { has_idea = humanist_tolerance }
+		}
+
+		modifier = {
+			factor = 0.5
+			owner = { num_of_revolts = 1 } 
+		}	
+	}
+	option = {
+		name = msg_religionevents.3.a
+
+		change_religion = aztlan_worship
+		add_permanent_province_modifier = {
+			name = religious_zeal_at_conv
+			duration = 9000
+		}
+	}	
+}
+#Tikal converts to Aztlan
+province_event = {
+	id = msg_religionevents.4
+	title = msg_religionevents.4.t
+	desc = msg_religionevents.4.d
+	picture = STREET_SPEECH_eventPicture
+	
+	fire_only_once = yes
+
+	
+	trigger = {
+		province_id = 846
+		NOT = { religion = aztlan_worship }
+		had_global_flag = {
+			flag = aztlan_reformation days = 60
+			}
+		OR = {
+				AND = {
+					religion = pantheon_worship
+					any_neighbor_province = {
+						OR = {
+							religion = mesoamerican_religion
+							religion = nahuatl
+							religion = aztlan_worship
+						}
+					}
+				}
+				AND = {
+					OR = {
+						religion = mesoamerican_religion
+						religion = nahuatl
+					}
+					any_neighbor_province = {
+						OR = {
+							religion = pantheon_worship
+							religion = aztlan_worship
+						}
+					}
+				}
+			}
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+		
+		modifier = {
+			factor = 0.9
+			OR = {
+				has_province_modifier = msg_tikal_start
+				has_province_modifier = msg_tikal_continue
+				has_province_modifier = msg_tikal_repaired
+			}
+		}
+		
+		modifier = {
+			factor = 0.25
+			any_neighbor_province = {
+				religion = aztlan_worship
+				has_province_modifier = religious_center
+			}
+		
+		}
+		
+		modifier = {
+			factor = 0.5
+			OR = {
+				AND = {
+					religion = pantheon_worship
+					any_neighbor_province = {
+						OR = {
+							religion = mesoamerican_religion
+							religion = nahuatl
+							religion = aztlan_worship
+						}
+					}
+				}
+				AND = {
+					OR = {
+						religion = mesoamerican_religion
+						religion = nahuatl
+					}
+					any_neighbor_province = {
+						OR = {
+							religion = pantheon_worship
+							religion = aztlan_worship
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 5 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 6 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 7 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_allows_polygamy }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_high_priests }
+		}
+		modifier = {
+			factor = 1.5
+			OR = { 
+				owner = { has_country_modifier = nhs_ares_worship }
+				owner = { has_country_modifier = nhs_poseidon_worship }
+				}
+		}
+		modifier = {
+			factor = 0.8
+			owner = { has_idea = humanist_tolerance }
+		}
+
+		modifier = {
+			factor = 0.5
+			owner = { num_of_revolts = 1 } 
+		}	
+	}
+	option = {
+		name = msg_religionevents.4.a
+
+		change_religion = aztlan_worship
+		add_permanent_province_modifier = {
+			name = religious_zeal_at_conv
+			duration = 9000
+		}
+	}	
+}
+#Chichen Itza converts to Aztlan if repaired
+province_event = {
+	id = msg_religionevents.5
+	title = msg_religionevents.5.t
+	desc = msg_religionevents.5.d
+	picture = STREET_SPEECH_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		province_id = 842
+		NOT = { religion = aztlan_worship }
+		had_global_flag = {
+			flag = aztlan_reformation days = 60
+		}
+		OR = {
+				AND = {
+					religion = pantheon_worship
+					any_neighbor_province = {
+						OR = {
+							religion = mesoamerican_religion
+							religion = nahuatl
+							religion = aztlan_worship
+						}
+					}
+				}
+				AND = {
+					OR = {
+						religion = mesoamerican_religion
+						religion = nahuatl
+					}
+					any_neighbor_province = {
+						OR = {
+							religion = pantheon_worship
+							religion = aztlan_worship
+						}
+					}
+				}
+			}
+	}
+	mean_time_to_happen = {
+		months = 36
+		
+		modifier = {
+			factor = 0.9
+			has_province_modifier =  msg_itza_reconstructed 
+		}
+		
+		modifier = {
+			factor = 0.25
+			any_neighbor_province = {
+				religion = aztlan_worship
+				has_province_modifier = religious_center
+			}
+		
+		}
+		
+		modifier = {
+			factor = 0.5
+			OR = {
+				AND = {
+					religion = pantheon_worship
+					any_neighbor_province = {
+						OR = {
+							religion = mesoamerican_religion
+							religion = nahuatl
+							religion = aztlan_worship
+						}
+					}
+				}
+				AND = {
+					OR = {
+						religion = mesoamerican_religion
+						religion = nahuatl
+					}
+					any_neighbor_province = {
+						OR = {
+							religion = pantheon_worship
+							religion = aztlan_worship
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 5 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 6 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 7 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_allows_polygamy }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_high_priests }
+		}
+		modifier = {
+			factor = 1.5
+			OR = { 
+				owner = { has_country_modifier = nhs_ares_worship }
+				owner = { has_country_modifier = nhs_poseidon_worship }
+				}
+		}
+		modifier = {
+			factor = 0.8
+			owner = { has_idea = humanist_tolerance }
+		}
+
+		modifier = {
+			factor = 0.5
+			owner = { num_of_revolts = 1 } 
+		}	
+	}
+	option = {
+		name = msg_religionevents.5.a
+
+		change_religion = aztlan_worship
+		add_permanent_province_modifier = {
+			name = religious_zeal_at_conv
+			duration = 9000
+		}
+	}	
+}
+#Mictlan Starts to Worship Mictlantecuhtli
+province_event = {
+	id = msg_religionevents.6
+	title = msg_religionevents.6.t
+	desc = msg_religionevents.6.d
+	picture = STREET_SPEECH_eventPicture
+	
+	fire_only_once = yes
+
+	
+	trigger = {
+		province_id = 848
+		NOT = { religion = aztlan_worship }
+		had_global_flag = {
+			flag = aztlan_reformation days = 60
+			}
+		OR = {
+				AND = {
+					religion = pantheon_worship
+					any_neighbor_province = {
+						OR = {
+							religion = mesoamerican_religion
+							religion = nahuatl
+							religion = aztlan_worship
+						}
+					}
+				}
+				AND = {
+					OR = {
+						religion = mesoamerican_religion
+						religion = nahuatl
+					}
+					any_neighbor_province = {
+						OR = {
+							religion = pantheon_worship
+							religion = aztlan_worship
+						}
+					}
+				}
+			}
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+	
+		modifier = {
+			factor = 0.9
+			has_province_modifier = msg_mictlan_city
+		}
+	
+		modifier = {
+			factor = 0.25
+			any_neighbor_province = {
+				religion = aztlan_worship
+				has_province_modifier = religious_center
+			}
+		
+		}
+		
+		modifier = {
+			factor = 0.5
+			OR = {
+				AND = {
+					religion = pantheon_worship
+					any_neighbor_province = {
+						OR = {
+							religion = mesoamerican_religion
+							religion = nahuatl
+							religion = aztlan_worship
+						}
+					}
+				}
+				AND = {
+					OR = {
+						religion = mesoamerican_religion
+						religion = nahuatl
+					}
+					any_neighbor_province = {
+						OR = {
+							religion = pantheon_worship
+							religion = aztlan_worship
+						}
+					}
+				}
+			}
+		}
+	
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 5 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 6 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 7 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_allows_polygamy }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_high_priests }
+		}
+		modifier = {
+			factor = 1.5
+			owner = { 
+			OR = { 
+				has_country_modifier = nhs_ares_worship 
+				has_country_modifier = nhs_poseidon_worship 
+				}
+			 }
+		}
+		modifier = {
+			factor = 0.8
+			owner = { has_idea = humanist_tolerance }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { NOT = { nhs_ely_has_opinion_X = { MNENJE = -50 } } }
+		}
+		modifier = {
+			factor = 0.85
+			owner = { NOT = { nhs_ely_has_opinion_X = { MNENJE = -100 } } }
+		}
+		modifier = {
+			factor = 0.75
+			owner = { NOT = { nhs_ely_has_opinion_X = { MNENJE = -150 } } }
+		}
+		modifier = {
+			factor = 0.5
+			owner = { num_of_revolts = 1 }
+		}	
+	}
+	option = {
+		name = msg_religionevents.6.a
+
+		848 = {
+			change_religion = aztlan_worship
+			add_permanent_province_modifier = {
+				name = religious_zeal_at_conv
+				duration = 9000
+			}
+			add_unrest = 5
+		}
+	}	
+}
+
+#Aztlan continues to spread
+province_event = {
+	id = msg_religionevents.7
+	title = msg_religionevents.7.t
+	desc = msg_religionevents.7.d
+	picture = STREET_SPEECH_eventPicture
+	
+
+	trigger = {
+		is_religion_enabled = aztlan_worship
+		has_global_flag = aztlan_reformation 
+		OR = {
+			religion = mesoamerican_religion
+			religion = nahuatl
+			religion = pantheon_worship
+		}
+		NOT = { has_global_flag = msg_post_reformation }
+		NOT = {
+			OR = {
+				has_province_modifier = religious_center
+				has_province_flag = nhs_msg_original_heartland
+				religion = aztlan_worship
+				province_id = 852
+				province_id = 848
+				province_id = 842
+				province_id = 846
+			}
+		}
+		OR = {
+				AND = {
+					religion = pantheon_worship
+					any_neighbor_province = {
+						OR = {
+							religion = mesoamerican_religion
+							religion = nahuatl
+							religion = aztlan_worship
+						}
+					}
+				}
+				AND = {
+					OR = {
+						religion = mesoamerican_religion
+						religion = nahuatl
+					}
+					any_neighbor_province = {
+						OR = {
+							religion = pantheon_worship
+							religion = aztlan_worship
+						}
+					}
+				}
+			}
+			
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		
+		modifier = {
+			factor = 0.25
+			any_neighbor_province = {
+				religion = aztlan_worship
+				has_province_modifier = religious_center
+			}
+		}
+		
+		modifier = {
+			factor = 2
+			has_global_flag = aztlan_reformation_2	
+		}
+		
+		
+		
+		
+		modifier = {
+			factor = 0.5
+			owned_by = MSN
+		}
+		
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 5 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 6 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { innovativeness_ideas = 7 }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_allows_polygamy }
+		}
+		modifier = {
+			factor = 0.9
+			owner = { has_country_flag = nhs_high_priests }
+		}
+		modifier = {
+			factor = 1.2
+			OR = { 
+				owner = { has_country_modifier = nhs_ares_worship }
+				owner = { has_country_modifier = nhs_poseidon_worship }
+				}
+		}
+		modifier = {
+			factor = 0.8
+			owner = { has_idea = humanist_tolerance }
+		}
+
+		modifier = {
+			factor = 0.9
+			owner = { num_of_revolts = 1 }
+		}	
+	}	
+	
+	option = {
+		name = msg_religionevents.7.a
+		change_religion = aztlan_worship
+		add_permanent_province_modifier = {
+			name = religious_zeal_at_conv
+			duration = 9000
+		}
+	}
+}		
+		
+	
+
+
+#Aztlan followers start to kill pantheon priests
+
+country_event = {
+	id = msg_religionevents.8
+	title = msg_religionevents.8.t
+	desc = msg_religionevents.8.d
+	picture = Aztlan_War_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = MSN
+		religion = pantheon_worship
+		had_global_flag = {
+			flag = aztlan_reformation days = 720
+		}
+		any_owned_province = {
+			religion = aztlan_worship 
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 100
+		
+		modifier = {
+			factor = 0.9
+			
+			846 = { has_province_modifier = msg_itza_reconstructed }
+		}
+		modifier = {
+			factor = 0.9
+			848 = { has_province_modifier = msg_mictlan_city }
+		}
+		modifier = {
+			factor = 0.5
+			OR = {
+				842 = { has_province_modifier = msg_tikal_start }
+				842 = { has_province_modifier = msg_tikal_continue }
+				842 = { has_province_modifier = msg_tikal_repaired }
+			}
+		}
+		modifier = {
+			factor = 0.5
+			OR = {
+				852 = { has_province_modifier = msg_teno_repaired }
+				852 = { has_province_modifier = msg_teno_expanding }
+				852 = { has_province_modifier = msg_floating_city }
+			}
+		}
+		modifier = {
+			factor = 0.5
+			innovativeness_ideas = 5
+		}
+		modifier = {
+			factor = 0.5
+			innovativeness_ideas = 6
+		}
+		modifier = {
+			factor = 0.5
+			innovativeness_ideas = 7
+		}
+		modifier = {
+			factor = 0.5
+			has_country_flag = nhs_allows_polygamy
+		}
+		modifier = {
+			factor = 0.5
+			has_country_flag = nhs_high_priests
+		}
+		modifier = {
+			factor = 1.1
+			OR = { 
+				has_country_modifier = nhs_ares_worship 
+				has_country_modifier = nhs_poseidon_worship 
+				}
+		}
+		modifier = {
+			factor = 0.4
+			has_idea = humanist_tolerance
+		}
+
+		modifier = {
+			factor = 0.2
+			num_of_revolts = 1
+		}	
+	}
+	
+	
+	option = {
+		name = msg_religionevents.8.a
+
+		random_owned_province = {
+			limit = {
+				has_province_modifier = religious_center
+				religion = aztlan_worship
+			}
+			spawn_rebels = {
+				type = aztlan_worship_rebels
+				size = 15
+				leader = "Tlahuicole"
+				unrest = 15 #adds progress to the rebel faction
+				win = yes #to give the rebels control of the province
+			}
+			
+		}
+		set_global_flag = aztlan_reformation_2
+		
+		ai_chance = {
+			factor = 0
+		}
+
+	}
+	option = {
+		name = msg_religionevents.8.b
+		hidden_effect = {
+			country_event = { id = msg_religionvents.101 days = 1 }
+		}
+		change_religion = aztlan_worship
+		add_prestige = -50
+		add_legitimacy = -50
+		add_stability = -3
+		add_adm_power = -300
+		add_dip_power = -300
+		add_mil_power = -300
+		
+		ai_chance = {
+			factor = 1
+		}
+	}	
+}
+
+
+#Aztlan followers declare open war!
+country_event = {
+	id = msg_religionevents.9
+	title = msg_religionevents.9.t
+	desc = msg_religionevents.9.d
+	picture = Aztlan_War_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = MSN
+		religion = pantheon_worship
+		had_global_flag = {
+			flag = aztlan_reformation_2 days = 30
+		}
+		any_owned_province = {
+			religion = aztlan_worship 
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 100
+		
+		modifier = {
+			factor = 0.9
+			
+			846 = { has_province_modifier = msg_itza_reconstructed }
+		}
+		modifier = {
+			factor = 0.9
+			842 = { has_province_modifier = msg_mictlan_city }
+		}
+		modifier = {
+			factor = 0.5
+			OR = {
+				848 = { has_province_modifier = msg_tikal_start }
+				848 = { has_province_modifier = msg_tikal_continue } 
+				848 = { has_province_modifier = msg_tikal_repaired }
+			}
+		}
+		modifier = {
+			factor = 0.5
+			OR = {
+				852 = { has_province_modifier = msg_teno_repaired } 
+				852 = { has_province_modifier = msg_teno_expanding }
+				852 = { has_province_modifier = msg_floating_city }
+			}
+		}
+		modifier = {
+			factor = 0.5
+			innovativeness_ideas = 5
+		}
+		modifier = {
+			factor = 0.5
+			innovativeness_ideas = 6
+		}
+		modifier = {
+			factor = 0.5
+			innovativeness_ideas = 7
+		}
+		modifier = {
+			factor = 0.5
+			has_country_flag = nhs_allows_polygamy
+		}
+		modifier = {
+			factor = 0.5
+			has_country_flag = nhs_high_priests
+		}
+		modifier = {
+			factor = 1.1
+			OR = { 
+				has_country_modifier = nhs_ares_worship 
+				has_country_modifier = nhs_poseidon_worship 
+				}
+		}
+		modifier = {
+			factor = 0.4
+			has_idea = humanist_tolerance
+		}
+
+		modifier = {
+			factor = 0.2
+			num_of_revolts = 1
+		}	
+	}
+	option = {
+		name = msg_religionevents.9.a
+		random_owned_province = {
+			limit = {
+				religion = aztlan_worship
+			}
+			spawn_rebels = {
+				type = aztlan_worship_rebels
+				size = 25
+				unrest = 15 #adds progress to the rebel faction
+				win = yes #to give the rebels control of the province
+			}
+			
+		}
+		random_owned_province = {
+			limit = {
+				religion = aztlan_worship
+			}
+			spawn_rebels = {
+				type = aztlan_worship_rebels
+				size = 25
+				unrest = 15 #adds progress to the rebel faction
+				win = yes #to give the rebels control of the province
+			}
+			
+		}
+		set_country_flag = aztlan_reformation_war
+	}
+		
+	
+	option = {
+		name = msg_religionevents.9.b
+		hidden_effect = {
+			country_event = { id = msg_religionvents.101 days = 1 }
+		}
+		change_religion = aztlan_worship
+		add_prestige = -200
+		add_legitimacy = -200
+		add_adm_power = -400
+		add_dip_power = -400
+		add_mil_power = -400
+		add_stability = -4
+		disband_rebels = aztlan_worship_rebels
+	}	
+}
+
+#If one Converts to Aztlan
+
+country_event = {
+	id = msg_religionevents.101
+	title = msg_religionevents.101.t
+	desc = msg_religionevents.101.d
+	picture = Spartan_Convert_eventPicture
+	
+	fire_only_once = yes
+
+	
+	trigger = {
+		tag = MSN
+		religion = aztlan_worship
+		
+	}
+	immediate = {
+		hidden_effect = {
+			set_global_flag = msg_post_reformation
+			clr_global_flag = aztlan_reformation
+		}
+	}
+	option = {
+		name = msg_religionevents.101.a
+		change_religion = aztlan_worship
+		capital_scope = {
+				change_religion = aztlan_worship
+			}
+	
+		add_country_modifier = {
+			name = msg_oracle_after
+			duration = -1
+		}
+		if = {
+			limit = {
+				NOT = { has_country_modifier = nhs_high_priests}
+			}
+			add_country_modifier = {
+				name = nhs_high_priests
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_modifier = nhs_expanded_pantheon }
+			}
+			remove_country_modifier = nhs_consolidated_pantheon
+			add_country_modifier = { 
+				name = nhs_expanded_pantheon
+				duration = -1
+			}
+		}
+	}	
+}
+#If one survives the Aztlan rebellion while remaining pantheon
+country_event = {
+	id = msg_religionevents.102
+	title = msg_religionevents.102.t
+	desc = msg_religionevents.102.d
+	picture = Spartan_Hellenic_eventPicture
+	
+	fire_only_once = yes
+
+	
+	trigger = {
+		tag = MSN
+		religion = pantheon_worship
+		has_country_flag = aztlan_reformation_war
+		num_of_revolts = 0
+		
+	}
+	immediate = {
+		hidden_effect = {
+			set_global_flag = msg_post_reformation
+			clr_global_flag = aztlan_reformation
+		}
+	}
+	option = {
+		name = msg_religionevents.102.a
+		add_prestige = 50
+		add_legitimacy = 50
+		add_country_modifier = {
+			name = "msg_oracle_after"
+			duration = -1
+		}
+		if = {
+			limit = {
+				NOT = { has_country_modifier = nhs_high_priests }
+			}
+			add_country_modifier = {
+				name = nhs_high_priests
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_modifier = nhs_consolidated_pantheon }
+			}
+			remove_country_modifier = nhs_expanded_pantheon
+			add_country_modifier = { 
+				name = nhs_consolidated_pantheon
+				duration = -1
+			}
+		}
+	}
+}
+
+#Elsyian reaction to the Aztlan reformation starting
+country_event = {
+	id = msg_religionevents.11
+	title = msg_religionevents.11.t
+	desc = msg_religionevents.11.d
+	picture = Aztlan_War_eventPicture
+	
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NHS
+			nhs_is_elysia_late = yes
+			}
+		has_global_flag = aztlan_reformation 
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	option = {
+		name = msg_religionevents.11.a
+		
+	}
+}
+
+#Elysian reaction to the Aztlan reformation if the spartans reform
+country_event = {
+	id = msg_religionevents.12
+	title = msg_religionevents.12.t
+	desc = msg_religionevents.12.d
+	picture = Aztlan_War_eventPicture
+	
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NHS
+			nhs_is_elysia_late = yes
+			}
+		MSN = {
+			religion = aztlan_worship
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	option = {
+		name = msg_religionevents.12.a
+		add_opinion = { who = MSN modifier = nhs_msn_embraced_aztlan }
+	}
+}
+#Natives reaction to the Aztlan reformation 
+country_event = {
+	id = msg_religionevents.13
+	title = msg_religionevents.13.t
+	desc = msg_religionevents.13.d
+	picture = Aztlan_War_eventPicture
+	
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			religion = nahuatl
+			religion = mesoamerican_religion
+			}
+		has_global_flag = aztlan_reformation
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	option = {
+		name = msg_religionevents.13.a
+	}
+}
+
+#3 Statues events removed
+
+#Visit the oracle for guidance - either good or bad news - 5 in 5 years or so - start
+country_event = {
+	id = msg_religionevents.16
+	title = msg_religionevents.16.t
+	desc = msg_religionevents.16.d
+	picture = Oracle_eventPicture
+	
+	trigger = {
+		OR = {
+			religion = pantheon_worship
+			religion = aztlan_worship
+		}
+		OR = {
+			has_country_modifier = msg_oracle_before
+			has_country_modifier = msg_oracle_after
+		}
+		NOT = { has_country_modifier = nhs2_oracle_cooldown }
+	}
+	
+	mean_time_to_happen = {
+		days = 1 
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = nhs2_oracle_cooldown
+				duration = 3650
+				hidden = yes
+			}
+		}
+	}
+
+	option = {
+		name = msg_religionevents.16.a
+		custom_tooltip = "msg_religionevents.16.a.tt"
+		hidden_effect = {
+			random_list = {
+				20 = {
+					country_event = { id = msg_religionevents.17 days = 14 }
+				}
+				55 = {
+					country_event = { id = msg_religionevents.18 days = 14 } 
+				}
+				20 = {
+					country_event = { id = msg_religionevents.19 days = 14 } 
+				}
+				5 = {
+					country_event = { id = msg_religionevents.20 days = 14 } 
+				}
+			}
+		}
+	}	
+	option = {
+		name = msg_religionevents.16.b
+		add_adm_power = 10
+		add_prestige = -5
+	}
+}	
+
+#Visit the oracle for guidance - either good or bad news - 5 in 5 years or so - good
+country_event = {
+	id = msg_religionevents.17
+	title = msg_religionevents.17.t
+	desc = msg_religionevents.17.d
+	picture = Oracle_eventPicture
+	
+	is_triggered_only = yes
+	
+
+	option = {
+		name = msg_religionevents.17.a
+		add_country_modifier = {
+			name = msg_oracle_good
+			duration = 1825
+		}
+		add_adm_power = 10
+	}
+	
+}
+#Visit the oracle for guidance - either good or bad news - 5 in 5 years or so - neutral
+country_event = {
+	id = msg_religionevents.18
+	title = msg_religionevents.18.t
+	desc = msg_religionevents.18.d
+	picture = Oracle_eventPicture
+	
+	is_triggered_only = yes
+	
+
+	option = {
+		name = msg_religionevents.18.a
+		add_country_modifier = {
+			name = msg_oracle_neutral
+			duration = 1825
+		}
+	}
+	
+}
+#Visit the oracle for guidance - either good or bad news - 5 in 5 years or so - bad
+country_event = {
+	id = msg_religionevents.19
+	title = msg_religionevents.19.t
+	desc = msg_religionevents.19.d
+	picture = Oracle_eventPicture
+	
+	is_triggered_only = yes
+	
+
+	option = {
+		name = msg_religionevents.19.a
+		add_country_modifier = {
+			name = msg_oracle_bad
+			duration = 1825
+		}
+		add_adm_power = -10
+	}
+	
+}
+#Visit the oracle for guidance - either good or bad news - 5 in 5 years or so - lycurgus
+country_event = {
+	id = msg_religionevents.20
+	title = msg_religionevents.20.t
+	desc = msg_religionevents.20.d
+	picture = Oracle_eventPicture
+	
+	is_triggered_only = yes
+	
+
+	option = {
+		name = msg_religionevents.20.a
+		add_country_modifier = {
+			name = msg_oracle_lycurgus
+			duration = 1825
+		}
+		add_stability_or_adm_power = yes
+	}
+	
+}
+##For natives
+
+
+##Great Temples
+#Lakonia's Great Pyramid 
+country_event = {
+	id = msg_religionevents.50
+	title = msg_religionevents.50.t
+	desc = msg_religionevents.50.d
+	picture = Capital_Pyramid_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	trigger = {
+		tag = MSN
+		religion = aztlan_worship
+	}
+	
+	option = {
+		name = msg_religionevents.50.a
+		random_owned_province = {
+			limit = {
+				has_province_flag = nhs_msg_original_capital
+				controlled_by = MSN
+			}
+			add_permanent_province_modifier = {
+				name = msg_great_pyramid
+				duration = -1
+			}
+			add_base_tax = 1
+			add_base_manpower = 1
+		}	
+	}
+}
+#Lakonia's Great Pantheon
+country_event = {
+	id = msg_religionevents.51
+	title = msg_religionevents.51.t
+	desc = msg_religionevents.51.d
+	picture = Capital_Pantheon_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	trigger = {
+		tag = MSN
+		religion = pantheon_worship
+	}
+	
+	option = {
+		name = msg_religionevents.51.a
+		random_owned_province = {
+			limit = {
+				has_province_flag = nhs_msg_original_capital
+				controlled_by = ROOT
+			}
+			add_permanent_province_modifier = {
+				name = msg_great_pantheon
+				duration = -1
+			}
+			add_base_tax = 1
+			add_base_manpower = 1
+		}	
+	}
+}
+#Lakonia's Great Cathedral
+country_event = {
+	id = msg_religionevents.52
+	title = msg_religionevents.52.t
+	desc = msg_religionevents.52.d
+	picture = Capital_Cathedral_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	trigger = {
+		tag = MSN
+		religion_group = christian
+	}
+	
+	option = {
+		name = msg_religionevents.52.a
+		random_owned_province = {
+				limit = {
+					has_province_flag = nhs_msg_original_capital
+					controlled_by = ROOT
+				}
+				add_permanent_province_modifier = {
+					name = msg_great_cathedral
+					duration = -1
+				}
+				add_base_tax = 1
+				add_base_manpower = 1
+		}	
+	}
+}
+##Event chain adapted from el dorado
+
+# Birth of a Warrior - Event titles for msg_religionevets.53 to 58 
+
+#"Precious Son"
+country_event = {
+	id = msg_religionevents.53
+	title = msg_religionevents.53.t
+	desc = msg_religionevents.53.d
+	picture = NEW_HEIR_eventPicture
+	
+	trigger = {
+		religion = aztlan_worship
+		has_country_flag = msg_agoge
+		NOT = { has_country_flag = spartan_warrior_born }
+		
+	}
+	
+	immediate = {
+		set_country_flag = spartan_warrior_born
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+	}
+	
+	option = {
+		name = msg_religionevents.53.a #The Telpochcalli will make a fine warrior out of him.
+		set_country_flag = spartan_warrior_telpochcalli
+		#hidden_effect = {
+			country_event = { id = msg_religionevents.54 days = 5475 }
+		#}
+		custom_tooltip = msg_religionevents.53.a.tt #The child will be educated at a Telpochcalli
+	}
+	option = {
+		name = msg_religionevents.53.b #Attempt to get him into the Calmecac
+		set_country_flag = spartan_warrior_calmecac
+		add_legitimacy = -10
+		if = {
+			limit = { government = republic }
+			add_republican_tradition = -10
+		}
+		custom_tooltip = msg_religionevents.53.b.tt #The child will be educated at the Calmecac, furthering his potential but our ruler loses face.
+		#hidden_effect = {
+			country_event = { id = msg_religionevents.54 days = 5475 }
+		#}
+	}
+}
+
+#"War is thy desert, thy task"
+country_event = {
+	id = msg_religionevents.54
+	title = msg_religionevents.54.t
+	desc = msg_religionevents.54.d
+	picture = MILITARY_CAMP_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = msg_religionevents.54.a #The Omens favor him, that should be enough.
+		custom_tooltip = msg_religionevents.54.a.tt #The Warrior is sent to War.
+		set_country_flag = spartan_warrior_to_war
+	}
+	option = {
+		name = msg_religionevents.54.b #Let us sacrifice in his support.
+		trigger = { has_regency = no }
+		custom_tooltip = msg_religionevents.54.b.tt #Our ruler spills some of his blood, aiding our warrior but will now be seen to have part any future defeat.
+		set_country_flag = spartan_warrior_to_war
+		set_country_flag = spartan_warrior_auto_sacrifice
+	}
+}
+
+#"Thy home is not here, for thou art an eagle, a jaguar" (Great Victory)
+country_event = {
+	id = msg_religionevents.55
+	title = msg_religionevents.55.t
+	desc = msg_religionevents.55.d
+	picture = FEAST_eventPicture
+	
+	trigger = {
+		religion = aztlan_worship
+		has_country_flag = msg_agoge
+		has_country_flag = spartan_warrior_to_war
+		NOT = { has_country_flag = spartan_warrior_tested }
+		is_at_war = yes
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 0.6
+			has_country_flag = spartan_warrior_auto_sacrifice
+		}
+	}
+	
+	immediate = {
+		set_country_flag = spartan_warrior_tested
+	}
+	
+	option = {
+		name = msg_religionevents.55.a #Great!
+		trigger = { NOT = { has_country_flag = spartan_warrior_calmecac } }
+		create_general = { tradition = 75 }
+		add_mil_power = 50
+		add_doom = -10
+	}
+	option = {
+		name = msg_religionevents.55.a #Great!
+		trigger = { has_country_flag =  spartan_warrior_calmecac }
+		create_general = { tradition = 100 }
+		add_mil_power = 75
+		add_doom = -10
+	}
+}
+
+#"Thou wilt merit death by foreign wips." (Captured)
+country_event = {
+	id = msg_religionevents.56
+	title = msg_religionevents.56.t
+	desc = msg_religionevents.56.d
+	picture = BATTLE_eventPicture
+	
+	trigger = {
+		religion = aztlan_worship
+		has_country_flag = msg_agoge
+		has_country_flag = spartan_warrior_to_war
+		is_at_war = yes
+		NOT = { has_country_flag = spartan_warrior_tested }
+	}
+	
+	immediate = {
+		set_country_flag = spartan_warrior_tested
+	}
+	
+	mean_time_to_happen = {
+		months = 16
+	}
+	
+	option = {
+		name = msg_religionevents.56.a #
+		add_prestige = -5 #A painful death
+	}
+}
+
+#"Thou shalt give drink, nourishment, food to the soil." (Death)
+country_event = {
+	id = msg_religionevents.57
+	title = msg_religionevents.57.t
+	desc = msg_religionevents.57.d
+	picture = BATTLE_eventPicture
+	
+	trigger = {
+		religion = aztlan_worship
+		has_country_flag = spartan_warrior_to_war
+		has_country_flag = msg_agoge
+		is_at_war = yes
+		NOT = { has_country_flag = spartan_warrior_tested }
+	}
+	
+	mean_time_to_happen = {
+		months = 16
+	}
+	
+	immediate = {
+		set_country_flag = spartan_warrior_tested
+	}
+	
+	option = {
+		name = msg_religionevents.57.a #Ok.
+		trigger = { NOT = { has_country_flag = spartan_warrior_auto_sacrifice } }
+		add_prestige = -5 #An unfortunate Death
+	}
+	option = {
+		name = msg_religionevents.57.a #Ok.
+		trigger = { has_country_flag = spartan_warrior_auto_sacrifice }
+		add_prestige = -5 #An unfortunate Death
+		add_legitimacy = -10
+	}
+}
+
+#"Thy home is not here..." (Coward )
+country_event = {
+	id = msg_religionevents.58
+	title = msg_religionevents.58.t
+	desc = msg_religionevents.58.d
+	picture = DIPLOMACY_eventPicture
+	
+	trigger = {
+		religion = aztlan_worship
+		has_country_flag = msg_agoge
+		has_country_flag = spartan_warrior_to_war
+		is_at_war = yes
+		NOT = { has_country_flag = spartan_warrior_tested }
+	}
+	
+	immediate = {
+		set_country_flag = spartan_warrior_tested
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	option = {
+		name = msg_religionevents.58.a #Ok.
+		trigger = { NOT = { has_country_flag = spartan_warrior_auto_sacrifice } }
+		add_prestige = -10 #A catastrophic development, 
+	}
+	option = {
+		name = msg_religionevents.58.b #Ok.
+		trigger = { has_country_flag = spartan_warrior_auto_sacrifice }
+		add_prestige = -10 #A catastrophic development, 
+		add_legitimacy = -5
+	}
+}
+
+
+##To do later:
+#Maybe build a temple for the oracle?
+#Declare yourself a god incarnate.
+
+# Choosing deity aztlan
+country_event = {
+	id = msg_religionevents.59
+	title = msg_religionevents.59.t
+	desc = msg_religionevents.59.d
+	picture = Oracle_eventPicture
+
+	trigger = {
+		religion = aztlan_worship
+		ai = no
+		has_regency = no
+		NOT = { has_dlc = "Wealth of Nations" }
+		NOT = { has_personal_deity = Leonidas }
+		NOT = { has_personal_deity = Texcatlipoca }
+		NOT = { has_personal_deity = Quetzacoatl }
+		NOT = { has_personal_deity = Tlaloc }
+		NOT = { has_personal_deity = Chalchiuhtlicue }
+		NOT = { has_personal_deity = Ares_2 }
+		NOT = { has_personal_deity = Mictlantlencuhtli }
+		NOT = { has_personal_deity = Poseidon_2 }
+		NOT = { has_country_flag = nhs_choosing_d }
+	}
+
+	immediate = {
+		set_country_flag = nhs_choosing_d
+	}
+
+	option = {
+		name = "msg_religionevents.59.a"
+		change_personal_deity = Leonidas
+		custom_tooltip = nhs_Leonidas_tooltip
+		clr_country_flag = nhs_choosing_d
+	}
+	option = {
+		name = "msg_religionevents.59.b"
+		change_personal_deity = Texcatlipoca
+		custom_tooltip = nhs_Texcatlipoca_tooltip
+		clr_country_flag = nhs_choosing_d
+	}
+	option = {
+		name = "msg_religionevents.59.c"
+		change_personal_deity = Quetzacoatl
+		custom_tooltip = nhs_Quetzacoatl_tooltip
+		clr_country_flag = nhs_choosing_d
+	}
+	option = {
+		name = "msg_religionevents.59.e"
+		change_personal_deity = Tlaloc
+		custom_tooltip = nhs_Tlaloc_tooltip
+		clr_country_flag = nhs_choosing_d
+	}
+	option = {
+		name = "msg_religionevents.59.f"
+		change_personal_deity = Chalchiuhtlicue
+		custom_tooltip = nhs_Chalchiuhtlicue_tooltip
+		clr_country_flag = nhs_choosing_d
+	}
+	option = {
+		name = "msg_religionevents.59.g"
+		change_personal_deity = Ares_2
+		custom_tooltip = nhs_Ares_2_tooltip
+		clr_country_flag = nhs_choosing_d
+	}
+	option = {
+		name = "msg_religionevents.59.h"
+		change_personal_deity = Mictlantlencuhtli
+		custom_tooltip = nhs_Mictlantlencuhtli_tooltip
+		clr_country_flag = nhs_choosing_d
+	}
+	option = {
+		name = "msg_religionevents.59.i"
+		change_personal_deity = Poseidon_2
+		custom_tooltip = nhs_Poseidon_2_tooltip
+		clr_country_flag = nhs_choosing_d
+	}
+	option = {
+		name = "msg_religionevents.59.j"
+		trigger = {
+			has_global_flag = msg_aztlan_zeus_deity
+		}
+		change_personal_deity = Zeus_2
+		custom_tooltip = nhs_Zeus_2_tooltip
+		clr_country_flag = nhs_choosing_d
+	}
+	
+}
+
+# Missionaries native aztlan
+country_event = {
+	id = msg_religionevents.60
+	title = msg_religionevents.60.t
+	desc = msg_religionevents.60.d
+	picture = Pacal_eventPicture
+
+    is_triggered_only = yes
+	
+	option = {	 # Accept
+		ai_chance = {
+			factor = 60
+			modifier = {
+				factor = 1.25
+				alliance_with = FROM
+			}
+			modifier = {
+				factor = 1.1
+				stability = 1
+			}
+			modifier = {
+				factor = 1.1
+				stability = 2
+			}
+			modifier = {
+				factor = 1.1
+				stability = 3
+			}
+			modifier = {
+				factor = 1.25
+				FROM = {
+					has_opinion = { who = ROOT value = 150 }
+				}
+			}
+			modifier = {
+				factor = 1.25
+				FROM = {
+					has_opinion = { who = ROOT value = 100 }
+				}
+			}
+			modifier = {
+				factor = 0.2
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = 0 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.3
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = -100 }
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				technology_group = hellenised_american
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					OR = {
+						religion = nahuatl
+						religion = mesoamerican_religion
+					}
+				}
+			}
+		}
+		name = "nhs2_religionevents6.a"
+		reverse_add_opinion = { who = FROM modifier = nhs_o_embraced_new_religion }
+		add_opinion = { who = FROM modifier = nhs_o_embraced_new_religion }
+		if = {
+			limit = {
+				any_owned_province = {
+					NOT = { religion = aztlan_worship }
+					is_capital = no
+				}
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { religion = aztlan_worship }
+					is_capital = no
+				}
+				change_religion = aztlan_worship
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_owned_province = {
+						NOT = { religion = aztlan_worship }
+						is_capital = no
+					}
+				}
+			}
+			capital_scope = {
+				change_religion = aztlan_worship
+			}
+		}
+		if = {
+			limit = {
+				NOT = { num_of_cities = 2 }
+			}
+			country_event = { id = nhs2_religionevents.2 }
+		}
+		FROM = {
+			country_event = { id = nhs2_religionevents.61 days = 30 }
+		}
+	}
+	
+	option = {	
+		name = "nhs2_religionevents6.b"  #Decline
+		ai_chance = {
+			factor = 40
+			modifier = {
+				factor = 0.75
+				alliance_with = FROM
+			}
+			modifier = {
+				factor = 0.9
+				FROM = {
+					has_opinion = { who = ROOT value = 150 }
+				}
+			}
+			modifier = {
+				factor = 0.9
+				FROM = {
+					has_opinion = { who = ROOT value = 100 }
+				}
+			}
+			modifier = {
+				factor = 0.9
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = 100 }
+					}
+				}
+			}
+			modifier = {
+				factor = 1.2
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = 0 }
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = -100 }
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				NOT = { stability = 0 }
+			}
+			modifier = {
+				factor = 0.6
+				FROM = {
+					OR = {
+						religion = nahuatl
+						religion = mesoamerican_religion
+					}
+				}
+			}
+		}
+		add_legitimacy = 5
+		add_prestige = 10
+		FROM = {
+			country_event = { id = msg_religionevents.62 days = 30 }
+		}
+	}
+}
+
+# Missionaries get back + aztlan
+country_event = {
+	id = msg_religionevents.61
+	title = msg_religionevents.61.t
+	desc = msg_religionevents.61.d
+	picture = NATIVE_CITY_VIEW_eventPicture
+
+    is_triggered_only = yes
+
+	option = {
+		name = "msg_religionevents.61.a"
+		add_prestige = 10	
+	}
+}
+
+# Missionaries get back - aztlan
+country_event = {
+	id = msg_religionevents.62
+	title = msg_religionevents.62.t
+	desc = msg_religionevents.62.d
+	picture = NATIVE_ANGRY_MOB_eventPicture
+
+    is_triggered_only = yes
+
+	option = {
+		name = "msg_religionevents.62.a"
+		add_prestige = -10
+		# hidden_effect = {
+			# add_country_modifier = {
+				# name = nhs2_missionaries_cooldown
+				# duration = 3650
+				# hidden = yes
+			# }
+		# }
+	}
+}

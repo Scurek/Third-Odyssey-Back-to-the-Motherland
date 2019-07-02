@@ -1,0 +1,309 @@
+namespace = nhs_powhatan_deal
+
+#Trade weapons/money for land with Powhatan
+country_event = {
+	id = nhs_powhatan_deal.1
+	title = nhs_powhatan_deal.1.t
+	desc = nhs_powhatan_deal.1.d
+	picture = ELYEXPLORER_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		always = no #Now a decision
+		tag = NHS
+		num_of_cities = 2
+		has_discovered = 952
+		is_at_war = no
+		POW = {
+			is_at_war = no
+			owns_core_province = 952
+		}
+	}
+	
+	option = {
+		name = nhs_powhatan_deal.1.a # Seal the deal
+		trigger = {
+			treasury = 175
+		}
+		add_treasury = -175
+		POW = { country_event = { id = nhs_powhatan_deal.2 days = 1 } }
+	}
+	
+	option = {
+		name = nhs_powhatan_deal.1.b # We can't afford it
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Elysians offer deal
+country_event = {
+	id = nhs_powhatan_deal.2
+	title = nhs_powhatan_deal.2.t
+	desc = nhs_powhatan_deal.2.d
+	picture = ELYEXPLORER_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+				if = {
+					limit = {
+						932 = {
+							is_empty = yes
+						}
+					}
+					932 = {
+						set_province_flag = nhs_pow_mig_tar
+					}
+				}
+				if = {
+					limit = {
+						NOT = {
+							932 = {
+								is_empty = yes
+							}
+						}
+						932 = {
+							any_empty_neighbor_province = {
+								NOT = { nhs_homelands = yes }
+								is_empty = yes
+							}
+						}
+					}
+					932 = {
+						random_empty_neighbor_province = {
+							set_province_flag = nhs_pow_mig_tar
+						}
+					}
+				}
+				if = {
+					limit = {
+						NOT = {
+							932 = {
+								is_empty = yes
+							}
+						}
+						NOT = {
+							932 = {
+								any_empty_neighbor_province = {
+									NOT = { nhs_homelands = yes }
+									is_empty = yes
+								}
+							}
+						}
+						POW = {
+							any_owned_province = {
+								any_empty_neighbor_province = {
+									NOT = { nhs_homelands = yes }
+								}
+							}
+						}
+					}
+					POW = {
+						random_owned_province = {
+							limit = {
+								any_empty_neighbor_province = {
+									NOT = { nhs_homelands = yes }
+								}
+							}
+							random_empty_neighbor_province = {
+								set_province_flag = nhs_pow_mig_tar
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						NOT = {
+							932 = {
+								is_empty = yes
+							}
+						}
+						NOT = {
+							932 = {
+								any_empty_neighbor_province = {
+									NOT = { nhs_homelands = yes }
+									is_empty = yes
+								}
+							}
+						}
+						NOT = {
+							POW = {
+								any_owned_province = {
+									any_empty_neighbor_province = {
+										NOT = { nhs_homelands = yes }
+									}
+								}
+							}
+						}
+						NHS = {
+							any_owned_province = {
+								any_empty_neighbor_province = {
+									NOT = { nhs_homelands = yes }
+								}
+							}
+						}
+					}
+					NHS = {
+						random_owned_province = {
+							limit = {
+								any_empty_neighbor_province = {
+									NOT = { nhs_homelands = yes }
+								}
+							}
+							random_empty_neighbor_province = {
+								set_province_flag = nhs_pow_mig_tar
+							}
+						}
+					}
+				}
+			}
+	}
+	
+	option = {
+		name = nhs_powhatan_deal.2.a # Hell yea!
+		ai_chance = { factor = 100 }
+		random_province = {
+			limit = {
+				has_province_flag = nhs_pow_mig_tar
+			}
+			ROOT = {
+				set_capital = PREV
+			}
+			change_culture = ROOT
+			change_religion = ROOT
+			add_institution_embracement = {
+				which = "feudalism"
+				value = 50
+			}
+			cede_province = POW
+			add_core = ROOT
+		}
+		add_treasury = 200
+		add_adm_power = 100
+		add_dip_power = 100
+		add_mil_power = 100
+		tooltip = {
+			if = {
+				limit = {
+					NOT = { mil_tech = 2 }
+				}
+				add_mil_tech = 2
+			}
+			else_if = {
+				limit = {
+					NOT = { mil_tech = 3 }
+				}
+				add_mil_tech = 1
+			}
+		}
+		NHS = { country_event = { id = nhs_powhatan_deal.3 days = 1 } }
+		hidden_effect = {
+			every_province = {
+				limit = {
+					has_province_flag = nhs_pow_mig_tar
+				}
+				clr_province_flag = nhs_pow_mig_tar
+			}
+		}
+	}
+	option = {
+		name = nhs_powhatan_deal.2.b # No
+		ai_chance = { factor = 0 }
+		NHS = { country_event = { id = nhs_powhatan_deal.4 days = 1 } }
+		hidden_effect = {
+			every_province = {
+				limit = {
+					has_province_flag = nhs_pow_mig_tar
+				}
+				clr_province_flag = nhs_pow_mig_tar
+			}
+		}
+	}
+}
+
+#Powhatan accepts deal
+country_event = {
+	id = nhs_powhatan_deal.3
+	title = nhs_powhatan_deal.3.t
+	desc = nhs_powhatan_deal.3.d
+	picture = NATIVE_DEBATE_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			add_core = 952
+			952 = {
+				change_culture = ROOT
+				change_religion = ROOT
+				cede_province = NHS
+				remove_core = POW
+			}
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		tooltip = {
+			add_core = 952
+			952 = {
+				change_culture = ROOT
+				change_religion = ROOT
+				cede_province = NHS
+				remove_core = POW
+			}
+		}
+		952 = {
+			add_province_modifier = {
+				name = nhs2_settling
+				duration = 1095
+			}
+		}
+		FROM = {
+			if = {
+				limit = {
+					NOT = { mil_tech = 2 }
+				}
+				add_mil_tech = 2
+			}
+			else_if = {
+				limit = {
+					NOT = { mil_tech = 3 }
+				}
+				add_mil_tech = 1
+			}
+		}
+	}
+}
+
+#Powhatan refuses deal
+country_event = {
+	id = nhs_powhatan_deal.4
+	title = nhs_powhatan_deal.4.t
+	desc = nhs_powhatan_deal.4.d
+	picture = NATIVE_DEBATE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		if = {
+			limit = {
+				has_global_flag = nhs_60_cash
+			}
+			add_treasury = 60
+			clr_global_flag = nhs_50_cash
+		}
+		if = {
+			limit = {
+				has_global_flag = nhs_120_cash
+			}
+			add_treasury = 120
+			clr_global_flag = nhs_110_cash
+		}
+	}
+}

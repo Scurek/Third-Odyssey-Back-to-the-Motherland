@@ -1,0 +1,337 @@
+# INSTRUCTIONS:
+# -------------
+# is_triggered_only - Triggered from within the code or by event effects. DO NOT REMOVE THE STOCK ONES.
+# months - The number of months this CB will be valid. Only works for triggered CBs.
+# prerequisites - A condition that automatically activates a CB. Does not work for triggered CBs.
+# no_opinion_hit - If yes you get no negative opinion from this
+#
+# ROOT = attacker
+# FROM = target
+#
+# NOTE: The order in which the peace options are listed is the order in which the AI will normally prioritize them in peace treaties
+#
+# TRIGGERED - Triggered from within the code or by event effects
+# --------------------------------------------------------------
+# Third Odyssey BTM cb
+# European Invasion
+
+cb_nhs_cb_crush_the_revolution = {
+	valid_for_subject = no
+
+	prerequisites = {
+		OR = {
+			capital_scope = { continent = europe }
+			is_neighbor_of = FROM
+			has_reform = elysian_absolute_empire
+			has_reform = senatorial_empire
+		}
+		nhs_revolution_target_exists = yes
+		NOT = { nhs_is_revolution_target = yes }
+		is_free_or_tributary_trigger = yes
+		government = monarchy
+		NOT = {
+			revolution_target = {
+				war_with = ROOT
+			}
+			revolution_target = {
+				truce_with = ROOT
+			}
+			revolution_target = {
+				alliance_with = ROOT
+			}
+		}
+		FROM = {
+			nhs_is_revolution_target = yes
+			tag = ERR
+		}
+	}
+	
+	war_goal = nhs_take_capital_revolution
+}
+
+cb_nhs_invasion = {
+	valid_for_subject = no
+
+	prerequisites = {
+		OR = {
+			capital_scope = { continent = north_america }
+			capital_scope = { continent = south_america }
+		}
+		has_country_flag = nhs_invasion_second_part_begins
+		NOT = { has_country_flag = nhs_invasion_over }
+		is_free_or_tributary_trigger = yes
+		FROM = {
+			NOT = {
+				AND = {
+					culture_group = byzantine
+					NOT = { primary_culture = turkish }
+				}
+			}
+			any_owned_province = {
+				continent = europe
+				culture = greek
+			}			
+		}
+	}
+	
+	war_goal = nhs_invasion
+}
+
+cb_nhs_raid_and_conquer = {
+	is_triggered_only = yes
+	months = 120
+
+	war_goal = nhs_raid_and_conquer
+}
+
+cb_nhs_ideology_of_superiority = {
+	valid_for_subject = no
+
+	prerequisites = {
+		is_free_or_tributary_trigger = yes
+		has_idea = ideology_of_superiority
+		is_neighbor_of = FROM
+		FROM = {
+			OR = {
+				technology_group = north_american
+				technology_group = mesoamerican
+				technology_group = south_american
+				technology_group = andean
+				technology_group = hellenised_american
+			}
+		}
+	}
+	war_goal = war_goal_nhs_ideology_of_superiority
+}
+
+
+
+cb_nhs_holy_war_elysian_orthodoxy = {
+	valid_for_subject = no
+	
+	is_triggered_only = yes
+	months = 120
+	
+	prerequisites = {
+		is_free_or_tributary_trigger = yes
+		NOT = { nhs_is_revolution_target = yes }
+		FROM = {
+			religion_group = pagan
+		}
+	}
+	
+	war_goal = superiority_crusade
+}
+
+cb_elysian_patriarchate_recovery = {
+	valid_for_subject = no
+	
+	is_triggered_only = yes
+	months = 120
+	
+	prerequisites = {
+		is_free_or_tributary_trigger = yes
+		FROM = {
+			NOT = { religion = elysian_orthodoxy }
+			any_owned_province = {
+				OR = {
+						has_province_modifier = nhs2_orthodox_patriarchate
+						has_province_modifier = patriarchate_of_the_west
+						has_province_modifier = patriarchate_of_the_south
+						has_province_modifier = patriarchate_of_the_far_west
+						has_province_modifier = patriarchate_of_the_north
+						has_province_modifier = ecumenical_patriarch_modifier
+						has_province_modifier = nhs2_orthodox_patriarchate_off
+						has_province_modifier = patriarchate_of_the_west_off
+						has_province_modifier = patriarchate_of_the_south_off
+						has_province_modifier = patriarchate_of_the_far_west_off
+						has_province_modifier = patriarchate_of_the_north_off
+						has_province_modifier = ecumenical_patriarch_modifier_off
+						has_province_modifier = nhs2_orthodox_patriarchate_cus
+						has_province_modifier = patriarchate_of_the_west_cus
+						has_province_modifier = patriarchate_of_the_south_cus
+						has_province_modifier = patriarchate_of_the_far_west_cus
+						has_province_modifier = patriarchate_of_the_north_cus
+						has_province_modifier = ecumenical_patriarch_modifier_cus
+						has_province_modifier = nhs2_orthodox_patriarchate_for
+						has_province_modifier = patriarchate_of_the_west_for
+						has_province_modifier = patriarchate_of_the_south_for
+						has_province_modifier = patriarchate_of_the_far_west_for
+						has_province_modifier = patriarchate_of_the_north_for
+						has_province_modifier = ecumenical_patriarch_modifier_for					
+					}
+			}
+		}
+	}
+	
+	war_goal = wg_elysian_patriarchate_recovery
+}
+
+cb_nhs_repel_the_invaders = {
+	valid_for_subject = no
+
+	prerequisites = {
+		is_free_or_tributary_trigger = yes
+		full_idea_group = domination_ideas
+		capital_scope = {
+			OR = {
+				continent = south_america
+				continent = north_america
+			}
+		}
+		FROM = {
+			any_owned_province = {
+				OR = {
+					continent = south_america
+					continent = north_america
+				}
+			}
+			OR = {
+				technology_group = western
+				technology_group = eastern
+				technology_group = muslim
+			}
+			OR = {
+				capital_scope = {
+					continent = europe
+				}
+				is_former_colonial_nation = yes
+				is_colonial_nation = yes
+			}
+		}
+	}
+	war_goal = war_goal_nhs_repel_the_invaders
+}
+
+cb_nhs_pu_restore_dinasty = {
+	valid_for_subject = no
+	prerequisites = {
+		is_free_or_tributary_trigger = yes
+		nhs_is_elysia_late = yes
+		has_country_flag = nhs_gain_spartan_pu_restore_dynasty
+		government = monarchy
+		FROM = {
+			OR = {
+				tag = MSN
+				tag = MSG
+			}
+			NOT = { is_subject_of = ROOT }
+			NOT = {
+				dynasty = "Spartakon"
+				#ruler_culture = high_elysian
+				#ruler_culture = lakonian
+			}
+		}
+	}
+	war_goal = war_goal_nhs_pu_restore_dinasty
+}
+
+cb_nhs_spartan_pu = {
+	valid_for_subject = no
+	prerequisites = {
+		is_free_or_tributary_trigger = yes
+		nhs_is_elysia_late = yes
+		has_country_flag = nhs_gain_spartan_pu
+		government = monarchy
+		FROM = {
+			OR = {
+				tag = MSN
+				tag = MSG
+			}
+			NOT = { is_subject_of = ROOT }
+			OR = {
+				dynasty = "Spartakon"
+				#ruler_culture = high_elysian
+				#ruler_culture = lakonian
+			}
+		}
+		
+	}
+	war_goal = take_capital_throne
+}
+
+cb_north_american_hegemony = {
+	valid_for_subject = no
+
+	prerequisites = {
+		nhs_is_elysia_late = yes
+		is_free_or_tributary_trigger = yes
+		has_country_flag = nhs_expanding_south_complete
+		NOT = { has_country_flag = nhs_promised_land_complete }
+		NOT = { nhs_is_revolution_target = yes }
+		FROM = {
+			NOT = { is_subject_of = ROOT }
+			NOT = { alliance_with = ROOT }
+			any_owned_province = {
+				continent = north_america
+			}
+		}
+	}
+	
+	war_goal = nhs_wargoal_north_american_hegemony
+}
+
+cb_north_american_hegemony_expanded = {
+	valid_for_subject = no
+
+	prerequisites = {
+		nhs_is_elysia_late = yes
+		is_free_or_tributary_trigger = yes
+		has_country_flag = nhs_promised_land_complete
+		NOT = { nhs_is_revolution_target = yes }
+		FROM = {
+			NOT = { is_subject_of = ROOT }
+			NOT = { alliance_with = ROOT }
+			any_owned_province = {
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+			}
+		}
+	}
+	
+	war_goal = nhs_wargoal_north_american_hegemony_expanded
+}
+
+cb_nhs_overseas_expansion = {
+	valid_for_subject = no
+
+	prerequisites = {
+		nhs_is_elysia_late = yes
+		is_free_or_tributary_trigger = yes
+		has_country_flag = nhs_completed_outward_focus
+		FROM = {
+			is_great_power = no
+			#primitives = no
+			is_free_or_tributary_trigger = yes
+			OR = {
+				technology_group = indian
+				technology_group = east_african
+				technology_group = central_african
+				technology_group = chinese
+				technology_group = sub_saharan
+			}
+		}
+	}
+	
+	war_goal = nhs_overseas_expansion
+}
+
+# cb_spartan_conquest = {
+
+	# prerequisites = {
+		# OR = {
+			# tag = MSN
+			# tag = MSG
+		# }
+		# FROM = {
+			# any_owned_province = {
+				# province_group = mesoamerica_pgroup
+			# }
+		# }
+		# NOT = { nhs_is_revolution_target = yes }
+	# }
+
+	# war_goal = msg_take_mesoamerica
+# }

@@ -1,0 +1,994 @@
+namespace = nhs_vov_firstyears
+
+###Events for before meeting Elysia
+##Kaupmenn trade with other colony
+country_event = {
+	id = nhs_vov_firstyears.1
+	title = nhs_vov_firstyears.1.t
+	desc = nhs_vov_firstyears.1.d
+	picture = norse_shore_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_kaupmenn
+			is_year = 1550
+		}
+		NOT = { has_country_modifier = nhs_vov_firstyears_cooldown }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = "nhs_vov_firstyears_cooldown"
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	#Ain't that a thing
+	option = {
+		name = "nhs_vov_firstyears.1.a"
+		add_country_modifier = {
+			name = "nhs_vov_kaupmenn"
+			duration = 1825
+		}
+		
+	}
+	
+	#Trading with those buggers? Never!
+	option = {
+		name = "nhs_vov_firstyears.1.b"
+		add_prestige = 5
+	}
+	
+}
+
+##Templar Treasure found
+country_event = {
+	id = nhs_vov_firstyears.2
+	title = nhs_vov_firstyears.2.t
+	desc = nhs_vov_firstyears.2.d
+	picture = norse_shipwreck_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			is_year = 1550
+			has_global_flag = nhs_vov_templar_treasure
+		}
+		NOT = { has_country_modifier = nhs_vov_firstyears_cooldown }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		set_global_flag = nhs_vov_templar_treasure
+		hidden_effect = {
+			add_country_modifier = {
+				name = "nhs_vov_firstyears_cooldown"
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	
+	#Gold! So much Gold!!
+	option = {
+		name = "nhs_vov_firstyears.2.a"
+		add_treasury = 300
+
+	}
+	
+}
+##Fishers arguing with whalers
+country_event = {
+	id = nhs_vov_firstyears.3
+	title = nhs_vov_firstyears.3.t
+	desc = nhs_vov_firstyears.3.d
+	picture = norse_shore_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_whaling 
+			has_country_modifier = nhs_vov_fishing
+			is_year = 1550
+		}
+		NOT = { has_country_modifier = nhs_vov_firstyears_cooldown }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = "nhs_vov_firstyears_cooldown"
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	# "Whaling is the blood of this nation"
+	option = {
+		name = "nhs_vov_firstyears.3.a"
+		add_country_modifier = {
+			name = "nhs_vov_whaling"
+			duration = 1825
+		}
+	}
+	
+	# "I always prefered fish myself"
+	option = {
+		name = "nhs_vov_firstyears.3.b"
+		add_country_modifier = {
+			name = "nhs_vov_fishing"
+			duration = 1825
+		}
+	}
+	option = {
+		ai_chance = { factor = 0 }
+		name = "nhs_vov_firstyears.3.c"
+		add_treasury = -10
+	}
+	
+	
+	
+}
+##Raiders bring shit all
+country_event = {
+	id = nhs_vov_firstyears.4
+	title = nhs_vov_firstyears.4.t
+	desc = nhs_vov_firstyears.4.d
+	picture = norse_boats_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			is_year = 1550
+		}
+		OR = {
+			had_country_flag = { flag = nhs_vov_raiders_return days = 3650 }
+			NOT = { has_country_flag = nhs_vov_raiders_return }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 48
+	}
+	
+	immediate = {
+		clr_country_flag = nhs_vov_raiders_return
+		set_country_flag = nhs_vov_raiders_return
+	}
+	
+	##Shame, shame, shame
+	option = {
+		name = "nhs_vov_firstyears.4.a"
+		add_prestige = -5
+		add_treasury = 1
+	}
+	
+}
+##Skraelings angry at us
+country_event = {
+	id = nhs_vov_firstyears.5
+	title = nhs_vov_firstyears.5.t
+	desc = nhs_vov_firstyears.5.d
+	picture = skraeling_trade_eventPicture
+
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_skraelings_angry
+			is_year = 1550
+		}
+		any_owned_province = {
+			OR = {
+				culture = skraeling
+				NOT = { culture_group = norse_g }
+			}
+			continent = north_america
+		}
+		NOT = { has_country_modifier = nhs_vov_firstyears_cooldown }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = "nhs_vov_firstyears_cooldown"
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	##They are just overreacting
+	option = {
+		name = "nhs_vov_firstyears.5.a"
+		every_owned_province = {
+			limit = {
+				OR = {
+					culture = skraeling
+					NOT = { culture_group = norse_g }
+				}
+				continent = north_america
+			}
+			add_province_modifier = {
+				name = "nhs_vov_skraelings_angry"
+				duration = 1825
+			}
+		}
+	}
+	
+}
+###Other colony is bring a prick
+#country_event = {
+#	id = nhs_vov_firstyears.6
+#	title = nhs_vov_firstyears.6.t
+#	desc = nhs_vov_firstyears.6.d
+#	picture = viking_court_eventPicture
+#	
+#	trigger = {
+#		AND = {
+#			tag = MK1 # Disabled
+#			tag = HLL
+#		}
+#		exists = MK1
+#		exists = HLL
+#		NOT = { has_country_modifier = nhs_vov_firstyears_cooldown }
+#	}
+#	
+#	mean_time_to_happen = {
+#		months = 12
+#	}
+#	
+#	immediate = {
+#		hidden_effect = {
+#			add_country_modifier = {
+#				name = "nhs_vov_firstyears_cooldown"
+#				duration = 1825
+#				hidden = yes
+#			}
+#		}
+#	}
+#	
+#	##What a bunch of pricks!
+#	option = {
+#		name = "nhs_vov_firstyears.6.a"
+#		if = {
+#			limit = {
+#				tag = MK1
+#			}
+#			add_opinion = { who = HLL modifier = "nhs_vov_norse_insult" }
+#		}
+#		if = {
+#			limit = {
+#				tag = HLL
+#			}
+#			add_opinion = { who = MK1 modifier = "nhs_vov_norse_insult" }
+#		}
+#	}
+#}
+##People question your authority
+country_event = {
+	id = nhs_vov_firstyears.7
+	title = nhs_vov_firstyears.7.t
+	desc = nhs_vov_firstyears.7.d
+	picture = viking_court_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			has_country_modifier = reduced_dip_reputation
+			is_year = 1550
+		}
+		NOT = { has_country_modifier = nhs_vov_firstyears_cooldown }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = "nhs_vov_firstyears_cooldown"
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	##But I am the Jarl!
+	option = {
+		name = "nhs_vov_firstyears.7.a"
+		add_country_modifier = {
+			name = "reduced_dip_reputation"
+			duration = 1825
+		}
+	}
+	
+}
+
+
+##The thing requests more offensive attitude
+country_event = {
+	id = nhs_vov_firstyears.8
+	title = nhs_vov_firstyears.8.t
+	desc = nhs_vov_firstyears.8.d
+	picture = viking_court_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_urge_for_conquest
+			is_year = 1550
+		}
+		NOT = { has_country_flag = nhs_conquest_mrk }
+		NOT = { has_country_flag = nhs_conquest_hll }
+		any_country = {
+			NOT = { tag = ROOT }
+			NOT = { culture_group = norse_g }
+			NOT = { truce_with = ROOT }
+			any_owned_province = {
+				any_neighbor_province = {
+					owned_by = ROOT
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	
+	##The nation urges for some war
+	option = {
+		name = "nhs_vov_firstyears.8.a"
+		if = {
+			limit = {
+				tag = MK1
+			}
+			set_country_flag = nhs_conquest_mrk
+			every_country = {
+				limit = {
+					NOT = { tag = ROOT }
+					NOT = { culture_group = norse_g }
+					any_owned_province = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+					}
+				}
+				set_country_flag = nhs_conquest_tar_mrk
+				reverse_add_casus_belli = {
+					target = ROOT
+					type = cb_nhs_raid_and_conquer
+					months = 120
+				}
+				every_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+					}
+					add_claim = ROOT
+				}
+			}
+		}
+		if = {
+			limit = {
+				tag = HLL
+			}
+			set_country_flag = nhs_conquest_hll
+			every_country = {
+				limit = {
+					NOT = { tag = ROOT }
+					NOT = { culture_group = norse_g }
+					any_owned_province = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+					}
+				}
+				set_country_flag = nhs_conquest_tar_hll
+				reverse_add_casus_belli = {	
+					target = ROOT
+					type = cb_nhs_raid_and_conquer
+					months = 120
+				}
+				every_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+					}
+					add_claim = ROOT
+				}
+			}
+		}
+		add_country_modifier = {
+			name = "nhs_vov_urge_for_conquest"
+			duration = 3650
+		}
+	}
+}
+
+##Falied Conquest
+country_event = {
+	id = nhs_vov_firstyears.10
+	title = nhs_vov_firstyears.10.t
+	desc = nhs_vov_firstyears.10.d
+	picture = viking_court_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_urge_for_conquest
+		}
+		OR = {
+			has_country_flag = nhs_conquest_mrk
+			has_country_flag = nhs_conquest_hll
+		}
+		is_at_war = no
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					tag = MK1
+				}
+				clr_country_flag = nhs_conquest_mrk
+				every_country = {
+					limit = {
+						has_country_flag = nhs_conquest_tar_mrk
+					}
+					clr_country_flag = nhs_conquest_tar_mrk
+				}
+			}
+			if = {
+				limit = {
+					tag = HLL
+				}
+				clr_country_flag = nhs_conquest_hll
+				every_country = {
+					limit = {
+						has_country_flag = nhs_conquest_tar_hll
+					}
+					clr_country_flag = nhs_conquest_tar_hll
+				}
+			}
+		
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_firstyears.10.a"
+		if = {
+			limit = {
+				tag = MK1
+			}
+			every_country = {
+				limit = {
+					has_country_flag = nhs_conquest_tar_mrk
+				}
+				every_owned_province = {
+					remove_claim = ROOT
+				}
+			}
+		}
+		if = {
+			limit = {
+				tag = HLL
+			}
+			every_country = {
+				limit = {
+					has_country_flag = nhs_conquest_tar_hll
+				}
+				every_owned_province = {
+					remove_claim = ROOT
+				}
+			}
+		}
+		if = {
+			limit = {
+				ai = no
+			}
+			add_prestige = -10
+			add_legitimacy = -10
+		}
+		if = {
+			limit = {
+				ai = yes
+			}
+			add_prestige = -1
+			add_legitimacy = -1
+		}
+	}
+}
+
+##Successfull Conquest
+country_event = {
+	id = nhs_vov_firstyears.13
+	title = nhs_vov_firstyears.13.t
+	desc = nhs_vov_firstyears.13.d
+	picture = nordic_battle_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		OR = {
+			has_country_flag = nhs_conquest_mrk
+			has_country_flag = nhs_conquest_hll
+		}
+		any_country = {
+			OR = {
+				AND = {
+					has_country_flag = nhs_conquest_tar_mrk
+					ROOT = {
+						tag = MK1
+					}
+				}
+				AND = {
+					has_country_flag = nhs_conquest_tar_hll
+					ROOT = {
+						tag = HLL
+					}
+				}
+			}
+			war_with = ROOT
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					tag = MK1
+				}
+				clr_country_flag = nhs_conquest_mrk
+				every_country = {
+					limit = {
+						has_country_flag = nhs_conquest_tar_mrk
+					}
+					clr_country_flag = nhs_conquest_tar_mrk
+				}
+			}
+			if = {
+				limit = {
+					tag = HLL
+				}
+				clr_country_flag = nhs_conquest_hll
+				every_country = {
+					limit = {
+						has_country_flag = nhs_conquest_tar_hll
+					}
+					clr_country_flag = nhs_conquest_tar_hll
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_firstyears.13.a"
+		add_prestige = 10
+		add_legitimacy = 10
+		add_treasury = 50
+		every_owned_province = {
+			add_unrest = -3
+		}
+	}
+}
+
+
+##Local gothi requests funds for repairing his temple
+country_event = {
+	id = nhs_vov_firstyears.9
+	title = nhs_vov_firstyears.9.t
+	desc = nhs_vov_firstyears.9.d
+	picture = norse_temple_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			is_year = 1550
+		}
+		NOT = { has_country_modifier = nhs_vov_firstyears_cooldown }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 50
+			NOT = { treasury = 100 }
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = "nhs_vov_firstyears_cooldown"
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	##Give the poor man some funds
+	option = {
+		name = "nhs_vov_firstyears.9.a"
+		ai_chance = { 
+			factor = 90
+			modifier = {
+				factor = 0
+				NOT = { treasury = 100 }
+			}
+		}
+		add_treasury = -100
+	}
+	
+	##We have no money to give
+	option = {
+		name = "nhs_vov_firstyears.9.b"
+		ai_chance = { factor = 10 }
+		add_prestige = -10
+	}
+	
+}
+##Cultural tensions in a village
+country_event = {
+	id = nhs_vov_firstyears.11
+	title = nhs_vov_firstyears.11.t
+	desc = nhs_vov_firstyears.11.d
+	picture = norse_street_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			is_year = 1550
+		}
+		NOT = {
+			any_owned_province = {
+				has_province_modifier = nhs_vov_cultural_tension
+			}
+		}
+		NOT = { has_country_modifier = nhs_vov_firstyears_cooldown }
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = "nhs_vov_firstyears_cooldown"
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	##No matter our ancestry, we are all Norse!
+	option = {
+		name = "nhs_vov_firstyears.11.a"
+		random_owned_province = {
+			add_province_modifier = {
+				name = "nhs_vov_cultural_tension"
+				duration = 1000
+			}
+		}
+	}
+	
+}
+##Local Blot
+country_event = {
+	id = nhs_vov_firstyears.12
+	title = nhs_vov_firstyears.12.t
+	desc = nhs_vov_firstyears.12.d
+	picture = norse_blot_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_local_blot
+			is_year = 1550
+		}
+		any_owned_province = {
+			religion = norse_pagan_reformed
+		}
+		NOT = { has_country_modifier = nhs_vov_firstyears_cooldown }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = "nhs_vov_firstyears_cooldown"
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	##No need for such things
+	
+	option = {
+		name = "nhs_vov_firstyears.12.a"
+		ai_chance = { factor = 10 }
+		add_prestige = -5
+	}
+	
+	##There's always time for a good Blot
+	
+	option = {
+		name = "nhs_vov_firstyears.12.b"
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0
+				NOT = { treasury = 50 }
+			}
+		}
+		add_treasury = -50
+		random_owned_province = {
+			limit = {
+				religion = norse_pagan_reformed
+			}
+			add_province_modifier = {
+				name = "nhs_vov_local_blot"
+				duration = 1825
+			}
+		}
+	}
+	
+}
+##Other colony still being a prick
+#country_event = {
+#	id = nhs_vov_firstyears.13
+#	title = nhs_vov_firstyears.13.t
+#	desc = nhs_vov_firstyears.13.d
+#	picture = 
+#	
+#	trigger = {
+#		OR = {
+#			tag = MK1
+#			tag = HLL
+#		}
+#		NOT = {
+#			has_opinion_modifier = {
+#				modifier = nhs_vov_other_insult
+#			}
+#			is_year = 1550
+#		}
+#		has_opinion_modifier = {
+#			modifier = nhs_vov_insult
+#		}
+#	}
+#	
+#	mean_time_to_happen = {
+#		months = 60
+#	}
+#	
+#	
+#	##They are still a bunch of pricks!
+#	option = {
+#		name = "nhs_vov_firstyears.13.a"
+#		
+#	}
+#	
+#}
+
+##Prestigious raiding party shamed by natives
+country_event = {
+	id = nhs_vov_firstyears.15
+	title = nhs_vov_firstyears.15.t
+	desc = nhs_vov_firstyears.15.d
+	picture = norse_boats_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+
+			is_year = 1550
+		}
+		OR = {
+			had_country_flag = { flag = nhs_vov_raiders_return days = 3650 }
+			NOT = { has_country_flag = nhs_vov_raiders_return }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		clr_country_flag = nhs_vov_raiders_return
+		set_country_flag = nhs_vov_raiders_return
+	}
+	
+	##Those darn skraelings
+	option = {
+		name = "nhs_vov_firstyears.15.a"
+		add_prestige = -5
+	}
+	
+}
+##Raiding party brings good haul of skraeling serfs
+country_event = {
+	id = nhs_vov_firstyears.16
+	title = nhs_vov_firstyears.16.t
+	desc = nhs_vov_firstyears.16.d
+	picture = norse_boats_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_extra_serfs
+			is_year = 1550
+		}
+		OR = {
+			had_country_flag = { flag = nhs_vov_raiders_return days = 3650 }
+			NOT = { has_country_flag = nhs_vov_raiders_return }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 48
+	}
+	
+	immediate = {
+		clr_country_flag = nhs_vov_raiders_return
+		set_country_flag = nhs_vov_raiders_return
+	}
+	
+	##More serfs to serve!
+	option = {
+		name = "nhs_vov_firstyears.16.a"
+		add_country_modifier = { 
+			name = "nhs_vov_extra_serfs"
+			duration = 1825
+		}
+	}
+	
+}
+
+##Raiding party brings cash
+country_event = {
+	id = nhs_vov_firstyears.18
+	title = nhs_vov_firstyears.18.t
+	desc = nhs_vov_firstyears.18.d
+	picture = norse_boats_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = MK1
+			tag = HLL
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_extra_serfs
+			is_year = 1550
+		}
+		OR = {
+			had_country_flag = { flag = nhs_vov_raiders_return days = 3650 }
+			NOT = { has_country_flag = nhs_vov_raiders_return }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		clr_country_flag = nhs_vov_raiders_return
+		set_country_flag = nhs_vov_raiders_return
+	}
+	
+	##More serfs to serve!
+	option = {
+		name = "nhs_vov_firstyears.18.a"
+		add_treasury = 100
+	}
+}
+
+##Local Skraelings adapt to our ways
+province_event = {
+	id = nhs_vov_firstyears.17
+	title = nhs_vov_firstyears.17.t
+	desc = nhs_vov_firstyears.17.d
+	picture = skraeling_trade_eventPicture
+	
+	trigger = {
+		NOT = {
+			culture_group = norse_g
+			is_year = 1550
+		}
+		owner = {
+			primary_culture = norse
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 100
+	}
+	
+	option = {
+		name ="nhs_vov_firstyears.17.a"
+		change_culture = norse
+		change_religion = norse_pagan_reformed
+		add_local_autonomy = 20
+	}
+	
+}

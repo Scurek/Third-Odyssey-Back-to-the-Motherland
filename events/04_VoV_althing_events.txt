@@ -1,0 +1,1401 @@
+namespace = nhs_vov_althingevents
+###Vinland Formed
+#Event for Vinland
+country_event = {
+	id = nhs_vov_althingevents.1
+	title = nhs_vov_althingevents.1.t
+	desc = nhs_vov_althingevents.1.d
+	picture = vinland_founded_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "nhs_vov_althingevents.1.a"
+		tooltip = {
+			add_government_reform = althing_republic
+		}
+		canada_region = {
+			limit = {
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = VIN
+		}
+		greenland_region = {
+			limit = {
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = VIN
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					knows_country = VIN
+					NOT = {
+						tag = VIN
+					}
+				}
+				country_event = { id = nhs_vov_althingevent.2 }
+			}
+		}
+	}
+}
+#Event for Other American Nations 
+country_event = {
+	id = nhs_vov_althingevents.2
+	title = nhs_vov_althingevents.2.t
+	desc = nhs_vov_althingevents.2.d
+	picture = vinland_founded_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		knows_country = VIN
+		NOT = {
+			tag = VIN
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.2.a"
+		if = {
+			limit = {
+				has_global_flag = nhs_vov_markland_deal
+				has_global_flag = nhs_vov_helluland_deal
+				OR = {
+					tag = NHS
+					nhs_is_elysia_late = yes
+				}
+			}
+			clr_global_flag = nhs_vov_markland_deal
+			clr_global_flag = nhs_vov_helluland_deal
+			set_global_flag = nhs_vov_vinland_deal
+			if = {
+				limit = {
+					has_country_modifier = nhs_vov_markland_deal
+				}
+				remove_country_modifier = nhs_vov_markland_deal
+				MK1 = { 
+					add_opinion = { who = ROOT modifier = nhs_broken_trade } 
+					country_event = { id = nhs_vov_coloniesevents.25 }
+				}
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs_vov_helluland_deal
+				}
+				remove_country_modifier = nhs_vov_helluland_deal
+				HLL = { 
+					add_opinion = { who = ROOT modifier = nhs_broken_trade } 
+					country_event = { id = nhs_vov_coloniesevents.25 }
+				}
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs_vov_markland_deal_after
+				}
+				remove_country_modifier = nhs_vov_markland_deal_after
+				MK1 = { 
+				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
+				country_event = { id = nhs_vov_coloniesevents.25 }
+				}
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs_vov_helluland_deal_after
+				}
+				remove_country_modifier = nhs_vov_helluland_deal_after
+				HLL = { 
+					add_opinion = { who = ROOT modifier = nhs_broken_trade } 
+					country_event = { id = nhs_vov_coloniesevents.25 }
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_global_flag = nhs_vov_trade_reduced }
+				}
+				add_country_modifier = {
+					name = nhs_vov_vinland_deal
+					duration = -1
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = nhs_vov_trade_reduced
+				}
+				add_country_modifier = {
+					name = nhs_vov_vinland_deal_after
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+#Elections
+country_event = {
+	id = nhs_vov_althingevents.3
+	title = nhs_vov_althingevents.3.t
+	desc = nhs_vov_althingevents.3.d
+	picture = norse_new_jarl_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.3.a"	# Current ruler stays
+		trigger = {
+			has_regency = no
+		}
+		ai_chance = { 
+			factor = 60
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 25 }
+			}	
+			modifier = {
+				factor = 0.5
+				NOT = { republican_tradition = 50 }
+			}				
+			modifier = {
+				factor = 0.5
+				NOT = { republican_tradition = 75 }
+			}	
+			modifier = {
+				factor = 2.0
+				republican_tradition = 90
+			}		
+		}
+		custom_tooltip = remains_ruler
+		change_adm = 1
+		change_dip = 1
+		change_mil = 1
+			
+		add_scaled_republican_tradition = -10
+		random_list = {
+			10 = {
+				add_adm_power = 50
+			}
+			10 = {
+				add_dip_power = 50
+			}
+			10 = {
+				add_mil_power = 50
+			}
+		}
+	}
+	option = {
+		name = "nhs_vov_althingevents.3.b"	# An administrator type
+		ai_chance = { factor = 20 }
+		custom_tooltip = vov_elections_adm_tt
+		hidden_effect = {
+			if = {
+				limit = { has_active_policy = mandatory_service }
+				define_ruler = {
+					mil = 1
+					adm = 4
+					dip = 1
+					max_random_dip = 3
+					random_gender = yes
+				}
+			}
+			else = {
+				define_ruler = {
+					mil = 1
+					adm = 4
+					dip = 1
+					max_random_dip = 3
+				}
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = vin_gothar 
+			}
+			add_faction_influence = {
+				faction = vin_gothar
+				influence = 20
+			}				
+		}
+	}
+	option = {
+		name = "nhs_vov_althingevents.3.c"	# A diplomat
+		ai_chance = { factor = 20 }
+		custom_tooltip = vov_elections_dip_tt
+		hidden_effect = {
+			if = {
+				limit = { has_active_policy = mandatory_service }
+				define_ruler = {
+					dip = 4
+					adm = 1
+					mil = 1
+					max_random_mil = 3
+					random_gender = yes
+				}
+			}
+			else = {
+				define_ruler = {
+					dip = 4
+					adm = 1
+					mil = 1
+					max_random_mil = 3
+				}
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = vin_farmadr 
+			}
+			add_faction_influence = {
+				faction = vin_farmadr
+				influence = 20
+			}				
+		}		
+	}
+	option = {
+		name = "nhs_vov_althingevents.3.e"	# A military man
+		ai_chance = { factor = 20 }
+		custom_tooltip = vov_elections_mil_tt
+		hidden_effect = {
+			if = {
+				limit = { has_active_policy = mandatory_service }
+				define_ruler = {
+					mil = 4
+					adm = 1
+					dip = 1
+					max_random_adm = 3
+					random_gender = yes
+				}
+			}
+			else = {
+				define_ruler = {
+					mil = 4
+					adm = 1
+					dip = 1
+					max_random_adm = 3
+				}
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = vin_vikingr 
+			}
+			add_faction_influence = {
+				faction = vin_vikingr
+				influence = 20
+			}				
+		}		
+	}
+}
+
+#Elections uppon death
+country_event = {
+	id = nhs_vov_althingevents.4
+	title = nhs_vov_althingevents.4.t
+	desc = nhs_vov_althingevents.4.d
+	picture = norse_new_jarl_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic 
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.4.a"	# An administrator type
+		ai_chance = { factor = 40 }
+		custom_tooltip = vov_elections_adm_tt
+		hidden_effect = {
+			if = {
+				limit = { has_active_policy = mandatory_service }
+				define_ruler = {
+					mil = 1
+					adm = 4
+					dip = 1
+					max_random_dip = 3
+					random_gender = yes
+				}
+			}
+			else = {
+				define_ruler = {
+					mil = 1
+					adm = 4
+					dip = 1
+					max_random_dip = 3
+				}
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = vin_gothar
+			}
+			add_faction_influence = {
+				faction = vin_gothar
+				influence = 20
+			}				
+		}
+	}
+	option = {
+		name = "nhs_vov_althingevents.4.b"	# A diplomat
+		ai_chance = { factor = 30 }
+		custom_tooltip = vov_elections_dip_tt
+		hidden_effect = {
+			if = {
+				limit = { has_active_policy = mandatory_service }
+				define_ruler = {
+					dip = 4
+					adm = 1
+					mil = 1
+					max_random_mil = 3
+					random_gender = yes
+				}
+			}
+			else = {
+				define_ruler = {
+					dip = 4
+					adm = 1
+					mil = 1
+					max_random_mil = 3
+				}
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = vin_farmadr 
+			}
+			add_faction_influence = {
+				faction = vin_farmadr
+				influence = 20
+			}				
+		}			
+	}
+	option = {
+		name = "nhs_vov_althingevents.4.c"	# A military man
+		ai_chance = { factor = 30 }
+		custom_tooltip = vov_elections_mil_tt
+		hidden_effect = {
+			if = {
+				limit = { has_active_policy = mandatory_service }
+				define_ruler = {
+					mil = 4
+					adm = 1
+					dip = 1
+					max_random_adm = 3
+					random_gender = yes
+				}
+			}
+			else = {
+				define_ruler = {
+					mil = 4
+					adm = 1
+					dip = 1
+					max_random_adm = 3
+				}
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = vin_vikingr 
+			}
+			add_faction_influence = {
+				faction = vin_vikingr
+				influence = 20
+			}				
+		}		
+	}
+}
+###Faction struggle events
+
+##Choose between the 3 factions
+
+#The gothar have called for an assembly of free men bequesting everyone to support internal growth, many of those free folk however argue that we should focus on enriching the nation first through bloodshed or commerce
+country_event = {
+	id = nhs_vov_althingevents.10
+	title = nhs_vov_althingevents.10.t
+	desc = nhs_vov_althingevents.10.d
+	picture = norse_temple_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		has_faction = vin_gothar
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.10.a"
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = 10
+		}	
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = -10
+		}	
+		add_faction_influence = {
+			faction = vin_gothar
+			influence = -10
+		}	
+	}
+	option = {
+		name = "nhs_vov_althingevents.10.b"
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = -10
+		}	
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = 10
+		}	
+		add_faction_influence = {
+			faction = vin_gothar
+			influence = -10
+		}	
+	}
+	option = {
+		name = "nhs_vov_althingevents.10.c"
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = -10
+		}	
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = -10
+		}	
+		add_faction_influence = {
+			faction = vin_gothar
+			influence = 10
+		}	
+	}
+	
+}
+##Choose between raider and trader support
+
+#Many free men are assembled arguing what their fate will be next summer
+
+country_event = {
+	id = nhs_vov_althingevents.11
+	title = nhs_vov_althingevents.11.t
+	desc = nhs_vov_althingevents.11.d
+	picture = norse_street_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.11.a"
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = 10
+		}	
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = -10
+		}	
+	}
+	option = {
+		name = "nhs_vov_althingevents.11.b"
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = -10
+		}	
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = 10
+		}	
+	}
+}
+
+##Choose between raider and gothar support
+
+#An argument has sprung up between several vikingar and a famous gothi. It seems the gothi wishes to bequest their spoils to improve Odin's Temple which has divided the group of raiders between the most devot and several cynics.
+country_event = {
+	id = nhs_vov_althingevents.12
+	title = nhs_vov_althingevents.12.t
+	desc = nhs_vov_althingevents.12.d
+	picture = norse_temple_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		has_faction = vin_gothar
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.12.a"
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = 10
+		}	
+		add_faction_influence = {
+			faction = vin_gothar
+			influence = -10
+		}	
+	}
+	option = {
+		name = "nhs_vov_althingevents.12.b"
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = -10
+		}	
+		add_faction_influence = {
+			faction = vin_gothar
+			influence = 10
+		}	
+	}
+}
+##Choose between trader and gothar support
+
+#A great commotion has ocorred in the trade district between some of our kuapmenn and a group of gothar. It appears that what started as a simple haggle has turned into a theological and economical discution.
+country_event = {
+	id = nhs_vov_althingevents.13
+	title = nhs_vov_althingevents.13.t
+	desc = nhs_vov_althingevents.13.d
+	picture = awesome_viking_city_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		has_faction = vin_gothar
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.13.a"
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = 10
+		}	
+		add_faction_influence = {
+			faction = vin_gothar
+			influence = -10
+		}	
+	}
+	option = {
+		name = "nhs_vov_althingevents.13.b"
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = -10
+		}	
+		add_faction_influence = {
+			faction = vin_gothar
+			influence = 10
+		}	
+	}
+}
+##Gain/Lose trader support or something else
+
+#One of the most renown farmadr has come to you with a proposition.....
+country_event = {
+	id = nhs_vov_althingevents.14
+	title = nhs_vov_althingevents.14.t
+	desc = nhs_vov_althingevents.14.d
+	picture = norse_metropolis_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		NOT = {
+			faction_in_power = vin_farmadr
+		}
+		NOT = { has_country_modifier = nhs_vov_farmenn_surplus }
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.14.a"
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = 10
+		}	
+		add_country_modifier = {
+			name = nhs_vov_farmenn_surplus
+			duration = 1850
+		}
+	}
+	option = {
+		name = "nhs_vov_althingevents.14.b"
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = -10
+		}	
+		add_prestige = 10
+	}
+}
+#It seems several trade expeditions are missing, cutting off farmadr's profits and diverting some of the youth away from the trading industry.
+country_event = {
+	id = nhs_vov_althingevents.15
+	title = nhs_vov_althingevents.15.t
+	desc = nhs_vov_althingevents.15.d
+	picture = viking_pier_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		faction_in_power = vin_farmadr
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.15.a"
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = -20
+		}	
+		add_prestige = -5
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.15.b"
+		add_years_of_income = -0.1
+		add_dip_power = -20
+	}
+	
+}
+##Gain/Lose raider support or something else
+
+#One of the greatest warriors of your nation has set up a new viking and several men are floking in.
+country_event = {
+	id = nhs_vov_althingevents.16
+	title = nhs_vov_althingevents.16.t
+	desc = nhs_vov_althingevents.16.d
+	picture = norse_party_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		NOT = {
+			faction_in_power = vin_vikingr
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_vikingar_surplus
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.16.a"
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = 10
+		}	
+		add_country_modifier = {
+			name = nhs_vov_vikingar_surplus
+			duration = 1850
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.16.b"
+		add_years_of_income = -0.1
+		add_mil_power = -10
+	}
+	
+}
+
+#A famous bragi has created a new piece dipcting grand adventures, looting, raiding and fighting southerners and skraelings, inticing the youth to the ways of the vikingr.
+country_event = {
+	id = nhs_vov_althingevents.17
+	title = nhs_vov_althingevents.17.t
+	desc = nhs_vov_althingevents.17.d
+	picture = bragi_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		NOT = {
+			faction_in_power = vin_vikingr
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_vikingar_surplus
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.17.a"
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = 20
+		}	
+		add_country_modifier = {
+			name = nhs_vov_vikingar_surplus
+			duration = 1850
+		}
+	}
+	option = {
+		name = "nhs_vov_althingevents.17.b"
+		
+		add_yearly_manpower = 0.2
+		add_years_of_income = -0.3
+		add_mil_power = -30
+	}
+}
+#With the passage of years people have stopped looking for adventure in the seas, striving instead for safer ways of living
+country_event = {
+	id = nhs_vov_althingevents.18
+	title = nhs_vov_althingevents.18.t
+	desc = nhs_vov_althingevents.18.d
+	picture = norse_party_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		faction_in_power = vin_vikingr
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.18.a"
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = -20
+		}	
+		add_prestige = -5
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.18.b"
+		add_years_of_income = -0.1
+		add_mil_power = -20
+	}
+}
+##Gain/Lose gothar support or something else
+
+#It seems that several war torn men have turned to the temples seeking peaceful jobs and a closer spiritual conection to the gods. These men could however be directed somewhere else.
+country_event = {
+	id = nhs_vov_althingevents.19
+	title = nhs_vov_althingevents.19.t
+	desc = nhs_vov_althingevents.19.d
+	picture = norse_temple_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		NOT = { faction_in_power = vin_gothar }
+		has_faction = vin_gothar
+		NOT = { has_country_modifier = nhs_vov_gothar_surplus }
+	}
+	
+	option = { 
+		name = "nhs_vov_althingevents.19.a"
+		add_faction_influence = {
+			faction = vin_gothar
+			influence = 20
+		}	
+		add_country_modifier = {
+			name = nhs_vov_gothar_surplus
+			duration = 1850
+		}
+	}
+	option = {
+		name = "nhs_vov_althingevents.19.b"
+		add_yearly_manpower = 0.2
+		add_years_of_income = -0.3
+		add_adm_power = -30
+	}
+}
+#The various temples of the gods cannot harbour more people and several folk are now seeking alternative career paths
+country_event = {
+	id = nhs_vov_althingevents.20
+	title = nhs_vov_althingevents.20.t
+	desc = nhs_vov_althingevents.20.d
+	picture = norse_temple_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_factions = yes
+		faction_in_power = vin_gothar
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.20.a"
+		add_faction_influence = {
+			faction = vin_gothar
+			influence = -20
+		}	
+		add_prestige = -5
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.20.b"
+		add_years_of_income = -0.1
+		add_adm_power = -10
+	}
+}
+##########################################################################
+###Gothar factions is created alongside the reformation of the Norse faith
+
+#The ancient Norse religion is proving unable to withstand the pressure from the gods of the south. Rather than abandoning the old ways a great conclave of gothar were assembled to reform the faith. A holy scripture was written with codifided rites and a new strict church hierarchy was formed. Hopefully this new centralized religious structure will help us faight back against the weak and effeminate foreign beliefs!
+#For Vinland
+country_event = {
+	id = nhs_vov_althingevents.30
+	title = nhs_vov_althingevents.30.t
+	desc = nhs_vov_althingevents.30.d
+	picture = irminsul_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	
+	option = {
+		name = "nhs_vov_althingevents.30.a"
+		trigger = {
+			has_reform = althing_republic
+		}
+		add_faction = vin_gothar
+		hidden_effect = {
+			set_country_flag = vin_gothar_exist
+		}
+	}
+	option = {
+		name = "nhs_vov_althingevents.30.b"
+		trigger = {
+			NOT = { has_reform = althing_republic }
+		}
+	}
+}
+##Raider Faction events
+# Vikingar bring loot!
+country_event = {
+	id = nhs_vov_althingevents.40
+	title = nhs_vov_althingevents.40.t
+	desc = nhs_vov_althingevents.40.d
+	picture = norse_boats_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		faction_in_power = vin_vikingr
+	}
+
+	
+	option = {
+		name = "nhs_vov_althingevents.40.a"
+		add_years_of_income = 0.15
+	}
+	option = {
+		name = "nhs_vov_althingevents.40.b"
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = 10
+		}
+		add_prestige = 2
+	}
+	
+	
+}
+# Vikingar join the army!
+country_event = {
+	id = nhs_vov_althingevents.41
+	title = nhs_vov_althingevents.41.t
+	desc = nhs_vov_althingevents.41.d
+	picture = norse_party_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		faction_in_power = vin_vikingr
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.41.a"
+		add_yearly_manpower = 0.1
+	}
+	option = {
+		name = "nhs_vov_althingevents.41.b"
+		create_general = { tradition = 50 }
+	}
+	
+	
+}
+# Vikingar refuses to acknoledge you!
+country_event = {
+	id = nhs_vov_althingevents.42
+	title = nhs_vov_althingevents.42.t
+	desc = nhs_vov_althingevents.42.d
+	picture = norse_party_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		NOT = { faction_in_power = vin_vikingr }
+		NOT = {
+			faction_influence = {
+				faction = vin_vikingr
+				influence = 10
+			}
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_vikingar_minnus
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.42.a"
+		add_country_modifier = {
+			name = nhs_vov_vikingar_minnus
+			duration = 3650
+		}
+	}
+	
+}
+##Trader Faction events
+# Farmenn propose mercantile reforms.
+country_event = {
+	id = nhs_vov_althingevents.43
+	title = nhs_vov_althingevents.43.t
+	desc = nhs_vov_althingevents.43.d
+	picture = norse_metropolis_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		faction_in_power = vin_farmadr
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.43.a"
+		add_mercantilism = 1
+		add_adm_power = -50
+		add_dip_power = -50
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = 10
+		}
+	}
+	option = {
+		name = "nhs_vov_althingevents.43.b"
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = -20
+		}
+	}
+	
+	
+}
+# Farmenn find success in foreign markets!
+country_event = {
+	id = nhs_vov_althingevents.44
+	title = nhs_vov_althingevents.44.t
+	desc = nhs_vov_althingevents.44.d
+	picture = norse_metropolis_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		faction_in_power = vin_farmadr
+		NOT = {
+			has_country_modifier = nhs_vov_farmenn_foreign
+		}
+	}
+	
+	
+	option = {
+		name = "nhs_vov_althingevents.44.a"
+		add_country_modifier = {
+			name = nhs_vov_farmenn_foreign
+			duration = 3650
+		}
+	}
+	
+	
+	
+}
+# Farmenn stop supporting the nation!
+country_event = {
+	id = nhs_vov_althingevents.45
+	title = nhs_vov_althingevents.45.t
+	desc = nhs_vov_althingevents.45.d
+	picture = viking_pier_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		NOT = { faction_in_power = vin_farmadr }
+		NOT = {
+			faction_influence = {
+				faction = vin_farmadr
+				influence = 10
+			}
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_farmenn_minnus
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.45.a"
+		add_country_modifier = {
+			name = nhs_vov_farmenn_minnus
+			duration = 3650
+		}
+	}
+	
+	
+	
+}
+##Gothar Faction events
+
+# Gothi's invest in the nation!
+country_event = {
+	id = nhs_vov_althingevents.46
+	title = nhs_vov_althingevents.46.t
+	desc = nhs_vov_althingevents.46.d
+	picture = norse_temple_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		faction_in_power = vin_gothar
+		NOT = {
+			has_country_modifier = nhs_vov_gothar_surplus
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_althingevents.46.a"
+		add_country_modifier = {
+			name = nhs_vov_gothar_surplus
+			duration = 3650
+		}
+	}
+	
+}
+# The gothar close their doors!
+country_event = {
+	id = nhs_vov_althingevents.47
+	title = nhs_vov_althingevents.47.t
+	desc = nhs_vov_althingevents.47.d
+	picture = norse_temple_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		NOT = { faction_in_power = vin_gothar }
+		NOT = {
+			faction_influence = {
+				faction = vin_gothar
+				influence = 10
+			}
+		}
+		NOT = {
+			has_country_modifier = nhs_vov_gothar_minnus
+		}
+		
+	}
+
+	
+	option = {
+		name = "nhs_vov_althingevents.46.a"
+		add_country_modifier = {
+			name = nhs_vov_gothar_minnus
+			duration = 3650
+		}
+	}
+	
+}
+
+###Althing flavour events
+# Shady deals between free men
+country_event = {
+	id = nhs_vov_althingevents.50
+	title = nhs_vov_althingevents.50.t
+	desc = nhs_vov_althingevents.50.d
+	picture = norse_street_eventPicture
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		NOT = {
+			has_country_modifier = nhs_vov_corruption
+		}
+		NOT = { stability = 2 }
+		NOT = { republican_tradition = 95 }
+		NOT = { has_country_modifier = nhs_vov_althing_cooldown }
+	}
+	
+	mean_time_to_happen = {
+		months = 700
+		modifier = {
+			factor = 0.4
+			NOT = { stability = -2 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { stability = -1 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { stability = 0 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { republican_tradition = 50 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { republican_tradition = 40 }
+		}
+		modifier = {
+			factor = 0.4
+			NOT = { republican_tradition = 30 }
+		}
+		modifier = {
+			factor = 0.25
+			NOT = { republican_tradition = 20 }
+		}
+		modifier = {
+			factor = 0.0001
+			NOT = { republican_tradition = 10 }
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = nhs_vov_althing_cooldown
+				duration = 7300
+				hidden = yes
+			}
+		}
+	}
+	
+	option = { #Bah, who cares?
+		name = "nhs_vov_althingevents.50.a"
+		ai_chance = { factor = 75 }
+		add_country_modifier = {
+			name = nhs_vov_corruption
+			duration = 3650
+		}
+		add_stability_or_adm_power = yes
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = 10
+		}
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = -10
+		}
+	}
+	option = { #Fine! Someone investigate this!
+		name = "nhs_vov_althingevents.50.b"
+		ai_chance = {
+			factor = 25 
+			modifier = {
+				factor = 4
+				treasury = 100
+			}
+		}
+		add_prestige = 15
+		if = {
+			limit = {
+				OR = {
+					NOT = { monthly_income = 8 }
+					ai = yes
+				}
+			}
+			add_treasury = -100
+		}
+		if = {
+			limit = {
+				ai = no
+				monthly_income = 8
+			}
+			add_years_of_income = -1
+		}
+		add_stability = -1
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = -10
+		}
+		add_faction_influence = {
+			faction = vin_vikingr
+			influence = 10
+		}
+	}
+}
+# Althing members assassinated
+country_event = {
+	id = nhs_vov_althingevents.51
+	title = nhs_vov_althingevents.51.t
+	desc = nhs_vov_althingevents.51.d
+	picture = norse_street_eventPicture
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		NOT = { stability = 2 }
+		NOT = { republican_tradition = 95 }
+		NOT = { has_country_modifier = nhs_vov_althing_ass_cooldown }
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+		modifier = {
+			factor = 0.4
+			NOT = { stability = -2 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { stability = -1 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { stability = 0 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { republican_tradition = 50 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { republican_tradition = 40 }
+		}
+		modifier = {
+			factor = 0.4
+			NOT = { republican_tradition = 30 }
+		}
+		modifier = {
+			factor = 0.25
+			NOT = { republican_tradition = 20 }
+		}
+		modifier = {
+			factor = 0.0001
+			NOT = { republican_tradition = 10 }
+		}
+		modifier = {
+			factor = 0.5
+			has_country_modifier = nhs_vov_corruption
+		}
+		modifier = {
+			factor = 2
+			NOT = { has_country_modifier = nhs_vov_corruption }
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = nhs_vov_althing_ass_cooldown
+				duration = 7300
+				hidden = yes
+			}
+		}
+	}
+	
+	option = { #The Althing isnt what it used to be.
+		name = "nhs_vov_althingevents.51.a"
+		add_stability = -1
+		add_country_modifier = {
+			name = nhs_vov_assassination
+			duration = 3650
+		}
+		add_faction_influence = {
+			faction = vin_farmadr
+			influence = -10
+		}
+	}
+}
+# Efficient meetings
+country_event = {
+	id = nhs_vov_althingevents.52
+	title = nhs_vov_althingevents.52.t
+	desc = nhs_vov_althingevents.52.d
+	picture = viking_court_eventPicture
+	
+	trigger = {
+		has_reform = althing_republic
+		has_factions = yes
+		NOT = { has_country_modifier = nhs_vov_corruption }
+		stability = 0
+		NOT = { has_country_modifier = nhs_vov_althing_cooldown }
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+		modifier = {
+			factor = 0.9
+			stability = 1
+		}
+		modifier = {
+			factor = 0.8
+			stability = 2
+		}
+		modifier = {
+			factor = 0.5
+			stability = 3
+		}
+		modifier = {
+			factor = 0.9
+			republican_tradition = 75
+		}
+		modifier = {
+			factor = 0.8
+			republican_tradition = 80
+		}
+		modifier = {
+			factor = 0.75
+			republican_tradition = 90
+		}
+		modifier = {
+			factor = 0.5
+			republican_tradition = 95
+		}
+		modifier = {
+			factor = 0.5
+			republican_tradition = 100
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = nhs_vov_althing_cooldown
+				duration = 7300
+				hidden = yes
+			}
+		}
+	}
+	
+	option = { #The Althing is running well
+		name = nhs_vov_althingevents.52.a
+		add_stability_or_adm_power = yes
+		add_adm_power = 50
+		add_dip_power = 50
+		add_mil_power = 50
+	}
+}

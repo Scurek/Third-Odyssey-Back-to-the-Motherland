@@ -1,0 +1,432 @@
+namespace = msg_mission
+
+#Barbaroi uprising! (MSN)
+country_event = {
+	id = msg_mission.1
+	title = msg_mission.1.t
+	desc = msg_mission.1.d
+	picture = elysian_army_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = MSN
+		nhs_at_war_with_ely = yes
+		has_global_flag = msg_completed_incite_barbaroi_rebellion_flag_temp
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		nhs_make_event_target_elysia = yes
+		if = {
+			limit = {
+				NOT = {
+					calc_true_if = {
+						any_province = {
+							nhs_is_elysia_owner = yes
+							has_province_flag = msg_prepped_for_barbaroi_rise_temp
+						}
+						amount = 5
+					}
+				}
+			}
+			random_province = { # Repetition is alright here
+				limit = {
+					nhs_is_elysia_owner = yes
+					NOT = { culture = high_elysian }
+					NOT = { culture = shqipproi }
+					NOT = { culture = shqiperi }
+				}
+				set_province_flag = msg_prepped_for_barbaroi_rise_temp
+			}
+			random_province = {
+				limit = {
+					nhs_is_elysia_owner = yes
+					NOT = { culture = high_elysian }
+					NOT = { culture = shqipproi }
+					NOT = { culture = shqiperi }
+				}
+				set_province_flag = msg_prepped_for_barbaroi_rise_temp
+			}
+			random_province = {
+				limit = {
+					nhs_is_elysia_owner = yes
+					NOT = { culture = high_elysian }
+					NOT = { culture = shqipproi }
+					NOT = { culture = shqiperi }
+				}
+				set_province_flag = msg_prepped_for_barbaroi_rise_temp
+			}
+			random_province = {
+				limit = {
+					nhs_is_elysia_owner = yes
+					NOT = { culture = high_elysian }
+					NOT = { culture = shqipproi }
+					NOT = { culture = shqiperi }
+				}
+				set_province_flag = msg_prepped_for_barbaroi_rise_temp
+			}
+			random_province = {
+				limit = {
+					nhs_is_elysia_owner = yes
+					NOT = { culture = high_elysian }
+					NOT = { culture = shqipproi }
+					NOT = { culture = shqiperi }
+				}
+				set_province_flag = msg_prepped_for_barbaroi_rise_temp
+			}
+			
+		}
+	}
+	
+	option = {
+		name = msg_mission.1.a
+		event_target:existing_elysia = { country_event = { id = msg_mission.2 } }
+		clr_global_flag = msg_completed_incite_barbaroi_rebellion_flag_temp
+	}
+}
+
+#Barbaroi uprising! (ELY)
+country_event = {
+	id = msg_mission.2
+	title = msg_mission.2.t
+	desc = msg_mission.2.d
+	picture = elysian_army_eventPicture
+	
+	fire_only_once = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		nhs_is_elysia_late = yes
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					calc_true_if = {
+						any_owned_province = {
+							has_province_flag = msg_prepped_for_barbaroi_rise_temp
+						}
+						amount = 5
+					}
+				}
+			}
+			every_owned_province = {
+				limit = {
+					has_province_flag = msg_prepped_for_barbaroi_rise_temp
+				}
+				clr_province_flag = msg_prepped_for_barbaroi_rise_temp
+				spawn_rebels = {
+					type = particularist_rebels
+					size = 3
+					culture = elysameric
+					unrest = 15
+					friend = MSN
+				}
+				if = {
+					limit = {
+						NOT = { native_culture = yes }
+					}
+					change_culture = elysameric
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					calc_true_if = {
+						any_owned_province = {
+							has_province_flag = msg_prepped_for_barbaroi_rise_temp
+						}
+						amount = 10
+					}
+				}
+			}
+			every_owned_province = {
+				limit = {
+					has_province_flag = msg_prepped_for_barbaroi_rise_temp
+				}
+				clr_province_flag = msg_prepped_for_barbaroi_rise_temp
+				spawn_rebels = {
+					type = particularist_rebels
+					size = 2
+					culture = elysameric
+					unrest = 15
+					friend = MSN
+				}
+				if = {
+					limit = {
+						NOT = { native_culture = yes }
+					}
+					change_culture = elysameric
+				}
+			}
+		}
+		else = {
+			every_owned_province = {
+				limit = {
+					has_province_flag = msg_prepped_for_barbaroi_rise_temp
+				}
+				clr_province_flag = msg_prepped_for_barbaroi_rise_temp
+				spawn_rebels = {
+					type = particularist_rebels
+					size = 1
+					culture = elysameric
+					unrest = 15
+					friend = MSN
+				}
+				if = {
+					limit = {
+						NOT = { native_culture = yes }
+					}
+					change_culture = elysameric
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = msg_mission.2.a
+	}
+}
+
+#Varangian raiders! (MSN)
+country_event = {
+	id = msg_mission.3
+	title = msg_mission.3.t
+	desc = msg_mission.3.d
+	picture = norse_army_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = MSN
+		nhs_at_war_with_ely = yes
+		has_global_flag = msg_purchased_varangian_mercs_ely_temp
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		nhs_make_event_target_elysia = yes
+	}
+	
+	option = {
+		name = msg_mission.3.a
+		clr_global_flag = msg_purchased_varangian_mercs_ely_temp
+		event_target:existing_elysia = { country_event = { id = msg_mission.4 } }
+	}
+}
+
+#Varangian raiders! (ELY)
+country_event = {
+	id = msg_mission.4
+	title = msg_mission.4.t
+	desc = msg_mission.4.d
+	picture = norse_army_eventPicture
+	
+	fire_only_once = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		nhs_is_elysia_late = yes
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				VGD = {
+					any_owned_province = {
+						any_neighbor_province = {
+							nhs_is_elysia_owner = yes
+						}
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					any_neighbor_province = {
+						owned_by = VGD
+					}
+				}
+				spawn_rebels = {
+					type = anti_tax_rebels
+					size = 5 #note: will never exceed ELY's forcelimit
+					culture = varangian_e
+					unrest = 5
+					win = yes
+					friend = MSN
+				}
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					NOT = { province_id = 953 }
+				}
+				spawn_rebels = {
+					type = anti_tax_rebels
+					size = 5 #note: will never exceed ELY's forcelimit
+					culture = varangian_e
+					unrest = 5
+					friend = MSN
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = msg_mission.4.a
+	}
+}
+
+#ELY:Spartan Purge
+country_event = {
+	id = msg_mission.5
+	title = msg_mission.5.t
+	desc = msg_mission.5.d
+	picture = GOLDEN_CITY_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+	}
+	
+	option = {
+		name = msg_mission.5.a
+		add_spy_network_in = {
+			who = FROM
+			value = -50
+		}
+		tooltip = {
+			add_historical_rival = MSN
+		}
+	}
+}
+
+#Elysia: Sparta has claimed our throne!
+country_event = {
+	id = msg_mission.6
+	title = msg_mission.6.t
+	desc = msg_mission.6.d
+	picture = Aztlan_War_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		nhs_is_elysia_late = yes
+	}
+	
+	option = {
+		name = msg_mission.6.a
+		tooltip = {
+			northeast_america_region = {
+				add_permanent_claim = FROM
+			}
+			southeast_america_region = {
+				add_permanent_claim = FROM
+			}
+			mississippi_region = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_permanent_claim = FROM
+			}
+			rio_grande_region = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_permanent_claim = FROM
+			}
+			# every_owned_province = {
+				# limit = {
+					# OR = {
+						# region = northeast_america_region
+						# region = southeast_america_region
+					# }
+				# }
+				# add_permanent_claim = MSN
+			# }
+		}
+	}
+}
+
+#Northern Expansion: Province of Tayshia
+country_event = {
+	id = msg_mission.7
+	title = msg_mission.7.t
+	desc = msg_mission.7.d
+	picture = MINE_2_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		tag = MSN
+	}
+	
+	option = {
+		name = msg_mission.7.a
+	}
+}
+
+#Northern Expansion: Lone Star Legion
+country_event = {
+	id = msg_mission.8
+	title = msg_mission.8.t
+	desc = msg_mission.8.d
+	picture = FORTENHANCE_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		tag = MSN
+	}
+	
+	option = {
+		name = msg_mission.8.a
+	}
+}
+
+#Southern Expansion: Province of Greater Retoria
+country_event = {
+	id = msg_mission.9
+	title = msg_mission.9.t
+	desc = msg_mission.9.d
+	picture = RIVER_THROUGH_VALLEY_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		tag = MSN
+	}
+	
+	option = {
+		name = msg_mission.9.a
+	}
+}
+
+#Caribbean Expansion: Gythia Port
+country_event = {
+	id = msg_mission.10
+	title = msg_mission.10.t
+	desc = msg_mission.10.d
+	picture = ELYSIAN_HARBOUR_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		tag = MSN
+	}
+	
+	option = {
+		name = msg_mission.10.a
+	}
+}

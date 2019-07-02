@@ -1,0 +1,630 @@
+namespace = elysian_revolution
+
+# Revolution
+country_event = {
+	id = elysian_revolution.1
+	title = "ELYREVNAME01"
+	desc = "ELYREVDESC01"
+	picture = REVOLUTION_eventPicture
+	
+	major = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = nhs_had_first_civil_war
+		hidden_effect = {
+			set_variable = {
+				which = RevolutionCountingVariable
+				value = 60
+			}
+		}
+	}
+	option = {
+		name = "ELYREVOPTA01"			# Bring me their heads!
+		custom_tooltip = nhs_elysian_revolution_begun
+		#set_country_flag = elysian_revolution
+		add_prestige = -30
+		add_stability = -6
+		
+	}
+}
+country_event = {
+	id = elysian_revolution.2
+	title = "ELYREVNAME02"
+	desc = "ELYREVDESC02"
+	picture = SIEGE_eventPicture
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	trigger = {
+		any_owned_province = {
+			is_capital = no
+			NOT = { area = CAPITAL }
+			is_state = yes
+			NOT = {
+				any_province = {
+					area = PREV
+					owned_by = ROOT
+					has_province_modifier = rev_had_revolutionary_attack
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					is_capital = no
+					is_state = yes
+					NOT = { area = CAPITAL }
+					NOT = {
+						any_province = {
+							area = PREV
+							owned_by = ROOT
+							has_province_modifier = rev_had_revolutionary_attack
+						}
+					}
+				}
+				save_event_target_as = rev_attacked_province
+				#area = {
+				#	limit = {
+				#		owned_by = ROOT
+				#		is_capital = no
+				#		NOT = { has_province_flag = rev_revolutionary_attack }
+				#	}
+				#	set_province_flag = rev_revolutionary_attack
+				#}
+			}
+		}
+	}
+	
+	option = {
+		name = "ELYREVOPTA201"			# The Revolutionaries Capture the Entire Militia!
+		custom_tooltip = nhs_revolution_increase_greatly
+		hidden_effect = {
+			change_variable = {
+				which = RevolutionCountingVariable
+				value = 10
+			}
+		}
+		event_target:rev_attacked_province = {
+			spawn_rebels = {
+				type = revolutionary_rebels
+				size = 4.0
+				win = yes
+			}
+			area = {
+                limit = { owned_by = ROOT }
+                add_province_modifier = {
+                    name = "rev_had_revolutionary_attack"
+                    duration = 5475
+                }
+            }
+		}
+		#every_owned_province = {
+		#	limit = {
+		#		has_province_flag = rev_revolutionary_attack
+		#	}
+		#	add_province_modifier = {
+		#		name = "rev_had_revolutionary_attack"
+		#		duration = 913
+		#	}
+		#	clr_province_flag = rev_revolutionary_attack
+		#}
+	}
+	option = {
+		name = "ELYREVOPTA202"			# The Militia Escapes, albeit with heavy losses!
+		custom_tooltip = nhs_revolution_increase_slightly
+		hidden_effect = {
+			change_variable = {
+				which = RevolutionCountingVariable
+				value = 5
+			}
+		}
+		event_target:rev_attacked_province = {
+			spawn_rebels = {
+				type = revolutionary_rebels
+				size = 4.0
+				win = yes
+			}
+			area = {
+                limit = { owned_by = ROOT }
+                add_province_modifier = {
+                    name = "rev_had_revolutionary_attack"
+                    duration = 5475
+                }
+            }
+		}
+	}
+}
+country_event = {
+	id = elysian_revolution.3
+	title = "ELYREVNAME03"
+	desc = "ELYREVDESC03"
+	picture = WOUNDED_SOLDIERS_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_province = {
+			is_capital = no
+			NOT = { area = CAPITAL }
+			is_state = yes
+			NOT = {
+				any_province = {
+					area = PREV
+					owned_by = ROOT
+					has_province_modifier = rev_had_army_attacked
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					is_capital = no
+					NOT = { area = CAPITAL }
+					is_state = yes
+					NOT = {
+						any_province = {
+							area = PREV
+							owned_by = ROOT
+							has_province_modifier = rev_had_army_attacked
+						}
+					}
+				}
+				save_event_target_as = rev_army_attacked_tar
+			}
+		}
+	}
+	
+	option = {
+		name = "ELYREVOPTA301"			# We have no choice but to retreat.
+		custom_tooltip = nhs_revolution_increase_slightly
+		hidden_effect = {
+			change_variable = {
+				which = RevolutionCountingVariable
+				value = 5
+			}
+		}
+		event_target:rev_army_attacked_tar = {
+			area = {
+				limit = { owned_by = ROOT } 
+				add_province_modifier = {
+					name = "rev_had_army_attacked"
+					duration = 913
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = elysian_revolution.4
+	title = "ELYREVNAME04"
+	desc = "ELYREVDESC04"
+	picture = BATTLE_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_province = {
+			is_capital = no
+			NOT = { area = CAPITAL }
+			is_state = yes
+			NOT = {
+				any_province = {
+					area = PREV
+					owned_by = ROOT
+					has_province_modifier = rev_had_army_engaged
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					is_capital = no
+					NOT = { area = CAPITAL }
+					is_state = yes
+					NOT = {
+						any_province = {
+							area = PREV
+							owned_by = ROOT
+							has_province_modifier = rev_had_army_engaged
+						}
+					}
+				}
+				save_event_target_as = rev_army_engaged_province
+			}
+		}
+	}
+	
+	option = {
+		name = "ELYREVOPTA401"			# We will crush the enemy!
+		custom_tooltip = nhs_revolution_decrease_slightly
+		hidden_effect = {
+			subtract_variable = {
+				which = RevolutionCountingVariable
+				value = 5
+			}
+		}
+		event_target:rev_army_engaged_province = {
+			spawn_rebels = {
+				type = revolutionary_rebels
+				size = 4.0
+				win = yes
+			}
+			area = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = "rev_had_army_engaged"
+					duration = 913
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = elysian_revolution.5
+	title = "ELYREVNAME05"
+	desc = "ELYREVDESC05"
+	picture = SIEGE_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_province = {
+			is_capital = no
+			NOT = { area = CAPITAL }
+			is_state = yes
+			NOT = {
+				any_province = {
+					area = PREV
+					owned_by = ROOT
+					has_province_modifier = rev_had_city_liberated
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					is_capital = no
+					NOT = { area = CAPITAL }
+					is_state = yes
+					NOT = {
+						any_province = {
+							area = PREV
+							owned_by = ROOT
+							has_province_modifier = rev_had_city_liberated
+						}
+					}
+				}
+				save_event_target_as = rev_city_liberated_province
+			}
+		}
+	}
+	
+	option = {
+		name = "ELYREVOPTA501"			# The enemy forces are captured!
+		custom_tooltip = nhs_revolution_decrease_greatly
+		hidden_effect = {
+			subtract_variable = {
+				which = RevolutionCountingVariable
+				value = 10
+			}
+		}
+		event_target:rev_city_liberated_province = {
+			area = {
+				limit = { owned_by = ROOT }
+				add_province_modifier = {
+					name = "rev_had_city_liberated"
+					duration = 913
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "ELYREVOPTA502"			# What remains of the enemy forces sneak out of the city and get away.
+		custom_tooltip = nhs_revolution_decrease_slightly
+		hidden_effect = {
+			subtract_variable = {
+				which = RevolutionCountingVariable
+				value = 5
+			}
+		}
+		event_target:rev_city_liberated_province = {
+			area = {
+				limit = { owned_by = ROOT }
+				add_province_modifier = {
+					name = "rev_had_city_liberated"
+					duration = 913
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = elysian_revolution.6
+	title = "ELYREVNAME06"
+	desc = "ELYREVDESC06"
+	picture = {
+		trigger = {
+			OR = {
+				AND = {
+					check_variable = {
+						which = RevolutionCountingVariable
+						value = 80
+					}
+					has_regency = yes
+				}
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 110
+				}
+			}
+		}
+		picture = VICTORY_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = {
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 11
+				}
+			}
+		}
+		picture = BYZANTINE_EMPEROR_eventPicture
+	}
+	
+	trigger = {
+		has_disaster = elysian_revolution
+		OR = {
+			check_variable = {
+				which = RevolutionCountingVariable
+				value = 110
+			}
+			NOT = {
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 11
+				}
+			}
+			AND = {
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 80
+				}
+				has_regency = yes
+			}
+		}
+	}
+	
+	major = yes
+	
+	immediate = {
+		hidden_effect = {
+			end_disaster = elysian_revolution
+		}
+	}
+	
+	option = {
+		name = "ELYREVOPTA601"			# The Emperor flees into exile! Zíto i epanástasi!
+		trigger = {
+			OR = {
+				AND = {
+					check_variable = {
+						which = RevolutionCountingVariable
+						value = 80
+					}
+					has_regency = yes
+				}
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 110
+				}
+			}
+		}
+		tooltip = {
+			end_disaster = elysian_revolution
+		}
+		custom_tooltip = nhs_revolution_success
+		disband_rebels = revolutionary_rebels
+		change_tag = ERF
+		nhs_change_government = { GOV = republic }
+		add_government_reform = elysian_republic
+		if = {
+			limit = {
+				has_dlc = "Dharma"
+			}
+			lose_reforms = 2
+		}
+		else = {
+			custom_tooltip = nhs_starts_with_senate_disolved_tt
+			hidden_effect = {
+				dissolve_parliament = yes
+			}
+		}
+		add_stability = 1
+		
+		if = {
+			limit = {
+				has_heir = yes
+				has_regency = no
+			}
+			exile_heir_as = nhs_rev_exiled_heir
+			set_global_flag = nhs_has_exiled_heir
+			exile_ruler_as = nhs_rev_exiled_ruler
+			set_global_flag = nhs_has_exiled_ruler
+			#custom_tooltip = nhs_ruler_and_heir_exiled_tt
+		}
+		else_if = {
+			limit = {
+				has_regency = no
+				has_heir = no
+			}
+			exile_ruler_as = nhs_rev_exiled_ruler
+			set_global_flag = nhs_has_exiled_ruler
+			#custom_tooltip = nhs_ruler_and_heir_exiled_tt
+			#tooltip = {
+			#	kill_ruler = yes
+			#}
+		}
+		else_if = {
+			limit = {
+				has_regency = yes
+			}
+			exile_heir_as = nhs_rev_exiled_heir
+			set_global_flag = nhs_has_exiled_heir
+			#tooltip = {
+			#	kill_ruler = yes
+			#}
+		}
+		define_ruler = {
+			mil = 3
+			dip = 3
+			adm = 3
+		}
+	}
+	
+	option = {
+		name = "ELYREVOPTA602"			# The Revolution has been put down! Zíto o Basileus!
+		trigger = {
+			NOT = {
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 11
+				}
+			}
+		}
+		tooltip = {
+			end_disaster = elysian_revolution
+		}
+		custom_tooltip = nhs_revolution_failure
+		disband_rebels = revolutionary_rebels
+		add_stability = 1
+		add_country_modifier = {
+			name = rev_absolute_authority
+			duration = -1
+		}
+	}
+}
+#country_event = {
+#	id = elysian_revolution.7
+#	title = "ELYREVNAME07"
+#	desc = "ELYREVDESC07"
+#	picture = AWESOMECITY_eventPicture
+#	
+#	fire_only_once = yes
+#	
+#	hidden = yes
+#	
+#	trigger = {
+#		has_disaster = elysian_revolution
+#		check_variable = {
+#			which = RevolutionCountingVariable
+#			value = 110
+#		}
+#	}
+#	
+#	mean_time_to_happen = {
+#		days = 1
+#	}
+#	
+#	immediate = {
+#		hidden_effect = {
+#			set_country_flag = elysian_revolution_over
+#		}
+#	}
+#	
+#	option = {
+#		name = "ELYREVOPTA701"
+#	}
+#}
+#country_event = {
+#	id = elysian_revolution.8
+#	title = "ELYREVNAME07"
+#	desc = "ELYREVDESC07"
+#	picture = AWESOMECITY_eventPicture
+#	
+#	fire_only_once = yes
+#	
+#	hidden = yes
+#	
+#	trigger = {
+#		has_disaster = elysian_revolution
+#		has_regency = yes
+#	}
+#	
+#	mean_time_to_happen = {
+#		days = 1
+#	}
+#	
+#	immediate = {
+#		hidden_effect = {
+#			set_country_flag = elysian_revolution_over
+#		}
+#	}
+#	
+#	option = {
+#		name = "ELYREVOPTA701"
+#	}
+#}
+#country_event = {
+#	id = elysian_revolution.9
+#	title = "ELYREVNAME07"
+#	desc = "ELYREVDESC07"
+#	picture = AWESOMECITY_eventPicture
+#	
+#	fire_only_once = yes
+#	
+#	hidden = yes
+#	
+#	trigger = {
+#		has_disaster = elysian_revolution
+#		NOT = {
+#			check_variable = {
+#				which = RevolutionCountingVariable
+#				value = 11
+#			}
+#		}
+#	}
+#	
+#	immediate = {
+#		hidden_effect = {
+#			set_country_flag = elysian_revolution_over
+#		}
+#	}
+#	
+#	option = {
+#		name = "ELYREVOPTA701"
+#	}
+#}

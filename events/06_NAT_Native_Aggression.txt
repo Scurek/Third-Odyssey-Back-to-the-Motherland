@@ -1,0 +1,302 @@
+namespace = nhs2_native_aggression
+
+#Global Aggression
+#Aggression Groups: CAHOKIAN(Great Plains, Mississipi, South Elysian coast, Half the aggresion from IROQUOIS), IROQUOIS(Great Lakes, North Elysian Coast, Half the aggresion from CAHOKIAN), NORTHERN(Vinland, Thorfin Bay, Half the aggresion from IROQUOIS), WESTERN(Hyperboreala, Hesperidian Fields), SOUTHERN(Mexico, Central America)
+#
+
+### On game start
+#country_event = {
+#	id = nhs2_native_aggression.1
+#	title = gcc_elysianevents.1.t
+#	desc = gcc_elysianevents.1.d
+#	picture = cahokia_eventPicture
+#	
+#	is_triggered_only = yes
+#	hidden = yes
+#	
+#	trigger = {
+#		always = no #Disabled
+#		NOT = { has_global_flag = nhs_set_aggression }
+#	}
+#	
+#	immediate = {
+#		set_global_flag = nhs_set_aggression
+#		REB = {
+#			set_variable = { which = nhs_global_aggression value = 0 }
+#			set_variable = { which = nhs_cah_aggression value = 0 }
+#			set_variable = { which = nhs_iro_aggression value = 0 }
+#			set_variable = { which = nhs_north_aggression value = 0 }
+#			set_variable = { which = nhs_west_aggression value = 0 }
+#			set_variable = { which = nhs_south_aggression value = 0 }
+#		}
+#	}
+#
+#	option = {
+#		name = "GCC_ELYSIANEVENTS_NAME_1A"
+#	}
+#}
+#
+### On province taken
+## on_province_owner_change
+#province_event = {
+#	id = nhs2_native_aggression.2
+#	title = gcc_elysianevents.1.t
+#	desc = gcc_elysianevents.1.d
+#	picture = cahokia_eventPicture
+#	
+#	is_triggered_only = yes
+#	hidden = yes
+#	
+#	trigger = {
+#		always = no #Disabled
+#	}
+#	
+#	immediate = {
+#		owner = {
+#			change_variable = { which = nhs_own_aggression value = 2 }
+#		}
+#		#IROQUOIS
+#		if = {
+#			limit = {
+#				superregion = northeast_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 2 }
+#				change_variable = { which = nhs_iro_aggression value = 4 }
+#				change_variable = { which = nhs_cah_aggression value = 2 }
+#				change_variable = { which = nhs_north_aggression value = 2 }
+#			}
+#		}
+#		#CAHOKIAN
+#		if = {
+#			limit = {
+#				superregion = southeast_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 2 }
+#				change_variable = { which = nhs_cah_aggression value = 4 }
+#				change_variable = { which = nhs_iro_aggression value = 2 }
+#			}
+#		}
+#		#NORTHERN
+#		if = {
+#			limit = {
+#				superregion = north_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 2 }
+#				change_variable = { which = nhs_north_aggression value = 4 }
+#			}
+#		}
+#		#WESTERN
+#		if = {
+#			limit = {
+#				superregion = west_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 2 }
+#				change_variable = { which = nhs_west_aggression value = 4 }
+#			}
+#		}
+#		#SOUTHERN
+#		if = {
+#			limit = {
+#				superregion = south_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 2 }
+#				change_variable = { which = nhs_south_aggression value = 4 }
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = "GCC_ELYSIANEVENTS_NAME_1A"
+#	}
+#}
+#
+#province_event = {
+#	id = nhs2_native_aggression.3
+#	title = gcc_elysianevents.1.t
+#	desc = gcc_elysianevents.1.d
+#	picture = cahokia_eventPicture
+#	
+#	hidden = yes
+#	trigger = {
+#		always = no #Disabled
+#		NOT = { has_province_flag = nhs_was_colony }
+#		is_colony = yes
+#		OR = {
+#			superregion = south_elysia_superregion
+#			superregion = west_elysia_superregion
+#			superregion = north_elysia_superregion
+#			superregion = northeast_elysia_superregion
+#			superregion = southeast_elysia_superregion
+#		}
+#	}
+#	
+#	immediate = {
+#		set_province_flag = nhs_was_colony
+#	}
+#	
+#	option = {
+#		name = "GCC_ELYSIANEVENTS_NAME_1A"
+#	}
+#
+#}
+#
+### On province colonised
+#province_event = {
+#	id = nhs2_native_aggression.4
+#	title = gcc_elysianevents.1.t
+#	desc = gcc_elysianevents.1.d
+#	picture = cahokia_eventPicture
+#	
+#	hidden = yes
+#	trigger = {
+#		always = no #Disabled
+#		has_province_flag = nhs_was_colony
+#		is_colony = no
+#		NOT = { nhs_homelands = yes }
+#		OR = {
+#			superregion = south_elysia_superregion
+#			superregion = west_elysia_superregion
+#			superregion = north_elysia_superregion
+#			superregion = northeast_elysia_superregion
+#			superregion = southeast_elysia_superregion
+#		}
+#	}
+#	
+#	immediate = {
+#		#IROQUOIS
+#		if = {
+#			limit = {
+#				superregion = northeast_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 1 }
+#				change_variable = { which = nhs_iro_aggression value = 2 }
+#			}
+#		}
+#		#CAHOKIAN
+#		if = {
+#			limit = {
+#				superregion = southeast_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 1 }
+#				change_variable = { which = nhs_cah_aggression value = 2 }
+#			}
+#		}
+#		#NORTHERN
+#		if = {
+#			limit = {
+#				superregion = north_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 2 }
+#				change_variable = { which = nhs_north_aggression value = 4 }
+#			}
+#		}
+#		#WESTERN
+#		if = {
+#			limit = {
+#				superregion = west_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 1 }
+#				change_variable = { which = nhs_west_aggression value = 2 }
+#			}
+#		}
+#		#SOUTHERN
+#		if = {
+#			limit = {
+#				superregion = south_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 1 }
+#				change_variable = { which = nhs_south_aggression value = 2 }
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = "GCC_ELYSIANEVENTS_NAME_1A"
+#	}
+#}
+#
+### On nation annexed
+## on_annexed
+#province_event = {
+#	id = nhs2_native_aggression.4
+#	title = gcc_elysianevents.1.t
+#	desc = gcc_elysianevents.1.d
+#	picture = cahokia_eventPicture
+#	
+#	is_triggered_only = yes
+#	hidden = yes
+#	
+#	trigger = {
+#		always = no #Disabled
+#	}
+#	
+#	immediate = {
+#		#IROQUOIS
+#		if = {
+#			limit = {
+#				superregion = northeast_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 3 }
+#				change_variable = { which = nhs_iro_aggression value = 6 }
+#				change_variable = { which = nhs_cah_aggression value = 3 }
+#				change_variable = { which = nhs_north_aggression value = 3 }
+#			}
+#		}
+#		#CAHOKIAN
+#		if = {
+#			limit = {
+#				superregion = southeast_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 3 }
+#				change_variable = { which = nhs_cah_aggression value = 6 }
+#				change_variable = { which = nhs_iro_aggression value = 3 }
+#			}
+#		}
+#		#NORTHERN
+#		if = {
+#			limit = {
+#				superregion = north_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 3 }
+#				change_variable = { which = nhs_north_aggression value = 6 }
+#			}
+#		}
+#		#WESTERN
+#		if = {
+#			limit = {
+#				superregion = west_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 3 }
+#				change_variable = { which = nhs_west_aggression value = 6 }
+#			}
+#		}
+#		#SOUTHERN
+#		if = {
+#			limit = {
+#				superregion = south_elysia_superregion
+#			}
+#			REB = {
+#				change_variable = { which = nhs_global_aggression value = 3 }
+#				change_variable = { which = nhs_south_aggression value = 6 }
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = "GCC_ELYSIANEVENTS_NAME_1A"
+#	}
+#}

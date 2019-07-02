@@ -1,0 +1,856 @@
+# INSTRUCTIONS:
+#
+# condition				A diplomatic action can have any number of condition blocks, each with its own
+#						tooltip, potential and allow section
+#
+# 	tooltip					Sets a custom text string similar to the hardcoded limits
+# 							If no tooltip is scripted, the tooltip for the actual trigger will be shown
+#							Note that the custom tooltip is only shown if the allow trigger is NOT met
+#
+# 	potential				Determines if the trigger is applicable or not
+# 	allow					Determines if the action is valid or not
+#
+# effect				A diplomatic action can only have one effect block
+
+# ROOT					actor
+# FROM					target
+
+########################################
+# DIPLOMATIC ACTIONS
+########################################
+# royal_marriage
+# declarewar
+# requestpeace
+# support_independence_action
+# allianceaction
+# embargoaction
+# annexationaction
+# integrationaction
+# vassalaction
+# guaranteeaction
+# warningaction
+# threaten_war
+# milaccess
+# fleet_access
+# offer_fleet_access
+# offermilaccess
+# insultaction
+# giftaction
+# claimaction
+# callaction
+# offerloan
+# warsubsidy
+# sellprov
+# imperial_relations_action
+# religious_unity_action
+# grant_electorate
+# remove_electorate
+# grant_freecity
+# remove_freecity
+# demand_unlawful_territory_action
+# call_crusade_action
+# excommunicate_action
+# enforce_peace
+# improve_relation
+# fabricate_claim
+# justify_trade_conflict
+# transfer_trade_power
+# infiltrate_administration
+# sabotage_reputation
+# support_rebels
+# sow_discontent
+# study_technology
+# agitate_for_liberty
+# form_coalition
+# request_to_join_federation
+# invite_to_federation
+# support_heir
+# break_marriage
+# designate_march
+# ask_for_march
+# sell_ships_action
+# counterespionage
+# abandon_union_action
+
+allianceaction = {
+	condition = {
+		tooltip = NHS_CANNOT_ALLY_YET
+		potential = {
+			exists = HLL
+			exists = MK1
+			FROM = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+			}
+			ROOT = {
+				AND = {
+					nhs_is_elysia = yes
+					FROM = {
+						OR = {
+							tag = HLL
+							tag = MK1
+						}
+					}
+				}
+				AND = {
+					nhs_is_elysia = yes
+					FROM = {
+						nhs_is_elysia = yes
+					}
+				}
+				NOT = { has_global_flag = nhs_meeting }
+				NOT = { is_year = 1460 }
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = NHS_ONLY_ONE_VIKING_ALLY
+		potential = {
+			FROM = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+			}
+			ROOT = {
+				nhs_is_elysia = yes
+				OR = {
+					alliance_with = MK1
+					alliance_with = HLL
+				}
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = NHS_ONLY_TRADING_VIKING_ALLY
+		potential = {
+			FROM = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+			}
+			ROOT = {
+				nhs_is_elysia = yes
+				OR = {
+					AND = {
+						NOT = {
+							trading_with_helluland = yes
+						}
+						FROM = { tag = HLL }
+					}
+					AND = {
+						NOT = {
+							trading_with_markland = yes
+						}
+						FROM = { tag = MK1 }
+					}
+				}
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = NHS_ONLY_TRADING_VIKING_ALLY_V
+		potential = {
+			FROM = {
+				nhs_is_elysia = yes
+			}
+			ROOT = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+				OR = {
+					AND = {
+						NOT = {
+							trading_with_helluland = yes
+						}
+						ROOT = { tag = HLL }
+					}
+					AND = {
+						NOT = {
+							trading_with_markland = yes
+						}
+						ROOT = { tag = MK1 }
+					}
+				}
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = NHS_ONLY_ONE_VIKING_ALLY_V
+		potential = {
+			FROM = {
+				nhs_is_elysia = yes
+			}
+			ROOT = {
+				OR = {
+					tag = MK1
+					tag = HLL
+				}
+				nhs_condition_all_ely = { KOMANDA = alliance_with }
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_ely_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_ely_allow = yes
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_eu_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_eu_allow = yes
+		}
+	}
+}
+
+threaten_war = {
+	condition = {
+		tooltip = NHS_COLONIES
+		potential = {
+			FROM = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+				NOT = { has_global_flag = nhs_vov_war_brewing }
+			}
+			ROOT = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+				NOT = { has_global_flag = nhs_vov_war_brewing }
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+}
+
+declarewar = {
+#	effect = {
+#		if = {
+#			limit = {
+#				tag = ELY
+#				has_country_flag = nhs_expanding_south_complete
+#				FROM = {
+#					any_owned_province = {
+#						continent = north_america
+#					}
+#				}
+#			}
+#			every_province = {
+#				limit = {
+#					owned_by = FROM
+#					continent = north_america
+#				}
+#				add_claim = ROOT
+#			}
+#		}
+#		if = {
+#			limit = {
+#				tag = ELY
+#				has_country_flag = nhs_promised_land_complete
+#				NOT = { has_country_flag = nhs_expanding_south_complete }
+#				FROM = {
+#					any_owned_province = {
+#						OR = {
+#							continent = north_america
+#							continent = south_america
+#						}
+#					}
+#				}
+#			}
+#			every_province = {
+#				limit = {
+#					owned_by = FROM
+#					OR = {
+#						continent = north_america
+#						continent = south_america
+#					}
+#				}
+#				add_claim = ROOT
+#			}
+#		}
+#	}
+	condition = {
+		tooltip = 100_YEAR_PEACE
+		potential = {
+			ROOT = {
+				nhs_is_elysia = yes
+				has_country_modifier = nhs2_albanians_albania_treaty
+			}
+			FROM = {
+				tag = SHQ
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = TRADE_DEAL
+		potential = {
+			FROM = {
+				OR = {
+					AND = {
+						tag = MK1
+						trading_with_markland = yes
+					}
+					AND = {
+						tag = HLL
+						trading_with_helluland = yes
+					}
+					AND = {
+						tag = VIN
+						trading_with_vinland = yes
+					}
+				}
+			}
+			ROOT = {
+				nhs_is_elysia = yes
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = TRADE_DEAL
+		potential = {
+			FROM = {
+				nhs_is_elysia = yes
+			}
+			ROOT = {
+				OR = {
+					tag = MK1
+					tag = HLL
+					tag = VIN
+				}
+				has_country_modifier = nhs_vov_trade_deal
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = NHS_PEACE
+		potential = {
+			FROM = {
+				tag = BYZ
+				has_country_modifier = byz_flight
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = NHS_PEACE
+		potential = {
+			ROOT = {
+				tag = BYZ
+				has_country_modifier = byz_flight
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = NHS_COLONIES
+		potential = {
+			FROM = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+				NOT = { has_global_flag = nhs_vov_war_brewing }
+			}
+			ROOT = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+				NOT = { has_global_flag = nhs_vov_war_brewing }
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	#NEW CONDITION FOR AI SPARTA
+	#Removed so ai is a bit better
+	# condition = {
+		# tooltip = MSG_NO_WAR_DURING_REFORM_AI_ONLY
+		# potential = {
+			# ROOT = {
+				# tag = MSN
+				# ai = yes
+			# }
+			# FROM = {
+				# always = yes
+			# }
+		# }
+		# allow = {
+			# NOT = { has_country_flag = msg_reform_in_progress }
+		# }
+	# }
+	#NEW CONDITION FOR SPARTA AND FRIENDS :)
+	condition = {
+		tooltip = MSG_NO_WAR_WITH_PACTMATES
+		potential = {
+			ROOT = { tag = MSN }
+			FROM = {
+				OR = {
+					has_country_flag = msg_in_barbaroi_pact_with_MSN
+					has_country_flag = msg_in_viking_pact_with_MSN
+				}
+			}
+		}
+		allow = { always = no }
+	}
+	condition = {
+		tooltip = MSG_NO_WAR_WITH_PACTMATES
+		potential = {
+			ROOT = {
+				OR = {
+					has_country_flag = msg_in_barbaroi_pact_with_MSN
+					has_country_flag = msg_in_viking_pact_with_MSN
+				}
+			}
+			FROM = {
+				tag = MSN
+			}
+		}
+		allow = { always = no }
+	}
+}
+
+
+warningaction = {
+	condition = {
+		potential = {
+			ROOT = {
+				any_neighbor_country = {
+					tag = BYZ
+				}
+			}
+			FROM = {
+				OR = {
+					NOT = { tag = BYZ }
+					is_year = 1448
+				}
+			}
+		}
+		allow = {
+			FROM = {
+				OR = {
+					NOT = { tag = BYZ }
+					is_year = 1448
+				}
+			}
+		}
+	}
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_ely_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_ely_allow = yes
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_eu_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_eu_allow = yes
+		}
+	}
+}
+
+royal_marriage = {
+	condition = {
+		tooltip = MARWAR
+		potential = {
+		}
+		allow = {
+			NOT = { war_with = FROM }
+		}
+	}
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_ely_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_ely_allow = yes
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_eu_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_eu_allow = yes
+		}
+	}
+}
+
+annexationaction = {
+	condition = {
+		tooltip = ANNEX_TOO_LOW
+		potential = {
+			FROM = {
+				vassal_of = ROOT
+			}
+		}
+		allow = {
+			FROM = {
+				has_opinion = {
+					who = ROOT
+					value = 190
+				}
+			}
+		}
+	}
+	condition = {
+		tooltip = ANNEX_PU
+		potential = {
+			FROM = {
+				is_subject_of_type = personal_union
+				religion_group = ROOT
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = ANNEX_PU_50_YEARS
+		potential = {
+			FROM = {
+				is_subject_of_type = personal_union
+				NOT = { religion_group = ROOT }
+			}
+		}
+		allow = {
+			FROM = {
+				had_country_flag = { flag = nhs_been_subject_for_50_years days = 18250 }
+			}
+		}
+	}
+	condition = {
+		tooltip = ANNEX_IA_50_YEARS
+		potential = {
+			FROM = {
+				is_subject_of_type = nhs_imperial_associate
+			}
+		}
+		allow = {
+			FROM = {
+				had_country_flag = { flag = nhs_been_subject_for_50_years days = 18250 }
+			}
+		}
+	}
+	#condition = {
+	#	tooltip = ANNEXINVALID
+	#	potential = {
+	#		FROM = {
+	#			vassal_of = ROOT
+	#		}
+	#	}
+	#	allow = {
+	#		FROM = {
+	#			years_in_vassalage_under = {
+	#				who = ROOT
+	#				years = 10
+	#			}
+	#		}
+	#	}
+	#}
+}
+
+integrationaction = {
+	condition = {
+		tooltip = INTEGRATETOOLOWDESC
+		potential = {
+			senior_union_with = FROM
+		}
+		allow = {
+			FROM = {
+				has_opinion = {
+					who = ROOT
+					value = 190
+				}
+			}
+		}
+	}
+	#condition = {
+	#	tooltip = INTEGRATEINVALID
+	#	potential = {
+	#		senior_union_with = FROM
+	#	}
+	#	allow = {
+	#		FROM = {
+	#			years_in_union_under = {
+	#				who = ROOT
+	#				years = 50
+	#			}
+	#		}
+	#	}
+	#}
+}
+
+vassalaction = {
+	condition = {
+		tooltip = VASSALINVALID
+		potential = {
+		}
+		allow = {
+			alliance_with = FROM
+			FROM = {
+				has_opinion = {
+					who = ROOT
+					value = 190
+				}
+			}
+			FROM = { is_at_war = no }
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_ely_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_ely_allow = yes
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_eu_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_eu_allow = yes
+		}
+	}
+}
+
+abandon_union_action = {
+	condition = {
+		potential = {
+		}
+		allow = {
+			ROOT = {
+				senior_union_with = FROM
+				is_at_war = no
+			}
+		}
+	}
+}
+
+
+
+
+form_coalition = {
+	condition = {
+		tooltip = MINAGGRESSIVEEXPANSION
+		potential = {	
+		}
+		allow = {
+			has_opinion_modifier = {
+				modifier = aggressive_expansion
+				who = FROM
+			}		
+			NOT = {
+				has_opinion_modifier = {
+					modifier = aggressive_expansion
+					who = FROM
+					value = -50
+				}
+			}
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_ely_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_ely_allow = yes
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_eu_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_eu_allow = yes
+		}
+	}
+}
+
+#fabricate_claim = {
+#	condition = {
+#		tooltip = NHS_NOTNATIVE
+#		potential = {
+#			OR = {
+#				government = native_council
+#				government = native_council2
+#			}
+#		}
+#		allow = {
+#			NOT = { government = native_council }
+#			NOT = { government = native_council2 }
+#		}
+#	}
+#}
+
+guaranteeaction = {
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_ely_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_ely_allow = yes
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_eu_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_eu_allow = yes
+		}
+	}
+}
+
+support_independence_action = {
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_ely_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_ely_allow = yes
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_eu_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_eu_allow = yes
+		}
+	}
+}
+
+claimaction = {
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_ely_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_ely_allow = yes
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_eu_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_eu_allow = yes
+		}
+	}
+}
+
+sellprov = {
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_ely_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_ely_allow = yes
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_eu_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_eu_allow = yes
+		}
+	}
+}
+
+demand_unlawful_territory_action = {
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			FROM = {
+				is_subject_of_type = elysian_subject
+			}
+		}
+		allow = {
+			FROM = {
+				NOT = {
+					is_subject_of_type = elysian_subject
+				}
+			}
+		}
+	}
+}

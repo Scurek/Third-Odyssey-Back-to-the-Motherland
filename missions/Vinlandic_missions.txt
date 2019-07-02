@@ -1,0 +1,530 @@
+nhs_left_start_vikings = {
+	slot = 1 
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MK1
+			tag = HLL
+			tag = VIN
+		}
+	}
+	colonize_greenland = {
+		position = 4
+		icon = mission_rb_settle_the_north
+		provinces_to_highlight = {
+			area = greenland_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			#has_discovered = 370
+			#has_discovered = 371
+			any_owned_province = {
+				is_colony = no
+				area = greenland_area
+			}
+		}
+		effect = {
+			add_adm_power = 50
+			add_prestige = 5
+			add_permanent_claim = 370
+			add_permanent_claim = 371
+		}
+	}
+	vin_conquer_iceland = {
+		position = 5
+		required_missions = {
+			colonize_greenland
+		}
+		icon = mission_rb_colonise_canada
+		provinces_to_highlight = {
+			OR = {
+				province_id = 370
+				province_id = 371
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 370
+			owns_or_non_sovereign_subject_of = 371
+			custom_trigger_tooltip = {
+				tooltip = vin_has_discovered_europe
+				OR = {
+					has_country_flag = nhs_europe_discovered_got
+					AND = {
+						calc_true_if = {
+							all_province = {
+								region = british_isles_region
+								has_discovered = ROOT
+							}
+							amount = 10
+						}
+						calc_true_if = {
+							all_province = {
+								region = scandinavia_region
+								has_discovered = ROOT
+							}
+							amount = 10
+						}
+					}
+				}
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = "military_victory"
+				duration = 3650
+			}
+			add_permanent_claim = 373
+			add_permanent_claim = 4364
+			subarctic_islands_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = nhs_vin_scandinavia_claims_tt
+			hidden_effect = {
+				every_province = {
+					limit = {
+						region = scandinavia_region
+						NOT = { area = iceland_area }
+						NOT = { area = subarctic_islands_area }
+						NOT = { area = greenland_area }
+						NOT = { area = karelia_area }
+						NOT = { area = north_karelia }
+						NOT = { area = laponia_area }
+						NOT = { area = finland_area }
+						NOT = { area = bothnia_area }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	vin_conquer_ireland = {
+		position = 6
+		required_missions = {
+			vin_conquer_iceland
+		}
+		icon = mission_rb_conquer_ireland
+		provinces_to_highlight = {
+			OR = {
+				area = munster_area
+				area = connacht_area
+				area = leinster_area
+				area = ulster_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 373
+			custom_trigger_tooltip = {
+				tooltip = nhs_vin_ireland
+				calc_true_if = {
+					all_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_subject_of = ROOT
+							}
+						}
+						OR = {
+							area = ulster_area
+							area = leinster_area
+							area = connacht_area
+							area = munster_area
+						}
+					}
+					amount = 6
+				}
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = "military_victory"
+				duration = 3650
+			}
+			munster_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			connacht_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			leinster_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ulster_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			wessex_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			wales_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	vin_conquer_england = {
+		position = 7
+		required_missions = {
+			vin_conquer_ireland
+			vin_conquer_scotland
+		}
+		icon = mission_rb_into_england
+		provinces_to_highlight = {
+			OR = {
+			#if = {
+			#	limit = {
+			#		scottish_marches_area = {
+			#			has_discovered = ROOT
+			#		}
+			#	}
+				area = scottish_marches_area
+			#	NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			#}
+			#if = {
+			#	limit = {
+			#		yorkshire_area = {
+			#			has_discovered = ROOT
+			#		}
+			#	}
+				area = yorkshire_area
+			#	NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			#}
+			#if = {
+			#	limit = {
+			#		east_midlands_area = {
+			#			has_discovered = ROOT
+			#		}
+			#	}
+				area = east_midlands_area
+			#	NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			#}
+			#if = {
+			#	limit = {
+			#		home_counties_area = {
+			#			has_discovered = ROOT
+			#		}
+			#	}
+				area = home_counties_area
+			#	NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			#}
+			#if = {
+			#	limit = {
+			#		wales_area = {
+			#			has_discovered = ROOT
+			#		}
+			#	}
+				area = wales_area
+			#	NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			#}
+			#if = {
+			#	limit = {
+			#		wessex_area = {
+			#			has_discovered = ROOT
+			#		}
+			#	}
+				area = wessex_area
+			#	NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			#}
+			#if = {
+			#	limit = {
+			#		west_midlands_area = {
+			#			has_discovered = ROOT
+			#		}
+			#	}
+				area = west_midlands_area
+			#	NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			#}
+			#if = {
+			#	limit = {
+			#		east_anglia_area = {
+			#			has_discovered = ROOT
+			#		}
+			#	}
+				area = east_anglia_area
+				
+			#}
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+
+		trigger = {
+			owns_or_non_sovereign_subject_of = 236
+			owns_or_non_sovereign_subject_of = 245
+			custom_trigger_tooltip = {
+				tooltip = nhs_vin_england
+				calc_true_if = {
+					all_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_subject_of = ROOT
+							}
+						}
+						OR = {
+							area = scottish_marches_area
+							area = wessex_area
+							area = yorkshire_area
+							area = east_anglia_area
+							area = home_counties_area
+							area = west_midlands_area
+							area = east_midlands_area
+							area = wales_area
+						}
+					}
+					amount = 15
+				}
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = "military_victory"
+				duration = 3650
+			}
+			scottish_marches_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_claim = ROOT
+			}
+			wessex_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_claim = ROOT
+			}
+			yorkshire_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_claim = ROOT
+			}
+			east_anglia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_claim = ROOT
+			}
+			home_counties_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_claim = ROOT
+			}
+			west_midlands_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_claim = ROOT
+			}
+			east_midlands_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_claim = ROOT
+			}
+			wales_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_claim = ROOT
+			}
+		}
+	}
+}
+
+nhs_left_mid_start_vikings = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MK1
+			tag = HLL
+			tag = VIN
+		}
+	}
+	vin_conquer_scotland = {
+		icon = mission_rb_conquer_scotland
+		position = 6
+		required_missions = {
+			vin_conquer_iceland
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = highlands_area
+				area = lowlands_area
+				area = kingdom_of_the_isles_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 4364
+			custom_trigger_tooltip = {
+				tooltip = nhs_vin_scotland
+				calc_true_if = {
+					all_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_subject_of = ROOT
+							}
+						}
+						OR = {
+							area = lowlands_area
+							area = highlands_area
+							area = kingdom_of_the_isles_area
+						}
+					}
+					amount = 6
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "military_victory"
+				duration = 3650
+			}
+			highlands_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lowlands_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kingdom_of_the_isles_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			scottish_marches_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			yorkshire_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+nhs_mid_start_vikings = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MK1
+			tag = HLL
+			tag = VIN
+		}
+	}
+	vin_conquer_scandinavia = {
+		position = 6
+		required_missions = {
+			vin_conquer_iceland
+		}
+		icon = mission_rb_scottish_north_sea_trade
+		provinces_to_highlight = {
+			region = scandinavia_region
+			NOT = { area = iceland_area }
+			NOT = { area = subarctic_islands_area }
+			NOT = { area = greenland_area }
+			NOT = { area = laponia_area }
+			NOT = { area = finland_area }
+			NOT = { area = bothnia_area }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 1
+			owns_or_non_sovereign_subject_of = 12
+			owns_or_non_sovereign_subject_of = 17
+			custom_trigger_tooltip = {
+				tooltip = nhs_vin_scandinavia
+				calc_true_if = {
+					all_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_subject_of = ROOT
+							}
+						}
+						region = scandinavia_region
+						NOT = { area = iceland_area }
+						NOT = { area = subarctic_islands_area }
+						NOT = { area = greenland_area }
+						NOT = { area = laponia_area }
+						NOT = { area = finland_area }
+						NOT = { area = bothnia_area }
+					}
+					amount = 40
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "military_victory"
+				duration = 3650
+			}
+			custom_tooltip = nhs_vin_scandinavia_reward2
+			hidden_effect = {
+				every_province = {
+					limit = {
+						OR = {
+							area = laponia_area
+							area = finland_area
+							area = bothnia_area
+						}
+					}
+					add_permanent_claim  = ROOT
+				}
+			}
+		}
+	}
+}

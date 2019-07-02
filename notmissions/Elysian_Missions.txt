@@ -1,0 +1,291 @@
+# Mission for ambitious Elysian Kingdoms to take over the Empire
+
+take_elysian_throne = {
+
+	type = country
+	category = MIL
+	ai_mission = yes
+	
+	target_provinces = {
+		has_province_flag = nhs_original_capital
+		NOT = { owned_by = ROOT }
+	}
+	
+	allow = {
+		government = elysian_kingdom
+		NOT = { tag = MSG }
+		NOT = { tag = MSN }
+		NOT = { tag = ROOT } #Disabled
+		FROM = { is_subject = no }
+		any_province = {
+			has_province_flag = nhs_original_capital
+			NOT = { owned_by = ROOT }
+		}
+		OR = {
+			technology_group = exiled_greek
+			technology_group = modern_greek
+			technology_group = exiled_spartan
+			technology_group = modern_spartan
+		}
+	}
+	abort = {
+		FROM = { is_subject = yes }
+	}
+	success = {
+		all_target_province = {
+			owned_by = ROOT
+		}
+		is_at_war = no
+	}
+	chance = {
+		factor = 1000
+		modifier = {
+			factor = 5
+			num_of_cities = 6
+		}
+		modifier = {
+			factor = 2
+			mil = 3
+		}
+		modifier = {
+			factor = 5
+			legitimacy = 95
+		}
+	}
+	immediate = {
+		every_target_province = {
+			add_claim = ROOT
+		}
+	}
+	abort_effect = {
+		every_target_province = {
+			remove_claim = ROOT
+		}
+	}
+	effect = {
+		add_adm_power = 150
+		add_dip_power = 150
+		add_prestige = 20
+	}
+}
+
+# Mission for when Elysia is lost
+
+retake_elysia = {
+
+	type = country
+	category = MIL
+	
+	target_provinces = {
+		has_province_flag = nhs_original_capital
+		NOT = { owned_by = ROOT }
+	}
+	
+	allow = {
+		OR = {
+			tag = NHS
+			tag = ELY
+		}
+		FROM = { is_subject = no }
+		any_province = {
+			has_province_flag = nhs_original_capital
+			NOT = { owned_by = ROOT }
+		}
+	}
+	abort = {
+		FROM = { is_subject = yes }
+	}
+	success = {
+		all_target_province = {
+			owned_by = ROOT
+		}
+		is_at_war = no
+	}
+	chance = {
+		factor = 5000
+		modifier = {
+			factor = 0
+			tag = NHS
+			exists = ELY
+		}
+		modifier = {
+			factor = 0
+			tag = ELY
+			exists = NHS
+		}
+	}
+	immediate = {
+		every_target_province = {
+			add_claim = ROOT
+		}
+	}
+	abort_effect = {
+		every_target_province = {
+			remove_claim = ROOT
+		}
+		add_prestige = -10
+	}
+	effect = {
+		add_mil_power = 100
+		add_prestige = 10
+		add_stability = 1
+	}
+}
+
+# Mission for taking Powhattan and securing Chesapeake bay
+
+take_homelands_from_natives = {
+
+	type = country
+	category = MIL
+	ai_mission = yes
+	
+	target_provinces = {
+		nhs_homelands = yes
+		NOT = { owned_by = ROOT }
+		is_empty = no
+		owner = { government = native_council }
+		owner = { NOT = { is_subject_of = ROOT } }
+	}
+	
+	allow = {
+		OR = {
+			tag = NHS
+			tag = ELY
+		}
+		always = no #disabled
+		FROM = { is_subject = no }
+		NOT = { has_global_flag = nhs_mission_take_homelands_from_natives_done }
+		any_province = {
+			nhs_homelands = yes	
+			NOT = { owned_by = ROOT }
+			is_empty = no
+			owner = { government = native_council }
+			owner = { NOT = { is_subject_of = ROOT } }
+		}
+	}
+	abort = {
+		FROM = { is_subject = yes }
+		NOT = {
+			any_province = {
+				nhs_homelands = yes		
+				NOT = { owned_by = ROOT }
+				is_empty = no
+				owner = { government = native_council }
+				owner = { NOT = { is_subject_of = ROOT } }
+			}
+		}
+	}
+	success = {
+		all_target_province = {
+			owned_by = ROOT
+			is_core = ROOT
+		}
+	}
+	chance = {
+		factor = 4000
+		modifier = {
+			factor = 4
+			owns = 950
+		}
+		modifier = {
+			factor = 4
+			owns = 2550
+		}
+		modifier = {
+			factor = 4
+			owns = 2554
+		}
+	}
+	immediate = {
+		every_target_province = {
+			add_claim = ROOT
+		}
+	}
+	abort_effect = {
+		every_target_province = {
+			remove_claim = ROOT
+		}
+	}
+	effect = {
+		every_target_province = {
+			change_culture = ROOT
+			change_religion = ROOT
+		}
+		add_adm_power = 100
+		add_prestige = 10
+		set_global_flag = nhs_mission_take_homelands_from_natives_done
+	}
+}
+
+# Mission for taking all of the homelands
+control_the_elysian_homelands = {
+
+	type = country
+	category = DIP
+	ai_mission = yes
+	
+	target_provinces = {
+		OR = {
+			province_id = 2550
+			province_id = 952
+			province_id = 950
+			province_id = 2554
+			province_id = 957
+			province_id = 953
+		}
+		NOT = { owned_by = ROOT }
+	}
+	
+	allow = {
+		OR = {
+			tag = NHS
+			tag = ELY
+		}
+		NOT = { has_global_flag = nhs_mission_elysian_homelands_done }
+		953 = { has_province_flag = nhs_original_capital }
+		FROM = { is_subject = no }
+		OR = {
+			NOT = { owns = 2550 }
+			NOT = { owns = 952 }
+			NOT = { owns = 950 }
+			NOT = { owns = 2554 }
+			NOT = { owns = 957 }
+			NOT = { owns = 953 }
+		}
+	}
+	abort = {
+		FROM = { is_subject = yes }
+	}
+	success = {
+		all_target_province = {
+			OR = {
+				owned_by = ROOT
+				owner = {
+					is_subject_of = ROOT
+				}
+			}
+			is_core = ROOT
+		}
+	}
+	chance = {
+		factor = 4000
+	}
+	immediate = {
+		every_target_province = {
+			add_claim = ROOT
+		}
+	}
+	
+	abort_effect = {
+		every_target_province = {
+			remove_claim = ROOT
+		}
+	}
+	
+	effect = {
+		add_adm_power = 100
+		add_prestige = 10
+		set_global_flag = nhs_mission_elysian_homelands_done
+	}
+}
