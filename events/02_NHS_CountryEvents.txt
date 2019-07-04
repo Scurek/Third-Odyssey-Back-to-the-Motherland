@@ -7160,7 +7160,7 @@ country_event = {
 					}
 				}
 				random_empty_neighbor_province = {
-					add_colonysize = 200
+					create_colony = 200
 					add_base_tax = 1
 					add_base_production = 1
 				}
@@ -7295,3 +7295,142 @@ country_event = {
 		}
 	}
 }
+
+# VENETIAN ARSENAL
+country_event = {
+	id = nhs2_countryevents.74
+	title = nhs2_countryevents.74.t
+	desc = nhs2_countryevents.74.d
+	picture = nhs_ADVISOR_eventPicture
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+	
+	}
+}
+
+###################################################
+### WINTER EVENTS
+###################################################
+
+# Great Winter of 1445
+country_event = {
+	id = nhs2_countryevents.75
+	title = nhs2_countryevents.75.t
+	desc = nhs2_countryevents.75.d
+	picture = FAMINE_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		tag = NHS
+		has_country_flag = nhs_colonial_troubles_major
+		is_year = 1445
+		is_month = 11
+		NOT = { is_year = 1447 }
+	}
+
+	option = {
+		kill_ruler = yes
+		add_stability = -3
+		custom_tooltip = nhs_remove_colonisation_bonus_tt
+		if = {
+			limit = {
+				has_country_modifier = nhs2_colonial_needs_2
+			}
+			hidden_effect = {
+				remove_country_modifier = nhs2_colonial_needs_2
+				add_country_modifier = {
+					name = nhs2_breakdown_of_society
+					duration = -1
+				}
+			}
+		}
+		else = {
+			add_country_modifier = {
+				name = nhs2_breakdown_of_society
+				duration = -1
+			}
+		}
+		add_country_modifier = {
+			name = nhs2_colony_colapse
+			duration = -1
+		}
+		hidden_effect = {
+			country_event = { id = nhs2_countryevents.75 days = 32 }
+		}
+	}
+}
+
+# First Thanksgiving
+country_event = {
+	id = nhs2_countryevents.75
+	title = nhs2_countryevents.75.t
+	desc = nhs2_countryevents.75.d
+	picture = nat_GOOD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				any_neighbor_country = {
+					technology_group = north_american
+				}
+			}
+			random_neighbor_country = {
+				limit = {
+					technology_group = north_american
+				}
+				save_event_target_as = nhs_helpers_in_need_et
+			}
+		}
+		else_if = {
+			limit = {
+				any_known_country = {
+					technology_group = north_american
+				}
+			}
+			random_known_country = {
+				limit = {
+					technology_group = north_american
+				}
+				save_event_target_as = nhs_helpers_in_need_et
+			}
+		}
+		else_if = {
+			limit = {
+				any_country = {
+					technology_group = north_american
+				}
+			}
+			random_country = {
+				limit = {
+					technology_group = north_american
+				}
+				save_event_target_as = nhs_helpers_in_need_et
+			}
+		}
+	}
+
+	option = {
+		add_stability = 2
+		add_prestige = -30
+		remove_country_modifier = nhs2_colony_colapse
+		event_target:nhs_helpers_in_need_et = {
+			add_opinion = {
+				who = ROOT
+				modifier = nhs_helped_in_need
+			}
+			reverse_add_opinion = {
+				who = ROOT
+				modifier = nhs_been_helped_in_need
+			}
+		}
+		custom_tooltip = nhs_nothing_stopping_from_breaking_treaty_tt
+	}
+}
+
