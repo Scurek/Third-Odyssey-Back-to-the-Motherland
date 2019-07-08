@@ -219,13 +219,147 @@ nhs_administrative_missions = {
 		}
 	}
 	nhs_industrial_revolution_mission = {
-		icon = mission_rb_build_furnaces
+		#icon = mission_rb_build_furnaces
+		icon = mission_rb_prospect_for_coal
 		position = 5
 		required_missions = { nhs_build_manufactories }
 		trigger = {
-			treasury = 1
+			owns = 953
+			has_institution = enlightenment
+			custom_trigger_tooltip = {
+				tooltip = nhs_owns_at_least_50_manufactories_tt
+				calc_true_if = {
+					all_owned_province = {
+						OR = {
+							has_building = mills
+							has_building = farm_estate
+							has_building = tradecompany
+							has_building = plantations
+							has_building = textile
+							has_building = weapons
+							has_building = wharf
+							has_building = furnace
+						}
+					}
+					amount = 50
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				OR = {
+					adm_tech = 26
+					AND = {
+						adm_tech = 23
+						full_idea_group = innovativeness_ideas
+					}
+					AND = {
+						adm_tech = 23
+						innovativeness = 20
+					}
+				}
+			}
+			else = {
+				OR = {
+					adm_tech = 26
+					AND = {
+						adm_tech = 23
+						full_idea_group = innovativeness_ideas
+					}
+				}
+			}
+			OR = {
+				2023 = {
+					owned_by = ROOT
+					has_building = furnace
+				}
+				2549 = {
+					owned_by = ROOT
+					has_building = furnace
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = nhs_owns_at_least_5_furnaces_tt
+				calc_true_if = {
+					all_province = {
+						country_or_non_sovereign_subject_holds = ROOT
+						has_building = furnace
+					}
+					amount = 5
+				}
+			}
 		}
 		effect = {
+			add_prestige = 20
+			define_advisor = {
+				type = natural_scientist
+				name = "Iakovos Heronopoulos"
+				skill = 4
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 10
+			}
+			else = {
+				add_adm_power = 100
+				add_dip_power = 100
+				add_mil_power = 100
+			}
+			953 = {
+				add_base_tax = 3
+				add_base_production = 3
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = nhs2_steam_engine
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs2_steam_engine_tm
+				}
+			}
+			if = {
+				limit = {
+					2023 = {
+						owned_by = ROOT
+						has_building = furnace
+					}
+				}
+				2023 = {
+					add_base_production = 3
+					add_base_manpower = 3
+					tooltip = {
+						add_permanent_province_modifier = {
+							name = nhs2_great_mine
+							duration = -1
+						}
+					}
+					hidden_effect = {
+						add_province_triggered_modifier = nhs2_great_mine_tm
+					}
+				}
+			}
+			else = {
+				2549 = {
+					add_base_production = 3
+					add_base_manpower = 3
+					tooltip = {
+						add_permanent_province_modifier = {
+							name = nhs2_great_mine
+							duration = -1
+						}
+					}
+					hidden_effect = {
+						add_province_triggered_modifier = nhs2_great_mine_tm
+					}
+				}
+			}
 		}
 	}
 }

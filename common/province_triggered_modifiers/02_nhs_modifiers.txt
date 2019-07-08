@@ -3,11 +3,6 @@
 #
 # Effects are fully scriptable here.
 
-
-###########################################
-# Just random test modifier
-###########################################
-
 nhs_old_gods_bonus = {
 	potential = {
 	}
@@ -789,4 +784,131 @@ nhs2_converts_tm = {
 	local_manpower_modifier = 0.05
 	local_unrest = -3
 }
+
+nhs2_lantent_coal_tm = {
+	potential = {
+		NOT = { trade_goods = coal_2 }
+		OR = {
+			development = 20
+			full_idea_group = innovativeness_ideas
+		}
+		provincial_institution_progress = {
+			which = enlightenment
+			value = 100
+		}
+		owner = { has_institution = enlightenment }
+	}
+	# viewer = {
+		# always = no
+	# }
+	trigger = {
+		OR = {
+			development = 20
+			full_idea_group = innovativeness_ideas
+		}
+		provincial_institution_progress = {
+			which = enlightenment
+			value = 100
+		}
+		owner = { has_institution = enlightenment }
+	}
+	
+	on_activation = {
+		hidden_effect = {
+			nhs_save_previous_goods = yes
+			remove_province_modifier = nhs2_lantent_coal
+			change_trade_goods = coal_2
+		}
+	}
+	on_deactivation = {
+	}
+	
+	picture = "nhs_coal_icon"
+	#trade_goods_size = 0.05
+	#local_state_maintenance_modifier = -0.2
+}
+
+nhs2_lantent_coal_deactivate_tm = {
+	potential = {
+		trade_goods = coal_2
+		NOT = {
+			OR = {
+				development = 20
+				full_idea_group = innovativeness_ideas
+			}
+			provincial_institution_progress = {
+				which = enlightenment
+				value = 100
+			}
+			owner = { has_institution = enlightenment }
+		}
+	}
+	# viewer = {
+		# always = no
+	# }
+	trigger = {
+		NOT = {
+			OR = {
+				development = 20
+				full_idea_group = innovativeness_ideas
+			}
+			provincial_institution_progress = {
+				which = enlightenment
+				value = 100
+			}
+			owner = { has_institution = enlightenment }
+		}
+	}
+	
+	on_activation = {
+		hidden_effect = {
+			nhs_load_previous_goods = yes
+			add_permanent_province_modifier = {
+				name = nhs2_lantent_coal
+				duration = -1
+			}
+		}
+	}
+	on_deactivation = {
+	}
+	
+	picture = "nhs_coal_icon"
+	#trade_goods_size = 0.05
+	#local_state_maintenance_modifier = -0.2
+}
+
+nhs2_steam_engine_tm = {
+	trigger = {
+		owner = {
+			any_owned_province = {
+				controlled_by = ROOT
+				has_building = furnace
+				has_province_modifier = nhs2_great_mine_tm
+			}
+		}
+	}
+	
+	trade_goods_size = 5
+	global_trade_goods_size_modifier = 0.05
+	technology_cost = -0.1
+	idea_cost = -0.1
+	picture = "nhs_steam_engine"
+}
+
+nhs2_great_mine_tm = {
+	trigger = {
+		has_building = furnace
+		owner = {
+			any_owned_province = {
+				controlled_by = ROOT
+				has_province_modifier = nhs2_steam_engine_tm
+			}
+		}
+	}
+	trade_goods_size = 5
+	local_unrest = 5
+	global_trade_goods_size_modifier = -0.05
+	picture = "nhs_coal_wagon"
+}
+
 

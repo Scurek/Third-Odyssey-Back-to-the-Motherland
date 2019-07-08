@@ -93,7 +93,7 @@ nhs_save_previous_goods = {
 
 nhs_load_previous_goods = {
 	trigger_switch = {
-		on_trigger = trade_goods
+		on_trigger = has_province_flag
 		nhs_had_grain_tg = { change_trade_goods = grain }
 		nhs_had_wine_tg = { change_trade_goods = wine }
 		nhs_had_wool_tg = { change_trade_goods = wool }
@@ -859,22 +859,22 @@ nhs_decrease_variable = {
 }
 
 nhs_building_counter_effect_add = {
-	tooltip = {
-		owner = {
-			change_variable = {
-				which = nhs_HighTierBuildingCount
-				value = 1
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_start_counting_buildings
+			}
+			NOT = { has_province_flag = $FLAGG$ }
+		}
+		tooltip = {
+			owner = {
+				change_variable = {
+					which = nhs_HighTierBuildingCount
+					value = 1
+				}
 			}
 		}
-	}
-	hidden_effect = {
-		if = {
-			limit = {
-				owner = {
-					has_country_flag = nhs_start_counting_buildings
-				}
-				NOT = { has_province_flag = $FLAGG$ }
-			}
+		hidden_effect = {
 			set_province_flag = $FLAGG$
 			owner = {
 				change_variable = {
