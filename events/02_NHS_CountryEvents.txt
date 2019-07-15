@@ -80,6 +80,12 @@ country_event = {
 				}
 				2554 = { rename_capital = "Kleomenon" }
 			}
+			else_if = {
+				limit = {
+					province_id = 950 # Nanticoke, Nea Aleksandra
+				}
+				950 = { rename_capital = "Didymo Fylakes" }
+			}
 			if = {
 				limit = {
 					NOT = { has_province_modifier = nhs2_albanian_majority }
@@ -88,6 +94,9 @@ country_event = {
 				change_culture = ROOT
 				change_religion = ROOT
 			}
+			set_province_flag = nhs_development_province1
+			set_province_flag = nhs_development_province2
+			set_province_flag = nhs_development_province3
 		}
 		if = {
 			limit = {
@@ -821,14 +830,46 @@ country_event = {
 		}
 		if = {
 			limit = {
-				check_variable = { which = nhs_num_of_heavy_ships value = 1 }
+				has_dlc = "Golden Century"
 			}
-			add_treasury = -10
+			custom_tooltip = nhs_starting_flagship_fixed_tt
+			hidden_effect = {
+				# heavy_ship = NHS
+				capital_scope = {
+					random_owned_province = {
+						limit = {
+							heavy_ships_in_province = ROOT
+						}
+						kill_units = {
+							who = ROOT
+							type = heavy_ship
+							amount = 1
+						}
+					}
+					set_country_flag = nhs_first_flagship
+					set_country_flag = nhs_first_flagship_fixed
+					953 = {
+						create_flagship = {	
+							name = "Aghia Theotoke"
+							type = heavy_ship
+						}
+					}
+					clr_country_flag = nhs_first_flagship
+					clr_country_flag = nhs_first_flagship_fixed
+				}
+			}
+		}
+		else = {
 			capital_scope = {
 				heavy_ship = NHS
 			}
-
 		}
+		# if = {
+			# limit = {
+				# check_variable = { which = nhs_num_of_heavy_ships value = 1 }
+			# }
+			# add_treasury = -10
+		# }
 		if = {
 			limit = {
 				check_variable = { which = nhs_num_of_light_ships value = 1 }
@@ -902,50 +943,6 @@ country_event = {
 				light_ship = NHS
 				light_ship = NHS
 			}
-		}
-	}
-}
-
-#  The Frontier Skirmishes-Janissaries clear the sorrounding ares
-country_event = {
-	id = nhs2_countryevents.70
-	title = nhs2_countryevents.70.t
-	desc = nhs2_countryevents.70.d
-	picture = tur_MILITARY_CAMP_eventPicture
-	
-	fire_only_once = yes
-
-	trigger = {
-		tag = NHS
-		num_of_cities = 3
-		any_owned_province = {
-			is_colony = yes
-			colonysize = 200
-			NOT = { colonysize = 900 }
-		}
-	}
-
-	option = {
-		name = "nhs2_countryevents.23.a"
-		random_owned_province = {
-			limit = {
-				is_colony = yes
-				colonysize = 200
-				NOT = { colonysize = 900 }
-			}
-			add_colonysize = 250
-			add_base_manpower = 1
-		}
-		every_province = {
-			limit = {
-				nhs_homelands_no_capital = yes
-				OR = {
-					is_empty = yes
-					is_colony = yes
-				}
-			}
-			change_native_ferocity = -10
-			change_native_hostileness = -10
 		}
 	}
 }
@@ -1097,7 +1094,7 @@ country_event = {
 			add_base_tax = 1
 			add_base_production = 1
 		}
-		add_legitimacy = -5
+		#add_legitimacy = -5
 		add_treasury = 75
 		#custom_tooltip = nhs2_nobles_bankrupt
 		#set_global_flag = nhs2_nobles_bankrupt_flag
@@ -6963,13 +6960,70 @@ country_event = {
 		}
 		if = {
 			limit = {
-				check_variable = { which = nhs_num_of_heavy_ships value = 1 }
+				has_dlc = "Golden Century"
 			}
+			custom_tooltip = nhs_starting_flagship_fixed_tt
+			hidden_effect = {
+				# heavy_ship = NHS
+				capital_scope = {
+					random_owned_province = {
+						limit = {
+							heavy_ships_in_province = ROOT
+						}
+						kill_units = {
+							who = ROOT
+							type = heavy_ship
+							amount = 1
+						}
+					}
+					set_country_flag = nhs_first_flagship
+					set_country_flag = nhs_first_flagship_fixed
+					953 = {
+						create_flagship = {	
+							name = "Aghia Theotoke"
+							type = heavy_ship
+						}
+					}
+					clr_country_flag = nhs_first_flagship
+					clr_country_flag = nhs_first_flagship_fixed
+				}
+			}
+		}
+		else = {
 			capital_scope = {
 				heavy_ship = NHS
 			}
-
 		}
+		# if = {
+			# limit = {
+				# check_variable = { which = nhs_num_of_heavy_ships value = 1 }
+			# }
+			# capital_scope = {
+				# # heavy_ship = NHS
+				# if = {
+					# limit = {
+						# has_dlc = "Golden Century"
+					# }
+					# set_country_flag = nhs_first_flagship
+					# set_country_flag = nhs_first_flagship_fixed
+					# custom_tooltip = nhs_starting_flagship_fixed_tt
+					# 953 = {
+						# create_flagship = {	
+							# name = "Aghia Theotoke"
+							# type = heavy_ship
+						# }
+					# }
+					# clr_country_flag = nhs_first_flagship
+					# clr_country_flag = nhs_first_flagship_fixed
+				# }
+				# else = {
+					# create_named_ship = {
+						# name = "Aghia Theotoke"
+						# type = heavy_ship
+					# }
+				# }
+			# }
+		# }
 		if = {
 			limit = {
 				check_variable = { which = nhs_num_of_light_ships value = 1 }
@@ -7058,12 +7112,39 @@ country_event = {
 		}
 		if = {
 			limit = {
-				check_variable = { which = nhs_num_of_heavy_ships value = 1 }
+				has_dlc = "Golden Century"
 			}
+			custom_tooltip = nhs_starting_flagship_fixed_tt
+			hidden_effect = {
+				# heavy_ship = NHS
+				capital_scope = {
+					random_owned_province = {
+						limit = {
+							heavy_ships_in_province = ROOT
+						}
+						kill_units = {
+							who = ROOT
+							type = heavy_ship
+							amount = 1
+						}
+					}
+					set_country_flag = nhs_first_flagship
+					set_country_flag = nhs_first_flagship_fixed
+					953 = {
+						create_flagship = {	
+							name = "Aghia Theotoke"
+							type = heavy_ship
+						}
+					}
+					clr_country_flag = nhs_first_flagship
+					clr_country_flag = nhs_first_flagship_fixed
+				}
+			}
+		}
+		else = {
 			capital_scope = {
 				heavy_ship = NHS
 			}
-
 		}
 		if = {
 			limit = {
@@ -7173,12 +7254,39 @@ country_event = {
 		}
 		if = {
 			limit = {
-				check_variable = { which = nhs_num_of_heavy_ships value = 1 }
+				has_dlc = "Golden Century"
 			}
+			custom_tooltip = nhs_starting_flagship_fixed_tt
+			hidden_effect = {
+				# heavy_ship = NHS
+				capital_scope = {
+					random_owned_province = {
+						limit = {
+							heavy_ships_in_province = ROOT
+						}
+						kill_units = {
+							who = ROOT
+							type = heavy_ship
+							amount = 1
+						}
+					}
+					set_country_flag = nhs_first_flagship
+					set_country_flag = nhs_first_flagship_fixed
+					953 = {
+						create_flagship = {	
+							name = "Aghia Theotoke"
+							type = heavy_ship
+						}
+					}
+					clr_country_flag = nhs_first_flagship
+					clr_country_flag = nhs_first_flagship_fixed
+				}
+			}
+		}
+		else = {
 			capital_scope = {
 				heavy_ship = NHS
 			}
-
 		}
 		if = {
 			limit = {
@@ -7273,6 +7381,12 @@ country_event = {
 			custom_tooltip = nhs_enables_venetian_guild_gabriele_tt
 		}
 		custom_tooltip = nhs_merchant_estate_improvements_tt
+		if = {
+			limit = {
+				has_dlc = "Res Publica"
+			}
+			custom_tooltip = nhs_merchant_estate_improvements_trade_posts_tt
+		}
 		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {
@@ -7293,6 +7407,7 @@ country_event = {
 		else = {
 			add_treasury = 100
 		}
+		set_country_flag = nhs_enable_venetian_merchant_estate
 	}
 }
 
@@ -7442,10 +7557,10 @@ country_event = {
 
 # FRONTIER SKIRMISHES
 country_event = {
-	id = nhs2_countryevents.77
-	title = nhs2_countryevents.77.t
-	desc = nhs2_countryevents.77.d
-	picture = nhs_ADVISOR_eventPicture
+	id = nhs2_countryevents.70
+	title = nhs2_countryevents.70.t
+	desc = nhs2_countryevents.70.d
+	picture = tur_MILITARY_CAMP_eventPicture
 
 	fire_only_once = yes
 	
@@ -7459,8 +7574,9 @@ country_event = {
 	}
 
 	option = {
-		name = "nhs2_countryevents.77.a"
+		name = "nhs2_countryevents.70.a"
 		define_general = {
+			name = "Orhan Çelebi"
 			shock = 3
 			fire = 3
 			manuever = 2
@@ -7474,16 +7590,26 @@ country_event = {
 			infantry = ROOT
 			infantry = ROOT
 			add_colonysize = 400
+			add_base_manpower = 2
+		}
+		every_province = {
+			limit = {
+				nhs_homelands_no_capital = yes
+				OR = {
+					is_colony = yes
+					is_empty = yes
+				}
+			}
 			change_native_ferocity = -10
 			change_native_hostileness = -10
 		}
 	}
 	
 	option = {
-		name = "nhs2_countryevents.77.a"
+		name = "nhs2_countryevents.70.b"
 		define_advisor = {
 			type = commandant
-			name = "Orhan Ã‡elebi"
+			name = "Orhan Çelebi"
 			skill = 2
 			culture = turkish
 			religion = sunni
@@ -7496,6 +7622,16 @@ country_event = {
 				colonysize = 400
 			}
 			add_colonysize = 400
+			add_base_manpower = 2
+		}
+		every_province = {
+			limit = {
+				nhs_homelands_no_capital = yes
+				OR = {
+					is_colony = yes
+					is_empty = yes
+				}
+			}
 			change_native_ferocity = -10
 			change_native_hostileness = -10
 		}
