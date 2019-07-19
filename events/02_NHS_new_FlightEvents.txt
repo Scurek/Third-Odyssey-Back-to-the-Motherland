@@ -1100,25 +1100,37 @@ country_event = {
 	option = { #Pay
 		trigger = {
 			NOT = {
-				OR = {
-					AND = {
-						has_country_flag = nhs_new_flight_taken_fire
-						has_country_flag = nhs_new_flight_taken_venetians
-					}
-					AND = {
-						has_country_flag = nhs_new_flight_taken_turks
-						has_country_flag = nhs_new_flight_taken_venetians
-					}
-					AND = {
-						has_country_flag = nhs_new_flight_taken_turks
-						has_country_flag = nhs_new_flight_taken_fire
-					}
-				}
+				# OR = {
+					# AND = {
+						# has_country_flag = nhs_new_flight_taken_fire
+						# has_country_flag = nhs_new_flight_taken_venetians
+					# }
+					# AND = {
+						# has_country_flag = nhs_new_flight_taken_turks
+						# has_country_flag = nhs_new_flight_taken_venetians
+					# }
+					# AND = {
+						# has_country_flag = nhs_new_flight_taken_turks
+						# has_country_flag = nhs_new_flight_taken_fire
+					# }
+				# }
+				has_country_flag = nhs_new_flight_taken_fire
+				has_country_flag = nhs_new_flight_taken_turks
+				has_country_flag = nhs_new_flight_taken_venetians
 			}
 		}
 		name = "nhs_new_flightevents.9.a"
 		# Standard pay
-		add_treasury = -120
+		if = {
+			limit = {
+				has_country_flag = nhs_new_flight_taken_venetians
+			}
+			custom_tooltip = nhs_new_flight_venetian_negotiation_tt
+			add_treasury = -60
+		}
+		else = {
+			add_treasury = -100
+		}
 		set_country_flag = nhs_new_flight_paid_toll
 	}
 	option = { #Fight
@@ -1140,9 +1152,11 @@ country_event = {
 		name = "nhs_new_flightevents.9.c"
 		highlight = yes
 		# Lesser loss
-		add_prestige = 10
+		add_prestige = 5
+		set_country_flag = nhs_new_flight_janissary_boarding
 		custom_tooltip = nhs_new_flight_lesser_loses_tt
-		set_country_flag = nhs_new_flight_lesser_loses
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_new_flight_additional_ship_tt
 	}
 	option = { #Set them alight with Greek Fire!
 		trigger = {
@@ -1153,7 +1167,8 @@ country_event = {
 		highlight = yes
 		# Less long fire
 		custom_tooltip = nhs_new_flight_less_fire_tt
-		set_country_flag = nhs_new_flight_fire_depleted
+		#set_country_flag = nhs_new_flight_fire_depleted
+		set_country_flag = nhs_new_flight_fire_depleted_minor
 	}
 	option = { #We have allies too!
 		trigger = {
@@ -1166,11 +1181,14 @@ country_event = {
 		# Lesser loss
 		add_prestige = 10
 		custom_tooltip = nhs_new_flight_lesser_loses_tt
-		set_country_flag = nhs_new_flight_lesser_loses
+		set_country_flag = nhs_new_flight_venetian_fight
 	}
 	option = { #We're more than prepared for a sea battle!
 		trigger = {
-			has_country_flag = nhs_new_flight_taken_fire
+			#OR = {
+				has_country_flag = nhs_new_flight_taken_fire
+				has_country_flag = nhs_new_flight_taken_turks
+			#}
 			has_country_flag = nhs_new_flight_taken_venetians
 		}
 		name = "nhs_new_flightevents.9.g"
@@ -1181,18 +1199,19 @@ country_event = {
 		#custom_tooltip = nhs_new_flight_less_fire_tt
 		#set_country_flag = nhs_new_flight_fire_depleted_minor
 		set_country_flag = nhs_new_flight_sea_battle_major
-	}
-	option = { #How dare they! Let’s seize their ships!
-		trigger = {
-			has_country_flag = nhs_new_flight_taken_turks
-			has_country_flag = nhs_new_flight_taken_venetians
-		}
-		name = "nhs_new_flightevents.9.h"
-		highlight = yes
-		# Gain some additional ships and supplies
-		set_country_flag = nhs_new_flight_additional_ship
 		custom_tooltip = nhs_new_flight_additional_ship_tt
 	}
+	# option = { #How dare they! Let’s seize their ships!
+		# trigger = {
+			# has_country_flag = nhs_new_flight_taken_turks
+			# has_country_flag = nhs_new_flight_taken_venetians
+		# }
+		# name = "nhs_new_flightevents.9.h"
+		# highlight = yes
+		# # Gain some additional ships and supplies
+		# set_country_flag = nhs_new_flight_additional_ship
+		# custom_tooltip = nhs_new_flight_additional_ship_tt
+	# }
 	option = { #If they want piracy, we’ll give them piracy!
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_turks
@@ -1208,6 +1227,7 @@ country_event = {
 		223 = {
 			add_devastation = 33
 		}
+		custom_tooltip = nhs_new_flight_lesser_loses_tt
 	}
 	after = {
 		hidden_effect = {
@@ -1353,33 +1373,76 @@ country_event = {
 		}
 	}
 
+	# option = {
+		# name = nhs_new_flightevents.11.a # Lose treasure
+		# ai_chance = { 
+			# factor = 100 
+			# modifier = {
+				# factor = 0
+				# has_country_flag = nhs_new_flight_additional_ship
+			# }
+		# }
+		# add_treasury = -60
+		# set_country_flag = nhs_new_flightevents_lose_cash_storm
+	# }
+	# option = {
+		# name = nhs_new_flightevents.11.b # Lose people (and 'ships', thus basetax)
+		# ai_chance = { factor = 0 }
+		# custom_tooltip = nhs_new_flightevents_lose_dev_tt
+		# set_country_flag = nhs_new_flightevents_lose_dev_storm
+	# }
+	# option = {
+		# trigger = {
+			# has_country_flag = nhs_new_flight_additional_ship
+		# }
+		# name = nhs_new_flightevents.11.c # Lose ship you picked up
+		# highlight = yes
+		# ai_chance = { factor = 100 }
+		# add_sailors = -50
+		# set_country_flag = nhs_new_flight_lost_new_ship_in_the_storm
+	# }
 	option = {
-		name = nhs_new_flightevents.11.a # Lose treasure
+		name = nhs_new_flightevents.11.a # Lose ruler stats
 		ai_chance = { 
 			factor = 100 
-			modifier = {
-				factor = 0
-				has_country_flag = nhs_new_flight_additional_ship
-			}
 		}
-		add_treasury = -60
-		set_country_flag = nhs_new_flightevents_lose_cash_storm
+		if = {
+			limit = {
+				has_ruler = "Ioannes VIII"
+			}
+			custom_tooltip = nhs_ioannes_becomes_ill_tt
+			change_adm = -5
+			change_dip = -5
+			change_mil = -5
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_new_flightevents_lose_advisors_tt
+			change_heir_adm = -1
+			change_heir_dip = -1
+			#change_heir_mil = -1
+		}
+		else = {
+			custom_tooltip = nhs_new_flightevents_lose_advisors_tt
+			change_adm = -1
+			change_dip = -1
+			#change_mil = -1
+		}
+		set_country_flag = nhs_new_flightevents_lose_stats_storm
 	}
 	option = {
 		name = nhs_new_flightevents.11.b # Lose people (and 'ships', thus basetax)
 		ai_chance = { factor = 0 }
+		if = {
+			limit = {
+				has_ruler = "Ioannes VIII"
+			}
+			custom_tooltip = nhs_ioannes_becomes_ill_tt
+			change_adm = -5
+			change_dip = -5
+			change_mil = -5
+			custom_tooltip = nhs_new_line_tt
+		}
 		custom_tooltip = nhs_new_flightevents_lose_dev_tt
 		set_country_flag = nhs_new_flightevents_lose_dev_storm
-	}
-	option = {
-		trigger = {
-			has_country_flag = nhs_new_flight_additional_ship
-		}
-		name = nhs_new_flightevents.11.c # Lose ship you picked up
-		highlight = yes
-		ai_chance = { factor = 100 }
-		add_sailors = -50
-		set_country_flag = nhs_new_flight_lost_new_ship_in_the_storm
 	}
 	after = {
 		# Next event
@@ -1694,13 +1757,18 @@ country_event = {
 					limit = {
 						religion = pantheon_worship
 					}
-					define_advisor = {
-						type = artist
-						name = "Georgios Sphrantzes"
-						skill = 2
-						culture = greek
-						religion = pantheon_worship
-						cost_multiplier = 0.5
+					if = {
+						limit = {
+							NOT = { has_country_flag = nhs_new_flightevents_lose_stats_storm }
+						}
+						define_advisor = {
+							type = artist
+							name = "Georgios Sphrantzes"
+							skill = 2
+							culture = greek
+							religion = pantheon_worship
+							cost_multiplier = 0.5
+						}
 					}
 					define_advisor = {
 						type = fortification_expert
@@ -1712,13 +1780,18 @@ country_event = {
 					}
 				}
 				else = {
-					define_advisor = {
-						type = artist
-						name = "Georgios Sphrantzes"
-						skill = 2
-						culture = greek
-						religion = orthodox
-						cost_multiplier = 0.5
+					if = {
+						limit = {
+							NOT = { has_country_flag = nhs_new_flightevents_lose_stats_storm }
+						}
+						define_advisor = {
+							type = artist
+							name = "Georgios Sphrantzes"
+							skill = 2
+							culture = greek
+							religion = orthodox
+							cost_multiplier = 0.5
+						}
 					}
 					define_advisor = {
 						type = fortification_expert
@@ -2068,9 +2141,10 @@ country_event = {
 			}
 			else_if = {
 				limit = {
-					has_country_flag = nhs_new_flight_lesser_loses
+					has_country_flag = nhs_new_flight_venetian_fight
 				}
 				NHS = {
+					add_prestige = 10
 					add_manpower = -1
 					capital_scope = {
 						kill_units = {
@@ -2080,17 +2154,35 @@ country_event = {
 						}
 					}
 				}
-				clr_country_flag = nhs_new_flight_lesser_loses
+				clr_country_flag = nhs_new_flight_venetian_fight
 			}
 			else_if = {
 				limit = {
-					has_country_flag = nhs_new_flight_fire_depleted
+					has_country_flag = nhs_new_flight_janissary_boarding
 				}
 				NHS = {
-					set_country_flag = nhs_new_flight_fire_depleted
+					add_prestige = 5
+					add_manpower = -1
+					capital_scope = {
+						kill_units = {
+							who = NHS
+							type = infantry
+							amount = 1
+						}
+					}
+					change_variable = { which = nhs_num_of_light_ships value = 1 }
 				}
-				clr_country_flag = nhs_new_flight_fire_depleted
+				clr_country_flag = nhs_new_flight_janissary_boarding
 			}
+			# else_if = {
+				# limit = {
+					# has_country_flag = nhs_new_flight_fire_depleted
+				# }
+				# NHS = {
+					# set_country_flag = nhs_new_flight_fire_depleted
+				# }
+				# clr_country_flag = nhs_new_flight_fire_depleted
+			# }
 			else_if = {
 				limit = {
 					has_country_flag = nhs_new_flight_fire_depleted_minor
@@ -2102,17 +2194,30 @@ country_event = {
 			}
 			else_if = {
 				limit = {
-					has_country_flag = nhs_new_flight_additional_ship
-					NOT = { has_country_flag = nhs_new_flight_lost_new_ship_in_the_storm }
+					has_country_flag = nhs_new_flight_sea_battle_major
 				}
 				NHS = {
+					add_prestige = 15
+					add_legitimacy = 5
 					change_variable = { which = nhs_num_of_light_ships value = 1 }
 				}
 				clr_country_flag = nhs_new_flight_additional_ship
 			}
-			else = {
+			else_if = {
+				limit = {
+					has_country_flag = nhs_new_flight_raids
+				}
 				NHS = {
 					add_treasury = 50
+					add_manpower = -1
+					change_variable = { which = nhs_num_of_light_ships value = 1 }
+					capital_scope = {
+						kill_units = {
+							who = NHS
+							type = infantry
+							amount = 1
+						}
+					}
 				}
 				clr_country_flag = nhs_new_flight_raids
 			}
@@ -2149,11 +2254,21 @@ country_event = {
 				}
 				clr_country_flag = nhs_new_flightevents_lose_cash_storm
 			}
-			else = {
-				add_sailors = -50
-				clr_country_flag = nhs_new_flight_lost_new_ship_in_the_storm
-				clr_country_flag = nhs_new_flight_additional_ship
+			else_if = {
+				limit = {
+					has_country_flag = nhs_new_flightevents_lose_stats_storm
+				}
+				NHS = {
+					change_adm = -1
+					change_dip = -1
+				}
+				clr_country_flag = nhs_new_flightevents_lose_stats_storm
 			}
+			# else = {
+				# add_sailors = -50
+				# clr_country_flag = nhs_new_flight_lost_new_ship_in_the_storm
+				# clr_country_flag = nhs_new_flight_additional_ship
+			# }
 			if = {
 				limit = {
 					religion = orthodox
