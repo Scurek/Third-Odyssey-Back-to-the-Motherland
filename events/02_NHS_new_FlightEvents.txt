@@ -1114,9 +1114,11 @@ country_event = {
 						# has_country_flag = nhs_new_flight_taken_fire
 					# }
 				# }
-				has_country_flag = nhs_new_flight_taken_fire
-				has_country_flag = nhs_new_flight_taken_turks
-				has_country_flag = nhs_new_flight_taken_venetians
+				AND = {
+					has_country_flag = nhs_new_flight_taken_fire
+					has_country_flag = nhs_new_flight_taken_turks
+					has_country_flag = nhs_new_flight_taken_venetians
+				}
 			}
 		}
 		name = "nhs_new_flightevents.9.a"
@@ -1161,7 +1163,7 @@ country_event = {
 	option = { #Set them alight with Greek Fire!
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_fire
-			NOT = { has_country_flag = nhs_new_flight_taken_venetians }
+			#NOT = { has_country_flag = nhs_new_flight_taken_venetians }
 		}
 		name = "nhs_new_flightevents.9.e"
 		highlight = yes
@@ -1173,8 +1175,8 @@ country_event = {
 	option = { #We have allies too!
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_venetians
-			NOT = { has_country_flag = nhs_new_flight_taken_turks }
-			NOT = { has_country_flag = nhs_new_flight_taken_fire }
+			#NOT = { has_country_flag = nhs_new_flight_taken_turks }
+			#NOT = { has_country_flag = nhs_new_flight_taken_fire }
 		}
 		name = "nhs_new_flightevents.9.f"
 		highlight = yes
@@ -1941,8 +1943,9 @@ country_event = {
 						infantry = NHS
 						infantry = NHS
 						infantry = NHS
+						infantry = NHS
 					}
-					add_manpower = 9
+					add_manpower = 5
 					# add_country_modifier = {
 						# name = nhs2_abundant_supplies
 						# duration = 3650
@@ -2026,7 +2029,14 @@ country_event = {
 				}
 			}
 			else = {
-				
+				if = {
+					limit = {
+						has_country_flag = nhs_new_flightevents_lose_stats_storm
+					}
+					NHS = {
+						set_country_flag = nhs_new_flightevents_lose_stats_storm
+					}
+				}
 				NHS = {
 					set_country_flag = nhs_new_flight_food_status_0
 					add_treasury = -30
@@ -2066,6 +2076,7 @@ country_event = {
 					}
 					add_manpower = 1
 					change_variable = { which = nhs_num_of_light_ships value = 1 }
+					set_country_flag = nhs_new_flight_sold_morea_to_genoa
 				}
 				clr_country_flag = nhs_new_flight_sold_morea_to_genoa
 			}
@@ -2100,6 +2111,13 @@ country_event = {
 						# religion = catholic
 						# cost_multiplier = 0.2
 					# }
+					define_general = {
+						name = "Gjergj Kastrioti \"Skanderbeg\""
+						fire = 5
+						shock = 5
+						manuever = 5
+						siege = 0
+					}
 				}
 				clr_country_flag = nhs_new_flight_taken_albanians
 			}
@@ -2137,15 +2155,17 @@ country_event = {
 						add_base_production = -1
 						add_base_manpower = -1
 					}
+					set_country_flag = nhs_new_flight_ship_loses_gra
 				}
 			}
 			else_if = {
 				limit = {
 					has_country_flag = nhs_new_flight_venetian_fight
 				}
+				set_country_flag = nhs_new_flight_troop_loses
 				NHS = {
 					add_prestige = 10
-					add_manpower = -1
+					#add_manpower = -1
 					capital_scope = {
 						kill_units = {
 							who = NHS
@@ -2153,6 +2173,7 @@ country_event = {
 							amount = 1
 						}
 					}
+					set_country_flag = nhs_new_flight_troop_loses
 				}
 				clr_country_flag = nhs_new_flight_venetian_fight
 			}
@@ -2160,9 +2181,10 @@ country_event = {
 				limit = {
 					has_country_flag = nhs_new_flight_janissary_boarding
 				}
+				set_country_flag = nhs_new_flight_troop_loses
 				NHS = {
 					add_prestige = 5
-					add_manpower = -1
+					#add_manpower = -1
 					capital_scope = {
 						kill_units = {
 							who = NHS
@@ -2171,6 +2193,7 @@ country_event = {
 						}
 					}
 					change_variable = { which = nhs_num_of_light_ships value = 1 }
+					set_country_flag = nhs_new_flight_troop_loses
 				}
 				clr_country_flag = nhs_new_flight_janissary_boarding
 			}
@@ -2207,9 +2230,10 @@ country_event = {
 				limit = {
 					has_country_flag = nhs_new_flight_raids
 				}
+				set_country_flag = nhs_new_flight_troop_loses
 				NHS = {
 					add_treasury = 50
-					add_manpower = -1
+					#add_manpower = -1
 					change_variable = { which = nhs_num_of_light_ships value = 1 }
 					capital_scope = {
 						kill_units = {
@@ -2218,6 +2242,7 @@ country_event = {
 							amount = 1
 						}
 					}
+					set_country_flag = nhs_new_flight_troop_loses
 				}
 				clr_country_flag = nhs_new_flight_raids
 			}
@@ -2242,6 +2267,7 @@ country_event = {
 						add_base_tax = -1
 						add_base_manpower = -1
 					}
+					set_country_flag = nhs_new_flightevents_lose_dev_storm
 				}
 				clr_country_flag = nhs_new_flightevents_lose_dev_storm
 			}
@@ -2308,7 +2334,7 @@ country_event = {
 	
 	option = {
 		name = nhs_new_flightevents.15.a
-		custom_tooltip = nhs_flight_settlement_and_landing_tt
+		#custom_tooltip = nhs_flight_settlement_and_landing_tt
 		if = {
 			limit = {
 				has_dlc = "Golden Century"
@@ -2339,53 +2365,40 @@ country_event = {
 					has_country_flag = nhs_new_flight_food_status_3
 				}
 				custom_tooltip = nhs_new_flight_food_status_3_tt
-				add_country_modifier = {
-					name = nhs2_colonial_needs_1
-					duration = 3650
-				}
 			}
 			else_if = {
 				limit = {
 					has_country_flag = nhs_new_flight_food_status_2
 				}
 				custom_tooltip = nhs_new_flight_food_status_2_tt
-				add_country_modifier = {
-					name = nhs2_colonial_needs_1
-					duration = 7300
-				}
 			}
 			else_if = {
 				limit = {
 					has_country_flag = nhs_new_flight_food_status_1
 				}
 				custom_tooltip = nhs_new_flight_food_status_1_tt
-				add_country_modifier = {
-					name = nhs2_colonial_needs_2
-					duration = 10950
-				}
 			}
 			else_if = {
 				limit = {
 					has_country_flag = nhs_new_flight_food_status_0
 				}
-				custom_tooltip = nhs_new_flight_food_status_0_tt
-				add_country_modifier = {
-					name = nhs2_colonial_needs_2
-					duration = 10950
+				custom_tooltip = nhs_new_flight_food_status_1_tt
+			}
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = nhs_new_flight_food_status_4
+						has_country_flag = nhs_new_flight_food_status_3
+						has_country_flag = nhs_new_flight_food_status_2
+					}
 				}
+				custom_tooltip = nhs_new_flight_food_status_modifiers_tt
 			}
-			add_country_modifier = {
-				name = "nhs_no_merchant_class"
-				duration = -1
+			else = {
+				custom_tooltip = nhs_new_flight_food_status_modifiers_worse_tt
 			}
-			add_country_modifier = {
-				name = "nhs_constrained_resources"
-				duration = -1
-			}
-			add_country_modifier = {
-				name = "nhs_handicap_settlers"
-				duration = -1
-			}
+			custom_tooltip = nhs_new_line_tt
 			# if = {
 				# limit = {
 					# has_country_flag = nhs_new_flight_sold_morea_to_venice
@@ -2580,7 +2593,7 @@ country_event = {
 				add_adm_power = 200
 				add_dip_power = 200
 				add_mil_power = 200
-				add_manpower = 10
+				#add_manpower = 10
 				form_coalition_against = ROOT
 				every_province = {
 					limit = {

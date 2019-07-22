@@ -7449,9 +7449,20 @@ country_event = {
 
 	option = {
 		name = "nhs2_countryevents.75.a"
+		if = {
+			limit = {
+				has_country_flag = nhs_new_flightevents_lose_stats_storm
+				has_heir = yes
+			}
+			change_adm = -1
+			change_dip = -1
+			clr_country_flag = nhs_new_flightevents_lose_stats_storm
+		}
 		kill_ruler = yes
 		add_stability = -3
-		custom_tooltip = nhs_remove_colonisation_bonus_tt
+		custom_tooltip = nhs_reduce_colonisation_bonus_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_mission_removed_breakdown_tt
 		if = {
 			limit = {
 				has_country_modifier = nhs2_colonial_needs_2
@@ -7472,10 +7483,10 @@ country_event = {
 		}
 		add_country_modifier = {
 			name = nhs2_colony_colapse
-			duration = -1
+			duration = 730
 		}
 		hidden_effect = {
-			country_event = { id = nhs2_countryevents.76 days = 32 }
+			country_event = { id = nhs2_countryevents.76 days = 40 }
 		}
 	}
 }
@@ -7490,44 +7501,110 @@ country_event = {
 	fire_only_once = yes
 	is_triggered_only = yes
 	
+	trigger = {
+		# If none of those are true for some reason you are just screwed
+		any_country = {
+			NOT = { tag = POW }
+			technology_group = north_american
+			capital_scope = {
+				OR = {
+					area = chesapeake_area
+					area = carolinas_area
+					area = piedmont_north_america_area
+					area = great_valley_area
+					area = susquehanna_area
+					area = delaware_valley_area
+					area = hudson_valley_area
+				}
+			}
+			NOT = { war_with = ROOT }
+		}
+	}
+	
 	immediate = {
-		if = {
-			limit = {
-				any_neighbor_country = {
-					technology_group = north_american
-				}
-			}
-			random_neighbor_country = {
+		hidden_effect = {
+			if = {
 				limit = {
-					technology_group = north_american
+					exists = PIA
+					NOT = { war_with = PIA }
 				}
-				save_event_target_as = nhs_helpers_in_need_et
-			}
-		}
-		else_if = {
-			limit = {
-				any_known_country = {
-					technology_group = north_american
+				PIA = {
+					save_event_target_as = nhs_helpers_in_need_et
 				}
 			}
-			random_known_country = {
+			else_if = {
 				limit = {
-					technology_group = north_american
+					exists = LEN
+					NOT = { war_with = LEN }
 				}
-				save_event_target_as = nhs_helpers_in_need_et
-			}
-		}
-		else_if = {
-			limit = {
-				any_country = {
-					technology_group = north_american
+				LEN = {
+					save_event_target_as = nhs_helpers_in_need_et
 				}
 			}
-			random_country = {
+			else_if = {
 				limit = {
-					technology_group = north_american
+					exists = SUS
+					NOT = { war_with = SUS }
 				}
-				save_event_target_as = nhs_helpers_in_need_et
+				SUS = {
+					save_event_target_as = nhs_helpers_in_need_et
+				}
+			}
+			else_if = {
+				limit = {
+					any_known_country = {
+						NOT = { tag = POW }
+						technology_group = north_american
+						NOT = { war_with = ROOT }
+					}
+				}
+				random_known_country = {
+					limit = {
+						NOT = { tag = POW }
+						technology_group = north_american
+						NOT = { war_with = ROOT }
+					}
+					save_event_target_as = nhs_helpers_in_need_et
+				}
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						NOT = { tag = POW }
+						technology_group = north_american
+						capital_scope = {
+							OR = {
+								area = chesapeake_area
+								area = carolinas_area
+								area = piedmont_north_america_area
+								area = great_valley_area
+								area = susquehanna_area
+								area = delaware_valley_area
+								area = hudson_valley_area
+							}
+						}
+						NOT = { war_with = ROOT }
+					}
+				}
+				random_country = {
+					limit = {
+						NOT = { tag = POW }
+						technology_group = north_american
+						capital_scope = {
+							OR = {
+								area = chesapeake_area
+								area = carolinas_area
+								area = piedmont_north_america_area
+								area = great_valley_area
+								area = susquehanna_area
+								area = delaware_valley_area
+								area = hudson_valley_area
+							}
+						}
+						NOT = { war_with = ROOT }
+					}
+					save_event_target_as = nhs_helpers_in_need_et
+				}
 			}
 		}
 	}
@@ -7566,6 +7643,7 @@ country_event = {
 	
 	trigger = {
 		tag = NHS
+		has_country_flag = nhs_new_flight_taken_turks
 		num_of_cities = 2
 		any_owned_province = {
 			is_colony = yes
