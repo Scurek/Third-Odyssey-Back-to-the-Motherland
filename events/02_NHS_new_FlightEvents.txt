@@ -55,6 +55,7 @@ country_event = {
 	
 	option = {
 		name = "nhs_new_flightevents.2.a"
+		custom_tooltip = nhs_theophilos_heir_tt
 		hidden_effect = {
 			country_event = { id = nhs_new_flightevents.7 days = 2 }
 		}
@@ -298,14 +299,7 @@ country_event = {
 	
 	option = {
 		name = "nhs_new_flightevents.3.a"
-		define_advisor = {
-			type = naval_reformer
-			name = "Gabriele Trevisano"
-			skill = 2
-			culture = venetian
-			religion = catholic
-			cost_multiplier = 0.25
-		}
+		custom_tooltip = nhs_get_trevisano_advisor_tt
 		# Arte di Trevisano
 		hidden_effect = {
 			country_event = { id = nhs_new_flightevents.5 days = 2 }
@@ -329,14 +323,7 @@ country_event = {
 	
 	option = {
 		name = "nhs_new_flightevents.4.a"
-		define_advisor = {
-			type = naval_reformer
-			name = "Delfino Delfin"
-			skill = 2
-			culture = venetian
-			religion = catholic
-			cost_multiplier = 0.25
-		}
+		custom_tooltip = nhs_get_delfin_advisor_tt
 		# Arte di Delfini
 		hidden_effect = {
 			country_event = { id = nhs_new_flightevents.5 days = 2 }
@@ -348,7 +335,73 @@ country_event = {
 country_event = {
 	id = nhs_new_flightevents.5
 	title = nhs_new_flightevents.5.t
-	desc = nhs_new_flightevents.5.d
+	#desc = nhs_new_flightevents.5.d
+	desc = {
+		trigger = {
+			check_variable = {
+				which = nhs_new_flight_food_status
+				value = 4
+			}
+		}
+		desc = nhs_new_flightevents.5.d_plentiful
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = nhs_new_flight_food_status
+				value = 3
+			}
+			NOT = {
+				check_variable = {
+					which = nhs_new_flight_food_status
+					value = 4
+				}
+			}
+		}
+		desc = nhs_new_flightevents.5.d_high
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = nhs_new_flight_food_status
+				value = 2
+			}
+			NOT = {
+				check_variable = {
+					which = nhs_new_flight_food_status
+					value = 3
+				}
+			}
+		}
+		desc = nhs_new_flightevents.5.d_sufficient
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = nhs_new_flight_food_status
+				value = 1
+			}
+			NOT = {
+				check_variable = {
+					which = nhs_new_flight_food_status
+					value = 2
+				}
+			}
+		}
+		desc = nhs_new_flightevents.5.d_scarce
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				check_variable = {
+					which = nhs_new_flight_food_status
+					value = 1
+				}
+			}
+		}
+		desc = nhs_new_flightevents.5.d_abysmal
+	}
+
 	picture = TRADE_GOODS_PLANTATION_GOODS_IN_WAREHOUSE_eventPicture
 	
 	is_triggered_only = yes
@@ -396,46 +449,46 @@ country_event = {
 			# custom_tooltip = nhs_new_flight_space_status_red_tt
 		# }
 		# custom_tooltip = nhs_new_line_tt
-		if = {
-			limit = {
-				check_variable = {
-					which = nhs_new_flight_food_status
-					value = 4
-				}
-			}
-			custom_tooltip = nhs_new_flight_food_status_plentiful_tt
-		}
-		else_if = {
-			limit = {
-				check_variable = {
-					which = nhs_new_flight_food_status
-					value = 3
-				}
-			}
-			custom_tooltip = nhs_new_flight_food_status_high_tt
-		}
-		else_if = {
-			limit = {
-				check_variable = {
-					which = nhs_new_flight_food_status
-					value = 2
-				}
-			}
-			custom_tooltip = nhs_new_flight_food_status_sufficient_tt
-		}
-		else_if = {
-			limit = {
-				check_variable = {
-					which = nhs_new_flight_food_status
-					value = 1
-				}
-			}
-			custom_tooltip = nhs_new_flight_food_status_scarce_tt
-		}
-		else = {
-			custom_tooltip = nhs_new_flight_food_status_abysmal_tt
-		}
-		custom_tooltip = nhs_new_line_tt
+		# if = {
+			# limit = {
+				# check_variable = {
+					# which = nhs_new_flight_food_status
+					# value = 4
+				# }
+			# }
+			# custom_tooltip = nhs_new_flight_food_status_plentiful_tt
+		# }
+		# else_if = {
+			# limit = {
+				# check_variable = {
+					# which = nhs_new_flight_food_status
+					# value = 3
+				# }
+			# }
+			# custom_tooltip = nhs_new_flight_food_status_high_tt
+		# }
+		# else_if = {
+			# limit = {
+				# check_variable = {
+					# which = nhs_new_flight_food_status
+					# value = 2
+				# }
+			# }
+			# custom_tooltip = nhs_new_flight_food_status_sufficient_tt
+		# }
+		# else_if = {
+			# limit = {
+				# check_variable = {
+					# which = nhs_new_flight_food_status
+					# value = 1
+				# }
+			# }
+			# custom_tooltip = nhs_new_flight_food_status_scarce_tt
+		# }
+		# else = {
+			# custom_tooltip = nhs_new_flight_food_status_abysmal_tt
+		# }
+		# custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {
 				has_country_flag = nhs_new_flight_taken_venetians
@@ -467,6 +520,7 @@ country_event = {
 		trigger = {
 			NOT = { has_country_flag = nhs_new_flight_taken_fire }
 		}
+		nhs_low_supply_warning = yes
 		custom_tooltip = nhs_additional_expanation_fire_tt
 		set_country_flag = nhs_new_flight_taken_fire
 		add_country_modifier = {
@@ -482,9 +536,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = -1
 			}
-			country_event = { id = nhs_new_flightevents.6 }
 		}
-		
+		nhs_switch_starting_event = yes
 	}
 	
 	option = {
@@ -492,6 +545,7 @@ country_event = {
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_fire
 		}
+		nhs_low_supply_warning = yes
 		custom_tooltip = nhs_additional_expanation_fire_tt
 		clr_country_flag = nhs_new_flight_taken_fire
 		remove_country_modifier = nhs_secrets_greekfire
@@ -504,8 +558,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = 1
 			}
-			country_event = { id = nhs_new_flightevents.6 }
 		}
+		nhs_switch_starting_event = yes
 	}
 	
 	option = {
@@ -513,6 +567,7 @@ country_event = {
 		trigger = {
 			NOT = { has_country_flag = nhs_new_flight_taken_books }
 		}
+		nhs_low_supply_warning = yes
 		custom_tooltip = nhs_additional_expanation_books_tt
 		set_country_flag = nhs_new_flight_taken_books
 		add_country_modifier = {
@@ -528,8 +583,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = -1
 			}
-			country_event = { id = nhs_new_flightevents.6 }
 		}
+		nhs_switch_starting_event = yes
 	}
 	
 	option = {
@@ -537,6 +592,7 @@ country_event = {
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_books
 		}
+		nhs_low_supply_warning = yes
 		custom_tooltip = nhs_additional_expanation_books_tt
 		clr_country_flag = nhs_new_flight_taken_books
 		remove_country_modifier = nhs_secrets_books
@@ -549,8 +605,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = 1
 			}
-			country_event = { id = nhs_new_flightevents.6 }
 		}
+		nhs_switch_starting_event = yes
 	}
 	
 	option = {
@@ -558,6 +614,7 @@ country_event = {
 		trigger = {
 			NOT = { has_country_flag = nhs_new_flight_taken_silk }
 		}
+		nhs_low_supply_warning = yes
 		custom_tooltip = nhs_additional_expanation_silk_tt
 		set_country_flag = nhs_new_flight_taken_silk
 		add_country_modifier = {
@@ -573,8 +630,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = -1
 			}
-			country_event = { id = nhs_new_flightevents.6 }
 		}
+		nhs_switch_starting_event = yes
 	}
 	
 	option = {
@@ -582,6 +639,7 @@ country_event = {
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_silk
 		}
+		nhs_low_supply_warning = yes
 		custom_tooltip = nhs_additional_expanation_silk_tt
 		clr_country_flag = nhs_new_flight_taken_silk
 		remove_country_modifier = nhs_secrets_silk
@@ -594,8 +652,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = 1
 			}
-			country_event = { id = nhs_new_flightevents.6 }
 		}
+		nhs_switch_starting_event = yes
 	}
 	
 	option = {
@@ -603,10 +661,38 @@ country_event = {
 		trigger = {
 			NOT = { has_country_flag = nhs_new_flight_taken_venetians }
 		}
+		nhs_low_supply_warning = yes
 		custom_tooltip = nhs_additional_expanation_venetians_tt
 		set_country_flag = nhs_new_flight_taken_venetians
 		set_global_flag = nhs_enable_venetian_merchant_estate_g
 		custom_tooltip = nhs_flight_venetian_effect_tt
+		if = {
+			limit = {
+				has_country_flag = nhs_new_flight_sold_morea_to_venice
+			}
+			tooltip = {
+				define_advisor = {
+					type = naval_reformer
+					name = "Delfino Delfin"
+					skill = 2
+					culture = venetian
+					religion = catholic
+					cost_multiplier = 0.25
+				}
+			}
+		}
+		else = {
+			tooltip = {
+				define_advisor = {
+					type = naval_reformer
+					name = "Gabriele Trevisano"
+					skill = 2
+					culture = venetian
+					religion = catholic
+					cost_multiplier = 0.25
+				}
+			}
+		}
 		hidden_effect = {
 			change_variable = {
 				which = nhs_new_flight_space_status
@@ -616,8 +702,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = -1
 			}
-			country_event = { id = nhs_new_flightevents.6 }
 		}
+		nhs_switch_starting_event = yes
 	}
 	
 	option = {
@@ -625,6 +711,7 @@ country_event = {
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_venetians
 		}
+		nhs_low_supply_warning = yes
 		custom_tooltip = nhs_additional_expanation_venetians_tt
 		clr_country_flag = nhs_new_flight_taken_venetians
 		clr_global_flag = nhs_enable_venetian_merchant_estate_g
@@ -638,12 +725,13 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = 1
 			}
-			country_event = { id = nhs_new_flightevents.6 }
 		}
+		nhs_switch_starting_event = yes
 	}
 	
 	option = {
 		name = "nhs_new_flightevents.5.j"
+		nhs_low_supply_warning = yes
 		hidden_effect = {
 			country_event = { id = nhs_new_flightevents.8 days = 7 }
 		}
@@ -653,7 +741,72 @@ country_event = {
 country_event = {
 	id = nhs_new_flightevents.6
 	title = nhs_new_flightevents.5.t
-	desc = nhs_new_flightevents.5.d
+	#desc = nhs_new_flightevents.5.d
+	desc = {
+		trigger = {
+			check_variable = {
+				which = nhs_new_flight_food_status
+				value = 4
+			}
+		}
+		desc = nhs_new_flightevents.5.d_plentiful
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = nhs_new_flight_food_status
+				value = 3
+			}
+			NOT = {
+				check_variable = {
+					which = nhs_new_flight_food_status
+					value = 4
+				}
+			}
+		}
+		desc = nhs_new_flightevents.5.d_high
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = nhs_new_flight_food_status
+				value = 2
+			}
+			NOT = {
+				check_variable = {
+					which = nhs_new_flight_food_status
+					value = 3
+				}
+			}
+		}
+		desc = nhs_new_flightevents.5.d_sufficient
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = nhs_new_flight_food_status
+				value = 1
+			}
+			NOT = {
+				check_variable = {
+					which = nhs_new_flight_food_status
+					value = 2
+				}
+			}
+		}
+		desc = nhs_new_flightevents.5.d_scarce
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				check_variable = {
+					which = nhs_new_flight_food_status
+					value = 1
+				}
+			}
+		}
+		desc = nhs_new_flightevents.5.d_abysmal
+	}
 	picture = TRADE_GOODS_PLANTATION_GOODS_IN_WAREHOUSE_eventPicture
 	
 	is_triggered_only = yes
@@ -701,46 +854,46 @@ country_event = {
 			# custom_tooltip = nhs_new_flight_space_status_red_tt
 		# }
 		# custom_tooltip = nhs_new_line_tt
-		if = {
-			limit = {
-				check_variable = {
-					which = nhs_new_flight_food_status
-					value = 4
-				}
-			}
-			custom_tooltip = nhs_new_flight_food_status_plentiful_tt
-		}
-		else_if = {
-			limit = {
-				check_variable = {
-					which = nhs_new_flight_food_status
-					value = 3
-				}
-			}
-			custom_tooltip = nhs_new_flight_food_status_high_tt
-		}
-		else_if = {
-			limit = {
-				check_variable = {
-					which = nhs_new_flight_food_status
-					value = 2
-				}
-			}
-			custom_tooltip = nhs_new_flight_food_status_sufficient_tt
-		}
-		else_if = {
-			limit = {
-				check_variable = {
-					which = nhs_new_flight_food_status
-					value = 1
-				}
-			}
-			custom_tooltip = nhs_new_flight_food_status_scarce_tt
-		}
-		else = {
-			custom_tooltip = nhs_new_flight_food_status_abysmal_tt
-		}
-		custom_tooltip = nhs_new_line_tt
+		# if = {
+			# limit = {
+				# check_variable = {
+					# which = nhs_new_flight_food_status
+					# value = 4
+				# }
+			# }
+			# custom_tooltip = nhs_new_flight_food_status_plentiful_tt
+		# }
+		# else_if = {
+			# limit = {
+				# check_variable = {
+					# which = nhs_new_flight_food_status
+					# value = 3
+				# }
+			# }
+			# custom_tooltip = nhs_new_flight_food_status_high_tt
+		# }
+		# else_if = {
+			# limit = {
+				# check_variable = {
+					# which = nhs_new_flight_food_status
+					# value = 2
+				# }
+			# }
+			# custom_tooltip = nhs_new_flight_food_status_sufficient_tt
+		# }
+		# else_if = {
+			# limit = {
+				# check_variable = {
+					# which = nhs_new_flight_food_status
+					# value = 1
+				# }
+			# }
+			# custom_tooltip = nhs_new_flight_food_status_scarce_tt
+		# }
+		# else = {
+			# custom_tooltip = nhs_new_flight_food_status_abysmal_tt
+		# }
+		# custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {
 				has_country_flag = nhs_new_flight_taken_venetians
@@ -772,7 +925,8 @@ country_event = {
 		trigger = {
 			NOT = { has_country_flag = nhs_new_flight_taken_fire }
 		}
-		custom_tooltip = nhs_additional_expanation_tt
+		nhs_low_supply_warning = yes
+		custom_tooltip = nhs_additional_expanation_fire_tt
 		set_country_flag = nhs_new_flight_taken_fire
 		add_country_modifier = {
 			name = "nhs_secrets_greekfire"
@@ -787,9 +941,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = -1
 			}
-			country_event = { id = nhs_new_flightevents.5 }
 		}
-		
+		nhs_switch_starting_event_2 = yes
 	}
 	
 	option = {
@@ -797,7 +950,8 @@ country_event = {
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_fire
 		}
-		custom_tooltip = nhs_additional_expanation_tt
+		nhs_low_supply_warning = yes
+		custom_tooltip = nhs_additional_expanation_fire_tt
 		clr_country_flag = nhs_new_flight_taken_fire
 		remove_country_modifier = nhs_secrets_greekfire
 		hidden_effect = {
@@ -809,8 +963,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = 1
 			}
-			country_event = { id = nhs_new_flightevents.5 }
 		}
+		nhs_switch_starting_event_2 = yes
 	}
 	
 	option = {
@@ -818,7 +972,8 @@ country_event = {
 		trigger = {
 			NOT = { has_country_flag = nhs_new_flight_taken_books }
 		}
-		custom_tooltip = nhs_additional_expanation_tt
+		nhs_low_supply_warning = yes
+		custom_tooltip = nhs_additional_expanation_books_tt
 		set_country_flag = nhs_new_flight_taken_books
 		add_country_modifier = {
 			name = "nhs_secrets_books"
@@ -833,8 +988,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = -1
 			}
-			country_event = { id = nhs_new_flightevents.5 }
 		}
+		nhs_switch_starting_event_2 = yes
 	}
 	
 	option = {
@@ -842,7 +997,8 @@ country_event = {
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_books
 		}
-		custom_tooltip = nhs_additional_expanation_tt
+		nhs_low_supply_warning = yes
+		custom_tooltip = nhs_additional_expanation_books_tt
 		clr_country_flag = nhs_new_flight_taken_books
 		remove_country_modifier = nhs_secrets_books
 		hidden_effect = {
@@ -854,8 +1010,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = 1
 			}
-			country_event = { id = nhs_new_flightevents.5 }
 		}
+		nhs_switch_starting_event_2 = yes
 	}
 	
 	option = {
@@ -863,7 +1019,8 @@ country_event = {
 		trigger = {
 			NOT = { has_country_flag = nhs_new_flight_taken_silk }
 		}
-		custom_tooltip = nhs_additional_expanation_tt
+		nhs_low_supply_warning = yes
+		custom_tooltip = nhs_additional_expanation_silk_tt
 		set_country_flag = nhs_new_flight_taken_silk
 		add_country_modifier = {
 			name = "nhs_secrets_silk"
@@ -878,8 +1035,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = -1
 			}
-			country_event = { id = nhs_new_flightevents.5 }
 		}
+		nhs_switch_starting_event_2 = yes
 	}
 	
 	option = {
@@ -887,7 +1044,8 @@ country_event = {
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_silk
 		}
-		custom_tooltip = nhs_additional_expanation_tt
+		nhs_low_supply_warning = yes
+		custom_tooltip = nhs_additional_expanation_silk_tt
 		clr_country_flag = nhs_new_flight_taken_silk
 		remove_country_modifier = nhs_secrets_silk
 		hidden_effect = {
@@ -899,8 +1057,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = 1
 			}
-			country_event = { id = nhs_new_flightevents.5 }
 		}
+		nhs_switch_starting_event_2 = yes
 	}
 	
 	option = {
@@ -908,7 +1066,8 @@ country_event = {
 		trigger = {
 			NOT = { has_country_flag = nhs_new_flight_taken_venetians }
 		}
-		custom_tooltip = nhs_additional_expanation_tt
+		nhs_low_supply_warning = yes
+		custom_tooltip = nhs_additional_expanation_venetians_tt
 		set_country_flag = nhs_new_flight_taken_venetians
 		set_global_flag = nhs_enable_venetian_merchant_estate_g
 		custom_tooltip = nhs_flight_venetian_effect_tt
@@ -921,8 +1080,8 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = -1
 			}
-			country_event = { id = nhs_new_flightevents.5 }
 		}
+		nhs_switch_starting_event_2 = yes
 	}
 	
 	option = {
@@ -930,7 +1089,8 @@ country_event = {
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_venetians
 		}
-		custom_tooltip = nhs_additional_expanation_tt
+		nhs_low_supply_warning = yes
+		custom_tooltip = nhs_additional_expanation_venetians_tt
 		clr_country_flag = nhs_new_flight_taken_venetians
 		clr_global_flag = nhs_enable_venetian_merchant_estate_g
 		hidden_effect = {
@@ -942,12 +1102,13 @@ country_event = {
 				which = nhs_new_flight_food_status
 				value = 1
 			}
-			country_event = { id = nhs_new_flightevents.5 }
 		}
+		nhs_switch_starting_event_2 = yes
 	}
 	
 	option = {
 		name = "nhs_new_flightevents.5.j"
+		nhs_low_supply_warning = yes
 		hidden_effect = {
 			country_event = { id = nhs_new_flightevents.8 days = 7 }
 		}
@@ -1171,7 +1332,7 @@ country_event = {
 		}
 		name = "nhs_new_flightevents.9.b"
 		# Standard loss
-		add_navy_tradition = 5
+		add_navy_tradition = 15
 		custom_tooltip = nhs_new_flight_standard_loses_tt
 		set_country_flag = nhs_new_flight_ship_loses_gra
 	}
@@ -1184,7 +1345,7 @@ country_event = {
 		highlight = yes
 		# Lesser loss
 		add_prestige = 5
-		add_navy_tradition = 5
+		add_navy_tradition = 15
 		set_country_flag = nhs_new_flight_janissary_boarding
 		custom_tooltip = nhs_new_flight_lesser_loses_tt
 		custom_tooltip = nhs_new_line_tt
@@ -1226,7 +1387,7 @@ country_event = {
 		highlight = yes
 		# Lesser loss
 		add_prestige = 10
-		add_navy_tradition = 5
+		add_navy_tradition = 15
 		custom_tooltip = nhs_new_flight_lesser_loses_tt
 		set_country_flag = nhs_new_flight_venetian_fight
 	}
@@ -1243,7 +1404,7 @@ country_event = {
 		# lesser penatly to long fire, prestige
 		add_prestige = 15
 		add_legitimacy = 5
-		add_navy_tradition = 10
+		add_navy_tradition = 20
 		#custom_tooltip = nhs_new_flight_less_fire_tt
 		#set_country_flag = nhs_new_flight_fire_depleted_minor
 		set_country_flag = nhs_new_flight_sea_battle_major
@@ -1637,7 +1798,7 @@ country_event = {
 		has_country_modifier = byz_flight
 	}
 
-	option = {	
+	option = {
 		name = nhs_new_flightevents.14.a
 		ai_chance = { factor = 50 }
 		change_religion = pantheon_worship	# Convert
@@ -1649,6 +1810,14 @@ country_event = {
 			set_heir_religion = pantheon_worship
 		}
 		add_legitimacy = -25
+		define_advisor = {
+			type = theologian
+			name = "Gemistos Plethon"
+			skill = 2
+			culture = greek
+			religion = pantheon_worship
+			cost_multiplier = 0.2
+		}
 	}
 
 	option = {	
@@ -1703,7 +1872,7 @@ country_event = {
 					release = NHS
 				}
 				NHS = {
-					#add_corruption = 95
+					add_corruption = 100
 					add_treasury = 150
 					add_manpower = -10
 				}
@@ -2214,7 +2383,7 @@ country_event = {
 				}
 				NHS = {
 					add_manpower = -1
-					add_navy_tradition = 5
+					add_navy_tradition = 15
 					capital_scope = { 
 						add_base_tax = -1
 						add_base_production = -1
@@ -2230,7 +2399,7 @@ country_event = {
 				set_country_flag = nhs_new_flight_troop_loses
 				NHS = {
 					add_prestige = 10
-					add_navy_tradition = 5
+					add_navy_tradition = 15
 					#add_manpower = -1
 					capital_scope = {
 						kill_units = {
@@ -2250,7 +2419,7 @@ country_event = {
 				set_country_flag = nhs_new_flight_troop_loses
 				NHS = {
 					add_prestige = 5
-					add_navy_tradition = 5
+					add_navy_tradition = 15
 					#add_manpower = -1
 					capital_scope = {
 						kill_units = {
@@ -2289,7 +2458,7 @@ country_event = {
 				NHS = {
 					add_prestige = 15
 					add_legitimacy = 5
-					add_navy_tradition = 10
+					add_navy_tradition = 20
 					change_variable = { which = nhs_num_of_light_ships value = 1 }
 				}
 				clr_country_flag = nhs_new_flight_additional_ship
@@ -2398,6 +2567,17 @@ country_event = {
 				}
 				#switch_tag = NHS
 				country_event = { id = nhs_flightevents.300 }
+			}
+			every_country = {
+				limit = {
+					OR = {
+						tag = PIA
+						tag = POW
+						tag = SUS
+						tag = LEN
+					}
+				}
+				country_event = { id = nhs2_nativesevents.7 }
 			}
 		}
 	}
@@ -2529,46 +2709,21 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = {
-					NOT = { 
-						has_country_flag = nhs_new_flight_taken_turks
-					}
+					has_country_flag = nhs_new_flight_taken_turks
 				}
-				BYZ = {
-					every_owned_province = {
-						add_core = TUR
-						cede_province = TUR
-					}
-					# every_core_province = {
-						# limit = {
-							# continent = europe
-							# NOT = { province_id = 151 }
-						# }
-						# remove_core = BYZ
-					# }
-				}
-				if = {
-					limit = {
-						has_global_flag = nhs_byz_left_fire
-					}
-					ALB = {
-						add_country_modifier = {
-							name = nhs_greekfire_update
-							duration = 3650
-						}
-					}
-					clr_global_flag = nhs_byz_left_fire
+				ALB = {
+					country_event = { id = nhs_new_flightevents.26 }
 				}
 				TUR = {
-					declare_war_with_cb = {
-						who = ALB
-						casus_belli = cb_conquest
-						war_goal_province = 143
-					}
+					country_event = { id = nhs_new_flightevents.28 }
 				}
 			}
 			else = {
 				TUR = {
 					country_event = { id = nhs_new_flightevents.21 days = 1 } 
+				}
+				ALB = {
+					country_event = { id = nhs_new_flightevents.27 }
 				}
 			}
 			europe = {
@@ -2969,6 +3124,92 @@ country_event = {
 					}
 				}
 			}
+		}
+	}
+}
+
+### Albanian reaction - not taken with
+country_event = {
+	id = nhs_new_flightevents.26
+	title = nhs_new_flightevents.26.t
+	desc = nhs_new_flightevents.26.d
+	picture = ALBANIAN_EAGLE_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = nhs_new_flightevents.26.a
+		add_treasury = 400
+		add_manpower = 2
+		add_prestige = 10
+		capital_scope = {
+			infantry = ROOT
+		}
+		if = {
+			limit = {
+				has_global_flag = nhs_byz_left_fire
+			}
+			add_country_modifier = {
+				name = nhs_greekfire_update
+				duration = 3650
+			}
+			clr_global_flag = nhs_byz_left_fire
+		}
+	}
+}
+
+### Albanian reaction - taken with
+country_event = {
+	id = nhs_new_flightevents.27
+	title = nhs_new_flightevents.27.t
+	desc = nhs_new_flightevents.27.d
+	picture = ALBANIAN_EAGLE_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = nhs_new_flightevents.27.a
+		define_ruler = {
+			adm = 2
+			dip = 1
+			mil = 5
+			age = 34
+			claim = 60
+		}
+		hidden_effect = {
+			define_heir = {
+				age = 16
+				claim = 60
+				dynasty = ROOT
+			}
+		}
+	}
+}
+
+### Turks gain free land upon leaving if you take Orhan
+country_event = {
+	id = nhs_new_flightevents.28
+	title = nhs_new_flightevents.28.t
+	desc = nhs_new_flightevents.28.d
+	picture = tur_CONQUEST_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = nhs_new_flightevents.27.a
+		every_province = {
+			limit = {
+				owned_by = BYZ
+			}
+			cede_province = ROOT
+			add_core = ROOT
+			remove_core = BYZ
+			add_core = MOE
+		}
+		declare_war_with_cb = {
+			who = ALB
+			casus_belli = cb_conquest
+			war_goal_province = 143
 		}
 	}
 }

@@ -474,6 +474,131 @@ country_event = {
 	}
 }
 
+# Coastal provinces to Elyshi
+country_event = {
+	id = nhs2_countryevents.17
+	title = nhs2_countryevents.17.t
+	desc = nhs2_countryevents.17.d
+	picture = EUROPEAN_REFUGEES_eventPicture
+
+	trigger = {
+		culture_group = elysian_group
+		NOT = { primary_culture = elyric }
+		any_owned_province = {
+			culture = elyric
+			has_port = yes
+			NOT = { 
+				province_group = nhs_provinces_around_lakes
+			}
+			OR = {
+				province_group = mesoamerican_landing
+				region = southeast_america_region
+				region = mississippi_region
+				region = northeast_america_region
+				region = canada_region
+				region = greenland_region
+				region = carribeans_region
+				province_id = 979
+				province_id = 502
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					culture = elyric
+					has_port = yes
+					NOT = { 
+						province_group = nhs_provinces_around_lakes
+					}
+					OR = {
+						province_group = mesoamerican_landing
+						region = southeast_america_region
+						region = mississippi_region
+						region = northeast_america_region
+						region = canada_region
+						region = greenland_region
+						region = carribeans_region
+						province_id = 979
+						province_id = 502
+					}
+				}
+				save_event_target_as = nhs2_countryevents17_target
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+		modifier = {
+			factor = 0.8
+			has_country_flag = nhs_natives_no_privileges
+		}
+		modifier = {
+			factor = 0.9
+			stability = 1
+		}
+		modifier = {
+			factor = 0.9
+			stability = 2
+		}
+		modifier = {
+			factor = 0.9
+			stability = 3
+		}
+		modifier = {
+			factor = 2
+			OR = {
+				tag = ERF
+				tag = ELR
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents.17.a"
+		trigger = {
+			NOT = { 
+				OR = {
+					tag = ERF
+					tag = ELR
+				}
+			}
+			NOT = { primary_culture = elyshi }
+		}
+		event_target:nhs2_countryevents17_target = {
+			change_culture = elyshi
+		}
+	}
+	option = {
+		trigger = {
+			primary_culture = elyshi
+		}
+		name = "nhs2_countryevents.17.b"
+		add_prestige = 5
+		event_target:nhs2_countryevents17_target = {
+			change_culture = elyshi
+			local_unrest = -10
+		}
+	}
+	option = {
+		trigger = {
+			OR = {
+				tag = ERF
+				tag = ELR
+			}
+		}
+		name = "nhs2_countryevents.17.c"
+		add_prestige = -1
+		event_target:nhs2_countryevents17_target = {
+			change_culture = elyshi
+		}
+	}
+
+}
+
 # Breaks Vassalisation over Spartans
 country_event = {
 	id = nhs2_countryevents.18
@@ -835,8 +960,10 @@ country_event = {
 			custom_tooltip = nhs_starting_flagship_fixed_tt
 			hidden_effect = {
 				# heavy_ship = NHS
+				set_country_flag = nhs_first_flagship
+				set_country_flag = nhs_first_flagship_fixed
 				capital_scope = {
-					random_owned_province = {
+					random_province = {
 						limit = {
 							heavy_ships_in_province = ROOT
 						}
@@ -846,17 +973,15 @@ country_event = {
 							amount = 1
 						}
 					}
-					set_country_flag = nhs_first_flagship
-					set_country_flag = nhs_first_flagship_fixed
 					953 = {
 						create_flagship = {	
 							name = "Aghia Theotoke"
 							type = heavy_ship
 						}
 					}
-					clr_country_flag = nhs_first_flagship
-					clr_country_flag = nhs_first_flagship_fixed
 				}
+				clr_country_flag = nhs_first_flagship
+				clr_country_flag = nhs_first_flagship_fixed
 			}
 		}
 		else = {
@@ -1024,25 +1149,25 @@ country_event = {
 
 	option = {
 		name = "nhs2_countryevents.25.a"
+		custom_tooltip = nhs_enables_noble_estate_tt
 		capital_scope = {
 			add_base_tax = 2
 		}
-		custom_tooltip = nhs_enables_noble_estate_tt
 	}
 	option = {
 		name = "nhs2_countryevents.25.b"
+		custom_tooltip = nhs_enables_noble_estate_tt
 		capital_scope = {
 			add_base_production = 2
 		}
-		custom_tooltip = nhs_enables_noble_estate_tt
 	}
 	option = {
 		name = "nhs2_countryevents.25.c"
+		custom_tooltip = nhs_enables_noble_estate_tt
 		capital_scope = {
 			add_base_tax = 1
 			add_base_production = 1
 		}
-		custom_tooltip = nhs_enables_noble_estate_tt
 	}
 }
 
@@ -6988,8 +7113,10 @@ country_event = {
 			custom_tooltip = nhs_starting_flagship_fixed_tt
 			hidden_effect = {
 				# heavy_ship = NHS
+				set_country_flag = nhs_first_flagship
+				set_country_flag = nhs_first_flagship_fixed
 				capital_scope = {
-					random_owned_province = {
+					random_province = {
 						limit = {
 							heavy_ships_in_province = ROOT
 						}
@@ -6999,17 +7126,15 @@ country_event = {
 							amount = 1
 						}
 					}
-					set_country_flag = nhs_first_flagship
-					set_country_flag = nhs_first_flagship_fixed
 					953 = {
 						create_flagship = {	
 							name = "Aghia Theotoke"
 							type = heavy_ship
 						}
 					}
-					clr_country_flag = nhs_first_flagship
-					clr_country_flag = nhs_first_flagship_fixed
 				}
+				clr_country_flag = nhs_first_flagship
+				clr_country_flag = nhs_first_flagship_fixed
 			}
 		}
 		else = {
@@ -7140,8 +7265,10 @@ country_event = {
 			custom_tooltip = nhs_starting_flagship_fixed_tt
 			hidden_effect = {
 				# heavy_ship = NHS
+				set_country_flag = nhs_first_flagship
+				set_country_flag = nhs_first_flagship_fixed
 				capital_scope = {
-					random_owned_province = {
+					random_province = {
 						limit = {
 							heavy_ships_in_province = ROOT
 						}
@@ -7151,17 +7278,15 @@ country_event = {
 							amount = 1
 						}
 					}
-					set_country_flag = nhs_first_flagship
-					set_country_flag = nhs_first_flagship_fixed
 					953 = {
 						create_flagship = {	
 							name = "Aghia Theotoke"
 							type = heavy_ship
 						}
 					}
-					clr_country_flag = nhs_first_flagship
-					clr_country_flag = nhs_first_flagship_fixed
 				}
+				clr_country_flag = nhs_first_flagship
+				clr_country_flag = nhs_first_flagship_fixed
 			}
 		}
 		else = {
@@ -7282,8 +7407,10 @@ country_event = {
 			custom_tooltip = nhs_starting_flagship_fixed_tt
 			hidden_effect = {
 				# heavy_ship = NHS
+				set_country_flag = nhs_first_flagship
+				set_country_flag = nhs_first_flagship_fixed
 				capital_scope = {
-					random_owned_province = {
+					random_province = {
 						limit = {
 							heavy_ships_in_province = ROOT
 						}
@@ -7293,17 +7420,15 @@ country_event = {
 							amount = 1
 						}
 					}
-					set_country_flag = nhs_first_flagship
-					set_country_flag = nhs_first_flagship_fixed
 					953 = {
 						create_flagship = {	
 							name = "Aghia Theotoke"
 							type = heavy_ship
 						}
 					}
-					clr_country_flag = nhs_first_flagship
-					clr_country_flag = nhs_first_flagship_fixed
 				}
+				clr_country_flag = nhs_first_flagship
+				clr_country_flag = nhs_first_flagship_fixed
 			}
 		}
 		else = {
@@ -7499,20 +7624,23 @@ country_event = {
 		}
 		kill_ruler = yes
 		add_stability = -2
+		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = nhs_reduce_colonisation_bonus_tt
 		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = nhs_mission_removed_breakdown_tt
+		#custom_tooltip = nhs_mission_removed_breakdown_tt
+		#custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {
 				has_country_modifier = nhs2_colonial_needs_2
 			}
-			#hidden_effect = {
+			custom_tooltip = nhs_replace_cn2_with_breakdown_tt
+			hidden_effect = {
 				remove_country_modifier = nhs2_colonial_needs_2
 				add_country_modifier = {
 					name = nhs2_breakdown_of_society
 					duration = -1
 				}
-			#}
+			}
 		}
 		else = {
 			add_country_modifier = {
@@ -7525,7 +7653,7 @@ country_event = {
 			duration = 730
 		}
 		hidden_effect = {
-			country_event = { id = nhs2_countryevents.76 days = 40 }
+			country_event = { id = nhs2_countryevents.76 days = 45 }
 		}
 	}
 }
@@ -7732,7 +7860,7 @@ country_event = {
 		name = "nhs2_countryevents.70.b"
 		define_advisor = {
 			type = commandant
-			name = "Orhan Ã‡elebi"
+			name = "Orhan Çelebi"
 			skill = 2
 			culture = turkish
 			religion = sunni
