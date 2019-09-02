@@ -302,7 +302,16 @@ country_event = {
 		custom_tooltip = nhs_get_trevisano_advisor_tt
 		# Arte di Trevisano
 		hidden_effect = {
-			country_event = { id = nhs_new_flightevents.5 days = 2 }
+			if = {
+				limit = {
+					ai = no
+				}
+				country_event = { id = nhs_new_flightevents.5 days = 2 }
+			}
+			else = {
+				nhs_ai_picks_secrets = yes
+				country_event = { id = nhs_new_flightevents.8 days = 9 }
+			}
 		}
 	}
 }
@@ -326,7 +335,16 @@ country_event = {
 		custom_tooltip = nhs_get_delfin_advisor_tt
 		# Arte di Delfini
 		hidden_effect = {
-			country_event = { id = nhs_new_flightevents.5 days = 2 }
+			if = {
+				limit = {
+					ai = no
+				}
+				country_event = { id = nhs_new_flightevents.5 days = 2 }
+			}
+			else = {
+				nhs_ai_picks_secrets = yes
+				country_event = { id = nhs_new_flightevents.8 days = 9 }
+			}
 		}
 	}
 }
@@ -1312,15 +1330,26 @@ country_event = {
 		}
 		name = "nhs_new_flightevents.9.a"
 		# Standard pay
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				OR = {
+					has_country_flag = nhs_new_flight_taken_fire
+					has_country_flag = nhs_new_flight_taken_venetians
+					has_country_flag = nhs_new_flight_taken_turks
+				}
+			}
+		}
 		if = {
 			limit = {
 				has_country_flag = nhs_new_flight_taken_venetians
 			}
 			custom_tooltip = nhs_new_flight_venetian_negotiation_tt
-			add_treasury = -60
+			add_treasury = -50
 		}
 		else = {
-			add_treasury = -100
+			add_treasury = -80
 		}
 		set_country_flag = nhs_new_flight_paid_toll
 	}
@@ -1329,6 +1358,9 @@ country_event = {
 			NOT = { has_country_flag = nhs_new_flight_taken_turks }
 			NOT = { has_country_flag = nhs_new_flight_taken_fire }
 			NOT = { has_country_flag = nhs_new_flight_taken_venetians }
+		}
+		ai_chance = {
+			factor = 50
 		}
 		name = "nhs_new_flightevents.9.b"
 		# Standard loss
@@ -1342,6 +1374,9 @@ country_event = {
 			NOT = { has_country_flag = nhs_new_flight_taken_venetians }
 		}
 		name = "nhs_new_flightevents.9.c"
+		ai_chance = {
+			factor = 100
+		}
 		highlight = yes
 		# Lesser loss
 		add_prestige = 5
@@ -1363,6 +1398,9 @@ country_event = {
 			}
 		}
 		name = "nhs_new_flightevents.9.e"
+		ai_chance = {
+			factor = 100
+		}
 		highlight = yes
 		# Less long fire
 		custom_tooltip = nhs_new_flight_less_fire_tt
@@ -1383,6 +1421,9 @@ country_event = {
 			}
 		}
 		name = "nhs_new_flightevents.9.f"
+		ai_chance = {
+			factor = 100
+		}
 		highlight = yes
 		# Lesser loss
 		add_prestige = 10
@@ -1397,6 +1438,9 @@ country_event = {
 				has_country_flag = nhs_new_flight_taken_turks
 			#}
 			has_country_flag = nhs_new_flight_taken_venetians
+		}
+		ai_chance = {
+			factor = 100
 		}
 		name = "nhs_new_flightevents.9.g"
 		highlight = yes
@@ -1424,6 +1468,9 @@ country_event = {
 		trigger = {
 			has_country_flag = nhs_new_flight_taken_turks
 			has_country_flag = nhs_new_flight_taken_fire
+		}
+		ai_chance = {
+			factor = 100
 		}
 		name = "nhs_new_flightevents.9.i"
 		highlight = yes
@@ -1461,6 +1508,9 @@ country_event = {
 	option = {	
 		name = nhs_new_flightevents.10.a
 		custom_tooltip = nhs_new_flightevents_portuguese_tt
+		ai_chance = {
+			factor = 10
+		}
 		add_treasury = 30
 		POR = {
 			country_event = { id = nhs_othersevents.4 days = 3 }
@@ -1472,6 +1522,9 @@ country_event = {
 	option = {	
 		name = nhs_new_flightevents.10.b
 		custom_tooltip = nhs_new_flightevents_portuguese_tt
+		ai_chance = {
+			factor = 90
+		}
 		add_treasury = 30
 		POR = {
 			add_opinion = {
@@ -1556,7 +1609,7 @@ country_event = {
 					define_heir = {
 						name = "Loukas"
 						dynasty = "Notaras"
-						adm = 5
+						adm = 3
 						dip = 5
 						mil = 3
 						#fixed = yes
@@ -1634,7 +1687,25 @@ country_event = {
 			# change_dip = -1
 			# #change_mil = -1
 		# }
+		custom_tooltip = nhs_new_flightevents_lose_advisors_tt
+		change_adm = -1
+		change_dip = -1
+		custom_tooltip = nhs_kill_georgios_tt
 		set_country_flag = nhs_new_flightevents_lose_stats_storm
+		hidden_effect = {
+			CM1 = {
+				change_adm = 1
+				change_dip = 1
+				define_advisor = {
+					type = artist
+					name = "Georgios Sphrantzes"
+					skill = 2
+					culture = greek
+					religion = orthodox
+					cost_multiplier = 0.25
+				}
+			}
+		}
 	}
 	option = {
 		name = nhs_new_flightevents.11.b # Lose people (and 'ships', thus basetax)
@@ -1651,6 +1722,12 @@ country_event = {
 		# }
 		custom_tooltip = nhs_new_flightevents_lose_dev_tt
 		set_country_flag = nhs_new_flightevents_lose_dev_storm
+		hidden_effect = {
+			481 = {
+				add_base_tax = 1
+				add_base_manpower = 1
+			}
+		}
 	}
 	after = {
 		# Next event
@@ -2145,7 +2222,7 @@ country_event = {
 						value = 4
 					}
 				}
-				#set_country_flag = nhs_new_flight_food_status_4
+				set_country_flag = nhs_new_flight_food_status_4
 				NHS = {
 					set_country_flag = nhs_new_flight_food_status_4
 					capital_scope = { 
@@ -2176,7 +2253,7 @@ country_event = {
 						value = 3
 					}
 				}
-				#set_country_flag = nhs_new_flight_food_status_3
+				set_country_flag = nhs_new_flight_food_status_3
 				NHS = {
 					set_country_flag = nhs_new_flight_food_status_3
 					add_treasury = 60
@@ -2207,6 +2284,7 @@ country_event = {
 						value = 2
 					}
 				}
+				set_country_flag = nhs_new_flight_food_status_2
 				NHS = {
 					set_country_flag = nhs_new_flight_food_status_2
 					add_treasury = 30
@@ -2236,7 +2314,7 @@ country_event = {
 						value = 1
 					}
 				}
-				
+				set_country_flag = nhs_new_flight_food_status_1
 				NHS = {
 					set_country_flag = nhs_new_flight_food_status_1
 					random_owned_province = {
@@ -2375,10 +2453,10 @@ country_event = {
 						limit = {
 							has_country_flag = nhs_new_flight_taken_venetians
 						}
-						add_treasury = -60
+						add_treasury = -50
 					}
 					else = {
-						add_treasury = -100
+						add_treasury = -80
 					}
 				}
 			}
