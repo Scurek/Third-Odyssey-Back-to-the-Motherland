@@ -56,24 +56,12 @@ nhs_military_missions = { #Series name is displayed over the slot?
 			}
 		}
 	}
+	
 	#4th
-	nhs_assemble_an_army = {
-		icon = mission_assemble_an_army
-		required_missions = { nhs_conquer_states }
-		position = 4
-		trigger = { army_size = 80 }
-		effect = {
-			add_country_modifier = {
-				name = "army_enthusiasm"
-				duration = 9125 #25 years
-			}
-		}
-	}
-	#5th
 	nhs_unite_home_region = {
 		icon = mission_unite_home_region
-		required_missions = { nhs_assemble_an_army }
-		position = 5
+		required_missions = { nhs_conquer_states }
+		position = 4
 		provinces_to_highlight = {
 			OR = {
 				region = northeast_america_region
@@ -98,6 +86,22 @@ nhs_military_missions = { #Series name is displayed over the slot?
 			add_country_modifier = {
 				name = "hegemonic_ambition"
 				duration = 9125 #25 years
+			}
+		}
+	}
+	nhs_imperial_ambition_mission = {
+		icon = mission_empire
+		position = 5
+		required_missions = { nhs_unite_home_region }
+		trigger = {
+			nhs_is_elysia_late = yes
+			total_development = 1000
+		}
+		effect = {
+			add_prestige = 30
+			add_country_modifier = {
+				name = "imperial_ambition"
+				duration = 9125
 			}
 		}
 	}
@@ -153,28 +157,171 @@ nhs_administrative_missions = {
 	# }
 	nhs_wonders_of_elysium = {
 		icon = mission_conquer_alexandria
+		#icon = nhs_elysian_silk_with_secret2
 		position = 3
 		required_missions = { nhs_build_temples }
 		trigger = {
-			OR = {
-				any_owned_province = {
-					has_province_modifier = nhs_gilded_keep_tm
+			if = {
+				limit = {
+					any_owned_province = {
+						has_province_modifier = nhs_alexandrian_library_no_books_tm
+					}
 				}
-				any_owned_province = {
-					has_province_modifier = nhs_carthaginian_design_harbour_tm
+				# OR = {
+					# any_owned_province = {
+						# has_province_modifier = nhs_gilded_keep_tm
+					# }
+					# any_owned_province = {
+						# has_province_modifier = nhs_carthaginian_design_harbour_tm
+					# }
+					# any_owned_province = {
+						# has_province_modifier = nhs_seagate_guardians_tm
+					# }
+					# any_owned_province = {
+						# has_province_modifier = nhs_hippodrome_tm
+					# }
+					# any_owned_province = {
+						# has_province_modifier = nhs_alexandrian_library_no_books_tm
+					# }
+				# }
+				if = {
+					limit = {
+						has_country_flag = nhs_new_flight_taken_venetians
+					}
+					any_owned_province = {
+						OR = {
+							has_province_modifier = nhs_gilded_keep_tm
+							has_province_modifier = nhs_carthaginian_design_harbour_tm
+							has_province_modifier = nhs_seagate_guardians_tm
+							has_province_modifier = nhs_hippodrome_tm
+							has_province_modifier = nhs_alexandrian_library_no_books_tm
+							has_province_modifier = nhs_elysian_arsenal_tm
+						}
+					}
 				}
-				any_owned_province = {
-					has_province_modifier = nhs_seagate_guardians_tm
+				else = {
+					any_owned_province = {
+						OR = {
+							has_province_modifier = nhs_gilded_keep_tm
+							has_province_modifier = nhs_carthaginian_design_harbour_tm
+							has_province_modifier = nhs_seagate_guardians_tm
+							has_province_modifier = nhs_hippodrome_tm
+							has_province_modifier = nhs_alexandrian_library_no_books_tm
+						}
+					}
 				}
-				any_owned_province = {
-					has_province_modifier = nhs_hippodrome_tm
+			}
+			else = {
+				# OR = {
+					# any_owned_province = {
+						# has_province_modifier = nhs_gilded_keep_tm
+					# }
+					# any_owned_province = {
+						# has_province_modifier = nhs_carthaginian_design_harbour_tm
+					# }
+					# any_owned_province = {
+						# has_province_modifier = nhs_seagate_guardians_tm
+					# }
+					# any_owned_province = {
+						# has_province_modifier = nhs_hippodrome_tm
+					# }
+					# any_owned_province = {
+						# has_province_modifier = nhs_alexandrian_library_tm
+					# }
+				# }
+				if = {
+					limit = {
+						has_country_flag = nhs_new_flight_taken_venetians
+					}
+					any_owned_province = {
+						OR = {
+							has_province_modifier = nhs_gilded_keep_tm
+							has_province_modifier = nhs_carthaginian_design_harbour_tm
+							has_province_modifier = nhs_seagate_guardians_tm
+							has_province_modifier = nhs_hippodrome_tm
+							has_province_modifier = nhs_alexandrian_library_tm
+							has_province_modifier = nhs_elysian_arsenal_tm
+						}
+					}
 				}
-				any_owned_province = {
-					has_province_modifier = nhs_alexandrian_library_tm
+				else = {
+					any_owned_province = {
+						OR = {
+							has_province_modifier = nhs_gilded_keep_tm
+							has_province_modifier = nhs_carthaginian_design_harbour_tm
+							has_province_modifier = nhs_seagate_guardians_tm
+							has_province_modifier = nhs_hippodrome_tm
+							has_province_modifier = nhs_alexandrian_library_tm
+						}
+					}
 				}
 			}
 		}
 		effect = {
+			set_country_flag = nhs_completed_wonders_of_elysium
+			custom_tooltip = nhs_wineries_of_odessos_tt
+			2550 = {
+				change_trade_goods = wine
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_iron_in_alouion_tt
+			952 = {
+				change_trade_goods = iron
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_ivos_shipyards_tt
+			950 = {
+				change_trade_goods = naval_supplies
+				if = {
+					limit = {
+						OR = {
+							has_province_modifier = nhs_carthaginian_design_harbour_tm
+							has_province_modifier = nhs_elysian_arsenal_tm
+						}
+					}
+					tooltip = {
+						add_province_modifier = {
+							name = nhs2_ivos_naval_supplies_boost
+							duration = -1
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							has_country_flag = nhs_new_flight_taken_venetians
+						}
+					}
+					custom_tooltip = nhs_naval_supplies_boost_with_harbour_ven_tt
+				}
+				else = {
+					custom_tooltip = nhs_naval_supplies_boost_with_harbour_tt
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs2_ivos_naval_supplies_boost_tm
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							has_province_modifier = nhs_alexandrian_library_no_books_tm
+							has_province_modifier = nhs_alexandrian_library_tm
+						}
+					}
+				}
+				custom_tooltip = nhs_paper_in_nea_alexandria_tt
+				2554 = {
+					change_trade_goods = paper
+				}
+				custom_tooltip = nhs_new_line_tt
+			}
+			custom_tooltip = nhs_native_dies_in_methenai_tt
+			957 = {
+				change_trade_goods = dyes
+			}
+			custom_tooltip = nhs_new_line_tt
 			add_country_modifier = {
 				name = "building_spree"
 				duration = 9125
@@ -210,19 +357,147 @@ nhs_administrative_missions = {
 			add_years_of_income = 1.5
 		}
 	}
-	nhs_imperial_ambition_mission = {
-		icon = mission_empire
+	nhs_industrial_revolution_mission = {
+		#icon = mission_rb_build_furnaces
+		icon = mission_rb_prospect_for_coal
 		position = 5
 		required_missions = { nhs_build_manufactories }
 		trigger = {
-			nhs_is_elysia_late = yes
-			total_development = 1000
+			owns = 953
+			has_institution = enlightenment
+			custom_trigger_tooltip = {
+				tooltip = nhs_owns_at_least_50_manufactories_tt
+				calc_true_if = {
+					all_owned_province = {
+						OR = {
+							has_building = mills
+							has_building = farm_estate
+							has_building = tradecompany
+							has_building = plantations
+							has_building = textile
+							has_building = weapons
+							has_building = wharf
+							has_building = furnace
+						}
+					}
+					amount = 50
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				OR = {
+					adm_tech = 26
+					AND = {
+						adm_tech = 23
+						full_idea_group = innovativeness_ideas
+					}
+					AND = {
+						adm_tech = 23
+						innovativeness = 20
+					}
+				}
+			}
+			else = {
+				OR = {
+					adm_tech = 26
+					AND = {
+						adm_tech = 23
+						full_idea_group = innovativeness_ideas
+					}
+				}
+			}
+			OR = {
+				2023 = {
+					owned_by = ROOT
+					has_building = furnace
+				}
+				2549 = {
+					owned_by = ROOT
+					has_building = furnace
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = nhs_owns_at_least_5_furnaces_tt
+				calc_true_if = {
+					all_province = {
+						country_or_non_sovereign_subject_holds = ROOT
+						has_building = furnace
+					}
+					amount = 5
+				}
+			}
 		}
 		effect = {
-			add_prestige = 30
-			add_country_modifier = {
-				name = "imperial_ambition"
-				duration = 9125
+			add_prestige = 20
+			define_advisor = {
+				type = natural_scientist
+				name = "Iakovos Heronopoulos"
+				skill = 3
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 10
+			}
+			else = {
+				add_adm_power = 100
+				add_dip_power = 100
+				add_mil_power = 100
+			}
+			953 = {
+				add_base_tax = 3
+				add_base_production = 3
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = nhs2_steam_engine
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs2_steam_engine_tm
+				}
+			}
+			if = {
+				limit = {
+					2023 = {
+						owned_by = ROOT
+						has_building = furnace
+					}
+				}
+				2023 = {
+					add_base_production = 3
+					add_base_manpower = 3
+					tooltip = {
+						add_permanent_province_modifier = {
+							name = nhs2_great_mine
+							duration = -1
+						}
+					}
+					hidden_effect = {
+						add_province_triggered_modifier = nhs2_great_mine_tm
+					}
+				}
+			}
+			else = {
+				2549 = {
+					add_base_production = 3
+					add_base_manpower = 3
+					tooltip = {
+						add_permanent_province_modifier = {
+							name = nhs2_great_mine
+							duration = -1
+						}
+					}
+					hidden_effect = {
+						add_province_triggered_modifier = nhs2_great_mine_tm
+					}
+				}
 			}
 		}
 	}
@@ -246,15 +521,46 @@ nhs_left_start = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			owns = 952
+			#owns = 952
+			owns_or_non_sovereign_subject_of = 952
 		}
 		effect = {
-			953 = {
-				change_culture = ROOT
-				change_religion = ROOT
+			if = {
+				limit = {
+					NOT = {
+						952 = {
+							owner = {
+								is_subject_of = ROOT
+							}
+						}
+					}
+				}
+				952 = {
+					change_culture = ROOT
+					change_religion = ROOT
+				}
 			}
-			add_adm_power = 50
 			add_prestige = 5
+			add_adm_power = 50
+			if = {
+				limit = {
+					OR = {
+						has_global_flag = nhs_pow_dead_done
+						952 = {
+							owner = {
+								is_subject_of = ROOT
+							}
+						}
+					}
+				}
+				add_dip_power = 50
+			}
+			else = {
+				custom_tooltip = nhs_powhatan_mission_dip_or_mil
+				hidden_effect = {
+					add_mil_power = 50
+				}
+			}
 		}
 	}
 	
@@ -353,17 +659,78 @@ nhs_right_start = {
 		position = 1
 		provinces_to_highlight = {
 			area = chesapeake_area
+			NOT = { is_core = ROOT }
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			chesapeake_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			# chesapeake_area = {
+				# type = all
+				# country_or_non_sovereign_subject_holds = ROOT
+			# }
+			custom_trigger_tooltip = {
+				tooltip = nhs_owns_core_elysia_tt
+				chesapeake_area = {
+					type = all
+					OR = {
+						AND = {
+							owned_by = ROOT
+							is_core = ROOT
+						}
+						owner = {
+							is_subject_of = ROOT
+						}
+					}
+				}
 			}
 		}
 		effect = {
-			add_adm_power = 100
+			add_adm_power = 50
 			add_prestige = 10
+			953 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs2_breakdown_of_society
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = nhs_replace_breakdown_with_cn2_tt
+				hidden_effect = {
+					remove_country_modifier = nhs2_breakdown_of_society
+					add_country_modifier = {
+						name = nhs2_colonial_needs_2
+						duration = 7300
+					}
+				}
+			}
+			# every_owned_province = {
+				# limit = {
+					# nhs_homelands_no_capital = yes
+				# }
+				# add_base_tax = 2
+				# add_base_production = 2
+				# add_base_manpower = 1
+				# set_province_flag = nhs_development_province1
+				# set_province_flag = nhs_development_province2
+				# set_province_flag = nhs_development_province3
+			# }
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					owns = 950
+					950 = { NOT = { has_province_modifier = nhs_toll_modifier_tm } }
+					NOT = { has_country_modifier = nhs_no_merchant_class }
+				}
+				country_event = { id = nhs_countryevents.2 }
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs_secrets_silk
+				}
+				country_event = { id = nhs2_countryevents.71 }
+			}
 		}
 	}
 	
@@ -390,6 +757,240 @@ nhs_right_start = {
 	}
 }
 
+nhs_right_start_silk_with_secret = {
+	slot = 5
+	generic = no
+	ai = yes
+	has_country_shield = yes
+	potential = {
+		nhs_is_elysia_not_seen = yes
+		OR = {
+			has_country_modifier = nhs_secrets_silk
+			has_country_flag = nhs_new_flight_taken_silk
+		}
+	}
+	nhs_elysian_silk_with_secret = {
+		icon = nhs_elysian_silk_with_secret
+		position = 4
+		required_missions = { nhs_wonders_of_elysium }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						area = thrace_area
+						area = macedonia_area
+						area = corsica_sardinia_area
+						area = catalonia_area
+						area = valencia_area
+						area = baleares_area
+						area = tunisia_area
+					}
+					has_discovered = ROOT
+					has_port = yes
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					ROOT = {
+						OR = {
+							has_country_flag = nhs_discovered_new_source_of_silk
+							has_discovered = 1525
+							has_discovered = 1503
+							has_discovered = 1505
+						}
+					}
+					has_port = yes
+					OR = {
+						province_id = 926
+						province_id = 2536
+						province_id = 482
+						province_id = 485
+						province_id = 2656
+						province_id = 2654
+					}
+				}
+			}
+		}
+		trigger = {
+			owns = 953
+			controls = 953
+			dip_tech = 8
+			if = {
+				limit = {
+					NOT = { has_country_flag = nhs_discovered_new_source_of_silk }
+					NOT = { has_discovered = 1525 }
+					NOT = { has_discovered = 1503 }
+					NOT = { has_discovered = 1505 }
+				}
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = nhs_needs_to_find_silk
+						always = no
+					}
+					custom_trigger_tooltip = {
+						tooltip = nhs_silk_europe_trigger2_tt
+						calc_true_if = {
+							all_province = {
+								OR = {
+									area = thrace_area
+									area = macedonia_area
+									area = corsica_sardinia_area
+									area = catalonia_area
+									area = valencia_area
+									area = baleares_area
+									area = tunisia_area
+								}
+								has_port = yes
+								OR = {
+									owned_by = ROOT
+									owner = {
+										is_subject_of = ROOT
+									}
+								}
+							}
+							amount = 5
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = nhs_silk_elysia_trigger_tt
+						any_province = {
+							OR = {
+								province_id = 926
+								province_id = 2536
+								province_id = 482
+								province_id = 485
+								province_id = 2656
+								province_id = 2654
+							}
+							OR = {
+								owned_by = ROOT
+								owner = {
+									is_subject_of = ROOT
+								}
+							}
+							development = 16
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = nhs_silk_europe_trigger2_tt
+						calc_true_if = {
+							all_province = {
+								OR = {
+									area = thrace_area
+									area = macedonia_area
+									area = corsica_sardinia_area
+									area = catalonia_area
+									area = valencia_area
+									area = baleares_area
+									area = tunisia_area
+								}
+								has_port = yes
+								OR = {
+									owned_by = ROOT
+									owner = {
+										is_subject_of = ROOT
+									}
+								}
+							}
+							amount = 5
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			set_country_flag = nhs_new_flight_taken_silk
+			remove_country_modifier = nhs_secrets_silk
+			953 = {
+				change_trade_goods = elysian_silk
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = "nhs_silk_quarter"
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs_silk_quarter_tm
+				}
+			}
+		}
+	}
+}
+
+nhs_right_start_silk_without_secret = {
+	slot = 5
+	generic = no
+	ai = yes
+	has_country_shield = yes
+	potential = {
+		nhs_is_elysia_not_seen = yes
+		NOT = {
+			has_country_modifier = nhs_secrets_silk
+			has_country_flag = nhs_new_flight_taken_silk
+		}
+	}
+	nhs_elysian_silk_without_secret = {
+		icon = nhs_elysian_silk_with_secret2
+		position = 4
+		required_missions = { nhs_wonders_of_elysium }
+		provinces_to_highlight = {
+			OR = {
+				area = thrace_area
+				area = macedonia_area
+				area = corsica_sardinia_area
+				area = catalonia_area
+				area = valencia_area
+				area = baleares_area
+				area = tunisia_area
+			}
+			has_discovered = ROOT
+			has_port = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns = 953
+			controls = 953
+			dip_tech = 12
+			custom_trigger_tooltip = {
+				tooltip = nhs_completed_nhs_back_to_the_motherland_tt
+				has_country_flag = nhs_completed_nhs_back_to_the_motherland
+			}
+			custom_trigger_tooltip = {
+				tooltip = nhs_silk_europe_trigger_tt
+				calc_true_if = {
+					all_province = {
+						OR = {
+							area = thrace_area
+							area = macedonia_area
+							area = corsica_sardinia_area
+							area = catalonia_area
+							area = valencia_area
+							area = baleares_area
+							area = tunisia_area
+						}
+						has_port = yes
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_subject_of = ROOT
+							}
+						}
+					}
+					amount = 5
+				}
+			}
+		}
+		effect = {
+			953 = {
+				change_trade_goods = elysian_silk
+			}
+		}
+	}
+}
+
 nhs_centre_start = {
 	slot = 3
 	generic = no
@@ -410,7 +1011,15 @@ nhs_centre_start = {
 				}
 				is_year = 1450
 				years_of_income = 0.4
-				dip_power = 200
+				if = {
+					limit = {
+						has_country_flag = nhs_enable_venetian_merchant_estate
+					}
+					dip_power = 50
+				}
+				else = {
+					dip_power = 200
+				}
 				stability = 1
 				if = {
 					limit = {
@@ -435,7 +1044,15 @@ nhs_centre_start = {
 				}
 				remove_country_modifier = nhs_no_merchant_class
 				add_years_of_income = -0.4
-				add_dip_power = -200
+				if = {
+					limit = {
+						has_country_flag = nhs_enable_venetian_merchant_estate
+					}
+					add_dip_power = -50
+				}
+				else = {
+					add_dip_power = -200
+				}
 				if = {
 					limit = {
 						owns = 953
@@ -459,6 +1076,16 @@ nhs_centre_start = {
 					#add_center_of_trade_level = <number>
 				#}
 			}
+			if = {
+				limit = {
+					has_country_flag = nhs_enable_venetian_merchant_estate
+				}
+				custom_tooltip = nhs_rename_merchants_back_tt
+			}
+			else = {
+				custom_tooltip = nhs_enables_merchnant_estate_tt
+			}
+			#clr_country_flag = nhs_enable_venetian_merchant_estate
 		}
 	}
 	
@@ -542,6 +1169,65 @@ nhs_centre_start = {
 				#tooltip = {
 				#	remove_country_modifier = nhs_handicap_settlers	
 				#}
+			}
+			else_if = {
+				limit = {
+					has_country_modifier = nhs2_new_handicap_settlers
+					NOT = { has_country_flag = nhs_settled_mission }
+				}
+				#country_event = { id = nhs_countryevents.7 }
+				add_prestige = 10
+				remove_country_modifier = newnhs_chose_supplies
+				if = {
+					limit = {
+						has_country_flag = nhs_start_with_two
+					}
+					custom_tooltip = nhs_settler_heritage_0_2_tt
+					hidden_effect = {
+						remove_country_modifier = nhs2_new_handicap_settlers
+						add_country_modifier = {
+							name = nhs_settler_heritage_two
+							duration = -1
+						}
+					}
+				}
+				else = {
+					custom_tooltip = nhs_settler_heritage_0_1_tt
+					#add_country_modifier = {
+					#	name = nhs_settler_heritage
+					#	duration = 21900
+					#}
+					hidden_effect = {
+						remove_country_modifier = nhs2_new_handicap_settlers
+						add_country_modifier = {
+							name = nhs_settler_heritage
+							duration = -1
+						}
+					}
+				}
+				if = {
+					limit = {
+						owns = 953
+					}
+					953 = {
+						nhs_set_center_of_trade_2 = yes
+					}
+				}
+				else = {
+					capital_scope = {
+						nhs_set_center_of_trade_2 = yes
+					}
+				}
+				#tooltip = {
+				#	remove_country_modifier = nhs_handicap_settlers	
+				#}
+			}
+			custom_tooltip = nhs_new_line_tt
+			950 = {
+				add_permanent_province_modifier = {
+					name = nhs2_drain_ivos_swamps
+					duration = -1
+				}
 			}
 		}
 	}
@@ -670,6 +1356,19 @@ nhs_centre_start = {
 			set_country_flag = nhs_completed_nhs_modernise_mission
 		}
 	}
+	
+	nhs_assemble_an_army = {
+		icon = mission_assemble_an_army
+		required_missions = { nhs_modernise_mission }
+		position = 4
+		trigger = { army_size = 80 }
+		effect = {
+			add_country_modifier = {
+				name = "army_enthusiasm"
+				duration = 9125 #25 years
+			}
+		}
+	}
 }
 
 nhs_centre_end = {
@@ -684,7 +1383,7 @@ nhs_centre_end = {
 	nhs_back_to_the_motherland = {
 		icon = mission_sea_battles
 		required_missions = {
-			nhs_modernise_mission
+			nhs_assemble_an_army
 		}
 		position = 5
 		provinces_to_highlight = {
@@ -697,9 +1396,18 @@ nhs_centre_end = {
 			owns_or_non_sovereign_subject_of = 151
 		}
 		effect = {
-			#TO DO
-			#Potential Exarchates Also get claims
 			set_country_flag = nhs_completed_nhs_back_to_the_motherland
+			if = {
+				limit = {
+					OR = {
+						NOT = { has_country_flag = nhs_new_flight_taken_fire }
+						NOT = { has_country_flag = nhs_new_flight_taken_books }
+						NOT = { has_country_flag = nhs_new_flight_taken_silk }
+					}
+				}
+				country_event = { id = nhs2_mainlandevents.27 }
+			}
+			#Potential Exarchates Also get claims
 			custom_tooltip = nhs_potential_exarchate_claims_tt
 			hudavendigar_area = {
 				limit = {
@@ -2058,7 +2766,11 @@ nhs_left_end = {
 				tooltip = nhs_completed_restoration_focus_tt
 				NOT = { has_country_flag = nhs_completed_nhs_heir_of_justinian }
 			}
-			owns = 953
+			#owns = 953
+			chesapeake_area = {
+				type = all
+				owned_by = ROOT
+			}
 		}
 		effect = {
 			custom_tooltip = nhs_inwards_lock
@@ -2072,11 +2784,76 @@ nhs_left_end = {
 			}
 			custom_tooltip = nhs_unlocks_vinland_sub_dec
 			custom_tooltip = nhs_inward_focus_build_cost_reduction_tt
-			
+			if = {
+				limit = {
+					953 = {
+						trade_goods = grain
+					}
+				}
+				custom_tooltip = nhs_change_elysia_to_cloth_tt
+				hidden_effect = {
+					change_trade_goods = cloth
+				}
+			}
+			custom_tooltip = nhs_add_grassland_improvement_tt
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_add_coastline_improvement_tt
+			custom_tooltip = nhs_new_line_tt
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							province_id = 953
+							province_id = 2550
+							province_id = 952
+						}
+					}
+					add_permanent_province_modifier = {
+						name = nhs2_improve_grassland
+						duration = -1
+					}
+				}
+				every_owned_province = {
+					limit = {
+						OR = {
+							province_id = 2554
+							province_id = 957
+						}
+					}
+					add_permanent_province_modifier = {
+						name = nhs2_improve_coastline
+						duration = -1
+					}
+				}
+			}
+			if = {
+				limit = {
+					950 = {
+						has_province_modifier = nhs2_drain_ivos_swamps
+					}
+				}
+				custom_tooltip = nhs_upgrade_swamp_drain_tt
+				hidden_effect = {
+					950 = {
+						remove_province_modifier = nhs2_drain_ivos_swamps
+						add_permanent_province_modifier = {
+							name = nhs2_drain_ivos_swamps2
+							duration = -1
+						}
+					}
+				}
+			}
+			else = {
+				950 = {
+					add_permanent_province_modifier = {
+						name = nhs2_drain_ivos_swamps2
+						duration = -1
+					}
+				}
+			}
 			set_country_flag = nhs_completed_inward_focus
 			set_country_flag = nhs_start_counting_buildings
 			hidden_effect = {
-				
 				every_province = {
 					limit = {
 						continent = north_america
@@ -3276,6 +4053,7 @@ nhs_right_end = {
 		provinces_to_highlight = {
 			province_id = 226
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			has_discovered = ROOT
 		}
 		trigger = {
 			owns_or_non_sovereign_subject_of = 226
@@ -3995,9 +4773,9 @@ nhs_right_end = {
 		icon = mission_rb_grow_the_channel
 		position = 11
 		provinces_to_highlight = {
-				province_id = 835
-				NOT = { owned_by = ROOT }
-			
+			province_id = 835
+			NOT = { owned_by = ROOT }
+			has_discovered = ROOT
 		}
 		trigger = {
 			owns = 835

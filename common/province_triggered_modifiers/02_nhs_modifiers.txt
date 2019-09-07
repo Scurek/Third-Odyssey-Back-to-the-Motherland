@@ -3,11 +3,6 @@
 #
 # Effects are fully scriptable here.
 
-
-###########################################
-# Just random test modifier
-###########################################
-
 nhs_old_gods_bonus = {
 	potential = {
 	}
@@ -455,7 +450,9 @@ nhs_carthaginian_design_harbour_tm = {
 		nhs_eligible_for_elysian_improvements = { MODIFIER = carthaginian_design_harbour }
 	}
 	province_trade_power_value = 10
-	trade_efficiency = 0.05
+	#trade_efficiency = 0.05
+	local_sailors = 500
+	global_trade_power = 0.1
 	naval_forcelimit = 5
 	prestige = 0.01
 	picture = "carthagian_harbor"
@@ -564,6 +561,47 @@ nhs_alexandrian_library_tm_decay = {
 	on_deactivation = {}
 }
 
+nhs_alexandrian_library_no_books_tm = {
+	potential = {
+		#NOT = { has_province_flag = nhs_ei_alexandrian_library_decay }
+		# NOT = { has_province_flag = nhs_elysian_improvement_decay }
+		# owner = {
+			# nhs_eligible_for_elysian_improvements = yes
+		# }
+		always = yes
+	}
+	trigger = {
+		nhs_eligible_for_elysian_improvements = { MODIFIER = alexandrian_library_no_books }
+	}
+	idea_cost = -0.10
+	technology_cost = -0.10
+	prestige = 0.01
+	picture = "alexandrian_library"
+	#Province scope
+	on_activation = {}
+	on_deactivation = {}
+}
+
+nhs_alexandrian_library_no_books_tm_decay = {
+	potential = {
+		has_province_flag = nhs_ei_alexandrian_library_decay
+		#has_province_flag = nhs_elysian_improvement_decay
+		# owner = {
+			# nhs_eligible_for_elysian_improvements = yes
+		# }
+	}
+	trigger = {
+		nhs_not_eligible_for_elysian_improvements = { MODIFIER = alexandrian_library_no_books }
+	}
+	idea_cost = -0.01
+	technology_cost = -0.01
+	local_unrest = 0.5
+	picture = "alexandrian_library_decay"
+	#Province scope
+	on_activation = {}
+	on_deactivation = {}
+}
+
 nhs_hippodrome_tm = {
 	potential = {
 		#NOT = { has_province_flag = nhs_ei_hippodrome_decay }
@@ -638,6 +676,57 @@ nhs_silk_quarter_tm_decay = {
 	trade_goods_size_modifier = 0.10
 	local_unrest = 0.5
 	picture = "nhs_silk_quarter_decay"
+	#Province scope
+	on_activation = {}
+	on_deactivation = {}
+}
+
+nhs_elysian_arsenal_tm = {
+	potential = {
+		#NOT = { has_province_flag = nhs_ei_carthaginian_design_harbour_decay }
+		# NOT = { has_province_flag = nhs_elysian_improvement_decay }
+		# owner = {
+			# nhs_eligible_for_elysian_improvements = { MODIFIER = gilded_keep }
+		# }
+		always = yes
+	}
+	trigger = {
+		nhs_eligible_for_elysian_improvements = { MODIFIER = elysian_arsenal }
+	}
+	ship_recruit_speed = -0.75
+	local_ship_repair = 0.75
+	local_ship_cost = -0.2
+	ship_durability = 0.05
+	global_ship_cost = -0.2
+	artillery_cost = -0.15
+	naval_forcelimit = 10
+	prestige = 0.01
+	picture = "nhs_venetian_arsenal"
+	#Province scope
+	on_activation = {}
+	on_deactivation = {}
+}
+
+nhs_elysian_arsenal_tm_decay = {
+	potential = {
+		has_province_flag = nhs_ei_elysian_arsenal_decay
+		# has_province_flag = nhs_elysian_improvement_decay
+		# owner = {
+			# nhs_eligible_for_elysian_improvements = { MODIFIER = carthaginian_design_harbour }
+		# }
+	}
+	trigger = {
+		nhs_not_eligible_for_elysian_improvements = { MODIFIER = elysian_arsenal }
+	}
+	ship_recruit_speed = -0.75
+	local_ship_repair = 0.75
+	local_ship_cost = -0.2
+	ship_durability = 0.05
+	global_ship_cost = -0.2
+	artillery_cost = -0.15
+	naval_forcelimit = 10
+	prestige = 0.01
+	picture = "nhs_venetian_arsenal_decay"
 	#Province scope
 	on_activation = {}
 	on_deactivation = {}
@@ -747,5 +836,158 @@ nhs2_converts_tm = {
 	local_tax_modifier = 0.05
 	local_manpower_modifier = 0.05
 	local_unrest = -3
+}
+
+nhs2_lantent_coal_tm = {
+	potential = {
+		NOT = { trade_goods = coal_2 }
+		OR = {
+			development = 20
+			full_idea_group = innovativeness_ideas
+		}
+		provincial_institution_progress = {
+			which = enlightenment
+			value = 100
+		}
+		owner = { has_institution = enlightenment }
+	}
+	# viewer = {
+		# always = no
+	# }
+	trigger = {
+		OR = {
+			development = 20
+			full_idea_group = innovativeness_ideas
+		}
+		provincial_institution_progress = {
+			which = enlightenment
+			value = 100
+		}
+		owner = { has_institution = enlightenment }
+	}
+	
+	on_activation = {
+		hidden_effect = {
+			nhs_save_previous_goods = yes
+			remove_province_modifier = nhs2_lantent_coal
+			change_trade_goods = coal_2
+		}
+	}
+	on_deactivation = {
+	}
+	
+	picture = "nhs_coal_icon"
+	#trade_goods_size = 0.05
+	#local_state_maintenance_modifier = -0.2
+}
+
+nhs2_lantent_coal_deactivate_tm = {
+	potential = {
+		trade_goods = coal_2
+		NOT = {
+			OR = {
+				development = 20
+				full_idea_group = innovativeness_ideas
+			}
+			provincial_institution_progress = {
+				which = enlightenment
+				value = 100
+			}
+			owner = { has_institution = enlightenment }
+		}
+	}
+	# viewer = {
+		# always = no
+	# }
+	trigger = {
+		NOT = {
+			OR = {
+				development = 20
+				full_idea_group = innovativeness_ideas
+			}
+			provincial_institution_progress = {
+				which = enlightenment
+				value = 100
+			}
+			owner = { has_institution = enlightenment }
+		}
+	}
+	
+	on_activation = {
+		hidden_effect = {
+			nhs_load_previous_goods = yes
+			add_permanent_province_modifier = {
+				name = nhs2_lantent_coal
+				duration = -1
+			}
+		}
+	}
+	on_deactivation = {
+	}
+	
+	picture = "nhs_coal_icon"
+	#trade_goods_size = 0.05
+	#local_state_maintenance_modifier = -0.2
+}
+
+nhs2_steam_engine_tm = {
+	trigger = {
+		owner = {
+			any_owned_province = {
+				controlled_by = ROOT
+				has_building = furnace
+				has_province_modifier = nhs2_great_mine_tm
+			}
+		}
+	}
+	
+	trade_goods_size = 5
+	global_trade_goods_size_modifier = 0.05
+	technology_cost = -0.1
+	idea_cost = -0.1
+	picture = "nhs_steam_engine"
+}
+
+nhs2_great_mine_tm = {
+	trigger = {
+		has_building = furnace
+		owner = {
+			any_owned_province = {
+				controlled_by = ROOT
+				has_province_modifier = nhs2_steam_engine_tm
+			}
+		}
+	}
+	trade_goods_size = 5
+	local_unrest = 5
+	global_trade_goods_size_modifier = -0.05
+	picture = "nhs_coal_wagon"
+}
+
+nhs2_ivos_naval_supplies_boost_tm = {
+	potential = {
+		always = yes
+	}
+	trigger = {
+		trade_goods = naval_supplies
+		if = {
+			limit = {
+				OR = {
+					has_province_modifier = nhs_elysian_arsenal_tm
+					owner = {
+						has_country_flag = nhs_new_flight_taken_venetians
+					}
+				}
+			}
+			OR = {
+				has_active_triggered_province_modifier = nhs_carthaginian_design_harbour_tm
+				has_active_triggered_province_modifier = nhs_elysian_arsenal_tm
+			}
+		}
+		else = {
+			has_active_triggered_province_modifier = nhs_carthaginian_design_harbour_tm
+		}
+	}
+	trade_goods_size = 1
 }
 

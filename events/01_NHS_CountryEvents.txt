@@ -10,8 +10,31 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	
+	trigger = {
+		is_random_new_world = no
+	}
+	
 	immediate = {
 		hidden_effect = {
+			add_treasury = 150
+			while = {
+				limit = {
+					treasury = 251
+				}
+				add_treasury = -100
+			}
+			while = {
+				limit = {
+					treasury = 161
+				}
+				add_treasury = -10
+			}
+			while = {
+				limit = {
+					treasury = 151
+				}
+				add_treasury = -1
+			}
 			nhs_set_native_governments = yes
 			every_country = {
 				limit = {
@@ -29,7 +52,7 @@ country_event = {
 					add_government_reform = sedentary_society
 				}
 			}
-			set_global_flag = nhs_new_capital_names
+			# set_global_flag = nhs_new_capital_names
 		}
 	}
 
@@ -44,7 +67,14 @@ country_event = {
 			name = "byz_flight"
 			duration = -1
 		}
+		custom_tooltip = nhs_ruler_busy_with_flight_tt
+		change_adm = -5
+		change_dip = -5
+		change_mil = -5
 		free_vassal = ATH
+		hidden_effect = {
+			country_event = { id = nhs_new_flightevents.1 days = 0 }
+		}
 		#hidden_effect = {
 		#	every_owned_province = {
 		#		kill_units = {
@@ -99,23 +129,28 @@ country_event = {
 	title = nhs_countryevents.2.t
 	desc = nhs_countryevents.2.d
 	picture = HARBOUR_eventPicture
+	
+	fire_only_once = yes
 
     trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
-		953 = { has_province_flag = nhs_original_capital }
-		owns = 953 # Conoy, Elysia
-		owns = 952 # Powhattan
+		# 953 = { has_province_flag = nhs_original_capital }
+		# owns = 953 # Conoy, Elysia
+		# owns = 952 # Powhattan
 		owns = 950 # Chesapeake
-		owns = 2550 # Doeg
-		owns = 2554 # Nanticoke
+		# owns = 2550 # Doeg
+		# owns = 2554 # Nanticoke
+		chesapeake_area = {
+			type = all
+			country_or_non_sovereign_subject_holds = ROOT
+		}
 		950 = { NOT = { has_province_modifier = nhs_toll_modifier_tm } }
 		NOT = { has_country_modifier = nhs_no_merchant_class }
-		is_core = 950
-		controls = 953
-		controls = 952
-		controls = 950
-		controls = 2550
-		controls = 2554
+		# is_core = 950
+		# controls = 953
+		# controls = 950
+		# controls = 2550
+		# controls = 2554
 	}
 
 	mean_time_to_happen = {
@@ -128,7 +163,7 @@ country_event = {
 		add_dip_power = 25
 		# Rename Chesapeake
 		950 = {
-			rename_capital = "Didymo Fylakes"
+			#rename_capital = "Didymo Fylakes"
 			add_base_tax = 1
 			add_base_production = 2
 			tooltip = {
@@ -141,52 +176,6 @@ country_event = {
 				add_province_triggered_modifier = nhs_toll_modifier_tm
 			}
 			set_province_flag = nhs_original_heartland
-		}
-		hidden_effect = {
-			952 = {
-				set_province_flag = nhs_original_heartland
-				if = {
-					limit = {
-						NOT = { has_province_flag = got_base_tax_new }
-					}
-					add_base_tax = 1
-					add_base_production = 1
-					set_province_flag = got_base_tax_new
-				}
-			}
-			2550 = { 
-				set_province_flag = nhs_original_heartland
-				if = {
-					limit = {
-						NOT = { has_province_flag = got_base_tax_new }
-					}
-					add_base_tax = 1
-					add_base_production = 1
-					set_province_flag = got_base_tax_new
-				}
-			}
-			2554 = { 
-				set_province_flag = nhs_original_heartland
-				if = {
-					limit = {
-						NOT = { has_province_flag = got_base_tax_new }
-					}
-					add_base_tax = 1
-					add_base_production = 1
-					set_province_flag = got_base_tax_new
-				}
-			}
-			950 = {
-				set_province_flag = nhs_original_heartland
-				if = {
-					limit = {
-						NOT = { has_province_flag = got_base_tax_new }
-					}
-					add_base_tax = 1
-					add_base_production = 1
-					set_province_flag = got_base_tax_new
-				}
-			}
 		}
 		# Rename sea area
 		if = {
@@ -279,6 +268,7 @@ country_event = {
 			}
 			hidden_effect = {
 				add_province_triggered_modifier = nhs_gilded_keep_tm
+				show_ambient_object = wonder_generic
 			}
 		}
 	}
@@ -298,7 +288,7 @@ country_event = {
 	id = nhs_countryevents.4
 	title = nhs_countryevents.4.t
 	desc = nhs_countryevents.4.d
-	picture = COURT_eventPicture
+	picture = byz_COURT_eventPicture
 	
 	fire_only_once = yes
 	
@@ -406,9 +396,11 @@ country_event = {
 	picture = BATTLE_eventPicture
 	
 	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
 		NOT = { has_country_modifier = nhs_greekfire_update }
 		has_country_modifier = nhs_secrets_greekfire
-		is_year = 1540
+		is_year = 1520
+		had_country_flag = { flag = nhs_searching_for_naphtha days = 18250 }
 	}
 
 	mean_time_to_happen = {
@@ -802,68 +794,69 @@ country_event = {
 
 # 10 moved to elysIdeaEvents
 
-# Elysian homelands
-country_event = {
-	id = nhs_countryevents.11
-	title = nhs_countryevents.11.t
-	desc = nhs_countryevents.11.d
-	picture = HARBOUR_eventPicture
+###There is a mission that does the same
+# # Elysian homelands
+# country_event = {
+	# id = nhs_countryevents.11
+	# title = nhs_countryevents.11.t
+	# desc = nhs_countryevents.11.d
+	# picture = HARBOUR_eventPicture
 
-	fire_only_once = yes
+	# fire_only_once = yes
 
-    trigger = {
-		nhs_condition_all_ely = { KOMANDA = tag }
-		NOT = { has_country_modifier = nhs_handicap_settlers }
-		NOT = {
-			any_province = {
-				nhs_homelands = yes
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-		#NOT = { #Old code
-		#	any_province = {
-		#		AND = {
-		#			OR = {
-		#				any_neighbor_province = { has_province_flag = nhs_original_capital }
-		#				AND = {
-		#					province_id = 950
-		#					953 = {
-		#						has_province_flag = nhs_original_capital
-		#					}
-		#				}
-		#				AND = {
-		#					province_id = 952
-		#					953 = {
-		#						has_province_flag = nhs_original_capital
-		#					}
-		#				}
-		#			}
-		#			NOT = { owned_by = ROOT }
-		#			NOT = { is_core = ROOT }
-		#		}
-		#	}
-		#}
-	}
+    # trigger = {
+		# nhs_condition_all_ely = { KOMANDA = tag }
+		# NOT = { has_country_modifier = nhs_handicap_settlers }
+		# NOT = {
+			# any_province = {
+				# nhs_homelands = yes
+				# NOT = { owned_by = ROOT }
+				# NOT = { is_core = ROOT }
+			# }
+		# }
+		# #NOT = { #Old code
+		# #	any_province = {
+		# #		AND = {
+		# #			OR = {
+		# #				any_neighbor_province = { has_province_flag = nhs_original_capital }
+		# #				AND = {
+		# #					province_id = 950
+		# #					953 = {
+		# #						has_province_flag = nhs_original_capital
+		# #					}
+		# #				}
+		# #				AND = {
+		# #					province_id = 952
+		# #					953 = {
+		# #						has_province_flag = nhs_original_capital
+		# #					}
+		# #				}
+		# #			}
+		# #			NOT = { owned_by = ROOT }
+		# #			NOT = { is_core = ROOT }
+		# #		}
+		# #	}
+		# #}
+	# }
 
-	mean_time_to_happen = {
-		months = 1
-	}
+	# mean_time_to_happen = {
+		# months = 1
+	# }
 	
-	option = {
-		name = "NHSCOUNTRYEVENTSNAME11"
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					nhs_homelands = yes
-				}
-				add_base_tax = 1
-				add_base_production = 1
-				set_province_flag = got_base_tax_new
-			}
-		}
-	}
-}
+	# option = {
+		# name = "NHSCOUNTRYEVENTSNAME11"
+		# hidden_effect = {
+			# every_owned_province = {
+				# limit = {
+					# nhs_homelands = yes
+				# }
+				# add_base_tax = 1
+				# add_base_production = 1
+				# set_province_flag = got_base_tax_new
+			# }
+		# }
+	# }
+# }
 
 # Seagate guardian statues - Only when 953 is original capital
 country_event = {
@@ -935,6 +928,8 @@ country_event = {
 			}
 			hidden_effect = {
 				add_province_triggered_modifier = nhs_seagate_guardians_tm
+				show_ambient_object = wonder_statue
+				show_ambient_object = wonder_statue_2
 			}
 		}
 	}
@@ -954,7 +949,7 @@ country_event = {
 	id = nhs_countryevents.13
 	title = nhs_countryevents.13.t
 	desc = nhs_countryevents.13.d
-	picture = COURT_eventPicture
+	picture = byz_COURT_eventPicture
 	
 	trigger = {
 		# tag = NHS - Now for all exiled greeks
@@ -1022,7 +1017,7 @@ country_event = {
 	id = nhs_countryevents.14
 	title = nhs_countryevents.14.t
 	desc = nhs_countryevents.14.d
-	picture = COURT_eventPicture
+	picture = byz_COURT_eventPicture
 	
 	trigger = {
 		OR = {
@@ -1424,6 +1419,7 @@ country_event = {
 	picture = NATIVES_eventPicture
 	
 	trigger = {
+		culture_group = elysian_group
 		any_owned_province = {
 			is_core = ROOT
 			native_culture = yes
@@ -1434,7 +1430,6 @@ country_event = {
 				has_global_flag = nhs_skythiai_appear
 			}
 		}
-		culture_group = elysian_group
 	}
 	
 	immediate = {
@@ -1556,13 +1551,13 @@ country_event = {
 	picture = NATIVES_eventPicture
 	
 	trigger = {
+		culture_group = elysian_group
+		NOT = { primary_culture = elysameric }
 		any_owned_province = {
 			is_core = ROOT
 			culture = elysameric
 			NOT = { has_estate = estate_nhs_native_council }
 		}
-		culture_group = elysian_group
-		NOT = { primary_culture = elysameric }
 	}
 	
 	immediate = {
@@ -1744,46 +1739,46 @@ province_event = {
 	}
 }
 
-# Silk production in the capital
-country_event = {
-	id = nhs_countryevents.17
-	title = nhs_countryevents.17.t
-	desc = nhs_countryevents.17.d
-	picture = AWESOMECITY_eventPicture
+# # Silk production in the capital
+# country_event = {
+	# id = nhs_countryevents.17
+	# title = nhs_countryevents.17.t
+	# desc = nhs_countryevents.17.d
+	# picture = AWESOMECITY_eventPicture
 	
-	fire_only_once = yes
+	# fire_only_once = yes
 	
-	trigger = {
-		nhs_condition_all_ely = { KOMANDA = tag }
-		is_year = 1505
-		NOT = { has_country_modifier = nhs_handicap_settlers }
-		has_country_modifier = nhs_secrets_silk
-		owns = 953
-		controls = 953
-	}
+	# trigger = {
+		# nhs_condition_all_ely = { KOMANDA = tag }
+		# is_year = 1505
+		# NOT = { has_country_modifier = nhs_handicap_settlers }
+		# has_country_modifier = nhs_secrets_silk
+		# owns = 953
+		# controls = 953
+	# }
 	
-	mean_time_to_happen = {
-		months = 12
-	}
+	# mean_time_to_happen = {
+		# months = 12
+	# }
 	
-	option = {
-		name = "NHSCOUNTRYEVENTSNAME17"
-		remove_country_modifier = nhs_secrets_silk
-		953 = {
-			#add_base_production = 2
-			change_trade_goods = elysian_silk
-			tooltip = {
-				add_permanent_province_modifier = {
-					name = "nhs_silk_quarter"
-					duration = -1
-				}
-			}
-			hidden_effect = {
-				add_province_triggered_modifier = nhs_silk_quarter_tm
-			}
-		}
-	}
-}
+	# option = {
+		# name = "NHSCOUNTRYEVENTSNAME17"
+		# remove_country_modifier = nhs_secrets_silk
+		# 953 = {
+			# #add_base_production = 2
+			# change_trade_goods = elysian_silk
+			# tooltip = {
+				# add_permanent_province_modifier = {
+					# name = "nhs_silk_quarter"
+					# duration = -1
+				# }
+			# }
+			# hidden_effect = {
+				# add_province_triggered_modifier = nhs_silk_quarter_tm
+			# }
+		# }
+	# }
+# }
 
 # Events 18 (original one), 19 and 20 moved to elysIdeaEvents
 

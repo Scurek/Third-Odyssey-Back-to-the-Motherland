@@ -4,15 +4,44 @@ namespace = nhs2_albania
 country_event = {
 	id = nhs2_albania.1
 	title = nhs2_albania.1.t
-	desc = nhs2_albania.1.d
+	desc = {
+		trigger = {
+			has_leader = "Gjergj Kastrioti \"Skanderbeg\""
+			NOT = { is_year = 1480 }
+		}
+		desc = nhs2_albania.1.da
+	}
+	desc = {
+		trigger = {
+			NOT = { has_leader = "Gjergj Kastrioti \"Skanderbeg\"" }
+			NOT = { is_year = 1480 }
+		}
+		desc = nhs2_albania.1.db
+	}
+	desc = {
+		trigger = {
+			is_year = 1480
+			NOT = { is_year = 1495 }
+		}
+		desc = nhs2_albania.1.dc
+	}
+	desc = {
+		trigger = {
+			is_year = 1495
+		}
+		desc = nhs2_albania.1.dd
+	}
+	
 	picture = ALBANIAN_EAGLE_eventPicture
 
 	fire_only_once = yes
 
     trigger = {
-		NOT = { exists = ALB }
-		NOT = { is_year = 1480 }
+		#NOT = { exists = ALB }
+		#NOT = { is_year = 1480 }
 		tag = NHS
+		is_year = 1461
+		has_country_flag = nhs_new_flight_taken_albanians
 		num_of_cities = 4
 		OR = {
 			any_owned_province = {
@@ -29,9 +58,30 @@ country_event = {
 			}
 		}
 	}
-
-	mean_time_to_happen = {
-		days = 1
+	
+	immediate = {
+		hidden_effect = {
+			set_saved_name = {
+				key = oth_alb_ruler
+				type = advisor
+				#scope = ROOT
+			}
+			if = {
+				limit = {
+					is_year = 1495
+				}
+				set_country_flag = oth_alb_1495
+			}
+			if = {
+				limit = {
+					is_year = 1480
+				}
+				set_country_flag = oth_alb_1480
+			}
+			else = {
+				set_country_flag = oth_alb_1445
+			}
+		}
 	}
 
 	option = {
@@ -43,6 +93,7 @@ country_event = {
 				is_core = ROOT
 			}
 		}
+		oth_remove_albanian_quarter = yes
 		random_owned_province = {
 			limit = {
 				has_port = yes
@@ -78,6 +129,10 @@ country_event = {
 					owner = { has_global_flag = nhs2_patriarchate_established }
 				}
 				change_religion = elysian_orthodoxy
+				add_province_modifier = {
+					name = religious_zeal_at_conv
+					duration = 14600
+				}
 			}
 			add_permanent_province_modifier = {
 				name = "nhs2_albanian_majority"
@@ -105,6 +160,7 @@ country_event = {
 				}
 			}
 		}
+		oth_remove_albanian_quarter = yes
 		random_province = {
 			limit = {
 				has_port = yes
@@ -178,6 +234,7 @@ country_event = {
 				}
 			}
 		}
+		oth_remove_albanian_quarter = yes
 		random_province = {
 			limit = {
 				has_port = yes
@@ -268,26 +325,71 @@ country_event = {
 				#add_government_reform = autocracy_reform
 				change_technology_group = exiled_greek
 				change_unit_type = squipery
-				define_heir = {
-					name = "Gjergj Skanderbeg"
-					dynasty = "Kastrioti"
-					adm = 6
-					dip = 5
-					mil = 6
-					#fixed = yes
-					birth_date = 1405.1.1
+				if = {
+					limit = {
+						has_country_flag = oth_alb_1445
+					}
+					define_heir = {
+						name = "Gjergj Skanderbeg"
+						dynasty = "Kastrioti"
+						adm = 6
+						dip = 5
+						mil = 6
+						#fixed = yes
+						birth_date = 1405.1.1
+					}
+					kill_ruler = yes
+					add_stability = 1
+					add_ruler_personality = inspiring_leader_personality
+					add_ruler_personality = silver_tongue_personality
+					define_heir = {
+						name = "Gjon"
+						dynasty = "Kastrioti"
+						claim = 100
+						adm = 3
+						dip = 4
+						mil = 2
+						#fixed = yes
+						birth_date = 1420.1.1
+					}
 				}
-				kill_ruler = yes
-				add_stability = 1
-				define_heir = {
-					name = "Gjon"
-					dynasty = "Kastrioti"
-					claim = 95
-					adm = 3
-					dip = 4
-					mil = 2
-					#fixed = yes
-					birth_date = 1420.1.1
+				else_if = {
+					limit = {
+						has_country_flag = oth_alb_1480
+					}
+					define_heir = {
+						name = "Gjon"
+						monarch_name = "Gjon II"
+						dynasty = "Kastrioti"
+						claim = 100
+						adm = 3
+						dip = 4
+						mil = 2
+						#fixed = yes
+						birth_date = 1420.1.1
+					}
+					kill_ruler = yes
+					add_stability = 1
+					define_heir = {
+						name = "Constantino"
+						dynasty = "Kastrioti"
+						adm = 3
+						dip = 2
+						mil = 1
+						claim = 100
+						#fixed = yes
+						birth_date = 1440.1.1
+					}
+				}
+				else_if = {
+					limit = {
+						has_country_flag = oth_alb_1495
+					}
+					define_ruler = {
+						name = oth_alb_ruler
+						dynasty = "Kastrioti"
+						claim = 100
+					}
 				}
 			}
 		}
@@ -296,294 +398,301 @@ country_event = {
 
 	option = {
 		name = "nhs2_albania.1.e"
+		oth_remove_albanian_quarter = yes
 		custom_tooltip = nhs_albanians_south_tooltip
 		hidden_effect = {
-				every_province = {
-					limit = {
-						has_discovered = ROOT
-					}
-					set_province_flag = hns_has_discovered
+			every_province = {
+				limit = {
+					has_discovered = ROOT
 				}
-				random_province = {
+				set_province_flag = hns_has_discovered
+			}
+			random_province = {
+				limit = {
+					is_empty = yes
+					has_port = yes
+					region = carribeans_region
+					is_island = no
+				}
+				cede_province = ROOT
+				add_core = SHQ
+				hidden_effect = {
+					add_institution_embracement = {
+						which = "feudalism"
+						value = 100
+					}
+				}
+				undiscover_province = PREV
+				add_base_tax = 4
+				add_base_manpower = 4
+				add_base_production = 4
+				change_culture = shqiperi
+				change_technology_group = exiled_greek
+				change_unit_type = squipery
+				hidden_effect = {
+					add_local_autonomy = -100
+					remove_core = ROOT
+				}
+				if = {
 					limit = {
-						is_empty = yes
-						has_port = yes
-						region = carribeans_region
-						is_island = no
+						NOT = { religion = orthodox }
+						NOT = { owner = { has_global_flag = nhs2_patriarchate_established } }
 					}
-					cede_province = ROOT
-					add_core = SHQ
-					hidden_effect = {
-						add_institution_embracement = {
-							which = "feudalism"
-							value = 100
-						}
+					change_religion = orthodox
+					add_province_modifier = {
+						name = religious_zeal_at_conv
+						duration = 14600
 					}
+				}
+				if = {
+					limit = {
+						NOT = { religion = elysian_orthodoxy }
+						owner = { has_global_flag = nhs2_patriarchate_established }
+					}
+					change_religion = elysian_orthodoxy
+					add_province_modifier = {
+						name = religious_zeal_at_conv
+						duration = 14600
+					}
+				}
+			}
+			release = SHQ
+			every_province = {
+				limit = {
+					has_discovered = ROOT
+					NOT = { has_province_flag = hns_has_discovered }
+				}
+				every_country = {
+					limit = { tag = ROOT }
 					undiscover_province = PREV
-					add_base_tax = 4
-					add_base_manpower = 4
-					add_base_production = 4
-					change_culture = shqiperi
-					change_technology_group = exiled_greek
-					change_unit_type = squipery
-					hidden_effect = {
-						add_local_autonomy = -100
-						remove_core = ROOT
-					}
-					if = {
-						limit = {
-							NOT = { religion = orthodox }
-							NOT = { owner = { has_global_flag = nhs2_patriarchate_established } }
-						}
-						change_religion = orthodox
-						add_province_modifier = {
-							name = religious_zeal_at_conv
-							duration = 14600
-						}
-					}
-					if = {
-						limit = {
-							NOT = { religion = elysian_orthodoxy }
-							owner = { has_global_flag = nhs2_patriarchate_established }
-						}
-						change_religion = elysian_orthodoxy
-						add_province_modifier = {
-							name = religious_zeal_at_conv
-							duration = 14600
-						}
+				}
+			}
+			every_province = {
+				limit = {
+					any_neighbor_province = {
+						owned_by = SHQ
 					}
 				}
-				release = SHQ
-				every_province = {
-					limit = {
-						has_discovered = ROOT
-						NOT = { has_province_flag = hns_has_discovered }
-					}
-					every_country = {
-						limit = { tag = ROOT }
-						undiscover_province = PREV
-					}
+				every_country = {
+					limit = { tag = ROOT }
+					undiscover_province = PREV
 				}
-				every_province = {
-					limit = {
+			}
+			if = {
+				limit = {
+					1505 = {
 						any_neighbor_province = {
 							owned_by = SHQ
 						}
 					}
+				}
+				1505 = {
 					every_country = {
 						limit = { tag = ROOT }
 						undiscover_province = PREV
 					}
 				}
-				if = {
-					limit = {
-						1505 = {
-							any_neighbor_province = {
-								owned_by = SHQ
-							}
-						}
-					}
-					1505 = {
-						every_country = {
-							limit = { tag = ROOT }
-							undiscover_province = PREV
+			}
+			if = {
+				limit = {
+					1503 = {
+						any_neighbor_province = {
+							owned_by = SHQ
 						}
 					}
 				}
-				if = {
-					limit = {
-						1503 = {
-							any_neighbor_province = {
-								owned_by = SHQ
-							}
-						}
-					}
 				1503 = {
 					every_country = {
 						limit = { tag = ROOT }
 						undiscover_province = PREV
 					}
 				}
-				}
-				if = {
-					limit = {
-						1525 = {
-							any_neighbor_province = {
-								owned_by = SHQ
-							}
+			}
+			if = {
+				limit = {
+					1525 = {
+						any_neighbor_province = {
+							owned_by = SHQ
 						}
 					}
+				}
 				1525 = {
 					every_country = {
 						limit = { tag = ROOT }
 						undiscover_province = PREV
 					}
 				}
-				}
-				if = {
-					limit = {
-						1524 = {
-							any_neighbor_province = {
-								owned_by = SHQ
-							}
+			}
+			if = {
+				limit = {
+					1524 = {
+						any_neighbor_province = {
+							owned_by = SHQ
 						}
 					}
+				}
 				1524 = {
 					every_country = {
 						limit = { tag = ROOT }
 						undiscover_province = PREV
 					}
 				}
-				}
-				if = {
-					limit = {
-						1526 = {
-							any_neighbor_province = {
-								owned_by = SHQ
-							}
+			}
+			if = {
+				limit = {
+					1526 = {
+						any_neighbor_province = {
+							owned_by = SHQ
 						}
 					}
+				}
 				1526 = {
 					every_country = {
 						limit = { tag = ROOT }
 						undiscover_province = PREV
 					}
 				}
-				}
-				if = {
-					limit = {
-						1523 = {
-							any_neighbor_province = {
-								owned_by = SHQ
-							}
+			}
+			if = {
+				limit = {
+					1523 = {
+						any_neighbor_province = {
+							owned_by = SHQ
 						}
 					}
+				}
 				1523 = {
 					every_country = {
 						limit = { tag = ROOT }
 						undiscover_province = PREV
 					}
 				}
-				}
-				if = {
-					limit = {
-						1522 = {
-							any_neighbor_province = {
-								owned_by = SHQ
-							}
+			}
+			if = {
+				limit = {
+					1522 = {
+						any_neighbor_province = {
+							owned_by = SHQ
 						}
 					}
+				}
 				1522 = {
 					every_country = {
 						limit = { tag = ROOT }
 						undiscover_province = PREV
 					}
 				}
-				}
-				if = {
-					limit = {
-						1521 = {
-							any_neighbor_province = {
-								owned_by = SHQ
-							}
+			}
+			if = {
+				limit = {
+					1521 = {
+						any_neighbor_province = {
+							owned_by = SHQ
 						}
 					}
+				}
 				1521 = {
 					every_country = {
 						limit = { tag = ROOT }
 						undiscover_province = PREV
 					}
 				}
-				}
-				if = {
-					limit = {
-						1517 = {
-							any_neighbor_province = {
-								owned_by = SHQ
-							}
+			}
+			if = {
+				limit = {
+					1517 = {
+						any_neighbor_province = {
+							owned_by = SHQ
 						}
 					}
+				}
 				1517 = {
 					every_country = {
 						limit = { tag = ROOT }
 						undiscover_province = PREV
 					}
 				}
-				}
-				if = {
-					limit = {
-						1516 = {
-							any_neighbor_province = {
-								owned_by = SHQ
-							}
+			}
+			if = {
+				limit = {
+					1516 = {
+						any_neighbor_province = {
+							owned_by = SHQ
 						}
 					}
+				}
 				1516 = {
 					every_country = {
 						limit = { tag = ROOT }
 						undiscover_province = PREV
 					}
 				}
-				}
-				if = {
-					limit = {
-						1518 = {
-							any_neighbor_province = {
-								owned_by = SHQ
-							}
+			}
+			if = {
+				limit = {
+					1518 = {
+						any_neighbor_province = {
+							owned_by = SHQ
 						}
 					}
+				}
 				1518 = {
 					every_country = {
 						limit = { tag = ROOT }
 						undiscover_province = PREV
 					}
 				}
+			}
+			SHQ = {
+				change_primary_culture = shqiperi
+				add_treasury = 100
+				add_prestige = 25
+				add_stability_or_adm_power = yes
+				every_owned_province = {
+					add_local_autonomy = -100
 				}
-				SHQ = {
-					change_primary_culture = shqiperi
-					add_treasury = 100
-					add_prestige = 25
-					add_stability_or_adm_power = yes
-					every_owned_province = {
-						add_local_autonomy = -100
+				if = {
+					limit = {
+						NOT = { religion = orthodox }
+						NOT = { has_global_flag = nhs2_patriarchate_established }
 					}
-					if = {
-						limit = {
-							NOT = { religion = orthodox }
-							NOT = { has_global_flag = nhs2_patriarchate_established }
-						}
-						change_religion = orthodox
+					change_religion = orthodox
+				}
+				if = {
+					limit = {
+						NOT = { religion = elysian_orthodoxy }
+						has_global_flag = nhs2_patriarchate_established
 					}
-					if = {
-						limit = {
-							NOT = { religion = elysian_orthodoxy }
-							has_global_flag = nhs2_patriarchate_established
-						}
-						change_religion = elysian_orthodoxy
+					change_religion = elysian_orthodoxy
+				}
+				random_owned_province = {
+					infantry = SHQ
+					infantry = SHQ
+				}
+				nhs_change_government = { GOV = monarchy }
+				#add_government_reform = autocracy_reform
+				nhs_add_gov_reform = { REF = autocracy_reform }
+				if = {
+					limit = {
+						has_country_flag = oth_alb_1445
 					}
-					random_owned_province = {
-						infantry = SHQ
-						infantry = SHQ
-					}
-					nhs_change_government = { GOV = monarchy }
-					#add_government_reform = autocracy_reform
-					nhs_add_gov_reform = { REF = autocracy_reform }
 					define_heir = {
 						name = "Gjergj Skanderbeg"
 						dynasty = "Kastrioti"
-						#fixed = yes
 						adm = 6
 						dip = 5
 						mil = 6
+						#fixed = yes
 						birth_date = 1405.1.1
 					}
 					kill_ruler = yes
 					add_stability = 1
+					add_ruler_personality = inspiring_leader_personality
+					add_ruler_personality = silver_tongue_personality
 					define_heir = {
 						name = "Gjon"
 						dynasty = "Kastrioti"
-						claim = 95
+						claim = 100
 						adm = 3
 						dip = 4
 						mil = 2
@@ -591,7 +700,52 @@ country_event = {
 						birth_date = 1420.1.1
 					}
 				}
+				else_if = {
+					limit = {
+						has_country_flag = oth_alb_1480
+					}
+					define_heir = {
+						name = "Gjon"
+						monarch_name = "Gjon II"
+						dynasty = "Kastrioti"
+						claim = 100
+						adm = 3
+						dip = 4
+						mil = 2
+						#fixed = yes
+						birth_date = 1420.1.1
+					}
+					kill_ruler = yes
+					add_stability = 1
+					define_heir = {
+						name = "Constantino"
+						dynasty = "Kastrioti"
+						adm = 3
+						dip = 2
+						mil = 1
+						claim = 100
+						#fixed = yes
+						birth_date = 1440.1.1
+					}
+				}
+				else_if = {
+					limit = {
+						has_country_flag = oth_alb_1495
+					}
+					define_ruler = {
+						name = oth_alb_ruler
+						dynasty = "Kastrioti"
+						claim = 100
+					}
+				}
 			}
+		}
+	}
+	
+	after = {
+		clr_country_flag = oth_alb_1495
+		clr_country_flag = oth_alb_1480
+		clr_country_flag = oth_alb_1445
 	}
 }
 

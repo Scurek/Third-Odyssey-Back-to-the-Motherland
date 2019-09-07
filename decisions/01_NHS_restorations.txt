@@ -220,7 +220,10 @@ country_decisions = {
 			nhs_eligible_for_elysian_improvements_restoration = yes
 			2554 = {
 				owned_by = ROOT
-				has_province_flag = nhs_ei_alexandrian_library_decay
+				OR = {
+					has_province_flag = nhs_ei_alexandrian_library_decay
+					has_province_flag = nhs_ei_alexandrian_library_no_books_decay
+				}
 			}
 		}
 
@@ -241,20 +244,41 @@ country_decisions = {
 			add_dip_power = -25
 			add_mil_power = -25
 			add_prestige = 10
-			2554 = {
-				#remove_province_modifier = nhs_alexandrian_library_decay
-				tooltip = {
-					add_permanent_province_modifier = {
-						name = "nhs_alexandrian_library"
-						duration = -1
+			if = {
+				limit = {
+					2554 = {
+						has_province_flag = nhs_ei_alexandrian_library_decay
 					}
 				}
-				clr_province_flag = nhs_ei_alexandrian_library_decay
-				hidden_effect = {
-					remove_province_triggered_modifier = nhs_alexandrian_library_tm_decay
+				2554 = {
+					#remove_province_modifier = nhs_alexandrian_library_decay
+					tooltip = {
+						add_permanent_province_modifier = {
+							name = "nhs_alexandrian_library"
+							duration = -1
+						}
+					}
+					clr_province_flag = nhs_ei_alexandrian_library_decay
+					hidden_effect = {
+						remove_province_triggered_modifier = nhs_alexandrian_library_tm_decay
+					}
 				}
 			}
-			
+			else = {
+				2554 = {
+					#remove_province_modifier = nhs_alexandrian_library_decay
+					tooltip = {
+						add_permanent_province_modifier = {
+							name = "nhs_alexandrian_library_no_books"
+							duration = -1
+						}
+					}
+					clr_province_flag = nhs_ei_alexandrian_library_no_books_decay
+					hidden_effect = {
+						remove_province_triggered_modifier = nhs_alexandrian_library_no_books_tm_decay
+					}
+				}
+			}
 		}
 		
 		ai_will_do = {
@@ -333,7 +357,7 @@ country_decisions = {
 		allow = {
 			treasury = 250
 			dip_power = 30
-			950 = {
+			953 = {
 				has_active_triggered_province_modifier = nhs_silk_quarter_tm_decay
 			}
 		}
@@ -366,6 +390,55 @@ country_decisions = {
 					num_of_loans = 1
 				}
 			}
+		}
+	}
+	
+	nhs_restore_elysian_arsenal = {
+		potential = {
+			nhs_eligible_for_elysian_improvements_restoration = yes
+			950 = {
+				owned_by = ROOT
+				has_province_flag = nhs_ei_elysian_arsenal_decay
+			}
+		}
+
+		allow = {
+			if = {
+				limit = {
+					ai = no
+				}
+				treasury = 500
+				dip_power = 30
+			}
+			950 = {
+				has_active_triggered_province_modifier = nhs_elysian_arsenal_tm_decay
+			}
+		}
+
+		effect = {
+			if = {
+				limit = {
+					ai = no
+				}
+				add_treasury = -500
+				add_dip_power = -30
+			}
+			add_prestige = 5
+			950 = {
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = "nhs_elysian_arsenal"
+						duration = -1
+					}
+				}
+				clr_province_flag = nhs_ei_elysian_arsenal_decay
+				hidden_effect = {
+					remove_province_triggered_modifier = nhs_elysian_arsenal_tm_decay
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
 		}
 	}
 }

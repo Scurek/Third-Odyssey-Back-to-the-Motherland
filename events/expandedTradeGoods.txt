@@ -17,17 +17,16 @@ province_event = {
 			owner = { culture_group = norse_g }
 			owner = { dip_tech = 12 }
 		}
-		area = greenland_area
 		has_port = yes
 		trade_goods = fish
 		NOT = {
 			trade_goods = whaling
 		}
-		NOT = {
-			any_province = {
-				area = greenland_area
-				trade_goods = whaling
-			}
+		nhs_can_get_special_trade_good = { 
+			ONE_REGION = yes 
+			REGION1 = greenland_region 
+			TRADE_GOOD = whaling 
+			MAX = 1
 		}
 	}
 
@@ -36,7 +35,10 @@ province_event = {
 
 		modifier = {
 			factor = 0.9
-			OR = { colonysize = 300 is_city = yes }
+			OR = { 
+				colonysize = 300 
+				is_city = yes 
+			}
 		}
 		modifier = {
 			factor = 0.7
@@ -52,12 +54,17 @@ province_event = {
 		}	
 	}
 	
-	immediate = { 
-		hidden_effect = { 
+	immediate = {
+		hidden_effect = {
 			change_trade_goods = whaling 
 			add_province_modifier = {
 				name = nhs_changed_trade_good
 				duration = 1825
+			}
+			nhs_increase_special_trade_good = {
+				TRADE_GOOD = whaling
+				REGION1 = greenland_region
+				MAX = 1
 			}
 		}
 	}
@@ -74,9 +81,39 @@ province_event = {
 	}
 }
 
+#Shut down seals in Greenland
+country_event = {
+	id = new_colonial_goods.23
+	title = "NEWS_FROM_COL"
+	desc = "EVTDESCnew_colonial_whaling_local"
+	picture = TRADEGOODS_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	
+	trigger = {
+		any_province = {
+			region = greenland_region
+			trade_goods = whaling
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			nhs_end_trade_good_region = {
+				TRADE_GOOD = whaling
+				REGION1 = greenland_region
+				MAX = 1
+			}
+		}
+	}
+
+	option = {
+		name = "OPT.VERYWELL"
+	}
+}
+
 #Progressive whaling in pacific northwest
 province_event = {
-
 	id = new_colonial_goods.10
 	title = "NEWS_FROM_COL"
 	desc = "EVTDESCnew_colonial_whaling_local"
@@ -90,22 +127,27 @@ province_event = {
 			owner = { culture_group = norse_g }
 			owner = { dip_tech = 12 }
 		}
-		region = cascadia_region
 		has_port = yes
 		trade_goods = fish
 		NOT = {
 			trade_goods = whaling
 		}
-		NOT = {
-			calc_true_if = {
-				all_province = {
-					AND = {
-						region = cascadia_region
-						trade_goods = whaling
-					}
-				}
-				amount = 3
-			}
+		# NOT = {
+			# calc_true_if = {
+				# all_province = {
+					# AND = {
+						# region = cascadia_region
+						# trade_goods = whaling
+					# }
+				# }
+				# amount = 3
+			# }
+		# }
+		nhs_can_get_special_trade_good = { 
+			ONE_REGION = yes 
+			REGION1 = cascadia_region 
+			TRADE_GOOD = whaling 
+			MAX = 3 
 		}
 	}
 
@@ -137,6 +179,11 @@ province_event = {
 				name = nhs_changed_trade_good
 				duration = 1825
 			}
+			nhs_increase_special_trade_good = {
+				TRADE_GOOD = whaling
+				REGION1 = cascadia_region
+				MAX = 3
+			}
 		}
 	}
 
@@ -149,6 +196,41 @@ province_event = {
 				duration = 1825
 			}
 		}
+	}
+}
+
+#Shut down whales in pacific northwest
+country_event = {
+	id = new_colonial_goods.11
+	title = "NEWS_FROM_COL"
+	desc = "EVTDESCnew_colonial_whaling_local"
+	picture = TRADEGOODS_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	
+	trigger = {
+		calc_true_if = {
+			all_province = {
+				region = cascadia_region
+				is_city = yes
+				trade_goods = whaling
+			}
+			amount = 3
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			nhs_end_trade_good_region = {
+				TRADE_GOOD = whaling
+				REGION1 = cascadia_region
+				MAX = 3
+			}
+		}
+	}
+
+	option = {
+		name = "OPT.VERYWELL"
 	}
 }
 
@@ -163,22 +245,27 @@ province_event = {
 	trigger = {
 		is_city = yes
 		owner = { dip_tech = 12 }
-		region = oceanea_region
 		has_port = yes
 		trade_goods = fish
 		NOT = {
 			trade_goods = whaling
 		}
-		NOT = {
-			calc_true_if = {
-				all_province = {
-					AND = {
-						region = oceanea_region
-						trade_goods = whaling
-					}
-				}
-				amount = 3
-			}
+		# NOT = {
+			# calc_true_if = {
+				# all_province = {
+					# AND = {
+						# region = oceanea_region
+						# trade_goods = whaling
+					# }
+				# }
+				# amount = 3
+			# }
+		# }
+		nhs_can_get_special_trade_good = { 
+			ONE_REGION = yes 
+			REGION1 = oceanea_region 
+			TRADE_GOOD = whaling 
+			MAX = 3 
 		}
 	}
 
@@ -210,6 +297,11 @@ province_event = {
 				name = nhs_changed_trade_good
 				duration = 1825
 			}
+			nhs_increase_special_trade_good = {
+				TRADE_GOOD = whaling
+				REGION1 = oceanea_region
+				MAX = 3
+			}
 		}
 	}
 
@@ -222,6 +314,41 @@ province_event = {
 				duration = 1825
 			}
 		}
+	}
+}
+
+#Shut down whales in new zealand
+country_event = {
+	id = new_colonial_goods.14
+	title = "NEWS_FROM_COL"
+	desc = "EVTDESCnew_colonial_whaling_local"
+	picture = TRADEGOODS_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	
+	trigger = {
+		calc_true_if = {
+			all_province = {
+				region = oceanea_region
+				is_city = yes
+				trade_goods = whaling
+			}
+			amount = 3
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			nhs_end_trade_good_region = {
+				TRADE_GOOD = whaling
+				REGION1 = oceanea_region
+				MAX = 3
+			}
+		}
+	}
+
+	option = {
+		name = "OPT.VERYWELL"
 	}
 }
 
@@ -242,16 +369,22 @@ province_event = {
 		NOT = {
 			trade_goods = whaling
 		}
-		NOT = {
-			calc_true_if = {
-				all_province = {
-					AND = {
-						region = japan_region
-						trade_goods = whaling
-					}
-				}
-				amount = 3
-			}
+		# NOT = {
+			# calc_true_if = {
+				# all_province = {
+					# AND = {
+						# region = japan_region
+						# trade_goods = whaling
+					# }
+				# }
+				# amount = 3
+			# }
+		# }
+		nhs_can_get_special_trade_good = { 
+			ONE_REGION = yes 
+			REGION1 = japan_region 
+			TRADE_GOOD = whaling 
+			MAX = 3 
 		}
 	}
 
@@ -271,6 +404,11 @@ province_event = {
 				name = nhs_changed_trade_good
 				duration = 1825
 			}
+			nhs_increase_special_trade_good = {
+				TRADE_GOOD = whaling
+				REGION1 = japan_region
+				MAX = 3
+			}
 		}
 	}
 
@@ -283,6 +421,41 @@ province_event = {
 				duration = 1825
 			}
 		}
+	}
+}
+
+#Shut down whales in japan
+country_event = {
+	id = new_colonial_goods.16
+	title = "NEWS_FROM_COL"
+	desc = "EVTDESCnew_colonial_whaling_local"
+	picture = TRADEGOODS_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	
+	trigger = {
+		calc_true_if = {
+			all_province = {
+				region = japan_region
+				is_city = yes
+				trade_goods = whaling
+			}
+			amount = 3
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			nhs_end_trade_good_region = {
+				TRADE_GOOD = whaling
+				REGION1 = japan_region
+				MAX = 3
+			}
+		}
+	}
+
+	option = {
+		name = "OPT.VERYWELL"
 	}
 }
 
@@ -309,11 +482,6 @@ province_event = {
 				culture_group = central_algonquian
 				culture_group = na_dene
 			}
-		}		
-		OR = {
-			region = canada_region
-			region = hudson_bay_region
-			region = greenland_region
 		}
 		has_port = yes
 		OR = {
@@ -323,20 +491,27 @@ province_event = {
 		NOT = {
 			trade_goods = seal_hunting
 		}
-		NOT = {
-			calc_true_if = {
-				all_province = {
-					AND = {
-						OR = {
-							region = canada_region
-							region = hudson_bay_region
-							region = greenland_region
-						}
-						trade_goods = seal_hunting
-					}
-				}
-				amount = 7
-			}
+		# NOT = {
+			# calc_true_if = {
+				# all_province = {
+					# AND = {
+						# OR = {
+							# region = canada_region
+							# region = hudson_bay_region
+							# region = greenland_region
+						# }
+						# trade_goods = seal_hunting
+					# }
+				# }
+				# amount = 7
+			# }
+		# }
+		nhs_can_get_special_trade_good = { 
+			TWO_REGIONS = yes 
+			REGION1 = canada_region
+			REGION2 = hudson_bay_region
+			TRADE_GOOD = seal_hunting
+			MAX = 7
 		}
 	}
 
@@ -369,6 +544,11 @@ province_event = {
 				name = nhs_changed_trade_good
 				duration = 1825
 			}
+			nhs_increase_special_trade_good = {
+				TRADE_GOOD = seal_hunting
+				REGION1 = canada_region
+				MAX = 7
+			}
 		}
 	}
 
@@ -384,10 +564,47 @@ province_event = {
 	}
 }
 
+#Shut down seals in Artic America
+country_event = {
+	id = new_colonial_goods.19
+	title = "NEWS_FROM_COL"
+	desc = "EVTDESCnew_colonial_whaling_local"
+	picture = TRADEGOODS_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	
+	trigger = {
+		calc_true_if = {
+			all_province = {
+				OR = {
+					region = canada_region
+					region = hudson_bay_region
+				}
+				is_city = yes
+				trade_goods = seal_hunting
+			}
+			amount = 7
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			nhs_end_trade_good_region = {
+				TRADE_GOOD = seal_hunting
+				REGION1 = canada_region
+				MAX = 7
+			}
+		}
+	}
+
+	option = {
+		name = "OPT.VERYWELL"
+	}
+}
+
 
 #Progressive seal in Northwest America
 province_event = {
-
 	id = new_colonial_goods.17
 	title = "SEAL_HUNTING"
 	desc = "new_colonial_goods_seal"
@@ -410,16 +627,22 @@ province_event = {
 		NOT = {
 			trade_goods = seal_hunting
 		}
-		NOT = {
-			calc_true_if = {
-				all_province = {
-					AND = {
-						region = cascadia_region
-						trade_goods = seal_hunting
-					}
-				}
-				amount = 5
-			}
+		# NOT = {
+			# calc_true_if = {
+				# all_province = {
+					# AND = {
+						# region = cascadia_region
+						# trade_goods = seal_hunting
+					# }
+				# }
+				# amount = 5
+			# }
+		# }
+		nhs_can_get_special_trade_good = { 
+			ONE_REGION = yes 
+			REGION1 = cascadia_region
+			TRADE_GOOD = seal_hunting
+			MAX = 5
 		}
 	}
 
@@ -451,6 +674,11 @@ province_event = {
 				name = nhs_changed_trade_good
 				duration = 1825
 			}
+			nhs_increase_special_trade_good = {
+				TRADE_GOOD = seal_hunting
+				REGION1 = cascadia_region
+				MAX = 5
+			}
 		}
 	}
 
@@ -463,6 +691,41 @@ province_event = {
 				duration = 1825
 			}
 		}
+	}
+}
+
+#Shut down seals in Northwest America
+country_event = {
+	id = new_colonial_goods.21
+	title = "NEWS_FROM_COL"
+	desc = "EVTDESCnew_colonial_whaling_local"
+	picture = TRADEGOODS_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	
+	trigger = {
+		calc_true_if = {
+			all_province = {
+				region = cascadia_region
+				is_city = yes
+				trade_goods = seal_hunting
+			}
+			amount = 5
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			nhs_end_trade_good_region = {
+				TRADE_GOOD = seal_hunting
+				REGION1 = cascadia_region
+				MAX = 5
+			}
+		}
+	}
+
+	option = {
+		name = "OPT.VERYWELL"
 	}
 }
 
@@ -482,7 +745,7 @@ province_event = {
 			owner = { culture_group = norse_g }
 			owner = { dip_tech = 12 }
 		}
-		area = greenland_area
+		# area = greenland_region
 		has_port = yes
 		OR = {
 			trade_goods = fur
@@ -491,11 +754,17 @@ province_event = {
 		NOT = {
 			trade_goods = seal_hunting
 		}
-		NOT = {
-			any_province = {
-				area = greenland_area
-				trade_goods = seal_hunting
-			}
+		# NOT = {
+			# any_province = {
+				# area = greenland_region
+				# trade_goods = seal_hunting
+			# }
+		# }
+		nhs_can_get_special_trade_good = { 
+			ONE_REGION = yes 
+			REGION1 = greenland_region
+			TRADE_GOOD = seal_hunting
+			MAX = 1
 		}
 	}
 
@@ -527,6 +796,11 @@ province_event = {
 				name = nhs_changed_trade_good
 				duration = 1825
 			}
+			nhs_increase_special_trade_good = {
+				TRADE_GOOD = seal_hunting
+				REGION1 = greenland_region
+				MAX = 1
+			}
 		}
 	}
 
@@ -539,6 +813,37 @@ province_event = {
 				duration = 1825
 			}
 		}
+	}
+}
+
+#Shut down seals in Greenland
+country_event = {
+	id = new_colonial_goods.23
+	title = "NEWS_FROM_COL"
+	desc = "EVTDESCnew_colonial_whaling_local"
+	picture = TRADEGOODS_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	
+	trigger = {
+		any_province = {
+			region = greenland_region
+			trade_goods = seal_hunting
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			nhs_end_trade_good_region = {
+				TRADE_GOOD = seal_hunting
+				REGION1 = greenland_region
+				MAX = 1
+			}
+		}
+	}
+
+	option = {
+		name = "OPT.VERYWELL"
 	}
 }
 
@@ -559,11 +864,11 @@ province_event = {
 			owner = { culture_group = norse_g }
 			owner = { dip_tech = 12 }
 		}
-		OR = {
-			area = okhotsk_area
-			area = magadan_area
-			area = kamchatka_area
-		}
+		# OR = {
+			# area = okhotsk_area
+			# area = magadan_area
+			# area = kamchatka_area
+		# }
 		has_port = yes
 		OR = {
 			trade_goods = fur
@@ -572,20 +877,28 @@ province_event = {
 		NOT = {
 			trade_goods = seal_hunting
 		}
-		NOT = {
-			calc_true_if = {
-				all_province = {
-					AND = {
-						OR = {
-							area = okhotsk_area
-							area = magadan_area
-							area = kamchatka_area
-						}
-						trade_goods = seal_hunting
-					}
-				}
-				amount = 3
-			}
+		# NOT = {
+			# calc_true_if = {
+				# all_province = {
+					# AND = {
+						# OR = {
+							# area = okhotsk_area
+							# area = magadan_area
+							# area = kamchatka_area
+						# }
+						# trade_goods = seal_hunting
+					# }
+				# }
+				# amount = 3
+			# }
+		# }
+		nhs_can_get_special_trade_good = { 
+			THREE_AREAS = yes 
+			REGION1 = okhotsk_area
+			REGION2 = magadan_area
+			REGION3 = kamchatka_area
+			TRADE_GOOD = seal_hunting
+			MAX = 3
 		}
 	}
 
@@ -617,6 +930,11 @@ province_event = {
 				name = nhs_changed_trade_good
 				duration = 1825
 			}
+			nhs_increase_special_trade_good = {
+				TRADE_GOOD = seal_hunting
+				REGION1 = okhotsk_area
+				MAX = 3
+			}
 		}
 	}
 
@@ -629,6 +947,45 @@ province_event = {
 				duration = 1825
 			}
 		}
+	}
+}
+
+#Shut down seals in Eastern Siberia
+country_event = {
+	id = new_colonial_goods.24
+	title = "NEWS_FROM_COL"
+	desc = "EVTDESCnew_colonial_whaling_local"
+	picture = TRADEGOODS_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	
+	trigger = {
+		calc_true_if = {
+			all_province = {
+				OR = {
+					area = okhotsk_area
+					area = magadan_area
+					area = kamchatka_area
+				}
+				is_city = yes
+				trade_goods = seal_hunting
+			}
+			amount = 3
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			nhs_end_trade_good_region = {
+				TRADE_GOOD = seal_hunting
+				REGION1 = okhotsk_area
+				MAX = 3
+			}
+		}
+	}
+
+	option = {
+		name = "OPT.VERYWELL"
 	}
 }
 
@@ -649,7 +1006,7 @@ province_event = {
 			owner = { culture_group = norse_g }
 			owner = { dip_tech = 12 }
 		}
-		region = oceanea_region
+		# region = oceanea_region
 		has_port = yes
 		OR = {
 			trade_goods = fur
@@ -658,16 +1015,22 @@ province_event = {
 		NOT = {
 			trade_goods = seal_hunting
 		}
-		NOT = {
-			calc_true_if = {
-				all_province = {
-					AND = {
-						region = oceanea_region
-						trade_goods = seal_hunting
-					}
-				}
-				amount = 3
-			}
+		# NOT = {
+			# calc_true_if = {
+				# all_province = {
+					# AND = {
+						# region = oceanea_region
+						# trade_goods = seal_hunting
+					# }
+				# }
+				# amount = 3
+			# }
+		# }
+		nhs_can_get_special_trade_good = { 
+			ONE_REGION = yes 
+			REGION1 = oceanea_region
+			TRADE_GOOD = seal_hunting
+			MAX = 3
 		}
 	}
 
@@ -699,6 +1062,11 @@ province_event = {
 				name = nhs_changed_trade_good
 				duration = 1825
 			}
+			nhs_increase_special_trade_good = {
+				TRADE_GOOD = seal_hunting
+				REGION1 = oceanea_region
+				MAX = 3
+			}
 		}
 	}
 	
@@ -714,45 +1082,79 @@ province_event = {
 	}
 }
 
-
-##Events for the exiles discovering the new trade goods
-#Elysia Discovering Maize and it's planting techniques from the natives
-province_event = {
-	id = new_colonial_goods.30
-	title = new_colonial_goods_prices.1.t
-	desc = new_colonial_goods_prices.1.d
+#Shut down seals in Eastern Siberia
+country_event = {
+	id = new_colonial_goods.25
+	title = "NEWS_FROM_COL"
+	desc = "EVTDESCnew_colonial_whaling_local"
 	picture = TRADEGOODS_eventPicture
 	
 	fire_only_once = yes
+	hidden = yes
 	
 	trigger = {
-		is_city = yes
-		nhs_is_elysia_owner = yes
-		trade_goods = maize
-		NOT = { has_global_flag = exiles_maize_happened }
+		calc_true_if = {
+			all_province = {
+				region = oceanea_region
+				is_city = yes
+				trade_goods = seal_hunting
+			}
+			amount = 3
+		}
 	}
-	
-	mean_time_to_happen = {
-		months = 1
-	}
-	
 	immediate = {
-		set_global_flag = exiles_maize_happened
-	}
-	
-	option = {
-		name = "new_colonial_goods_prices.1.a"
-		owner = {
-			change_price = {
-				trade_goods = maize
-				key = EXILES_MAIZE
-				value = 0.2
-				duration = 730
+		hidden_effect = {
+			nhs_end_trade_good_region = {
+				TRADE_GOOD = seal_hunting
+				REGION1 = oceanea_region
+				MAX = 3
 			}
 		}
 	}
-	
+
+	option = {
+		name = "OPT.VERYWELL"
+	}
 }
+
+##Events for the exiles discovering the new trade goods
+#Elysia Discovering Maize and it's planting techniques from the natives
+# province_event = {
+	# id = new_colonial_goods.30
+	# title = new_colonial_goods_prices.1.t
+	# desc = new_colonial_goods_prices.1.d
+	# picture = TRADEGOODS_eventPicture
+	
+	# fire_only_once = yes
+	
+	# trigger = {
+		# is_city = yes
+		# nhs_is_elysia_owner = yes
+		# trade_goods = maize
+		# NOT = { has_global_flag = exiles_maize_happened }
+	# }
+	
+	# mean_time_to_happen = {
+		# months = 1
+	# }
+	
+	# immediate = {
+		# set_global_flag = exiles_maize_happened
+	# }
+	
+	# option = {
+		# name = "new_colonial_goods_prices.1.a"
+		# owner = {
+			# change_price = {
+				# trade_goods = maize
+				# key = EXILES_MAIZE
+				# value = 0.2
+				# duration = 730
+			# }
+		# }
+	# }
+	
+# }
 ##Events to change trade goods value
 #Event to increase whaling - Whaling companies founded, elysians and europeans seek whale meat and oil
 country_event = {
@@ -885,11 +1287,6 @@ country_event = {
 		nhs_knows_country_ely = yes
 		953 = {
 			trade_goods = elysian_silk
-		}
-		NOT = {
-			tag = VIN
-			tag = HLL
-			tag = MK1
 		}
 		NOT = { has_global_flag = western_silk_happened }
 	}
