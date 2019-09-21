@@ -284,42 +284,31 @@ country_event = {
 
 country_event = {
 	id = nhs2_test.2
-	title = nhs2_test.2.t
-	desc = nhs2_test.2.d
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = CITY_VIEW_eventPicture
 	
 	is_triggered_only = yes
+	hidden = yes
 	trigger = {
-		any_owned_province = {
-			has_active_triggered_province_modifier = nhs_carthaginian_design_harbour_tm_decay
+		any_province = {
+			region = canada_region
+			has_port = yes
+			NOT = { has_province_modifier = vov_coastal_bonus }
 		}
 	}
-	
-	option = {
-		name = "nhs2_mainlandevents1.a"
-		set_country_flag = nhs_start_counting_buildings
-		2646 = {
-			if = {
-				limit = {
-					NOT = { 
-						owner = {
-							technology_group = north_american
-						}
-					}
-					continent = north_america
-					NOT = { owned_by = ROOT }
-					is_city = yes
-				}
-				add_building = cathedral
-				add_building = university
-				add_building = grand_shipyard
-				add_building = drydock
+	immediate = {
+		every_province = {
+			limit = {
+				region = canada_region
+				has_port = yes
+				NOT = { has_province_modifier = vov_coastal_bonus }
 			}
+			add_province_triggered_modifier = vov_coastal_bonus
 		}
-		set_variable = {
-			which = nhs_HighTierBuildingCount
-			value = 0
-		}
+	}
+	option = {
+		name = "nhs2_hidden.a"
 	}
 }
 
@@ -3047,6 +3036,52 @@ country_event = {
 	immediate = {
 		2554 = {
 			change_trade_goods = paper
+		}
+	}
+	option = {
+		
+	}
+}
+
+country_event = {
+	id = nhs2_test.51
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	
+	is_triggered_only = yes
+	hidden = yes
+	
+	trigger = {
+		any_owned_province = {
+			has_province_modifier = nhs_elysian_arsenal_tm
+			OR = {
+				has_building = shipyard
+				has_building = grand_shipyard
+			}
+		}
+	}
+	
+	immediate = {
+		every_owned_province = {
+			limit = {
+				has_province_modifier = nhs_elysian_arsenal_tm
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+			}
+			if = {
+				limit = {
+					has_building = shipyard
+				}
+				remove_building = shipyard
+			}
+			else_if = {
+				limit = {
+					has_building = grand_shipyard
+				}
+				remove_building = grand_shipyard
+			}
 		}
 	}
 	option = {
