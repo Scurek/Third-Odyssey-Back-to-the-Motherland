@@ -3,12 +3,16 @@
 #
 # Effects are fully scriptable here.
 
-vov_coastal_bonus = {
+vov_coastal_bonus_tm = {
 	potential = {
-		always = yes
+		is_empty = no
+		is_colony = no
 	}
 	trigger = {
-		culture_group = norse_g
+		OR = {
+			culture_group = norse_g
+			is_colony = yes
+		}
 		owner = {
 			culture_group = norse_g
 		}
@@ -18,7 +22,20 @@ vov_coastal_bonus = {
 	local_autonomy = -0.1
 	picture = "vov_coastal_bonus"
 	#Province scope
-	on_activation = {}
+	on_activation = {
+		if = {
+			limit = {
+				has_province_modifier = vov_coastal_bonus
+			}
+			remove_province_modifier = vov_coastal_bonus
+		}
+		else_if = {
+			limit = {
+				has_province_modifier = vov_coastal_bonus_norse
+			}
+			remove_province_modifier = vov_coastal_bonus_norse
+		}
+	}
 	on_deactivation = {}
 }
 

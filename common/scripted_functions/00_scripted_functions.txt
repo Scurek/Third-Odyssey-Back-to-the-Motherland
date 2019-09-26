@@ -654,17 +654,24 @@ can_colonize_province = {
 					tag = VIN
 				}
 				culture_group = norse_g
-				#ai = yes
-				any_province = {
-					has_province_modifier = vov_coastal_bonus
-					range = FROM
-					is_empty = yes
-					has_discovered = FROM
-				}
+				ai = yes
 			}
 			NOT = { colonysize = 50 }
-			NOT = {
-				has_province_modifier = vov_coastal_bonus
+			NOT = { has_province_modifier = vov_coastal_bonus_tm }
+			FROM = {
+				OR = {
+					any_province = {
+						has_province_modifier = vov_coastal_bonus_tm
+						is_empty = yes
+						has_discovered = FROM
+						OR = {
+							range = FROM
+							any_neighbor_province = {
+								owned_by = FROM
+							}
+						}
+					}
+				}
 			}
 		}
 		allow = {
@@ -676,17 +683,25 @@ can_colonize_province = {
 		potential = {
 			FROM = {
 				tag = MK1
-				#ai = yes
-				any_province = {
-					vov_is_markland_path = yes
-					range = FROM
-					is_empty = yes
-					has_discovered = FROM
-				}
+				ai = yes
+				NOT = { num_of_cities = 20 }
 			}
 			NOT = { colonysize = 50 }
 			NOT = {
 				vov_is_markland_path = yes
+			}
+			FROM = {
+				any_province = {
+					vov_is_markland_path = yes
+					is_empty = yes
+					has_discovered = FROM
+					OR = {
+						range = FROM
+						any_neighbor_province = {
+							owned_by = FROM
+						}
+					}
+				}
 			}
 		}
 		allow = {
@@ -699,17 +714,26 @@ can_colonize_province = {
 			FROM = {
 				tag = HLL
 				ai = yes
-				any_province = {
-					vov_is_helluland_path = yes
-					range = FROM
-					is_empty = yes
-					has_discovered = FROM
-				}
+				NOT = { num_of_cities = 20 }
 			}
 			NOT = { colonysize = 50 }
 			NOT = {
 				vov_is_helluland_path = yes
 			}
+			FROM = {
+				any_province = {
+					vov_is_helluland_path = yes
+					is_empty = yes
+					has_discovered = FROM
+					OR = {
+						range = FROM
+						any_neighbor_province = {
+							owned_by = FROM
+						}
+					}
+				}
+			}
+			
 		}
 		allow = {
 			always = no
@@ -721,21 +745,29 @@ can_colonize_province = {
 			FROM = {
 				tag = VIN
 				ai = yes
-				any_province = {
-					OR = {
-						vov_is_markland_path = yes
-						vov_is_helluland_path = yes
-					}
-					range = FROM
-					is_empty = yes
-					has_discovered = FROM
-				}
+				NOT = { num_of_cities = 20 }
 			}
 			NOT = { colonysize = 50 }
 			NOT = {
 				OR = {
 					vov_is_markland_path = yes
 					vov_is_helluland_path = yes
+				}
+			}
+			FROM = {
+				any_province = {
+					OR = {
+						vov_is_markland_path = yes
+						vov_is_helluland_path = yes
+					}
+					is_empty = yes
+					has_discovered = FROM
+					OR = {
+						range = FROM
+						any_neighbor_province = {
+							owned_by = FROM
+						}
+					}
 				}
 			}
 		}
