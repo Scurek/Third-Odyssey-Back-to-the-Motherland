@@ -381,6 +381,19 @@ can_move_capital = {
 			always = no
 		}
 	}
+	
+	condition = {
+		tooltip = "VINLAND_CAPITAL"
+		potential = {
+			owner = {
+				tag = VIN
+			}
+			province_id = 993
+		}
+		allow = {
+			always = no
+		}
+	}
 }
 
 can_move_trade_port = {
@@ -408,7 +421,6 @@ can_colonize_province = {
 	condition = {
 		tooltip = "NHS_RESTRICTED"
 		potential = {
-			NOT = { region = carribeans_region }
 			FROM = {
 				OR = {
 					tag = CM1
@@ -417,6 +429,7 @@ can_colonize_province = {
 				has_country_flag = nhs_restricted_expansion_s
 				nhs_is_subject_of_ely = yes
 			}
+			NOT = { region = carribeans_region }
 			
 		}
 		allow = {
@@ -426,17 +439,15 @@ can_colonize_province = {
 	condition = {
 		tooltip = "NHS_RESTRICTED"
 		potential = {
+			FROM = {
+				tag = SHQ
+				has_country_flag = nhs_restricted_expansion_s
+				nhs_is_subject_of_ely = yes
+			}
 			NOT = {
 				any_neighbor_province = {
 					owned_by = FROM
 				}
-			}
-			FROM = {
-				OR = {
-					tag = SHQ
-				}
-				has_country_flag = nhs_restricted_expansion_s
-				nhs_is_subject_of_ely = yes
 			}
 			
 		}
@@ -474,19 +485,19 @@ can_colonize_province = {
 	condition = {
 		tooltip = "NHS_STARTING_MODIFIERS"
 		potential = {
+			FROM = {
+				# OR = {
+					has_country_modifier = nhs_constrained_resources
+					# AND = {
+						# has_country_modifier = nhs_vov_population
+						# NOT = { tag = VIN }
+					# }
+				# }
+			}
 			NOT = {
 				any_neighbor_province = {
 					is_colony = no
 					owned_by = FROM
-				}
-			}
-			FROM = {
-				OR = {
-					has_country_modifier = nhs_constrained_resources
-					AND = {
-						has_country_modifier = nhs_vov_population
-						NOT = { tag = VIN }
-					}
 				}
 			}
 		}
@@ -628,6 +639,137 @@ can_colonize_province = {
 			}
 			has_port = no
 			always = no #Disabled
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = "VOV_VIKING_PREFERENCE_AI"
+		potential = {
+			FROM = {
+				OR = {
+					tag = MK1
+					tag = HLL
+					tag = VIN
+				}
+				culture_group = norse_g
+				ai = yes
+			}
+			NOT = { colonysize = 50 }
+			NOT = { has_province_modifier = vov_coastal_bonus_tm }
+			FROM = {
+				OR = {
+					any_province = {
+						has_province_modifier = vov_coastal_bonus_tm
+						is_empty = yes
+						has_discovered = FROM
+						OR = {
+							range = FROM
+							any_neighbor_province = {
+								owned_by = FROM
+							}
+						}
+					}
+				}
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = "VOV_VIKING_PREFERENCE_AI"
+		potential = {
+			FROM = {
+				tag = MK1
+				ai = yes
+				NOT = { num_of_cities = 20 }
+			}
+			NOT = { colonysize = 50 }
+			NOT = {
+				vov_is_markland_path = yes
+			}
+			FROM = {
+				any_province = {
+					vov_is_markland_path = yes
+					is_empty = yes
+					has_discovered = FROM
+					OR = {
+						range = FROM
+						any_neighbor_province = {
+							owned_by = FROM
+						}
+					}
+				}
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = "VOV_VIKING_PREFERENCE_AI"
+		potential = {
+			FROM = {
+				tag = HLL
+				ai = yes
+				NOT = { num_of_cities = 20 }
+			}
+			NOT = { colonysize = 50 }
+			NOT = {
+				vov_is_helluland_path = yes
+			}
+			FROM = {
+				any_province = {
+					vov_is_helluland_path = yes
+					is_empty = yes
+					has_discovered = FROM
+					OR = {
+						range = FROM
+						any_neighbor_province = {
+							owned_by = FROM
+						}
+					}
+				}
+			}
+			
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = "VOV_VIKING_PREFERENCE_AI"
+		potential = {
+			FROM = {
+				tag = VIN
+				ai = yes
+				NOT = { num_of_cities = 20 }
+			}
+			NOT = { colonysize = 50 }
+			NOT = {
+				OR = {
+					vov_is_markland_path = yes
+					vov_is_helluland_path = yes
+				}
+			}
+			FROM = {
+				any_province = {
+					OR = {
+						vov_is_markland_path = yes
+						vov_is_helluland_path = yes
+					}
+					is_empty = yes
+					has_discovered = FROM
+					OR = {
+						range = FROM
+						any_neighbor_province = {
+							owned_by = FROM
+						}
+					}
+				}
+			}
 		}
 		allow = {
 			always = no

@@ -4,9 +4,8 @@ country_decisions = {
 	seek_to_establish_trade_deal_ely = {
 		potential = {
 			nhs_is_elysia = yes
-			has_global_flag = nhs_vov_no_deal
-			NOT = { has_country_modifier = nhs_broken_trade_deal }
-			NOT = { has_country_modifier = nhs_vov_recently_proposed_trade }
+			#has_global_flag = nhs_vov_no_deal
+			
 			NOT = {
 				trading_with_markland = yes
 				trading_with_helluland = yes
@@ -20,6 +19,11 @@ country_decisions = {
 			}
 		}
 		allow = {
+			NOT = { has_country_modifier = nhs_broken_trade_deal }
+			custom_trigger_tooltip = {
+				tooltip = nhs_vov_trade_deal_cd_tt
+				NOT = { has_country_modifier = nhs_vov_recently_proposed_trade }
+			}
 			if = {
 				limit = {
 					exists = MK1
@@ -273,22 +277,31 @@ country_decisions = {
 				tag = VIN
 			}
 			NOT = { has_country_modifier = nhs_vov_trade_deal }
-			NOT = { has_country_modifier = nhs_broken_trade_deal }
-			NOT = { has_country_modifier = nhs_vov_recently_proposed_trade }
+			nhs_exists_elysia = yes
+			#NOT = { has_country_modifier = nhs_broken_trade_deal }
+			#NOT = { has_country_modifier = nhs_vov_recently_proposed_trade }
 			OR = {
-				has_global_flag = nhs_vov_no_deal
+				AND = {
+					tag = VIN
+					NOT = { trading_with_vinland = yes }
+				}
+				#has_global_flag = nhs_vov_no_deal
 				AND = {
 					tag = MK1
-					trading_with_helluland = yes
+					NOT = { trading_with_markland = yes }
 				}
 				AND = {
 					tag = HLL
-					trading_with_markland = yes
+					NOT = { trading_with_helluland = yes }
 				}
 			}
-			nhs_exists_elysia = yes
 		}
 		allow = {
+			NOT = { has_country_modifier = nhs_broken_trade_deal }
+			custom_trigger_tooltip = {
+				tooltip = nhs_vov_trade_deal_cd_tt
+				NOT = { has_country_modifier = nhs_vov_recently_proposed_trade }
+			}
 			nhs_ely_seek_to_establish_trade_deal_vikings_allow = yes
 		}
 		effect = {
@@ -347,10 +360,13 @@ country_decisions = {
 				tag = VIN
 			}
 			has_country_modifier = nhs_vov_trade_deal
-			NOT = { has_country_modifier = nhs_vov_recently_proposed_trade }
 		}
 		allow = {
 			nhs_ely_vin_break_trade_deal_vikings_allow = yes
+			custom_trigger_tooltip = {
+				tooltip = nhs_vov_trade_deal_done_cd_tt
+				NOT = { has_country_modifier = nhs_vov_recently_proposed_trade }
+			}
 		}
 		effect = {
 			nhs_make_event_target_elysia = yes
@@ -378,7 +394,7 @@ country_decisions = {
 	vin_break_trade_deal_ely = {
 		potential = {
 			nhs_is_elysia = yes
-			NOT = { has_country_modifier = nhs_vov_recently_proposed_trade }
+			#NOT = { has_country_modifier = nhs_vov_recently_proposed_trade }
 			OR = {
 				AND = {
 					trading_with_markland = yes
@@ -396,6 +412,10 @@ country_decisions = {
 		}
 		allow = {
 			stability = 1
+			custom_trigger_tooltip = {
+				tooltip = nhs_vov_trade_deal_done_cd_tt
+				NOT = { has_country_modifier = nhs_vov_recently_proposed_trade }
+			}
 			if = {
 				limit = {
 					trading_with_markland = yes
@@ -806,7 +826,6 @@ country_decisions = {
 			is_subject = no
 			owns_core_province = 994
 			primary_culture = vinlandic
-			
 		}
 		effect = {
 			if = {

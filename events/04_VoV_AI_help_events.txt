@@ -1,295 +1,390 @@
 namespace = nhs_vov_ai_help
 
 # AI colonisation help Vinland and Norse Colonies
-province_event = {
+country_event = {
 	id = nhs_vov_ai_help.1
 	title = nhs_vov_ai_help.1.t
 	desc = nhs_vov_ai_help.1.d
 	picture = DIPLOMACY_eventPicture
 	
 	trigger = {
-		owner = {
-			OR = {
-				tag = MK1
-				tag = HLL
-				tag = VIN
-			}
+		OR = {
+			tag = MK1
+			tag = HLL
+			tag = VIN
 		}
-		has_empty_adjacent_province = yes
-		owner = { NOT = { num_of_colonies = 1 } }
-		owner = { ai = yes }
-		owner = { NOT = { has_country_modifier = nhs2_ai_colonising_timer }	}
-		owner = { num_of_colonists = 1 }
-		NOT = { num_of_cities = 20 }
-	}
-
-	immediate = {
-		owner = {
-			add_country_modifier = {
-				name = nhs2_ai_colonising_timer
-				duration = 1
-				hidden = yes
-			}
-		}
-	}
-	
-	
-	option = {
-		name = "nhs_vov_ai_help.1.a"
-		trigger = {
-			any_empty_neighbor_province = {
-				province_id = 994
-			}
-		}
-		random_empty_neighbor_province = {
-			limit = {
-				province_id = 994
-			}
-			create_colony = 50
-		}
-	}
-	option = {
-		name = "nhs_vov_ai_help.1.a"
-		trigger = {
-			NOT = {
-				any_empty_neighbor_province = {
-					province_id = 994
-				}
-			}
-			any_empty_neighbor_province = {
-				province_group = thorfinn_bay
-			}
-		}
-		random_empty_neighbor_province = {
-			limit = {
-				province_group = thorfinn_bay
-			}
-			create_colony = 50
-		}
-	}
-	option = {
-		name = "nhs_vov_ai_help.1.a"
-		trigger = {
-			NOT = {
-				any_empty_neighbor_province = {
-					province_id = 994
-				}
-			}
-			NOT = {
-				any_empty_neighbor_province = {
-					province_group = thorfinn_bay
-				}
-			}
-			any_empty_neighbor_province = {
-				region = canada_region
-			}
-		}
-		random_empty_neighbor_province = {
-			limit = {
-				region = canada_region
-			}
-			create_colony = 50
-		}
-	}
-	option = {
-		name = "nhs_vov_ai_help.1.a"
-		trigger = {
-			NOT = {
-				any_empty_neighbor_province = {
-					province_id = 994
-				}
-			}
-			NOT = {
-				any_empty_neighbor_province = {
-					region = canada_region
-				}
-			}
-			NOT = {
-				any_empty_neighbor_province = {
-					province_group = thorfinn_bay
-				}
-			}
+		ai = yes
+		#NOT = { num_of_cities = 20 }
+		NOT = { num_of_colonies = 1 }
+		num_of_colonists = 1
+		NOT = { has_country_modifier = nhs2_ai_colonising_timer }
+		OR = {
 			any_province = {
-				area = greenland_area
+				has_discovered = ROOT
 				is_empty = yes
+				range = ROOT
 			}
-			owner = { NOT = { has_country_modifier = nhs_vov_population } }
+			any_owned_province = {
+				has_empty_adjacent_province = yes
+			}
 		}
-		random_province = {
+	}
+	
+	immediate = {
+		add_country_modifier = {
+			name = nhs2_ai_colonising_timer
+			duration = 1
+			hidden = yes
+		}
+		if = {
 			limit = {
-				area = greenland_area
+				994 = {
+					is_empty = yes
+					OR = {
+						range = ROOT
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+					}
+				}
 			}
-			create_colony = 10
+			994 = {
+				set_province_flag = vov_ai_colony_tar@ROOT
+			}
+		}
+		else_if = {
+			limit = {
+				tag = MK1
+				any_owned_province = {
+					any_empty_neighbor_province = {
+						vov_is_markland_path = yes
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					any_empty_neighbor_province = {
+						vov_is_markland_path = yes
+					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						vov_is_markland_path = yes
+					}
+					set_province_flag = vov_ai_colony_tar@ROOT
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				tag = HLL
+				any_owned_province = {
+					any_empty_neighbor_province = {
+						vov_is_helluland_path = yes
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					any_empty_neighbor_province = {
+						vov_is_helluland_path = yes
+					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						vov_is_helluland_path = yes
+					}
+					set_province_flag = vov_ai_colony_tar@ROOT
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				tag = VIN
+				any_owned_province = {
+					any_empty_neighbor_province = {
+						OR = {
+							vov_is_markland_path = yes
+							vov_is_helluland_path = yes
+						}
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					any_empty_neighbor_province = {
+						OR = {
+							vov_is_markland_path = yes
+							vov_is_helluland_path = yes
+						}
+					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						OR = {
+							vov_is_markland_path = yes
+							vov_is_helluland_path = yes
+						}
+					}
+					set_province_flag = vov_ai_colony_tar@ROOT
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				tag = MK1
+				any_province = {
+					vov_is_markland_path = yes
+					range = ROOT
+					is_empty = yes
+				}
+			}
+			random_province = {
+				limit = {
+					vov_is_markland_path = yes
+					range = ROOT
+					is_empty = yes
+				}
+				set_province_flag = vov_ai_colony_tar@ROOT
+			}
+		}
+		else_if = {
+			limit = {
+				tag = HLL
+				any_province = {
+					vov_is_helluland_path = yes
+					range = ROOT
+					is_empty = yes
+				}
+			}
+			random_province = {
+				limit = {
+					vov_is_helluland_path = yes
+					range = ROOT
+					is_empty = yes
+				}
+				set_province_flag = vov_ai_colony_tar@ROOT
+			}
+		}
+		else_if = {
+			limit = {
+				tag = VIN
+				any_province = {
+					OR = {
+						vov_is_markland_path = yes
+						vov_is_helluland_path = yes
+					}
+					range = ROOT
+					is_empty = yes
+				}
+			}
+			random_province = {
+				limit = {
+					OR = {
+						vov_is_markland_path = yes
+						vov_is_helluland_path = yes
+					}
+					range = ROOT
+					is_empty = yes
+				}
+				set_province_flag = vov_ai_colony_tar@ROOT
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_province = {
+					any_empty_neighbor_province = {
+						has_province_modifier = vov_coastal_bonus_tm
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					any_empty_neighbor_province = {
+						has_province_modifier = vov_coastal_bonus_tm
+					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						has_province_modifier = vov_coastal_bonus_tm
+					}
+					set_province_flag = vov_ai_colony_tar@ROOT
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				any_province = {
+					range = ROOT
+					is_empty = yes
+					has_province_modifier = vov_coastal_bonus_tm
+				}
+			}
+			random_province = {
+				limit = {
+					range = ROOT
+					is_empty = yes
+					has_province_modifier = vov_coastal_bonus_tm
+				}
+				set_province_flag = vov_ai_colony_tar@ROOT
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_province = {
+					has_empty_adjacent_province = yes
+				}
+			}
+			random_owned_province = {
+				limit = {
+					has_empty_adjacent_province = yes
+				}
+				random_empty_neighbor_province = {
+					set_province_flag = vov_ai_colony_tar@ROOT
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				any_province = {
+					range = ROOT
+					is_empty = yes
+				}
+			}
+			random_province = {
+				limit = {
+					range = ROOT
+					is_empty = yes
+				}
+				set_province_flag = vov_ai_colony_tar@ROOT
+			}
+		}
+		#create_colony = 50
+		capital_scope = {
+			province_event = { id = nhs_vov_ai_help.5 }
 		}
 	}
 	option = {
 		name = "nhs_vov_ai_help.1.a"
-		trigger = {
-			NOT = {
-				any_empty_neighbor_province = {
-					province_id = 994
-				}
-			}
-			NOT = {
-				any_empty_neighbor_province = {
-					region = canada_region
-				}
-				any_province = {
-					area = greenland_area
-					is_empty = yes
-				}
-			}
-		}
-		random_empty_neighbor_province = {
-			limit = {
-				continent = north_america
-			}
-			create_colony = 10
-		}
-	}
-	option = {
-		name = "nhs_vov_ai_help.1.a"
-		trigger = {
-			NOT = {
-				any_empty_neighbor_province = {
-					province_id = 994
-				}
-			}
-			NOT = {
-				any_empty_neighbor_province = {
-					region = canada_region
-				}
-				any_province = {
-					area = greenland_area
-					is_empty = yes
-				}
-				any_empty_neighbor_province = {
-					continent = north_america
-				}
-			}
-		}
-		random_empty_neighbor_province = {
-			create_colony = 10
-		}
 	}
 }
 
 
 # AI colonisation help: Varangians
-province_event = {
-	id = nhs_vov_ai_help.2
-	title = nhs_vov_ai_help.1.t
-	desc = nhs_vov_ai_help.1.d
-	picture = DIPLOMACY_eventPicture
+# province_event = {
+	# id = nhs_vov_ai_help.2
+	# title = nhs_vov_ai_help.1.t
+	# desc = nhs_vov_ai_help.1.d
+	# picture = DIPLOMACY_eventPicture
 	
-	trigger = {
-		owner = {
-			OR = {
-				tag = VGD
-			}
-			NOT = { num_of_cities = 20 }
-		}
-		NOT = {
-			any_empty_neighbor_province = {
-				region = canada_region
-			}
-		}
-		has_empty_adjacent_province = yes
-		owner = { NOT = { num_of_colonies = 1 } }
-		owner = { ai = yes }
-		owner = { NOT = { has_country_modifier = nhs2_ai_colonising_timer }	}
-		owner = { num_of_colonists = 1 }
-	}
+	# trigger = {
+		# owner = {
+			# OR = {
+				# tag = VGD
+			# }
+			# NOT = { num_of_cities = 20 }
+		# }
+		# NOT = {
+			# any_empty_neighbor_province = {
+				# region = canada_region
+			# }
+		# }
+		# has_empty_adjacent_province = yes
+		# owner = { NOT = { num_of_colonies = 1 } }
+		# owner = { ai = yes }
+		# owner = { NOT = { has_country_modifier = nhs2_ai_colonising_timer }	}
+		# owner = { num_of_colonists = 1 }
+	# }
 
-	immediate = {
-		owner = {
-			add_country_modifier = {
-				name = nhs2_ai_colonising_timer
-				duration = 1
-				hidden = yes
-			}
-		}
-	}
+	# immediate = {
+		# owner = {
+			# add_country_modifier = {
+				# name = nhs2_ai_colonising_timer
+				# duration = 1
+				# hidden = yes
+			# }
+		# }
+	# }
 	
-	mean_time_to_happen = {
-		days = 1
-	}
+	# mean_time_to_happen = {
+		# days = 1
+	# }
 
-	option = {
-		name = "nhs_vov_ai_help.1.a"
-		trigger = {
-			any_empty_neighbor_province = {
-				region = canada_region
-				has_port = yes
-			}
-		}
-		random_empty_neighbor_province = {
-			limit = {
-				region = canada_region
-				has_port = yes
-			}
-			create_colony = 10
-		}
-	}
-	option = {
-		name = "nhs_vov_ai_help.1.a"
-		trigger = {
-			NOT = {
-				any_empty_neighbor_province = {
-					region = canada_region
-					has_port = yes
-				}
-			}
-		}
-		random_empty_neighbor_province = {
-			limit = {
-				region = canada_region
-			}
-			create_colony = 10
-		}
-	}
-	option = {
-		name = "nhs_vov_ai_help.1.a"
-		trigger = {
-			NOT = {
-				any_empty_neighbor_province = {
-					region = canada_region
-				}
-			}
-			any_empty_neighbor_province = {
-				region = canada_region
-				has_port = yes
-			}
-		}
-		random_empty_neighbor_province = {
-			limit = {
-				region = canada_region
-				has_port = yes
-			}
-			create_colony = 10
-		}
-	}
-	option = {
-		name = "nhs_vov_ai_help.1.a"
-		trigger = {
-			NOT = {
-				any_empty_neighbor_province = {
-					region = canada_region
-				}
-				any_empty_neighbor_province = {
-					region = canada_region 
-					has_port = yes
-				}
-			}
-		}
-		random_empty_neighbor_province = {
-			limit = {
-				region = canada_region
-			}
-		}
-		create_colony = 10
-	}
-}
+	# option = {
+		# name = "nhs_vov_ai_help.1.a"
+		# trigger = {
+			# any_empty_neighbor_province = {
+				# region = canada_region
+				# has_port = yes
+			# }
+		# }
+		# random_empty_neighbor_province = {
+			# limit = {
+				# region = canada_region
+				# has_port = yes
+			# }
+			# create_colony = 10
+		# }
+	# }
+	# option = {
+		# name = "nhs_vov_ai_help.1.a"
+		# trigger = {
+			# NOT = {
+				# any_empty_neighbor_province = {
+					# region = canada_region
+					# has_port = yes
+				# }
+			# }
+		# }
+		# random_empty_neighbor_province = {
+			# limit = {
+				# region = canada_region
+			# }
+			# create_colony = 10
+		# }
+	# }
+	# option = {
+		# name = "nhs_vov_ai_help.1.a"
+		# trigger = {
+			# NOT = {
+				# any_empty_neighbor_province = {
+					# region = canada_region
+				# }
+			# }
+			# any_empty_neighbor_province = {
+				# region = canada_region
+				# has_port = yes
+			# }
+		# }
+		# random_empty_neighbor_province = {
+			# limit = {
+				# region = canada_region
+				# has_port = yes
+			# }
+			# create_colony = 10
+		# }
+	# }
+	# option = {
+		# name = "nhs_vov_ai_help.1.a"
+		# trigger = {
+			# NOT = {
+				# any_empty_neighbor_province = {
+					# region = canada_region
+				# }
+				# any_empty_neighbor_province = {
+					# region = canada_region 
+					# has_port = yes
+				# }
+			# }
+		# }
+		# random_empty_neighbor_province = {
+			# limit = {
+				# region = canada_region
+			# }
+		# }
+		# create_colony = 10
+	# }
+# }
 
 
 ## AI colonisation help: Jomsvikings
@@ -436,6 +531,33 @@ country_event = {
 				duration = 1460
 				hidden = yes
 			}
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_ai_help.1.a"
+	}
+}
+
+province_event = {
+	id = nhs_vov_ai_help.5
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = COLONIZATION_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+	
+	immediate = {
+		owner = {
+			save_event_target_as = vov_owner
+		}
+		random_province = {
+			limit = {
+				has_province_flag = vov_ai_colony_tar@event_target:vov_owner
+			}
+			create_colony = 50
+			clr_province_flag = vov_ai_colony_tar@event_target:vov_owner
 		}
 	}
 	
