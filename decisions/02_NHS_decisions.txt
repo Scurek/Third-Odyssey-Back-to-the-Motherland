@@ -237,7 +237,7 @@ country_decisions = {
 				}
 				add_mil_power = -50
 			}
-			country_event = { id = nhs2_mainlandevents.6 days = 2 }
+			country_event = { id = nhs2_mainlandevents.6 }
 			hidden_effect = {
 				if = {
 					limit = {
@@ -269,7 +269,7 @@ country_decisions = {
 							}
 						}
 					}
-					country_event = { id = nhs2_mainlandevents.8 }
+					country_event = { id = nhs2_mainlandevents.8 days = 2 }
 				}
 			}
 			set_country_flag = nhs_invasion_begins
@@ -430,6 +430,118 @@ country_decisions = {
 		effect = {
 			set_country_flag = nhs_invasion_second_part_begins
 			country_event = { id = nhs2_mainlandevents.9 }
+		}
+
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	nhs2_request_constantinople = {
+		major = yes
+		potential = {
+			nhs_is_elysia_late = yes
+			OR = {
+				AND = {
+					has_country_flag = nhs_invasion_second_part
+					has_country_flag = nhs_invasion_second_part_begins
+				}
+				has_country_flag = nhs_invasion_over
+			}
+			NOT = { has_country_flag = nhs_abandoned_greece }
+			NOT = { owns = 151 }
+			151 = {
+				owner = {
+					NOT = { has_country_flag = nhs_got_constantinople_deal }
+				}
+			}
+		}
+		allow = {
+			dip_power = 50
+			151 = {
+				owner = {
+					culture_group = byzantine
+				}
+			}
+		}
+
+		effect = {
+			add_dip_power = -50
+			hidden_effect = {
+				151 = {
+					owner = {
+						country_event = { id = nhs2_mainlandevents.32 days = 1 }
+						set_country_flag = nhs_got_constantinople_deal
+					}
+				}
+			}
+			custom_tooltip = nhs_req_constantinople_country_event_tt
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					151 = {
+						owner = {
+							OR = {
+								is_subject_of = ROOT
+								AND = {
+									NOT = { num_of_cities = 15 }
+									has_opinion = { who = ROOT value = 180 }
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						ai = no
+					}
+					custom_tooltip = nhs_constantinople_deal_agree_tt
+				}
+				hidden_effect = {
+					151 = {
+						owner = {
+							set_country_flag = nhs_agree_to_the_deal
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					ai = no
+				}
+				custom_tooltip = nhs_constantinople_deal_disagree_tt
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_successfull_constantinople_deal_tt
+			tooltip = {
+				151 = {
+					cede_province = ROOT
+					add_core = ROOT
+					owner = {
+						remove_core = 151
+						reverse_add_opinion = {
+							who = ROOT
+							modifier = nhs_constantinople_deal_op
+						}
+						ROOT = {
+							add_truce_with = PREV
+						}
+					}
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_unsuccessfull_constantinople_deal_tt
+			tooltip = {
+				151 = {
+					add_permanent_claim = ROOT
+					owner = {
+						reverse_add_opinion = {
+							who = ROOT
+							modifier = nhs_no_constantinople_deal_op
+						}
+					}
+				}
+			}
 		}
 
 		ai_will_do = {
