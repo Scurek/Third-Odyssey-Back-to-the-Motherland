@@ -12,6 +12,7 @@ country_event = {
 			religion = pantheon_worship
 			religion = aztlan_worship
 		}
+		NOT = { has_ruler_flag = nhs_had_proper_sacrifices }
 		NOT = { has_ruler_modifier = nhs_proper_sacrifices }
 	}
 
@@ -38,30 +39,51 @@ country_event = {
 			has_country_modifier = nhs_high_priests
 		}
 	}
+	
+	immediate = {
+		hidden_effect = {
+			set_ruler_flag = nhs_had_proper_sacrifices
+		}
+	}
 
 	option = {	
 		name = "NHSRELIGIONEVENTSNAME1A"
 		ai_chance = { 
 			factor = 100 
 			modifier = {
-				factor = 0.1
-				NOT = { treasury = 50 }
+				factor = 0
+				ai = yes
 			}
+		}
+		if = {
+			limit = {
+				NOT = { monthly_income = 1 }
+			}
+			add_treasury = -12
+		}
+		else_if = {
+			limit = {
+				NOT = { monthly_income = 62 }
+			}
+			add_years_of_income = -0.10
+		}
+		else = {
+			add_treasury = -75
 		}
 		add_treasury = -50
 		add_ruler_modifier = {
 			name = nhs_proper_sacrifices
 			duration = -1
-		}	
+		}
 	}
 	option = {	
 		name = "NHSRELIGIONEVENTSNAME1B"
 		ai_chance = { 
 			factor = 10
-			modifier = {
-				factor = 10
-				NOT = { treasury = 50 }
-			}
+			# modifier = {
+				# factor = 10
+				# NOT = { treasury = 50 }
+			# }
 		}
 		add_prestige = 5
 	}
