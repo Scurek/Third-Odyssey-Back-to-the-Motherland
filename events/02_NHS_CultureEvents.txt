@@ -2110,6 +2110,7 @@ province_event = {
 	hidden = yes
 
     trigger = {
+		has_estate = estate_nhs_native_council
 		owner = {
 			OR = {
 				culture_group = elysian_group
@@ -2118,7 +2119,6 @@ province_event = {
 			}
 			has_estate = estate_nhs_native_council
 		}
-		has_estate = estate_nhs_native_council
 		NOT = {
 			native_culture = yes
 		}
@@ -2127,6 +2127,9 @@ province_event = {
 		OR = {
 			NOT = { owner = { primary_culture = elysian } }
 			any_neighbor_province = {
+				native_culture = yes
+			}
+			any_empty_neighbor_province = {
 				native_culture = yes
 			}
 		}
@@ -2142,12 +2145,34 @@ province_event = {
 						primary_culture = elysian
 					}
 				}
-				random_neighbor_province = {
+				if = {
 					limit = {
-						native_culture = yes
+						any_neighbor_province = {
+							native_culture = yes
+						}
 					}
-					ROOT = {
-						change_culture = PREV
+					random_neighbor_province = {
+						limit = {
+							native_culture = yes
+						}
+						ROOT = {
+							change_culture = PREV
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						any_empty_neighbor_province = {
+							native_culture = yes
+						}
+					}
+					random_empty_neighbor_province = {
+						limit = {
+							native_culture = yes
+						}
+						ROOT = {
+							change_culture = PREV
+						}
 					}
 				}
 			}
