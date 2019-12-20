@@ -631,11 +631,30 @@ estate_burghers =
 		}
 		
 		effect = {
-			custom_tooltip = nhs_venerian_autonomy_tt
+			## Three different description since for some reason using stuff like $ESTATE_BURGHERS$ to get the name doesn't work in custom tooltips.
+			if = {
+				limit = {
+					has_country_flag = nhs_new_flight_sold_morea_to_venice
+					has_country_flag = nhs_new_flight_taken_venetians
+					has_country_modifier = nhs_no_merchant_class
+				}
+				custom_tooltip = nhs_venerian_autonomy_delfini_tt
+			}
+			else_if = {
+				limit = {
+					NOT = { has_country_flag = nhs_new_flight_sold_morea_to_venice }
+					has_country_flag = nhs_new_flight_taken_venetians
+					has_country_modifier = nhs_no_merchant_class
+				}
+				custom_tooltip = nhs_venerian_autonomy_trevisano_tt
+			}
+			else = {
+				custom_tooltip = nhs_venerian_autonomy_tt
+			}
 			hidden_effect = {
 				every_owned_province = {
 					limit = { has_estate = estate_burghers }
-					add_local_autonomy = 25
+					add_local_autonomy = 33
 					add_province_modifier = {
 						name = "nhs2_venetian_benign_neglect"
 						duration = 3650
@@ -660,7 +679,7 @@ estate_burghers =
 				factor = 0
 				estate_loyalty = {
 					estate = estate_maratha
-					loyalty = 30
+					loyalty = 40
 				}				
 			}
 		}
