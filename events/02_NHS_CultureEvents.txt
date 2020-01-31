@@ -896,26 +896,87 @@ country_event = {
 
 	option = {
 		name = "nhs2_cultureevents.8.a"
-		every_owned_province = {
+		if = {
 			limit = {
-				is_colony = no
-				OR = {
-					nhs_borealian_areas = yes
-					AND = {
-						owner = {
-							NOT = { has_global_flag = nhs_hyperborealians_appeared }
-						}
-						nhs_hyperborealian_areas = yes
-					}	
+				NOT = { has_global_flag = nhs_hyperborealians_appeared }
+				any_owned_province = {
+					nhs_hyperborealian_areas = yes
 				}
-				NOT = { culture = shqipproi }
-				NOT = { culture = elysameric }
-				NOT = { culture = borealian }
-				culture_group = elysian_group
-				#has_seat_in_parliament = no
 			}
-			change_culture = borealian
-		}	
+			if = {
+				limit = {
+					NOT = {
+						capital_scope = {
+							OR = {
+								nhs_borealian_areas = yes
+								nhs_hyperborealian_areas = yes
+							}
+						} 
+					}
+				}
+				custom_tooltip = nhs_spawn_borealian_additional_autonomy_tt
+			}
+			else = {
+				custom_tooltip = nhs_spawn_borealian_additional_tt
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					NOT = {
+						capital_scope = {
+							nhs_borealian_areas = yes
+						} 
+					}
+				}
+				custom_tooltip = nhs_spawn_borealian_autonomy_tt
+			}
+			else = {
+				custom_tooltip = nhs_spawn_borealian_tt
+			}
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					is_colony = no
+					NOT = { culture = shqipproi }
+					NOT = { culture = elysameric }
+					OR = {
+						nhs_borealian_areas = yes
+						AND = {
+							owner = {
+								NOT = { has_global_flag = nhs_hyperborealians_appeared }
+							}
+							nhs_hyperborealian_areas = yes
+						}	
+					}
+					NOT = { culture = borealian }
+					culture_group = elysian_group
+				}
+				if = {
+					limit = {
+						NOT = { has_province_flag = nhs_got_autonomy }
+						NOT = {
+							owner = {
+								capital_scope = {
+									OR = {
+										nhs_borealian_areas = yes
+										AND = {
+											owner = {
+												NOT = { has_global_flag = nhs_hyperborealians_appeared }
+											}
+											nhs_hyperborealian_areas = yes
+										}
+									}
+								} 
+							} 
+						}
+					}
+					set_province_flag = nhs_got_autonomy
+					add_local_autonomy = 10
+				}
+			}
+		}
 	}
 }
 
@@ -989,7 +1050,6 @@ country_event = {
 				OR = {
 					region = california_region
 					AND = {
-						region = mexico_region
 						NOT = { province_group = mesoamerica_pgroup }
 						area = nayarit_area
 					}
@@ -1005,34 +1065,12 @@ country_event = {
 	}
 	desc = {
 		trigger = {
-			NOT = {
-				any_owned_province = {
-					OR = {
-						nhs_hesperidian_atlas = yes
-						AND = {
-							region = mexico_region
-							NOT = { province_group = mesoamerica_pgroup }
-						}
-						area = chihuahua_area
-					}
-					is_colony = no
-					NOT = { has_port = yes }
-					NOT = { culture = shqipproi }
-					NOT = { culture = elysameric }
-					culture_group = elysian_group
-					any_neighbor_province = {
-						owned_by = ROOT
-						region = rio_grande_region
-					}
-				}
-			}
 			any_owned_province = {
 				OR = {
 					region = california_region
 					AND = {
-						region = mexico_region
-						NOT = { province_group = mesoamerica_pgroup }
 						area = nayarit_area
+						NOT = { province_group = mesoamerica_pgroup }
 					}
 				}
 				has_port = yes
@@ -1046,33 +1084,34 @@ country_event = {
 	}
 	desc = {
 		trigger = {
-			NOT = {
-				any_owned_province = {
-					OR = {
-						region = california_region
-						AND = {
-							region = mexico_region
-							NOT = { province_group = mesoamerica_pgroup }
-							area = nayarit_area
-						}
-					}
-					has_port = yes
-					is_colony = no
-					NOT = { culture = shqipproi }
-					NOT = { culture = elysameric }
-					culture_group = elysian_group
-				}
-			}
+			always = yes
+			# NOT = {
+				# any_owned_province = {
+					# OR = {
+						# region = california_region
+						# AND = {
+							# NOT = { province_group = mesoamerica_pgroup }
+							# area = nayarit_area
+						# }
+					# }
+					# has_port = yes
+					# is_colony = no
+					# NOT = { culture = shqipproi }
+					# NOT = { culture = elysameric }
+					# culture_group = elysian_group
+				# }
+			# }
 		}
 		desc = nhs2_cultureevents.10.db #From the east
 	}
+	
+	
 	picture = {
 		trigger = {
 			any_owned_province = {
 				OR = {
 					region = california_region
 					AND = {
-						region = mexico_region
 						NOT = { province_group = mesoamerica_pgroup }
 						area = nayarit_area
 					}
@@ -1088,23 +1127,24 @@ country_event = {
 	}
 	picture = {
 		trigger = {
-			NOT = {
-				any_owned_province = {
-					OR = {
-						region = california_region
-						AND = {
-							region = mexico_region
-							NOT = { province_group = mesoamerica_pgroup }
-							area = nayarit_area
-						}
-					}
-					has_port = yes
-					is_colony = no
-					NOT = { culture = shqipproi }
-					NOT = { culture = elysameric }
-					culture_group = elysian_group
-				}
-			}
+			always = yes
+			# NOT = {
+				# any_owned_province = {
+					# OR = {
+						# region = california_region
+						# AND = {
+							# region = mexico_region
+							# NOT = { province_group = mesoamerica_pgroup }
+							# area = nayarit_area
+						# }
+					# }
+					# has_port = yes
+					# is_colony = no
+					# NOT = { culture = shqipproi }
+					# NOT = { culture = elysameric }
+					# culture_group = elysian_group
+				# }
+			# }
 		}
 		picture = CITY_DEVELOPMENT_eventPicture
 	}
@@ -1134,68 +1174,89 @@ country_event = {
 	
 	immediate = {
 		set_global_flag = nhs_hesperidians_appeared
+		# hidden_effect = {
+			# if = {
+				# limit = {
+					# any_owned_province = {
+						# OR = {
+							# nhs_hesperidian_atlas = yes
+							# AND = {
+								# region = mexico_region
+								# NOT = { province_group = mesoamerica_pgroup }
+							# }
+							# area = chihuahua_area
+						# }
+						# is_colony = no
+						# NOT = { has_port = yes }
+						# NOT = { culture = shqipproi }
+						# NOT = { culture = elysameric }
+						# culture_group = elysian_group
+						# any_neighbor_province = {
+							# owned_by = ROOT
+							# region = rio_grande_region
+						# }
+					# }
+					# any_owned_province = {
+						# OR = {
+							# region = california_region
+							# AND = {
+								# area = nayarit_area
+								# NOT = { province_group = mesoamerica_pgroup }
+							# }
+						# }
+						# has_port = yes
+						# is_colony = no
+						# NOT = { culture = shqipproi }
+						# NOT = { culture = elysameric }
+						# culture_group = elysian_group
+					# }
+				# }
+				# set_global_flag = nhs_hesperidians_appear_sea
+				# set_global_flag = nhs_hesperidians_appear_east
+			# }
+			# else_if = {
+				# limit = {
+					# NOT = {
+						# any_owned_province = {
+							# OR = {
+								# region = california_region
+								# AND = {
+									# area = nayarit_area
+									# NOT = { province_group = mesoamerica_pgroup }
+								# }
+							# }
+							# has_port = yes
+							# is_colony = no
+							# NOT = { culture = shqipproi }
+							# NOT = { culture = elysameric }
+							# culture_group = elysian_group
+						# }
+					# }
+				# }
+				# set_global_flag = nhs_hesperidians_appear_east
+			# }
+			# else = {
+				# set_global_flag = nhs_hesperidians_appear_sea
+			# }
+		# }
+	}
+
+	option = {
+		name = "nhs2_cultureevents.10.a"
+		if = {
+			limit = {
+				NOT = {
+					capital_scope = {
+						nhs_hesperidian_areas = yes
+					} 
+				}
+			}
+			custom_tooltip = nhs_spawn_hesperidian_both_autonomy_tt
+		}
+		else = {
+			custom_tooltip = nhs_spawn_hesperidian_both_tt
+		}
 		hidden_effect = {
-			if = {
-				limit = {
-					any_owned_province = {
-						OR = {
-							nhs_hesperidian_atlas = yes
-							AND = {
-								region = mexico_region
-								NOT = { province_group = mesoamerica_pgroup }
-							}
-							area = chihuahua_area
-						}
-						is_colony = no
-						NOT = { has_port = yes }
-						NOT = { culture = shqipproi }
-						NOT = { culture = elysameric }
-						culture_group = elysian_group
-						any_neighbor_province = {
-							owned_by = ROOT
-							region = rio_grande_region
-						}
-					}
-					any_owned_province = {
-						OR = {
-							region = california_region
-							AND = {
-								area = nayarit_area
-								NOT = { province_group = mesoamerica_pgroup }
-							}
-						}
-						has_port = yes
-						is_colony = no
-						NOT = { culture = shqipproi }
-						NOT = { culture = elysameric }
-						culture_group = elysian_group
-					}
-				}
-				set_global_flag = nhs_hesperidians_appear_sea
-				set_global_flag = nhs_hesperidians_appear_east
-			}
-			else_if = {
-				limit = {
-					any_owned_province = {
-						OR = {
-							region = california_region
-							AND = {
-								area = nayarit_area
-								NOT = { province_group = mesoamerica_pgroup }
-							}
-						}
-						has_port = yes
-						is_colony = no
-						NOT = { culture = shqipproi }
-						NOT = { culture = elysameric }
-						culture_group = elysian_group
-					}
-				}
-				set_global_flag = nhs_hesperidians_appear_sea
-			}
-			else = {
-				set_global_flag = nhs_hesperidians_appear_east
-			}
 			every_owned_province = {
 				limit = {
 					is_colony = no
@@ -1217,107 +1278,92 @@ country_event = {
 			}
 		}
 	}
-
-	option = {
-		name = "nhs2_cultureevents.10.a"
-		every_owned_province = {
-			limit = {
-				is_colony = no
-				nhs_hesperidian_areas = yes
-				culture_group = elysian_group
-				NOT = { culture = shqipproi }
-				NOT = { culture = elysameric }
-				#has_seat_in_parliament = no
-			}
-			change_culture = hesperidian
-		}	
-	}
 }
 
-# Hesperidians appear from land
-country_event = {
-	id = nhs2_cultureevents.21
-	title = nhs2_cultureevents.21.t
-	desc = nhs2_cultureevents.21.d
-	picture = CITY_DEVELOPMENT_eventPicture
+# # Hesperidians appear from land
+# country_event = {
+	# id = nhs2_cultureevents.21
+	# title = nhs2_cultureevents.21.t
+	# desc = nhs2_cultureevents.21.d
+	# picture = CITY_DEVELOPMENT_eventPicture
 
-    trigger = {
-		has_global_flag = nhs_hesperidians_appeared
-		NOT = { has_global_flag = nhs_hesperidians_appeared_east }
-		culture_group = elysian_group
-		OR = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			primary_culture = high_elysian
-		}
-		any_owned_province = {
-			OR = {
-				nhs_hesperidian_atlas = yes
-				AND = {
-					region = mexico_region
-					NOT = { province_group = mesoamerica_pgroup }
-				}
-				area = chihuahua_area
-			}
-			is_colony = no
-			NOT = { has_port = yes }
-			NOT = { culture = shqipproi }
-			NOT = { culture = elysameric }
-			culture_group = elysian_group
-			any_neighbor_province = {
-				owned_by = ROOT
-				region = rio_grande_region
-			}
-		}
-	}
+    # trigger = {
+		# has_global_flag = nhs_hesperidians_appeared
+		# NOT = { has_global_flag = nhs_hesperidians_appeared_east }
+		# culture_group = elysian_group
+		# OR = {
+			# nhs_condition_all_ely = { KOMANDA = tag }
+			# primary_culture = high_elysian
+		# }
+		# any_owned_province = {
+			# OR = {
+				# nhs_hesperidian_atlas = yes
+				# AND = {
+					# region = mexico_region
+					# NOT = { province_group = mesoamerica_pgroup }
+				# }
+				# area = chihuahua_area
+			# }
+			# is_colony = no
+			# NOT = { has_port = yes }
+			# NOT = { culture = shqipproi }
+			# NOT = { culture = elysameric }
+			# culture_group = elysian_group
+			# any_neighbor_province = {
+				# owned_by = ROOT
+				# region = rio_grande_region
+			# }
+		# }
+	# }
 	
-	immediate = {
-		set_global_flag = nhs_hesperidians_appeared_east
-	}
+	# immediate = {
+		# set_global_flag = nhs_hesperidians_appeared_east
+	# }
 
-	option = {
-		name = "nhs2_cultureevents.21.a"
-	}
-}
+	# option = {
+		# name = "nhs2_cultureevents.21.a"
+	# }
+# }
 
-# Hesperidians appear from sea
-country_event = {
-	id = nhs2_cultureevents.22
-	title = nhs2_cultureevents.22.t
-	desc = nhs2_cultureevents.22.d
-	picture = western_coast_eventPicture
+# # Hesperidians appear from sea
+# country_event = {
+	# id = nhs2_cultureevents.22
+	# title = nhs2_cultureevents.22.t
+	# desc = nhs2_cultureevents.22.d
+	# picture = western_coast_eventPicture
 
-    trigger = {
-		has_global_flag = nhs_hesperidians_appeared
-		NOT = { has_global_flag = nhs_hesperidians_appeared_sea }
-		culture_group = elysian_group
-		OR = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			primary_culture = high_elysian
-		}
-		any_owned_province = {
-			OR = {
-				region = california_region
-				AND = {
-					area = nayarit_area
-					NOT = { province_group = mesoamerica_pgroup }
-				}
-			}
-			has_port = yes
-			is_colony = no
-			NOT = { culture = shqipproi }
-			NOT = { culture = elysameric }
-			culture_group = elysian_group
-		}
-	}
+    # trigger = {
+		# has_global_flag = nhs_hesperidians_appeared
+		# NOT = { has_global_flag = nhs_hesperidians_appeared_sea }
+		# culture_group = elysian_group
+		# OR = {
+			# nhs_condition_all_ely = { KOMANDA = tag }
+			# primary_culture = high_elysian
+		# }
+		# any_owned_province = {
+			# OR = {
+				# region = california_region
+				# AND = {
+					# area = nayarit_area
+					# NOT = { province_group = mesoamerica_pgroup }
+				# }
+			# }
+			# has_port = yes
+			# is_colony = no
+			# NOT = { culture = shqipproi }
+			# NOT = { culture = elysameric }
+			# culture_group = elysian_group
+		# }
+	# }
 	
-	immediate = {
-		set_global_flag = nhs_hesperidians_appeared_sea
-	}
+	# immediate = {
+		# set_global_flag = nhs_hesperidians_appeared_sea
+	# }
 
-	option = {
-		name = "nhs2_cultureevents.22.a"
-	}
-}
+	# option = {
+		# name = "nhs2_cultureevents.22.a"
+	# }
+# }
 
 # The Lakonian Spartans timer
 country_event = {
@@ -1495,10 +1541,11 @@ country_event = {
 			NOT = { culture = elysameric }
 			is_colony = no
 			culture_group = elysian_group
-			OR = {
-				NOT = { province_id = 481 }
-				481 = { owned_by = ROOT }
-			}
+			NOT = { province_id = 481 }
+			# OR = {
+				# NOT = { province_id = 481 }
+				# 481 = { owned_by = ROOT }
+			# }
 		}
 	}
 	
@@ -1571,48 +1618,16 @@ country_event = {
 			is_colony = no
 			culture_group = elysian_group
 			#has_seat_in_parliament = no
-			OR = {
-				NOT = { province_id = 481 }
-				481 = { owned_by = ROOT }
-			}
+			NOT = { province_id = 481 }
+			# OR = {
+				# NOT = { province_id = 481 }
+				# 481 = { owned_by = ROOT }
+			# }
 		}
-		
 	}
 	
 	immediate = {
 		set_global_flag = nhs_kykladian_appeared
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					is_colony = no
-					region = carribeans_region
-					NOT = { culture = shqipproi }
-					NOT = { culture = elysameric }
-					NOT = { culture = kykladian }
-					# OR = {
-						# NOT = { province_id = 481 }
-						# 481 = { owner = { tag = KYK } }
-					# }
-					culture_group = elysian_group
-					owner = {
-						NOT = {
-							capital_scope = {
-								region = carribeans_region
-							}
-						}
-					}
-				}
-				change_culture = kykladian
-				if = {
-					limit = {
-						NOT = { has_province_flag = nhs_got_autonomy }
-						NOT = { owner = { capital_scope = { region = carribeans_region } } }
-					}
-					set_province_flag = nhs_got_autonomy
-					add_local_autonomy = 20
-				}
-			}
-		}
 	}
 
 	option = {
@@ -1628,25 +1643,29 @@ country_event = {
 				tag = NHS
 			}
 		}
-		custom_tooltip = nhs_spawn_kykladian_tt
-		# every_owned_province = {
-			# limit = {
-				# is_colony = no
-				# region = carribeans_region
-				# #NOT = { culture = kykladian }
-				# culture_group = elysian_group
-				# NOT = { culture = shqipproi }
-				# NOT = { culture = elysameric }
-				# #has_seat_in_parliament = no
-				# # OR = {
-					# # NOT = { province_id = 481 }
-					# # 481 = { owner = { tag = KYK } }
-				# # }
-			# }
-			# custom_tooltip = nhs_culture_changes_to_tt
-			# #change_culture = kykladian
-			# add_local_autonomy = 20
-		# }
+		custom_tooltip = nhs_spawn_kykladian_autonomy_tt
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					is_colony = no
+					region = carribeans_region
+					NOT = { culture = shqipproi }
+					NOT = { culture = elysameric }
+					NOT = { culture = kykladian }
+					NOT = { province_id = 481 }
+					culture_group = elysian_group
+				}
+				change_culture = kykladian
+				if = {
+					limit = {
+						NOT = { has_province_flag = nhs_got_autonomy }
+						NOT = { owner = { capital_scope = { region = carribeans_region } } }
+					}
+					set_province_flag = nhs_got_autonomy
+					add_local_autonomy = 20
+				}
+			}
+		}
 	}
 	
 	option = {
@@ -1673,15 +1692,9 @@ country_event = {
 			limit = {
 				is_colony = no
 				region = carribeans_region
-				#NOT = { culture = kykladian }
 				culture_group = elysian_group
 				NOT = { culture = shqipproi }
 				NOT = { culture = elysameric }
-				#has_seat_in_parliament = no
-				# OR = {
-					# NOT = { province_id = 481 }
-					# 481 = { owner = { tag = KYK } }
-				# }
 			}
 			change_culture = kykladian
 		}
@@ -1755,6 +1768,23 @@ country_event = {
 	
 	immediate = {
 		set_global_flag = nhs_hyperborealians_appeared
+	}
+
+	option = {
+		name = "nhs2_cultureevents.8.a"
+		if = {
+			limit = {
+				NOT = {
+					capital_scope = {
+						nhs_hyperborealian_areas = yes
+					} 
+				}
+			}
+			custom_tooltip = nhs_spawn_thoulean_autonomy_tt
+		}
+		else = {
+			custom_tooltip = nhs_spawn_thoulean_tt
+		}
 		hidden_effect = {
 			every_owned_province = {
 				limit = {
@@ -1782,22 +1812,6 @@ country_event = {
 				}
 			}
 		}
-	}
-
-	option = {
-		name = "nhs2_cultureevents.8.a"
-		every_owned_province = {
-			limit = {
-				is_colony = no
-				nhs_hyperborealian_areas = yes
-				#NOT = { culture = hyperborealian }
-				NOT = { culture = shqipproi }
-				NOT = { culture = elysameric }
-				culture_group = elysian_group
-				#has_seat_in_parliament = no
-			}
-			change_culture = hyperborealian
-		}	
 	}
 }
 
