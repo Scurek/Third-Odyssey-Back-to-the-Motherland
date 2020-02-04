@@ -18,6 +18,7 @@ country_event = {
 		POW = {
 			is_at_war = no
 			owns_core_province = 952
+			NOT = { num_of_cities = 2 }
 		}
 	}
 	
@@ -165,6 +166,9 @@ country_event = {
 	
 	option = {
 		name = nhs_powhatan_deal.2.a # Hell yea!
+		trigger = {
+			NOT = { num_of_cities = 2 }
+		}
 		ai_chance = { factor = 100 }
 		random_province = {
 			limit = {
@@ -198,6 +202,13 @@ country_event = {
 					NOT = { mil_tech = 3 }
 				}
 				add_mil_tech = 1
+			}
+			if = {
+				limit = {
+					is_subject = yes
+				}
+				grant_independence = yes
+				create_alliance = NHS
 			}
 		}
 		NHS = { country_event = { id = nhs_powhatan_deal.3 days = 1 } }
@@ -276,6 +287,21 @@ country_event = {
 				}
 				add_mil_tech = 1
 			}
+			if = {
+				limit = {
+					is_subject = yes
+				}
+				grant_independence = yes
+				create_alliance = ROOT
+				hidden_effect = {
+					every_province = {
+						limit = {
+							owned_by = POW
+						}
+						discover_country = ROOT
+					}
+				}
+			}
 		}
 	}
 }
@@ -293,17 +319,56 @@ country_event = {
 		name = OK
 		if = {
 			limit = {
+				has_global_flag = nhs_30_cash
+			}
+			add_treasury = 30
+			clr_global_flag = nhs_30_cash
+		}
+		if = {
+			limit = {
 				has_global_flag = nhs_60_cash
 			}
 			add_treasury = 60
-			clr_global_flag = nhs_50_cash
+			clr_global_flag = nhs_60_cash
 		}
 		if = {
 			limit = {
 				has_global_flag = nhs_120_cash
 			}
 			add_treasury = 120
-			clr_global_flag = nhs_110_cash
+			clr_global_flag = nhs_120_cash
 		}
+	}
+}
+
+#Initial Event
+country_event = {
+	id = nhs_powhatan_deal.5
+	title = nhs_powhatan_deal.5.t
+	desc = nhs_powhatan_deal.5.d
+	picture = NATIVE_DEBATE_eventPicture
+	
+	fire_only_once = yes
+		
+	trigger = {
+		ai = no
+		tag = NHS
+		exists = POW
+		owns = 953
+		has_discovered = 952
+		POW = {
+			owns_core_province = 952
+			OR = {
+				is_subject = no
+				is_subject_of = ROOT
+			}
+		}
+		NOT = { has_global_flag = nhs_pow_dead_done }
+	}
+	
+	option = {
+		name = "nhs_powhatan_deal.5.a"
+		custom_tooltip = nhs_unlock_powhatan_deal_dec_tt
+		set_country_flag = nhs_enable_powhatan_deal
 	}
 }

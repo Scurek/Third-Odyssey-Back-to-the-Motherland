@@ -216,6 +216,18 @@ country_event = {
 			country_event = { id = nhs_new_flightevents.3 days = 3 }
 		}
 	}
+	after = {
+		hidden_effect = {
+			MOE = {
+				every_owned_province = {
+					limit = {
+						is_core = ROOT
+					}
+					remove_core = ROOT
+				}
+			}
+		}
+	}
 }
 
 ### Event for Venice if you sell them Morea
@@ -756,6 +768,34 @@ country_event = {
 		name = "nhs_new_flightevents.5.j"
 		nhs_low_supply_warning = yes
 		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = nhs_new_flight_taken_venetians
+				}
+				if = {
+					limit = {
+						has_country_flag = nhs_new_flight_sold_morea_to_venice
+					}
+					define_advisor = {
+						type = naval_reformer
+						name = "Delfino Delfin"
+						skill = 2
+						culture = venetian
+						religion = catholic
+						cost_multiplier = 0.25
+					}
+				}
+				else = {
+					define_advisor = {
+						type = naval_reformer
+						name = "Gabriele Trevisano"
+						skill = 2
+						culture = venetian
+						religion = catholic
+						cost_multiplier = 0.25
+					}
+				}
+			}
 			country_event = { id = nhs_new_flightevents.8 days = 7 }
 		}
 	}
@@ -1133,6 +1173,34 @@ country_event = {
 		name = "nhs_new_flightevents.5.j"
 		nhs_low_supply_warning = yes
 		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = nhs_new_flight_taken_venetians
+				}
+				if = {
+					limit = {
+						has_country_flag = nhs_new_flight_sold_morea_to_venice
+					}
+					define_advisor = {
+						type = naval_reformer
+						name = "Delfino Delfin"
+						skill = 2
+						culture = venetian
+						religion = catholic
+						cost_multiplier = 0.25
+					}
+				}
+				else = {
+					define_advisor = {
+						type = naval_reformer
+						name = "Gabriele Trevisano"
+						skill = 2
+						culture = venetian
+						religion = catholic
+						cost_multiplier = 0.25
+					}
+				}
+			}
 			country_event = { id = nhs_new_flightevents.8 days = 7 }
 		}
 	}
@@ -2429,6 +2497,10 @@ country_event = {
 				NHS = {
 					add_stability = 1
 					add_treasury = 150
+					add_historical_friend = MOE
+					MOE = {
+						add_historical_friend = NHS
+					}
 				}
 				clr_country_flag = nhs_new_flight_sold_morea_to_athens
 			}
@@ -2685,7 +2757,7 @@ country_event = {
 			### Next event
 			NHS = {
 				swap_non_generic_missions = yes
-				#add_corruption = -100
+				add_corruption = -100
 				country_event = { id = nhs_new_flightevents.16 days = 3 }
 			}
 			if = {
@@ -2942,6 +3014,22 @@ country_event = {
 					release = RUM
 				}
 				add_permanent_claim = ROOT
+			}
+			every_province = {
+				limit = {
+					owned_by = BYZ
+				}
+				add_core = RUM
+				add_permanent_claim = ROOT
+			}
+			BYZ = {
+				release = RUM
+			}
+			every_province = {
+				limit = {
+					is_core = BYZ
+				}
+				remove_core = BYZ
 			}
 			RUM = {
 				nhs_change_government = { GOV = monarchy }

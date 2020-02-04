@@ -65,11 +65,14 @@ country_decisions = {
 			stability = 1
 			OR = {
 				num_of_cities = 20
-				any_known_country = {
-					technology_group = north_american
-					has_opinion = { who = ROOT value = 100 }
-				}
 				dip = 5
+				any_known_country = {
+					OR = {
+						technology_group = north_american
+						technology_group = hellenised_american
+					}
+					has_opinion = { who = ROOT value = 100 }
+				}	
 			}
 		}
 
@@ -986,43 +989,43 @@ country_decisions = {
 		}
 	}
 
-	nhs_province_development_hide = {
-		#major = yes
-		potential = {
-			num_of_cities = 20
-			ai = no
-			NOT = { has_country_flag = nhs_hide_development }
-			OR = {
-				nhs_is_elysia = yes
-				culture_group = elysian_group
-				culture_group = spartakian_group
-				culture_group = norse_g
-			}
-		}
+	# nhs_province_development_hide = {
+		# #major = yes
+		# potential = {
+			# num_of_cities = 20
+			# ai = no
+			# NOT = { has_country_flag = nhs_hide_development }
+			# OR = {
+				# nhs_is_elysia = yes
+				# culture_group = elysian_group
+				# culture_group = spartakian_group
+				# culture_group = norse_g
+			# }
+		# }
 
-		allow = {
-			custom_trigger_tooltip = {
-				NOT = { has_country_modifier = province_development_hide_cooldown }
-				tooltip = province_development_hide_ttooltip
-			}
-		}
+		# allow = {
+			# custom_trigger_tooltip = {
+				# NOT = { has_country_modifier = province_development_hide_cooldown }
+				# tooltip = province_development_hide_ttooltip
+			# }
+		# }
 
-		effect = {
-			set_country_flag = nhs_hide_development
-			custom_tooltip = province_development_hide_tooltip
-			hidden_effect = {
-				add_country_modifier = {
-					name = province_development_hide_cooldown
-					duration = 365
-					hidden = yes
-				}
-			}
-		}
+		# effect = {
+			# set_country_flag = nhs_hide_development
+			# custom_tooltip = province_development_hide_tooltip
+			# hidden_effect = {
+				# add_country_modifier = {
+					# name = province_development_hide_cooldown
+					# duration = 365
+					# hidden = yes
+				# }
+			# }
+		# }
 
-		ai_will_do = {
-			factor = 0
-		}
-	}
+		# ai_will_do = {
+			# factor = 0
+		# }
+	# }
 	nhs_province_development_show = {
 		#major = yes
 		potential = {
@@ -1111,7 +1114,7 @@ country_decisions = {
 						has_country_flag = nhs_ideas_unlocked
 					}
 				}
-				custom_tooltip = idea_groups_unlocked
+				#custom_tooltip = idea_groups_unlocked
 				set_country_flag = nhs_ideas_unlocked
 			}
 			hidden_effect = {
@@ -2177,24 +2180,29 @@ country_decisions = {
 		potential = {
 			ai = no
 			tag = NHS
+			exists = POW
+			has_country_flag = nhs_enable_powhatan_deal
 			POW = {
 				ai = yes
-			}
-			has_discovered = 952
-			is_at_war = no
-			exists = POW
-			POW = {
 				owns_core_province = 952
 			}
-			owns = 953
-			NOT = { has_global_flag = nhs_pow_dead_done }
+			has_discovered = 952
+			#is_at_war = no
+			#owns = 953
+			#NOT = { has_global_flag = nhs_pow_dead_done }
 		}
 
 		allow = {
 			num_of_cities = 2
+			is_at_war = no
 			POW = {
 				is_at_war = no
 				has_opinion = { who = ROOT value = 100 }
+				NOT = { num_of_cities = 2 }
+				OR = {
+					is_subject = no
+					is_subject_of = ROOT
+				}
 			}
 			OR = {
 				treasury = 120
@@ -2248,7 +2256,22 @@ country_decisions = {
 			}
 			POW = { country_event = { id = nhs_powhatan_deal.2 } }
 			set_global_flag = nhs_pow_dead_done
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_unlock_powhatan_deal_transfer_province_tt
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					POW = {
+						is_subject_of = ROOT
+					}
+				}
+				custom_tooltip = nhs_remove_powhattan_subject_tt
+			}
+			else = {
+				custom_tooltip = nhs_remove_powhattan_subject_warning_tt
+			}
 		}
+			
 		ai_will_do = {
 			factor = 1
 		}
@@ -2260,28 +2283,31 @@ country_decisions = {
 		potential = {
 			ai = yes
 			tag = NHS
-			POW = {
-				ai = yes
-			}
-			has_discovered = 952
-			is_at_war = no
 			exists = POW
 			POW = {
+				ai = yes
 				owns_core_province = 952
+				NOT = { num_of_cities = 2 }
+				OR = {
+					is_subject = no
+					is_subject_of = ROOT
+				}
 			}
+			has_discovered = 952
 			owns = 953
 			NOT = { has_global_flag = nhs_pow_dead_done }
 		}
 
 		allow = {
 			num_of_cities = 2
+			is_at_war = no
 			POW = {
 				is_at_war = no
 			}
 			OR = {
-				treasury = 120
+				treasury = 60
 				AND = {
-					treasury = 60
+					treasury = 30
 					num_of_cities = 5
 				}
 			}
@@ -2318,15 +2344,15 @@ country_decisions = {
 				limit = {
 					num_of_cities = 5
 				}
-				add_treasury = -60
-				set_global_flag = nhs_60_cash
+				add_treasury = -30
+				set_global_flag = nhs_30_cash
 			}
 			if = {
 				limit = {
 					NOT = { num_of_cities = 5 }
 				}
-				add_treasury = -120
-				set_global_flag = nhs_120_cash
+				add_treasury = -60
+				set_global_flag = nhs_60_cash
 			}
 			POW = { country_event = { id = nhs_powhatan_deal.2 } }
 			set_global_flag = nhs_pow_dead_done
