@@ -30,11 +30,11 @@
 marketplace = {
 	cost = 100
 	time = 12
-	
+
 	modifier = {
 		province_trade_power_modifier = 0.5
 	}
-	
+
 	ai_will_do = {
 		factor = 1.5 # Because hard-coded AI only considers what it will gain, not what its enemies will lose.
 	}
@@ -46,7 +46,7 @@ workshop = {
 	modifier = {
 		local_production_efficiency = 0.5
 	}
-	
+
 	allow_in_gold_provinces = no
 
 	ai_will_do = {
@@ -60,7 +60,7 @@ temple = {
 	modifier = {
 		local_tax_modifier = 0.4
 	}
-	
+
 	ai_will_do = {
 		factor = 1
 	}
@@ -95,16 +95,16 @@ barracks = {
 #			}
 #		}
 #	}
-	
+
 	ai_will_do = {
 		factor = 1
 	}
-}		
+}
 
 shipyard = {
 	cost = 100
 	time = 12
-	trigger = {
+	build_trigger = {
 		has_port = yes
 		NOT = { has_province_modifier = nhs_elysian_arsenal_tm }
 	}
@@ -113,7 +113,7 @@ shipyard = {
 		ship_recruit_speed = -0.25
 		local_ship_repair = 0.25
 	}
-	
+
 	ai_will_do = {
 		factor = 1
 		modifier = {
@@ -156,13 +156,30 @@ fort_15th = {
 #			}
 #		}
 #	}
-	
+
 	onmap = yes
 	influencing_fort = yes
-	
+
 	ai_will_do = {
 		factor = 1 #Lots of logic in code instead, that multiplies with this value
-	} 
+	}
+}
+
+coastal_defence = {
+
+	cost = 100
+	time = 12
+	build_trigger = {
+		has_port = yes
+	}
+	modifier = {
+		blockade_force_required = 0.5
+		hostile_disembark_speed = 1.0
+	}
+
+	ai_will_do = {
+		factor = 1
+	}
 }
 
 
@@ -175,8 +192,9 @@ courthouse = {
 	modifier = {
 		local_state_maintenance_modifier = -0.25
 		local_autonomy = -0.1
+		local_governing_cost = -0.25
 	}
-	
+
 	ai_will_do = {
 		factor = 1
 	}
@@ -185,15 +203,18 @@ courthouse = {
 dock = {
 	cost = 100
 	time = 12
-	trigger = {
+	build_trigger = {
 		has_port = yes
 	}
 	modifier = {
 		local_sailors_modifier = 0.5
 	}
-	
+
 	ai_will_do = {
 		factor = 1
+		modifier = {
+			factor = 0.5
+		}
 	}
 }
 
@@ -226,7 +247,7 @@ regimental_camp = {
 #			}
 #		}
 #	}
-	
+
 	ai_will_do = {
 		factor = 1
 		modifier = {
@@ -272,12 +293,31 @@ fort_16th = {
 #	}
 
 	onmap = yes
-	
+
 	influencing_fort = yes
-	
+
 	ai_will_do = {
 		factor = 1 #Lots of logic in code instead, that multiplies with this value
-	} 
+	}
+}
+
+naval_battery = {
+
+	make_obsolete = coastal_defence
+	cost = 200
+	time = 12
+	build_trigger = {
+		has_port = yes
+	}
+	modifier = {
+		blockade_force_required = 1.0
+		hostile_disembark_speed = 2.0
+		hostile_fleet_attrition = 5
+	}
+
+	ai_will_do = {
+		factor = 1
+	}
 }
 
 ################################################
@@ -285,7 +325,7 @@ fort_16th = {
 ################################################
 cathedral = {
 	make_obsolete = temple
-	
+
 	cost = 300
 	time = 12
 	modifier = {
@@ -304,7 +344,7 @@ cathedral = {
 	}
 	
 	ai_will_do = {
-		factor = 1	
+		factor = 1
 	}
 }
 
@@ -337,11 +377,11 @@ university = {
 		}
 		modifier = {
 			factor = 0.9
-			OR = 
+			OR =
 			{
 				has_climate = tropical
 				has_climate = arid
-			}			
+			}
 		}
 		modifier = {
 			factor = 0.4
@@ -364,9 +404,9 @@ university = {
 trade_depot = {
 	cost = 300
 	time = 12
-	
+
 	make_obsolete = marketplace
-	
+
 	modifier = {
 		province_trade_power_modifier = 1
 	}
@@ -389,10 +429,10 @@ trade_depot = {
 grand_shipyard = {
 	cost = 300
 	time = 12
-	
+
 	make_obsolete = shipyard
-	
-	trigger = {
+
+	build_trigger = {
 		has_port = yes
 		NOT = { has_province_modifier = nhs_elysian_arsenal_tm }
 	}
@@ -467,7 +507,7 @@ training_fields = {
 	modifier = {
 		local_manpower_modifier = 1
 	}
-	
+
 	ai_will_do = {
 		factor = 1
 	}
@@ -477,9 +517,9 @@ training_fields = {
 fort_17th = {
 	cost = 600
 	time = 30
-	
+
 	make_obsolete = fort_16th
-	
+
 	modifier = {
 		fort_level = 6
 	}
@@ -524,9 +564,9 @@ fort_17th = {
 stock_exchange = {
 	cost = 400
 	time = 12
-	
+
 	make_obsolete = trade_depot
-	
+
 	modifier = {
 		province_trade_power_modifier = 1.25
 	}
@@ -558,7 +598,7 @@ stock_exchange = {
 counting_house = {
 	cost = 400
 	time = 12
-	
+
 	make_obsolete = workshop
 	modifier = {
 		local_production_efficiency = 1
@@ -575,7 +615,7 @@ counting_house = {
 	}
 	
 	allow_in_gold_provinces = no
-	
+
 	ai_will_do = {
 		factor = 1
 	}
@@ -587,12 +627,13 @@ counting_house = {
 town_hall = {
 	cost = 200
 	time = 12
-	
+
 	make_obsolete = courthouse
-	
+
 	modifier = {
 		local_state_maintenance_modifier = -0.5
 		local_autonomy = -0.2
+		local_governing_cost = -0.5
 	}
 	
 	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
@@ -604,7 +645,7 @@ town_hall = {
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAGG = nhs_has_town_hall }
 	}
-	
+
 	ai_will_do = {
 		factor = 1
 	}
@@ -613,10 +654,10 @@ town_hall = {
 drydock = {
 	cost = 300
 	time = 12
-	
+
 	make_obsolete = dock
-	
-	trigger = {
+
+	build_trigger = {
 		has_port = yes
 	}
 	
@@ -632,8 +673,8 @@ drydock = {
 	
 	modifier = {
 		local_sailors_modifier = 1.0
-	}	
-	
+	}
+
 	ai_will_do = {
 		factor = 1
 	}
@@ -642,8 +683,8 @@ drydock = {
 conscription_center = {
 	cost = 400
 	time = 12
-	
-	
+
+
 	make_obsolete = regimental_camp
 
 #	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
@@ -682,7 +723,7 @@ conscription_center = {
 	modifier = {
 		land_forcelimit = 2
 	}
-	
+
 	ai_will_do = {
 		factor = 1
 		modifier = {
@@ -701,10 +742,10 @@ conscription_center = {
 fort_18th = {
 	cost = 800
 	time = 30
-	
-	
+
+
 	make_obsolete = fort_17th
-	
+
 	modifier = {
 		fort_level = 8
 	}
@@ -733,12 +774,12 @@ fort_18th = {
 #	}
 
 	onmap = yes
-	
+
 	influencing_fort = yes
-	
+
 	ai_will_do = {
 		factor = 1 #Lots of logic in code instead, that multiplies with this value
-	} 
+	}
 }
 
 ################################################
@@ -776,12 +817,12 @@ wharf = {
 	
 	ai_will_do = {
 		factor = 1750
-		
-		modifier = { 
+
+		modifier = {
 			factor = 0.4
 			NOT = { base_production = 6 }
 		}
-		modifier = { 
+		modifier = {
 			factor = 1.5
 			base_production = 10
 		}
@@ -789,7 +830,7 @@ wharf = {
 			factor = 1.5
 			base_production = 15
 		}
-		modifier = { 
+		modifier = {
 			factor = 5
 			OR = {
 				has_province_modifier = skanemarket
@@ -910,7 +951,6 @@ farm_estate = {
 		livestock
 		wine
 		norse_mead
-		maize
 	}
 	onmap = yes
 	
@@ -981,6 +1021,176 @@ furnace = {
 	onmap = yes
 	show_separate = yes # Means as a manufactory it will be shown according to the old way
 	
+	ai_will_do = {
+		factor = 1
+	}
+}
+
+ramparts = {
+	manufactory = {
+		all
+	}
+
+	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
+	on_built = {
+		nhs_building_counter_effect_add = { FLAGG = nhs_has_manufactory }
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
+	on_destroyed = {
+		nhs_building_counter_effect_sub = { FLAGG = nhs_has_manufactory }
+	}
+
+	modifier = {
+		local_hostile_attrition = 1
+		local_defensiveness = 0.15
+	}
+	onmap = no
+	show_separate = yes # Means as a manufactory it will be shown according to the old way
+
+	ai_will_do = {
+		factor = 1
+	}
+}
+
+soldier_households = {
+	manufactory = {
+		all
+	}
+
+	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
+	on_built = {
+		nhs_building_counter_effect_add = { FLAGG = nhs_has_manufactory }
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
+	on_destroyed = {
+		nhs_building_counter_effect_sub = { FLAGG = nhs_has_manufactory }
+	}
+
+	bonus_manufactory = { # Will apply an extra modifier if these goods
+		grain
+		fish
+		livestock
+		wine
+	}
+
+	modifier = {
+		local_manpower = 0.75
+	}
+	bonus_modifier = {
+		local_manpower = 0.75
+	}
+	onmap = no
+	show_separate = yes # Means as a manufactory it will be shown according to the old way
+
+	ai_will_do = {
+		factor = 1
+	}
+}
+
+impressment_offices = {
+	manufactory = {
+		all
+	}
+
+	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
+	on_built = {
+		nhs_building_counter_effect_add = { FLAGG = nhs_has_manufactory }
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
+	on_destroyed = {
+		nhs_building_counter_effect_sub = { FLAGG = nhs_has_manufactory }
+	}
+
+	bonus_manufactory = { # Will apply an extra modifier if these goods
+		salt
+		fish
+		naval_supplies
+		tropical_wood
+	}
+
+	build_trigger = {
+		has_port = yes
+	}
+
+	modifier = {
+		local_sailors = 250
+	}
+	bonus_modifier = {
+		local_sailors = 250
+	}
+	onmap = no
+	show_separate = yes # Means as a manufactory it will be shown according to the old way
+
+	ai_will_do = {
+		factor = 1
+	}
+}
+
+
+state_house = {
+	manufactory = {
+		all
+	}
+
+	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
+	on_built = {
+		nhs_building_counter_effect_add = { FLAGG = nhs_has_manufactory }
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
+	on_destroyed = {
+		nhs_building_counter_effect_sub = { FLAGG = nhs_has_manufactory }
+	}
+
+	bonus_manufactory = { # Will apply an extra modifier if these goods
+		paper
+		glass
+		gems
+	}
+
+	build_trigger = {
+		NOT = {
+			area_for_scope_province = {
+				owner = {
+					tag = ROOT
+				}
+				OR = {
+					has_building = state_house
+					has_construction = state_house
+				}
+			}
+		}
+	}
+	
+	keep_trigger = {
+		NOT = {
+			area_for_scope_province = {
+				NOT = { province_id = root }
+				owner = {
+					tag = ROOT
+				}
+				OR = {
+					has_building = state_house
+					has_construction = state_house
+				}
+			}
+		}
+	}
+
+	modifier = {
+		statewide_governing_cost = -0.2
+		min_local_autonomy = -5
+	}
+	bonus_modifier = {
+		statewide_governing_cost = -0.2
+		min_local_autonomy = -5
+	}
+	onmap = no
+	show_separate = yes # Means as a manufactory it will be shown according to the old way
+
 	ai_will_do = {
 		factor = 1
 	}
