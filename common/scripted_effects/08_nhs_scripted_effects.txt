@@ -1,0 +1,301 @@
+
+nhs_civil_war_initialize_land = {
+	nhs_calc_total_rebellion_dev = yes
+	set_variable = {
+		which = nhs_total_rebel_dev_owned
+		value = 0
+	}
+	divide_variable = {            
+		which = nhs_total_rebel_dev
+		value = 2
+	}
+	nhs_set_rebel_capital = yes
+	nhs_set_ely_capital = yes
+	nhs_set_area_capitals = yes
+	
+	while = {
+		limit = {
+			check_variable = {
+				which = nhs_total_rebel_dev
+				which = nhs_total_rebel_dev_owned
+			}
+		}
+		nhs_set_area_capitals_province_weights = yes
+		nhs_set_rebel_province_weights = yes
+		nhs_transfer_area = yes
+		#nhs_calc_current_rebellion_dev = yes
+	}
+	release = ERF
+}
+
+nhs_set_ely_capital = {
+	capital_scope = {
+		area = {
+			set_province_flag = nhs_rebellion_ignore_province
+		}
+	}
+}
+
+nhs_calc_total_rebellion_dev = {
+	set_variable = {
+		which = nhs_total_rebel_dev
+		value = 0
+	}
+	every_owned_province = {
+		limit = {
+			nhs_potential_rebellion_provinces = yes
+		}
+		export_to_variable = {
+			which = nhs_total_rebel_dev
+			value = development
+		}
+		ROOT = {
+			change_variable = {            
+				which = nhs_total_rebel_dev
+				which = PREV
+			}
+		}
+	}
+}
+
+nhs_calc_current_rebellion_dev = {
+	set_variable = {
+		which = nhs_total_rebel_dev_owned
+		value = 0
+	}
+	# ERF = {
+	# 	every_owned_province = {
+	# 		export_to_variable = {
+	# 			which = nhs_total_rebel_dev_owned
+	# 			value = development
+	# 		}
+	# 		ROOT = {
+	# 			change_variable = {            
+	# 				which = nhs_total_rebel_dev_owned
+	# 				which = PREV
+	# 			}
+	# 		}
+	# 	}
+	# }
+	every_owned_province = {
+		limit = {
+			is_core = ERF
+		}
+		export_to_variable = {
+			which = nhs_total_rebel_dev_owned
+			value = development
+		}
+		ROOT = {
+			change_variable = {            
+				which = nhs_total_rebel_dev_owned
+				which = PREV
+			}
+		}
+	}
+}
+
+nhs_set_rebel_capital = {
+	if = {
+		limit = {
+			owns = 2021
+		}
+		2021 = {
+			set_province_flag = nhs_rebel_capital_flag
+		}
+	}
+	else = {
+		random_owned_province = {
+			limit = {
+				is_capital = no
+			}
+			add_core = ERF
+			#cede_province = ERF
+			set_province_flag = nhs_rebel_capital_flag
+		}
+	}
+}
+
+nhs_set_area_capitals = {
+	every_owned_province = {
+		limit = {
+			nhs_potential_rebellion_provinces = yes
+			NOT = {
+				has_province_flag = nhs_ely_area_capital
+				# any_owned_province = {
+				# 	area = PREV
+				# 	has_province_flag = nhs_ely_area_capital
+				# }
+				area_for_scope_province = {
+					has_province_flag = nhs_ely_area_capital
+				}
+			}
+		}
+		set_province_flag = nhs_ely_area_capital
+	}
+}
+
+nhs_set_area_capitals_province_weights = {
+	every_owned_province = {
+		limit = {
+			nhs_potential_rebellion_provinces = yes
+			has_province_flag = nhs_ely_area_capital
+		}
+		set_variable = {
+			which = nhs_total_rebel_dev_owned
+			value = 0
+		}
+		export_to_variable = {
+			which = nhs_total_rebel_dev_owned
+			value = development
+		}
+		nhs_set_province_weight = yes
+	}
+}
+
+nhs_set_rebel_province_weights = {
+	every_owned_province = {
+		limit = {
+			nhs_potential_rebellion_provinces = yes
+			NOT = { has_province_flag = nhs_ely_area_capital }
+		}
+		nhs_set_province_weight = yes
+		set_variable = {
+			which = nhs_total_rebel_dev_owned
+			value = 0
+		}
+		export_to_variable = {
+			which = nhs_total_rebel_dev_owned
+			value = development
+		}
+		random_province = {
+			limit = {
+				area = PREV
+				has_province_flag = nhs_ely_area_capital
+			}
+			change_variable = {
+				which = nhs_rebel_province_weight
+				which = PREV
+			}
+			change_variable = {
+				which = nhs_total_rebel_dev_owned
+				which = PREV
+			}
+			#log = "Capital [Prev.nhs_rebel_province_weight.GetValue]"
+		}
+	}
+}
+
+nhs_set_province_weight = {
+	set_variable = {
+		which = nhs_rebel_province_weight
+		value = 0
+	}
+	#set_base_production = 1
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					NOT = { culture_group = elysian_group }
+					NOT = { native_culture = yes }
+				}
+				# TODO Natives clause
+				culture = skythiai
+				culture = borealian
+				culture = hyperborealian
+				culture = hesperidian
+				culture = kykladian
+			}
+		}
+		change_variable = {            
+			which = nhs_rebel_province_weight
+			value = 1
+		}
+		# add_base_production = 1
+	}
+	every_neighbor_province = {
+		limit = {
+			is_core = ERF
+		}
+		PREV = {
+			change_variable = {            
+				which = nhs_rebel_province_weight
+				value = 3
+			}
+			# add_base_production = 3
+		}
+	}
+}
+
+nhs_transfer_area = {
+	set_variable = {
+		which = nhs_rebellion_top_weight
+    	value = 0
+	}
+	every_owned_province = {
+		limit = {
+			nhs_potential_rebellion_provinces = yes
+			has_province_flag = nhs_ely_area_capital
+		}
+		set_variable = {            
+			which = nhs_rebellion_top_weight
+			which = nhs_rebel_province_weight
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = nhs_rebellion_top_weight
+					which = ROOT
+				}				
+			}
+			ROOT = {
+				set_variable = {
+					which = nhs_rebellion_top_weight
+					which = PREV
+				}
+			}
+			# random_province = {
+			# 	limit = {
+			# 		has_province_flag = nhs_top_province_weight
+			# 	}
+			# 	clr_province_flag = nhs_top_province_weight
+			# }
+			#set_province_flag = nhs_top_province_weight
+			save_event_target_as = nhs_top_province_weight
+		}
+	}
+	event_target:nhs_top_province_weight = {
+		area = {
+			add_core = ERF
+			#cede_province = ERF
+		}
+		# set_variable = {
+		# 	which = nhs_test
+		# 	value = 0
+		# }
+		# while = {
+		# 	limit = {
+		# 		check_variable = {
+		# 			which = nhs_total_rebel_dev_owned
+		# 			which = nhs_test
+		# 		}
+		# 	}
+		# 	add_base_production = 1
+		# 	change_variable = {
+		# 		which = nhs_test
+		# 		value = 1
+		# 	}
+		# }
+		ROOT = {
+			change_variable = {
+				which = nhs_total_rebel_dev_owned
+				which = PREV
+			}
+		}
+	}
+	# random_owned_province = {
+	# 	limit = {
+	# 		has_province_flag = nhs_top_province_weight
+	# 	}
+		
+	# }
+}
