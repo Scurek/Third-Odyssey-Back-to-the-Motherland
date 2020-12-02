@@ -1,5 +1,5 @@
 version="1.30.*"
 name="Third Odyssey DEV"
 supported_version="1.30.*"
-path="mod/third_odyssey_DEV/deploy"
+path="mod/Third-Odyssey-Back-to-the-Motherland/deploy"
 replace_path = "gfx/loadingscreens"
