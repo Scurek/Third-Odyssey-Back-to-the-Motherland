@@ -1,0 +1,5 @@
+version="1.30.*"
+name="Third Odyssey DEV"
+supported_version="1.30.*"
+path="mod/third_odyssey_DEV/deploy"
+replace_path = "gfx/loadingscreens"
