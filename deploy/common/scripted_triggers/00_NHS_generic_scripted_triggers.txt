@@ -1,0 +1,145 @@
+# Scripted triggers with arguments that are very generic to 3rd Odyssey
+
+
+# -- GENERIC --
+
+# Check if TAG exists and given CONDITION matches it
+nhs_tag_exists_and_matches {
+    limit {
+        exists = $TAG$
+    }
+    $CONDITION$ = $TAG$
+}
+
+
+# -- ELYSIAN --
+
+# Check if CONDITION matches any Elysian nation
+nhs_check_all_elysian = {
+	OR = {
+		$CONDITION$ = ELY  # Elysian Empire
+		$CONDITION$ = NHS  # Elysia
+		$CONDITION$ = ELR  # Elysian Noble Republic
+		$CONDITION$ = ERR  # Revolutionary Elysia
+		$CONDITION$ = ERF  # First Elysian Republic
+	}
+}
+
+# Check if CONDITION matches any Elysian nation, including Creta Minor and culture primaries
+nhs_check_all_elysian_expanded = {
+	nhs_check_all_elysian { CONDITION = $CONDITION$ }
+	$CONDITION$ = CM1  # Creta Minor
+	$CONDITION$ = ELF  # Elysian settlers
+	$CONDITION$ = ELA  # Elysian Federation
+	$CONDITION$ = SKY  # Scythia
+	$CONDITION$ = BOR  # Borealia
+	$CONDITION$ = HBR  # Hyperborealia
+	$CONDITION$ = HSP  # Hesperidia
+	$CONDITION$ = LAK  # Lakonia
+	$CONDITION$ = VAE  # Varangia
+}
+
+# Check if the culture is 'functionally Elysian'
+nhs_culturally_elysian = {
+	OR = {
+		AND = {
+			culture_group = byzantine
+			capital_scope = {
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+			}
+		}
+		culture_group = elysian_group
+		NOT = {
+			# Exclude 'Norse' Elysian
+			primary_culture = varangian_e
+		}
+		NOT = {
+			# Exclude 'Spartan' Elysian
+			primary_culture = lakonian
+		}
+		NOT = {
+			# Exclude 'Albanian' Elysian
+			primary_culture = shqipproi
+		}
+	}
+}
+
+
+# -- VINLAND --
+
+# Check if CONDITION matches any Vinlandic nation
+nhs_check_all_vinland = {
+	OR = {
+		$CONDITION$ = MK1
+		$CONDITION$ = HLL
+		$CONDITION$ = VIN
+	}
+}
+
+# Check if CONDITION matches any Norse nation
+nhs_check_all_norse = {
+	nhs_check_all_vinland { CONDITION = $CONDITION$ }
+    $CONDITION$ = JOM  # Jomsvikings
+	$CONDITION$ = VGD  # Varangian Order
+}
+
+# Check if the culture is 'functionally Norse'
+nhs_culturally_norse = {
+	OR = {
+		culture_group = norse_g
+		primary_culture = varangian_e
+	}
+}
+
+
+# -- SPARTAN --
+
+# Check if CONDITION matches any Spartan nation
+nhs_check_all_spartan = {
+	OR = {
+		$CONDITION$ = MSN
+		$CONDITION$ = MSG
+	}
+}
+
+# Check if the culture is 'functionally Spartan'
+nhs_culturally_spartan = {
+	OR = {
+		culture_group = spartakian_group
+		primary_culture = lakonian
+	}
+}
+
+
+# -- Albanian --
+
+# Check if the culture is 'functionally Albanian'
+nhs_culturally_albanian = {
+	OR = {
+		primary_culture = shqipproi
+		primary_culture = shqiperi
+		AND = {
+			primary_culture = albanian
+			capital_scope = {
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+			}
+		}
+	}
+}
+
+# -- Exiles --
+
+# Check if CONDITION matches any exiled nation
+nhs_check_all_exiles = {
+    nhs_check_all_elysian_expanded { CONDITION = $CONDITION$ }
+    nhs_check_all_norse { CONDITION = $CONDITION$ }
+    nhs_check_all_spartan { CONDITION = $CONDITION$ }
+    # Include minor exiles
+    $CONDITION$ = SHQ  # Shqiperi
+}
