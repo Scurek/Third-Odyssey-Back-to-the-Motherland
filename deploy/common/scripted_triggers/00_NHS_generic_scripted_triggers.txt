@@ -15,6 +15,7 @@ nhs_tag_exists_and_matches {
 # -- ELYSIAN --
 
 # Check if CONDITION matches any Elysian nation
+# Use: nhs_check_all_elysian = { CONDITION = tag }
 nhs_check_all_elysian = {
 	OR = {
 		$CONDITION$ = ELY  # Elysian Empire
@@ -26,8 +27,9 @@ nhs_check_all_elysian = {
 }
 
 # Check if CONDITION matches any Elysian nation, including Creta Minor and culture primaries
+# Use: nhs_check_all_elysian_expanded = { CONDITION = tag }
 nhs_check_all_elysian_expanded = {
-	nhs_check_all_elysian { CONDITION = $CONDITION$ }
+	nhs_check_all_elysian = { CONDITION = $CONDITION$ }
 	$CONDITION$ = CM1  # Creta Minor
 	$CONDITION$ = ELF  # Elysian settlers
 	$CONDITION$ = ELA  # Elysian Federation
@@ -40,6 +42,7 @@ nhs_check_all_elysian_expanded = {
 }
 
 # Check if the culture is 'functionally Elysian'
+# Use: nhs_culturally_elysian = yes
 nhs_culturally_elysian = {
 	OR = {
 		AND = {
@@ -71,6 +74,7 @@ nhs_culturally_elysian = {
 # -- VINLAND --
 
 # Check if CONDITION matches any Vinlandic nation
+# Use: nhs_check_all_vinland = { CONDITION = tag }
 nhs_check_all_vinland = {
 	OR = {
 		$CONDITION$ = MK1
@@ -80,6 +84,7 @@ nhs_check_all_vinland = {
 }
 
 # Check if CONDITION matches any Norse nation
+# Use: nhs_check_all_norse = { CONDITION = tag }
 nhs_check_all_norse = {
 	nhs_check_all_vinland { CONDITION = $CONDITION$ }
     $CONDITION$ = JOM  # Jomsvikings
@@ -87,6 +92,7 @@ nhs_check_all_norse = {
 }
 
 # Check if the culture is 'functionally Norse'
+# Use: nhs_culturally_norse = yes
 nhs_culturally_norse = {
 	OR = {
 		culture_group = norse_g
@@ -98,6 +104,7 @@ nhs_culturally_norse = {
 # -- SPARTAN --
 
 # Check if CONDITION matches any Spartan nation
+# Use: nhs_check_all_spartan = { CONDITION = tag }
 nhs_check_all_spartan = {
 	OR = {
 		$CONDITION$ = MSN
@@ -106,6 +113,7 @@ nhs_check_all_spartan = {
 }
 
 # Check if the culture is 'functionally Spartan'
+# Use: nhs_culturally_spartan = yes
 nhs_culturally_spartan = {
 	OR = {
 		culture_group = spartakian_group
@@ -117,6 +125,7 @@ nhs_culturally_spartan = {
 # -- Albanian --
 
 # Check if the culture is 'functionally Albanian'
+# Use: nhs_culturally_albanian = yes
 nhs_culturally_albanian = {
 	OR = {
 		primary_culture = shqipproi
@@ -136,10 +145,135 @@ nhs_culturally_albanian = {
 # -- Exiles --
 
 # Check if CONDITION matches any exiled nation
+# Use: nhs_check_all_exiles = { CONDITION = tag }
 nhs_check_all_exiles = {
-    nhs_check_all_elysian_expanded { CONDITION = $CONDITION$ }
-    nhs_check_all_norse { CONDITION = $CONDITION$ }
-    nhs_check_all_spartan { CONDITION = $CONDITION$ }
+    nhs_check_all_elysian_expanded = { CONDITION = $CONDITION$ }
+    nhs_check_all_norse = { CONDITION = $CONDITION$ }
+    nhs_check_all_spartan = { CONDITION = $CONDITION$ }
     # Include minor exiles
     $CONDITION$ = SHQ  # Shqiperi
+}
+
+
+# -- Native Estates --
+
+# Check if has any native estate (early, mid, late)
+# Use: nhs_has_any_native_estate = yes
+nhs_has_any_native_estate = {
+	OR = {
+		has_estate = estate_all_natives_early
+		has_estate = estate_all_natives_mid
+		has_estate = estate_all_natives_late
+	}
+}
+
+# Check if any native estate has QUANTITY influence
+# Use: nhs_check_influence_any_native_estate = { QUANTITY = 30 }
+nhs_check_influence_any_native_estate = {
+	# DEBUG: temporarily simplified
+	estate_influence = {
+		estate = estate_all_natives_early
+		influence = $QUANTITY$
+	}
+	#if = {
+	#	limit = {
+	#		has_estate = estate_all_natives_early
+	#	}
+	#	estate_influence = {
+	#		estate = estate_all_natives_early
+	#		influence = $QUANTITY$
+	#	}
+	#}
+	#else_if = {
+	#	limit = {
+	#		has_estate = estate_all_natives_mid
+	#	}
+	#	estate_influence = {
+	#		estate = estate_all_natives_mid
+	#		influence = $QUANTITY$
+	#	}
+	#}
+	#else_if = {
+	#	limit = {
+	#		has_estate = estate_all_natives_late
+	#	}
+	#	estate_influence = {
+	#		estate = estate_all_natives_late
+	#		influence = $QUANTITY$
+	#	}
+	#}
+}
+
+# Check if any native estate has QUANTITY loyalty
+# Use: nhs_check_loyalty_any_native_estate = { QUANTITY = 30 }
+nhs_check_loyalty_any_native_estate = {
+	# DEBUG: temporarily simplified
+	estate_loyalty = {
+		estate = estate_all_natives_early
+		loyalty = $QUANTITY$
+	}
+	#if = {
+	#	limit = {
+	#		has_estate = estate_all_natives_early
+	#	}
+	#	estate_loyalty = {
+	#		estate = estate_all_natives_early
+	#		loyalty = $QUANTITY$
+	#	}
+	#}
+	#else_if = {
+	#	limit = {
+	#		has_estate = estate_all_natives_mid
+	#	}
+	#	estate_loyalty = {
+	#		estate = estate_all_natives_mid
+	#		loyalty = $QUANTITY$
+	#	}
+	#}
+	#else_if = {
+	#	limit = {
+	#		has_estate = estate_all_natives_late
+	#	}
+	#	estate_loyalty = {
+	#		estate = estate_all_natives_late
+	#		loyalty = $QUANTITY$
+	#	}
+	#}
+}
+
+# Check if any native estate has the influence modifier NAME
+# Use: nhs_has_influence_modifier_any_native_estate = { NAME = EST_VAL_SERFS_HUNTED }
+nhs_has_influence_modifier_any_native_estate = {
+	# DEBUG: temporarily simplified
+ 	has_estate_influence_modifier = {
+		estate = estate_all_natives_late
+		modifier = $NAME$
+	}
+	#if = {
+	#	limit = {
+	#		has_estate = estate_all_natives_early
+	#	}
+	#	has_estate_influence_modifier = {
+	#		estate = estate_all_natives_early
+	#		modifier = $NAME$
+	#	}
+	#}
+	#else_if = {
+	#	limit = {
+	#		has_estate = estate_all_natives_mid
+	#	}
+	#	has_estate_influence_modifier = {
+	#		estate = estate_all_natives_mid
+	#		modifier = $NAME$
+	#	}
+	#}
+	#else_if = {
+	#	limit = {
+	#		has_estate = estate_all_natives_late
+	#	}
+	#	has_estate_influence_modifier = {
+	#		estate = estate_all_natives_late
+	#		modifier = $NAME$
+	#	}
+	#}
 }
