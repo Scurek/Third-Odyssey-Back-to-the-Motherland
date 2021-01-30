@@ -1,0 +1,159 @@
+namespace = nhs_all_natives_estates
+
+
+# -- Change natives estate (early-mid-late) --
+
+# Remove flags from non-exile nations
+country_event = {
+    id = nhs_all_natives_estates.1
+	title = nhs_all_natives_estates.1.t
+	desc = nhs_all_natives_estates.1.d
+	picture = COURT_eventPicture
+
+    hidden = yes
+
+	trigger = {
+		NOT = { nhs_check_all_exiles = { CONDITION = tag } }
+        OR = {
+            has_country_flag = native_council_enabled_early
+            has_country_flag = native_council_enabled_mid
+            has_country_flag = native_council_enabled_late
+        }
+	}
+
+    immediate = {
+		clr_country_flag = native_council_enabled_early
+		clr_country_flag = native_council_enabled_mid
+		clr_country_flag = native_council_enabled_late
+    }
+
+	option = {	
+		name = "Should not be visible!"
+		ai_chance = { factor = 100 }
+	}
+
+}
+
+# Set early flag (always for all exiles - except for norse who immediatly get mid, and Elysia which needs to colonise homeland)
+country_event = {
+    id = nhs_all_natives_estates.2
+	title = nhs_all_natives_estates.2.t
+	desc = nhs_all_natives_estates.2.d
+	picture = COURT_eventPicture
+
+    hidden = yes
+
+	trigger = {
+        NOT = {
+            OR = {
+                has_country_flag = native_council_enabled_early
+                has_country_flag = native_council_enabled_mid
+                has_country_flag = native_council_enabled_late
+            }
+        }
+		nhs_check_all_exiles = { CONDITION = tag }
+        NOT = { nhs_check_all_vinland { CONDITION = tag } }
+        OR = {
+            NOT = { tag = NHS }
+            # Homelands settled (based on mission "control_the_elysian_homelands")
+            chesapeake_area = {
+                type = all
+                is_city = yes
+                OR = {
+                    AND = {
+                        owned_by = ROOT
+                        is_core = ROOT
+                    }
+                    owner = {
+                        is_subject_of = ROOT
+                    }
+                }
+            }
+        }
+        NOT = { has_institution = new_world_i }
+	}
+
+    immediate = {
+		set_country_flag = native_council_enabled_early
+		clr_country_flag = native_council_enabled_mid
+		clr_country_flag = native_council_enabled_late
+    }
+
+	option = {	
+		name = "Should not be visible!"
+		ai_chance = { factor = 100 }
+	}
+
+}
+
+# Set mid flag (always for norse, after colonialism for other exiles)
+country_event = {
+    id = nhs_all_natives_estates.3
+	title = nhs_all_natives_estates.3.t
+	desc = nhs_all_natives_estates.3.d
+	picture = COURT_eventPicture
+
+    hidden = yes
+
+	trigger = {
+        NOT = {
+            OR = {
+                has_country_flag = native_council_enabled_mid
+                has_country_flag = native_council_enabled_late
+            }
+        }
+        OR = {
+            nhs_check_all_vinland = { CONDITION = tag }
+            AND = {
+                nhs_check_all_exiles = { CONDITION = tag }
+                has_country_flag = native_council_enabled_early
+                has_institution = new_world_i
+            }
+        }
+	}
+
+    immediate = {
+		clr_country_flag = native_council_enabled_early
+		set_country_flag = native_council_enabled_mid
+		clr_country_flag = native_council_enabled_late
+    }
+
+	option = {	
+		name = "Should not be visible!"
+		ai_chance = { factor = 100 }
+	}
+
+}
+
+# Set late flag (after global trade for all exiles)
+country_event = {
+    id = nhs_all_natives_estates.4
+	title = nhs_all_natives_estates.4.t
+	desc = nhs_all_natives_estates.4.d
+	picture = COURT_eventPicture
+
+    hidden = yes
+
+	trigger = {
+        NOT = {
+            has_country_flag = native_council_enabled_late
+        }
+        AND = {
+            nhs_check_all_exiles = { CONDITION = tag }
+            has_country_flag = native_council_enabled_mid
+            has_institution = global_trade
+        }
+	}
+
+    immediate = {
+		clr_country_flag = native_council_enabled_early
+		clr_country_flag = native_council_enabled_mid
+		set_country_flag = native_council_enabled_late
+    }
+
+	option = {	
+		name = "Should not be visible!"
+		ai_chance = { factor = 100 }
+	}
+
+}
