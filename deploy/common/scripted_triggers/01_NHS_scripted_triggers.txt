@@ -320,7 +320,6 @@ nhs_greek_areas = {
 		area = aegean_archipelago_area
 		AND = {
 			culture_group = byzantine
-			NOT = { culture = turkish }
 			OR = {
 				region = balkan_region
 				region = anatolia_region
@@ -881,8 +880,36 @@ nhs_one_of_the_vikings_op = {
 	}
 }
 
+nhs_elg_province = {
+	continent = europe
+	NOT = { province_id = 151 }
+	NOT = { has_province_modifier = nhs2_supply_lines }
+	NOT = { has_province_modifier = nhs2_base_of_operations }
+	OR = {
+		nhs_greek_areas = yes
+		AND = {
+			region = anatolia_region
+			ROOT = { has_global_flag = nhs_elg_got_anatolia }
+		}
+		AND = {
+			region = balkan_region
+			ROOT = { has_global_flag = nhs_elg_got_balkans }
+		}
+	}
+	OR = {
+		has_country_flag = nhs_invasion_over
+		NOT = {
+			nhs_is_current_base_of_operations_target = { FLAG_SCOPE = owner }
+		}
+	}
+}
+
 nhs_exarch_land = {
 	OR = {
+		AND = {
+			ROOT = { tag = ELG }
+			nhs_elg_province = yes
+		}
 		AND = {
 			ROOT = { tag = EEA }
 			region = caucasia_region
@@ -973,6 +1000,45 @@ nhs_exarch_land = {
 			OR = {
 				region = persia_region
 				region = khorasan_region
+			}
+		}
+	}
+}
+
+nhs_elg_gets_province_effect = {
+	if = {
+		limit = {
+			nhs_greek_areas = yes
+		}
+		add_core = ELG
+		if = {
+			limit = {
+				owner = {
+					religion = pantheon_worship
+				}
+				NOT = { has_province_flag = nhs_got_question_of_religion }
+			}
+			set_province_flag = nhs_got_question_of_religion
+			random_list = {
+				40 = {
+					add_province_modifier = {
+					name = "nhs2_greek_deny_religion"
+						duration = 7300
+					}
+				}
+				40 = {
+					add_province_modifier = {
+						name = "nhs2_greek_accept_religion"
+						duration = 7300
+					}
+				}
+				10 = { change_religion = ROOT }
+				10 = { 
+					add_province_modifier = {
+						name = "missionary_failure"
+						duration = 7300
+					}
+				}
 			}
 		}
 	}
@@ -1237,25 +1303,25 @@ nhs_first_flagship = {
 nhs_is_current_base_of_operations_target = {
 	OR = {
 		AND = {
-			ROOT = {
+			$FLAG_SCOPE$ = {
 				has_country_flag = nhs_bo_athens
 			}
 			province_id = 146
 		}
 		AND = {
-			ROOT = {
+			$FLAG_SCOPE$ = {
 				has_country_flag = nhs_bo_macedonia
 			}
 			province_id = 148
 		}
 		AND = {
-			ROOT = {
+			$FLAG_SCOPE$ = {
 				has_country_flag = nhs_bo_sparta
 			}
 			province_id = 145
 		}
 		AND = {
-			ROOT = {
+			$FLAG_SCOPE$ = {
 				has_country_flag = nhs_bo_rhodes
 			}
 			province_id = 320
