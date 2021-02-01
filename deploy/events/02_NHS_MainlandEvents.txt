@@ -1138,35 +1138,29 @@ country_event = {
 	
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
+		NOT = { has_country_flag = nhs_invasion_over }
 		OR = {
 			AND = {
 				has_country_flag = nhs_bo_athens
-				owns = 146
+				country_or_subject_holds = 146
 			}
 			AND = {
 				has_country_flag = nhs_bo_macedonia
-				owns = 148
+				country_or_subject_holds = 148
 			}
 			AND = {
 				has_country_flag = nhs_bo_sparta
-				owns = 145
+				country_or_subject_holds = 145
 			}
 			AND = {
 				has_country_flag = nhs_bo_rhodes
-				owns = 320
+				country_or_subject_holds = 320
 			}
 		}
-		NOT = { has_country_flag = nhs_invasion_over }
 		NOT = {
 			any_owned_province = {
 				has_province_modifier = nhs2_base_of_operations
 			}
-		}
-		OR = {
-			has_country_flag = nhs_bo_athens
-			has_country_flag = nhs_bo_macedonia
-			has_country_flag = nhs_bo_sparta
-			has_country_flag = nhs_bo_rhodes
 		}
 	}
 	
@@ -1186,42 +1180,138 @@ country_event = {
 				has_country_flag = nhs_bo_athens
 			}
 			146 = {
+				if = {
+					limit = {
+						owner = {
+							is_subject_of = ROOT
+						}
+					}
+					cede_province = ROOT
+					add_core = ROOT
+				}
 				add_province_modifier = {
 					name = "nhs2_base_of_operations"
 					duration = -1
 				}
+				if = {
+					limit = {
+						NOT = { 
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 0.2
+						cost = 0
+					}
+				}
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				has_country_flag = nhs_bo_macedonia
 			}
-			148= {
+			148 = {
+				if = {
+					limit = {
+						owner = {
+							is_subject_of = ROOT
+						}
+					}
+					cede_province = ROOT
+					add_core = ROOT
+				}
 				add_province_modifier = {
 					name = "nhs2_base_of_operations"
 					duration = -1
 				}
+				if = {
+					limit = {
+						NOT = { 
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 0.2
+						cost = 0
+					}
+				}
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				has_country_flag = nhs_bo_sparta
 			}
 			145 = {
+				if = {
+					limit = {
+						owner = {
+							is_subject_of = ROOT
+						}
+					}
+					cede_province = ROOT
+					add_core = ROOT
+				}
 				add_province_modifier = {
 					name = "nhs2_base_of_operations"
 					duration = -1
 				}
+				if = {
+					limit = {
+						NOT = { 
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 0.2
+						cost = 0
+					}
+				}
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				has_country_flag = nhs_bo_rhodes
 			}
 			320 = {
+				if = {
+					limit = {
+						owner = {
+							is_subject_of = ROOT
+						}
+					}
+					cede_province = ROOT
+					add_core = ROOT
+				}
 				add_province_modifier = {
 					name = "nhs2_base_of_operations"
 					duration = -1
+				}
+				if = {
+					limit = {
+						NOT = { 
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 0.2
+						cost = 0
+					}
 				}
 			}
 		}
@@ -1456,48 +1546,21 @@ country_event = {
 	trigger = {
 		nhs_is_elysia_late = yes
 		has_country_flag = nhs_invasion_second_part_begins
-		any_owned_province = {
-			AND = {
-				culture = greek
-				continent = europe
-				NOT = { has_province_modifier = nhs2_base_of_operations }
-				NOT = {
-					OR = {
-						AND = {
-							ROOT = {
-								has_country_flag = nhs_bo_athens
-							}
-							province_id = 146
-						}
-						AND = {
-							ROOT = {
-								has_country_flag = nhs_bo_macedonia
-							}
-							province_id = 148
-						}
-						AND = {
-							ROOT = {
-								has_country_flag = nhs_bo_sparta
-							}
-							province_id = 145
-						}
-						AND = {
-							ROOT = {
-								has_country_flag = nhs_bo_rhodes
-							}
-							province_id = 320
-						}
-					}
-				}
-				NOT = { province_id = 151 }
-			}
-			NOT = { has_construction = missionary }
-		}
 		NOT = { exists = ELG }
 		NOT = { has_country_flag = nhs_formed_greek }
 		NOT = { has_country_modifier = nhs2_timer_formed_greek }
 		NOT = { has_country_flag = nhs_invasion_over }
 		NOT = { has_country_flag = nhs_no_greek_nation }
+		any_owned_province = {
+			culture = greek
+			continent = europe
+			NOT = { has_province_modifier = nhs2_base_of_operations }
+			NOT = {
+				nhs_is_current_base_of_operations_target = yes
+			}
+			NOT = { province_id = 151 }
+			NOT = { has_construction = missionary }
+		}
 	}
 	
 	mean_time_to_happen = {
@@ -1547,8 +1610,11 @@ country_event = {
 					NOT = { has_province_modifier = nhs2_base_of_operations }
 					NOT = { province_id = 151 }
 					continent = europe
+					NOT = {
+						nhs_is_current_base_of_operations_target = yes
+					}
+					NOT = { has_construction = missionary }
 				}
-				NOT = { has_construction = missionary }
 			}
 			#if = {
 			#	limit = {
@@ -1611,39 +1677,6 @@ country_event = {
 				}
 				every_owned_province = {
 					add_core = ELG
-				}
-				if = {
-					limit = {
-						ROOT = {
-							has_country_modifier = nhs_secrets_greekfire
-						}
-					}
-					add_country_modifier = {
-						name = nhs_secrets_greekfire
-						duration = -1
-					}
-				}
-				if = {
-					limit = {
-						ROOT = {
-							has_country_modifier = nhs_greekfire_update
-						}
-					}				
-					add_country_modifier = {
-						name = nhs_greekfire_update
-						duration = -1
-					}
-				}
-				if = {
-					limit = {
-						ROOT = {
-							has_country_modifier = nhs_noble_cataphracts
-						}
-					}
-					add_country_modifier = {
-						name = nhs_noble_cataphracts
-						duration = -1
-					}
 				}
 			}
 		}
@@ -2053,11 +2086,9 @@ country_event = {
 		hidden_effect = {
 			every_owned_province = {
 				limit = {
-					AND = {
-						nhs_greek_areas = yes
-						NOT = { province_id = 151 }
-						NOT = { has_construction = missionary }
-					}
+					nhs_greek_areas = yes
+					NOT = { province_id = 151 }
+					NOT = { has_construction = missionary }
 				}
 				#if = {
 				#	limit = {
@@ -2078,88 +2109,6 @@ country_event = {
 				}
 				add_core = ELG
 			}
-			release = ELG
-		}
-		create_subject = {
-			subject_type = elysian_subject
-			subject = ELG
-		}
-		hidden_effect = {
-			if = {
-				limit = {
-					religion = pantheon_worship
-				}
-				country_event = {
-					id = nhs2_mainlandevents.21
-					days = 1
-					tooltip = nhs2_mainlandevents.21.t
-				}
-			}
-		}
-		hidden_effect = {
-			ELG = {
-				change_primary_culture = greek
-				nhs_change_government = { GOV = monarchy }
-				nhs_add_gov_reform = { REF = autocracy_reform }
-				change_technology_group = eastern
-				change_unit_type = eastern
-				change_religion = orthodox
-				add_manpower = 10
-				reverse_add_opinion = {
-					who = ROOT
-					modifier = nhs_formed_greeko
-				}
-				add_opinion = {
-					who = ROOT
-					modifier = nhs_formed_greeko
-				}
-				every_owned_province = {
-					limit = {
-						nhs_greek_areas = yes
-					}
-					add_core = ELG
-				}
-				add_treasury = 200
-				add_mil_power = 100
-				add_dip_power = 100
-				add_adm_power = 100
-				random_owned_province = {
-					infantry = ROOT
-					infantry = ROOT
-					infantry = ROOT
-					infantry = ROOT
-					infantry = ROOT
-				}
-			}
-		}
-	}
-	
-	option = {
-		name = "nhs2_mainlandevents22.b"  # Vassal
-		trigger = {
-			always = no
-		}
-		set_country_flag = nhs_formed_greek
-		every_owned_province = {
-			limit = {
-				AND = {
-					nhs_greek_areas = yes
-					NOT = { province_id = 151 }
-					NOT = { has_construction = missionary }
-				}
-			}
-			#if = {
-			#	limit = {
-			#		is_core = ROOT
-			#	}
-			#	remove_core = ROOT
-			#}
-			tooltip = {
-				cede_province = ELG
-			}
-			add_core = ELG
-		}
-		hidden_effect = {
 			release = ELG
 		}
 		create_subject = {
