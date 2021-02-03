@@ -130,8 +130,14 @@ country_event = {
 				}
 			}
 			set_country_flag = nhs_elysian_revolution_scythian_unrest
-			
-			country_event = { id = elysian_revolution.3 }
+			every_province = {
+				limit = {
+					nhs_scythian_revolt_province = yes
+				}
+				add_core = SKY
+				add_nationalism = 10
+			}
+			country_event = { id = elysian_revolution.3 days = 32 }
 		}
 	}
 
@@ -150,49 +156,45 @@ country_event = {
 		
 	is_triggered_only = yes
 
+	goto = nhs_scythian_stronghold_target
+
 	immediate = {
 		set_country_flag = nhs_elysian_revolution_progress_25
 		hidden_effect = {
-			every_province = {
-				limit = {
-					nhs_scythian_revolt_province = yes
-				}
-				add_core = SKY
-			}
+			# every_province = {
+			# 	limit = {
+			# 		nhs_scythian_revolt_province = yes
+			# 	}
+			# 	add_core = SKY
+			# 	add_nationalism = 10
+			# }
 			## Find target province
 			nhs_highest_dev_province = {
 				PROVINCE_CONDITION = nhs_scythian_revolt_province 
 				TRADE_CENTER_BONUS = 5
 				EVENT_TARGET = nhs_scythian_stronghold_target
 			}
-		}
-	}
 
-	option = {
-		name = elysian_revolution.3.a			# Bring me their heads!
-		set_country_flag = nhs_elysian_revolution_scythian_revolt
-		custom_tooltip = nhs_elysian_revolution_scythian_cores_tt
-
-		add_disaster_progress = {
-			disaster = nhs_scythian_revolt
-			value = 100
-		}
-
-		event_target:nhs_scythian_stronghold_target = {
-			set_province_flag = nhs_scythian_revolt_rebels
-			nhs_remove_fort = yes
-			add_province_modifier = {
-				name = nhs2_scythian_rebel_stronghold
-				duration = -1
+			add_disaster_progress = {
+				disaster = nhs_scythian_revolt
+				value = 100
 			}
-			tooltip = {
-				spawn_rebels = {
-					size = 3
-					type = nationalist_rebels
-					win = yes
+
+			## Spawn rebels
+			event_target:nhs_scythian_stronghold_target = {
+				set_province_flag = nhs_scythian_revolt_rebels
+				nhs_remove_fort = yes
+				add_province_modifier = {
+					name = nhs2_scythian_rebel_stronghold
+					duration = -1
 				}
-			}
-			hidden_effect = {
+				tooltip = {
+					spawn_rebels = {
+						size = 3
+						type = nationalist_rebels
+						win = yes
+					}
+				}
 				random_list = {
 					50 = {
 						spawn_rebels = {
@@ -212,11 +214,6 @@ country_event = {
 					}
 				}
 			}
-		}
-
-		custom_tooltip = nhs_elysian_revolution_scythian_additional_rebels_tt
-
-		hidden_effect = {
 			set_variable = {            
 				which = nhs_scythian_revolt_stacks
 				value = 4
@@ -256,7 +253,6 @@ country_event = {
 								spawn_rebels = {
 									size = 1
 									type = scythian_nationalist_rebels
-									win = yes
 									culture = skythiai
 								}
 							}
@@ -264,7 +260,6 @@ country_event = {
 								spawn_rebels = {
 									size = 1
 									type = scythian_nationalist_rebels
-									win = yes
 									culture = scythian_c
 								}
 							}
@@ -278,7 +273,6 @@ country_event = {
 								spawn_rebels = {
 									size = 1
 									type = scythian_nationalist_rebels
-									win = yes
 									culture = skythiai
 								}
 							}
@@ -286,7 +280,6 @@ country_event = {
 								spawn_rebels = {
 									size = 1
 									type = scythian_nationalist_rebels
-									win = yes
 									culture = scythian_c
 								}
 							}
@@ -295,27 +288,39 @@ country_event = {
 				}
 			}
 		}
-		
+	}
+
+	option = {
+		name = elysian_revolution.3.a			# Bring me their heads!
+		set_country_flag = nhs_elysian_revolution_scythian_revolt
+		custom_tooltip = nhs_elysian_revolution_scythian_cores_tt
+		custom_tooltip = nhs_elysian_revolution_scythian_disaster_tt
 	}
 	option = {
 		name = elysian_revolution.3.b			# 
 		custom_tooltip = nhs_elysian_revolution_scythian_cores_tt
-		add_absolutism = -15
+		
 		add_prestige = -20
+		add_absolutism = -15
+		end_disaster = nhs_scythian_revolt
+		disband_rebels = scythian_nationalist_rebels
 		add_disaster_progress = {
 			disaster = elysian_revolution
 			value = -10
 		}
-		every_owned_province = {
-			limit = {
-				nhs_scythian_revolt_province = yes
-			}
-			add_province_modifier = {
-				name = nhs2_scythian_autonomy
-				duration = -1
+		
+		custom_tooltip = nhs_elysian_revolution_scythian_autonomy_tt
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					nhs_scythian_revolt_province = yes
+				}
+				add_province_modifier = {
+					name = nhs2_scythian_autonomy
+					duration = -1
+				}
 			}
 		}
-		custom_tooltip = nhs_elysian_revolution_scythian_autonomy_tt
 
 		set_country_flag = nhs_elysian_revolution_scythian_appeasement
 	}

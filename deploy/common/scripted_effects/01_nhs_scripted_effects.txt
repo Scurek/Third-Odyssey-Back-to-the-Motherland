@@ -7686,48 +7686,51 @@ nhs_remove_fort = {
 }
 
 nhs_highest_dev_province = {
-	every_owned_province = {
-		clr_province_flag = nhs_highest_dev_check
-		clr_province_flag = nhs_highest_dev_province
-	}
 	set_variable = {
 		which = nhs_highest_province_dev
 		value = 0
 	}
-	while = {
+	every_owned_province = {
 		limit = {
-			any_owned_province = {
-				$PROVINCE_CONDITION$ = yes
-				NOT = { has_province_flag = nhs_highest_dev_check }
+			$PROVINCE_CONDITION$ = yes
+		}
+		ROOT = {
+			export_to_variable = {
+				which = nhs_local_dev
+				value = development
+				who = PREV
 			}
 		}
-		set_province_flag = nhs_highest_dev_check
-		export_to_variable = {
-			which = nhs_local_dev
-			value = trigger_value:development
-		}
-
+		
 		[[TRADE_CENTER_BONUS]
 			if = {
 				limit = {
 					province_has_center_of_trade_of_level = 1
 				}
-				change_variable = {            
-					which = nhs_local_dev
-					value = $TRADE_CENTER_BONUS$
+				ROOT = {
+					change_variable = {            
+						which = nhs_local_dev
+						value = $TRADE_CENTER_BONUS$
+					}
 				}
 			}
 		]
-		
-		if = {
-			limit = {
-				check_variable = { which = nhs_local_dev which = nhs_highest_province_dev }
+		ROOT = {
+			if = {
+				limit = {
+					check_variable = { 
+						which = nhs_local_dev 
+						which = nhs_highest_province_dev 
+					}
+				}
+				set_variable = {
+					which = nhs_highest_province_dev 
+					which = nhs_local_dev 
+				}
+				PREV = {
+					save_event_target_as = $EVENT_TARGET$
+				}
 			}
-			set_province_flag = nhs_highest_dev_province
-			event_target:$EVENT_TARGET$ = {
-				clr_province_flag = nhs_highest_dev_province
-			}
-			save_event_target_as = $EVENT_TARGET$
 		}
 	}
 }
