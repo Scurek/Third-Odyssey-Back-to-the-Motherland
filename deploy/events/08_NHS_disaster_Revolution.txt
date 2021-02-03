@@ -49,348 +49,272 @@ country_event = {
 		}
 	}
 }
+
+###################################################
+### EVENTS LEADING UP TO REVOLUTION
+###################################################
+
+# Event triggerer
 country_event = {
 	id = elysian_revolution.2
-	title = "ELYREVNAME02"
-	desc = "ELYREVDESC02"
-	picture = SIEGE_eventPicture
-	
-	is_triggered_only = yes
-	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
+	title = elysian_revolution.2.t
+	desc = elysian_revolution.2.d
+	picture = REVOLUTION_eventPicture
+
+	hidden = yes
+		
 	trigger = {
-		any_owned_province = {
-			is_capital = no
-			NOT = { area = CAPITAL }
-			is_state = yes
-			NOT = {
-				any_province = {
-					area = PREV
-					owned_by = ROOT
-					has_province_modifier = rev_had_revolutionary_attack
+		tag = ELY
+		is_free_or_tributary_trigger = yes
+		has_reform = elysian_absolute_empire
+		OR = {
+			current_age = age_of_absolutism
+			current_age = age_of_revolutions
+		}
+		OR = {
+			AND = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_25 }
+				has_disaster_progress = {
+					disaster = elysian_revolution
+					value = 25
+				}
+			}
+			AND = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_50 }
+				has_disaster_progress = {
+					disaster = elysian_revolution
+					value = 50
+				}
+			}
+			AND = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_75 }
+				has_disaster_progress = {
+					disaster = elysian_revolution
+					value = 75
 				}
 			}
 		}
 	}
 	
 	immediate = {
-		hidden_effect = {
-			random_owned_province = {
-				limit = {
-					is_capital = no
-					is_state = yes
-					NOT = { area = CAPITAL }
-					NOT = {
-						any_province = {
-							area = PREV
-							owned_by = ROOT
-							has_province_modifier = rev_had_revolutionary_attack
-						}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_25 }
+			}
+			set_country_flag = nhs_elysian_revolution_progress_25
+		}
+		else_if = {
+			limit = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_50 }
+			}
+			set_country_flag = nhs_elysian_revolution_progress_50
+		}
+		else_if = {
+			limit = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_75 }
+			}
+			set_country_flag = nhs_elysian_revolution_progress_75
+		}
+
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_elysian_revolution_scythian_unrest }
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 10
+					continent = north_america
+					is_city = yes
+					OR = {
+						culture = skythiai
+						culture = scythian_c
 					}
 				}
-				save_event_target_as = rev_attacked_province
-				#area = {
-				#	limit = {
-				#		owned_by = ROOT
-				#		is_capital = no
-				#		NOT = { has_province_flag = rev_revolutionary_attack }
-				#	}
-				#	set_province_flag = rev_revolutionary_attack
-				#}
 			}
+			set_country_flag = nhs_elysian_revolution_scythian_unrest
+			
+			country_event = { id = elysian_revolution.3 }
 		}
 	}
-	
+
 	option = {
-		name = "ELYREVOPTA201"			# The Revolutionaries Capture the Entire Militia!
-		custom_tooltip = nhs_revolution_increase_greatly
-		hidden_effect = {
-			change_variable = {
-				which = RevolutionCountingVariable
-				value = 10
-			}
-		}
-		event_target:rev_attacked_province = {
-			spawn_rebels = {
-				type = revolutionary_rebels
-				size = 4.0
-				win = yes
-			}
-			area = {
-                limit = { owned_by = ROOT }
-                add_province_modifier = {
-                    name = "rev_had_revolutionary_attack"
-                    duration = 5475
-                }
-            }
-		}
-		#every_owned_province = {
-		#	limit = {
-		#		has_province_flag = rev_revolutionary_attack
-		#	}
-		#	add_province_modifier = {
-		#		name = "rev_had_revolutionary_attack"
-		#		duration = 913
-		#	}
-		#	clr_province_flag = rev_revolutionary_attack
-		#}
-	}
-	option = {
-		name = "ELYREVOPTA202"			# The Militia Escapes, albeit with heavy losses!
-		custom_tooltip = nhs_revolution_increase_slightly
-		hidden_effect = {
-			change_variable = {
-				which = RevolutionCountingVariable
-				value = 5
-			}
-		}
-		event_target:rev_attacked_province = {
-			spawn_rebels = {
-				type = revolutionary_rebels
-				size = 4.0
-				win = yes
-			}
-			area = {
-                limit = { owned_by = ROOT }
-                add_province_modifier = {
-                    name = "rev_had_revolutionary_attack"
-                    duration = 5475
-                }
-            }
-		}
+		name = elysian_revolution.2.a
+		
 	}
 }
+
+# Unrest in scythia
 country_event = {
 	id = elysian_revolution.3
-	title = "ELYREVNAME03"
-	desc = "ELYREVDESC03"
-	picture = WOUNDED_SOLDIERS_eventPicture
-	
+	title = elysian_revolution.3.t
+	desc = elysian_revolution.3.d
+	picture = REVOLUTION_eventPicture
+		
 	is_triggered_only = yes
-	
-	trigger = {
-		any_owned_province = {
-			is_capital = no
-			NOT = { area = CAPITAL }
-			is_state = yes
-			NOT = {
-				any_province = {
-					area = PREV
-					owned_by = ROOT
-					has_province_modifier = rev_had_army_attacked
+
+	immediate = {
+		set_country_flag = nhs_elysian_revolution_progress_25
+		hidden_effect = {
+			every_province = {
+				limit = {
+					nhs_scythian_revolt_province = yes
 				}
+				add_core = SKY
+			}
+			## Find target province
+			nhs_highest_dev_province = {
+				PROVINCE_CONDITION = nhs_scythian_revolt_province 
+				TRADE_CENTER_BONUS = 5
+				EVENT_TARGET = nhs_scythian_stronghold_target
 			}
 		}
 	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	immediate = {
-		hidden_effect = {
-			random_owned_province = {
-				limit = {
-					is_capital = no
-					NOT = { area = CAPITAL }
-					is_state = yes
-					NOT = {
-						any_province = {
-							area = PREV
-							owned_by = ROOT
-							has_province_modifier = rev_had_army_attacked
+
+	option = {
+		name = elysian_revolution.3.a			# Bring me their heads!
+		custom_tooltip = nhs_elysian_revolution_scythian_cores_tt
+		event_target:nhs_scythian_stronghold_target = {
+			set_province_flag = nhs_scythian_revolt_rebels
+			nhs_remove_fort = yes
+			add_province_modifier = {
+				name = nhs2_scythian_rebel_stronghold
+				duration = -1
+			}
+			tooltip = {
+				spawn_rebels = {
+					size = 3
+					type = nationalist_rebels
+					win = yes
+				}
+			}
+			hidden_effect = {
+				random_list = {
+					50 = {
+						spawn_rebels = {
+							size = 3
+							type = nationalist_rebels
+							win = yes
+							culture = skythiai
+						}
+					}
+					50 = {
+						spawn_rebels = {
+							size = 3
+							type = nationalist_rebels
+							win = yes
+							culture = scythian_c
 						}
 					}
 				}
-				save_event_target_as = rev_army_attacked_tar
 			}
 		}
-	}
-	
-	option = {
-		name = "ELYREVOPTA301"			# We have no choice but to retreat.
-		custom_tooltip = nhs_revolution_increase_slightly
+
+		custom_tooltip = nhs_elysian_revolution_scythian_additional_rebels_tt
+
 		hidden_effect = {
-			change_variable = {
-				which = RevolutionCountingVariable
-				value = 5
+			set_variable = {            
+				which = nhs_scythian_revolt_stacks
+				value = 4
 			}
-		}
-		event_target:rev_army_attacked_tar = {
-			area = {
-				limit = { owned_by = ROOT } 
-				add_province_modifier = {
-					name = "rev_had_army_attacked"
-					duration = 913
-				}
-			}
-		}
-	}
-}
-country_event = {
-	id = elysian_revolution.4
-	title = "ELYREVNAME04"
-	desc = "ELYREVDESC04"
-	picture = BATTLE_eventPicture
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		any_owned_province = {
-			is_capital = no
-			NOT = { area = CAPITAL }
-			is_state = yes
-			NOT = {
-				any_province = {
-					area = PREV
-					owned_by = ROOT
-					has_province_modifier = rev_had_army_engaged
-				}
-			}
-		}
-	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	immediate = {
-		hidden_effect = {
-			random_owned_province = {
+			while = {
 				limit = {
-					is_capital = no
-					NOT = { area = CAPITAL }
-					is_state = yes
-					NOT = {
-						any_province = {
-							area = PREV
-							owned_by = ROOT
-							has_province_modifier = rev_had_army_engaged
+					check_variable = {
+						which = nhs_scythian_revolt_stacks
+						value = 0
+					}
+				}
+				subtract_variable = {            
+					which = nhs_scythian_revolt_stacks
+					value = 1
+				}
+				if = {
+					limit = {
+						any_owned_province = {
+							NOT = { has_province_flag = nhs_scythian_revolt_rebels }
+							nhs_scythian_revolt_province = yes
+							any_neighbor_province = {
+								has_province_flag = nhs_scythian_revolt_rebels
+							}
+						}
+					}
+					random_owned_province = {
+						limit = {
+							NOT = { has_province_flag = nhs_scythian_revolt_rebels }
+							nhs_scythian_revolt_province = yes
+							any_neighbor_province = {
+								has_province_flag = nhs_scythian_revolt_rebels
+							}
+						}
+						set_province_flag = nhs_scythian_revolt_rebels
+						random_list = {
+							50 = {
+								spawn_rebels = {
+									size = 1
+									type = nationalist_rebels
+									win = yes
+									culture = skythiai
+								}
+							}
+							50 = {
+								spawn_rebels = {
+									size = 1
+									type = nationalist_rebels
+									win = yes
+									culture = scythian_c
+								}
+							}
 						}
 					}
 				}
-				save_event_target_as = rev_army_engaged_province
-			}
-		}
-	}
-	
-	option = {
-		name = "ELYREVOPTA401"			# We will crush the enemy!
-		custom_tooltip = nhs_revolution_decrease_slightly
-		hidden_effect = {
-			subtract_variable = {
-				which = RevolutionCountingVariable
-				value = 5
-			}
-		}
-		event_target:rev_army_engaged_province = {
-			spawn_rebels = {
-				type = revolutionary_rebels
-				size = 4.0
-				win = yes
-			}
-			area = {
-				limit = {
-					owned_by = ROOT
-				}
-				add_province_modifier = {
-					name = "rev_had_army_engaged"
-					duration = 913
-				}
-			}
-		}
-	}
-}
-country_event = {
-	id = elysian_revolution.5
-	title = "ELYREVNAME05"
-	desc = "ELYREVDESC05"
-	picture = SIEGE_eventPicture
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		any_owned_province = {
-			is_capital = no
-			NOT = { area = CAPITAL }
-			is_state = yes
-			NOT = {
-				any_province = {
-					area = PREV
-					owned_by = ROOT
-					has_province_modifier = rev_had_city_liberated
-				}
-			}
-		}
-	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	immediate = {
-		hidden_effect = {
-			random_owned_province = {
-				limit = {
-					is_capital = no
-					NOT = { area = CAPITAL }
-					is_state = yes
-					NOT = {
-						any_province = {
-							area = PREV
-							owned_by = ROOT
-							has_province_modifier = rev_had_city_liberated
+				else = {
+					event_target:nhs_scythian_stronghold_target = {
+						random_list = {
+							50 = {
+								spawn_rebels = {
+									size = 1
+									type = nationalist_rebels
+									win = yes
+									culture = skythiai
+								}
+							}
+							50 = {
+								spawn_rebels = {
+									size = 1
+									type = nationalist_rebels
+									win = yes
+									culture = scythian_c
+								}
+							}
 						}
 					}
 				}
-				save_event_target_as = rev_city_liberated_province
 			}
 		}
+		
 	}
-	
 	option = {
-		name = "ELYREVOPTA501"			# The enemy forces are captured!
-		custom_tooltip = nhs_revolution_decrease_greatly
-		hidden_effect = {
-			subtract_variable = {
-				which = RevolutionCountingVariable
-				value = 10
+		name = elysian_revolution.3.b			# 
+		custom_tooltip = nhs_elysian_revolution_scythian_cores_tt
+		add_absolutism = -15
+		add_prestige = -20
+		add_disaster_progress = {
+			disaster = elysian_revolution
+			value = -10
+		}
+		every_owned_province = {
+			limit = {
+				nhs_scythian_revolt_province = yes
+			}
+			add_province_modifier = {
+				name = nhs2_scythian_automony
+				duration = -1
 			}
 		}
-		event_target:rev_city_liberated_province = {
-			area = {
-				limit = { owned_by = ROOT }
-				add_province_modifier = {
-					name = "rev_had_city_liberated"
-					duration = 913
-				}
-			}
-		}
-	}
-	
-	option = {
-		name = "ELYREVOPTA502"			# What remains of the enemy forces sneak out of the city and get away.
-		custom_tooltip = nhs_revolution_decrease_slightly
-		hidden_effect = {
-			subtract_variable = {
-				which = RevolutionCountingVariable
-				value = 5
-			}
-		}
-		event_target:rev_city_liberated_province = {
-			area = {
-				limit = { owned_by = ROOT }
-				add_province_modifier = {
-					name = "rev_had_city_liberated"
-					duration = 913
-				}
-			}
-		}
+		custom_tooltip = nhs_elysian_revolution_scythian_autonomy_tt
 	}
 }
+
+
+
+
 country_event = {
 	id = elysian_revolution.6
 	title = "ELYREVNAME06"
