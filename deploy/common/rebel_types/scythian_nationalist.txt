@@ -1,9 +1,9 @@
 ######################################################################
 # Separatist rebels. Freedom!!!
 ######################################################################
-nationalist_rebels = {
+scythian_nationalist_rebels = {
 
-	color = { 25 180 25 }
+	color = { 133 196 113 }
 
 	area = nation_rebel_tag 			# Stays within provinces of their rebel tag
 	government = any				# No special preference
@@ -20,8 +20,8 @@ nationalist_rebels = {
 	smart = yes
 	
 	artillery = 0.1
-	infantry = 0.6
-	cavalry = 0.3
+	infantry = 0.5
+	cavalry = 0.4
 	
 	morale = 1.0
 
@@ -36,6 +36,21 @@ nationalist_rebels = {
 	spawn_chance = {
 		factor = 10
 		modifier = {
+			factor = 0
+			NOT = {
+				nhs_scythian_revolt_province = yes
+			}
+		 }
+		 modifier = {
+			factor = 0
+			owner = {
+				OR = {
+					primary_culture = scythian_c
+					primary_culture = skythiai
+				}
+			}
+	 	}
+		modifier = {
 			factor = 0.01
 			NOT = { nationalism = 1 }
 			owner = {
@@ -44,56 +59,18 @@ nationalist_rebels = {
 					culture_group = ROOT
 					primary_culture = ROOT
 				}
-				OR = {
-					NOT = { has_reform = celestial_empire }
-					has_country_modifier = the_mandate_of_heaven
-					AND = {
-						has_reform = celestial_empire
-						has_dlc = "Mandate of Heaven"
-						imperial_mandate = 80
-					}
-				}
 			}
 			tolerance_to_this = 0			
 	 	}
 		modifier = {
-			factor = 0.01
-			region = france_region
-			has_owner_religion = no
-			owner = { has_disaster = french_wars_of_religion }			
-	 	}
-		modifier = {
-			factor = 0.01
-			owner = {
-				culture_group = ROOT
-				has_reform = celestial_empire
-				OR = {
-					has_country_modifier = the_mandate_of_heaven
-					AND = {
-						has_dlc = "Mandate of Heaven"
-						imperial_mandate = 80
-					}
-				}
-			}
+			factor = 10
+			nationalism = 1
 		}
 		modifier = {
 			factor = 100
 			owner = {
-				NOT = { primary_culture = ROOT }
-				has_reform = celestial_empire
-				OR = {
-					has_country_modifier = the_mandate_of_heaven_lost
-					has_country_modifier = lost_mandate_of_heaven
-					AND = {
-						has_dlc = "Mandate of Heaven"
-						NOT = { imperial_mandate = 50 } 
-					}
-				}
+				has_disaster = nhs_scythian_revolt
 			}
-		}
-		modifier = {
-			factor = 10
-			nationalism = 1
 		}
 		modifier = {
 			factor = 15
@@ -138,26 +115,6 @@ nationalist_rebels = {
 			factor = 1.5
 			owner = {
 				NOT = { culture_group = ROOT }
-			}
-		}
-		modifier = {
-			factor = 0.4
-			owner = {
-				accepted_culture = ROOT
-				NOT = { has_country_modifier = the_mandate_of_heaven_lost }
-				OR = {
-					NOT = { has_dlc = "Mandate of Heaven" }
-					AND = {
-						has_dlc = "Mandate of Heaven"
-						NOT = { has_country_modifier = lost_mandate_of_heaven }
-						NOT = { has_reform = celestial_empire }
-					}
-					AND = {
-						has_dlc = "Mandate of Heaven"
-						has_reform = celestial_empire
-						imperial_mandate = 80
-					}
-				}
 			}
 		}
 		modifier = {
@@ -209,18 +166,22 @@ nationalist_rebels = {
 			factor = 1.5
 			unrest = 6
 		}
+		modifier = {
+			factor = 1.5
+			nhs_scythian_revolt_province = yes
+		}
 	}
  
  	# Province Scope
  	siege_won_trigger = {
- 		culture = REB
+		nhs_scythian_revolt_province = yes
  	}
 	siege_won_effect = {
 		if = {
 			limit = {
-				NOT = { is_core = REB }
+				NOT = { is_core = SKY }
 			}
-			nhs_elysian_nationalist_on_siege_rebel_effect = yes
+			add_core = SKY
 		}
 		add_nationalism = 10 # Add ten extra years of nationalism
 	}
@@ -243,66 +204,33 @@ nationalist_rebels = {
 		add_prestige = -10
 		if = {
 			limit = {
-				OR = {
-					exists = ELY
-					exists = ELR
-					exists = ERR
-					exists = ERF
-				}
-				any_owned_province = {
-					has_rebel_faction = REB
-					culture = REB
-					culture = high_elysian
-				}
-			}
-			nhs_elysian_nationalist_enforce_demands_rebel_effect = yes
-		}
-		else_if = {
-			limit = {
-				NOT = {
-					exists = ELY
-					exists = ELR
-					exists = ERR
-					exists = ERF
-				}
-				any_owned_province = {
-					has_rebel_faction = REB
-					culture = REB
-					culture = high_elysian
-				}
-			}
-			nhs_elysian_nationalist_enforce_demands_not_exists_rebel_effect = yes
-		}
-		else_if = {
-			limit = {
-				exists = REB
+				exists = SKY
 			}
 			every_owned_province = {
 				limit = {
 					has_rebel_faction = REB
-					culture = REB
+					nhs_scythian_revolt_province = yes
 				}
 				if = {
-					limit = { NOT = { is_core = REB } }
-					add_core = REB
+					limit = { NOT = { is_core = SKY } }
+					add_core = SKY
 				}			
-				cede_province = REB
+				cede_province = SKY
 			}			
 		}
 		else_if = {
 			limit = {
-				NOT = { exists = REB }
+				NOT = { exists = SKY }
 			}
 			every_owned_province = {
 				limit = {
 					has_rebel_faction = REB
-					culture = REB
-					NOT = { is_core = REB }
-					culture = REB
+					nhs_scythian_revolt_province = yes
+					NOT = { is_core = SKY }
 				}
-				add_core = REB
+				add_core = SKY
 			}
-			create_vassal = REB
+			create_vassal = SKY
 		}		
 	}
 }
