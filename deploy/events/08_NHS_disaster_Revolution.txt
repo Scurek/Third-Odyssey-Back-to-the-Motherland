@@ -327,10 +327,219 @@ country_event = {
 }
 
 
+# Scythian uprising defeated
+country_event = {
+	id = elysian_revolution.4
+	title = elysian_revolution.4.t
+	desc = elysian_revolution.4.d
+	picture = REVOLUTION_eventPicture
 
+	is_triggered_only = yes
 
+	trigger = {
+		has_country_flag = nhs_elysian_revolution_scythian_revolt
+	}
+
+	option = {
+		name = elysian_revolution.4.a	
+	}
+}
+
+# Borealians emigrating
+country_event = {
+	id = elysian_revolution.5
+	title = elysian_revolution.5.t
+	desc = elysian_revolution.5.d
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				which = nhs_borealian_emigration_counter 
+				value = 4
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = nhs_borealian_emigration_counter
+						value = 0
+					}
+				}
+				nhs_highest_dev_province = {
+					PROVINCE_CONDITION = nhs_borealian_revolt_province 
+					TRADE_CENTER_BONUS = 5
+					EVENT_TARGET =  nhs_highest_dev_borealian_province
+				}
+				if = {
+					limit = {
+						event_target:nhs_highest_dev_borealian_province = {
+							has_province_flag = nhs_borealian_emigration_province
+						}
+					}
+					subtract_variable = {
+						which = nhs_borealian_emigration_counter
+						value = 5
+					}
+				}
+				else = {
+					event_target:nhs_highest_dev_borealian_province = {
+						set_province_flag = nhs_borealian_emigration_province
+						set_variable = {
+							which = nhs_borealian_emigration_counter 
+							which = ROOT
+						}
+						export_to_variable = {
+							which = nhs_borealian_base_tax_lost
+							value = trigger_value:base_tax
+						}
+						divide_variable = {
+							which = nhs_borealian_base_tax_lost
+							value = 2
+						}
+						export_to_variable = {
+							which = nhs_borealian_base_production_lost
+							value = trigger_value:base_production
+						}
+						divide_variable = {
+							which = nhs_borealian_base_production_lost
+							value = 2
+						}
+						export_to_variable = {
+							which = nhs_borealian_base_manpower_lost
+							value = trigger_value:base_manpower
+						}
+						divide_variable = {
+							which = nhs_borealian_base_manpower_lost
+							value = 2
+						}
+						# log = "[This.GetName] DEV LOST: [This.nhs_borealian_base_tax_lost.GetValue], [This.nhs_borealian_base_production_lost.GetValue], [This.nhs_borealian_base_manpower_lost.GetValue]"
+						nhs_set_revolution_emigration_target = yes
+						event_target:nhs_revolution_emigration_target = {
+							set_province_flag = nhs_borealian_emigration_province_target
+							set_variable = {
+								which = nhs_borealian_emigration_counter 
+								which = ROOT
+							}
+							set_variable = {
+								which = nhs_borealian_base_tax_lost 
+								which = PREV 
+							}
+							set_variable = {
+								which = nhs_borealian_base_production_lost 
+								which = PREV 
+							}
+							set_variable = {
+								which = nhs_borealian_base_manpower_lost 
+								which = PREV 
+							}
+							# log = "[This.GetName] DEV GAINED: [This.nhs_borealian_base_tax_lost.GetValue], [This.nhs_borealian_base_production_lost.GetValue], [This.nhs_borealian_base_manpower_lost.GetValue]"
+						}
+					}
+				}
+				subtract_variable = {
+					which = nhs_borealian_emigration_counter
+					value = 1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = elysian_revolution.5.a
+		VIN = {
+			country_event = { id = elysian_revolution.6 }
+		}
+		custom_tooltip = nhs_new_line_tt
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_borealian_emigration_province
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_tax
+				SIGN = -
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_production
+				SIGN = -
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_manpower
+				SIGN = -
+			}
+			tooltip = {
+				random_province = {
+					limit = {
+						has_province_flag = nhs_borealian_emigration_province_target
+						is_variable_equal = {
+							which = nhs_borealian_emigration_counter
+							which = PREV
+						}
+					}
+					nhs_revolution_change_development = {
+						DEVELOPMENT_TYPE = base_tax
+						SIGN = +
+					}
+					nhs_revolution_change_development = {
+						DEVELOPMENT_TYPE = base_production
+						SIGN = +
+					}
+					nhs_revolution_change_development = {
+						DEVELOPMENT_TYPE = base_manpower
+						SIGN = +
+					}
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+		}
+	}
+	after = {
+		every_province = {
+			clr_province_flag = nhs_borealian_emigration_province
+		}
+	}
+}
+
+# Borealians emigrating for Vinland
 country_event = {
 	id = elysian_revolution.6
+	title = elysian_revolution.6.t
+	desc = elysian_revolution.6.d
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = elysian_revolution.6.a
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_borealian_emigration_province_target
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_tax
+				SIGN = +
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_production
+				SIGN = +
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_manpower
+				SIGN = +
+			}
+		}
+	}
+
+	after = {
+		every_province = {
+			clr_province_flag = nhs_borealian_emigration_province_target
+		}
+	}
+}
+
+country_event = {
+	id = elysian_revolution.1006
 	title = "ELYREVNAME06"
 	desc = "ELYREVDESC06"
 	picture = {
