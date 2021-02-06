@@ -116,7 +116,15 @@ country_event = {
 			set_country_flag = nhs_elysian_revolution_progress_75
 		}
 
+		## Trigger events
 		if = {
+			limit = {
+				has_country_flag = nhs_elysian_revolution_progress_75
+			}
+			set_country_flag = nhs_elysian_revolution_point_of_no_return
+			country_event = { id = elysian_revolution.7 }
+		}
+		else_if = {
 			limit = {
 				NOT = { has_country_flag = nhs_elysian_revolution_scythian_unrest }
 				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -138,6 +146,16 @@ country_event = {
 				add_nationalism = 10
 			}
 			country_event = { id = elysian_revolution.3 days = 32 }
+		}
+		else_if = {
+			limit = {
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 3
+					nhs_borealian_revolt_province = yes
+				}
+			}
+			set_country_flag = nhs_elysian_revolution_had_borelian_emigration
+			country_event = { id = elysian_revolution.5 }
 		}
 	}
 
@@ -295,6 +313,14 @@ country_event = {
 		set_country_flag = nhs_elysian_revolution_scythian_revolt
 		custom_tooltip = nhs_elysian_revolution_scythian_cores_tt
 		custom_tooltip = nhs_elysian_revolution_scythian_disaster_tt
+		tooltip = {
+			event_target:nhs_scythian_stronghold_target = {
+				add_province_modifier = {
+					name = nhs2_scythian_rebel_stronghold_t
+					duration = -1
+				}
+			}
+		}
 	}
 	option = {
 		name = elysian_revolution.3.b			# 
@@ -320,6 +346,12 @@ country_event = {
 					duration = -1
 				}
 			}
+			random_owned_province = {
+				limit = {
+					has_province_modifier = nhs2_scythian_rebel_stronghold
+				}
+				remove_province_modifier = nhs2_scythian_rebel_stronghold
+			}
 		}
 
 		set_country_flag = nhs_elysian_revolution_scythian_appeasement
@@ -341,7 +373,15 @@ country_event = {
 	}
 
 	option = {
-		name = elysian_revolution.4.a	
+		name = elysian_revolution.4.a
+		add_prestige = 10
+		add_legitimacy = 10
+		random_owned_province = {
+			limit = {
+				has_province_modifier = nhs2_scythian_rebel_stronghold
+			}
+			remove_province_modifier = nhs2_scythian_rebel_stronghold
+		}
 	}
 }
 
@@ -356,6 +396,7 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
+			set_country_flag = nhs_elysian_revolution_borealian_emigration_ongoing
 			set_variable = {
 				which = nhs_borealian_emigration_counter 
 				value = 4
@@ -495,6 +536,7 @@ country_event = {
 		}
 	}
 	after = {
+		clr_country_flag = nhs_elysian_revolution_borealian_emigration_ongoing
 		every_province = {
 			clr_province_flag = nhs_borealian_emigration_province
 		}
@@ -534,6 +576,59 @@ country_event = {
 	after = {
 		every_province = {
 			clr_province_flag = nhs_borealian_emigration_province_target
+		}
+	}
+}
+
+# Point of no return
+country_event = {
+	id = elysian_revolution.7
+	title = elysian_revolution.7.t
+	desc = elysian_revolution.7.d
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = nhs_elysian_revolution_prevent_war
+	}
+
+	option = {
+		name = elysian_revolution.7.a
+		custom_tooltip = nhs_cannot_declare_war_tt
+		if = {
+			limit = {
+				is_at_war = yes
+			}
+			custom_tooltip = nhs_finish_war_warning_tt
+		}
+	}
+}
+
+# Trouble Overseas
+country_event = {
+	id = elysian_revolution.8
+	title = elysian_revolution.8.t
+	desc = elysian_revolution.8.d
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = nhs_elysian_revolution_has_colonial_trouble_event
+		hidden_effect = {
+			
+		}
+	}
+
+	option = {
+		name = elysian_revolution.7.a
+		custom_tooltip = nhs_cannot_declare_war_tt
+		if = {
+			limit = {
+				is_at_war = yes
+			}
+			custom_tooltip = nhs_finish_war_warning_tt
 		}
 	}
 }

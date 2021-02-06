@@ -22,7 +22,7 @@ nhs_set_revolution_emigration_target = {
 					province_has_center_of_trade_of_level = 1
 				}
 				ROOT = {
-					change_variable = {            
+					change_variable = {
 						which = nhs_local_dev
 						value = 10
 					}
@@ -31,11 +31,13 @@ nhs_set_revolution_emigration_target = {
 			if = {
 				limit = {
 					any_neighbor_province = {
-						nhs_condition_all_ely = { KOMANDA = owned_by }
+						nhs_condition_all_ely = {
+							KOMANDA = owned_by
+						}
 					}
 				}
 				ROOT = {
-					change_variable = {            
+					change_variable = {
 						which = nhs_local_dev
 						value = 5
 					}
@@ -46,7 +48,7 @@ nhs_set_revolution_emigration_target = {
 					has_province_flag = nhs_borealian_emigration_province_target
 				}
 				ROOT = {
-					change_variable = {            
+					change_variable = {
 						which = nhs_local_dev
 						value = -200
 					}
@@ -55,14 +57,14 @@ nhs_set_revolution_emigration_target = {
 			ROOT = {
 				if = {
 					limit = {
-						check_variable = { 
-							which = nhs_local_dev 
-							which = nhs_highest_province_dev 
+						check_variable = {
+							which = nhs_local_dev
+							which = nhs_highest_province_dev
 						}
 					}
 					set_variable = {
-						which = nhs_highest_province_dev 
-						which = nhs_local_dev 
+						which = nhs_highest_province_dev
+						which = nhs_local_dev
 					}
 					PREV = {
 						save_event_target_as = nhs_revolution_emigration_target
@@ -70,9 +72,10 @@ nhs_set_revolution_emigration_target = {
 				}
 			}
 		}
-	}	
+	}
 }
 
+## DEVELOPMENT_TYPE: base_tax, base_production or base_manpower SIGN: + or -
 nhs_revolution_change_development = {
 	if = {
 		limit = {
@@ -208,7 +211,66 @@ nhs_revolution_change_development = {
 			}
 		}
 		add_$DEVELOPMENT_TYPE$ = $SIGN$1
-	}	
+	}
+}
+
+## EXARCH_TAG: tag
+nhs_set_non_existing_exarch_preference = {
+	if = {
+		limit = {
+			NOT = {
+				exists = $EXARCH_TAG$
+			}
+		}
+		set_variable = {
+			which = nhs_total_non_existant_exarch_dev
+			value = 0
+		}
+		set_country_flag = nhs_looking_at_exarch_$EXARCH_TAG$
+		every_owned_province = {
+			limit = {
+				nhs_$EXARCH_TAG$_province = yes
+			}
+			ROOT = {
+				export_to_variable = {
+					which = nhs_exarch_province_dev
+					value = trigger_value:development
+					who = PREV
+				}
+				change_variable = {
+					which = nhs_total_non_existant_exarch_dev
+					which = nhs_exarch_province_dev
+				}
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = nhs_total_non_existant_exarch_dev
+					value = 500
+				}
+			}
+			set_country_flag = nhs_elysian_revolution_$EXARCH_TAG$_independance
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = nhs_total_non_existant_exarch_dev
+					value = 500
+				}
+			}
+			set_country_flag = nhs_elysian_revolution_$EXARCH_TAG$_needs_convincing
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = nhs_total_non_existant_exarch_dev
+					value = 1
+				}
+			}
+			set_country_flag = nhs_elysian_revolution_$EXARCH_TAG$_loyal
+		}
+	}
 }
 
 nhs_civil_war_initialize_land = {
@@ -217,14 +279,13 @@ nhs_civil_war_initialize_land = {
 		which = nhs_total_rebel_dev_owned
 		value = 0
 	}
-	divide_variable = {            
+	divide_variable = {
 		which = nhs_total_rebel_dev
 		value = 2
 	}
 	nhs_set_rebel_capital = yes
 	nhs_set_ely_capital = yes
 	nhs_set_area_capitals = yes
-	
 	while = {
 		limit = {
 			check_variable = {
@@ -262,7 +323,7 @@ nhs_calc_total_rebellion_dev = {
 			value = development
 		}
 		ROOT = {
-			change_variable = {            
+			change_variable = {
 				which = nhs_total_rebel_dev
 				which = PREV
 			}
@@ -298,7 +359,7 @@ nhs_calc_current_rebellion_dev = {
 			value = development
 		}
 		ROOT = {
-			change_variable = {            
+			change_variable = {
 				which = nhs_total_rebel_dev_owned
 				which = PREV
 			}
@@ -368,7 +429,9 @@ nhs_set_rebel_province_weights = {
 	every_owned_province = {
 		limit = {
 			nhs_potential_rebellion_provinces = yes
-			NOT = { has_province_flag = nhs_ely_area_capital }
+			NOT = {
+				has_province_flag = nhs_ely_area_capital
+			}
 		}
 		nhs_set_province_weight = yes
 		set_variable = {
@@ -407,8 +470,12 @@ nhs_set_province_weight = {
 		limit = {
 			OR = {
 				AND = {
-					NOT = { culture_group = elysian_group }
-					NOT = { native_culture = yes }
+					NOT = {
+						culture_group = elysian_group
+					}
+					NOT = {
+						native_culture = yes
+					}
 				}
 				# TODO Natives clause
 				culture = skythiai
@@ -418,7 +485,7 @@ nhs_set_province_weight = {
 				culture = kykladian
 			}
 		}
-		change_variable = {            
+		change_variable = {
 			which = nhs_rebel_province_weight
 			value = 1
 		}
@@ -429,7 +496,7 @@ nhs_set_province_weight = {
 			is_core = ERF
 		}
 		PREV = {
-			change_variable = {            
+			change_variable = {
 				which = nhs_rebel_province_weight
 				value = 3
 			}
@@ -441,14 +508,14 @@ nhs_set_province_weight = {
 nhs_transfer_area = {
 	set_variable = {
 		which = nhs_rebellion_top_weight
-    	value = 0
+		value = 0
 	}
 	every_owned_province = {
 		limit = {
 			nhs_potential_rebellion_provinces = yes
 			has_province_flag = nhs_ely_area_capital
 		}
-		set_variable = {            
+		set_variable = {
 			which = nhs_rebellion_top_weight
 			which = nhs_rebel_province_weight
 		}
@@ -457,7 +524,7 @@ nhs_transfer_area = {
 				check_variable = {
 					which = nhs_rebellion_top_weight
 					which = ROOT
-				}				
+				}
 			}
 			ROOT = {
 				set_variable = {
@@ -508,6 +575,5 @@ nhs_transfer_area = {
 	# 	limit = {
 	# 		has_province_flag = nhs_top_province_weight
 	# 	}
-		
 	# }
 }

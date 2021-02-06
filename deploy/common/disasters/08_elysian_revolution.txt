@@ -1,23 +1,19 @@
 elysian_revolution = {
 	potential = {
 		#NOT = { has_country_flag = elysian_revolution_over }
-		NOT = { has_country_flag = nhs_had_first_civil_war }
 		tag = ELY
+		NOT = { has_country_flag = nhs_had_first_civil_war }
 		is_free_or_tributary_trigger = yes
-		num_of_cities = 30
-		custom_trigger_tooltip = {
-			tooltip = nhs_owns_at_least_200_cities_in_na
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 200
-				continent = north_america
-				is_wasteland = no
-				is_city = yes
-			}
-		}
 		has_reform = elysian_absolute_empire
 		OR = {
 			current_age = age_of_absolutism
 			current_age = age_of_revolutions
+		}
+		num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+			value = 200
+			continent = north_america
+			is_wasteland = no
+			is_city = yes
 		}
 	}
 	
@@ -27,19 +23,31 @@ elysian_revolution = {
 			current_age = age_of_absolutism
 			current_age = age_of_revolutions
 		}
-		num_of_cities = 30
+		custom_trigger_tooltip = {
+			tooltip = nhs_owns_at_least_200_cities_in_na
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 200
+				continent = north_america
+				is_wasteland = no
+				is_city = yes
+			}
+		}
 		has_any_disaster = no
-		absolutism = 80
+		absolutism = 70
 		NOT = { has_regency = yes }
 	}
 	
-	can_stop = { 
+	can_stop = {
+		custom_trigger_tooltip = {
+			tooltip = nhs_elysian_revolution_not_past_the_ponr_tt
+			NOT = { has_country_flag = nhs_elysian_revolution_point_of_no_return }
+		}
 		OR = {
 			has_any_disaster = yes
 			AND = {
 				stability = 3
 				legitimacy = 95
-				prestige = 95
+				prestige = 80
 			}
 			NOT = { absolutism = 50 }
 		}
@@ -88,44 +96,63 @@ elysian_revolution = {
 	progress = {
 		modifier = {
 			factor = 1
+			custom_trigger_tooltip = {
+				tooltip = nhs_elysian_revolution_past_the_ponr_tt
+				has_country_flag = nhs_elysian_revolution_point_of_no_return
+			}
+		}
+		modifier = {
+			factor = 1
 			NOT = { prestige = 0 }
+			NOT = { has_country_flag = nhs_elysian_revolution_point_of_no_return }
 		}
 		modifier = {
 			factor = 1
 			war_exhaustion = 5
 		} 
-		modifier = {
-			factor = 0.5
-			num_of_loans = 10
-			NOT = { num_of_loans = 25 }
-		}	
+		# modifier = {
+		# 	factor = 0.5
+		# 	num_of_loans = 10
+		# 	NOT = { num_of_loans = 25 }
+		# }	
 		modifier = {
 			factor = 1
+			absolutism = 70
+			NOT = { absolutism = 80 }
+		}
+		modifier = {
+			factor = 1.5
 			absolutism = 80
 			NOT = { absolutism = 90 }
 		}
 		modifier = {
 			factor = 2
 			absolutism = 90
-			NOT = { absolutism = 100 }
 		}
 		modifier = {
 			factor = 3
 			absolutism = 100
 		}
+		# modifier = {
+		# 	factor = 1
+		# 	num_of_loans = 25
+		# }
+		# modifier = {
+		# 	factor = 2
+		# 	is_bankrupt = yes
+		# }
 		modifier = {
 			factor = 1
-			num_of_loans = 25
-		}
-		modifier = {
-			factor = 2
-			is_bankrupt = yes
-		}
-		modifier = {
-			factor = 2
 			NOT = { stability = 0 }
 		}
-
+		modifier = {
+			factor = 1.5
+			NOT = { stability = -1 }
+		}
+		modifier = {
+			factor = 2
+			NOT = { stability = -2 }
+		}
 	}
 	
 	can_end = {
@@ -140,7 +167,7 @@ elysian_revolution = {
 
 	modifier = {
 		global_unrest = 10
-		stability_cost_modifier = 0.1
+		stability_cost_modifier = 0.5
 	}	
 	
 	
