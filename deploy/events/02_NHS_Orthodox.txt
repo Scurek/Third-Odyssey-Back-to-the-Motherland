@@ -992,18 +992,23 @@ province_event = {
 	title = nhs2_orthodoxevents.25.t
 	desc = nhs2_orthodoxevents.25.d
 	picture = orthodox_temple_eventPicure
+
+	goto = nhs_patri_target
 	
 	trigger = {
 		continent = north_america
 		NOT = { region = far_north_region }
 		NOT = { region = greenland_region }
 		owner = {
-			NOT = { has_country_modifier = nhs2_patri_cooldown }
 			religion = elysian_orthodoxy
 			any_owned_province = {
 				nhs_is_ecumenical = yes
 			}
 			nhs_eligible_for_patriarchate = yes
+			OR = {
+				NOT = { has_global_flag = nhs_patr_c }
+				had_global_flag = { flag = nhs_patr_c days = 10 }
+			}
 		}
 		NOT = {
 			any_province = {
@@ -1019,9 +1024,7 @@ province_event = {
 					region = great_lakes_region
 				}
 			}
-			any_province = {
-				nhs_is_north = yes
-			}
+			has_global_flag = nhs2_patriarchate_north
 		}
 		NOT = { region = great_plains_region }
 		NOT = { region = california_region }
@@ -1032,15 +1035,9 @@ province_event = {
 					region = central_america_region
 				}
 			}
-			any_province = {
-				nhs_is_south = yes
-			}
+			has_global_flag = nhs2_patriarchate_south
 		}
 		owner = {
-			OR = {
-				NOT = { has_global_flag = nhs_patr_c }
-				had_global_flag = { flag = nhs_patr_c days = 10 }
-			}
 			OR = {
 				AND = {
 					calc_true_if = {
@@ -1087,11 +1084,6 @@ province_event = {
 			owner = {
 				clr_global_flag = nhs_patr_c
 				set_global_flag = nhs_patr_c
-				add_country_modifier = {
-					name = nhs2_patri_cooldown
-					duration = 10
-					hidden = yes
-				}
 				if = {
 					limit = {
 						any_owned_province = {
@@ -1295,7 +1287,11 @@ country_event = {
 	desc = nhs2_orthodoxevents.3.d
 	picture = orthodox_theology_eventPicture
 
+	goto = nhs_patri_target
+
     trigger = {
+		religion = elysian_orthodoxy
+		NOT = { has_global_flag = nhs2_patriarchate_north }
 		OR = {
 			NOT = { has_global_flag = nhs_patr_c }
 			had_global_flag = { flag = nhs_patr_c days = 10 }
@@ -1377,13 +1373,6 @@ country_event = {
 				}
 			}
 		}
-		religion = elysian_orthodoxy
-		NOT = { has_global_flag = nhs2_patriarchate_north }
-		NOT = {
-			any_province = {
-				nhs_is_north = yes
-			}
-		}
 	}
 	
 	immediate = {
@@ -1397,137 +1386,114 @@ country_event = {
 		hidden_effect = {
 			clr_global_flag = nhs_patr_c
 			set_global_flag = nhs_patr_c
-				if = {
-					limit = {
-						NOT = {
-							any_owned_province = {
-								nhs_is_ecumenical = yes
-							}
+			if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							region = hudson_bay_region
+							region = canada_region
+							region = great_lakes_region
 						}
-					}
-					every_country = {
-						limit = {
-							any_owned_province = {
-								nhs_is_ecumenical = yes
-							}
+						OR = {
+							has_river_estuary_trigger = yes
+							province_has_center_of_trade_of_level = 1
 						}
-						country_event = { id = nhs2_orthodoxevents.1995 days = 3 }
 					}
 				}
-				if = {
+				random_owned_province = {
+					limit = {
+						OR = {
+							region = hudson_bay_region
+							region = canada_region
+							region = great_lakes_region
+						}
+						OR = {
+							has_river_estuary_trigger = yes
+							province_has_center_of_trade_of_level = 1
+						}
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = {
+						name = "patriarchate_of_the_north" 
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							region = hudson_bay_region
+							region = canada_region
+							region = great_lakes_region
+						}
+						has_port = yes
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							region = hudson_bay_region
+							region = canada_region
+							region = great_lakes_region
+						}
+						has_port = yes
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = { 
+						name = "patriarchate_of_the_north" 
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							region = hudson_bay_region
+							region = canada_region
+							region = great_lakes_region
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							region = hudson_bay_region
+							region = canada_region
+							region = great_lakes_region
+						}
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = { 
+						name = "patriarchate_of_the_north" 
+						duration = -1
+					}
+				}
+			}
+			else = {
+				clr_global_flag = nhs2_patriarchate_north
+			}
+			if = {
+				limit = {
+					has_global_flag = nhs2_patriarchate_north
+					NOT = {
+						any_owned_province = {
+							nhs_is_ecumenical = yes
+						}
+					}
+				}
+				every_country = {
 					limit = {
 						any_owned_province = {
-							OR = {
-								region = hudson_bay_region
-								region = canada_region
-								region = great_lakes_region
-							}
-							OR = {
-								has_river_estuary_trigger = yes
-								province_has_center_of_trade_of_level = 1
-							}
+							nhs_is_ecumenical = yes
 						}
 					}
-					random_owned_province = {
-						limit = {
-							OR = {
-								region = hudson_bay_region
-								region = canada_region
-								region = great_lakes_region
-							}
-							OR = {
-								has_river_estuary_trigger = yes
-								province_has_center_of_trade_of_level = 1
-							}
-						}
-						change_religion = elysian_orthodoxy
-						add_permanent_province_modifier = {
-							name = "patriarchate_of_the_north" 
-							duration = -1
-						}
-					}
+					country_event = { id = nhs2_orthodoxevents.1995 days = 3 }
 				}
-				if = {
-					limit = {
-						NOT = {
-							any_owned_province = {
-								OR = {
-									region = hudson_bay_region
-									region = canada_region
-									region = great_lakes_region
-								}
-								OR = {
-									has_river_estuary_trigger = yes
-									province_has_center_of_trade_of_level = 1
-								}
-							}
-						}
-						any_owned_province = {
-							OR = {
-								region = hudson_bay_region
-								region = canada_region
-								region = great_lakes_region
-							}
-							has_port = yes
-						}
-					}
-					random_owned_province = {
-						limit = {
-							OR = {
-								region = hudson_bay_region
-								region = canada_region
-								region = great_lakes_region
-							}
-							has_port = yes
-						}
-						change_religion = elysian_orthodoxy
-						add_permanent_province_modifier = { 
-							name = "patriarchate_of_the_north" 
-							duration = -1
-						}
-					}
-				}
-				if = {
-					limit = {
-						NOT = {
-							any_owned_province = {
-								OR = {
-									region = hudson_bay_region
-									region = canada_region
-									region = great_lakes_region
-								}
-								OR = {
-									has_river_estuary_trigger = yes
-									province_has_center_of_trade_of_level = 1
-								}
-							}
-						}
-						NOT = {
-							any_owned_province = {
-								OR = {
-									region = hudson_bay_region
-									region = canada_region
-									region = great_lakes_region
-								}
-								has_port = yes
-							}
-						}
-					}
-					random_owned_province = {
-						limit = {
-							OR = {
-								region = hudson_bay_region
-								region = canada_region
-								region = great_lakes_region
-							}
-						}
-						change_religion = elysian_orthodoxy
-						add_permanent_province_modifier = { 
-							name = "patriarchate_of_the_north" 
-							duration = -1
-						}
-					}
-				
 			}
 		}
 	}
@@ -1539,9 +1505,8 @@ country_event = {
 			any_owned_province = {
 				nhs_is_ecumenical = yes
 			}
-			NOT = {
-				nhs_is_elysian_patriarchy = yes
-			}
+			NOT = { nhs_is_elysian_patriarchy = yes }
+			has_global_flag = nhs2_patriarchate_north
 		}
 		ai_chance = {
 			factor = 60
@@ -1573,9 +1538,8 @@ country_event = {
 			any_owned_province = {
 				nhs_is_ecumenical = yes
 			}
-			NOT = {
-				nhs_is_elysian_patriarchy = yes
-			}
+			NOT = { nhs_is_elysian_patriarchy = yes }
+			has_global_flag = nhs2_patriarchate_north
 		}
 		ai_chance = {
 			factor = 40
@@ -1610,6 +1574,7 @@ country_event = {
 				nhs_is_ecumenical = yes
 			}
 			nhs_is_elysian_patriarchy = yes
+			has_global_flag = nhs2_patriarchate_north
 		}
 		add_prestige = 10
 		add_devotion = 5
@@ -1635,6 +1600,7 @@ country_event = {
 					nhs_is_ecumenical = yes
 				}
 			}
+			has_global_flag = nhs2_patriarchate_north
 		}
 		add_patriarch_authority = 0.1
 		add_prestige = 5
@@ -1667,6 +1633,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.f"
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_north
 		}
 		ai_chance = {
 			factor = 30
@@ -1722,6 +1689,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.g"  # Just once
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_north
 		}
 		ai_chance = {
 			factor = 30
@@ -1753,6 +1721,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.h" # Expand the system
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_north
 		}
 		ai_chance = {
 			factor = 30
@@ -1785,6 +1754,17 @@ country_event = {
 		clr_global_flag = nhs_traditional_patriarchate
 		set_global_flag = nhs_expanded_patriarchate
 	}
+
+	option = {
+		name = "nhs2_orthodoxevents.3.i" # DEBUG
+		trigger = {
+			NOT = { has_global_flag = nhs2_patriarchate_north }
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = nhs_invalid_province_patriarchate_tt
+	}
 }
 
 # Patriarchate of the north bounce
@@ -1795,6 +1775,19 @@ country_event = {
 	picture = orthodox_court_eventPicture
 	
 	is_triggered_only = yes
+
+	goto = nhs_patri_target
+
+	immediate = {
+		hidden_effect = {
+			random_province = {
+				limit = {
+					has_province_modifier = patriarchate_of_the_north
+				}
+				save_event_target_as = nhs_patri_target
+			}
+		}
+	}
 
 	option = {
 		name = "nhs2_orthodoxevents.3.a"
@@ -1884,7 +1877,11 @@ country_event = {
 	desc = nhs2_orthodoxevents.4.d
 	picture = orthodox_temple_eventPicure
 
+	goto = nhs_patri_target
+
     trigger = {
+		religion = elysian_orthodoxy
+		NOT = { has_global_flag = nhs2_patriarchate_west }
 		OR = {
 			NOT = { has_global_flag = nhs_patr_c }
 			had_global_flag = { flag = nhs_patr_c days = 10 }
@@ -1950,13 +1947,6 @@ country_event = {
 				}
 			}
 		}
-		religion = elysian_orthodoxy
-		NOT = { has_global_flag = nhs2_patriarchate_west }
-		NOT = {
-			any_province = {
-				nhs_is_west = yes
-			}
-		}
 	}
 
 	mean_time_to_happen = {
@@ -1976,6 +1966,74 @@ country_event = {
 			set_global_flag = nhs_patr_c
 			if = {
 				limit = {
+					any_owned_province = {
+						region = great_plains_region
+						OR = {
+							has_river_estuary_trigger = yes
+							province_has_center_of_trade_of_level = 1
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = great_plains_region
+						OR = {
+							has_river_estuary_trigger = yes
+							province_has_center_of_trade_of_level = 1
+						}
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = { 
+						name = "patriarchate_of_the_west" 
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_province = {
+						region = great_plains_region
+						has_port = yes
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = great_plains_region
+						has_port = yes
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = { 
+						name = "patriarchate_of_the_west" 
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_province = {
+						region = great_plains_region
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = great_plains_region
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = { 
+						name = "patriarchate_of_the_west" 
+						duration = -1
+					}
+				}
+			}
+			else = {
+				clr_global_flag = nhs2_patriarchate_west
+			}
+			if = {
+				limit = {
+					has_global_flag = nhs2_patriarchate_west
 					NOT = {
 						any_owned_province = {
 							nhs_is_ecumenical = yes
@@ -1992,88 +2050,6 @@ country_event = {
 					country_event = { id = nhs2_orthodoxevents.1996 days = 3 }
 				}
 			}
-			if = {
-				limit = {
-					any_owned_province = {
-						region = great_plains_region
-						OR = {
-							has_river_estuary_trigger = yes
-							province_has_center_of_trade_of_level = 1
-						}
-					}
-				}
-				random_owned_province = {
-					limit = {
-						region = great_plains_region
-						OR = {
-							has_river_estuary_trigger = yes
-							province_has_center_of_trade_of_level = 1
-						}
-					}
-					change_religion = elysian_orthodoxy
-					add_permanent_province_modifier = { 
-						name = "patriarchate_of_the_west" 
-						duration = -1
-					}
-				}
-			}
-			if = {
-				limit = {
-					NOT = {
-						any_owned_province = {
-							region = great_plains_region
-							OR = {
-								has_river_estuary_trigger = yes
-								province_has_center_of_trade_of_level = 1
-							}
-						}
-					}
-					any_owned_province = {
-						region = great_plains_region
-						has_port = yes
-					}
-				}
-				random_owned_province = {
-					limit = {
-						region = great_plains_region
-						has_port = yes
-					}
-					change_religion = elysian_orthodoxy
-					add_permanent_province_modifier = { 
-						name = "patriarchate_of_the_west" 
-						duration = -1
-					}
-				}
-			}
-			if = {
-				limit = {
-					NOT = {
-						any_owned_province = {
-							region = great_plains_region
-							OR = {
-								has_river_estuary_trigger = yes
-								province_has_center_of_trade_of_level = 1
-							}
-						}
-					}
-					NOT = {
-						any_owned_province = {
-							region = great_plains_region
-							has_port = yes
-						}
-					}
-				}
-				random_owned_province = {
-					limit = {
-						region = great_plains_region
-					}
-					change_religion = elysian_orthodoxy
-					add_permanent_province_modifier = { 
-						name = "patriarchate_of_the_west" 
-						duration = -1
-					}
-				}
-			}
 		}
 	}
 
@@ -2085,6 +2061,7 @@ country_event = {
 				nhs_is_ecumenical = yes
 			}
 			NOT = {	nhs_is_elysian_patriarchy = yes }
+			has_global_flag = nhs2_patriarchate_west
 		}
 		ai_chance = {
 			factor = 60
@@ -2116,6 +2093,7 @@ country_event = {
 				nhs_is_ecumenical = yes
 			}
 			NOT = {	nhs_is_elysian_patriarchy = yes }
+			has_global_flag = nhs2_patriarchate_west
 		}
 		ai_chance = {
 			factor = 40
@@ -2150,6 +2128,7 @@ country_event = {
 				nhs_is_ecumenical = yes
 			}
 			nhs_is_elysian_patriarchy = yes
+			has_global_flag = nhs2_patriarchate_west
 		}
 		add_prestige = 10
 		add_devotion = 5
@@ -2174,6 +2153,7 @@ country_event = {
 					nhs_is_ecumenical = yes
 				}
 			}
+			has_global_flag = nhs2_patriarchate_west
 		}
 		add_patriarch_authority = 0.1
 		add_prestige = 5
@@ -2205,6 +2185,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.f"
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_west
 		}
 		ai_chance = {
 			factor = 30
@@ -2252,6 +2233,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.g"  # Just once
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_west
 		}
 		ai_chance = {
 			factor = 30
@@ -2283,6 +2265,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.h" # Expand the system
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_west
 		}
 		ai_chance = {
 			factor = 30
@@ -2315,6 +2298,17 @@ country_event = {
 		clr_global_flag = nhs_traditional_patriarchate
 		set_global_flag = nhs_expanded_patriarchate
 	}
+
+	option = {
+		name = "nhs2_orthodoxevents.3.i" # DEBUG
+		trigger = {
+			NOT = { has_global_flag = nhs2_patriarchate_west }
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = nhs_invalid_province_patriarchate_tt
+	}
 }
 
 # Patriarchate of the west bounce
@@ -2325,6 +2319,19 @@ country_event = {
 	picture = orthodox_court_eventPicture
 	
 	is_triggered_only = yes
+
+	goto = nhs_patri_target
+
+	immediate = {
+		hidden_effect = {
+			random_province = {
+				limit = {
+					has_province_modifier = patriarchate_of_the_west
+				}
+				save_event_target_as = nhs_patri_target
+			}
+		}
+	}
 
 	option = {
 		name = "nhs2_orthodoxevents.3.a"
@@ -2415,6 +2422,8 @@ country_event = {
 	picture = orthodox_discussion_eventPicture
 	
 	is_triggered_only = yes #NEW
+
+	goto = nhs2_orthodoxevents1992_target
 
    # trigger = {
 		#nhs_eligible_for_patriarchate = yes
@@ -2813,6 +2822,8 @@ country_event = {
 	picture = orthodox_court_eventPicture
 	
 	is_triggered_only = yes
+
+	goto = nhs_patri_target
 	
 	trigger = {
 		has_country_flag = nhs_had_orthodoxevents_1993
@@ -2820,6 +2831,17 @@ country_event = {
 	
 	immediate = {
 		set_country_flag = nhs_had_orthodoxevents_1993
+		hidden_effect = {
+			random_province = {
+				limit = {
+					OR = {
+						has_province_modifier = patriarchate_of_the_south
+						has_province_modifier = patriarchate_of_the_south1
+					}
+				}
+				save_event_target_as = nhs_patri_target
+			}
+		}
 	}
 	
 	option = {
@@ -2913,7 +2935,11 @@ country_event = {
 	desc = nhs2_orthodoxevents.5.d
 	picture = orthodox_theology_eventPicture
 
+	goto = nhs_patri_target
+
     trigger = {
+		religion = elysian_orthodoxy
+		NOT = { has_global_flag = nhs2_patriarchate_south }
 		OR = {
 			NOT = { has_global_flag = nhs_patr_c }
 			had_global_flag = { flag = nhs_patr_c days = 10 }
@@ -2994,13 +3020,6 @@ country_event = {
 				}
 			}
 		}
-		religion = elysian_orthodoxy
-		NOT = { has_global_flag = nhs2_patriarchate_south }
-		NOT = {
-			any_province = {
-				nhs_is_south = yes
-			}
-		}
 	}
 
 	mean_time_to_happen = {
@@ -3020,6 +3039,92 @@ country_event = {
 			set_global_flag = nhs_patr_c
 			if = {
 				limit = {
+					any_owned_province = {
+						OR = {
+							region = mexico_region
+							region = central_america_region
+						}
+						OR = {
+							has_river_estuary_trigger = yes
+							province_has_center_of_trade_of_level = 1
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							region = mexico_region
+							region = central_america_region
+						}
+						OR = {
+							has_river_estuary_trigger = yes
+							province_has_center_of_trade_of_level = 1
+						}
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = { 
+						name = "patriarchate_of_the_south" 
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							region = mexico_region
+							region = central_america_region
+						}
+						has_port = yes
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							region = mexico_region
+							region = central_america_region
+						}
+						has_port = yes
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = { 
+						name = "patriarchate_of_the_south" 
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							region = mexico_region
+							region = central_america_region
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							region = mexico_region
+							region = central_america_region
+						}
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = { 
+						name = "patriarchate_of_the_south" 
+						duration = -1
+					}
+				}
+			}
+			else = {
+				clr_global_flag = nhs2_patriarchate_south
+			}
+			if = {
+				limit = {
+					has_global_flag = nhs2_patriarchate_south
 					NOT = {
 						any_owned_province = {
 							nhs_is_ecumenical = yes
@@ -3036,112 +3141,6 @@ country_event = {
 					country_event = { id = nhs2_orthodoxevents.1998 days = 3 }
 				}
 			}
-			if = {
-				limit = {
-					any_owned_province = {
-						OR = {
-							region = mexico_region
-							region = central_america_region
-						}
-						OR = {
-							has_river_estuary_trigger = yes
-							province_has_center_of_trade_of_level = 1
-						}
-					}
-				}
-				random_owned_province = {
-					limit = {
-						OR = {
-							region = mexico_region
-							region = central_america_region
-						}
-						OR = {
-							has_river_estuary_trigger = yes
-							province_has_center_of_trade_of_level = 1
-						}
-					}
-					change_religion = elysian_orthodoxy
-					add_permanent_province_modifier = { 
-						name = "patriarchate_of_the_south" 
-						duration = -1
-					}
-				}
-			}
-			if = {
-				limit = {
-					NOT = {
-						any_owned_province = {
-							OR = {
-								region = mexico_region
-								region = central_america_region
-							}
-							OR = {
-								has_river_estuary_trigger = yes
-								province_has_center_of_trade_of_level = 1
-							}
-						}
-					}
-					any_owned_province = {
-						OR = {
-							region = mexico_region
-							region = central_america_region
-						}
-						has_port = yes
-					}
-				}
-				random_owned_province = {
-					limit = {
-						OR = {
-							region = mexico_region
-							region = central_america_region
-						}
-						has_port = yes
-					}
-					change_religion = elysian_orthodoxy
-					add_permanent_province_modifier = { 
-						name = "patriarchate_of_the_south" 
-						duration = -1
-					}
-				}
-			}
-			if = {
-				limit = {
-					NOT = {
-						any_owned_province = {
-							OR = {
-								region = mexico_region
-								region = central_america_region
-							}
-							OR = {
-								has_river_estuary_trigger = yes
-								province_has_center_of_trade_of_level = 1
-							}
-						}
-					}
-					NOT = {
-						any_owned_province = {
-							OR = {
-								region = mexico_region
-								region = central_america_region
-							}
-							has_port = yes
-						}
-					}
-				}
-				random_owned_province = {
-					limit = {
-						OR = {
-							region = mexico_region
-							region = central_america_region
-						}
-					}
-					change_religion = elysian_orthodoxy
-					add_permanent_province_modifier = { 
-						name = "patriarchate_of_the_south" 
-						duration = -1
-					}
-				}
-			}
 		}
 	}
 
@@ -3153,6 +3152,7 @@ country_event = {
 				nhs_is_ecumenical = yes
 			}
 			NOT = {	nhs_is_elysian_patriarchy = yes }
+			has_global_flag = nhs2_patriarchate_south
 		}
 		ai_chance = {
 			factor = 60
@@ -3184,6 +3184,7 @@ country_event = {
 				nhs_is_ecumenical = yes
 			}
 			NOT = {	nhs_is_elysian_patriarchy = yes }
+			has_global_flag = nhs2_patriarchate_south
 		}
 		ai_chance = {
 			factor = 40
@@ -3218,6 +3219,7 @@ country_event = {
 				nhs_is_ecumenical = yes
 			}
 			nhs_is_elysian_patriarchy = yes
+			has_global_flag = nhs2_patriarchate_south
 		}
 		add_prestige = 10
 		add_devotion = 5
@@ -3242,6 +3244,7 @@ country_event = {
 					nhs_is_ecumenical = yes
 				}
 			}
+			has_global_flag = nhs2_patriarchate_south
 		}
 		add_patriarch_authority = 0.1
 		add_prestige = 5
@@ -3273,6 +3276,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.f"
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_south
 		}
 		ai_chance = {
 			factor = 30
@@ -3326,6 +3330,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.g"  # Just once
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_south
 		}
 		ai_chance = {
 			factor = 30
@@ -3357,6 +3362,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.h" # Expand the system
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_south
 		}
 		ai_chance = {
 			factor = 30
@@ -3389,6 +3395,17 @@ country_event = {
 		clr_global_flag = nhs_traditional_patriarchate
 		set_global_flag = nhs_expanded_patriarchate
 	}
+
+	option = {
+		name = "nhs2_orthodoxevents.3.i" # DEBUG
+		trigger = {
+			NOT = { has_global_flag = nhs2_patriarchate_south }
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = nhs_invalid_province_patriarchate_tt
+	}
 }
 
 # Patriarchate of the south bounce
@@ -3397,8 +3414,21 @@ country_event = {
 	title = nhs2_orthodoxevents.1998.t
 	desc = nhs2_orthodoxevents.1998.d
 	picture = orthodox_court_eventPicture
+
+	goto = nhs_patri_target
 	
 	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			random_province = {
+				limit = {
+					has_province_modifier = patriarchate_of_the_south
+				}
+				save_event_target_as = nhs_patri_target
+			}
+		}
+	}
 
 	option = {
 		name = "nhs2_orthodoxevents.3.a"
@@ -3488,7 +3518,11 @@ country_event = {
 	desc = nhs2_orthodoxevents.6.d
 	picture = orthodox_temple_eventPicure
 
+	goto = nhs_patri_target
+
     trigger = {
+		religion = elysian_orthodoxy
+		NOT = { has_global_flag = nhs2_patriarchate_far_west }
 		OR = {
 			NOT = { has_global_flag = nhs_patr_c }
 			had_global_flag = { flag = nhs_patr_c days = 10 }
@@ -3520,25 +3554,13 @@ country_event = {
 			AND = {
 				calc_true_if = {
 					all_core_province = {
-						OR = {
-							region = california_region
-							AND = {
-								region = cascadia_region
-								OR = {
-									has_river_estuary_trigger = yes
-									province_has_center_of_trade_of_level = 1
-								}
-							}
-						}
+						region = california_region
 						owned_by = ROOT
 					}
 					amount = 5
 				}
 				any_owned_province = {
-					OR = {
-						region = california_region
-						region = cascadia_region
-					}
+					region = california_region
 					OR = {
 						has_port = yes
 						has_river_estuary_trigger = yes
@@ -3549,26 +3571,14 @@ country_event = {
 			AND = {
 				calc_true_if = {
 					all_core_province = {
-						OR = {
-							region = california_region
-							AND = {
-								region = cascadia_region
-								OR = {
-									has_river_estuary_trigger = yes
-									province_has_center_of_trade_of_level = 1
-								}
-							}
-						}
+						region = california_region
 						owned_by = ROOT
 					}
 					amount = 10
 				}
 				NOT = {
 					any_owned_province = {
-						OR = {
-							region = california_region
-							region = cascadia_region
-						}
+						region = california_region
 						OR = {
 							has_port = yes
 							has_river_estuary_trigger = yes
@@ -3576,13 +3586,6 @@ country_event = {
 						}
 					}
 				}
-			}
-		}
-		religion = elysian_orthodoxy
-		NOT = { has_global_flag = nhs2_patriarchate_far_west }
-		NOT = {
-			any_province = {
-				nhs_is_far_west = yes
 			}
 		}
 	}
@@ -3604,6 +3607,74 @@ country_event = {
 			set_global_flag = nhs_patr_c
 			if = {
 				limit = {
+					any_owned_province = {
+						region = california_region
+						OR = {
+							has_river_estuary_trigger = yes
+							province_has_center_of_trade_of_level = 1
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = california_region
+						OR = {
+							has_river_estuary_trigger = yes
+							province_has_center_of_trade_of_level = 1
+						}
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = { 
+						name = "patriarchate_of_the_far_west" 
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_province = {
+						region = california_region
+						has_port = yes
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = california_region
+						has_port = yes
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = { 
+						name = "patriarchate_of_the_far_west" 
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_province = {
+						region = california_region
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = california_region
+					}
+					save_event_target_as = nhs_patri_target
+					change_religion = elysian_orthodoxy
+					add_permanent_province_modifier = { 
+						name = "patriarchate_of_the_far_west" 
+						duration = -1
+					}
+				}
+			}
+			else = {
+				clr_global_flag = nhs2_patriarchate_far_west
+			}
+			if = {
+				limit = {
+					has_global_flag = nhs2_patriarchate_far_west
 					NOT = {
 						any_owned_province = {
 							nhs_is_ecumenical = yes
@@ -3620,100 +3691,6 @@ country_event = {
 					country_event = { id = nhs2_orthodoxevents.1997 days = 3 }
 				}
 			}
-			if = {
-				limit = {
-					any_owned_province = {
-						OR = {
-							region = california_region
-							region = cascadia_region
-						}
-						OR = {
-							has_river_estuary_trigger = yes
-							province_has_center_of_trade_of_level = 1
-						}
-					}
-				}
-				random_owned_province = {
-					limit = {
-						OR = {
-							region = california_region
-							region = cascadia_region
-						}
-						OR = {
-							has_river_estuary_trigger = yes
-							province_has_center_of_trade_of_level = 1
-						}
-					}
-					change_religion = elysian_orthodoxy
-					add_permanent_province_modifier = { 
-						name = "patriarchate_of_the_far_west" 
-						duration = -1
-					}
-				}
-			}
-			if = {
-				limit = {
-					NOT = {
-						any_owned_province = {
-							OR = {
-								region = california_region
-								region = cascadia_region
-							}
-							OR = {
-								has_river_estuary_trigger = yes
-								province_has_center_of_trade_of_level = 1
-							}
-						}
-					}
-					any_owned_province = {
-						region = california_region
-						has_port = yes
-					}
-				}
-				random_owned_province = {
-					limit = {
-						region = california_region
-						has_port = yes
-					}
-					change_religion = elysian_orthodoxy
-					add_permanent_province_modifier = { 
-						name = "patriarchate_of_the_far_west" 
-						duration = -1
-					}
-				}
-			}
-			if = {
-				limit = {
-					NOT = {
-						any_owned_province = {
-							OR = {
-								region = california_region
-								region = cascadia_region
-							}
-							OR = {
-								has_river_estuary_trigger = yes
-								province_has_center_of_trade_of_level = 1
-							}
-						}
-					}
-					NOT = {
-						any_owned_province = {
-							region = california_region
-							has_port = yes
-						}
-					}
-				}
-				random_owned_province = {
-					limit = {
-						region = california_region
-					}
-					change_religion = elysian_orthodoxy
-					add_permanent_province_modifier = { 
-						name = "patriarchate_of_the_far_west" 
-						duration = -1
-					}
-				}
-			}
 		}
 	}
 
@@ -3725,6 +3702,7 @@ country_event = {
 				nhs_is_ecumenical = yes
 			}
 			NOT = {	nhs_is_elysian_patriarchy = yes }
+			has_global_flag = nhs2_patriarchate_far_west
 		}
 		ai_chance = {
 			factor = 60
@@ -3756,6 +3734,7 @@ country_event = {
 				nhs_is_ecumenical = yes
 			}
 			NOT = {	nhs_is_elysian_patriarchy = yes }
+			has_global_flag = nhs2_patriarchate_far_west
 		}
 		ai_chance = {
 			factor = 40
@@ -3790,6 +3769,7 @@ country_event = {
 				nhs_is_ecumenical = yes
 			}
 			nhs_is_elysian_patriarchy = yes
+			has_global_flag = nhs2_patriarchate_far_west
 		}
 		add_prestige = 10
 		add_devotion = 5
@@ -3814,6 +3794,7 @@ country_event = {
 					nhs_is_ecumenical = yes
 				}
 			}
+			has_global_flag = nhs2_patriarchate_far_west
 		}
 		add_patriarch_authority = 0.1
 		add_prestige = 5
@@ -3845,6 +3826,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.f"
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_far_west
 		}
 		ai_chance = {
 			factor = 30
@@ -3859,10 +3841,6 @@ country_event = {
 		}
 		random_owned_province = {
 			limit = {
-				OR = {
-					region = california_region
-					region = cascadia_region
-				}
 				has_province_modifier = patriarchate_of_the_far_west
 			}
 			change_religion = elysian_orthodoxy
@@ -3898,6 +3876,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.g"  # Just once
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_far_west
 		}
 		ai_chance = {
 			factor = 30
@@ -3929,6 +3908,7 @@ country_event = {
 		name = "nhs2_orthodoxevents.3.h" # Expand the system
 		trigger = {
 			NOT = { nhs_eligible_for_patriarchate1 = yes }
+			has_global_flag = nhs2_patriarchate_far_west
 		}
 		ai_chance = {
 			factor = 30
@@ -3961,6 +3941,17 @@ country_event = {
 		clr_global_flag = nhs_traditional_patriarchate
 		set_global_flag = nhs_expanded_patriarchate
 	}
+
+	option = {
+		name = "nhs2_orthodoxevents.3.i" # DEBUG
+		trigger = {
+			NOT = { has_global_flag = nhs2_patriarchate_far_west }
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = nhs_invalid_province_patriarchate_tt
+	}
 }
 
 # Patriarchate of the far west bounce
@@ -3970,7 +3961,20 @@ country_event = {
 	desc = nhs2_orthodoxevents.1997.d
 	picture = orthodox_court_eventPicture
 	
+	goto = nhs_patri_target
+	
 	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			random_province = {
+				limit = {
+					has_province_modifier = patriarchate_of_the_far_west
+				}
+				save_event_target_as = nhs_patri_target
+			}
+		}
+	}
 
 	option = {
 		name = "nhs2_orthodoxevents.3.a"
@@ -5483,71 +5487,31 @@ country_event = {
 		hidden_effect = {
 			every_province = {
 				limit = {
+					# OR = {
+					# 	area = macedonia_area
+					# 	area = northern_greece_area
+					# 	area = morea_area
+					# 	area = western_aegean_area
+					# 	area = thrace_area
+					# 	area = bulgaria_area
+					# 	AND = {
+					# 		culture_group = byzantine
+					# 		OR = {
+					# 			region = balkan_region
+					# 			region = anatolia_region
+					# 			region = crimea_region
+					# 		}
+					# 	}
+					# }
 					OR = {
-						area = macedonia_area
-						area = northern_greece_area
-						area = morea_area
-						area = western_aegean_area
-						area = thrace_area
-						area = bulgaria_area
-						AND = {
-							culture_group = byzantine
-							NOT = { culture = turkish }
-							OR = {
-								region = balkan_region
-								region = anatolia_region
-								region = crimea_region
-							}
-						}
+						region = balkan_region
+						region = anatolia_region
+						region = crimea_region
 					}
-					# AND = {
-						# OR = {
-							# AND = {
-								# culture_group = byzantine
-								# NOT = { culture = turkish }
-							# }
-							# region = balkan_region
-						# }
-						# continent = europe
-						# religion = orthodox
-					# }
-					# owner = {
-						# religion = elysian_orthodoxy
-					# }
 				}
 				add_province_triggered_modifier = nhs2_new_patriarch_greek_tm
 				add_province_triggered_modifier = nhs2_converts_tm
-				# add_permanent_province_modifier = {
-					# name = "nhs2_new_patriarch_greek"
-					# duration = -1
-				# }
 			}
-			# every_province = {
-				# limit = {
-					# OR = {
-						# area = macedonia_area
-						# area = northern_greece_area
-						# area = morea_area
-						# area = western_aegean_area
-						# area = thrace_area
-						# area = bulgaria_area
-						# AND = {
-							# culture_group = byzantine
-							# NOT = { culture = turkish }
-							# OR = {
-								# region = balkan_region
-								# region = anatolia_region
-								# region = crimea_region
-							# }
-						# }
-					# }
-				# }
-				
-				# add_permanent_province_modifier = {
-					# name = "nhs2_converts"
-					# duration = -1
-				# }
-			# }
 		}
 	}
 	
@@ -5619,57 +5583,32 @@ country_event = {
 		hidden_effect = {
 			every_province = {
 				limit = {
+					# OR = {
+					# 	area = macedonia_area
+					# 	area = northern_greece_area
+					# 	area = morea_area
+					# 	area = western_aegean_area
+					# 	area = thrace_area
+					# 	area = bulgaria_area
+					# 	AND = {
+					# 		culture_group = byzantine
+					# 		NOT = { culture = turkish }
+					# 		OR = {
+					# 			region = balkan_region
+					# 			region = anatolia_region
+					# 			region = crimea_region
+					# 		}
+					# 	}
+					# }
 					OR = {
-						area = macedonia_area
-						area = northern_greece_area
-						area = morea_area
-						area = western_aegean_area
-						area = thrace_area
-						area = bulgaria_area
-						AND = {
-							culture_group = byzantine
-							NOT = { culture = turkish }
-							OR = {
-								region = balkan_region
-								region = anatolia_region
-								region = crimea_region
-							}
-						}
+						region = balkan_region
+						region = anatolia_region
+						region = crimea_region
 					}
 				}
 				add_province_triggered_modifier = nhs2_new_patriarch_greek_tm
 				add_province_triggered_modifier = nhs2_converts_tm
-				# add_permanent_province_modifier = {
-					# name = "nhs2_new_patriarch_greek"
-					# duration = -1
-				# }
 			}
-			# every_province = {
-				# limit = {
-					# OR = {
-						# area = macedonia_area
-						# area = northern_greece_area
-						# area = morea_area
-						# area = western_aegean_area
-						# area = thrace_area
-						# area = bulgaria_area
-						# AND = {
-							# culture_group = byzantine
-							# NOT = { culture = turkish }
-							# OR = {
-								# region = balkan_region
-								# region = anatolia_region
-								# region = crimea_region
-							# }
-						# }
-					# }
-				# }
-				
-				# add_permanent_province_modifier = {
-					# name = "nhs2_converts"
-					# duration = -1
-				# }
-			# }
 		}
 	}
 	option = {		# This land falls under the authority of Elysian Ecumenical patriarchate 
@@ -5731,57 +5670,32 @@ country_event = {
 		hidden_effect = {
 			every_province = {
 				limit = {
+					# OR = {
+					# 	area = macedonia_area
+					# 	area = northern_greece_area
+					# 	area = morea_area
+					# 	area = western_aegean_area
+					# 	area = thrace_area
+					# 	area = bulgaria_area
+					# 	AND = {
+					# 		culture_group = byzantine
+					# 		NOT = { culture = turkish }
+					# 		OR = {
+					# 			region = balkan_region
+					# 			region = anatolia_region
+					# 			region = crimea_region
+					# 		}
+					# 	}
+					# }
 					OR = {
-						area = macedonia_area
-						area = northern_greece_area
-						area = morea_area
-						area = western_aegean_area
-						area = thrace_area
-						area = bulgaria_area
-						AND = {
-							culture_group = byzantine
-							NOT = { culture = turkish }
-							OR = {
-								region = balkan_region
-								region = anatolia_region
-								region = crimea_region
-							}
-						}
+						region = balkan_region
+						region = anatolia_region
+						region = crimea_region
 					}
 				}
 				add_province_triggered_modifier = nhs2_new_patriarch_greek_tm
 				add_province_triggered_modifier = nhs2_converts_tm
-				# add_permanent_province_modifier = {
-					# name = "nhs2_new_patriarch_greek"
-					# duration = -1
-				# }
 			}
-			# every_province = {
-				# limit = {
-					# OR = {
-						# area = macedonia_area
-						# area = northern_greece_area
-						# area = morea_area
-						# area = western_aegean_area
-						# area = thrace_area
-						# area = bulgaria_area
-						# AND = {
-							# culture_group = byzantine
-							# NOT = { culture = turkish }
-							# OR = {
-								# region = balkan_region
-								# region = anatolia_region
-								# region = crimea_region
-							# }
-						# }
-					# }
-				# }
-				
-				# add_permanent_province_modifier = {
-					# name = "nhs2_converts"
-					# duration = -1
-				# }
-			# }
 		}
 	}
 	option = {		# Reastablish traditional Ecumenical patriarchate 
@@ -5829,57 +5743,32 @@ country_event = {
 		hidden_effect = {
 			every_province = {
 				limit = {
+					# OR = {
+					# 	area = macedonia_area
+					# 	area = northern_greece_area
+					# 	area = morea_area
+					# 	area = western_aegean_area
+					# 	area = thrace_area
+					# 	area = bulgaria_area
+					# 	AND = {
+					# 		culture_group = byzantine
+					# 		NOT = { culture = turkish }
+					# 		OR = {
+					# 			region = balkan_region
+					# 			region = anatolia_region
+					# 			region = crimea_region
+					# 		}
+					# 	}
+					# }
 					OR = {
-						area = macedonia_area
-						area = northern_greece_area
-						area = morea_area
-						area = western_aegean_area
-						area = thrace_area
-						area = bulgaria_area
-						AND = {
-							culture_group = byzantine
-							NOT = { culture = turkish }
-							OR = {
-								region = balkan_region
-								region = anatolia_region
-								region = crimea_region
-							}
-						}
+						region = balkan_region
+						region = anatolia_region
+						region = crimea_region
 					}
 				}
 				add_province_triggered_modifier = nhs2_allowed_patriarch_greek_tm
 				add_province_triggered_modifier = nhs2_converts_tm
-				# add_permanent_province_modifier = { 
-					# name = "nhs2_allowed_patriarch_greek"
-					# duration = -1
-				# }
 			}
-			# every_province = {
-				# limit = {
-					# OR = {
-						# area = macedonia_area
-						# area = northern_greece_area
-						# area = morea_area
-						# area = western_aegean_area
-						# area = thrace_area
-						# area = bulgaria_area
-						# AND = {
-							# culture_group = byzantine
-							# NOT = { culture = turkish }
-							# OR = {
-								# region = balkan_region
-								# region = anatolia_region
-								# region = crimea_region
-							# }
-						# }
-					# }
-				# }
-				
-				# add_permanent_province_modifier = {
-					# name = "nhs2_converts"
-					# duration = -1
-				# }
-			# }
 		}
 	}
 	

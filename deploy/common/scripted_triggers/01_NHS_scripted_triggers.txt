@@ -180,7 +180,13 @@ nhs_hesperidian_province = {
 }
 
 nhs_kykladian_province = {
-	region = carribeans_region
+	OR = {
+		region = carribeans_region
+		AND = {
+			owner = { primary_culture = kykladian }
+			culture = cretan_e
+		}
+	}
 	#NOT = { culture = kykladian }
 	is_colony = no
 	#has_seat_in_parliament = no
@@ -191,7 +197,7 @@ nhs_kykladian_province = {
 		culture = elyric
 	}
 	OR = {
-		owner = { capital_scope = { region = carribeans_region } }
+		owner = { primary_culture = kykladian }
 		NOT = { province_id = 481 }
 	}
 	#NOT = { culture = shqipproi }
@@ -314,7 +320,6 @@ nhs_greek_areas = {
 		area = aegean_archipelago_area
 		AND = {
 			culture_group = byzantine
-			NOT = { culture = turkish }
 			OR = {
 				region = balkan_region
 				region = anatolia_region
@@ -717,6 +722,7 @@ nhs_eligible_for_patriarchate = {
 
 nhs_eligible_for_patriarchate1 = {
 	OR = {
+		has_global_flag = nhs_expanded_patriarchate
 		NOT = {
 			calc_true_if = {
 				all_province = {
@@ -750,7 +756,6 @@ nhs_eligible_for_patriarchate1 = {
 				amount = 6
 			}
 		}
-		has_global_flag = nhs_expanded_patriarchate
 		NOT = {
 			any_province = {
 				OR = {
@@ -875,8 +880,36 @@ nhs_one_of_the_vikings_op = {
 	}
 }
 
+nhs_elg_province = {
+	continent = europe
+	NOT = { province_id = 151 }
+	NOT = { has_province_modifier = nhs2_supply_lines }
+	NOT = { has_province_modifier = nhs2_base_of_operations }
+	OR = {
+		nhs_greek_areas = yes
+		AND = {
+			region = anatolia_region
+			ROOT = { has_global_flag = nhs_elg_got_anatolia }
+		}
+		AND = {
+			region = balkan_region
+			ROOT = { has_global_flag = nhs_elg_got_balkans }
+		}
+	}
+	OR = {
+		has_country_flag = nhs_invasion_over
+		NOT = {
+			nhs_is_current_base_of_operations_target = { FLAG_SCOPE = owner }
+		}
+	}
+}
+
 nhs_exarch_land = {
 	OR = {
+		AND = {
+			ROOT = { tag = ELG }
+			nhs_elg_province = yes
+		}
 		AND = {
 			ROOT = { tag = EEA }
 			region = caucasia_region
@@ -1225,5 +1258,34 @@ nhs_first_flagship = {
 	AND = {
 		tag = NHS
 		has_country_flag = nhs_first_flagship
+	}
+}
+
+nhs_is_current_base_of_operations_target = {
+	OR = {
+		AND = {
+			$FLAG_SCOPE$ = {
+				has_country_flag = nhs_bo_athens
+			}
+			province_id = 146
+		}
+		AND = {
+			$FLAG_SCOPE$ = {
+				has_country_flag = nhs_bo_macedonia
+			}
+			province_id = 148
+		}
+		AND = {
+			$FLAG_SCOPE$ = {
+				has_country_flag = nhs_bo_sparta
+			}
+			province_id = 145
+		}
+		AND = {
+			$FLAG_SCOPE$ = {
+				has_country_flag = nhs_bo_rhodes
+			}
+			province_id = 320
+		}
 	}
 }

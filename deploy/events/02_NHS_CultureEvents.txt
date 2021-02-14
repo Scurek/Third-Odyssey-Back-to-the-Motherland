@@ -1648,7 +1648,10 @@ country_event = {
 			every_owned_province = {
 				limit = {
 					is_colony = no
-					region = carribeans_region
+					OR = {
+						region = carribeans_region
+						culture = cretan_e
+					}
 					NOT = { culture = shqipproi }
 					NOT = { culture = elysameric }
 					NOT = { culture = kykladian }
@@ -1659,7 +1662,16 @@ country_event = {
 				if = {
 					limit = {
 						NOT = { has_province_flag = nhs_got_autonomy }
-						NOT = { owner = { capital_scope = { region = carribeans_region } } }
+						NOT = { 
+							owner = { 
+								OR = {
+									primary_culture = kykladian
+									capital_scope = { 
+										region = carribeans_region 
+									} 
+								}
+							}
+						}
 					}
 					set_province_flag = nhs_got_autonomy
 					add_local_autonomy = 20
@@ -1691,7 +1703,13 @@ country_event = {
 		every_owned_province = {
 			limit = {
 				is_colony = no
-				region = carribeans_region
+				OR = {
+					region = carribeans_region
+					AND = {
+						owner = { primary_culture = kykladian }
+						culture = cretan_e
+					}
+				}
 				culture_group = elysian_group
 				NOT = { culture = shqipproi }
 				NOT = { culture = elysameric }
@@ -1826,11 +1844,13 @@ country_event = {
 
     trigger = {
 		culture_group = elysian_group
-		OR = {
-			AND = {
-				NOT = { has_country_flag = nhs_skythiai_appear }
-				has_global_flag = nhs_scythians_appear
-				any_owned_province = {
+		any_owned_province = {
+			OR = {
+				AND = {
+					ROOT = {
+						NOT = { has_global_flag = nhs_skythiai_appear }
+						has_global_flag = nhs_scythians_appear
+					}
 					region = great_plains_region
 					NOT = { culture = shqipproi }
 					NOT = { culture = elysameric }
@@ -1839,10 +1859,10 @@ country_event = {
 					#has_seat_in_parliament = no
 					culture_group = elysian_group
 				}
-			}
-			AND = {
-				has_country_flag = nhs_skythiai_appear
-				any_owned_province = {
+				AND = {
+					ROOT = {
+						has_global_flag = nhs_skythiai_appear
+					}
 					region = great_plains_region
 					NOT = { culture = shqipproi }
 					NOT = { culture = skythiai }
@@ -1850,44 +1870,45 @@ country_event = {
 					#has_seat_in_parliament = no
 					culture_group = elysian_group
 				}
-			}
-			AND = {
-				OR = {
-					nhs_condition_all_ely = { KOMANDA = tag }
-					primary_culture = high_elysian
-				}
-				has_global_flag = nhs_hyperborealians_appeared
-				any_owned_province = {
+				AND = {
+					ROOT = {
+						OR = {
+							nhs_condition_all_ely = { KOMANDA = tag }
+							primary_culture = high_elysian
+						}
+						has_global_flag = nhs_hyperborealians_appeared
+					}
 					nhs_hyperborealian_province = yes
 				}
-			}
-			AND = {
-				OR = {
-					nhs_condition_all_ely = { KOMANDA = tag }
-					primary_culture = high_elysian
-				}
-				has_global_flag = nhs_borealians_appeared
-				any_owned_province = {
+				AND = {
+					ROOT = {
+						OR = {
+							nhs_condition_all_ely = { KOMANDA = tag }
+							primary_culture = high_elysian
+						}
+						has_global_flag = nhs_borealians_appeared
+					}
 					nhs_borealian_province = yes
 				}
-			}
-			AND = {
-				OR = {
-					nhs_condition_all_ely = { KOMANDA = tag }
-					primary_culture = high_elysian
-				}
-				has_global_flag = nhs_hesperidians_appeared
-				any_owned_province = {
+				AND = {
+					ROOT = {
+						OR = {
+							nhs_condition_all_ely = { KOMANDA = tag }
+							primary_culture = high_elysian
+						}
+						has_global_flag = nhs_hesperidians_appeared
+					}
 					nhs_hesperidian_province = yes
 				}
-			}
-			AND = {
-				OR = {
-					nhs_condition_all_ely = { KOMANDA = tag }
-					primary_culture = high_elysian
-				}
-				has_global_flag = nhs_kykladian_appeared
-				any_owned_province = {
+				AND = {
+					ROOT = {
+						OR = {
+							nhs_condition_all_ely = { KOMANDA = tag }
+							primary_culture = high_elysian
+							primary_culture = kykladian
+						}
+						has_global_flag = nhs_kykladian_appeared
+					}
 					nhs_kykladian_province = yes
 				}
 			}
@@ -1899,7 +1920,7 @@ country_event = {
 			if = {
 				limit = {
 					AND = {
-						has_country_flag = nhs_skythiai_appear
+						has_global_flag = nhs_skythiai_appear
 						any_owned_province = {
 							region = great_plains_region
 							NOT = { culture = shqipproi }
@@ -1941,7 +1962,7 @@ country_event = {
 			if = {
 				limit = {
 					AND = {
-						NOT = { has_country_flag = nhs_skythiai_appear }
+						NOT = { has_global_flag = nhs_skythiai_appear }
 						has_global_flag = nhs_scythians_appear
 						any_owned_province = {
 							region = great_plains_region
@@ -2081,6 +2102,7 @@ country_event = {
 					OR = {
 						nhs_condition_all_ely = { KOMANDA = tag }
 						primary_culture = high_elysian
+						primary_culture = kykladian
 					}
 					has_global_flag = nhs_kykladian_appeared
 					any_owned_province = {
@@ -2094,7 +2116,16 @@ country_event = {
 					if = {
 						limit = {
 							NOT = { has_province_flag = nhs_got_autonomy }
-							NOT = { owner = { capital_scope = { region = carribeans_region } } }
+							NOT = { 
+								owner = {
+									OR = {
+										primary_culture = kykladian
+										capital_scope = { 
+											region = carribeans_region 
+										} 
+									}
+								}
+							}
 						}
 						set_province_flag = nhs_got_autonomy
 						add_local_autonomy = 20
