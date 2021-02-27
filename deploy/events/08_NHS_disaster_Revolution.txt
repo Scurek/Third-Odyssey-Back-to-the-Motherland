@@ -1,57 +1,7 @@
 namespace = elysian_revolution
 
-# Revolution
-country_event = {
-	id = elysian_revolution.1
-	title = elysian_revolution.1.t
-	desc = elysian_revolution.1.d
-	picture = REVOLUTION_eventPicture
-	
-	major = yes
-	
-	is_triggered_only = yes
-	
-	immediate = {
-		set_country_flag = nhs_had_first_civil_war
-	}
-	option = {
-		name = elysian_revolution.1.a			# Bring me their heads!
-		#custom_tooltip = nhs_elysian_revolution_begun
-		#set_country_flag = elysian_revolution
-		add_prestige = -30
-		add_stability = -6
-		random_owned_province = {
-			limit = {
-				is_capital = no
-			}
-			cede_province = ERF
-		}
-		set_country_flag = nhs_in_civil_war
-		ERF = {
-			set_country_flag = nhs_in_civil_war
-		}
-		declare_war_with_cb = {
-			who = ERF
-			casus_belli = cb_nhs_elysian_civil_war
-		}
-	}
-	option = {
-		name = elysian_revolution.1.b			# Vive la revolution!
-		#custom_tooltip = nhs_elysian_revolution_begun
-		#set_country_flag = elysian_revolution
-		add_prestige = -30
-		add_stability = -6
-		random_owned_province = {
-			limit = {
-				is_capital = no
-			}
-			cede_province = ELR
-		}
-	}
-}
-
 ###################################################
-### EVENTS LEADING UP TO REVOLUTION
+### EVENTS LEADING UP TO REVOLUTION (1-99)
 ###################################################
 
 # Event triggerer
@@ -605,6 +555,7 @@ country_event = {
 	}
 }
 
+
 # Trouble Overseas
 country_event = {
 	id = elysian_revolution.8
@@ -632,6 +583,167 @@ country_event = {
 		}
 	}
 }
+
+###################################################
+### PRE-WAR EVENTS (100-199)
+###################################################
+
+# Revolution starts, choose side
+country_event = {
+	id = elysian_revolution.100
+	title = elysian_revolution.100.t
+	desc = elysian_revolution.100.d
+	picture = REVOLUTION_eventPicture
+	
+	major = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = nhs_had_first_civil_war
+	}
+	option = {
+		name = elysian_revolution.100.a			# Bring me their heads!
+		custom_tooltip = nhs_elysian_revolution_emperor
+		
+	}
+	option = {
+		name = elysian_revolution.100.b			# Vive la revolution!
+		custom_tooltip = nhs_elysian_revolution_republic
+	}
+	option = {
+		name = elysian_revolution.100.c			# Joestar Family Secret Technique
+		trigger = {
+			OR = {
+				AND = {
+					exists = MSG
+					MSG = { ai = yes }
+				}
+				AND = {
+					exists = MSN
+					MSN = { ai = yes }
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = MSG
+			}
+			switch_tag = MSG
+		}
+		else_if = {
+			limit = {
+				exists = MSN
+			}
+			switch_tag = MSN
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				is_at_war = yes
+			}
+			country_event = { id = elysian_revolution.101 days = 1 }
+		}
+	}
+}
+
+# War penalty
+country_event = {
+	id = elysian_revolution.101
+	title = elysian_revolution.101.t
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_modifier = nhs2_war_penalty_1
+				has_country_modifier = nhs2_war_penalty_2
+				has_country_modifier = nhs2_war_penalty_3
+			}
+		}
+		desc = elysian_revolution.101.da
+	}
+	desc = {
+		trigger = {
+			OR = {
+				has_country_modifier = nhs2_war_penalty_1
+				has_country_modifier = nhs2_war_penalty_2
+				has_country_modifier = nhs2_war_penalty_3
+			}
+		}
+		desc = elysian_revolution.101.db
+	}
+	picture = REVOLUTION_eventPicture
+	
+	is_triggered_only = yes
+
+	trigger = {
+		ai = no
+		is_at_war = yes
+	}
+
+	immediate = {
+		set_country_flag = nhs_elysian_revolution_still_at_war
+	}
+	
+	option = {
+		name = elysian_revolution.101.a	
+		if = {
+			limit = {
+				has_country_modifier = nhs2_war_penalty_2
+			}
+			remove_country_modifier = nhs2_war_penalty_2
+			add_country_modifier = {
+				name = nhs2_war_penalty_3
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_modifier = nhs2_war_penalty_1
+			}
+			remove_country_modifier = nhs2_war_penalty_1
+			add_country_modifier = {
+				name = nhs2_war_penalty_2
+				duration = -1
+			}
+		}
+		else = {
+			add_country_modifier = {
+				name = nhs2_war_penalty_1
+				duration = -1
+			}
+		}
+	}
+}
+
+# War removed
+country_event = {
+	id = elysian_revolution.102
+	title = elysian_revolution.102.t
+	desc = elysian_revolution.102.d
+	picture = REVOLUTION_eventPicture
+	
+	is_triggered_only = yes
+
+	trigger = {
+		tag = ELY
+		is_at_war = no
+		OR = {
+			has_country_modifier = nhs2_war_penalty_1
+			has_country_modifier = nhs2_war_penalty_2
+			has_country_modifier = nhs2_war_penalty_3
+		}
+	}
+	
+	option = {
+		name = elysian_revolution.102.a	
+		remove_country_modifier = nhs2_war_penalty_1
+		remove_country_modifier = nhs2_war_penalty_2
+		remove_country_modifier = nhs2_war_penalty_3
+		clr_country_flag = nhs_elysian_revolution_still_at_war
+	}
+}
+
 
 country_event = {
 	id = elysian_revolution.1006
