@@ -328,6 +328,9 @@ nhs_buybacks_landshare = {
 	}
 }
 
+
+# -- NATIVE ESTATE EFFECTS --
+
 # Add influence modifier to any existing native estate with amount QUANTITY, description DESC and duration DURATION
 # We can keep this, since we can easily change this if native estates ever differentiate (again)...
 # Use: nhs_add_any_native_estate_influence_modifier = { QUANTITY = -15 DESC = EST_NHS_REVOKED_PRIVILEGES DURATION = 7300 }
@@ -342,10 +345,59 @@ nhs_add_any_native_estate_influence_modifier = {
 
 # Add loyalty to any existing native estate with amount QUANTITY
 # We can keep this, since we can easily change this if native estates ever differentiate (again)...
-# Use: nhs_add_any_native_estate_loyalty { QUANTITY = -40 }
+# Use: nhs_add_any_native_estate_loyalty = { QUANTITY = -40 }
 nhs_add_any_native_estate_loyalty = {
 	add_estate_loyalty = {
 		estate = estate_all_natives
 		loyalty = $QUANTITY$
 	}
+}
+
+# Update a single province, single native estate privilege's modifier
+# Use: province_update_estate_privilege = { PRIVILEGE = bns_native_priv_local_councils_recognized_early MODIFIER = bns_native_priv_local_councils_recognized_early_mod }
+province_update_estate_privilege = {
+	if = {
+		# Add province modifier if needed (and applicable)
+		limit = {
+			owner = { has_estate_privilege = $PRIVILEGE$ }
+			nhs_culturally_native = yes
+		}
+		if = {
+			limit = {
+				NOT = { has_province_modifier = $MODIFIER$ }
+			}
+			add_province_modifier = {
+				name = $MODIFIER$
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		# Remove province modifier if present (and not applicable)
+		limit = {
+			has_province_modifier = $MODIFIER$
+		}
+		remove_province_modifier = $MODIFIER$
+	}
+	
+}
+
+
+# Recalculate all native estate modifiers for a single province
+province_recalculate_estate_privileges_effect_natives = {
+	# TODO: effect can't use other effect?
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_local_councils_recognized_early MODIFIER = bns_native_priv_local_councils_recognized_early_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_local_councils_recognized_mid MODIFIER = bns_native_priv_local_councils_recognized_mid_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_local_councils_recognized_late MODIFIER = bns_native_priv_local_councils_recognized_late_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_minor_pax_romana_early MODIFIER = bns_native_priv_minor_pax_romana_early_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_major_pax_romana_early MODIFIER = bns_native_priv_major_pax_romana_early_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_major_pax_romana_mid MODIFIER = bns_native_priv_major_pax_romana_mid_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_increase_tribute_early MODIFIER = bns_native_priv_increase_tribute_early_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_increase_tribute_mid MODIFIER = bns_native_priv_increase_tribute_mid_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_increase_tribute_late MODIFIER = bns_native_priv_increase_tribute_late_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_encourage_barbaroi_officials_early MODIFIER = bns_native_priv_encourage_barbaroi_officials_early_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_designate_development_zones_mid MODIFIER = bns_native_priv_designate_development_zones_mid_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_designate_development_zones_late MODIFIER = bns_native_priv_designate_development_zones_late_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_divide_et_impera_early MODIFIER = bns_native_priv_divide_et_impera_early_mod }
+	province_update_estate_privilege = { PRIVILEGE = bns_native_priv_divide_et_impera_mid MODIFIER = bns_native_priv_divide_et_impera_mid_mod }
 }
