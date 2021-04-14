@@ -1,60 +1,8 @@
 namespace = nhs2_ideagroupevents
 
-# Starting colonial pop
-province_event = {
-	id = nhs2_ideagroupevents.1
-	title = nhs2_countryevents2.t
-	desc = nhs2_countryevents2.d
-	picture = CITY_VIEW_eventPicture
-
-	hidden = yes
-	
-    trigger = {
-		is_colony = yes
-		owner = {
-			has_idea = colonial_administration
-		}
-		NOT = { has_province_flag = nhs_got_boost }
-		NOT = { colonysize = 200 }
-		continent = north_america
-	}
-	
-	immediate = {
-		set_province_flag = nhs_got_boost
-		add_colonysize = 200
-	}
-
-	option = {
-		name = "nhs2_countryevents2.a"
-	}
-}
-
-# Starting colonial pop-remove flag on abandon colony
-province_event = {
-	id = nhs2_ideagroupevents.2
-	title = nhs2_countryevents2.t
-	desc = nhs2_countryevents2.d
-	picture = CITY_VIEW_eventPicture
-	
-	is_triggered_only = yes
-	hidden = yes
-	
-    trigger = {
-		has_province_flag = nhs_got_boost
-	}
-	
-	immediate = {
-		clr_province_flag = nhs_got_boost
-	}
-
-	option = {
-		name = "nhs2_countryevents2.a"
-	}
-}
-
 # Bonus on climate provinces
-province_event = {
-	id = nhs2_ideagroupevents.20
+country_event = {
+	id = nhs2_ideagroupevents.3
 	title = nhs2_countryevents2.t
 	desc = nhs2_countryevents2.d
 	picture = CITY_VIEW_eventPicture
@@ -63,37 +11,72 @@ province_event = {
 	
     trigger = {
 		OR = {
-			has_climate = tropical
-			has_climate = arid
-			has_climate = arctic
+			AND = {
+				has_idea = brave_the_elements
+				NOT = { has_country_flag = nhs_has_enabled_brave_the_elements }
+			}
+			AND = {
+				NOT = { has_idea = brave_the_elements }
+				has_country_flag = nhs_has_enabled_brave_the_elements
+			}
 		}
-		owner = {
-			has_idea = brave_the_elements
-		}
-		NOT = { has_province_modifier = nhs_brave_the_elements_modifier1 }
-		NOT = { has_province_modifier = nhs_brave_the_elements_modifier2 }
 	}
 	
 	immediate = {
 		if = {
 			limit = {
-				OR = {
-					has_climate = tropical
-					has_climate = arid
+				has_idea = brave_the_elements
+				NOT = { has_country_flag = nhs_has_enabled_brave_the_elements }
+			}
+			set_country_flag = nhs_has_enabled_brave_the_elements
+			every_owned_province = {
+				limit = {
+					OR = {
+						has_climate = tropical
+						has_climate = arid
+						has_climate = arctic
+					}
+					NOT = { has_province_modifier = nhs_brave_the_elements_modifier1 }
+					NOT = { has_province_modifier = nhs_brave_the_elements_modifier2 }
+				}
+				if = {
+					limit = {
+						OR = {
+							has_climate = tropical
+							has_climate = arid
+						}
+					}
+					add_province_modifier = {
+						name = nhs_brave_the_elements_modifier1
+						duration = -1
+					}
+				}
+				else_if = {
+					limit = {
+						has_climate = arctic
+					}
+					add_province_modifier = {
+						name = nhs_brave_the_elements_modifier2
+						duration = -1
+					}
 				}
 			}
-			add_province_modifier = {
-				name = nhs_brave_the_elements_modifier1
-				duration = -1
-			}
 		}
-		if = {
+		else_if = {
 			limit = {
-				has_climate = arctic
+				NOT = { has_idea = brave_the_elements }
+				has_country_flag = nhs_has_enabled_brave_the_elements
 			}
-			add_province_modifier = {
-				name = nhs_brave_the_elements_modifier2
-				duration = -1
+			clr_country_flag = nhs_has_enabled_brave_the_elements
+			every_owned_province = {
+				limit = {
+					OR = {
+						has_province_modifier = nhs_brave_the_elements_modifier1
+						has_province_modifier = nhs_brave_the_elements_modifier2
+					}
+				}
+				remove_province_modifier = nhs_brave_the_elements_modifier1
+				remove_province_modifier = nhs_brave_the_elements_modifier2
 			}
 		}
 	}
@@ -103,83 +86,7 @@ province_event = {
 	}
 }
 
-# Bonus on climate provinces, remove on city
-province_event = {
-	id = nhs2_ideagroupevents.8
-	title = nhs2_countryevents2.t
-	desc = nhs2_countryevents2.d
-	picture = CITY_VIEW_eventPicture
-	
-	hidden = yes
-	
-    trigger = {
-		owner = {
-			NOT = { has_idea = brave_the_elements }
-		}
-		OR = {
-			has_province_modifier = nhs_brave_the_elements_modifier1
-			has_province_modifier = nhs_brave_the_elements_modifier2
-		}
-	}
-	
-	immediate = {
-		if = {
-			limit = {
-				has_province_modifier = nhs_brave_the_elements_modifier1
-			}
-			remove_province_modifier = nhs_brave_the_elements_modifier1
-		}
-		if = {
-			limit = {
-				has_province_modifier = nhs_brave_the_elements_modifier2
-			}
-			remove_province_modifier = nhs_brave_the_elements_modifier2
-		}
-	}
-
-	option = {
-		name = "nhs2_countryevents2.a"
-	}
-}
-
-# Bonus on climate provinces, remove on abandon colony
-province_event = {
-	id = nhs2_ideagroupevents.9
-	title = nhs2_countryevents2.t
-	desc = nhs2_countryevents2.d
-	picture = CITY_VIEW_eventPicture
-	
-	is_triggered_only = yes
-	hidden = yes
-	
-    trigger = {
-		OR = {
-			has_province_modifier = nhs_brave_the_elements_modifier1
-			has_province_modifier = nhs_brave_the_elements_modifier2
-		}
-	}
-	
-	immediate = {
-		if = {
-			limit = {
-				has_province_modifier = nhs_brave_the_elements_modifier1
-			}
-			remove_province_modifier = nhs_brave_the_elements_modifier1
-		}
-		if = {
-			limit = {
-				has_province_modifier = nhs_brave_the_elements_modifier2
-			}
-			remove_province_modifier = nhs_brave_the_elements_modifier2
-		}
-	}
-
-	option = {
-		name = "nhs2_countryevents2.a"
-	}
-}
-
-# Grand forestries start
+# Grand forestries
 country_event = {
 	id = nhs2_ideagroupevents.10
 	title = nhs2_ideagroupevents.10.t

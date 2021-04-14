@@ -1,0 +1,458 @@
+nhs_on_startup = {
+	nhs_set_up_empty_province_flags = yes
+	vov_setup_coastal_bonus = yes
+}
+
+nhs_set_up_empty_province_flags = {
+	every_province = {
+		if = {
+			limit = {
+				is_empty = yes
+			}
+			set_province_flag = nhs_is_empty_province
+		}
+		else_if = {
+			limit = {
+				has_province_flag = nhs_is_empty_province
+			}
+			clr_province_flag = nhs_is_empty_province
+		}
+	}
+}
+
+nhs_handle_colonies = {
+	if = {
+		limit = {
+			has_province_flag = nhs_is_empty_province
+			is_empty = no
+			# is_colony = yes
+		}
+		on_colony_created = yes
+		clr_province_flag = nhs_is_empty_province
+		set_province_flag = nhs_is_colony
+	}
+	else_if = {
+		limit = {
+			NOT = { has_province_flag = nhs_is_empty_province }
+			is_empty = yes
+		}
+		on_colony_destroyed = yes
+		set_province_flag = nhs_is_empty_province
+		clr_province_flag = nhs_is_colony
+	}
+}
+
+on_colony_created = {
+	nhs_settler_boost_on_colony_created = yes
+}
+
+on_colony_destroyed = {
+	
+}
+
+on_colony_finished = {
+	
+}
+
+nhs_save_previous_goods = {
+	hidden_effect = {
+		clr_province_flag = nhs_had_grain_tg
+		clr_province_flag = nhs_had_wine_tg
+		clr_province_flag = nhs_had_wool_tg
+		clr_province_flag = nhs_had_cloth_tg
+		clr_province_flag = nhs_had_fish_tg
+		clr_province_flag = nhs_had_fur_tg
+		clr_province_flag = nhs_had_salt_tg
+		clr_province_flag = nhs_had_naval_supplies_tg
+		clr_province_flag = nhs_had_copper_tg
+		clr_province_flag = nhs_had_gold_tg
+		clr_province_flag = nhs_had_iron_tg
+		clr_province_flag = nhs_had_slaves_tg
+		clr_province_flag = nhs_had_ivory_tg
+		clr_province_flag = nhs_had_tea_tg
+		clr_province_flag = nhs_had_chinaware_tg
+		clr_province_flag = nhs_had_spices_tg
+		clr_province_flag = nhs_had_coffee_tg
+		clr_province_flag = nhs_had_cotton_tg
+		clr_province_flag = nhs_had_sugar_tg
+		clr_province_flag = nhs_had_tobacco_tg
+		clr_province_flag = nhs_had_cocoa_tg
+		clr_province_flag = nhs_had_silk_tg
+		clr_province_flag = nhs_had_dyes_tg
+		clr_province_flag = nhs_had_tropical_wood_tg
+		clr_province_flag = nhs_had_livestock_tg
+		clr_province_flag = nhs_had_incense_tg
+		clr_province_flag = nhs_had_glass_tg
+		clr_province_flag = nhs_had_paper_tg
+		clr_province_flag = nhs_had_gems_tg
+		clr_province_flag = nhs_had_coal_tg
+		clr_province_flag = nhs_had_seal_hunting_tg
+		clr_province_flag = nhs_had_elysian_silk_tg
+		clr_province_flag = nhs_had_norse_mead_tg
+		trigger_switch = {
+			on_trigger = trade_goods
+			grain = { set_province_flag = nhs_had_grain_tg }
+			wine = { set_province_flag = nhs_had_wine_tg }
+			wool = { set_province_flag = nhs_had_wool_tg }
+			cloth = { set_province_flag = nhs_had_cloth_tg }
+			fish = { set_province_flag = nhs_had_fish_tg }
+			fur = { set_province_flag = nhs_had_fur_tg }
+			salt = { set_province_flag = nhs_had_salt_tg }
+			naval_supplies = { set_province_flag = nhs_had_naval_supplies_tg }
+			copper = { set_province_flag = nhs_had_copper_tg }
+			gold = { set_province_flag = nhs_had_gold_tg }
+			iron = { set_province_flag = nhs_had_iron_tg }
+			slaves = { set_province_flag = nhs_had_slaves_tg }
+			ivory = { set_province_flag = nhs_had_ivory_tg }
+			tea = { set_province_flag = nhs_had_tea_tg }
+			chinaware = { set_province_flag = nhs_had_chinaware_tg }
+			spices = { set_province_flag = nhs_had_spices_tg }
+			coffee = { set_province_flag = nhs_had_coffee_tg }
+			cotton = { set_province_flag = nhs_had_cotton_tg }
+			sugar = { set_province_flag = nhs_had_sugar_tg }
+			tobacco = { set_province_flag = nhs_had_tobacco_tg }
+			cocoa = { set_province_flag = nhs_had_cocoa_tg }
+			silk = { set_province_flag = nhs_had_silk_tg }
+			dyes = { set_province_flag = nhs_had_dyes_tg }
+			tropical_wood = { set_province_flag = nhs_had_tropical_wood_tg }
+			livestock = { set_province_flag = nhs_had_livestock_tg }
+			incense = { set_province_flag = nhs_had_incense_tg }
+			glass = { set_province_flag = nhs_had_glass_tg }
+			paper = { set_province_flag = nhs_had_paper_tg }
+			gems = { set_province_flag = nhs_had_gems_tg }
+			coal = { set_province_flag = nhs_had_coal_tg }
+			elysian_silk = { set_province_flag = nhs_had_elysian_silk_tg }
+			norse_mead = { set_province_flag = nhs_had_norse_mead_tg }
+		}
+	}
+}
+
+nhs_load_previous_goods = {
+	trigger_switch = {
+		on_trigger = has_province_flag
+		nhs_had_grain_tg = { change_trade_goods = grain }
+		nhs_had_wine_tg = { change_trade_goods = wine }
+		nhs_had_wool_tg = { change_trade_goods = wool }
+		nhs_had_cloth_tg = { change_trade_goods = cloth }
+		nhs_had_fish_tg = { change_trade_goods = fish }
+		nhs_had_fur_tg = { change_trade_goods = fur }
+		nhs_had_salt_tg = { change_trade_goods = salt }
+		nhs_had_naval_supplies_tg = { change_trade_goods = naval_supplies }
+		nhs_had_copper_tg = { change_trade_goods = copper }
+		nhs_had_gold_tg = { change_trade_goods = gold }
+		nhs_had_iron_tg = { change_trade_goods = iron }
+		nhs_had_slaves_tg = { change_trade_goods = slaves }
+		nhs_had_ivory_tg = { change_trade_goods = ivory }
+		nhs_had_tea_tg = { change_trade_goods = tea }
+		nhs_had_chinaware_tg = { change_trade_goods = chinaware }
+		nhs_had_spices_tg = { change_trade_goods = spices }
+		nhs_had_coffee_tg = { change_trade_goods = coffee }
+		nhs_had_cotton_tg = { change_trade_goods = cotton }
+		nhs_had_sugar_tg = { change_trade_goods = sugar }
+		nhs_had_tobacco_tg = { change_trade_goods = tobacco }
+		nhs_had_cocoa_tg = { change_trade_goods = cocoa }
+		nhs_had_silk_tg = { change_trade_goods = silk }
+		nhs_had_dyes_tg = { change_trade_goods = dyes }
+		nhs_had_tropical_wood_tg = { change_trade_goods = tropical_wood }
+		nhs_had_livestock_tg = { change_trade_goods = livestock }
+		nhs_had_incense_tg = { change_trade_goods = incense }
+		nhs_had_glass_tg = { change_trade_goods = glass }
+		nhs_had_paper_tg = { change_trade_goods = paper }
+		nhs_had_gems_tg = { change_trade_goods = gems }
+		nhs_had_coal_tg = { change_trade_goods = coal }
+		nhs_had_elysian_silk_tg = { change_trade_goods = elysian_silk }
+		nhs_had_norse_mead_tg = { change_trade_goods = norse_mead }
+	}
+	clr_province_flag = nhs_had_grain_tg
+	clr_province_flag = nhs_had_wine_tg
+	clr_province_flag = nhs_had_wool_tg
+	clr_province_flag = nhs_had_cloth_tg
+	clr_province_flag = nhs_had_fish_tg
+	clr_province_flag = nhs_had_fur_tg
+	clr_province_flag = nhs_had_salt_tg
+	clr_province_flag = nhs_had_naval_supplies_tg
+	clr_province_flag = nhs_had_copper_tg
+	clr_province_flag = nhs_had_gold_tg
+	clr_province_flag = nhs_had_iron_tg
+	clr_province_flag = nhs_had_slaves_tg
+	clr_province_flag = nhs_had_ivory_tg
+	clr_province_flag = nhs_had_tea_tg
+	clr_province_flag = nhs_had_chinaware_tg
+	clr_province_flag = nhs_had_spices_tg
+	clr_province_flag = nhs_had_coffee_tg
+	clr_province_flag = nhs_had_cotton_tg
+	clr_province_flag = nhs_had_sugar_tg
+	clr_province_flag = nhs_had_tobacco_tg
+	clr_province_flag = nhs_had_cocoa_tg
+	clr_province_flag = nhs_had_silk_tg
+	clr_province_flag = nhs_had_dyes_tg
+	clr_province_flag = nhs_had_tropical_wood_tg
+	clr_province_flag = nhs_had_livestock_tg
+	clr_province_flag = nhs_had_incense_tg
+	clr_province_flag = nhs_had_glass_tg
+	clr_province_flag = nhs_had_paper_tg
+	clr_province_flag = nhs_had_gems_tg
+	clr_province_flag = nhs_had_coal_tg
+	clr_province_flag = nhs_had_seal_hunting_tg
+	clr_province_flag = nhs_had_elysian_silk_tg
+	clr_province_flag = nhs_had_norse_mead_tg
+}
+
+nhs_add_reform = {
+	add_government_reform = $REF$
+	# if = {
+	# 	limit = {
+	# 		has_dlc = "Dharma"
+	# 	}
+	# 	#[[REM]
+	# 	#	remove_government_reform = $REM$
+	# 	#]
+	# 	add_government_reform = $REF$
+	# }
+}
+
+nhs_add_gov_reform = {
+	add_government_reform = $REF$
+	# if = {
+	# 	limit = {
+	# 		has_dlc = "Dharma"
+	# 	}
+	# 	#[[REM]
+	# 	#	remove_government_reform = $REM$
+	# 	#]
+	# 	add_government_reform = $REF$
+	# }
+	# else = {
+	# 	hidden_effect = {
+	# 		add_government_reform = nhs_intermediary_government
+	# 	}
+	# 	add_government_reform = $REF$
+	# }
+}
+
+nhs_set_center_of_trade_1 = {
+	custom_tooltip = nhs_add_center_of_trade_1_tt
+	hidden_effect = {
+		if = {
+			limit = {
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+			center_of_trade = 1
+		}
+		else = {
+			owner = {
+				add_treasury = 50
+			}
+		}
+	}
+}
+
+nhs_set_center_of_trade_2 = {
+	custom_tooltip = nhs_add_center_of_trade_2_tt
+	hidden_effect = {
+		if = {
+			limit = {
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+			center_of_trade = 2
+		}
+		else_if = {
+			limit = {
+				NOT = { province_has_center_of_trade_of_level = 2 }
+			}
+			add_center_of_trade_level = 1
+		}
+		else = {
+			owner = {
+				add_treasury = 100
+			}
+		}
+	}
+}
+
+nhs_set_center_of_trade_3 = {
+	custom_tooltip = nhs_add_center_of_trade_3_tt
+	hidden_effect = {
+		if = {
+			limit = {
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+			center_of_trade = 3
+		}
+		else_if = {
+			limit = {
+				NOT = { province_has_center_of_trade_of_level = 3 }
+			}
+			add_center_of_trade_level = 2
+		}
+		else = {
+			owner = {
+				add_treasury = 500
+			}
+		}
+	}
+}
+
+nhs_set_center_in_a_region_to_level_3 = {
+	if = {
+		limit = {
+			any_owned_province = {
+				$TYPE$ = $CNRG$
+			}
+			NOT = {
+				any_province = {
+					$TYPE$ = $CNRG$
+					owner = {
+						OR = {
+							tag = ROOT
+							is_subject_of = ROOT
+						}
+					}
+					province_has_center_of_trade_of_level = 3
+				}
+			}
+		}
+		if = {
+			limit = {
+				any_owned_province = {
+					$TYPE$ = $CNRG$
+					province_has_center_of_trade_of_level = 2
+				}
+				
+			}
+			random_owned_province = {
+				limit = {
+					$TYPE$ = $CNRG$
+					province_has_center_of_trade_of_level = 2
+				}
+				nhs_set_center_of_trade_3 = yes
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_province = {
+					$TYPE$ = $CNRG$
+					province_has_center_of_trade_of_level = 1
+				}
+			}
+			random_owned_province = {
+				limit = {
+					$TYPE$ = $CNRG$
+					province_has_center_of_trade_of_level = 1
+				}
+				nhs_set_center_of_trade_3 = yes
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					$TYPE$ = $CNRG$
+				}
+				nhs_set_center_of_trade_3 = yes
+			}
+		}
+	}
+	else = {
+		add_treasury = 1000
+	}
+}
+
+nhs_set_center_in_a_region = {
+	if = {
+		limit = {
+			any_owned_province = {
+				$TYPE$ = $CNRG$
+				province_has_center_of_trade_of_level = 1
+				NOT = { province_has_center_of_trade_of_level = 2 }
+			}
+		}
+		random_owned_province = {
+			limit = {
+				$TYPE$ = $CNRG$
+				province_has_center_of_trade_of_level = 1
+				NOT = { province_has_center_of_trade_of_level = 2 }
+			}
+			nhs_set_center_of_trade_2 = yes
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				nhs_eicticofminh = yes
+				$TYPE$ = $CNRG$
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+		}
+		random_owned_province = {
+			limit = {
+				nhs_eicticofminh = yes
+				$TYPE$ = $CNRG$
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+			nhs_set_center_of_trade_1 = yes
+		}
+	}
+	else_if = {
+		limit = {
+			any_province = {
+				owner = {
+					is_subject_of = ROOT
+				}
+				nhs_eicticofminh = yes
+				$TYPE$ = $CNRG$
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+		}
+		random_province = {
+			limit = {
+				owner = {
+					is_subject_of = ROOT
+				}
+				nhs_eicticofminh = yes
+				$TYPE$ = $CNRG$
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+			nhs_set_center_of_trade_1 = yes
+		}
+	}
+	else_if = {
+		limit = {
+			any_province = {
+				owner = {
+					is_subject_of = ROOT
+				}
+				nhs_eicticofminh = yes
+				$TYPE$ = $CNRG$
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+		}
+		random__province = {
+			limit = {
+				owner = {
+					is_subject_of = ROOT
+				}
+				nhs_eicticofminh = yes
+				$TYPE$ = $CNRG$
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+			nhs_set_center_of_trade_1 = yes
+		}
+	}
+	else = {
+		add_treasury = 75
+	}
+}
+
+nhs_change_government = {
+	change_government = $GOV$
+	# if = {
+	# 	limit = {
+	# 		has_dlc = "Dharma"
+	# 		NOT = { government = $GOV$ }
+	# 	}
+	# 	change_government = $GOV$
+	# }
+	# [[LEGACY]
+	# 	set_legacy_government = $LEGACY$
+	# ]
+}
