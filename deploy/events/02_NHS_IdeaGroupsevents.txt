@@ -189,22 +189,51 @@ country_event = {
 	hidden = yes
 	
     trigger = {
-		has_idea = grand_forestries
-		NOT = { has_country_flag = nhs_has_enabled_forestries }
+		OR = {
+			AND = {
+				has_idea = grand_forestries
+				NOT = { has_country_flag = nhs_has_enabled_forestries }
+			}
+			AND = {
+				NOT = { has_idea = grand_forestries }
+				has_country_flag = nhs_has_enabled_forestries
+			}
+		}
 	}
 	
 	immediate = {
-		set_country_flag = nhs_has_enabled_forestries
 		hidden_effect = {
-			every_owned_province = {
-				if = {
-					limit = {
-						trade_goods = naval_supplies
+			if = {
+				limit = {
+					has_idea = grand_forestries
+					NOT = { has_country_flag = nhs_has_enabled_forestries }
+				}
+				set_country_flag = nhs_has_enabled_forestries
+				every_owned_province = {
+					if = {
+						limit = {
+							trade_goods = naval_supplies
+						}
+						add_province_modifier = { 
+							name = nhs_grand_forestries_modifier
+							duration = -1
+							hidden = yes
+						}
 					}
-					add_province_modifier = { 
-						name = nhs_grand_forestries_modifier
-						duration = -1
-						hidden = yes
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { has_idea = grand_forestries }
+					has_country_flag = nhs_has_enabled_forestries
+				}
+				clr_country_flag = nhs_has_enabled_forestries
+				every_owned_province = {
+					if = {
+						limit = {
+							has_province_modifier = nhs_grand_forestries_modifier
+						}
+						remove_province_modifier = nhs_grand_forestries_modifier
 					}
 				}
 			}
