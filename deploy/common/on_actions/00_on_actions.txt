@@ -211,39 +211,7 @@ on_religion_change = {
 		propagate_religion_events.7 #Propagated Country is now Muslim
 	}
 	#Third Odyssey
-	if = {
-		limit = {
-			has_reform = spartan_kingdom
-			OR = {
-				religion = orthodox
-				religion = elysian_orthodoxy
-			}
-		}
-		add_government_reform = msg_christian0_ref
-		add_government_reform = msg_spartan_patriarch_no
-		add_government_reform = msg_holy_army_no
-		add_government_reform = msg_saint_leo_no
-	}
-	else_if = {
-		limit = {
-			has_reform = spartan_kingdom
-			religion = pantheon_worship
-		}
-		add_government_reform = msg_hellenic0_ref
-		add_government_reform = msg_spartan_heralds_no
-		add_government_reform = msg_native_deities_no
-		add_government_reform = msg_deify_leonidas_no
-	}
-	else_if = {
-		limit = {
-			has_reform = spartan_kingdom
-			religion = aztlan_worship
-		}
-		add_government_reform = msg_aztlan0_ref
-		add_government_reform = msg_aztlan_priesthood_no
-		add_government_reform = msg_old_faith_no
-		add_government_reform = msg_sacrifice_no
-	}
+	nhs_on_religion_change = yes
 	#TO End
 }
 
@@ -3542,92 +3510,12 @@ on_remove_free_city = {
 }
 
 on_revoke_estate_land_ai = { #AI can't handle the rebels atm or perform a gradual revoke, sorry
-	#Third Odyssey	
-	if = {
-		limit = {
-			NOT = {
-				AND = {
-					owner = { has_country_modifier = msg_free_rewoke_timer }
-					OR = {
-						has_estate = estate_nhs_apogonoi
-						has_estate = estate_nhs_pipiltin
-					}
-				}
-			}
-		}
-		add_province_modifier = {
-			name = revoked_estate_modifier
-			duration = 5475 #15 years
-		}
-	}
-	if = {
-		limit = {
-			has_estate = estate_nhs_pipiltin
-			has_province_flag = msg_pipiltin_province
-		}
-		MSN = {
-			change_variable = {
-				which = msg_pipiltin_provinces
-				value = -1
-			}
-			change_variable = {
-				which = msg_estate_provinces_balance
-				value = 1
-			}
-			change_variable = {
-				which = msg_estate_provinces_balance_apog_view
-				value = -1
-			}
-			msg_calc_pips_angerment = yes
-			msg_calc_apog_angerment = yes
-		}
-		clr_province_flag = msg_pipiltin_province
-	}
-	if = {
-		limit = {
-			has_estate = estate_nhs_apogonoi
-			has_province_flag = msg_apogonoi_province
-		}
-		MSN = {
-			change_variable = {
-				which = msg_apogonoi_provinces
-				value = -1
-			}
-			change_variable = {
-				which = msg_estate_provinces_balance
-				value = -1
-			}
-			change_variable = {
-				which = msg_estate_provinces_balance_apog_view
-				value = 1
-			}
-			msg_calc_pips_angerment = yes
-			msg_calc_apog_angerment = yes
-		}
-		clr_province_flag = msg_apogonoi_province
-	}
-	nhs_remove_barbaroi_province = yes
-	#TO End
-	
 }
 
 on_revoke_estate_land = {
-	 if = {
-		limit = {
-			NOT = {
-				AND = {
-					owner = { has_country_modifier = msg_free_rewoke_timer }
-					OR = {
-						has_estate = estate_nhs_apogonoi
-						has_estate = estate_nhs_pipiltin
-					}
-				}
-			}
-		}
-		add_province_modifier = {
-			name = revoked_estate_modifier
-			duration = 5475 #15 years
-		}
+	add_province_modifier = {
+		name = revoked_estate_modifier
+		duration = 5475 #15 years
 	}
 	if = {
 		limit = {
@@ -3869,140 +3757,6 @@ on_revoke_estate_land = {
 		}
 		province_event = { id = marathas_estate_events.1 }
 	}
-	#Third Odyssey
-	if = {
-        limit = {
-			nhs_has_any_native_estate = yes
-            OR = {
-                NOT = { native_culture = yes }
-                culture = elysameric
-                culture = skraeling
-            }
- 
-            owner = {
-                NOT = {
-					nhs_check_loyalty_any_native_estate = { QUANTITY = 40 }
-                }
-            }
-        }
-        spawn_rebels = {
-            type = particularist_rebels
-            size = 1
-        }
-    }
-    if = {
-        limit = {
-			nhs_has_any_native_estate = yes
-            native_culture = yes
-            NOT = { culture = elysameric }
-            NOT = { culture = skraeling }
-            owner = {
-                NOT = {
-					nhs_check_loyalty_any_native_estate = { QUANTITY = 40 }
-                }
-            }
-        }
- 
-        spawn_rebels = {
-            type = particularist_rebels
-            size = 1
-        }
-        province_event = { id = natives_estate_events.16 }
-    }
-    if = {
-        limit = {
-            has_estate = estate_nhs_apogonoi
-            owner = {
-                NOT = {
-                    estate_loyalty = {
-                        estate = estate_nhs_apogonoi
-                        loyalty = 40
-                    }
-                }
-            }
-        }
-		if = {
-			limit = {
-				NOT = { owner = { has_country_modifier = msg_free_rewoke_timer } }
-			}
-			spawn_rebels = {
-				type = noble_rebels
-				size = 1
-			}
-		}
-		hidden_effect = {
-			if = {
-				limit = {
-					has_province_flag = msg_apogonoi_province
-				}
-				MSN = {
-					change_variable = {
-						which = msg_apogonoi_provinces
-						value = -1
-					}
-					change_variable = {
-						which = msg_estate_provinces_balance
-						value = -1
-					}
-					change_variable = {
-						which = msg_estate_provinces_balance_apog_view
-						value = 1
-					}
-					msg_calc_pips_angerment = yes
-					msg_calc_apog_angerment = yes
-				}
-				clr_province_flag = msg_apogonoi_province
-			}
-		}
-    }
-    if = {
-        limit = {
-            has_estate = estate_nhs_pipiltin
-            owner = {
-                NOT = {
-                    estate_loyalty = {
-                        estate = estate_nhs_pipiltin
-                        loyalty = 40
-                    }
-                }
-            }
-        }
-        if = {
-			limit = {
-				NOT = { owner = { has_country_modifier = msg_free_rewoke_timer } }
-			}
-			spawn_rebels = {
-				type = noble_rebels
-				size = 1
-			}
-		}
-		hidden_effect = {
-			if = {
-				limit = {
-					has_province_flag = msg_pipiltin_province
-				}
-				MSN = {
-					change_variable = {
-						which = msg_pipiltin_provinces
-						value = -1
-					}
-					change_variable = {
-						which = msg_estate_provinces_balance
-						value = 1
-					}
-					change_variable = {
-						which = msg_estate_provinces_balance_apog_view
-						value = -1
-					}
-					msg_calc_pips_angerment = yes
-					msg_calc_apog_angerment = yes
-				}
-				clr_province_flag = msg_pipiltin_province
-			}
-		}
-    }
-	nhs_remove_barbaroi_province = yes
-    #TO End
 }
 
 on_revoke_estate_land_ai_post = {
@@ -4019,62 +3773,6 @@ on_grant_estate_land = {
 		}
 		remove_province_modifier = revoked_estate_modifier
 	}
-	#Third Odyssey
-	if = {
-		limit = {
-			owner = { tag = MSN }
-			has_estate = estate_nhs_apogonoi
-			NOT = { has_province_flag = msg_apogonoi_province }
-		}
-		set_province_flag = msg_apogonoi_province
-		hidden_effect = {
-			MSN = {
-				change_variable = {
-					which = msg_apogonoi_provinces
-					value = 1
-				}
-				change_variable = {
-					which = msg_estate_provinces_balance
-					value = 1
-				}
-				change_variable = {
-					which = msg_estate_provinces_balance_apog_view
-					value = -1
-				}
-				msg_calc_pips_angerment = yes
-				msg_calc_apog_angerment = yes
-			}
-		}
-	}
-	if = {
-		limit = {
-			owner = { tag = MSN }
-			has_estate = estate_nhs_pipiltin
-			NOT = { has_province_flag = msg_pipiltin_province }
-		}
-		set_province_flag = msg_pipiltin_province
-		hidden_effect = {
-			MSN = {
-				change_variable = {
-					which = msg_pipiltin_provinces
-					value = 1
-				}
-				change_variable = {
-					which = msg_estate_provinces_balance
-					value = -1
-				}
-				change_variable = {
-					which = msg_estate_provinces_balance_apog_view
-					value = 1
-				}
-				msg_calc_pips_angerment = yes
-				msg_calc_apog_angerment = yes
-			}
-		}
-	}
-	province_event = { id = nhs2_cultureevents.19 }
-	nhs_add_barbaroi_province = yes
-	#TO End
 }
 
 on_death_has_harem = {
@@ -4124,28 +3822,7 @@ on_province_religion_converted = {
 # province
 on_province_culture_converted = {
 	#Third Odyssey
-	nhs_assign_names_effect = yes
-	if = {
-		limit = {
-			has_province_modifier = msg_slave_province_tm
-		}
-		remove_province_triggered_modifier = msg_slave_province_tm
-	}
-	if = {
-		limit = {
-			has_province_modifier = msg_liberated_slaves
-		}
-		remove_province_modifier = msg_liberated_slaves
-	}
-	if = {
-		limit = {
-			culture = elysian
-			owner = {
-				culture_group = elysian_group
-			}
-		}
-		change_culture = high_elysian
-	}
+	nhs_on_province_culture_converted = yes
 	#TO End
 }
 
@@ -4257,83 +3934,7 @@ on_province_owner_change = {
 	on_province_owner_change_estate_privileges_effect = yes
 
 	#Third Odyssey
-	nhs_handle_barbaroi_provinces_counter = yes
-	nhs_handle_spartan_integration = yes
-	vov_handle_grand_forestries = yes
-	nhs_handle_colonies = yes
-	msg_handle_slaves = yes
-	nhs_assign_names_effect = yes
-	vov_handle_coastal_bonus = yes
-	vov_handle_brave_the_elements = yes
-	if = {
-		limit = {
-			continent = north_america
-			NOT = {
-				FROM = {
-					nhs_is_elysia = yes
-				}
-			}
-		}
-		province_event = { id = nhs_mission_events.1 }
-	}
-	if = {
-		limit = {
-			FROM = { tag = MSN }
-			has_province_flag = msg_apogonoi_province
-		}
-		clr_province_flag = msg_apogonoi_province
-		FROM = {
-			change_variable = {
-				which = msg_apogonoi_provinces
-				value = -1
-			}
-			change_variable = {
-				which = msg_estate_provinces_balance
-				value = -1
-			}
-			change_variable = {
-				which = msg_estate_provinces_balance_apog_view
-				value = 1
-			}
-			msg_calc_pips_angerment = yes
-			msg_calc_apog_angerment = yes
-		}
-	}
-	if = {
-		limit = {
-			FROM = { tag = MSN }
-			has_province_flag = msg_pipiltin_province
-		}
-		clr_province_flag = msg_apogonoi_province
-		FROM = {
-			change_variable = {
-				which = msg_pipiltin_provinces
-				value = -1
-			}
-			change_variable = {
-				which = msg_estate_provinces_balance
-				value = 1
-			}
-			change_variable = {
-				which = msg_estate_provinces_balance_apog_view
-				value = -1
-			}
-			msg_calc_pips_angerment = yes
-			msg_calc_apog_angerment = yes
-		}
-	}
-	
-	if = {
-		limit = {
-			continent = north_america
-			owned_by = POR
-			is_colony = yes
-			POR = {
-				has_country_modifier = nhs2_treaty_of_lantanopolis_por
-			}
-		}
-		add_colonysize = -1000
-	}
+	nhs_on_province_owner_change = yes
 	#TO End
 }
 
@@ -4530,35 +4131,7 @@ on_dependency_gained = {
 		dutch_republic.31 # States General falls under a PU
 	}
 	#Third Odyssey
-	FROM = {
-		if = {
-			limit = {
-				has_country_modifier = msg_rise_of_sparta
-			}
-			remove_country_modifier = msg_rise_of_sparta
-		}
-		else_if = {
-			limit = {
-				has_country_modifier = msg_rise_of_sparta_2
-			}
-			remove_country_modifier = msg_rise_of_sparta_2
-		}
-		else_if = {
-			limit = {
-				has_country_modifier = msg_rise_of_sparta_3
-			}
-			remove_country_modifier = msg_rise_of_sparta_3
-		}
-		if = {
-			limit = {
-				OR = {
-					is_subject_of_type = nhs_imperial_associate
-					is_subject_of_type = personal_union
-				}
-			}
-			set_country_flag = nhs_been_subject_for_50_years
-		}
-	}
+	nhs_on_dependency_gained = yes
 	#TO End
 }
 

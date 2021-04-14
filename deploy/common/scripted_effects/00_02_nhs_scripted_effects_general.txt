@@ -1,3 +1,4 @@
+# country
 nhs_on_startup = {
 	nhs_set_up_empty_province_flags = yes
 	vov_setup_coastal_bonus = yes
@@ -52,6 +53,138 @@ on_colony_destroyed = {
 
 on_colony_finished = {
 	
+}
+
+# province
+# FROM = old owner
+nhs_on_province_owner_change = {
+	nhs_handle_colonies = yes
+	nhs_handle_spartan_integration = yes
+	vov_handle_grand_forestries = yes
+	msg_handle_slaves = yes
+	nhs_assign_names_effect = yes
+	vov_handle_coastal_bonus = yes
+	vov_handle_brave_the_elements = yes
+
+	## TODO Covert this (and related events) into scripted effect
+	if = {
+		limit = {
+			continent = north_america
+			NOT = {
+				FROM = {
+					nhs_is_elysia = yes
+				}
+			}
+		}
+		province_event = { id = nhs_mission_events.1 }
+	}
+	if = {
+		limit = {
+			continent = north_america
+			owned_by = POR
+			is_colony = yes
+			POR = {
+				has_country_modifier = nhs2_treaty_of_lantanopolis_por
+			}
+		}
+		add_colonysize = -1000
+	}
+}
+
+# ROOT = Overlord, FROM = Minor
+nhs_on_dependency_gained = {
+	FROM = {
+		if = {
+			limit = {
+				has_country_modifier = msg_rise_of_sparta
+			}
+			remove_country_modifier = msg_rise_of_sparta
+		}
+		else_if = {
+			limit = {
+				has_country_modifier = msg_rise_of_sparta_2
+			}
+			remove_country_modifier = msg_rise_of_sparta_2
+		}
+		else_if = {
+			limit = {
+				has_country_modifier = msg_rise_of_sparta_3
+			}
+			remove_country_modifier = msg_rise_of_sparta_3
+		}
+		if = {
+			limit = {
+				OR = {
+					is_subject_of_type = nhs_imperial_associate
+					is_subject_of_type = personal_union
+				}
+			}
+			set_country_flag = nhs_been_subject_for_50_years
+		}
+	}
+}
+
+# province
+nhs_on_province_culture_converted = {
+	nhs_assign_names_effect = yes
+	if = {
+		limit = {
+			has_province_modifier = msg_slave_province_tm
+		}
+		remove_province_triggered_modifier = msg_slave_province_tm
+	}
+	if = {
+		limit = {
+			has_province_modifier = msg_liberated_slaves
+		}
+		remove_province_modifier = msg_liberated_slaves
+	}
+	if = {
+		limit = {
+			culture = elysian
+			owner = {
+				culture_group = elysian_group
+			}
+		}
+		change_culture = high_elysian
+	}
+}
+
+# country
+nhs_on_religion_change = {
+	if = {
+		limit = {
+			has_reform = spartan_kingdom
+			OR = {
+				religion = orthodox
+				religion = elysian_orthodoxy
+			}
+		}
+		add_government_reform = msg_christian0_ref
+		add_government_reform = msg_spartan_patriarch_no
+		add_government_reform = msg_holy_army_no
+		add_government_reform = msg_saint_leo_no
+	}
+	else_if = {
+		limit = {
+			has_reform = spartan_kingdom
+			religion = pantheon_worship
+		}
+		add_government_reform = msg_hellenic0_ref
+		add_government_reform = msg_spartan_heralds_no
+		add_government_reform = msg_native_deities_no
+		add_government_reform = msg_deify_leonidas_no
+	}
+	else_if = {
+		limit = {
+			has_reform = spartan_kingdom
+			religion = aztlan_worship
+		}
+		add_government_reform = msg_aztlan0_ref
+		add_government_reform = msg_aztlan_priesthood_no
+		add_government_reform = msg_old_faith_no
+		add_government_reform = msg_sacrifice_no
+	}
 }
 
 nhs_save_previous_goods = {
