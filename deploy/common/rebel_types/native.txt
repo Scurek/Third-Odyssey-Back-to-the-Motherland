@@ -1,0 +1,112 @@
+
+######################################################################
+# Native rebels. Roughly similar to particularists.
+######################################################################
+# Like particularists but for indiginous communities, 
+# and might make provinces defect if the rebellion drags on.
+# Should never spawn except via event (from disaster).
+native_rebels = {
+
+	color = { 230 175 175 }
+
+	area = nation 					# Sticks to provinces of their nation
+	government = any				# Don't care about gov type
+	defection = culture_group
+	defect_delay = 60				# Held provinces will auto-defect after 60 months, regardless of accept/enforce demands.
+	independence = none				# Does not strive for independence
+	unit_transfer = yes				# Units switch allegiance after enforcing demands.
+	gfx_type = culture_province
+	
+	resilient = yes					# Will not disband on defeat.
+	reinforcing = yes				# Will reinforce (double rate in rebel controlled provinces)
+	general = yes					# Does use generals. The 'define_ruler' effect with 'rebel' argument will pick the rebel leader as new King.
+	smart = yes
+	will_relocate = yes				# Units will relocate if they have sieged all provinces nearby and has to move over sea.
+	
+	artillery = 0.0
+	infantry = 0.8
+	cavalry = 0.2
+	
+	morale = 1.2
+
+	# Possible handle actions
+	handle_action_negotiate = yes
+	handle_action_stability = yes
+	handle_action_build_core = yes
+	handle_action_send_missionary = yes	
+	
+	# The rebel type with the highest modifier for this province gets picked
+	spawn_chance = {
+		factor = 0
+	}
+ 
+ 	# This is checked for EACH province in the Area of Operations
+	movement_evaluation = {
+		factor = 1
+		modifier = {
+			factor = 0.1
+			units_in_province = 1
+		}
+		modifier = {
+			factor = 0.001
+			controlled_by = REB
+		}
+		modifier = {
+			factor = 1.5
+			unrest = 2
+		}
+		modifier = {
+			factor = 1.5
+			unrest = 4
+		}
+		modifier = {
+			factor = 1.5
+			unrest = 6
+		}
+	}
+ 
+ 	# Province Scope
+ 	siege_won_trigger = {
+ 		nhs_culturally_native = yes
+		 nationalism = 1
+ 	}
+	siege_won_effect = {
+		custom_tooltip = native_rebels_siege_effect_tooltip
+		add_nationalism = 15  # Add fifteen extra years of nationalism
+	}
+	
+	# Country scope
+	can_negotiate_trigger = {
+		always = yes
+	}
+	
+	# Country scope
+	can_enforce_trigger = {
+		always = yes
+	}
+	
+	# Localisation for their demands
+	demands_description = "native_rebels_demand"
+	
+	# Country Scope	
+	demands_enforced_effect = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = just_lost_to_rebels
+				duration = 10
+				hidden = yes
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_rebel_faction = REB
+			}
+			add_local_autonomy = 30
+		}
+		change_estate_land_share = {
+			estate = estate_all_natives
+			share = 20.0
+		}
+		add_prestige = -50
+	}
+}

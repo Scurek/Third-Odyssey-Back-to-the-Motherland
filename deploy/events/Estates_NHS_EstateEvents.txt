@@ -1,6 +1,6 @@
 namespace = nhs2_estateevents
 
-# Boom
+# Barbaroi councils estate rises in revolt
 country_event = {
 	id = nhs2_estateevents.1
 	title = nhs2_estateevents.1.t
@@ -11,51 +11,80 @@ country_event = {
 	
 	immediate = {
 		hidden_effect = {
-			set_country_flag = cossack_native_council_triggered
-			every_country = {
+			every_province = {
 				limit = {
-					exists = yes
-					native_culture_primary = yes
-					any_province = {
-						is_core = PREV
-						is_colony = no
-						owned_by = ROOT
-						OR = {
-							native_culture = yes
-							nhs_has_any_native_estate = yes
-						}
-					}
+					is_colony = no
+					owned_by = ROOT
+					nhs_culturally_native = yes
 				}
-				every_province = {
-					limit = {
-						is_core = PREV
-						is_colony = no
-						owned_by = ROOT
-						OR = {
-							native_culture = yes
-							nhs_has_any_native_estate = yes
-						}
-					}
-					cede_province = PREV
-				}
+				add_unrest = 10
+				add_local_autonomy = 20
 			}
-			create_independent_estate = {
-				estate = estate_all_natives
-				government = republic
-				#government_reform = cossacks_reform
-				play_as = no
+			# Select provinces
+			random_province = {
+				limit = {
+					is_colony = no
+					owned_by = ROOT
+					nhs_culturally_native = yes
+					NOT = { has_province_flag = nhs_prepped_for_estate_natives_rise_temp }
+				}
+				set_province_flag = nhs_prepped_for_estate_natives_rise_temp
+			}
+			random_province = {
+				limit = {
+					is_colony = no
+					owned_by = ROOT
+					nhs_culturally_native = yes
+					NOT = { has_province_flag = nhs_prepped_for_estate_natives_rise_temp }
+				}
+				set_province_flag = nhs_prepped_for_estate_natives_rise_temp
+			}
+			random_province = {
+				limit = {
+					is_colony = no
+					owned_by = ROOT
+					nhs_culturally_native = yes
+					NOT = { has_province_flag = nhs_prepped_for_estate_natives_rise_temp }
+				}
+				set_province_flag = nhs_prepped_for_estate_natives_rise_temp
+			}
+			# Spawn rebels
+			every_owned_province = {
+				limit = {
+					owned_by = ROOT
+					has_province_flag = nhs_prepped_for_estate_natives_rise_temp
+				}
+				spawn_rebels = {
+					type = native_rebels
+					size = 3
+					win = yes
+				}
 			}
 		}
 	}
 
 	option = {
-		name = "nhs2_countryevents.28.a"
+		name = "nhs2_estateevents.1.a"
 		tooltip = {
-			create_independent_estate = {
-				estate = estate_all_natives
-				government = republic
-				#government_reform = cossacks_reform
-				play_as = no
+			every_owned_province = {
+				limit = {
+					owned_by = ROOT
+					has_province_flag = nhs_prepped_for_estate_natives_rise_temp
+				}
+				spawn_rebels = {
+					type = native_rebels
+					size = 3
+					win = yes
+				}
+			}
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					owned_by = ROOT
+					has_province_flag = nhs_prepped_for_estate_natives_rise_temp
+				}
+				clr_province_flag = nhs_prepped_for_estate_natives_rise_temp
 			}
 		}
 	}
