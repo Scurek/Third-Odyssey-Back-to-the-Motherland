@@ -1,69 +1,111 @@
 estate_all_natives_disaster = {
+	# Natives in country rise up, oppose aggression against other natives
+
 	potential = {
 		nhs_has_any_native_estate = yes
 	}
 
 	can_start = {
 		nhs_has_any_native_estate = yes
+		has_any_disaster = no
 	}
 	
 	can_stop = {
-		NOT = { nhs_has_any_native_estate = yes }
+		OR = {
+			NOT = { nhs_has_any_native_estate = yes }
+			has_any_disaster = yes
+		}
 	}
 
 	down_progress = {
 		factor = 0
 		modifier = {
-			factor = 1
-			stability = 3
+			factor = 0.1
+			is_at_war = no
 		}
 		modifier = {
-			factor = 1
+			factor = 0.25
+			is_at_war = no
 			nhs_check_loyalty_any_native_estate = { QUANTITY = 60 }
 		}
 		modifier = {
-			factor = 1
+			factor = 0.25
+			is_at_war = no
 			nhs_check_loyalty_any_native_estate = { QUANTITY = 70 }
 		}
 	}
 	
 	progress = {
 		modifier = {
-			factor = 1
-			NOT = {
-				nhs_check_loyalty_any_native_estate = { QUANTITY = 30 }
+			factor = 0.5
+			any_country = {
+				nhs_culturally_native_primary = yes
+				defensive_war_with = ROOT
 			}
 		}
 		modifier = {
-			factor = 1
+			factor = 0.5
+			any_country = {
+				nhs_culturally_native_primary = yes
+				defensive_war_with = ROOT
+			}
+			NOT = {
+				nhs_check_loyalty_any_native_estate = { QUANTITY = 50 }
+			}
+		}
+		modifier = {
+			factor = 0.5
+			any_country = {
+				nhs_culturally_native_primary = yes
+				defensive_war_with = ROOT
+			}
 			estate_influence = {
 				estate = estate_all_natives
 				influence = 60
 			}
 		}
-		modifier = {
-			factor = 1
-			estate_influence = {
-				estate = estate_all_natives
-				influence = 80
-			}
-		}
-		modifier = {
-			factor = 2
-			estate_influence = {
-				estate = estate_all_natives
-				influence = 100
-			}
-		}
+	}
+	
+	modifier = {
+		# Own army worse
+		morale = -0.20
+		manpower_recovery_speed = -0.5
+		# Mercenaries difficult to find
+		mercenary_cost = 1.0
+		mercenary_manpower = -0.5
 	}
 	
 	can_end = {
-		always = yes
+		AND = {
+			NOT = {
+				any_country = {
+					nhs_culturally_native_primary = yes
+					defensive_war_with = ROOT
+				}
+			}
+			NOT = { num_of_rebel_controlled_provinces = 1 }
+			NOT = { num_of_rebel_armies = 1 }
+			custom_trigger_tooltip = {
+				tooltip = nhs_natives_disaster_timer_tt
+				NOT = { has_country_modifier = nhs_natives_disaster_timer }
+			}
+		}
 	}
 
 	on_start = nhs2_estateevents.1
+	on_end = nhs2_estateevents.2
 	
 	on_monthly = {
+		events = {
+			# TODO: events after 1 and 2 years for earlier negotiations
+		}
+		random_events = { 
+			1000 = 0
+			# TODO: raise more rebels, neighboring native negative opinion, native subject increase liberty desire, 
+			#  colony suffers setback (lose colony progress, add temporary country modifier),
+			#  defections in military (tradition, manpower loss), empower enemies (move development to hostile native)
+			# 100 = nhs2_estateevents.100
+		}
 	}
 }
 

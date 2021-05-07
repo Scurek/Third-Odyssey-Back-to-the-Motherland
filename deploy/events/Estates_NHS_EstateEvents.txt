@@ -11,6 +11,13 @@ country_event = {
 	
 	immediate = {
 		hidden_effect = {
+			# Set the disaster hidden timer
+			add_country_modifier = {
+				name = nhs_natives_disaster_timer
+				duration = 1095  # 3 years
+				hidden = yes
+			}
+			# Add some trouble everywhere
 			every_province = {
 				limit = {
 					is_colony = no
@@ -21,15 +28,6 @@ country_event = {
 				add_local_autonomy = 20
 			}
 			# Select provinces
-			random_province = {
-				limit = {
-					is_colony = no
-					owned_by = ROOT
-					nhs_culturally_native = yes
-					NOT = { has_province_flag = nhs_prepped_for_estate_natives_rise_temp }
-				}
-				set_province_flag = nhs_prepped_for_estate_natives_rise_temp
-			}
 			random_province = {
 				limit = {
 					is_colony = no
@@ -65,7 +63,18 @@ country_event = {
 
 	option = {
 		name = "nhs2_estateevents.1.a"
+		add_stability = -3
 		tooltip = {
+			# Repeat immediate province effects for clarity
+			every_province = {
+				limit = {
+					is_colony = no
+					owned_by = ROOT
+					nhs_culturally_native = yes
+				}
+				add_unrest = 10
+				add_local_autonomy = 20
+			}
 			every_owned_province = {
 				limit = {
 					owned_by = ROOT
@@ -79,6 +88,7 @@ country_event = {
 			}
 		}
 		hidden_effect = {
+			# Clear the flags when event is closed
 			every_owned_province = {
 				limit = {
 					owned_by = ROOT
@@ -87,5 +97,20 @@ country_event = {
 				clr_province_flag = nhs_prepped_for_estate_natives_rise_temp
 			}
 		}
+	}
+}
+
+
+country_event = {
+	id = nhs2_estateevents.2
+	title = nhs2_estateevents.2.t
+	desc = nhs2_estateevents.2.d
+	picture = NATIVE_LIBERUM_VETO_eventPicture
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "nhs2_estateevents.2.a"
+		tooltip = native_disaster_ends_tt
 	}
 }
