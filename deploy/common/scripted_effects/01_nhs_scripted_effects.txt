@@ -7198,3 +7198,80 @@ nhs_settler_boost_on_colony_created = {
 		add_colonysize = 200
 	}
 }
+
+nhs_remove_fort = {
+	if = {
+		limit = {
+			has_building = fort_15th
+		}
+		remove_building = fort_15th
+	}
+	else_if = {
+		limit = {
+			has_building = fort_16th
+		}
+		remove_building = fort_16th
+	}
+	else_if = {
+		limit = {
+			has_building = fort_17th
+		}
+		remove_building = fort_17th
+	}
+	else_if = {
+		limit = {
+			has_building = fort_18th
+		}
+		remove_building = fort_18th
+	}
+}
+
+nhs_highest_dev_province = {
+	set_variable = {
+		which = nhs_highest_province_dev
+		value = 0
+	}
+	every_owned_province = {
+		limit = {
+			$PROVINCE_CONDITION$ = yes
+		}
+		ROOT = {
+			export_to_variable = {
+				which = nhs_local_dev
+				value = development
+				who = PREV
+			}
+		}
+		
+		[[TRADE_CENTER_BONUS]
+			if = {
+				limit = {
+					province_has_center_of_trade_of_level = 1
+				}
+				ROOT = {
+					change_variable = {            
+						which = nhs_local_dev
+						value = $TRADE_CENTER_BONUS$
+					}
+				}
+			}
+		]
+		ROOT = {
+			if = {
+				limit = {
+					check_variable = { 
+						which = nhs_local_dev 
+						which = nhs_highest_province_dev 
+					}
+				}
+				set_variable = {
+					which = nhs_highest_province_dev 
+					which = nhs_local_dev 
+				}
+				PREV = {
+					save_event_target_as = $EVENT_TARGET$
+				}
+			}
+		}
+	}
+}
