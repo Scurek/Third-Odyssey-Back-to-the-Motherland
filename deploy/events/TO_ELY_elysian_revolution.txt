@@ -1,0 +1,893 @@
+namespace = elysian_revolution
+
+###################################################
+### EVENTS LEADING UP TO REVOLUTION (1-99)
+###################################################
+
+# Event triggerer
+country_event = {
+	id = elysian_revolution.2
+	title = elysian_revolution.2.t
+	desc = elysian_revolution.2.d
+	picture = REVOLUTION_eventPicture
+
+	hidden = yes
+		
+	trigger = {
+		tag = ELY
+		is_free_or_tributary_trigger = yes
+		has_reform = elysian_absolute_empire
+		OR = {
+			current_age = age_of_absolutism
+			current_age = age_of_revolutions
+		}
+		OR = {
+			AND = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_25 }
+				has_disaster_progress = {
+					disaster = elysian_revolution
+					value = 25
+				}
+			}
+			AND = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_50 }
+				has_disaster_progress = {
+					disaster = elysian_revolution
+					value = 50
+				}
+			}
+			AND = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_75 }
+				has_disaster_progress = {
+					disaster = elysian_revolution
+					value = 75
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_25 }
+			}
+			set_country_flag = nhs_elysian_revolution_progress_25
+		}
+		else_if = {
+			limit = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_50 }
+			}
+			set_country_flag = nhs_elysian_revolution_progress_50
+		}
+		else_if = {
+			limit = {
+				NOT = { has_country_flag = nhs_elysian_revolution_progress_75 }
+			}
+			set_country_flag = nhs_elysian_revolution_progress_75
+		}
+
+		## Trigger events
+		if = {
+			limit = {
+				has_country_flag = nhs_elysian_revolution_progress_75
+			}
+			set_country_flag = nhs_elysian_revolution_point_of_no_return
+			country_event = { id = elysian_revolution.7 }
+		}
+		else_if = {
+			limit = {
+				NOT = { has_country_flag = nhs_elysian_revolution_scythian_unrest }
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 10
+					continent = north_america
+					is_city = yes
+					OR = {
+						culture = skythiai
+						culture = scythian_c
+					}
+				}
+			}
+			set_country_flag = nhs_elysian_revolution_scythian_unrest
+			every_province = {
+				limit = {
+					nhs_scythian_revolt_province = yes
+				}
+				add_core = SKY
+				add_nationalism = 10
+			}
+			country_event = { id = elysian_revolution.3 days = 32 }
+		}
+		else_if = {
+			limit = {
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 3
+					nhs_borealian_revolt_province = yes
+				}
+			}
+			set_country_flag = nhs_elysian_revolution_had_borelian_emigration
+			country_event = { id = elysian_revolution.5 }
+		}
+	}
+
+	option = {
+		name = elysian_revolution.2.a
+		
+	}
+}
+
+# Unrest in scythia
+country_event = {
+	id = elysian_revolution.3
+	title = elysian_revolution.3.t
+	desc = elysian_revolution.3.d
+	picture = REVOLUTION_eventPicture
+		
+	is_triggered_only = yes
+
+	goto = nhs_scythian_stronghold_target
+
+	immediate = {
+		set_country_flag = nhs_elysian_revolution_progress_25
+		hidden_effect = {
+			## Find target province
+			nhs_highest_dev_province = {
+				PROVINCE_CONDITION = nhs_scythian_revolt_province 
+				TRADE_CENTER_BONUS = 5
+				EVENT_TARGET = nhs_scythian_stronghold_target
+			}
+
+			add_disaster_progress = {
+				disaster = nhs_scythian_revolt
+				value = 100
+			}
+
+			## Spawn rebels
+			event_target:nhs_scythian_stronghold_target = {
+				set_province_flag = nhs_scythian_revolt_rebels
+				nhs_remove_fort = yes
+				add_province_modifier = {
+					name = nhs2_scythian_rebel_stronghold
+					duration = -1
+				}
+				tooltip = {
+					spawn_rebels = {
+						size = 3
+						type = nationalist_rebels
+						win = yes
+					}
+				}
+				random_list = {
+					50 = {
+						spawn_rebels = {
+							size = 3
+							type = scythian_nationalist_rebels
+							win = yes
+							culture = skythiai
+						}
+					}
+					50 = {
+						spawn_rebels = {
+							size = 3
+							type = scythian_nationalist_rebels
+							win = yes
+							culture = scythian_c
+						}
+					}
+				}
+			}
+			set_variable = {            
+				which = nhs_scythian_revolt_stacks
+				value = 4
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = nhs_scythian_revolt_stacks
+						value = 0
+					}
+				}
+				subtract_variable = {            
+					which = nhs_scythian_revolt_stacks
+					value = 1
+				}
+				if = {
+					limit = {
+						any_owned_province = {
+							NOT = { has_province_flag = nhs_scythian_revolt_rebels }
+							nhs_scythian_revolt_province = yes
+							any_neighbor_province = {
+								has_province_flag = nhs_scythian_revolt_rebels
+							}
+						}
+					}
+					random_owned_province = {
+						limit = {
+							NOT = { has_province_flag = nhs_scythian_revolt_rebels }
+							nhs_scythian_revolt_province = yes
+							any_neighbor_province = {
+								has_province_flag = nhs_scythian_revolt_rebels
+							}
+						}
+						set_province_flag = nhs_scythian_revolt_rebels
+						random_list = {
+							50 = {
+								spawn_rebels = {
+									size = 1
+									type = scythian_nationalist_rebels
+									culture = skythiai
+								}
+							}
+							50 = {
+								spawn_rebels = {
+									size = 1
+									type = scythian_nationalist_rebels
+									culture = scythian_c
+								}
+							}
+						}
+					}
+				}
+				else = {
+					event_target:nhs_scythian_stronghold_target = {
+						random_list = {
+							50 = {
+								spawn_rebels = {
+									size = 1
+									type = scythian_nationalist_rebels
+									culture = skythiai
+								}
+							}
+							50 = {
+								spawn_rebels = {
+									size = 1
+									type = scythian_nationalist_rebels
+									culture = scythian_c
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = elysian_revolution.3.a			# Bring me their heads!
+		set_country_flag = nhs_elysian_revolution_scythian_revolt
+		custom_tooltip = nhs_elysian_revolution_scythian_cores_tt
+		custom_tooltip = nhs_elysian_revolution_scythian_disaster_tt
+		tooltip = {
+			event_target:nhs_scythian_stronghold_target = {
+				add_province_modifier = {
+					name = nhs2_scythian_rebel_stronghold_t
+					duration = -1
+				}
+			}
+		}
+	}
+	option = {
+		name = elysian_revolution.3.b			# 
+		custom_tooltip = nhs_elysian_revolution_scythian_cores_tt
+		
+		add_prestige = -20
+		add_absolutism = -15
+		end_disaster = nhs_scythian_revolt
+		disband_rebels = scythian_nationalist_rebels
+		add_disaster_progress = {
+			disaster = elysian_revolution
+			value = -10
+		}
+		
+		custom_tooltip = nhs_elysian_revolution_scythian_autonomy_tt
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					nhs_scythian_revolt_province = yes
+				}
+				add_province_modifier = {
+					name = nhs2_scythian_autonomy
+					duration = -1
+				}
+			}
+			random_owned_province = {
+				limit = {
+					has_province_modifier = nhs2_scythian_rebel_stronghold
+				}
+				remove_province_modifier = nhs2_scythian_rebel_stronghold
+			}
+		}
+
+		set_country_flag = nhs_elysian_revolution_scythian_appeasement
+	}
+}
+
+
+# Scythian uprising defeated
+country_event = {
+	id = elysian_revolution.4
+	title = elysian_revolution.4.t
+	desc = elysian_revolution.4.d
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = nhs_elysian_revolution_scythian_revolt
+	}
+
+	option = {
+		name = elysian_revolution.4.a
+		add_prestige = 10
+		add_legitimacy = 10
+		random_owned_province = {
+			limit = {
+				has_province_modifier = nhs2_scythian_rebel_stronghold
+			}
+			remove_province_modifier = nhs2_scythian_rebel_stronghold
+		}
+	}
+}
+
+# Borealians emigrating
+country_event = {
+	id = elysian_revolution.5
+	title = elysian_revolution.5.t
+	desc = elysian_revolution.5.d
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = nhs_elysian_revolution_borealian_emigration_ongoing
+			set_variable = {
+				which = nhs_borealian_emigration_counter 
+				value = 4
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = nhs_borealian_emigration_counter
+						value = 0
+					}
+				}
+				nhs_highest_dev_province = {
+					PROVINCE_CONDITION = nhs_borealian_revolt_province 
+					TRADE_CENTER_BONUS = 5
+					EVENT_TARGET =  nhs_highest_dev_borealian_province
+				}
+				if = {
+					limit = {
+						event_target:nhs_highest_dev_borealian_province = {
+							has_province_flag = nhs_borealian_emigration_province
+						}
+					}
+					subtract_variable = {
+						which = nhs_borealian_emigration_counter
+						value = 5
+					}
+				}
+				else = {
+					event_target:nhs_highest_dev_borealian_province = {
+						set_province_flag = nhs_borealian_emigration_province
+						set_variable = {
+							which = nhs_borealian_emigration_counter 
+							which = ROOT
+						}
+						export_to_variable = {
+							which = nhs_borealian_base_tax_lost
+							value = trigger_value:base_tax
+						}
+						divide_variable = {
+							which = nhs_borealian_base_tax_lost
+							value = 2
+						}
+						export_to_variable = {
+							which = nhs_borealian_base_production_lost
+							value = trigger_value:base_production
+						}
+						divide_variable = {
+							which = nhs_borealian_base_production_lost
+							value = 2
+						}
+						export_to_variable = {
+							which = nhs_borealian_base_manpower_lost
+							value = trigger_value:base_manpower
+						}
+						divide_variable = {
+							which = nhs_borealian_base_manpower_lost
+							value = 2
+						}
+						nhs_set_revolution_emigration_target = yes
+						event_target:nhs_revolution_emigration_target = {
+							set_province_flag = nhs_borealian_emigration_province_target
+							set_variable = {
+								which = nhs_borealian_emigration_counter 
+								which = ROOT
+							}
+							set_variable = {
+								which = nhs_borealian_base_tax_lost 
+								which = PREV 
+							}
+							set_variable = {
+								which = nhs_borealian_base_production_lost 
+								which = PREV 
+							}
+							set_variable = {
+								which = nhs_borealian_base_manpower_lost 
+								which = PREV 
+							}
+						}
+					}
+				}
+				subtract_variable = {
+					which = nhs_borealian_emigration_counter
+					value = 1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = elysian_revolution.5.a
+		VIN = {
+			country_event = { id = elysian_revolution.6 }
+		}
+		custom_tooltip = nhs_new_line_tt
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_borealian_emigration_province
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_tax
+				SIGN = -
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_production
+				SIGN = -
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_manpower
+				SIGN = -
+			}
+			tooltip = {
+				random_province = {
+					limit = {
+						has_province_flag = nhs_borealian_emigration_province_target
+						is_variable_equal = {
+							which = nhs_borealian_emigration_counter
+							which = PREV
+						}
+					}
+					nhs_revolution_change_development = {
+						DEVELOPMENT_TYPE = base_tax
+						SIGN = +
+					}
+					nhs_revolution_change_development = {
+						DEVELOPMENT_TYPE = base_production
+						SIGN = +
+					}
+					nhs_revolution_change_development = {
+						DEVELOPMENT_TYPE = base_manpower
+						SIGN = +
+					}
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+		}
+	}
+	after = {
+		clr_country_flag = nhs_elysian_revolution_borealian_emigration_ongoing
+		every_province = {
+			clr_province_flag = nhs_borealian_emigration_province
+		}
+	}
+}
+
+# Borealians emigrating for Vinland
+country_event = {
+	id = elysian_revolution.6
+	title = elysian_revolution.6.t
+	desc = elysian_revolution.6.d
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = elysian_revolution.6.a
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_borealian_emigration_province_target
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_tax
+				SIGN = +
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_production
+				SIGN = +
+			}
+			nhs_revolution_change_development = {
+				DEVELOPMENT_TYPE = base_manpower
+				SIGN = +
+			}
+		}
+	}
+
+	after = {
+		every_province = {
+			clr_province_flag = nhs_borealian_emigration_province_target
+		}
+	}
+}
+
+# Point of no return
+country_event = {
+	id = elysian_revolution.7
+	title = elysian_revolution.7.t
+	desc = elysian_revolution.7.d
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = nhs_elysian_revolution_prevent_war
+	}
+
+	option = {
+		name = elysian_revolution.7.a
+		custom_tooltip = nhs_cannot_declare_war_tt
+		if = {
+			limit = {
+				is_at_war = yes
+			}
+			custom_tooltip = nhs_finish_war_warning_tt
+		}
+	}
+}
+
+
+# Trouble Overseas
+country_event = {
+	id = elysian_revolution.8
+	title = elysian_revolution.8.t
+	desc = elysian_revolution.8.d
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = nhs_elysian_revolution_has_colonial_trouble_event
+		hidden_effect = {
+			
+		}
+	}
+
+	option = {
+		name = elysian_revolution.7.a
+		custom_tooltip = nhs_cannot_declare_war_tt
+		if = {
+			limit = {
+				is_at_war = yes
+			}
+			custom_tooltip = nhs_finish_war_warning_tt
+		}
+	}
+}
+
+###################################################
+### PRE-WAR EVENTS (100-199)
+###################################################
+
+# Revolution starts, choose side
+country_event = {
+	id = elysian_revolution.100
+	title = elysian_revolution.100.t
+	desc = elysian_revolution.100.d
+	picture = REVOLUTION_eventPicture
+	
+	major = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = nhs_had_first_civil_war
+	}
+	option = {
+		name = elysian_revolution.100.a			# Bring me their heads!
+		custom_tooltip = nhs_elysian_revolution_emperor
+		
+	}
+	option = {
+		name = elysian_revolution.100.b			# Vive la revolution!
+		custom_tooltip = nhs_elysian_revolution_republic
+	}
+	option = {
+		name = elysian_revolution.100.c			# Joestar Family Secret Technique
+		trigger = {
+			OR = {
+				AND = {
+					exists = MSG
+					MSG = { ai = yes }
+				}
+				AND = {
+					exists = MSN
+					MSN = { ai = yes }
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = MSG
+			}
+			switch_tag = MSG
+		}
+		else_if = {
+			limit = {
+				exists = MSN
+			}
+			switch_tag = MSN
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				is_at_war = yes
+			}
+			country_event = { id = elysian_revolution.101 days = 1 }
+		}
+	}
+}
+
+# War penalty
+country_event = {
+	id = elysian_revolution.101
+	title = elysian_revolution.101.t
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_modifier = nhs2_war_penalty_1
+				has_country_modifier = nhs2_war_penalty_2
+				has_country_modifier = nhs2_war_penalty_3
+			}
+		}
+		desc = elysian_revolution.101.da
+	}
+	desc = {
+		trigger = {
+			OR = {
+				has_country_modifier = nhs2_war_penalty_1
+				has_country_modifier = nhs2_war_penalty_2
+				has_country_modifier = nhs2_war_penalty_3
+			}
+		}
+		desc = elysian_revolution.101.db
+	}
+	picture = REVOLUTION_eventPicture
+	
+	is_triggered_only = yes
+
+	trigger = {
+		ai = no
+		is_at_war = yes
+	}
+
+	immediate = {
+		set_country_flag = nhs_elysian_revolution_still_at_war
+	}
+	
+	option = {
+		name = elysian_revolution.101.a	
+		if = {
+			limit = {
+				has_country_modifier = nhs2_war_penalty_2
+			}
+			remove_country_modifier = nhs2_war_penalty_2
+			add_country_modifier = {
+				name = nhs2_war_penalty_3
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_modifier = nhs2_war_penalty_1
+			}
+			remove_country_modifier = nhs2_war_penalty_1
+			add_country_modifier = {
+				name = nhs2_war_penalty_2
+				duration = -1
+			}
+		}
+		else = {
+			add_country_modifier = {
+				name = nhs2_war_penalty_1
+				duration = -1
+			}
+		}
+	}
+}
+
+# War removed
+country_event = {
+	id = elysian_revolution.102
+	title = elysian_revolution.102.t
+	desc = elysian_revolution.102.d
+	picture = REVOLUTION_eventPicture
+	
+	is_triggered_only = yes
+
+	trigger = {
+		tag = ELY
+		is_at_war = no
+		OR = {
+			has_country_modifier = nhs2_war_penalty_1
+			has_country_modifier = nhs2_war_penalty_2
+			has_country_modifier = nhs2_war_penalty_3
+		}
+	}
+	
+	option = {
+		name = elysian_revolution.102.a	
+		remove_country_modifier = nhs2_war_penalty_1
+		remove_country_modifier = nhs2_war_penalty_2
+		remove_country_modifier = nhs2_war_penalty_3
+		clr_country_flag = nhs_elysian_revolution_still_at_war
+	}
+}
+
+
+country_event = {
+	id = elysian_revolution.1006
+	title = "ELYREVNAME06"
+	desc = "ELYREVDESC06"
+	picture = {
+		trigger = {
+			OR = {
+				AND = {
+					check_variable = {
+						which = RevolutionCountingVariable
+						value = 80
+					}
+					has_regency = yes
+				}
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 110
+				}
+			}
+		}
+		picture = VICTORY_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = {
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 11
+				}
+			}
+		}
+		picture = BYZANTINE_EMPEROR_eventPicture
+	}
+	
+	trigger = {
+		has_disaster = elysian_revolution
+		OR = {
+			check_variable = {
+				which = RevolutionCountingVariable
+				value = 110
+			}
+			NOT = {
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 11
+				}
+			}
+			AND = {
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 80
+				}
+				has_regency = yes
+			}
+		}
+	}
+	
+	major = yes
+	
+	immediate = {
+		hidden_effect = {
+			end_disaster = elysian_revolution
+			set_country_flag = elysian_revolution_over
+		}
+	}
+	
+	option = {
+		name = "ELYREVOPTA601"			# The Emperor flees into exile! Zíto i epanástasi!
+		trigger = {
+			OR = {
+				AND = {
+					check_variable = {
+						which = RevolutionCountingVariable
+						value = 80
+					}
+					has_regency = yes
+				}
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 110
+				}
+			}
+		}
+		tooltip = {
+			end_disaster = elysian_revolution
+		}
+		custom_tooltip = nhs_revolution_success
+		disband_rebels = revolutionary_rebels
+		if = {
+			limit = {
+				has_heir = yes
+				has_regency = no
+			}
+			exile_heir_as = nhs_rev_exiled_heir
+			set_global_flag = nhs_has_exiled_heir
+			exile_ruler_as = nhs_rev_exiled_ruler
+			set_global_flag = nhs_has_exiled_ruler
+		}
+		else_if = {
+			limit = {
+				has_regency = no
+				has_heir = no
+			}
+			exile_ruler_as = nhs_rev_exiled_ruler
+			set_global_flag = nhs_has_exiled_ruler
+		}
+		else_if = {
+			limit = {
+				has_regency = yes
+			}
+			exile_heir_as = nhs_rev_exiled_heir
+			set_global_flag = nhs_has_exiled_heir
+		}
+		change_tag = ERF
+		nhs_change_government = { GOV = republic }
+		add_government_reform = elysian_republic
+		define_ruler = {
+			mil = 3
+			dip = 3
+			adm = 3
+		}
+		if = {
+			limit = {
+				NOT = { has_dlc = "Dharma" }
+			}
+			custom_tooltip = nhs_starts_with_senate_disolved_tt
+			hidden_effect = {
+				dissolve_parliament = yes
+			}
+		}
+		add_stability = 1
+	}
+	
+	option = {
+		name = "ELYREVOPTA602"			# The Revolution has been put down! Zíto o Basileus!
+		trigger = {
+			NOT = {
+				check_variable = {
+					which = RevolutionCountingVariable
+					value = 11
+				}
+			}
+		}
+		tooltip = {
+			end_disaster = elysian_revolution
+		}
+		custom_tooltip = nhs_revolution_failure
+		disband_rebels = revolutionary_rebels
+		add_stability = 2
+		add_country_modifier = {
+			name = rev_absolute_authority
+			duration = -1
+		}
+	}
+}

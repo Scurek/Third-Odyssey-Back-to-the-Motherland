@@ -1,0 +1,2773 @@
+namespace = nhs_vov_civil_war
+
+##Vinlandic War
+country_event = {
+	id = nhs_vov_civil_war.1
+	title = nhs_vov_coloniesevents.40.t
+	desc = nhs_vov_coloniesevents.40.d
+	picture = norse_war_eventPicture
+	
+	hidden = yes
+
+	trigger = {
+		OR = {
+			tag = HLL
+			tag = MK1
+		}
+		OR = {
+			MK1 = {
+				OR = {
+					owns = 2573
+					owns = 980
+					owns = 981
+					owns = 982
+					owns = 994
+				}
+			}
+			HLL = {
+				OR = {
+					owns = 997
+					owns = 996
+					owns = 2575
+					owns = 2574
+					owns = 994
+				}
+			}
+		}
+		HLL = { ai = yes }
+		MK1 = { ai = yes }
+		NOT = { has_global_flag = nhs_vov_war_ai_sceniario }
+		NOT = { has_global_flag = nhs_vov_war_brewing_c }
+		NOT = { has_global_flag = nhs_vov_war_over }
+		exists = HLL
+		exists = MK1
+		is_year = 1473
+	}
+
+	immediate = {
+			set_country_flag = nhs_vov_war_brewing_c
+			set_global_flag = nhs_vov_war_brewing
+			set_global_flag = nhs_vov_war_ai_sceniario
+			HLL = {
+				set_country_flag = nhs_vov_war_brewing_c
+				remove_historical_friend = MK1
+				add_historical_rival = MK1
+				add_truce_with = MK1
+			}
+			MK1 = {
+				set_country_flag = nhs_vov_war_brewing_c
+				remove_historical_friend = HLL
+				add_historical_rival = HLL
+				add_truce_with = HLL
+			}
+	}
+
+	option = {
+		name = "nhs_vov_coloniesevents.40.a"
+	}
+}
+
+
+#One colony lost all of its starting land
+country_event = {
+	id = nhs_vov_civil_war.2
+	title = nhs_vov_civil_war.2.t
+	desc = nhs_vov_coloniesevents.41.d
+	picture = norse_dispute_eventPicture
+	
+	hidden = yes
+
+	trigger = {
+		OR = {
+			tag = HLL
+			tag = MK1
+		}
+		exists = HLL
+		exists = MK1
+		HLL = { ai = yes }
+		MK1 = { ai = yes }
+		has_global_flag = nhs_vov_war_brewing
+		has_global_flag = nhs_vov_war_ai_sceniario
+		NOT = { has_global_flag = nhs_vov_war_over }
+		had_global_flag = { flag = nhs_vov_war_ai_sceniario days = 30 }
+		NOT = { has_global_flag = nhs_vov_war_ai_start }
+		nhs_one_of_the_vikings_not_worthy = yes
+	}
+
+	immediate = {
+		clr_global_flag = nhs_vov_war_brewing
+		clr_global_flag = nhs_vov_war_ai_sceniario
+		set_global_flag = nhs_vov_war_over
+	}
+
+	option = {
+		name = "nhs_vov_coloniesevents.41.a"
+		trigger = {
+			tag = MK1
+		}
+		inherit = HLL
+	}
+	option = {
+		name = "nhs_vov_coloniesevents.41.a"
+		trigger = {
+			tag = HLL
+		}
+		inherit = MK1
+	}
+}
+
+#One colony is much stronger
+country_event = {
+	id = nhs_vov_civil_war.3
+	title = nhs_vov_civil_war.3.t
+	desc = nhs_vov_coloniesevents.41.d
+	picture = norse_dispute_eventPicture
+	
+	hidden = yes
+
+	trigger = {
+		OR = {
+			tag = HLL
+			tag = MK1
+		}
+		exists = HLL
+		exists = MK1
+		HLL = { ai = yes }
+		MK1 = { ai = yes }
+		has_global_flag = nhs_vov_war_brewing
+		has_global_flag = nhs_vov_war_ai_sceniario
+		NOT = { has_global_flag = nhs_vov_war_over }
+		had_global_flag = { flag = nhs_vov_war_ai_sceniario days = 40 }
+		NOT = { has_global_flag = nhs_vov_war_ai_start }
+		NOT = { nhs_one_of_the_vikings_not_worthy = yes }
+		nhs_one_of_the_vikings_op = yes
+	}
+
+	immediate = {
+		clr_global_flag = nhs_vov_war_brewing
+		clr_global_flag = nhs_vov_war_ai_sceniario
+		set_global_flag = nhs_vov_war_over
+	}
+
+	option = {
+		name = "nhs_vov_coloniesevents.41.a"
+		trigger = {
+			tag = MK1
+		}
+		inherit = HLL
+	}
+	option = {
+		name = "nhs_vov_coloniesevents.41.a"
+		trigger = {
+			tag = HLL
+		}
+		inherit = MK1
+	}
+}
+
+#War starts
+country_event = {
+	id = nhs_vov_civil_war.4
+	title = nhs_vov_civil_war.4.t
+	desc = nhs_vov_coloniesevents.41.d
+	picture = norse_dispute_eventPicture
+	
+	hidden = yes
+
+	trigger = {
+		tag = MK1
+		OR = {
+			AND = {
+				HLL = { is_at_war = no }
+				MK1 = { is_at_war = no }
+			}
+			is_year = 1478
+		}
+		MK1 = { any_owned_province = { region = canada_region } }
+		HLL = { any_owned_province = { region = canada_region } }
+		NOT = { has_global_flag = nhs_vov_war_over }
+		exists = HLL
+		exists = MK1
+		HLL = { ai = yes }
+		MK1 = { ai = yes }
+		has_global_flag = nhs_vov_war_brewing
+		has_global_flag = nhs_vov_war_ai_sceniario
+		had_global_flag = { flag = nhs_vov_war_ai_sceniario days = 95 }
+		NOT = { has_global_flag = nhs_vov_war_ai_start }
+		NOT = {
+			nhs_one_of_the_vikings_not_worthy = yes
+		}
+		NOT = {
+			nhs_one_of_the_vikings_op = yes
+		}
+	}
+
+	immediate = {
+		set_global_flag = nhs_vov_war_ai_start
+	}
+
+	option = {
+		name = "nhs_vov_coloniesevents.41.a"
+		country_event = { id = nhs_vov_civil_war.5 }
+	}
+}
+
+#Battle
+country_event = {
+	id = nhs_vov_civil_war.5
+	title = nhs_vov_civil_war.5.t
+	desc = nhs_vov_coloniesevents.41.d
+	picture = norse_dispute_eventPicture
+	
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag  = MK1
+		exists = HLL
+		exists = MK1
+		HLL = { ai = yes }
+		MK1 = { ai = yes }
+		has_global_flag = nhs_vov_war_brewing
+		has_global_flag = nhs_vov_war_ai_sceniario
+		has_global_flag = nhs_vov_war_ai_start
+	}
+
+	immediate = {
+		clr_global_flag = nhs_cw_battle_land
+		clr_global_flag = nhs_cw_battle_landing
+		clr_global_flag = nhs_cw_battle_port
+		if = {
+			limit = {
+				NOT = { has_global_flag = nhs_cw_first_battle }
+			}
+			set_global_flag = nhs_cw_first_battle
+		}
+		every_province = {
+			limit = {
+				has_province_flag = nhs_cw_battle_tar2
+			}
+			clr_province_flag = nhs_cw_battle_tar2
+		}
+		every_province = {
+			limit = {
+				has_province_flag = nhs_cw_battle_tar
+			}
+			clr_province_flag = nhs_cw_battle_tar
+		}
+		if = {
+			limit = {
+				OR = {
+					MK1 = { NOT = { num_of_cities = 2 } }
+					HLL = { NOT = { num_of_cities = 2 } }
+				}
+			}
+			country_event = { id = nhs_vov_civil_war.9 days = 25 }
+		}
+		if = {
+			limit = {
+				any_owned_province = {
+					region = canada_region
+					is_capital = no
+					any_neighbor_province = {
+						region = canada_region
+						is_capital = no
+						owned_by = HLL
+					}
+				}
+				NOT = {
+					OR = {
+						MK1 = { NOT = { num_of_cities = 2 } }
+						HLL = { NOT = { num_of_cities = 2 } }
+					}
+				}
+			}
+			set_global_flag = nhs_cw_battle_land
+			random_list = {
+				50 = {
+					random_owned_province = {
+						limit = {
+							region = canada_region
+							is_capital = no
+							any_neighbor_province = {
+								region = canada_region
+								is_capital = no
+								owned_by = HLL
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+				}
+				50 = {
+					random_province = {
+						limit = {
+							owned_by = HLL
+							region = canada_region
+							is_capital = no
+							any_neighbor_province = {
+								region = canada_region
+								is_capital = no
+								owned_by = MK1
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						MK1 = { NOT = { num_of_cities = 2 } }
+						HLL = { NOT = { num_of_cities = 2 } }
+					}
+				}
+				NOT = {
+					any_owned_province = {
+						region = canada_region
+						is_capital = no
+						any_neighbor_province = {
+							region = canada_region
+							is_capital = no
+							owned_by = HLL
+						}
+					}
+				}
+				any_owned_province = {
+					region = canada_region
+					is_capital = no
+					sea_zone = {
+						nhs_vinland_waters = yes
+						any_neighbor_province = {
+							region = canada_region
+							is_capital = no
+							owned_by = HLL
+						}
+					}
+				}
+			}
+			set_global_flag = nhs_cw_battle_landing
+			random_list = {
+				50 = {
+					random_owned_province = {
+						limit = {
+							region = canada_region
+							is_capital = no
+							sea_zone = {
+								nhs_vinland_waters = yes
+								any_neighbor_province = {
+									region = canada_region
+									is_capital = no
+									owned_by = HLL
+								}
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et
+						owner = { save_global_event_target_as = nhs_cw_battle_tar_agressor }
+					}
+					random_province = {
+						limit = {
+							owned_by = HLL
+							region = canada_region
+							is_capital = no
+							sea_zone = {
+								nhs_vinland_waters = yes
+								any_neighbor_province = {
+									region = canada_region
+									is_capital = no
+									has_province_flag = nhs_cw_battle_tar
+								}
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar2
+						save_global_event_target_as = nhs_cw_battle_tar_et2
+						owner = { save_global_event_target_as = nhs_cw_battle_tar_defender }
+					}
+				}
+				50 = {
+					random_owned_province = {
+						limit = {
+							region = canada_region
+							is_capital = no
+							sea_zone = {
+								nhs_vinland_waters = yes
+								any_neighbor_province = {
+									region = canada_region
+									is_capital = no
+									owned_by = HLL
+								}
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et2
+						owner = { save_global_event_target_as = nhs_cw_battle_tar_defender }
+					}
+					random_province = {
+						limit = {
+							owned_by = HLL
+							is_capital = no
+							region = canada_region
+							sea_zone = {
+								nhs_vinland_waters = yes
+								any_neighbor_province = {
+									region = canada_region
+									is_capital = no
+									has_province_flag = nhs_cw_battle_tar
+								}
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar2
+						save_global_event_target_as = nhs_cw_battle_tar_et
+						owner = { save_global_event_target_as = nhs_cw_battle_tar_agressor }
+					}
+				}
+			}
+		}
+		#####
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						MK1 = { NOT = { num_of_cities = 2 } }
+						HLL = { NOT = { num_of_cities = 2 } }
+					}
+				}
+				NOT = {
+					any_owned_province = {
+						region = canada_region
+						is_capital = no
+						any_neighbor_province = {
+							region = canada_region
+							is_capital = no
+							owned_by = HLL
+						}
+					}
+				}
+				NOT = {
+					any_owned_province = {
+						is_capital = no
+						region = canada_region
+						sea_zone = {
+							nhs_vinland_waters = yes
+							any_neighbor_province = {
+								is_capital = no
+								owned_by = HLL
+								region = canada_region
+							}
+						}
+					}
+				}
+				any_owned_province = {
+					region = canada_region
+					is_capital = no
+					has_port = yes
+				}
+				any_province = {
+					region = canada_region
+					is_capital = no
+					owned_by = HLL
+					has_port = yes
+				}
+			}
+			set_global_flag = nhs_cw_battle_port
+			random_list = {
+				50 = {
+					HLL = { save_global_event_target_as = nhs_cw_battle_tar_agressor }
+					MK1 = { save_global_event_target_as = nhs_cw_battle_tar_defender }
+					random_owned_province = {
+						limit = {
+							region = canada_region
+							is_capital = no
+							has_port = yes
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et2
+					}
+					random_province = {
+						limit = {
+							owned_by = HLL
+							is_capital = no
+							region = canada_region
+							has_port = yes
+						}
+						set_province_flag = nhs_cw_battle_tar2
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+				}
+				50 = {
+					MK1 = { save_global_event_target_as = nhs_cw_battle_tar_agressor }
+					HLL = { save_global_event_target_as = nhs_cw_battle_tar_defender }
+					random_owned_province = {
+						limit = {
+							region = canada_region
+							is_capital = no
+							has_port = yes
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+					random_province = {
+						limit = {
+							owned_by = HLL
+							is_capital = no
+							region = canada_region
+							has_port = yes
+						}
+						set_province_flag = nhs_cw_battle_tar2
+						save_global_event_target_as = nhs_cw_battle_tar_et2
+					}
+				}
+			}
+		}
+		clr_global_flag = nhs_cw_battle_cooldown
+		set_global_flag = nhs_cw_battle_cooldown
+	}
+
+	option = {
+		name = "nhs_vov_coloniesevents.41.a"
+		if = {
+			limit = {
+				has_global_flag = nhs_cw_battle_land
+			}
+			country_event = { id = nhs_vov_civil_war.6 }
+		}
+		if = {
+			limit = {
+				has_global_flag = nhs_cw_battle_landing
+			}
+			country_event = { id = nhs_vov_civil_war.7 }
+		}
+		if = {
+			limit = {
+				has_global_flag = nhs_cw_battle_port
+			}
+			country_event = { id = nhs_vov_civil_war.8 }
+		}
+	}
+}
+
+#Battle debug
+country_event = {
+	id = nhs_vov_civil_war.51
+	title = nhs_vov_civil_war.5.t
+	desc = nhs_vov_coloniesevents.41.d
+	picture = norse_dispute_eventPicture
+	
+	hidden = yes
+
+	trigger = {
+		tag  = MK1
+		exists = HLL
+		exists = MK1
+		HLL = { ai = yes }
+		MK1 = { ai = yes }
+		has_global_flag = nhs_vov_war_brewing
+		has_global_flag = nhs_vov_war_ai_sceniario
+		has_global_flag = nhs_vov_war_ai_start
+		had_global_flag = { flag = nhs_cw_battle_cooldown days = 140 }
+		NOT = { has_global_flag = nhs_vov_war_over }
+	}
+
+	immediate = {
+		clr_global_flag = nhs_cw_battle_land
+		clr_global_flag = nhs_cw_battle_landing
+		clr_global_flag = nhs_cw_battle_port
+		if = {
+			limit = {
+				NOT = { has_global_flag = nhs_cw_first_battle }
+			}
+			set_global_flag = nhs_cw_first_battle
+		}
+		every_province = {
+			limit = {
+				has_province_flag = nhs_cw_battle_tar2
+			}
+			clr_province_flag = nhs_cw_battle_tar2
+		}
+		every_province = {
+			limit = {
+				has_province_flag = nhs_cw_battle_tar
+			}
+			clr_province_flag = nhs_cw_battle_tar
+		}
+		if = {
+			limit = {
+				OR = {
+					MK1 = { NOT = { num_of_cities = 2 } }
+					HLL = { NOT = { num_of_cities = 2 } }
+				}
+			}
+			country_event = { id = nhs_vov_civil_war.9 days = 25 }
+		}
+		if = {
+			limit = {
+				any_owned_province = {
+					region = canada_region
+					is_capital = no
+					any_neighbor_province = {
+						region = canada_region
+						is_capital = no
+						owned_by = HLL
+					}
+				}
+				NOT = {
+					OR = {
+						MK1 = { NOT = { num_of_cities = 2 } }
+						HLL = { NOT = { num_of_cities = 2 } }
+					}
+				}
+			}
+			set_global_flag = nhs_cw_battle_land
+			random_list = {
+				50 = {
+					random_owned_province = {
+						limit = {
+							region = canada_region
+							is_capital = no
+							any_neighbor_province = {
+								region = canada_region
+								is_capital = no
+								owned_by = HLL
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+				}
+				50 = {
+					random_province = {
+						limit = {
+							owned_by = HLL
+							region = canada_region
+							is_capital = no
+							any_neighbor_province = {
+								region = canada_region
+								is_capital = no
+								owned_by = MK1
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						MK1 = { NOT = { num_of_cities = 2 } }
+						HLL = { NOT = { num_of_cities = 2 } }
+					}
+				}
+				NOT = {
+					any_owned_province = {
+						region = canada_region
+						is_capital = no
+						any_neighbor_province = {
+							region = canada_region
+							is_capital = no
+							owned_by = HLL
+						}
+					}
+				}
+				any_owned_province = {
+					region = canada_region
+					is_capital = no
+					sea_zone = {
+						nhs_vinland_waters = yes
+						any_neighbor_province = {
+							region = canada_region
+							is_capital = no
+							owned_by = HLL
+						}
+					}
+				}
+			}
+			set_global_flag = nhs_cw_battle_landing
+			random_list = {
+				50 = {
+					random_owned_province = {
+						limit = {
+							region = canada_region
+							is_capital = no
+							sea_zone = {
+								nhs_vinland_waters = yes
+								any_neighbor_province = {
+									region = canada_region
+									is_capital = no
+									owned_by = HLL
+								}
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et
+						owner = { save_global_event_target_as = nhs_cw_battle_tar_agressor }
+					}
+					random_province = {
+						limit = {
+							owned_by = HLL
+							region = canada_region
+							is_capital = no
+							sea_zone = {
+								nhs_vinland_waters = yes
+								any_neighbor_province = {
+									region = canada_region
+									is_capital = no
+									has_province_flag = nhs_cw_battle_tar
+								}
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar2
+						save_global_event_target_as = nhs_cw_battle_tar_et2
+						owner = { save_global_event_target_as = nhs_cw_battle_tar_defender }
+					}
+				}
+				50 = {
+					random_owned_province = {
+						limit = {
+							region = canada_region
+							is_capital = no
+							sea_zone = {
+								nhs_vinland_waters = yes
+								any_neighbor_province = {
+									region = canada_region
+									is_capital = no
+									owned_by = HLL
+								}
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et2
+						owner = { save_global_event_target_as = nhs_cw_battle_tar_defender }
+					}
+					random_province = {
+						limit = {
+							owned_by = HLL
+							is_capital = no
+							region = canada_region
+							sea_zone = {
+								nhs_vinland_waters = yes
+								any_neighbor_province = {
+									region = canada_region
+									is_capital = no
+									has_province_flag = nhs_cw_battle_tar
+								}
+							}
+						}
+						set_province_flag = nhs_cw_battle_tar2
+						save_global_event_target_as = nhs_cw_battle_tar_et
+						owner = { save_global_event_target_as = nhs_cw_battle_tar_agressor }
+					}
+				}
+			}
+		}
+		#####
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						MK1 = { NOT = { num_of_cities = 2 } }
+						HLL = { NOT = { num_of_cities = 2 } }
+					}
+				}
+				NOT = {
+					any_owned_province = {
+						region = canada_region
+						is_capital = no
+						any_neighbor_province = {
+							region = canada_region
+							is_capital = no
+							owned_by = HLL
+						}
+					}
+				}
+				NOT = {
+					any_owned_province = {
+						is_capital = no
+						region = canada_region
+						sea_zone = {
+							nhs_vinland_waters = yes
+							any_neighbor_province = {
+								is_capital = no
+								owned_by = HLL
+								region = canada_region
+							}
+						}
+					}
+				}
+				any_owned_province = {
+					region = canada_region
+					is_capital = no
+					has_port = yes
+				}
+				any_province = {
+					region = canada_region
+					is_capital = no
+					owned_by = HLL
+					has_port = yes
+				}
+			}
+			set_global_flag = nhs_cw_battle_port
+			random_list = {
+				50 = {
+					HLL = { save_global_event_target_as = nhs_cw_battle_tar_agressor }
+					MK1 = { save_global_event_target_as = nhs_cw_battle_tar_defender }
+					random_owned_province = {
+						limit = {
+							region = canada_region
+							is_capital = no
+							has_port = yes
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et2
+					}
+					random_province = {
+						limit = {
+							owned_by = HLL
+							is_capital = no
+							region = canada_region
+							has_port = yes
+						}
+						set_province_flag = nhs_cw_battle_tar2
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+				}
+				50 = {
+					MK1 = { save_global_event_target_as = nhs_cw_battle_tar_agressor }
+					HLL = { save_global_event_target_as = nhs_cw_battle_tar_defender }
+					random_owned_province = {
+						limit = {
+							region = canada_region
+							is_capital = no
+							has_port = yes
+						}
+						set_province_flag = nhs_cw_battle_tar
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+					random_province = {
+						limit = {
+							owned_by = HLL
+							is_capital = no
+							region = canada_region
+							has_port = yes
+						}
+						set_province_flag = nhs_cw_battle_tar2
+						save_global_event_target_as = nhs_cw_battle_tar_et2
+					}
+				}
+			}
+		}
+		clr_global_flag = nhs_cw_battle_cooldown
+		set_global_flag = nhs_cw_battle_cooldown
+	}
+
+	option = {
+		name = "nhs_vov_coloniesevents.41.a"
+		if = {
+			limit = {
+				has_global_flag = nhs_cw_battle_land
+			}
+			country_event = { id = nhs_vov_civil_war.6 }
+		}
+		if = {
+			limit = {
+				has_global_flag = nhs_cw_battle_landing
+			}
+			country_event = { id = nhs_vov_civil_war.7 }
+		}
+		if = {
+			limit = {
+				has_global_flag = nhs_cw_battle_port
+			}
+			country_event = { id = nhs_vov_civil_war.8 }
+		}
+	}
+}
+
+#Land Battle
+country_event = {
+	id = nhs_vov_civil_war.6
+	title = nhs_vov_civil_war.6.t
+	desc = nhs_vov_civil_war.6.d
+	picture = norse_war_eventPicture
+
+	is_triggered_only = yes
+	hidden = yes
+	
+	trigger = {
+		exists = MK1
+		exists = HLL
+		NOT = {
+			OR = {
+				MK1 = { NOT = { num_of_cities = 2 } }
+				HLL = { NOT = { num_of_cities = 2 } }
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				trading_with_markland = yes
+			}
+			random_list = {
+				75 = {
+					MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+					MK1 = { set_country_flag = nhs_won_last_battle }
+					HLL = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+					}
+				}
+				25 = {
+					HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+					HLL = { set_country_flag = nhs_won_last_battle }
+					MK1 = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				trading_with_helluland = yes
+			}
+			random_list = {
+				25 = {
+					MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+					MK1 = { set_country_flag = nhs_won_last_battle }
+					HLL = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+					}
+				}
+				75 = {
+					HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+					HLL = { set_country_flag = nhs_won_last_battle }
+					MK1 = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { trading_with_markland = yes }
+				NOT = { trading_with_helluland = yes }
+			}
+			if = {
+				limit = {
+					HLL = { has_country_flag = nhs_won_last_battle }
+					NOT = { MK1 = { has_country_flag = nhs_won_last_battle } }
+				}
+				random_list = {
+					65 = {
+						HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+						HLL = { set_country_flag = nhs_won_last_battle }
+						MK1 = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+						}
+					}
+					35 = {
+						MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+						MK1 = { set_country_flag = nhs_won_last_battle }
+						HLL = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+						}
+					}
+				}
+			}
+			####
+			if = {
+				limit = {
+					MK1 = { has_country_flag = nhs_won_last_battle }
+					NOT = { HLL = { has_country_flag = nhs_won_last_battle } }
+				}
+				random_list = {
+					35 = {
+						HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+						HLL = { set_country_flag = nhs_won_last_battle }
+						MK1 = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+						}
+					}
+					65 = {
+						MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+						MK1 = { set_country_flag = nhs_won_last_battle }
+						HLL = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+						}
+					}
+				}
+			}
+			###
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							NOT = { HLL = { has_country_flag = nhs_won_last_battle } }
+							NOT = { MK1 = { has_country_flag = nhs_won_last_battle } }
+						}
+						AND = { #Incase something wierd happens
+							HLL = { has_country_flag = nhs_won_last_battle }
+							MK1 = { has_country_flag = nhs_won_last_battle }
+						}
+					}
+				}
+				random_list = {
+					50 = {
+						HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+						HLL = { set_country_flag = nhs_won_last_battle }
+						MK1 = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+						}
+					}
+					50 = {
+						MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+						MK1 = { set_country_flag = nhs_won_last_battle }
+						HLL = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+						}
+					}
+				}
+			}
+		}
+		nhs_roll_the_next_battle = yes
+	}
+	option = {
+		name = "nhs_vov_coloniesevents.40.a"
+		every_country = {
+			limit = {
+				any_known_country = {
+					OR = {
+						tag = MK1
+						tag = HLL
+					}
+				}
+				ai = no
+			}
+			country_event = { id = nhs_vov_civil_war.100 }
+		}
+	}
+}
+
+#Landing Battle
+country_event = {
+	id = nhs_vov_civil_war.7
+	title = nhs_vov_civil_war.7.t
+	desc = nhs_vov_coloniesevents.40.d
+	picture = norse_war_eventPicture
+
+	is_triggered_only = yes
+	hidden = yes
+	
+	trigger = {
+		exists = MK1
+		exists = HLL
+		NOT = {
+			OR = {
+				MK1 = { NOT = { num_of_cities = 2 } }
+				HLL = { NOT = { num_of_cities = 2 } }
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				trading_with_markland = yes
+			}
+			random_list = {
+				75 = {
+					MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+					MK1 = { set_country_flag = nhs_won_last_battle }
+					HLL = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar2
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+					}
+				}
+				25 = {
+					HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+					HLL = { set_country_flag = nhs_won_last_battle }
+					MK1 = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				trading_with_helluland = yes
+			}
+			random_list = {
+				25 = {
+					MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+					MK1 = { set_country_flag = nhs_won_last_battle }
+					HLL = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar2
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+					}
+				}
+				75 = {
+					HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+					HLL = { set_country_flag = nhs_won_last_battle }
+					MK1 = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { trading_with_markland = yes }
+				NOT = { trading_with_helluland = yes }
+			}
+			if = {
+				limit = {
+					HLL = { has_country_flag = nhs_won_last_battle }
+					NOT = { MK1 = { has_country_flag = nhs_won_last_battle } }
+				}
+				random_list = {
+					65 = {
+						HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+						HLL = { set_country_flag = nhs_won_last_battle }
+						MK1 = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+						}
+					}
+					35 = {
+						MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+						MK1 = { set_country_flag = nhs_won_last_battle }
+						HLL = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar2
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+						}
+					}
+				}
+			}
+			###
+			if = {
+				limit = {
+					MK1 = { has_country_flag = nhs_won_last_battle }
+					NOT = { HLL = { has_country_flag = nhs_won_last_battle } }
+				}
+				random_list = {
+					35 = {
+						HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+						HLL = { set_country_flag = nhs_won_last_battle }
+						MK1 = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+						}
+					}
+					65 = {
+						MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+						MK1 = { set_country_flag = nhs_won_last_battle }
+						HLL = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar2
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+						}
+					}
+				}
+			}
+			###
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							NOT = { HLL = { has_country_flag = nhs_won_last_battle } }
+							NOT = { MK1 = { has_country_flag = nhs_won_last_battle } }
+						}
+						AND = { #Incase something wierd happens
+							HLL = { has_country_flag = nhs_won_last_battle }
+							MK1 = { has_country_flag = nhs_won_last_battle }
+						}
+					}
+				}
+				random_list = {
+					50 = {
+						HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+						HLL = { set_country_flag = nhs_won_last_battle }
+						MK1 = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+						}
+					}
+					50 = {
+						MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+						MK1 = { set_country_flag = nhs_won_last_battle }
+						HLL = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar2
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+						}
+					}
+				}
+			}
+		}
+		nhs_roll_the_next_battle = yes
+	}
+	option = {
+		name = "nhs_vov_coloniesevents.40.a"
+		every_country = {
+			limit = {
+				any_known_country = {
+					OR = {
+						tag = MK1
+						tag = HLL
+					}
+				}
+				ai = no
+			}
+			country_event = { id = nhs_vov_civil_war.101 }
+		}
+	}
+}
+
+#Port Battle
+country_event = {
+	id = nhs_vov_civil_war.8
+	title = nhs_vov_civil_war.8.t
+	desc = nhs_vov_coloniesevents.40.d
+	picture = norse_war_eventPicture
+
+	is_triggered_only = yes
+	hidden = yes
+	
+	trigger = {
+		exists = MK1
+		NOT = {
+			OR = {
+				MK1 = { NOT = { num_of_cities = 2 } }
+				HLL = { NOT = { num_of_cities = 2 } }
+			}
+		}
+		exists = HLL
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				trading_with_markland = yes
+			}
+			random_list = {
+				75 = {
+					MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+					MK1 = { set_country_flag = nhs_won_last_battle }
+					HLL = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar2
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+					}
+				}
+				25 = {
+					HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+					HLL = { set_country_flag = nhs_won_last_battle }
+					MK1 = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				trading_with_helluland = yes
+			}
+			random_list = {
+				25 = {
+					MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+					MK1 = { set_country_flag = nhs_won_last_battle }
+					HLL = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar2
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = MK1 }
+							}
+							cede_province = MK1
+							add_core = MK1
+						}
+					}
+				}
+				75 = {
+					HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+					HLL = { set_country_flag = nhs_won_last_battle }
+					MK1 = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							has_province_flag = nhs_cw_battle_tar
+						}
+						if = {
+							limit = {
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+						every_neighbor_province = {
+							limit = {
+								is_capital = no
+								NOT = { owned_by = HLL }
+							}
+							cede_province = HLL
+							add_core = HLL
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { trading_with_markland = yes }
+				NOT = { trading_with_helluland = yes }
+			}
+			if = {
+				limit = {
+					HLL = { has_country_flag = nhs_won_last_battle }
+					NOT = { MK1 = { has_country_flag = nhs_won_last_battle } }
+				}
+				random_list = {
+					65 = {
+						HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+						HLL = { set_country_flag = nhs_won_last_battle }
+						MK1 = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+						}
+					}
+					35 = {
+						MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+						MK1 = { set_country_flag = nhs_won_last_battle }
+						HLL = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar2
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+						}
+					}
+				}
+			}
+			###
+			if = {
+				limit = {
+					MK1 = { has_country_flag = nhs_won_last_battle }
+					NOT = { HLL = { has_country_flag = nhs_won_last_battle } }
+				}
+				random_list = {
+					35 = {
+						HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+						HLL = { set_country_flag = nhs_won_last_battle }
+						MK1 = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+						}
+					}
+					65 = {
+						MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+						MK1 = { set_country_flag = nhs_won_last_battle }
+						HLL = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar2
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+						}
+					}
+				}
+			}
+			###
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							NOT = { HLL = { has_country_flag = nhs_won_last_battle } }
+							NOT = { MK1 = { has_country_flag = nhs_won_last_battle } }
+						}
+						AND = { #Incase something wierd happens
+							HLL = { has_country_flag = nhs_won_last_battle }
+							MK1 = { has_country_flag = nhs_won_last_battle }
+						}
+					}
+				}
+				random_list = {
+					50 = {
+						HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+						HLL = { set_country_flag = nhs_won_last_battle }
+						MK1 = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = HLL }
+								}
+								cede_province = HLL
+								add_core = HLL
+							}
+						}
+					}
+					50 = {
+						MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+						MK1 = { set_country_flag = nhs_won_last_battle }
+						HLL = { clr_country_flag = nhs_won_last_battle }
+						random_province = {
+							limit = {
+								has_province_flag = nhs_cw_battle_tar2
+							}
+							if = {
+								limit = {
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+							every_neighbor_province = {
+								limit = {
+									is_capital = no
+									NOT = { owned_by = MK1 }
+								}
+								cede_province = MK1
+								add_core = MK1
+							}
+						}
+					}
+				}
+			}
+		}
+
+		nhs_roll_the_next_battle = yes
+	}
+	option = {
+		name = "nhs_vov_coloniesevents.40.a"
+		every_country = {
+			limit = {
+				any_known_country = {
+					OR = {
+						tag = MK1
+						tag = HLL
+					}
+				}
+				ai = no
+			}
+			country_event = { id = nhs_vov_civil_war.102 }
+		}
+	}
+}
+
+#Capital Siege
+country_event = {
+	id = nhs_vov_civil_war.9
+	title = nhs_vov_civil_war.9.t
+	desc = nhs_vov_coloniesevents.40.d
+	picture = norse_war_eventPicture
+
+	is_triggered_only = yes
+	hidden = yes
+	
+	trigger = {
+		exists = MK1
+		exists = HLL
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					any_province = {
+						owned_by = HLL
+						any_neighbor_province = {
+							owned_by = MK1
+							is_capital = yes
+						}
+					}
+					MK1 = { NOT = { num_of_cities = 2 } }
+				}
+				MK1 = { NOT = { num_of_cities = 10 } }
+				NOT = {
+					AND = {
+						OR = {
+							any_province = {
+								owned_by = MK1
+								any_neighbor_province = {
+									owned_by = HLL
+									is_capital = yes
+								}
+							}
+							HLL = { NOT = { num_of_cities = 2 } }
+						}
+						HLL = { NOT = { num_of_cities = 10 } }
+					}
+				}
+			}
+			MK1 = { capital_scope = { save_global_event_target_as = nhs_cw_battle_tar_et } }
+			HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+			HLL = { set_country_flag = nhs_won_last_battle }
+			MK1 = { clr_country_flag = nhs_won_last_battle }
+			every_country = {
+				limit = {
+					any_known_country = {
+						OR = {
+							tag = MK1
+							tag = HLL
+						}
+					}
+					ai = no
+				}
+				country_event = { id = nhs_vov_civil_war.104 }
+			}
+			HLL = { inherit = MK1 }
+			set_global_flag = nhs_vov_war_over
+		}
+		if = {
+			limit = {
+				OR = {
+					any_province = {
+						owned_by = MK1
+						any_neighbor_province = {
+							owned_by = HLL
+							is_capital = yes
+						}
+					}
+					HLL = { NOT = { num_of_cities = 2 } }
+				}
+				HLL = { NOT = { num_of_cities = 10 } }
+				NOT = {
+					AND = {
+						OR = {
+							any_province = {
+								owned_by = HLL
+								any_neighbor_province = {
+									owned_by = MK1
+									is_capital = yes
+								}
+							}
+							MK1 = { NOT = { num_of_cities = 2 } }
+						}
+						MK1 = { NOT = { num_of_cities = 10 } }
+					}
+				}
+			}
+			HLL = { capital_scope = { save_global_event_target_as = nhs_cw_battle_tar_et } }
+			MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+			MK1 = { set_country_flag = nhs_won_last_battle }
+			HLL = { clr_country_flag = nhs_won_last_battle }
+			every_country = {
+				limit = {
+					any_known_country = {
+						OR = {
+							tag = MK1
+							tag = HLL
+						}
+					}
+					ai = no
+				}
+				country_event = { id = nhs_vov_civil_war.104 }
+			}
+			MK1 = { inherit = HLL }
+			set_global_flag = nhs_vov_war_over
+		}
+		if = {
+			limit = {
+				OR = {
+					any_province = {
+						owned_by = MK1
+						any_neighbor_province = {
+							owned_by = HLL
+							is_capital = yes
+						}
+					}
+					HLL = { NOT = { num_of_cities = 2 } }
+				}
+				OR = {
+					any_province = {
+						owned_by = HLL
+						any_neighbor_province = {
+							owned_by = MK1
+							is_capital = yes
+						}
+					}
+					MK1 = { NOT = { num_of_cities = 2 } }
+				}
+				HLL = { NOT = { num_of_cities = 10 } }
+				MK1 = { NOT = { num_of_cities = 10 } }
+			}
+			if = {
+				limit = {
+					MK1 = { has_global_flag = nhs_won_last_battle }
+				}
+				MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+				HLL = { capital_scope = { save_global_event_target_as = nhs_cw_battle_tar_et } }
+				every_country = {
+					limit = {
+						any_known_country = {
+							OR = {
+								tag = MK1
+								tag = HLL
+							}
+						}
+						ai = no
+					}
+					country_event = { id = nhs_vov_civil_war.104 }
+				}
+				MK1 = { inherit = HLL }
+				set_global_flag = nhs_vov_war_over
+			}
+			if = {
+				limit = {
+					HLL = { has_global_flag = nhs_won_last_battle }
+				}
+				HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+				MK1 = { capital_scope = { save_global_event_target_as = nhs_cw_battle_tar_et } }
+				every_country = {
+					limit = {
+						any_known_country = {
+							OR = {
+								tag = MK1
+								tag = HLL
+							}
+						}
+						ai = no
+					}
+					country_event = { id = nhs_vov_civil_war.104 }
+				}
+				HLL = { inherit = MK1 }
+				set_global_flag = nhs_vov_war_over
+			}
+		}
+	}
+	option = {
+		name = "nhs_vov_coloniesevents.40.a"
+	}
+}
+
+#Capital Siege debug
+country_event = {
+	id = nhs_vov_civil_war.91
+	title = nhs_vov_civil_war.9.t
+	desc = nhs_vov_coloniesevents.40.d
+	picture = norse_war_eventPicture
+	
+	hidden = yes
+
+	trigger = {
+		tag  = MK1
+		exists = MK1
+		exists = HLL
+		MK1 = { ai = yes }
+		HLL = { ai = yes }
+		has_global_flag = nhs_vov_war_brewing
+		has_global_flag = nhs_vov_war_ai_sceniario
+		has_global_flag = nhs_vov_war_ai_start
+		OR = {
+			MK1 = { NOT = { num_of_cities = 2 } }
+			HLL = { NOT = { num_of_cities = 2 } }
+		}
+		had_global_flag = { flag = nhs_cw_battle_cooldown days = 80 }
+		NOT = { has_global_flag = nhs_vov_war_over }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					any_province = {
+						owned_by = HLL
+						any_neighbor_province = {
+							owned_by = MK1
+							is_capital = yes
+						}
+					}
+					MK1 = { NOT = { num_of_cities = 2 } }
+				}
+				MK1 = { NOT = { num_of_cities = 10 } }
+				NOT = {
+					AND = {
+						OR = {
+							any_province = {
+								owned_by = MK1
+								any_neighbor_province = {
+									owned_by = HLL
+									is_capital = yes
+								}
+							}
+							HLL = { NOT = { num_of_cities = 2 } }
+						}
+						HLL = { NOT = { num_of_cities = 10 } }
+					}
+				}
+			}
+			MK1 = { capital_scope = { save_global_event_target_as = nhs_cw_battle_tar_et } }
+			HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+			HLL = { set_country_flag = nhs_won_last_battle }
+			MK1 = { clr_country_flag = nhs_won_last_battle }
+			every_country = {
+				limit = {
+					any_known_country = {
+						OR = {
+							tag = MK1
+							tag = HLL
+						}
+					}
+					ai = no
+				}
+				country_event = { id = nhs_vov_civil_war.104 }
+			}
+			HLL = { inherit = MK1 }
+			set_global_flag = nhs_vov_war_over
+		}
+		if = {
+			limit = {
+				OR = {
+					any_province = {
+						owned_by = MK1
+						any_neighbor_province = {
+							owned_by = HLL
+							is_capital = yes
+						}
+					}
+					HLL = { NOT = { num_of_cities = 2 } }
+				}
+				HLL = { NOT = { num_of_cities = 10 } }
+				NOT = {
+					AND = {
+						OR = {
+							any_province = {
+								owned_by = HLL
+								any_neighbor_province = {
+									owned_by = MK1
+									is_capital = yes
+								}
+							}
+							MK1 = { NOT = { num_of_cities = 2 } }
+						}
+						MK1 = { NOT = { num_of_cities = 10 } }
+					}
+				}
+			}
+			HLL = { capital_scope = { save_global_event_target_as = nhs_cw_battle_tar_et } }
+			MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+			MK1 = { set_country_flag = nhs_won_last_battle }
+			HLL = { clr_country_flag = nhs_won_last_battle }
+			every_country = {
+				limit = {
+					any_known_country = {
+						OR = {
+							tag = MK1
+							tag = HLL
+						}
+					}
+					ai = no
+				}
+				country_event = { id = nhs_vov_civil_war.104 }
+			}
+			MK1 = { inherit = HLL }
+			set_global_flag = nhs_vov_war_over
+		}
+		if = {
+			limit = {
+				OR = {
+					any_province = {
+						owned_by = MK1
+						any_neighbor_province = {
+							owned_by = HLL
+							is_capital = yes
+						}
+					}
+					HLL = { NOT = { num_of_cities = 2 } }
+				}
+				OR = {
+					any_province = {
+						owned_by = HLL
+						any_neighbor_province = {
+							owned_by = MK1
+							is_capital = yes
+						}
+					}
+					MK1 = { NOT = { num_of_cities = 2 } }
+				}
+				HLL = { NOT = { num_of_cities = 10 } }
+				MK1 = { NOT = { num_of_cities = 10 } }
+			}
+			if = {
+				limit = {
+					MK1 = { has_global_flag = nhs_won_last_battle }
+				}
+				MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+				HLL = { capital_scope = { save_global_event_target_as = nhs_cw_battle_tar_et } }
+				every_country = {
+					limit = {
+						any_known_country = {
+							OR = {
+								tag = MK1
+								tag = HLL
+							}
+						}
+						ai = no
+					}
+					country_event = { id = nhs_vov_civil_war.104 }
+				}
+				MK1 = { inherit = HLL }
+				set_global_flag = nhs_vov_war_over
+			}
+			if = {
+				limit = {
+					HLL = { has_global_flag = nhs_won_last_battle }
+				}
+				HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+				MK1 = { capital_scope = { save_global_event_target_as = nhs_cw_battle_tar_et } }
+				every_country = {
+					limit = {
+						any_known_country = {
+							OR = {
+								tag = MK1
+								tag = HLL
+							}
+						}
+						ai = no
+					}
+					country_event = { id = nhs_vov_civil_war.104 }
+				}
+				HLL = { inherit = MK1 }
+				set_global_flag = nhs_vov_war_over
+			}
+		}
+	}
+	option = {
+		name = "nhs_vov_coloniesevents.40.a"
+	}
+}
+
+#Naval Battle
+country_event = {
+	id = nhs_vov_civil_war.10
+	title = nhs_vov_civil_war.10.t
+	desc = nhs_vov_coloniesevents.41.d
+	picture = norse_dispute_eventPicture
+
+	is_triggered_only = yes
+	hidden = yes
+	
+	trigger = {
+		exists = MK1
+		exists = HLL
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				trading_with_markland = yes
+			}
+			MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+			MK1 = { set_country_flag = nhs_won_last_battle }
+			HLL = { clr_country_flag = nhs_won_last_battle }
+			random_province = {
+				limit = {
+					is_sea = yes
+					any_neighbor_province = {
+						OR = {
+							owned_by = MK1
+							owned_by = HLL
+						}
+					}
+				}
+				save_global_event_target_as = nhs_cw_battle_tar_et
+			}
+			every_province = {
+				limit = {
+					is_capital = no
+					owned_by = HLL
+					NOT = { region = canada_region }
+				}
+				cede_province = MK1
+				add_core = MK1
+			}
+		}
+		if = {
+			limit = {
+				trading_with_helluland = yes
+			}
+			HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+			HLL = { set_country_flag = nhs_won_last_battle }
+			MK1 = { clr_country_flag = nhs_won_last_battle }
+			random_province = {
+				limit = {
+					is_sea = yes
+					any_neighbor_province = {
+						OR = {
+							owned_by = MK1
+							owned_by = HLL
+						}
+					}
+				}
+				save_global_event_target_as = nhs_cw_battle_tar_et
+			}
+			every_province = {
+				limit = {
+					is_capital = no
+					owned_by = MK1
+					NOT = { region = canada_region }
+				}
+				cede_province = HLL
+				add_core = HLL
+			}
+		}
+		if = {
+			limit = {
+				NOT = { trading_with_markland = yes }
+				NOT = { trading_with_helluland = yes }
+			}
+			random_list = {
+				50 = {
+					HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+					HLL = { set_country_flag = nhs_won_last_battle }
+					MK1 = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							is_sea = yes
+							any_neighbor_province = {
+								OR = {
+									owned_by = MK1
+									owned_by = HLL
+								}
+							}
+						}
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+					every_province = {
+						limit = {
+							is_capital = no
+							owned_by = MK1
+							NOT = { region = canada_region }
+						}
+						cede_province = HLL
+						add_core = HLL
+					}
+				}
+				50 = {
+					MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+					MK1 = { set_country_flag = nhs_won_last_battle }
+					HLL = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							is_sea = yes
+							any_neighbor_province = {
+								OR = {
+									owned_by = MK1
+									owned_by = HLL
+								}
+							}
+						}
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+					every_province = {
+						limit = {
+							is_capital = no
+							owned_by = HLL
+							NOT = { region = canada_region }
+						}
+						cede_province = MK1
+						add_core = MK1
+					}
+				}
+			}
+		}
+		clr_global_flag = nhs_cw_battle_cooldown
+		set_global_flag = nhs_cw_battle_cooldown
+		nhs_roll_the_next_battle = yes
+	}
+
+	option = {
+		name = "nhs_vov_coloniesevents.41.a"
+		every_country = {
+			limit = {
+				any_known_country = {
+					OR = {
+						tag = MK1
+						tag = HLL
+					}
+				}
+				ai = no
+			}
+			country_event = { id = nhs_vov_civil_war.103 }
+		}
+	}
+}
+
+#Naval Battle debug
+country_event = {
+	id = nhs_vov_civil_war.1011
+	title = nhs_vov_civil_war.10.t
+	desc = nhs_vov_coloniesevents.41.d
+	picture = norse_dispute_eventPicture
+	
+	hidden = yes
+
+	trigger = {
+		tag = MK1
+		any_province = {
+			OR = {
+				owned_by = MK1
+				owned_by = HLL
+			}
+			NOT = { region = canada_region }
+		}
+		NOT = { has_global_flag = nhs_vov_war_over }
+		exists = HLL
+		exists = MK1
+		HLL = { ai = yes }
+		MK1 = { ai = yes }
+		
+		has_global_flag = nhs_vov_war_brewing
+		has_global_flag = nhs_vov_war_ai_sceniario
+		has_global_flag = nhs_vov_war_ai_start
+		had_global_flag = { flag = nhs_cw_battle_cooldown days = 110 }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				trading_with_markland = yes
+			}
+			MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+			MK1 = { set_country_flag = nhs_won_last_battle }
+			HLL = { clr_country_flag = nhs_won_last_battle }
+			random_province = {
+				limit = {
+					is_sea = yes
+					any_neighbor_province = {
+						OR = {
+							owned_by = MK1
+							owned_by = HLL
+						}
+					}
+				}
+				save_global_event_target_as = nhs_cw_battle_tar_et
+			}
+			every_province = {
+				limit = {
+					is_capital = no
+					owned_by = HLL
+					NOT = { region = canada_region }
+				}
+				cede_province = MK1
+				add_core = MK1
+			}
+		}
+		if = {
+			limit = {
+				trading_with_helluland = yes
+			}
+			HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+			HLL = { set_country_flag = nhs_won_last_battle }
+			MK1 = { clr_country_flag = nhs_won_last_battle }
+			random_province = {
+				limit = {
+					is_sea = yes
+					any_neighbor_province = {
+						OR = {
+							owned_by = MK1
+							owned_by = HLL
+						}
+					}
+				}
+				save_global_event_target_as = nhs_cw_battle_tar_et
+			}
+			every_province = {
+				limit = {
+					is_capital = no
+					owned_by = MK1
+					NOT = { region = canada_region }
+				}
+				cede_province = HLL
+				add_core = HLL
+			}
+		}
+		if = {
+			limit = {
+				NOT = { trading_with_markland = yes }
+				NOT = { trading_with_helluland = yes }
+			}
+			random_list = {
+				50 = {
+					HLL = { save_global_event_target_as = nhs_cw_battle_winner }
+					HLL = { set_country_flag = nhs_won_last_battle }
+					MK1 = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							is_sea = yes
+							any_neighbor_province = {
+								OR = {
+									owned_by = MK1
+									owned_by = HLL
+								}
+							}
+						}
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+					every_province = {
+						limit = {
+							is_capital = no
+							owned_by = MK1
+							NOT = { region = canada_region }
+						}
+						cede_province = HLL
+						add_core = HLL
+					}
+				}
+				50 = {
+					MK1 = { save_global_event_target_as = nhs_cw_battle_winner }
+					MK1 = { set_country_flag = nhs_won_last_battle }
+					HLL = { clr_country_flag = nhs_won_last_battle }
+					random_province = {
+						limit = {
+							is_sea = yes
+							any_neighbor_province = {
+								OR = {
+									owned_by = MK1
+									owned_by = HLL
+								}
+							}
+						}
+						save_global_event_target_as = nhs_cw_battle_tar_et
+					}
+					every_province = {
+						limit = {
+							is_capital = no
+							owned_by = HLL
+							NOT = { region = canada_region }
+						}
+						cede_province = MK1
+						add_core = MK1
+					}
+				}
+			}
+		}
+		clr_global_flag = nhs_cw_battle_cooldown
+		set_global_flag = nhs_cw_battle_cooldown
+		nhs_roll_the_next_battle = yes
+	}
+
+	option = {
+		name = "nhs_vov_coloniesevents.41.a"
+		every_country = {
+			limit = {
+				any_known_country = {
+					OR = {
+						tag = MK1
+						tag = HLL
+					}
+				}
+				ai = no
+			}
+			country_event = { id = nhs_vov_civil_war.103 }
+		}
+	}
+}
+
+#Land Battle Report
+country_event = {
+	id = nhs_vov_civil_war.100
+	title = nhs_vov_civil_war.100.t
+	desc = nhs_vov_civil_war.100.d
+	picture = norse_dispute_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		ai = no
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "nhs_vov_civil_war.100.a"
+	}
+}
+
+#Landing Battle Report
+country_event = {
+	id = nhs_vov_civil_war.101
+	title = nhs_vov_civil_war.101.t
+	desc = nhs_vov_civil_war.101.d
+	picture = norse_dispute_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		ai = no
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				event_target:nhs_cw_battle_tar_defender = {
+					has_country_flag = nhs_won_last_battle
+				}
+			}
+			custom_tooltip = nhs_vov_tooltip_defender_victor
+		}
+		if = {
+			limit = {
+				event_target:nhs_cw_battle_tar_agressor = {
+					has_country_flag = nhs_won_last_battle
+				}
+			}
+			custom_tooltip = nhs_vov_tooltip_attacker_victor
+		}
+	}
+
+	option = {
+		name = "nhs_vov_civil_war.101.a"
+	}
+}
+
+#Port Battle Report
+country_event = {
+	id = nhs_vov_civil_war.102
+	title = nhs_vov_civil_war.101.t
+	desc = nhs_vov_civil_war.101.d
+	picture = norse_dispute_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		ai = no
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				event_target:nhs_cw_battle_tar_defender = {
+					has_country_flag = nhs_won_last_battle
+				}
+			}
+			custom_tooltip = nhs_vov_tooltip_defender_victor
+		}
+		if = {
+			limit = {
+				event_target:nhs_cw_battle_tar_agressor = {
+					has_country_flag = nhs_won_last_battle
+				}
+			}
+			custom_tooltip = nhs_vov_tooltip_attacker_victor
+		}
+	}
+
+	option = {
+		name = "nhs_vov_civil_war.101.a"
+	}
+}
+
+#Naval Battle Report
+country_event = {
+	id = nhs_vov_civil_war.103
+	title = nhs_vov_civil_war.103.t
+	desc = nhs_vov_civil_war.103.d
+	picture = norse_dispute_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		ai = no
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "nhs_vov_civil_war.103.a"
+	}
+}
+
+#City Siege Report
+country_event = {
+	id = nhs_vov_civil_war.104
+	title = nhs_vov_civil_war.104.t
+	desc = nhs_vov_civil_war.104.d
+	picture = norse_dispute_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		ai = no
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "nhs_vov_civil_war.104.a"
+	}
+}
