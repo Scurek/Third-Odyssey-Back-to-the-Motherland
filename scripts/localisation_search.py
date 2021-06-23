@@ -7,6 +7,7 @@ Author: lichtkang
 import os
 import sys
 import pathlib
+import collections
 
 if sys.version_info < (3, 9):
     sys.exit("Needs Python 3.9 or higher")
@@ -56,8 +57,9 @@ def get_localisation_files(mod_dirpath: str):
     ]
 
 def get_loc_ids_patterns(filepaths: list[str]) -> dict[str, t.Pattern]:
-    """Load localisation identifiers and search patterns from a set of filepaths."""
+    """Load localisation identifiers and search patterns from a set of filepaths. Both as mapping to patterns, and in groups by filepath."""
     loc_ids_patterns = dict()
+    file_loc_ids = collections.defaultdict(set)
     for filepath in filepaths:
         with open(filepath, 'r') as fh:
             fh.readline()  # Skip first line, which specifies language
@@ -70,7 +72,8 @@ def get_loc_ids_patterns(filepaths: list[str]) -> dict[str, t.Pattern]:
                     continue  # Too few variables to unpack (corrupt), skip
                 else:
                     loc_ids_patterns[identifier] = re.compile(r"\b{identifier}\b")
-    return loc_ids_patterns
+                    file_loc_ids[filepath].add(identifier)
+    return loc_ids_patterns, file_loc_ids
 
 
 def scan_file_loc_ids(filepath: str, loc_ids_patterns: dict[str, t.Pattern]) -> list[str]:
@@ -97,16 +100,29 @@ def main():
     print(f"Mod dir: {MOD_DIR}")
     loc_filepaths = get_localisation_files(mod_dirpath=MOD_DIR)
     print(f"Localisation files: {len(loc_filepaths)}")
-    loc_ids_patterns = get_loc_ids_patterns(filepaths=loc_filepaths)
+    loc_ids_patterns, file_loc_ids = get_loc_ids_patterns(filepaths=loc_filepaths)
     print(f"Localisation identifiers: {len(loc_ids_patterns)}")
     search_filepaths = get_search_files(mod_dirpath=MOD_DIR, excluded_subdirs=EXCLUDED_SUBDIRS)
     print(f"Search files: {len(search_filepaths)}")
+    # Search all localisation usage
     all_found = set()
     for filepath, results in iter_scan_files_loc_ids(filepaths=search_filepaths, loc_ids_patterns=loc_ids_patterns):
         all_found.update(results)
     not_found = set(loc_ids_patterns.keys()).difference(all_found)
     print(f"Found: {len(all_found)}")
     print(f"Missing: {len(not_found)}")
+    # Localisation file stats
+    locfile_stats = []
+    for filepath, all_locs in file_loc_ids.items():
+        found_locs = all_locs.intersection(all_found)
+        locfile_stats.append((
+            os.path.basename(filepath), 
+            len(found_locs)/len(all_locs)
+        ))
+    locfile_stats.sort(key=lambda x: x[1])
+    print('Filename\tUsage')
+    for filename, perc_used in locfile_stats:
+        print(f"{filename}\t{perc_used:.0%}")
 
 
 if __name__ == '__main__':
