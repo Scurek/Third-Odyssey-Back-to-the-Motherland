@@ -71,24 +71,26 @@ def get_loc_ids_patterns(filepaths: list[str]) -> dict[str, t.Pattern]:
                 except ValueError:
                     continue  # Too few variables to unpack (corrupt), skip
                 else:
-                    loc_ids_patterns[identifier] = re.compile(r"\b{identifier}\b")
+                    loc_ids_patterns[identifier] = re.compile(rf"^[^#]*\b{identifier}\b.*$", re.MULTILINE)
                     file_loc_ids[filepath].add(identifier)
     return loc_ids_patterns, file_loc_ids
 
 
-def scan_file_loc_ids(filepath: str, loc_ids_patterns: dict[str, t.Pattern]) -> list[str]:
+def scan_file_loc_ids(filepath: str, loc_ids_patterns: dict[str, t.Pattern]) -> set[str]:
     """Scan a file for the presence of localisation identifiers."""
     with open(filepath, 'r') as fh:
         content = fh.read()  # Assume we can load whole files in memory without issues. Should speed up search compared to line-by-line.
-    found = []
+    found = set()
     for loc_id, pattern in loc_ids_patterns.items():
-        if loc_id in content:  # Seems good enough for now
-        #if pattern.search(content) is not None:
-            found.append(loc_id)
+        if loc_id in content:  # Quick first check
+            for line in content.splitlines():
+                if loc_id in line and  pattern.search(line) is not None:
+                    found.add(loc_id)
+                    break
     return found
 
 
-def iter_scan_files_loc_ids(filepaths: list[str], loc_ids_patterns: dict[str, t.Pattern]) -> t.Iterator[tuple[str, list[str]]]:
+def iter_scan_files_loc_ids(filepaths: list[str], loc_ids_patterns: dict[str, t.Pattern]) -> t.Iterator[tuple[str, set[str]]]:
     """Iteratively scan multiple files for the presence of localisation identifiers"""
     for filepath in filepaths:
         yield filepath, scan_file_loc_ids(filepath=filepath, loc_ids_patterns=loc_ids_patterns)
