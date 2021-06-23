@@ -1,0 +1,121 @@
+country_event = {
+	id = native_raids.1
+	title = native_raids.1.t
+	desc = native_raids.1.d
+	picture = TRADEGOODS_eventPicture
+	
+	trigger = {
+		capital_scope = {
+			continent = north_america
+		}
+		government = native
+		953 = {
+			owner = {
+				OR = {
+					culture_group = byzantine
+					culture_group = elysian_group 
+				} 
+				any_owned_province = {
+					any_neighbor_province = {
+						owned_by = ROOT
+					}
+				}
+				NOT = { war_with = ROOT }
+				NOT = { truce_with = ROOT }
+				NOT = {
+					reverse_has_opinion = {
+						who = ROOT
+						value = -50
+					}
+				}
+			}
+		}
+		manpower_percentage = 0.5
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+		modifier = {
+			factor = 1.2
+			953 = {
+				owner = {
+					religion = pantheon_worship
+				}
+			}
+		}
+		modifier = {
+			factor = 0.8
+			953 = {
+				owner = {
+					NOT = {
+						reverse_has_opinion = {
+							who = ROOT
+							value = -75
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.8
+			953 = {
+				owner = {
+					NOT = {
+						reverse_has_opinion = {
+							who = ROOT
+							value = -100
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = { # Raid!
+		name = "native_raids.1a"
+		add_prestige = 5
+		add_manpower = -2
+		953 = {
+			owner = {
+				country_event = { id = native_raids.2 }
+			}
+		}
+	}
+	option = { #Don't raid.
+		name = "native_raids.1b"
+		ai_chance = { factor = 0 }
+		add_prestige = -5
+	}
+}
+
+country_event = {
+	id = native_raids.2
+	title = native_raids.2.t
+	desc = native_raids.2.d
+	picture = TRADEGOODS_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_owned_province = {
+			limit = {
+				any_neighbor_province = {
+					owned_by = FROM
+				}
+			}
+			spawn_rebels = {
+				type = native_raiders_rebels
+				size = 1
+			}
+		}
+	}
+	
+	option = { # We're being raided!
+		name = "native_raids.2a"
+		add_casus_belli = {
+			type = cb_border_war
+			months = 60
+			target = FROM
+		}
+	}
+}
