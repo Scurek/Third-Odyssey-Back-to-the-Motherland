@@ -82,26 +82,32 @@ def get_localisation_files(mod_dirpath: os.PathLike):
     ]
 
 
-def get_loc_ids_patterns(filepaths: list[str]) -> tuple[dict[str, t.Pattern], dict[str, set]]:
+def get_loc_ids_patterns(filepaths: list[str]) -> tuple[dict[str, set[str]], dict[str, t.Pattern], dict[str, str]]:
     """Load localisation identifiers and search patterns from a set of filepaths. Both as mapping to patterns, and in groups by filepath."""
     loc_ids_patterns = dict()
-    file_loc_ids = collections.defaultdict(set)
+    loc_ids_text = dict()
+    locfile2ids = collections.defaultdict(set)
     for filepath in filepaths:
         with open(filepath, 'r') as fh:
             fh.readline()  # Skip first line, which specifies language
             for line_nr, line in enumerate(fh, start=2):
-                if not line.strip():
+                if not line.strip() or line.strip().startswith('#'):
                     continue
                 try:
-                    identifier, _ = line.strip().split(':', 1)
+                    identifier, text = line.strip().split(':0', 1)
                 except ValueError:
                     # Too few variables to unpack (corrupt), skip
                     logging.warning(f"Corruption in localisation file '{os.path.basename(filepath)}', line {line_nr}")
                     continue
                 else:
-                    loc_ids_patterns[identifier] = re.compile(rf"^[^#]*\b{identifier}\b.*$", re.MULTILINE)
-                    file_loc_ids[filepath].add(identifier)
-    return loc_ids_patterns, file_loc_ids
+                    identifier, text = identifier.strip(), text.strip()
+                    locfile2ids[filepath].add(identifier)
+                    if identifier in loc_ids_text:
+                        logging.warning(f"Duplicate localisation identifier: {identifier}")
+                    else:
+                        loc_ids_text[identifier] = text
+                        loc_ids_patterns[identifier] = re.compile(rf"^[^#]*\b{identifier}\b.*$", re.MULTILINE)
+    return locfile2ids, loc_ids_patterns, loc_ids_text
 
 
 def scan_file_loc_ids(filepath: str, loc_ids_patterns: dict[str, t.Pattern]) -> set[str]:
@@ -126,10 +132,10 @@ def iter_scan_files_loc_ids(filepaths: list[str], loc_ids_patterns: dict[str, t.
 
 # -- Run as Script --
 
-def get_data(mod_dir: os.PathLike, excluded_subdirs: list[str]) -> tuple[dict[str, set[str]], dict[str, set[str]], set[str], set[str]]:
+def get_data(mod_dir: os.PathLike, excluded_subdirs: list[str]) -> tuple[dict[str, set[str]], dict[str, set[str]], dict[str, str], set[str], set[str]]:
     loc_filepaths = get_localisation_files(mod_dirpath=mod_dir)
     logging.info(f"Localisation files count: {len(loc_filepaths)}")
-    loc_ids_patterns, locfile2all = get_loc_ids_patterns(filepaths=loc_filepaths)
+    locfile2ids, loc_ids_patterns, loc_ids_text = get_loc_ids_patterns(filepaths=loc_filepaths)
     logging.info(f"Localisation identifiers count: {len(loc_ids_patterns)}")
     search_filepaths = get_search_files(mod_dirpath=mod_dir, excluded_subdirs=excluded_subdirs)
     logging.info(f"Search files count: {len(search_filepaths)}")
@@ -138,14 +144,15 @@ def get_data(mod_dir: os.PathLike, excluded_subdirs: list[str]) -> tuple[dict[st
     all_found = set()
     for filepath, results in iter_scan_files_loc_ids(filepaths=search_filepaths, loc_ids_patterns=loc_ids_patterns):
         all_found.update(results)
-        subjfile2found[filepath] = results
+        if results:
+            subjfile2found[filepath] = results
     not_found = set(loc_ids_patterns.keys()).difference(all_found)
-    return locfile2all, subjfile2found, all_found, not_found
+    return locfile2ids, subjfile2found, loc_ids_text, all_found, not_found
 
 
-def write_locfile_stats(filepath: str, locfile2all: dict[str, set[str]], all_found: set[str]):
+def write_locfile_stats(filepath: str, locfile2ids: dict[str, set[str]], all_found: set[str]):
     locfile_stats = []
-    for locfile, all_locs in locfile2all.items():
+    for locfile, all_locs in locfile2ids.items():
         found_locs = all_locs.intersection(all_found)
         locfile_stats.append((
             os.path.basename(locfile),
@@ -171,13 +178,22 @@ def write_subjfile_data(filepath: str, subjfile2found: dict[str, set[str]], ):
         )
 
 
+def write_unused_locs(filepath: str, not_found: set[str], loc_ids_text: dict[str, str]):
+    with open(filepath, 'w', encoding='utf-8') as out_fh:
+        out_fh.write('l_english:\n')
+        for loc_id in sorted(not_found):
+            text = loc_ids_text[loc_id]
+            out_fh.write(f' {loc_id}:0 {text}\n')
+
+
 def main():
     logging.info(f"Mod dir: {MOD_DIR}")
     logging.info(f"Excluded subdirs: {EXCLUDED_SUBDIRS}")
-    locfile2all, subjfile2found, all_found, not_found = get_data(mod_dir=MOD_DIR, excluded_subdirs=EXCLUDED_SUBDIRS)
+    locfile2ids, subjfile2found, loc_ids_text, all_found, not_found = get_data(mod_dir=MOD_DIR, excluded_subdirs=EXCLUDED_SUBDIRS)
     logging.info(f"Found: {len(all_found)}/{(len(all_found)+len(not_found))} ({len(all_found)/(len(all_found)+len(not_found)):.0%})")
-    write_locfile_stats(filepath='locfile_stats.tsv', locfile2all=locfile2all, all_found=all_found)
+    write_locfile_stats(filepath='locfile_stats.tsv', locfile2ids=locfile2ids, all_found=all_found)
     write_subjfile_data(filepath='subjfile_data.json', subjfile2found=subjfile2found)
+    write_unused_locs(filepath='unused.yml', not_found=not_found, loc_ids_text=loc_ids_text)
 
 
 if __name__ == '__main__':
