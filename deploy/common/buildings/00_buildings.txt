@@ -60,7 +60,62 @@ temple = {
 	modifier = {
 		local_tax_modifier = 0.4
 	}
-
+	on_built = {
+		if = {
+			limit = {
+				FROM = {
+					OR = {
+						religion = buddhism
+						religion = mahayana
+						religion = vajrayana
+					}
+					has_estate_privilege = estate_church_karma_temples
+				}
+			}
+			FROM = {
+				add_karma = 3
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					religion = catholic
+					has_estate_privilege = estate_church_influence_temples
+				}
+			}
+			FROM = {
+				add_papal_influence = 3
+			}
+		}
+	}
+	on_destroyed = {
+		if = {
+			limit = {
+				FROM = {
+					OR = {
+						religion = buddhism
+						religion = mahayana
+						religion = vajrayana
+					}
+					has_estate_privilege = estate_church_karma_temples
+				}
+			}
+			FROM = {
+				add_karma = -3
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					religion = catholic
+					has_estate_privilege = estate_church_influence_temples
+				}
+			}
+			FROM = {
+				add_papal_influence = -3
+			}
+		}
+	}
 	ai_will_do = {
 		factor = 1
 	}
@@ -71,6 +126,30 @@ barracks = {
 	time = 12
 	modifier = {
 		local_manpower_modifier = 0.5
+	}
+	on_built = {
+		if = {
+			limit = {
+				FROM = {
+					has_reform = corvee_reform
+				}
+			}
+			FROM = {
+				add_manpower = 1
+			}
+		}
+	}
+	on_destroyed = {
+		if = {
+			limit = {
+				FROM = {
+					has_reform = corvee_reform
+				}
+			}
+			FROM = {
+				add_manpower = -1
+			}
+		}
 	}
 
 #	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
@@ -117,7 +196,7 @@ shipyard = {
 	ai_will_do = {
 		factor = 1
 		modifier = {
-			factor = 105 # Little above build cost
+			factor = 1.5 # bit more likely if close to the naval force limit
 			FROM = { navy_size_percentage = 0.95 }
 		}
 		modifier = {
@@ -175,6 +254,7 @@ coastal_defence = {
 	modifier = {
 		blockade_force_required = 0.5
 		hostile_disembark_speed = 1.0
+		block_slave_raid = yes
 	}
 
 	ai_will_do = {
@@ -197,6 +277,64 @@ courthouse = {
 
 	ai_will_do = {
 		factor = 1
+		modifier = {
+			factor = 2
+			FROM = { governing_capacity_percentage = 0.8 }
+		}
+		modifier = {
+			factor = 3
+			FROM = { governing_capacity_percentage = 1 }
+		}
+		modifier = {
+			factor = 5
+			FROM = { governing_capacity_percentage = 1.1 }
+		}
+		modifier = {
+			factor = 0.75
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 0.25
+			FROM = { num_of_loans = 2 }
+		}
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 3 }
+		}
+		modifier = {
+			factor = 0.5
+			FROM = { is_in_deficit = yes }
+		}
+		modifier = {
+			factor = 1.25
+			development = 10
+		}
+		modifier = {
+			factor = 1.25
+			development = 20
+		}
+		modifier = {
+			factor = 1.25
+			development = 30
+		}
+		modifier = {
+			factor = 0.5
+			FROM = { NOT = { treasury = 200 } }
+		}
+		modifier = {
+			factor = 1.25
+			FROM = { treasury = 300 }
+		}
+		#Provinces in the Capital Area don't need a courthouse
+		modifier = {
+			factor = 0
+			area_for_scope_province = {
+				any_province = {
+					area = PREV
+					is_capital_of = FROM
+				}
+			}
+		}
 	}
 }
 
@@ -208,6 +346,32 @@ dock = {
 	}
 	modifier = {
 		local_sailors_modifier = 0.5
+	}
+	
+	on_built = {
+		if = {
+			limit = {
+				FROM = {
+					has_reform = corvee_reform
+				}
+			}
+			FROM = {
+				add_sailors = 200
+			}
+		}
+	}
+	
+	on_destroyed = {
+		if = {
+			limit = {
+				FROM = {
+					has_reform = corvee_reform
+				}
+			}
+			FROM = {
+				add_sailors = -200
+			}
+		}
 	}
 
 	ai_will_do = {
@@ -251,7 +415,7 @@ regimental_camp = {
 	ai_will_do = {
 		factor = 1
 		modifier = {
-			factor = 215 # Little above build cost
+			factor = 1.5 # more likely if we have an army close to the force limit
 			FROM = { army_size_percentage = 0.95 }
 		}
 		modifier = {
@@ -313,6 +477,7 @@ naval_battery = {
 		blockade_force_required = 1.0
 		hostile_disembark_speed = 2.0
 		hostile_fleet_attrition = 5
+		block_slave_raid = yes
 	}
 
 	ai_will_do = {
@@ -332,17 +497,63 @@ cathedral = {
 		local_missionary_strength = 0.03
 		local_tax_modifier = 0.6
 	}
-	
-	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
 	on_built = {
-		nhs_building_counter_effect_add = { FLAGG = nhs_has_cathedral }
+		if = {
+			limit = {
+				FROM = {
+					OR = {
+						religion = buddhism
+						religion = mahayana
+						religion = vajrayana
+					}
+					has_estate_privilege = estate_church_karma_temples
+				}
+			}
+			FROM = {
+				add_karma = 3
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					religion = catholic
+					has_estate_privilege = estate_church_influence_temples
+				}
+			}
+			FROM = {
+				add_papal_influence = 3
+			}
+		}
+	}
+	on_destroyed = {
+		if = {
+			limit = {
+				FROM = {
+					OR = {
+						religion = buddhism
+						religion = mahayana
+						religion = vajrayana
+					}
+					has_estate_privilege = estate_church_karma_temples
+				}
+			}
+			FROM = {
+				add_karma = -3
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					religion = catholic
+					has_estate_privilege = estate_church_influence_temples
+				}
+			}
+			FROM = {
+				add_papal_influence = -3
+			}
+		}
 	}
 
-	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
-	on_destroyed = {
-		nhs_building_counter_effect_sub = { FLAGG = nhs_has_cathedral }
-	}
-	
 	ai_will_do = {
 		factor = 1
 	}
@@ -455,7 +666,7 @@ grand_shipyard = {
 	ai_will_do = {
 		factor = 1
 		modifier = {
-			factor = 320 # Little above build cost
+			factor = 1.5 # bit more likely if close to the force limit
 			FROM = { navy_size_percentage = 0.95 }
 		}
 		modifier = {
@@ -468,7 +679,7 @@ grand_shipyard = {
 training_fields = {
 	cost = 300
 	time = 12
-	
+
 	make_obsolete = barracks
 
 #	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
@@ -493,19 +704,36 @@ training_fields = {
 #			}
 #		}
 #	}
-	
-	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
-	on_built = {
-		nhs_building_counter_effect_add = { FLAGG = nhs_has_training_fields }
-	}
 
-	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
-	on_destroyed = {
-		nhs_building_counter_effect_sub = { FLAGG = nhs_has_training_fields }
-	}
-	
 	modifier = {
 		local_manpower_modifier = 1
+	}
+	
+	on_built = {
+		nhs_building_counter_effect_add = { FLAGG = nhs_has_training_fields }
+		if = {
+			limit = {
+				FROM = {
+					has_reform = corvee_reform
+				}
+			}
+			FROM = {
+				add_manpower = 1
+			}
+		}
+	}
+	on_destroyed = {
+		nhs_building_counter_effect_sub = { FLAGG = nhs_has_training_fields }
+		if = {
+			limit = {
+				FROM = {
+					has_reform = corvee_reform
+				}
+			}
+			FROM = {
+				add_manpower = -1
+			}
+		}
 	}
 
 	ai_will_do = {
@@ -548,12 +776,12 @@ fort_17th = {
 #	}
 
 	onmap = yes
-	
+
 	influencing_fort = yes
-	
+
 	ai_will_do = {
 		factor = 1 #Lots of logic in code instead, that multiplies with this value
-	} 
+	}
 }
 
 
@@ -645,9 +873,71 @@ town_hall = {
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAGG = nhs_has_town_hall }
 	}
-
+	
 	ai_will_do = {
 		factor = 1
+		modifier = {
+			factor = 10
+			has_building = courthouse
+		}
+		modifier = {
+			factor = 2
+			FROM = { governing_capacity_percentage = 0.8 }
+		}
+		modifier = {
+			factor = 3
+			FROM = { governing_capacity_percentage = 1 }
+		}
+		modifier = {
+			factor = 5
+			FROM = { governing_capacity_percentage = 1.1 }
+		}
+		modifier = {
+			factor = 0.75
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 0.25
+			FROM = { num_of_loans = 2 }
+		}
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 3 }
+		}
+		modifier = {
+			factor = 0.5
+			FROM = { is_in_deficit = yes }
+		}
+		modifier = {
+			factor = 1.25
+			development = 10
+		}
+		modifier = {
+			factor = 1.25
+			development = 20
+		}
+		modifier = {
+			factor = 1.25
+			development = 30
+		}
+		modifier = {
+			factor = 0.5
+			FROM = { NOT = { treasury = 300 } }
+		}
+		modifier = {
+			factor = 1.25
+			FROM = { treasury = 400 }
+		}
+		#Provinces in the Capital Area don't need a courthouse
+		modifier = {
+			factor = 0
+			area_for_scope_province = {
+				any_province = {
+					area = PREV
+					is_capital_of = FROM
+				}
+			}
+		}
 	}
 }
 
@@ -660,19 +950,37 @@ drydock = {
 	build_trigger = {
 		has_port = yes
 	}
-	
-	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
-	on_built = {
-		nhs_building_counter_effect_add = { FLAGG = nhs_has_drydock }
-	}
 
-	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
-	on_destroyed = {
-		nhs_building_counter_effect_sub = { FLAGG = nhs_has_drydock }
-	}
-	
 	modifier = {
 		local_sailors_modifier = 1.0
+	}
+	
+	on_built = {
+		nhs_building_counter_effect_add = { FLAGG = nhs_has_drydock }
+		if = {
+			limit = {
+				FROM = {
+					has_reform = corvee_reform
+				}
+			}
+			FROM = {
+				add_sailors = 200
+			}
+		}
+	}
+	
+	on_destroyed = {
+		nhs_building_counter_effect_sub = { FLAGG = nhs_has_drydock }
+		if = {
+			limit = {
+				FROM = {
+					has_reform = corvee_reform
+				}
+			}
+			FROM = {
+				add_sailors = -200
+			}
+		}
 	}
 
 	ai_will_do = {
@@ -727,7 +1035,7 @@ conscription_center = {
 	ai_will_do = {
 		factor = 1
 		modifier = {
-			factor = 435 # Little above build cost
+			factor = 1.5 # more likely if we have an army close to the force limit
 			FROM = { army_size_percentage = 0.95 }
 		}
 		modifier = {
@@ -815,7 +1123,7 @@ wharf = {
 	}
 	
 	ai_will_do = {
-		factor = 1750
+		factor = 1
 
 		modifier = {
 			factor = 0.4
@@ -923,6 +1231,7 @@ tradecompany = {
 		ivory
 		slaves
 		spices
+		cloves
 		fur
 		incense
 	}
@@ -1018,7 +1327,7 @@ furnace = {
 	}
 	onmap = yes
 	show_separate = yes # Means as a manufactory it will be shown according to the old way
-	
+
 	ai_will_do = {
 		factor = 1
 	}
@@ -1115,9 +1424,13 @@ impressment_offices = {
 
 	modifier = {
 		local_sailors = 250
+		ship_recruit_speed = -0.1
+		local_ship_cost = -0.05
 	}
 	bonus_modifier = {
 		local_sailors = 250
+		ship_recruit_speed = -0.1
+		local_ship_cost = -0.05
 	}
 	onmap = no
 	show_separate = yes # Means as a manufactory it will be shown according to the old way
