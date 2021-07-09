@@ -1627,8 +1627,8 @@ country_event = {
 				}
 			}
 			AND = {
-				exists = MSG
-				MSG = {
+				exists = MS1
+				MS1 = {
 					NOT = { is_subject_of = ROOT }
 					OR = {
 						dynasty = "Spartakon"
@@ -1672,8 +1672,8 @@ country_event = {
 				}
 			}
 			AND = {
-				exists = MSG
-				MSG = {
+				exists = MS1
+				MS1 = {
 					NOT = { is_subject_of = ROOT }
 					NOT = {
 						dynasty = "Spartakon"
@@ -1709,7 +1709,7 @@ country_event = {
 			MSN = {
 				is_subject_of = ROOT
 			}
-			MSG = {
+			MS1 = {
 				is_subject_of = ROOT
 			}
 		}
@@ -1737,16 +1737,16 @@ country_event = {
 		}
 		else_if = {
 			limit = {
-				MSG = {
+				MS1 = {
 					is_subject_of = ROOT
 				}
 			}
 			mesoamerica_pgroup = {
 				limit = {
-					NOT = { is_core = MSG }
+					NOT = { is_core = MS1 }
 					NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				}
-				add_core = MSG
+				add_core = MS1
 			}
 		}
 	}
@@ -1763,21 +1763,12 @@ country_event = {
 		nhs_is_elysia_late = yes
 		has_country_flag = nhs_expanding_north_completed
 		NOT = { has_country_flag = nhs_gain_spartan_claims }
-		NOT = { exists = MSN }
-		NOT = { exists = MSG }
-		OR = {
-			any_province = {
-				NOT = { is_core = ROOT }
-				NOT = { owned_by = ROOT }
-				NOT = { is_permanent_claim = ROOT }
-				is_core = MSN
-			}
-			any_province = {
-				NOT = { is_core = ROOT }
-				NOT = { owned_by = ROOT }
-				NOT = { is_permanent_claim = ROOT }
-				is_core = MSG
-			}
+		NOT = { nhs_check_all_spartan = { CONDITION = exists } }
+		any_province = {
+			NOT = { is_core = ROOT }
+			NOT = { owned_by = ROOT }
+			NOT = { is_permanent_claim = ROOT }
+			nhs_check_all_spartan = { CONDITION = is_core }
 		}
 	}
 	
@@ -1789,10 +1780,7 @@ country_event = {
 		name = "nhs_mission_events.13.a"
 		every_province = {
 			limit = {
-				OR = {
-					is_core = MSN
-					is_core = MSG
-				}
+				nhs_check_all_spartan = { CONDITION = is_core }
 				NOT = { is_core = ROOT }
 				NOT = { owned_by = ROOT }
 				NOT = { is_permanent_claim = ROOT }

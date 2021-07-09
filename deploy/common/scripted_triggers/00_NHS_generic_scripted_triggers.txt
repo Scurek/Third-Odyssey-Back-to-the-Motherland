@@ -5,10 +5,12 @@
 
 # Check if TAG exists and given CONDITION matches it
 nhs_tag_exists_and_matches = {
-    limit = {
-        exists = $TAG$
-    }
-    $CONDITION$ = $TAG$
+	if = {
+		limit = {
+			exists = $TAG$
+		}
+		$CONDITION$ = $TAG$
+	}
 }
 
 
@@ -112,7 +114,42 @@ nhs_culturally_norse = {
 nhs_check_all_spartan = {
 	OR = {
 		$CONDITION$ = MSN
-		$CONDITION$ = MSG
+		$CONDITION$ = MS1
+	}
+}
+
+# Check if CONDITION matches any Spartan nation, but check whichever exists first
+# Use: nhs_check_all_spartan_with_if = { CONDITION = tag }
+nhs_check_all_spartan_with_if = {
+	if = {
+		limit = {
+			exists = MS1
+		}
+		$CONDITION$ = MS1
+	}
+	else_if = {
+		limit = {
+			exists = MSN
+		}
+		$CONDITION$ = MSN
+	}
+}
+
+# Check if CONDITION matches any Spartan nation, but check whichever exists first
+# Takes both left and right side of the condition argument
+# Use: nhs_check_all_spartan_with_if_complex = { CONDITION = tag }
+nhs_check_all_spartan_with_if_complex = {
+	if = {
+		limit = {
+			exists = MS1
+		}
+		$CONDITION$ = $ARGUMENT$
+	}
+	else_if = {
+		limit = {
+			exists = MSN
+		}
+		$CONDITION$ = $ARGUMENT$
 	}
 }
 
