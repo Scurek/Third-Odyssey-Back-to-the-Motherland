@@ -1457,7 +1457,236 @@ country_event = { #Death of Georgios but Pagan revolt quelled
 
 country_event = { #Heir accused of being a heretic
     id = nhs_hellenicconversion.3
-}
+    title = nhs_hellenicconversion3.t
+    desc = nhs_hellenicconversion3.d
+    picture = orthodox_court_eventPicture
+
+    trigger = {
+		OR = {
+            tag = NHS
+            was_tag = NHS
+                    }
+
+        has_heir = yes
+        heir_age = 13
+        government = monarchy
+
+		has_country_flag = hellenic_conversion_preacher
+        NOT = { has_country_flag = hellenic_conversion_major_event }
+	        }
+
+    mean_time_to_happen = {
+        months = 24
+        }
+
+    immediate = {
+        hidden_effect = {
+            set_country_flag = hellenic_conversion_major_event
+            }
+        }
+
+    option = { #Denounce the heir
+        name = nhs_hellenicconversion.3.a
+
+        add_heir_claim = -20
+
+        hidden_effect = {
+            change_variable = {
+                which = PaganUprising
+                value = 1
+            }
+            random_list = {
+                33 = {
+                    country_event = { id = nhs_hellenicconversion.31 days = 31 } #Faifthul heir
+                }
+                33 = {
+                    country_event = { id = nhs_hellenicconversion.32 days = 31 } #Heathen heir
+                }
+                33 = {
+                    country_event = { id = nhs_hellenicconversion.33 days = 31 } #Heir assassinated
+                }
+            }
+        }
+
+        custom_tooltip = hellenicconversion_favour_Orthodox.tt
+        }
+
+    option = { #Stand by the heir
+        name = nhs_hellenicconversion.3.b
+
+        add_legitimacy = -10
+        
+        hidden_effect = {
+            change_variable = {
+                which = OrthodoxUprising
+                value = 1
+            }
+            random_list = {
+                33 = {
+                    country_event = { id = nhs_hellenicconversion.31 days = 31 } #Faifthul heir
+                }
+                33 = {
+                    country_event = { id = nhs_hellenicconversion.32 days = 31 } #Heathen heir
+                }
+                33 = {
+                    country_event = { id = nhs_hellenicconversion.33 days = 31 } #Heir assassinated
+                }
+            }
+        }
+
+        custom_tooltip = hellenicconversion_favour_Pagans.tt
+        }
+
+    option = { #Have the priest thrown in jail
+        name = nhs_hellenicconversion.3.c
+
+        add_estate_loyalty = {
+            estate = estate_church
+            loyalty = -15
+        }
+
+        hidden_effect = {
+            change_variable = {
+                which = OrthodoxUprising
+                value = 2
+            }
+            subtract_variable = {
+                which = PaganUprising
+                value = 1
+            }
+            random_list = {
+                33 = {
+                    country_event = { id = nhs_hellenicconversion.31 days = 31 } #Faifthul heir
+                }
+                33 = {
+                    country_event = { id = nhs_hellenicconversion.32 days = 31 } #Heathen heir
+                }
+                33 = {
+                    country_event = { id = nhs_hellenicconversion.33 days = 31 } #Heir assassinated
+                }
+            }
+        }
+
+        custom_tooltip = hellenicconversion_appease_Pagans.tt
+        }
+    }
+
+country_event = { #Faithful Heir
+    id = nhs_hellenicconversion.31
+    title = nhs_hellenicconversion31.t
+    desc = nhs_hellenicconversion31.d
+    picture = RELIGIOUS_CONVERSION_eventPicture
+
+    is_triggered_only = yes
+
+    option = {
+        name = nhs_hellenicconversion.31.a
+
+        add_estate_loyalty = {
+            estate = estate_church
+            loyalty = 5
+            }
+        add_heir_claim = 10
+
+        clr_country_flag = hellenic_conversion_major_event
+        }
+    }
+
+country_event = { #Heathen Heir
+    id = nhs_hellenicconversion.32
+    title = nhs_hellenicconversion32.t
+    desc = nhs_hellenicconversion32.d
+    picture = COURT_eventPicture
+
+    is_triggered_onlya = yes
+
+    option = { #Have the heir JAILED
+        name = nhs_hellenicconversion.32.a
+
+        add_estate_loyalty = {
+            estate = estate_church
+            loyalty = 10
+            }
+        add_stability = -1
+        kill_heir = yes
+
+        hidden_effect = {
+            change_variable = {
+                which = HellenicUprising
+                value = 2
+                }
+            subtract_variable = {
+                which = OrthodoxUprising
+                value = 1
+                }
+            }
+
+        clr_country_flag = hellenic_conversion_major_event
+        custom_tooltip = hellenicconversion_appease_Orthodox.tt
+        }
+
+    option = { #Refuse to hurt the heir
+        name = nhs_hellenicconversion.32.b
+
+        add_estate_loyalty = {
+            estate = estate_church
+            loyalty = -10
+            }
+        
+        hidden_effect = {
+            random_list = {
+                50 = {
+                    add_heir_claim = -100
+                    }
+                50 = {
+                    random_owned_province = {
+                            limit = {
+                                is_capital = no
+                                is_city = yes
+                                }
+                            spawn_rebels = {
+                                type = pretender_rebels
+                                religion = ROOT
+                                size = 3
+                                use_heir_as_leader = yes
+                                }
+                            }
+                        }
+                    }
+            change_variable = {
+                which = OrthodoxUprising
+                value = 1
+                    }
+                }
+
+        custom_tooltip = hellenicconversion_favour_Pagans.tt
+           }
+
+        clr_country_flag = hellenic_conversion_major_event
+        custom_tooltip = hellenicconversion_favour_Pagans.tt
+         }
+    }
+
+country_event = { #Heir assassinated
+    id = nhs_hellenicconversion.32
+    title = nhs_hellenicconversion32.t
+    desc = nhs_hellenicconversion32.d
+    picture = ASSASSINATION_eventPicture
+
+    is_triggered_only = yes  
+
+    immediate = {
+        hidden_effect = {
+            kill_heir = yes
+            }
+        }
+
+    option = {
+        name = nhs_hellenicconversion.32.a
+
+        clr_country_flag = hellenic_conversion_major_event
+        }
+    }
 
 ###################### Pagan Assemblies
 
