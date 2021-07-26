@@ -1,0 +1,132 @@
+nhs_hcd_hellenic_crisis = {
+	potential = {
+		OR = {
+			tag = NHS
+		    was_tag = NHS
+		}
+		has_country_flag = nhs_hcd_can_have_religious_disaster
+		religion_group = christian
+	}
+		
+	can_start = {
+		OR = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_hcd_hellenic_crisis_upset_Pagans.tt
+				check_variable = {
+					which = HellenicUprising
+					value = 13
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = nhs_hcd_hellenic_crisis_upset_Orthodox.tt
+				check_variable = {
+					which = OrthodoxUprising
+					value = 13
+				}
+			}
+			AND = {
+				custom_trigger_tooltip = {
+					tooltip = nhs_hcd_hellenic_crisis_angered_Orthodox.tt
+					check_variable = {
+						which = OrthodoxUprising
+						value = 8
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = nhs_hcd_hellenic_crisis_angered_Pagans.tt
+					check_variable = {
+						which = HellenicUprising
+						value = 8
+					}
+				}
+			}
+		}
+	}
+	
+	can_stop = { 
+		OR = {
+			NOT = { religion_group = christian }
+			custom_trigger_tooltip = {
+				tooltip = nhs_hcd_hellenic_crisis_over.tt
+				NOT = { has_country_flag = nhs_hcd_can_have_religious_disaster }
+			}
+		}
+	}
+	
+	down_progress = {
+		factor = 0
+	}
+	
+	progress = {
+		modifier = {
+			factor = 0.5
+			always = yes
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { religious_unity = 1 }
+			religious_unity = 0.75
+		}
+		modifier = {
+			factor = 1
+			NOT = { religious_unity = 0.75 }
+			religious_unity = 0.5
+		}
+		modifier = {
+			factor = 2
+			NOT = { religious_unity = 0.5 }
+		}
+		modifier = {
+			factor = 1
+			NOT = { stability = 1 }
+		}
+	 }
+	
+	can_end = {
+		NOT = {
+			OR = {
+				AND = {
+					any_owned_province = {
+						NOT = { has_owner_religion = yes }
+					}
+					stability = 1
+					NOT = {
+						has_spawned_rebels = particularist_rebels
+					}
+					NOT = {
+						has_spawned_rebels = elysian_hellenic_rebels 
+					}
+					NOT = {
+						has_spawned_rebels = orthodox_rebels
+					}
+				}
+				AND = {
+					religious_unity = 0.5
+					stability = 3
+					NOT = {
+						has_spawned_rebels = particularist_rebels
+					}
+					NOT = {
+						has_spawned_rebels = elysian_hellenic_rebels 
+					}
+					NOT = {
+						has_spawned_rebels = orthodox_rebels
+					}
+				}
+			}
+			
+		}
+	}
+
+	modifier = {
+		tolerance_own = -3
+		stability_cost_modifier = 0.2
+	}	
+	
+	
+	on_start = nhs_hcd_hellenicrevolt.1
+	on_end = nhs_hcd_hellenicrevolt.100
+	
+	on_monthly = {}
+}
+

@@ -167,3 +167,103 @@ nhs_native_ambassadors = {
 		native_assimilation = 0.5
 	}
 }
+
+#Special privileges for the church for the disaster
+
+estate_church_nhs_inquisition_privilege = {
+	icon = privilege_recruit_minister
+	max_absolutism = -10
+	influence = 0.10
+	loyalty = 0.05
+	is_valid = {
+		AND = {
+			has_estate_privilege = estate_church_nhs_inquisition_privilege 
+			OR = {
+				religion = orthodox
+				religion = elysian_orthodoxy
+			}
+		NOT = {
+			has_estate_privilege = estate_church_nhs_enforced_inquisition_privilege
+		}
+		}
+	}
+	can_revoke = {
+		estate_loyalty = {
+			estate = estate_church
+			loyalty = 65
+		}
+		stability = 2
+	}
+	penalties = {
+	}
+	benefits = {
+		tolerance_own = 1
+		missionary_maintenance_cost = -0.25 
+	}
+
+	cooldown_years = 10
+
+	ai_will_do = {
+		factor = 0
+	}
+}
+
+estate_church_nhs_enforced_inquisition_privilege = {
+	icon = privilege_recruit_minister
+	max_absolutism = -15
+	influence = 0.15
+	loyalty = 0.05
+	is_valid = {
+		AND = {
+			has_estate_privilege = estate_church_nhs_enforced_inquisition_privilege
+			OR = {
+				religion = orthodox
+				religion = elysian_orthodoxy
+			}
+		}
+	}
+	can_revoke = {
+		estate_loyalty = {
+			estate = estate_church
+			loyalty = 65
+		}
+		stability = 2
+	}
+	on_revoked = {
+		add_stability = -3
+		random_owned_province = {
+			limit = {
+				is_capital = yes
+			}
+			spawn_rebels = {
+				type = orthodox_rebels
+				size = 2
+			}
+		}
+	}
+	conditional_modifier = {
+		trigger = {
+			NOT = { religious_unity = 0.95 }
+			}
+		modifier = {
+			church_loyalty_modifier = -0.15
+			legitimacy = -2
+			missionary_maintenance_cost = -0.25 
+		}
+	}
+	conditional_modifier = {
+		trigger = {
+			religious_unity = 0.95
+		}
+		modifier = {
+			tolerance_own = 2
+			missionary_maintenance_cost = -0.25 
+		}
+	}
+
+	cooldown_years = 20
+
+	ai_will_do = {
+		factor = 0
+	}
+}
