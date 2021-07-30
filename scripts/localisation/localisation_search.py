@@ -10,6 +10,7 @@ if sys.version_info < (3, 9):
     sys.exit("Needs Python 3.9 or higher")
 
 import os
+import re
 import json
 import pathlib
 import logging
@@ -144,13 +145,15 @@ CAT_PRIORITIES_MAP = {
 }
 GROUP_MIN_SIZE = 6  # Minimum size of groups, when sorting by group
 
+_LOC_SEPARATOR_RE = re.compile(r":[0-9]")
+
 
 # -- Logging --
 
 def log_setup(logs_dir: str):
     os.makedirs(logs_dir, exist_ok=True)
     timestamp = datetime.datetime.now().strftime("%Y-%m-%dT%H_%M_%S")
-    log_handler = logging.FileHandler(f'{logs_dir}/{timestamp}.log', mode='w', encoding='utf-8')
+    log_handler = logging.FileHandler(f'{logs_dir}/{timestamp}.log', mode='w', encoding='utf-8-sig')
     formatter = logging.Formatter(
         fmt='%(asctime)s | %(name)s | %(levelname)s | %(message)s',
         datefmt='%H:%M:%S'
@@ -353,19 +356,19 @@ class SearchStats:
                     identifier=identifier, match=locid_best_match_map[identifier], by_appearance=sort_by_appearance
                 ))
             # Write all to file
-            with open(outpath, 'w', encoding='utf-8') as fh:
-                fh.write('l_english:\n')
+            with open(outpath, 'w', encoding='utf-8-sig') as fh:
+                fh.write('l_english:\n ')
                 # Write ungrouped
                 for identifier in group_locids_map.pop('', []):
                     text = self._locids_map[identifier].text
-                    fh.write(f' {identifier}:0 {text}\n')
+                    fh.write(f'{identifier}:0 {text}\n ')
                 # Write groups alphabetically
                 for group in sorted(group_locids_map.keys()):
                     group_locids = group_locids_map[group]
-                    fh.write(f"\n # {group}\n")
+                    fh.write(f"\n # {group}\n ")
                     for identifier in group_locids:
                         text = self._locids_map[identifier].text
-                        fh.write(f' {identifier}:0 {text}\n')
+                        fh.write(f'{identifier}:0 {text}\n ')
 
     # -- Internal Methods --
 
@@ -415,20 +418,20 @@ class SearchStats:
 def locids_from_filepath(filepath: str, sourcename: str) -> list['LocId']:
     """Get localisation identifiers from a source file. Logs file corruption."""
     results = []
-    with open(filepath, 'r', encoding='utf-8') as fh:
+    with open(filepath, 'r', encoding='utf-8-sig') as fh:
         fh.readline()  # Skip first line, which specifies language
         for line_nr, line in enumerate(fh, start=2):
             line = line.strip()
             if not line or line.startswith('#'):
                 continue
             try:
-                identifier, text = line.strip().split(':0', 1)
+                identifier, text = _LOC_SEPARATOR_RE.split(line, maxsplit=1)
             except ValueError:
                 # Too few variables to unpack (corrupt), skip
                 logging.warning(f"Corruption in localisation file '{os.path.basename(filepath)}', line {line_nr}")
                 continue
             else:
-                results.append(LocId(identifier=identifier, text=text, sourcename=sourcename))
+                results.append(LocId(identifier=identifier.strip(), text=text.strip(), sourcename=sourcename))
     return results
 
 
@@ -500,7 +503,7 @@ def get_stats(mod_dirpath: str, subjfile_data_filepath: str) -> SearchStats:
     logging.info(f"Localisation identifiers count: {len(locids)}")
     stats = SearchStats(locids=locids)
     # Load localisations from stats dump
-    with open(subjfile_data_filepath, 'r', encoding='utf-8') as fh:
+    with open(subjfile_data_filepath, 'r', encoding='utf-8-sig') as fh:
         data: t.Mapping[str, t.Mapping[str, t.Mapping[str, t.Tuple[int, int]]]] = json.load(fh)  # Category -> [Subject name -> [identifier -> line_nr]]
         for category, subjfile_matches_map in data.items():
             for subjname, matches_map in subjfile_matches_map.items():
@@ -527,17 +530,17 @@ def search_stats(mod_dirpath: str, excluded_subdirs: list[str]) -> SearchStats:
 
 def write_stats(statsdir: str, stats: 'SearchStats'):
     os.makedirs(statsdir, exist_ok=True)
-    with open(f'{statsdir}/locfile_stats.tsv', 'w', encoding='utf-8') as fh:
+    with open(f'{statsdir}/locfile_stats.tsv', 'w', encoding='utf-8-sig') as fh:
         stats.write_sources_stats(fh=fh)
-    with open(f'{statsdir}/subjfile_data.json', 'w', encoding='utf-8') as fh:
+    with open(f'{statsdir}/subjfile_data.json', 'w', encoding='utf-8-sig') as fh:
         stats.write_subj_data(fh=fh)
 
 
 def write_output(outdir: str, stats: 'SearchStats'):
     os.makedirs(outdir, exist_ok=True)
-    with open(f'{outdir}/xxx_new_unsorted_l_english.yml', 'w', encoding='utf-8') as fh:
+    with open(f'{outdir}/xxx_new_unsorted_l_english.yml', 'w', encoding='utf-8-sig') as fh:
         fh.write("l_english:\n # Dump your new localisations here, they will be automatically sorted next time the localisation search is run!\n")
-    with open(f'{outdir}/xxx_unused_l_english.yml', 'w', encoding='utf-8') as fh:
+    with open(f'{outdir}/xxx_unused_l_english.yml', 'w', encoding='utf-8-sig') as fh:
         stats.write_unused_locs(fh=fh)
     stats.write_used_locs(outdir=outdir)
 
@@ -558,7 +561,7 @@ def main(from_stats=False):
 
 
 if __name__ == '__main__':
-    main(from_stats=False)
+    main(from_stats=True)
 
 
 #
