@@ -142,7 +142,10 @@ nhs_native_priv_local_councils_empowered = {
 	influence = 0.10
 
 	is_valid = {
-		has_country_flag = native_council_enabled_early
+		OR = {
+			has_country_flag = native_council_enabled_early
+			has_country_flag = native_council_enabled_mid
+		}
 	}
 	on_granted = {
 		custom_tooltip = nhs_native_priv_local_councils_empowered_effect_tooltip
@@ -178,12 +181,6 @@ nhs_native_priv_local_councils_empowered = {
 				}
 				remove_province_modifier = nhs_native_priv_local_councils_empowered_mod
 			}
-		}
-		if = {
-			limit = {
-				has_country_flag = native_council_enabled_mid
-			}
-			set_estate_privilege = nhs_native_priv_local_councils_empowered_mid
 		}
 	}
 	penalties = {
@@ -581,44 +578,26 @@ nhs_native_priv_encourage_barbaroi_officials_early = {
 		nhs_is_elysia = yes
 	}
 	on_granted = {
+		# Increases speed of passive culture conversion  # TODO: implement passive culture conversion
 		custom_tooltip = nhs_native_priv_encourage_barbaroi_officials_early_effect_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					nhs_culturally_native = yes
-				}
-				add_province_modifier = {
-					name = nhs_native_priv_encourage_barbaroi_officials_early_mod
-					duration = -1
-				}
-			}
-		}
 	}
 	on_revoked = {
 		custom_tooltip = nhs_native_priv_encourage_barbaroi_officials_early_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_encourage_barbaroi_officials_early_mod
-				}
-				remove_province_modifier = nhs_native_priv_encourage_barbaroi_officials_early_mod
+		every_owned_province = {
+			limit = {
+				nhs_culturally_native = yes
 			}
+			add_unrest = 10
 		}
 	}
 	on_invalid = {
 		custom_tooltip = nhs_native_priv_encourage_barbaroi_officials_early_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_encourage_barbaroi_officials_early_mod
-				}
-				remove_province_modifier = nhs_native_priv_encourage_barbaroi_officials_early_mod
-			}
-		}
 	}
 	penalties = {
+		same_culture_advisor_cost = 0.25
 	}
 	benefits = {
+		advisor_pool = 1
 	}
 	ai_will_do = {
 		factor = 5
