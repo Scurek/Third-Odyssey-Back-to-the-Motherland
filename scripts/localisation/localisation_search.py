@@ -12,7 +12,6 @@ if sys.version_info < (3, 9):
 import os
 import re
 import json
-import pathlib
 import logging
 import logging.handlers
 import datetime
@@ -20,130 +19,13 @@ import functools
 import collections
 import typing as t
 
+try:
+    import defines
+except ImportError:
+    raise RuntimeError("Missing the associated `defines.py` file! Please ensure it is present in the same directory as this script.")
+
 
 # -- Globals --
-
-# Directory of the mod. Change this if needed. Assuming certain relative positions of script to files.
-MOD_DIR = pathlib.Path(__file__).absolute().parent.parent.parent.joinpath('deploy')
-LOGS_DIR = 'logs'
-STATSDIR = 'stats'
-OUTDIR = 'output'
-# Subdirectories within the mod to exclude from search
-EXCLUDED_SUBDIRS = [
-    'localisation',  # Of course, if we don't exclude localisation, we'll find all!
-    'gfx',
-    'history',
-    'interface',
-    'sound',
-    'common/units',  # Contain no localisation
-    'common/countries',  # Contain no localisation
-]
-EXCLUDED_LOCFILES = [
-    'xxx_manually_verified_l_english.yml',  # A localisation file that should contain 'manually' verified
-]
-CAT_SORT_BY_APPEARANCE = [
-    'events',
-]
-CAT_VARIANTS_PREFIX_SUFFIX_MAP = {
-    'common/event_modifiers': [('desc_', ''), ],
-    'common/triggered_modifiers': [('desc_', '')],
-    'common/province_triggered_modifiers': [('desc_', ''), ],
-    'decisions': [('', '_desc'), ('', '_title')],
-    'common/tradegoods': [('', 'DESC')],
-    'common/governments': [
-        ('', '_desc'),
-        ('', '_name'),
-    ],
-    'common/government_names': [
-        # Note: not all of these may still be used in current EU4
-        ('', '_desc'),
-        ('', '_ruler'),
-        ('', '_ruler_female'),
-        ('', '_vassal'),
-        ('', '_ruler_vassal'),
-        ('', '_long_desc'),
-        ('', '_is_our'),
-        ('', '_title'),
-        ('', '_title_plural')
-    ],
-    'common/subject_types': [
-        # Note: Assume same as government names?
-        ('', '_desc'),
-        ('', '_ruler'),
-        ('', '_ruler_female'),
-        ('', '_vassal'),
-        ('', '_ruler_vassal'),
-        ('', '_long_desc'),
-        ('', '_is_our'),
-        ('', '_title'),
-        ('', '_title_plural'),
-    ],
-    'common/rebel_types': [
-        ('', '_army'),
-        ('', '_name'),
-        ('', '_title'),
-        ('', '_desc'),
-        ('', '_demand_desc'),
-    ],
-    'common/ideas': [('', '_start'), ('', '_bonus'), ('', '_desc')],
-    'common/country_tags': [('', '_ADJ')],
-    'common/personal_deities': [('', '_desc')],
-    'common/estates': [('', '_desc')],
-    'common/estate_privileges': [('', '_desc')],
-    'missions': [('', '_desc'), ('', '_title')],
-    'common/factions': [('', '_FACTION_DESC'), ('', '_influence')],
-    'common/government_reforms': [('', '_desc')],
-    'common/peace_treaties': [
-        ('', '_desc'),
-        ('PEACE_', ''),
-        ('CB_ALLOWED_', ''),
-    ],
-    'common/cb_types': [('', '_desc')],
-    'common/policies': [('desc_', '')],
-    'common/religions': [
-        ('desc_', ''),  # Orthodox icons are in religion file, description localisations preceded by 'desc_'
-        ('', '_religion_desc'),
-    ],
-    'common': [
-        ('desc_', ''),  # Tech groups in common/technology.txt
-        ('', '_desc'),  # Tech groups in common/technology.txt
-    ],
-    'common/technologies': [
-        ('', 'DESCR'),  # Unit types are present in military techs
-    ],
-    'common/advisortypes': [('', '_desc')],
-    'common/disasters': [('', '_desc')],
-    'common/new_diplomatic_actions': [('', '_title'), ('', '_desc'), ('', '_tooltip')],
-    'common/flagship_modifications': [('', '_desc')],
-    'common/great_projects': [('great_project_', '')]
-}
-
-CAT_PRIORITIES_MAP = {
-    # Greater values -> later in sorting (sorting defaults to ascending order)
-    'common/country_tags': -140,
-    'common': -130,  # Graphical culture type, technologies
-    'common/tradegoods': -120,
-    'common/religions': -116,  # Referred to in personal_deities
-    'common/personal_deities': -115,  # Some names in cultures are deities
-    'common/cultures': -110,
-    'common/opinion_modifiers': -102,
-    'common/province_modifiers': -101,
-    'common/event_modifiers': -100,
-    'common/ideas': -90,
-    'common/subject_types': -80,
-    'common/government_names': -75,
-    'common/government_reforms': -74,
-    'common/governments': -73,
-    'common/estates': -70,
-    'common/estate_privileges': -69,
-    'common/disasters': -60,
-    'common/triggered_modifiers': 90,  # May contain all kinds of stuff
-    'events': 100,  # May contain all kinds of stuff  (NOTE: maybe not an issue to put at latest, since event localisations != unlocalised event identifier?)
-    'decisions': 110,  # May trigger events and contain all kinds of conditions
-    'missions': 120,  # May trigger events and contain all kinds of conditions  (NOTE: are missions used as conditions?)
-    'common/on_actions': 130,  # Contains no localisation itself
-}
-GROUP_MIN_SIZE = 6  # Minimum size of groups, when sorting by group
 
 _LOC_SEPARATOR_RE = re.compile(r":[0-9]")
 
@@ -225,7 +107,7 @@ class LocId:
     @classmethod
     def _determine_variantnames(cls, identifier: str, category: str) -> list[str]:
         """Determine the variant names of a localisation string"""
-        prefix_suffix_list = CAT_VARIANTS_PREFIX_SUFFIX_MAP.get(category, [])
+        prefix_suffix_list = defines.CAT_VARIANTS_PREFIX_SUFFIX_MAP.get(category, [])
         variants = []
         for prefix, suffix in prefix_suffix_list:
             variant = identifier.removeprefix(prefix).removesuffix(suffix)
@@ -331,7 +213,7 @@ class SearchStats:
             text = self._locids_map[identifier].text
             fh.write(f' {identifier}:0 {text}\n')
 
-    def write_used_locs(self, outdir: str):
+    def write_used_locs(self, outdir: str, prefix=''):
         """Output used localisations in PDX YAML format to various files."""
         # Get best match per localisation
         locid_best_match_map = {
@@ -342,12 +224,12 @@ class SearchStats:
         # Group into files for writing
         outpath_locids_map: t.Dict[str, t.List[str]] = collections.defaultdict(list)
         for identifier, match in locid_best_match_map.items():
-            outpath = self._get_output_locfile_path(outdir=outdir, match=match)
+            outpath = self._get_output_locfile_path(outdir=outdir, match=match, prefix=prefix)
             outpath_locids_map[outpath].append(identifier)
         # Output to files
         for outpath, locids in outpath_locids_map.items():
             category = locid_best_match_map[locids[0]][0]  # Category for the entire file should be category of all localisations (?)
-            sort_by_appearance = category in CAT_SORT_BY_APPEARANCE
+            sort_by_appearance = category in defines.CAT_SORT_BY_APPEARANCE
             # Group localisations
             group_locids_map = self._group_locids(locids=locids, locid_match_map=locid_best_match_map)
             # Sort localisation groups
@@ -377,13 +259,13 @@ class SearchStats:
         """Get the key by which to sort a match for finding the most relevant match, from: category, subjname, line_nr, indent."""
         # Sorting by tuples: first item is used for sorting first, on draws, second item is used etc.
         # Here: indent, category priority, category (alphabetical)
-        return match[3], CAT_PRIORITIES_MAP.get(match[0], 0), match[0]
+        return match[3], defines.CAT_PRIORITIES_MAP.get(match[0], 0), match[0]
 
     @staticmethod
-    def _get_output_locfile_path(outdir: str, match: t.Tuple[str, str, int, int]) -> str:
+    def _get_output_locfile_path(outdir: str, match: t.Tuple[str, str, int, int], prefix='') -> str:
         """Get the localisation output file path suited for a localisation with the given match. """
         category, subjname, line_nr, indents = match
-        outpath = f"{outdir}/{category.split('/')[-1]}_l_english.yml"
+        outpath = f"{outdir}/{prefix}{category.split('/')[-1]}_l_english.yml"
         return outpath
 
     @staticmethod
@@ -396,7 +278,7 @@ class SearchStats:
             group = match[1]  # Subjname
             group_locids_map[group].append(identifier)
         # Dissolve small groups to the 'ungrouped' group
-        dissolve_groups = [group for group, locids in group_locids_map.items() if len(locids) < GROUP_MIN_SIZE]
+        dissolve_groups = [group for group, locids in group_locids_map.items() if len(locids) < defines.GROUP_MIN_SIZE]
         for group in dissolve_groups:
             group_locids_map[''].extend(group_locids_map.pop(group))
         return group_locids_map
@@ -480,7 +362,7 @@ def _load_subjfiles(mod_dirpath: str, excluded_subdirs: list[str]) -> list['Subj
     return results
 
 
-def _load_locids(loc_dirpath: str) -> list['LocId']:
+def _load_locids(loc_dirpath: str, excluded_locfiles: list[str]) -> list['LocId']:
     """Load all localisation identifiers from the given localisations directory."""
     locids = []
     # Get locids from all english localisatino files
@@ -488,7 +370,7 @@ def _load_locids(loc_dirpath: str) -> list['LocId']:
         filepath = os.path.join(loc_dirpath, filename)
         if not filename.endswith('l_english.yml'):
             continue
-        if filename in EXCLUDED_LOCFILES:
+        if filename in excluded_locfiles:
             continue
         locids.extend(locids_from_filepath(filepath=filepath, sourcename=filename))
     # Filter duplicates and return
@@ -496,9 +378,9 @@ def _load_locids(loc_dirpath: str) -> list['LocId']:
     return locids
 
 
-def get_stats(mod_dirpath: str, subjfile_data_filepath: str) -> SearchStats:
+def get_stats(mod_dirpath: str, subjfile_data_filepath: str, excluded_locfiles: list[str]) -> SearchStats:
     """Get stats from a stats subject file data dump and mod localisation source."""
-    locids = _load_locids(loc_dirpath=os.path.join(mod_dirpath, 'localisation'))
+    locids = _load_locids(loc_dirpath=os.path.join(mod_dirpath, 'localisation'), excluded_locfiles=excluded_locfiles)
     locids_map = {locid.identifier: locid for locid in locids}
     logging.info(f"Localisation identifiers count: {len(locids)}")
     stats = SearchStats(locids=locids)
@@ -513,9 +395,9 @@ def get_stats(mod_dirpath: str, subjfile_data_filepath: str) -> SearchStats:
     return stats
 
 
-def search_stats(mod_dirpath: str, excluded_subdirs: list[str]) -> SearchStats:
+def search_stats(mod_dirpath: str, excluded_subdirs: list[str], excluded_locfiles: list[str]) -> SearchStats:
     """Search for localisation data and statistics in a mod directory."""
-    locids = _load_locids(loc_dirpath=os.path.join(mod_dirpath, 'localisation'))
+    locids = _load_locids(loc_dirpath=os.path.join(mod_dirpath, 'localisation'), excluded_locfiles=excluded_locfiles)
     logging.info(f"Localisation identifiers count: {len(locids)}")
     stats = SearchStats(locids=locids)
     # Search all localisation usage
@@ -536,32 +418,36 @@ def write_stats(statsdir: str, stats: 'SearchStats'):
         stats.write_subj_data(fh=fh)
 
 
-def write_output(outdir: str, stats: 'SearchStats'):
+def write_output(outdir: str, stats: 'SearchStats', locfiles_prefix: str):
     os.makedirs(outdir, exist_ok=True)
     with open(f'{outdir}/xxx_new_unsorted_l_english.yml', 'w', encoding='utf-8-sig') as fh:
         fh.write("l_english:\n # Dump your new localisations here, they will be automatically sorted next time the localisation search is run!\n")
     with open(f'{outdir}/xxx_unused_l_english.yml', 'w', encoding='utf-8-sig') as fh:
         stats.write_unused_locs(fh=fh)
-    stats.write_used_locs(outdir=outdir)
+    stats.write_used_locs(outdir=outdir, prefix=locfiles_prefix)
 
 
 def main(from_stats=False):
-    log_setup(logs_dir=LOGS_DIR)
-    logging.info(f"Excluded subdirs: {EXCLUDED_SUBDIRS}")
+    try:
+        with open('config.json', 'r') as fh:
+            config = json.load(fh)
+    except IOError:
+        raise RuntimeError("Could not find the required `config.json`. Please ensure it is present in the same directory as this script.")
+    log_setup(logs_dir=config['logs_dir'])
     if from_stats:
-        subjfile_data_filepath = f"{STATSDIR}/subjfile_data.json"
-        stats = get_stats(mod_dirpath=str(MOD_DIR), subjfile_data_filepath=subjfile_data_filepath)
+        subjfile_data_filepath = f"{config['stats_dir']}/subjfile_data.json"
+        stats = get_stats(mod_dirpath=str(config['mod_dir']), subjfile_data_filepath=subjfile_data_filepath, excluded_locfiles=config['excluded_locfiles'])
     else:
-        stats = search_stats(mod_dirpath=str(MOD_DIR), excluded_subdirs=EXCLUDED_SUBDIRS)
+        stats = search_stats(mod_dirpath=str(config['mod_dir']), excluded_subdirs=defines.EXCLUDED_SUBDIRS, excluded_locfiles=config['excluded_locfiles'])
     logging.info(f"Found: {stats.found}/{stats.total} ({stats.found/stats.total:.0%})")
     logging.info(f"Missing: {stats.missing}/{stats.total} ({stats.missing/stats.total:.0%})")
-    write_stats(statsdir=STATSDIR, stats=stats)
-    write_output(outdir=OUTDIR, stats=stats)
+    write_stats(statsdir=config['stats_dir'], stats=stats)
+    write_output(outdir=config['output_dir'], stats=stats, locfiles_prefix=config['locfiles_prefix'])
     logging.info("Done!")
 
 
 if __name__ == '__main__':
-    main(from_stats=True)
+    main(from_stats=False)
 
 
 #
