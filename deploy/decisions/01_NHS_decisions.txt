@@ -198,7 +198,12 @@ country_decisions = {
 		}
 		allow = {
 			is_at_war = no
-			stability = 1
+			if = {
+				limit = {
+					ai = no
+				}
+				stability = 2
+			}
 			NOT = { has_country_modifier = nhs_handicap_settlers }
 			OR = {
 				any_known_country = {
@@ -209,7 +214,10 @@ country_decisions = {
 					}
 				}
 				any_owned_province = {
-					has_province_modifier = nhs_alexandrian_library_tm
+					has_great_project = {
+						type = nhs_alexandrian_library
+						tier = 1
+					}
 				}
 			}
 			OR = {
@@ -223,7 +231,10 @@ country_decisions = {
 				AND = {
 					is_year = 1500
 					any_owned_province = {
-						has_province_modifier = nhs_alexandrian_library_tm
+						has_great_project = {
+							type = nhs_alexandrian_library
+							tier = 1
+						}
 					}
 				}
 				is_year = 1515
@@ -527,20 +538,98 @@ country_decisions = {
 		
 		ai_will_do = {
 			factor = 1
-			modifier = {
-				factor = 0
-				OR = {
-					NOT = {
-						treasury = 300
-					}
-					num_of_loans = 1
-				}
-			}
 		}
 	}
 
+	# # modifier Hippodrome in New Constantinople
+	# nhs_construct_hippodrome = {
+	# 	major = yes
+	# 	potential = {
+	# 		nhs_is_elysia = yes
+	# 		has_country_flag = nhs_enable_hippodrome_decision
+	# 		NOT = { has_country_modifier = nhs_handicap_settlers }
+	# 		is_year = 1500
+	# 		is_at_war = no
+	# 		stability = 1
+	# 		owns = 953
+	# 		NOT = {
+	# 			953 = {
+	# 				OR = {
+	# 					has_province_modifier = nhs_hippodrome_tm
+	# 					has_province_modifier = nhs_hippodrome_tm_decay
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+
+	# 	allow = {
+	# 		owns = 953
+	# 		controls = 953
+	# 		if = {
+	# 			limit = {
+	# 				ai = yes
+	# 			}
+	# 			treasury = 250
+	# 		}
+	# 		else = {
+	# 			treasury = 500
+	# 		}
+	# 		mil_power = 50
+	# 		stability = 1
+	# 		if = {
+	# 			limit = {
+	# 				ai = no
+	# 			}
+	# 			OR = {
+	# 				artist = 3
+	# 				fortification_expert = 3
+	# 				mil = 4
+	# 			}
+	# 		}
+	# 	}
+
+	# 	effect = {
+	# 		if = {
+	# 			limit = {
+	# 				ai = yes
+	# 			}
+	# 			add_treasury = -250
+	# 		}
+	# 		else = {
+	# 			add_treasury = -500
+	# 		}
+	# 		add_mil_power = -50
+	# 		953 = {
+	# 			add_base_manpower = 1
+	# 			tooltip = {
+	# 				add_permanent_province_modifier = {
+	# 					name = "nhs_hippodrome"
+	# 					duration = -1
+	# 				}
+	# 			}
+	# 			hidden_effect = {
+	# 				add_province_triggered_modifier = nhs_hippodrome_tm
+	# 			}
+	# 		}
+	# 	}
+		
+	# 	ai_will_do = {
+	# 		factor = 1
+	# 		modifier = {
+	# 			factor = 0
+	# 			OR = {
+	# 				NOT = {
+	# 					treasury = 250
+	# 				}
+	# 				num_of_loans = 1
+	# 			}
+	# 		}
+	# 	}
+	# }
+
+
 	# modifier Hippodrome in New Constantinople
-	nhs_construct_hippodrome = {
+	nhs_construct_monument = {
 		major = yes
 		potential = {
 			nhs_is_elysia = yes
@@ -655,7 +744,169 @@ country_decisions = {
 #	}
 
 	# New Alexandrian Library, maybe with printing press
-	nhs_found_grand_library = {
+	# nhs_found_grand_library = {
+	# 	major = yes
+	# 	potential = {
+	# 		nhs_is_elysia = yes
+	# 		has_country_flag = nhs_enable_alexandrian_library_decision
+	# 		NOT = { has_country_modifier = nhs_handicap_settlers }
+	# 		NOT = {
+	# 			2554 = {
+	# 				OR = {
+	# 					has_province_modifier = nhs_alexandrian_library_tm
+	# 					has_province_modifier = nhs_alexandrian_library_tm_decay
+	# 					has_province_modifier = nhs_alexandrian_library_no_books_tm
+	# 					has_province_modifier = nhs_alexandrian_library_no_books_tm_decay
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+
+	# 	allow = {
+	# 		owns = 2554
+	# 		controls = 2554
+	# 		if = {
+	# 			limit = {
+	# 				ai = yes
+	# 			}
+	# 			treasury = 450
+	# 			dip_power = 50
+	# 			adm_power = 50
+	# 			mil_power = 50
+	# 		}
+	# 		else = {
+	# 			OR = {
+	# 				AND = {
+	# 					treasury = 1000
+	# 					dip_power = 75
+	# 					adm_power = 75
+	# 					mil_power = 75
+	# 				}
+	# 				AND = {
+	# 					has_institution = printing_press
+	# 					treasury = 600
+	# 					dip_power = 25
+	# 					adm_power = 25
+	# 					mil_power = 25
+	# 				}
+	# 			}
+	# 			OR = {
+	# 				philosopher = 3
+	# 				natural_scientist = 3
+	# 				army_reformer = 3
+	# 				mil = 5
+	# 				dip = 5
+	# 				adm = 5
+	# 			}
+	# 		}
+	# 	}
+
+	# 	effect = {
+	# 		if = {
+	# 			limit = {
+	# 				ai = yes
+	# 			}
+	# 			add_treasury = -450
+	# 			add_dip_power = -50
+	# 			add_adm_power = -50
+	# 			add_mil_power = -50
+	# 		}
+	# 		else_if = {
+	# 			limit = {
+	# 				has_institution = printing_press
+	# 			}
+	# 			custom_tooltip = nhs_cheaper_library_tt
+	# 			add_treasury = -600
+	# 			add_dip_power = -25
+	# 			add_adm_power = -25
+	# 			add_mil_power = -25
+				
+	# 		}
+	# 		else = {
+	# 			custom_tooltip = nhs_not_cheaper_library_tt
+	# 			add_treasury = -1000
+	# 			add_dip_power = -75
+	# 			add_adm_power = -75
+	# 			add_mil_power = -75
+	# 		}
+	# 		if = {
+	# 			limit = {
+	# 				has_country_modifier = nhs_secrets_books
+	# 			}
+	# 			remove_country_modifier = nhs_secrets_books
+	# 			2554 = {
+	# 				tooltip = {
+	# 					add_permanent_province_modifier = {
+	# 						name = "nhs_alexandrian_library"
+	# 						duration = -1
+	# 					}
+	# 				}
+	# 				add_base_tax = 2
+	# 				hidden_effect = {
+	# 					add_province_triggered_modifier = nhs_alexandrian_library_tm
+	# 				}
+	# 				custom_tooltip = nhs_new_line_tt
+	# 				if = {
+	# 					limit = {
+	# 						OR = {
+	# 							has_country_flag = nhs_completed_wonders_of_elysium
+	# 							950 = { ##Temporary solution since no flags used to be set in mission
+	# 								has_province_modifier = nhs2_ivos_naval_supplies_boost_tm
+	# 							}
+	# 						}
+	# 					}
+	# 					change_trade_goods = paper
+	# 				}
+	# 				else = {
+	# 					custom_tooltip = nhs_alexandrian_paper_tt
+	# 				}
+	# 			}
+	# 		}
+	# 		else = {
+	# 			2554 = {
+	# 				tooltip = {
+	# 					add_permanent_province_modifier = {
+	# 						name = "nhs_alexandrian_library_no_books"
+	# 						duration = -1
+	# 					}
+	# 				}
+	# 				add_base_tax = 2
+	# 				hidden_effect = {
+	# 					add_province_triggered_modifier = nhs_alexandrian_library_no_books_tm
+	# 				}
+	# 				custom_tooltip = nhs_new_line_tt
+	# 				if = {
+	# 					limit = {
+	# 						OR = {
+	# 							has_country_flag = nhs_completed_wonders_of_elysium
+	# 							950 = { ##Temporary solution since no flags used to be set in mission
+	# 								has_province_modifier = nhs2_ivos_naval_supplies_boost_tm
+	# 							}
+	# 						}
+	# 					}
+	# 					change_trade_goods = paper
+	# 				}
+	# 				else = {
+	# 					custom_tooltip = nhs_alexandrian_paper_tt
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+		
+	# 	ai_will_do = {
+	# 		factor = 1
+	# 		modifier = {
+	# 			factor = 0
+	# 			OR = {
+	# 				NOT = { treasury = 450 }
+	# 				num_of_loans = 1
+	# 			}
+	# 		}
+	# 	}
+	# }
+
+	# New Alexandrian Library, maybe with printing press
+	nhs_found_grand_library_monument = {
 		major = yes
 		potential = {
 			nhs_is_elysia = yes
@@ -663,11 +914,8 @@ country_decisions = {
 			NOT = { has_country_modifier = nhs_handicap_settlers }
 			NOT = {
 				2554 = {
-					OR = {
-						has_province_modifier = nhs_alexandrian_library_tm
-						has_province_modifier = nhs_alexandrian_library_tm_decay
-						has_province_modifier = nhs_alexandrian_library_no_books_tm
-						has_province_modifier = nhs_alexandrian_library_no_books_tm_decay
+					has_great_project = {
+						type = nhs_alexandrian_library
 					}
 				}
 			}
@@ -676,143 +924,58 @@ country_decisions = {
 		allow = {
 			owns = 2554
 			controls = 2554
+			OR = {
+				dip = 6
+				mil = 6
+				adm = 6
+				philosopher = 3
+				natural_scientist = 3
+				army_reformer = 3
+			}
 			if = {
 				limit = {
-					ai = yes
+					OR = {
+						ai = yes
+						has_country_modifier = nhs_secrets_books
+					}
+					custom_tooltip = nhs_alexandrian_library_books_discount_tt
+					adm_power = 25
+					dip_power = 25
+					mil_power = 25
 				}
-				treasury = 450
-				dip_power = 50
-				adm_power = 50
-				mil_power = 50
 			}
 			else = {
-				OR = {
-					AND = {
-						treasury = 1000
-						dip_power = 75
-						adm_power = 75
-						mil_power = 75
-					}
-					AND = {
-						has_institution = printing_press
-						treasury = 600
-						dip_power = 25
-						adm_power = 25
-						mil_power = 25
-					}
-				}
-				OR = {
-					philosopher = 3
-					natural_scientist = 3
-					army_reformer = 3
-					mil = 5
-					dip = 5
-					adm = 5
-				}
+				dip_power = 75
+				adm_power = 75
+				mil_power = 75
 			}
 		}
 
 		effect = {
 			if = {
 				limit = {
-					ai = yes
+					OR = {
+						ai = yes
+						has_country_modifier = nhs_secrets_books
+					}
+					add_adm_power = -25
+					add_dip_power = -25
+					add_mil_power = -25
 				}
-				add_treasury = -450
-				add_dip_power = -50
-				add_adm_power = -50
-				add_mil_power = -50
-			}
-			else_if = {
-				limit = {
-					has_institution = printing_press
-				}
-				custom_tooltip = nhs_cheaper_library_tt
-				add_treasury = -600
-				add_dip_power = -25
-				add_adm_power = -25
-				add_mil_power = -25
-				
 			}
 			else = {
-				custom_tooltip = nhs_not_cheaper_library_tt
-				add_treasury = -1000
-				add_dip_power = -75
 				add_adm_power = -75
+				add_dip_power = -75
 				add_mil_power = -75
 			}
-			if = {
-				limit = {
-					has_country_modifier = nhs_secrets_books
-				}
-				remove_country_modifier = nhs_secrets_books
-				2554 = {
-					tooltip = {
-						add_permanent_province_modifier = {
-							name = "nhs_alexandrian_library"
-							duration = -1
-						}
-					}
-					add_base_tax = 2
-					hidden_effect = {
-						add_province_triggered_modifier = nhs_alexandrian_library_tm
-					}
-					custom_tooltip = nhs_new_line_tt
-					if = {
-						limit = {
-							OR = {
-								has_country_flag = nhs_completed_wonders_of_elysium
-								950 = { ##Temporary solution since no flags used to be set in mission
-									has_province_modifier = nhs2_ivos_naval_supplies_boost_tm
-								}
-							}
-						}
-						change_trade_goods = paper
-					}
-					else = {
-						custom_tooltip = nhs_alexandrian_paper_tt
-					}
-				}
+			2554 = {
+				add_great_project = nhs_alexandrian_library
 			}
-			else = {
-				2554 = {
-					tooltip = {
-						add_permanent_province_modifier = {
-							name = "nhs_alexandrian_library_no_books"
-							duration = -1
-						}
-					}
-					add_base_tax = 2
-					hidden_effect = {
-						add_province_triggered_modifier = nhs_alexandrian_library_no_books_tm
-					}
-					custom_tooltip = nhs_new_line_tt
-					if = {
-						limit = {
-							OR = {
-								has_country_flag = nhs_completed_wonders_of_elysium
-								950 = { ##Temporary solution since no flags used to be set in mission
-									has_province_modifier = nhs2_ivos_naval_supplies_boost_tm
-								}
-							}
-						}
-						change_trade_goods = paper
-					}
-					else = {
-						custom_tooltip = nhs_alexandrian_paper_tt
-					}
-				}
-			}
+			custom_tooltip = nhs_library_tier1_cost_tt
 		}
 		
 		ai_will_do = {
 			factor = 1
-			modifier = {
-				factor = 0
-				OR = {
-					NOT = { treasury = 450 }
-					num_of_loans = 1
-				}
-			}
 		}
 	}
 
