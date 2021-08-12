@@ -162,7 +162,6 @@ nhs_cothon = {
 		#what effects happen when this tier is achieved
 		on_upgraded = {
 			add_base_tax = 1
-			add_base_production = 2
 		}
 	}
 
@@ -196,13 +195,14 @@ nhs_cothon = {
 		#what modifiers are added to the country when we have this project here on this tier
 		country_modifiers = {
 			naval_forcelimit = 10
+			trade_range_modifier = 0.25
 			prestige = 0.01
 			global_trade_power = 0.1
 		}
 
 		#what effects happen when this tier is achieved
 		on_upgraded = {
-			add_base_production = 2
+			add_base_production = 1
 		}
 	}
 
@@ -237,13 +237,14 @@ nhs_cothon = {
 		country_modifiers = {
 			naval_forcelimit = 20
 			global_trade_power = 0.15
+			trade_range_modifier = 0.5
 			merchants = 1
 			prestige = 0.05
 		}
 
 		#what effects happen when this tier is achieved
 		on_upgraded = {
-			add_base_production = 4
+			add_base_production = 2
 		}
 	}
 }
@@ -717,6 +718,257 @@ nhs_hippodrome = {
 		#what effects happen when this tier is achieved
 		on_upgraded = {
 			add_base_manpower = 2
+		}
+	}
+}
+
+nhs_elysian_arsenal = {
+	# province it starts in
+	start = 950
+	
+	# date built in real life (so anything built during game time will be there if you start a game after that date)
+	# date = 1483.1.1
+	date = 1000.1.1
+	
+	#time to build
+	time = {
+		months = 0
+	}
+	
+	#how much to build one
+	build_cost = 0
+	
+	#can we move it?
+	can_be_moved = no
+	
+	#time to move the project one unit of distance, in days
+	move_days_per_unit_distance = 10
+	
+	#tier that the project starts at when first placed in the game (be that at game start or when built by a country as the game progresses)
+	starting_tier = 0
+	
+	#project type
+	type = canal
+
+	#can we build it?
+	build_trigger = {
+		FROM = {
+			nhs_eligible_for_elysian_monument = yes
+		}
+	}
+
+	#what to do when it's built
+	on_built = {
+	}
+	
+	#what to do when it's destroyed
+	on_destroyed = {
+	}
+
+	#can our country use it?
+	can_use_modifiers_trigger = {
+		FROM = {
+			nhs_eligible_for_elysian_monument = yes
+		}
+	}
+
+	#can our country upgrade it?
+	can_upgrade_trigger = {
+		FROM = {
+			nhs_eligible_for_elysian_monument = yes
+		}
+	}
+
+	#can our country keep it or is it destroyed when we get hold of it?
+	keep_trigger = {
+		always = yes
+	}
+
+	#tier data
+	tier_0 = {
+		#time to upgrade to this level (0 for tier 0)
+		upgrade_time = {
+			months = 0
+		}
+
+		#cost to upgrade to this level (0 for tier 0)
+		cost_to_upgrade = {
+			factor = 0
+		}
+
+		#what modifiers are added to the province when we have this project here on this tier
+		province_modifiers = {
+		}
+
+		#what modifiers are added to the provinces in the map area when we have this project here on this tier
+		area_modifier = {
+		}
+
+		#what modifiers are added to the country when we have this project here on this tier
+		country_modifiers = {
+		}
+
+		#what effects happen when this tier is achieved
+		on_upgraded = {
+		}
+	}
+
+	tier_1 = {
+		#time to upgrade to this level (0 for tier 0)
+		upgrade_time = {
+			months = 60
+			modifier = {
+				factor = 0.8
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+			}
+		}
+
+		#cost to upgrade to this level (0 for tier 0)
+		cost_to_upgrade = {
+			factor = 500
+			modifier = {
+				factor = 0.5
+				FROM = {
+					ai = yes
+				}
+			}
+			modifier = {
+				factor = 0.8
+				has_building = shipyard
+			}
+			modifier = {
+				factor = 0.4
+				has_building = grand_shipyard
+			}
+		}
+
+		#what modifiers are added to the province when we have this project here on this tier
+		province_modifiers = {
+			ship_recruit_speed = -0.75
+			local_ship_repair = 0.75
+			local_ship_cost = -0.1
+		}
+
+		#what modifiers are added to the provinces in the map area when we have this project here on this tier
+		area_modifier = {
+		}
+
+		#what modifiers are added to the country when we have this project here on this tier
+		country_modifiers = {
+			naval_forcelimit = 5
+			prestige = 0.01
+		}
+
+		#what effects happen when this tier is achieved
+		on_upgraded = {
+			add_base_production = 1
+			if = {
+				limit = {
+					has_building = shipyard
+				}
+				remove_building = shipyard
+			}
+			if = {
+				limit = {
+					has_building = grand_shipyard
+				}
+				remove_building = grand_shipyard
+			}
+			custom_tooltip = nhs_can_no_longer_build_shipyard_tt
+		}
+	}
+
+	tier_2 = {
+		#time to upgrade to this level (0 for tier 0)
+		upgrade_time = {
+			months = 120
+		}
+
+		#cost to upgrade to this level (0 for tier 0)
+		cost_to_upgrade = {
+			factor = 700
+			modifier = {
+				factor = 0.5
+				FROM = {
+					ai = yes
+				}
+			}
+		}
+
+		#what modifiers are added to the province when we have this project here on this tier
+		province_modifiers = {
+			ship_recruit_speed = -0.80
+			local_ship_repair = 0.80
+			local_ship_cost = -0.2
+		}
+
+		#what modifiers are added to the provinces in the map area when we have this project here on this tier
+		area_modifier = {
+		}
+
+		#what modifiers are added to the country when we have this project here on this tier
+		country_modifiers = {
+			naval_forcelimit = 10
+			global_ship_cost = -0.10
+			artillery_cost = -0.10
+			ship_durability = 0.05
+			prestige = 0.02
+		}
+
+		on_upgraded = {
+			add_base_production = 2
+		}
+	}
+
+	tier_3 = {
+		#time to upgrade to this level (0 for tier 0)
+		upgrade_time = {
+			months = 360
+		}
+
+		#cost to upgrade to this level (0 for tier 0)
+		cost_to_upgrade = {
+			factor = 5000
+			modifier = {
+				factor = 0.5
+				FROM = {
+					ai = yes
+				}
+			}
+		}
+
+		#what modifiers are added to the province when we have this project here on this tier
+		province_modifiers = {
+		}
+
+		#what modifiers are added to the provinces in the map area when we have this project here on this tier
+		area_modifier = {
+			ship_recruit_speed = -0.80
+			local_ship_repair = 0.80
+			local_ship_cost = -0.2
+		}
+
+		#what modifiers are added to the country when we have this project here on this tier
+		country_modifiers = {
+			naval_forcelimit = 30
+			global_ship_cost = -0.20
+			artillery_cost = -0.20
+			ship_durability = 0.05
+			prestige = 0.05
+		}
+
+		#what effects happen when this tier is achieved
+		on_upgraded = {
+			add_base_production = 3
+			remove_shipyards_in_province = { PROVINCE = 952 }
+			remove_shipyards_in_province = { PROVINCE = 2550 }
+			remove_shipyards_in_province = { PROVINCE = 953 }
+			remove_shipyards_in_province = { PROVINCE = 2554 }
+			remove_shipyards_in_province = { PROVINCE = 957 }
+			custom_tooltip = nhs_area_can_no_longer_build_shipyard_tt
 		}
 	}
 }
