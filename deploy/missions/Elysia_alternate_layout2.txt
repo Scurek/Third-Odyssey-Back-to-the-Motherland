@@ -131,19 +131,34 @@ nhs_administrative_missions = {
 			}
 		}
 	}
-	nhs_build_temples = {
-		icon = mission_early_game_buildings
+	# nhs_build_temples = {
+	# 	icon = mission_early_game_buildings
+	# 	position = 2
+	# 	required_missions = { nhs_high_income_mission }
+	# 	trigger = {
+	# 		temple = 5
+	# 		workshop = 5
+	# 	}
+	# 	effect = {
+	# 		add_adm_power = 50
+	# 		add_country_modifier = {
+	# 			name = "strong_treasury"
+	# 			duration = 9125
+	# 		}
+	# 	}
+	# }
+	nhs_aqueducts_mission = {
+		icon = nhs_aqueduct_construction
 		position = 2
 		required_missions = { nhs_high_income_mission }
 		trigger = {
-			temple = 5
-			workshop = 5
+			owns = 953
 		}
 		effect = {
 			add_adm_power = 50
 			add_country_modifier = {
-				name = "strong_treasury"
-				duration = 9125
+				name = "nhs2_colonial_boom"
+				duration = 7300
 			}
 		}
 	}
@@ -159,157 +174,45 @@ nhs_administrative_missions = {
 			# }
 		# }
 	# }
-	nhs_wonders_of_elysium = {
-		icon = mission_conquer_alexandria
-		#icon = nhs_elysian_silk_with_secret2
+	nhs_expansion_of_capital_mission = {
+		required_missions = {
+			#nhs_settling_mission
+			nhs_aqueducts_mission
+		}
+		#icon = mission_rb_college_of_justice
+		icon = mission_early_game_buildings
 		position = 3
-		required_missions = { nhs_build_temples }
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = nhs_owns_core_elysia_tt
-				chesapeake_area = {
-					type = all
-					OR = {
-						AND = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
-						owner = {
-							is_subject_of = ROOT
-						}
-					}
-				}
-			}
 			if = {
 				limit = {
-					has_country_flag = nhs_new_flight_taken_venetians
-				}
-				any_owned_province = {
 					OR = {
-						has_province_modifier = nhs_gilded_keep_tm
-						has_great_project = {
-							type = nhs_cothon
-							tier = 1
-						}
-						has_province_modifier = nhs_seagate_guardians_tm
-						has_great_project = {
-							type = nhs_hippodrome
-							tier = 1
-						}
-						has_great_project = {
-							type = nhs_alexandrian_library
-							tier = 1
-						}
-						has_great_project = {
-							type = nhs_elysian_arsenal
-							tier = 1
+						has_country_flag = nhs_completed_nhs_expansion_of_capital_mission
+						953 = {
+							has_province_modifier = nhs2_capital_emigration
 						}
 					}
 				}
-			}
-			else = {
-				any_owned_province = {
-					OR = {
-						has_province_modifier = nhs_gilded_keep_tm
-						has_great_project = {
-							type = nhs_cothon
-							tier = 1
-						}
-						has_province_modifier = nhs_seagate_guardians_tm
-						has_great_project = {
-							type = nhs_hippodrome
-							tier = 1
-						}
-						has_great_project = {
-							type = nhs_alexandrian_library
-							tier = 1
-						}
-					}
+				adm_tech = 8
+				OR = {
+					adm = 4
+					advisor = statesman
+					advisor = fortification_expert
 				}
 			}
 		}
 		effect = {
-			set_country_flag = nhs_completed_wonders_of_elysium
-			custom_tooltip = nhs_wineries_of_odessos_tt
-			2550 = {
-				change_trade_goods = wine
-			}
-			custom_tooltip = nhs_new_line_tt
-			custom_tooltip = nhs_iron_in_alouion_tt
-			952 = {
-				change_trade_goods = iron
-			}
-			custom_tooltip = nhs_new_line_tt
-			custom_tooltip = nhs_ivos_shipyards_tt
-			950 = {
-				change_trade_goods = naval_supplies
-				if = {
-					limit = {
-						OR = {
-							# has_province_modifier = nhs_carthaginian_design_harbour_tm
-							has_great_project = {
-								type = nhs_cothon
-								tier = 1
-							}
-							has_great_project = {
-								type = nhs_elysian_arsenal
-								tier = 1
-							}
-						}
-					}
-					tooltip = {
-						add_province_modifier = {
-							name = nhs2_ivos_naval_supplies_boost
-							duration = -1
-						}
-					}
-				}
-				else_if = {
-					limit = {
-						ROOT = {
-							has_country_flag = nhs_new_flight_taken_venetians
-						}
-					}
-					custom_tooltip = nhs_naval_supplies_boost_with_harbour_ven_tt
-				}
-				else = {
-					custom_tooltip = nhs_naval_supplies_boost_with_harbour_tt
-				}
-				hidden_effect = {
-					add_province_triggered_modifier = nhs2_ivos_naval_supplies_boost_tm
-				}
-			}
-			custom_tooltip = nhs_new_line_tt
-			if = {
-				limit = {
-					2554 = {
-						has_great_project = {
-							type = nhs_alexandrian_library
-							tier = 1
-						}
-					}
-				}
-				custom_tooltip = nhs_paper_in_nea_alexandria_tt
-				2554 = {
-					change_trade_goods = paper
-				}
-				custom_tooltip = nhs_new_line_tt
-			}
-			custom_tooltip = nhs_native_dies_in_methenai_tt
-			957 = {
-				change_trade_goods = dyes
-			}
-			custom_tooltip = nhs_new_line_tt
-			add_country_modifier = {
-				name = "building_spree"
-				duration = 9125
+			set_country_flag = nhs_completed_nhs_expansion_of_capital_mission
+			953 = {
+				remove_province_modifier = nhs2_capital_emigration
 			}
 		}
 	}
+
 	nhs_build_manufactories = {
 		icon = mission_have_manufactories
 		position = 4
-		required_missions = { nhs_wonders_of_elysium }
+		#required_missions = { nhs_wonders_of_elysium }
+		required_missions = { nhs_expansion_of_capital_mission }
 		trigger = {
 			calc_true_if = {
 				all_owned_province = {
@@ -713,27 +616,178 @@ nhs_right_start = {
 		}
 	}
 	
-	nhs_establish_census_system_mission = {
-		required_missions = {
-			nhs_settling_mission
-		}
-		icon = mission_rb_college_of_justice
+	# nhs_establish_census_system_mission = {
+	# 	required_missions = {
+	# 		nhs_settling_mission
+	# 	}
+	# 	icon = mission_rb_college_of_justice
+	# 	position = 3
+	# 	trigger = {
+	# 		adm_tech = 10
+	# 		OR = {
+	# 			adm = 4
+	# 			advisor = statesman
+	# 		}
+	# 	}
+	# 	effect = {
+	# 		add_adm_power = -50
+	# 		add_country_modifier = {
+	# 			name = "nhs_census_system"
+	# 			duration = -1
+	# 		}
+	# 	}
+	# }
+
+	nhs_wonders_of_elysium = {
+		#icon = mission_conquer_alexandria
+		icon = africa_proconsulare
+		#icon = nhs_elysian_silk_with_secret2
 		position = 3
+		# required_missions = { nhs_build_temples }
+		required_missions = { nhs_settling_mission }
 		trigger = {
-			adm_tech = 10
-			OR = {
-				adm = 4
-				advisor = statesman
+			custom_trigger_tooltip = {
+				tooltip = nhs_owns_core_elysia_tt
+				chesapeake_area = {
+					type = all
+					OR = {
+						AND = {
+							owned_by = ROOT
+							is_core = ROOT
+						}
+						owner = {
+							is_subject_of = ROOT
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_country_flag = nhs_new_flight_taken_venetians
+				}
+				any_owned_province = {
+					OR = {
+						has_province_modifier = nhs_gilded_keep_tm
+						has_great_project = {
+							type = nhs_cothon
+							tier = 1
+						}
+						has_province_modifier = nhs_seagate_guardians_tm
+						has_great_project = {
+							type = nhs_hippodrome
+							tier = 1
+						}
+						has_great_project = {
+							type = nhs_alexandrian_library
+							tier = 1
+						}
+						has_great_project = {
+							type = nhs_elysian_arsenal
+							tier = 1
+						}
+					}
+				}
+			}
+			else = {
+				any_owned_province = {
+					OR = {
+						has_province_modifier = nhs_gilded_keep_tm
+						has_great_project = {
+							type = nhs_cothon
+							tier = 1
+						}
+						has_province_modifier = nhs_seagate_guardians_tm
+						has_great_project = {
+							type = nhs_hippodrome
+							tier = 1
+						}
+						has_great_project = {
+							type = nhs_alexandrian_library
+							tier = 1
+						}
+					}
+				}
 			}
 		}
 		effect = {
-			add_adm_power = -50
+			set_country_flag = nhs_completed_wonders_of_elysium
+			custom_tooltip = nhs_wineries_of_odessos_tt
+			2550 = {
+				change_trade_goods = wine
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_iron_in_alouion_tt
+			952 = {
+				change_trade_goods = iron
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_ivos_shipyards_tt
+			950 = {
+				change_trade_goods = naval_supplies
+				if = {
+					limit = {
+						OR = {
+							# has_province_modifier = nhs_carthaginian_design_harbour_tm
+							has_great_project = {
+								type = nhs_cothon
+								tier = 1
+							}
+							has_great_project = {
+								type = nhs_elysian_arsenal
+								tier = 1
+							}
+						}
+					}
+					tooltip = {
+						add_province_modifier = {
+							name = nhs2_ivos_naval_supplies_boost
+							duration = -1
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							has_country_flag = nhs_new_flight_taken_venetians
+						}
+					}
+					custom_tooltip = nhs_naval_supplies_boost_with_harbour_ven_tt
+				}
+				else = {
+					custom_tooltip = nhs_naval_supplies_boost_with_harbour_tt
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs2_ivos_naval_supplies_boost_tm
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					2554 = {
+						has_great_project = {
+							type = nhs_alexandrian_library
+							tier = 1
+						}
+					}
+				}
+				custom_tooltip = nhs_paper_in_nea_alexandria_tt
+				2554 = {
+					change_trade_goods = paper
+				}
+				custom_tooltip = nhs_new_line_tt
+			}
+			custom_tooltip = nhs_native_dies_in_methenai_tt
+			957 = {
+				change_trade_goods = dyes
+			}
+			custom_tooltip = nhs_new_line_tt
 			add_country_modifier = {
-				name = "nhs_census_system"
-				duration = -1
+				name = "building_spree"
+				duration = 9125
 			}
 		}
 	}
+
 }
 
 nhs_right_start_silk_with_secret = {
@@ -2492,7 +2546,8 @@ nhs_left_end = {
 		required_missions = {
 			nhs_back_to_the_motherland
 		}
-		icon = mission_conquer_50_development
+		#icon = mission_conquer_50_development
+		icon = take_constantinople
 		position = 6
 		provinces_to_highlight = {
 			#OR = {
@@ -3116,7 +3171,7 @@ nhs_left_end = {
 		required_missions = {
 			nhs_development_of_the_true_homeland
 		}
-		icon = mission_early_game_buildings
+		icon = mission_early_game_buildings # take_constantinople
 		position = 10
 		trigger = {
 			owns = 953
@@ -4363,7 +4418,7 @@ nhs_right_end = {
 		required_missions = {
 			nhs_outward_focus
 		}
-		icon = mission_trade_company_region_abroad
+		icon = mission_the_triangle_trade # mission_trade_company_region_abroad
 		position = 9
 		#any_province = {
 		#	owned_by = ROOT
@@ -4778,7 +4833,8 @@ nhs_right_end = {
 			nhs_at_every_continent
 		}
 		#icon = mission_establish_high_seas_navy
-		icon = mission_rb_grow_the_channel
+		#icon = mission_rb_grow_the_channel
+		icon = a.e.i.o.u.
 		position = 11
 		provinces_to_highlight = {
 			province_id = 835
