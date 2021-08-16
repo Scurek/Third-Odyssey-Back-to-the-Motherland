@@ -1,136 +1,328 @@
-nhs_military_missions = { #Series name is displayed over the slot?
-	slot = 2 #ie, second upper left column
+nhs_left_mid_start = { #Series name is displayed over the slot?
+	slot = 1 #ie, second upper left column
 	generic = no #if a mission without generic = yes wants this slot then it overrides this.
-	ai = no #Can exist under the series itself or within individual missions.
+	ai = yes #Can exist under the series itself or within individual missions.
+	has_country_shield = yes
 	potential = {
 		nhs_is_elysia_not_seen = yes
 	} #These are triggers for the entire series
 	
-	#missions
-	#1st tier: (they appear in the order scripted here in the interface, all missions within one "series" has an arrow going down to the next one scripted)
-	nhs_build_army_mission = {
-		icon = mission_build_up_to_force_limit
+	take_powhatan = {
+		icon = nhs_mission_pf_soldier
+		completed_by = 1453.5.30
 		position = 1
-		required_missions = {  } #None
+		provinces_to_highlight = {
+			province_id = 952
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-			army_size = 10 #What you need to complete the mission, displayed for mission tooltip
+			#owns = 952
+			owns_or_non_sovereign_subject_of = 952
 		}
-		effect = { #This is what you get after you finished your mission.
-			add_country_modifier = {
-				name = "thriving_arms_industry"
-				duration = 9125 #25 years
-			}
-		}
-	}
-	#2nd tier: (second because it is the second mission to be listed)
-	nhs_expand_country_mission = {
-		icon = mission_conquer_50_development
-		required_missions = { nhs_build_army_mission }
-		position = 2
-		trigger = { grown_by_development = 100 }
 		effect = {
-			capital_scope = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-				area = {
-					limit = { owned_by = ROOT }
-					add_province_modifier = {
-						name = "growth_of_capital"
-						duration = 9125 #25 years
+			if = {
+				limit = {
+					NOT = {
+						952 = {
+							owner = {
+								is_subject_of = ROOT
+							}
+						}
 					}
+				}
+				952 = {
+					change_culture = ROOT
+					change_religion = ROOT
+				}
+			}
+			add_prestige = 5
+			add_adm_power = 50
+			if = {
+				limit = {
+					OR = {
+						has_global_flag = nhs_pow_dead_done
+						952 = {
+							owner = {
+								is_subject_of = ROOT
+							}
+						}
+					}
+				}
+				add_dip_power = 50
+			}
+			else = {
+				custom_tooltip = nhs_powhatan_mission_dip_or_mil
+				hidden_effect = {
+					add_mil_power = 50
 				}
 			}
 		}
 	}
-	#3d Tier: (not actually scripted as third, it's third as it is the 3rd one in this mission series)
-	nhs_conquer_states = {
-		icon = mission_cannons_firing
-		required_missions = { nhs_expand_country_mission }
-		position = 3
-		trigger = { grown_by_states = 5 }
-		effect = {
-			add_country_modifier = {
-				name = "expansionist_country"
-				duration = 9125 #25 years
+
+	nhs_diplomacy_mission = {
+		# icon = trade_with_the_natives
+		icon = mississippi_company
+		required_missions = { 
+			nhs_build_army_mission 
+			take_powhatan
+		}
+		position = 2
+		trigger = {
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 12
+					custom_trigger_tooltip = {
+						tooltip = nhs_is_native_culture_tt
+						native_culture = yes
+					}
+				}
+				calc_true_if = {
+					all_known_country = {
+						technology_group = north_american
+						OR = {
+							is_subject_of = ROOT
+							AND = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 150
+								}
+							}
+						}
+					}
+					amount = 3
+				}
 			}
 		}
+		effect = {
+			custom_tooltip = nhs_unlocks_mercs_tt
+			clr_country_flag = nhs_locked_native_mercenaries
+			set_country_flag = nhs_completed_nhs_diplomacy_mission
+		}
 	}
-	
-	#4th
-	nhs_unite_home_region = {
-		icon = mission_unite_home_region
-		required_missions = { nhs_conquer_states }
+
+	nhs_border_fortifications_mission = {
+		icon = protect_against_the_turks
+		required_missions = { nhs_diplomacy_mission }
+		position = 3
+		provinces_to_highlight = {
+			province_group = elysian_fortification_pgroup
+			NOT = {
+				AND = {
+					country_or_subject_or_ally_holds = { TAG = ROOT }
+					OR = {
+						has_influencing_fort = yes	
+						any_neighbor_province = {
+							has_influencing_fort = yes
+							country_or_subject_or_ally_holds = { TAG = ROOT }
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			elysian_fortification_pgroup = {
+				type = all
+				country_or_subject_or_ally_holds = { TAG = ROOT }
+				OR = {
+					has_influencing_fort = yes	
+					any_neighbor_province = {
+						has_influencing_fort = yes
+						country_or_subject_or_ally_holds = { TAG = ROOT }
+					}
+				}
+			}
+			# custom_trigger_tooltip = {
+			# 	tooltip = nhs_has_border_fortifications_tt
+			# 	NOT = {
+			# 		elysian_fortification_pgroup = {
+			# 			NOT = {
+			# 				AND = {
+			# 					country_or_subject_or_ally_holds = { TAG = ROOT }
+			# 					OR = {
+			# 						has_influencing_fort = yes	
+			# 						any_neighbor_province = {
+			# 							has_influencing_fort = yes
+			# 							country_or_subject_or_ally_holds = { TAG = ROOT }
+			# 						}
+			# 					}
+			# 				}
+			# 			}
+			# 		}
+			# 	}
+			# }
+		}
+		effect = {
+			custom_tooltip = nhs_reduce_native_raids_tt
+			define_advisor = {
+				type = fortification_expert
+				skill = 3
+				cost_multiplier = 0.25
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				953 = {
+					add_prosperity = 100
+				}
+			}
+			set_country_flag = nhs_completed_nhs_border_fortifications_mission
+		}
+	}
+
+	nhs_unite_home_region_mission = {
+		icon = mission_colonize_the_caribbean
+		required_missions = { nhs_border_fortifications_mission }
 		position = 4
 		provinces_to_highlight = {
 			OR = {
-				region = northeast_america_region
-				region = southeast_america_region
+				AND = {
+					OR = {
+						region = northeast_america_region
+						region = southeast_america_region
+					}
+					NOT = { country_or_subject_or_ally_holds = { TAG = ROOT } }
+				}
+				AND = {
+					region = carribeans_region
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = {
+						ROOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								region = carribeans_region 
+								value = 5
+							}
+						}
+					}
+				}
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			northeast_america_region = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+				country_or_subject_or_ally_holds = { TAG = ROOT }
 			}
 			southeast_america_region = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+				country_or_subject_or_ally_holds = { TAG = ROOT }
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				region = carribeans_region 
+				value = 5
 			}
 		}
 		effect = {
-			add_dip_power = 50
-			add_adm_power = 50
-			add_mil_power = 50
-			add_country_modifier = {
-				name = "hegemonic_ambition"
-				duration = 9125 #25 years
-			}
+			set_country_flag = nhs_completed_nhs_unite_home_region_mission
 		}
 	}
-	nhs_imperial_ambition_mission = {
+
+	nhs_hegemony_mission = {
 		icon = mission_empire
 		position = 5
-		required_missions = { nhs_unite_home_region }
+		required_missions = { nhs_unite_home_region_mission }
 		trigger = {
 			nhs_is_elysia_late = yes
 			total_development = 1000
 		}
 		effect = {
-			add_prestige = 30
-			add_country_modifier = {
-				name = "imperial_ambition"
-				duration = 9125
-			}
+			add_prestige = 100
+			set_country_flag = nhs_completed_nhs_hegemony_mission
 		}
 	}
 }
 
-nhs_administrative_missions = {
-	slot = 4
+nhs_right_mid_start = {
+	slot = 5
 	generic = no #if a mission without generic = yes wants this slot then it overrides this.
-	ai = no #Can exist under the series itself or within individual missions.
-	
+	ai = yes #Can exist under the series itself or within individual missions.
+	has_country_shield = yes
 	potential = {
 		nhs_is_elysia_not_seen = yes
 	}
-	nhs_high_income_mission = {
-		icon = mission_high_income
+
+	control_the_elysian_homelands = {
+		completed_by = 1453.5.30
+		icon = nhs_mission_pf_map_table
 		position = 1
-		required_missions = {  } #None
-		trigger = { 
-			monthly_income = 10
-			NOT = { inflation = 0.1 }
-			NOT = { corruption = 0.1 }
+		provinces_to_highlight = {
+			area = chesapeake_area
+			NOT = { is_core = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			# chesapeake_area = {
+				# type = all
+				# country_or_non_sovereign_subject_holds = ROOT
+			# }
+			custom_trigger_tooltip = {
+				tooltip = nhs_owns_core_elysia_tt
+				chesapeake_area = {
+					type = all
+					is_city = yes
+					OR = {
+						AND = {
+							owned_by = ROOT
+							is_core = ROOT
+						}
+						owner = {
+							is_subject_of = ROOT
+						}
+					}
+				}
+			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "growing_economy"
-				duration = 9125 #25 years
+			add_adm_power = 50
+			add_prestige = 10
+			953 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs2_breakdown_of_society
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = nhs_replace_breakdown_with_cn2_tt
+				hidden_effect = {
+					remove_country_modifier = nhs2_breakdown_of_society
+					add_country_modifier = {
+						name = nhs2_colonial_needs_2
+						duration = 7300
+					}
+				}
+			}
+			# every_owned_province = {
+				# limit = {
+					# nhs_homelands_no_capital = yes
+				# }
+				# add_base_tax = 2
+				# add_base_production = 2
+				# add_base_manpower = 1
+				# set_province_flag = nhs_development_province1
+				# set_province_flag = nhs_development_province2
+				# set_province_flag = nhs_development_province3
+			# }
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					owns = 950
+					950 = { NOT = { has_province_modifier = nhs_toll_modifier_tm } }
+					NOT = { has_country_modifier = nhs_no_merchant_class }
+				}
+				country_event = { id = nhs_countryevents.2 }
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs_secrets_silk
+				}
+				country_event = { id = nhs2_countryevents.71 }
 			}
 		}
 	}
+	
 	# nhs_build_temples = {
 	# 	icon = mission_early_game_buildings
 	# 	position = 2
@@ -150,7 +342,10 @@ nhs_administrative_missions = {
 	nhs_aqueducts_mission = {
 		icon = nhs_aqueduct_construction
 		position = 2
-		required_missions = { nhs_high_income_mission }
+		required_missions = { 
+			nhs_farming_mission 
+			control_the_elysian_homelands
+		}
 		trigger = {
 			owns = 953
 		}
@@ -159,6 +354,11 @@ nhs_administrative_missions = {
 			add_country_modifier = {
 				name = "nhs2_colonial_boom"
 				duration = 7300
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_wineries_of_odessos_tt
+			2550 = {
+				change_trade_goods = wine
 			}
 		}
 	}
@@ -174,19 +374,21 @@ nhs_administrative_missions = {
 			# }
 		# }
 	# }
-	nhs_expansion_of_capital_mission = {
+
+	nhs_infrastructure_mission = {
 		required_missions = {
 			#nhs_settling_mission
 			nhs_aqueducts_mission
 		}
 		#icon = mission_rb_college_of_justice
-		icon = mission_early_game_buildings
+		# icon = mission_early_game_buildings
+		icon = brest_dockyards
 		position = 3
 		trigger = {
 			if = {
 				limit = {
 					OR = {
-						has_country_flag = nhs_completed_nhs_expansion_of_capital_mission
+						has_country_flag = nhs_completed_nhs_infrastructure_mission
 						953 = {
 							has_province_modifier = nhs2_capital_emigration
 						}
@@ -201,48 +403,175 @@ nhs_administrative_missions = {
 			}
 		}
 		effect = {
-			set_country_flag = nhs_completed_nhs_expansion_of_capital_mission
+			set_country_flag = nhs_completed_nhs_infrastructure_mission
 			953 = {
 				remove_province_modifier = nhs2_capital_emigration
+			}
+			custom_tooltip = nhs_new_line_tt
+			950 = {
+				add_permanent_province_modifier = {
+					name = nhs2_drain_ivos_swamps
+					duration = -1
+				}
 			}
 		}
 	}
 
-	nhs_build_manufactories = {
-		icon = mission_have_manufactories
+	nhs_wonders_of_elysium = {
+		#icon = mission_conquer_alexandria
+		icon = africa_proconsulare
+		#icon = nhs_elysian_silk_with_secret2
 		position = 4
-		#required_missions = { nhs_wonders_of_elysium }
-		required_missions = { nhs_expansion_of_capital_mission }
+		# required_missions = { nhs_build_temples }
+		# required_missions = { nhs_settling_mission }
+		required_missions = { nhs_infrastructure_mission }
 		trigger = {
-			calc_true_if = {
-				all_owned_province = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_owns_core_elysia_tt
+				chesapeake_area = {
+					type = all
 					OR = {
-						has_building = mills
-						has_building = farm_estate
-						has_building = tradecompany
-						has_building = plantations
-						has_building = textile
-						has_building = weapons
-						has_building = wharf
-						has_building = furnace
+						AND = {
+							owned_by = ROOT
+							is_core = ROOT
+						}
+						owner = {
+							is_subject_of = ROOT
+						}
 					}
 				}
-				amount = 20
+			}
+			if = {
+				limit = {
+					has_country_flag = nhs_new_flight_taken_venetians
+				}
+				any_owned_province = {
+					OR = {
+						has_province_modifier = nhs_gilded_keep_tm
+						has_great_project = {
+							type = nhs_cothon
+							tier = 1
+						}
+						has_province_modifier = nhs_seagate_guardians_tm
+						has_great_project = {
+							type = nhs_hippodrome
+							tier = 1
+						}
+						has_great_project = {
+							type = nhs_alexandrian_library
+							tier = 1
+						}
+						has_great_project = {
+							type = nhs_elysian_arsenal
+							tier = 1
+						}
+					}
+				}
+			}
+			else = {
+				any_owned_province = {
+					OR = {
+						has_province_modifier = nhs_gilded_keep_tm
+						has_great_project = {
+							type = nhs_cothon
+							tier = 1
+						}
+						has_province_modifier = nhs_seagate_guardians_tm
+						has_great_project = {
+							type = nhs_hippodrome
+							tier = 1
+						}
+						has_great_project = {
+							type = nhs_alexandrian_library
+							tier = 1
+						}
+					}
+				}
 			}
 		}
 		effect = {
+			set_country_flag = nhs_completed_wonders_of_elysium
+			custom_tooltip = nhs_200_splendor_each_era_tt
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_ivos_shipyards_tt
+			950 = {
+				change_trade_goods = naval_supplies
+				if = {
+					limit = {
+						OR = {
+							# has_province_modifier = nhs_carthaginian_design_harbour_tm
+							has_great_project = {
+								type = nhs_cothon
+								tier = 1
+							}
+							has_great_project = {
+								type = nhs_elysian_arsenal
+								tier = 1
+							}
+						}
+					}
+					tooltip = {
+						add_province_modifier = {
+							name = nhs2_ivos_naval_supplies_boost
+							duration = -1
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							has_country_flag = nhs_new_flight_taken_venetians
+						}
+					}
+					custom_tooltip = nhs_naval_supplies_boost_with_harbour_ven_tt
+				}
+				else = {
+					custom_tooltip = nhs_naval_supplies_boost_with_harbour_tt
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs2_ivos_naval_supplies_boost_tm
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					2554 = {
+						has_great_project = {
+							type = nhs_alexandrian_library
+							tier = 1
+						}
+					}
+				}
+				custom_tooltip = nhs_paper_in_nea_alexandria_tt
+				2554 = {
+					change_trade_goods = paper
+				}
+				custom_tooltip = nhs_new_line_tt
+			}
 			add_country_modifier = {
-				name = "proto_industrialization"
+				name = "building_spree"
 				duration = 9125
 			}
-			add_years_of_income = 1.5
 		}
 	}
+
+	# nhs_TODO_mission = {
+	# 	# icon = mission_have_manufactories
+	# 	position = 4
+	# 	#required_missions = { nhs_wonders_of_elysium }
+	# 	required_missions = { nhs_infrastructure_mission }
+	# 	trigger = {
+			
+	# 	}
+	# 	effect = {
+			
+	# 	}
+	# }
 	nhs_industrial_revolution_mission = {
 		#icon = mission_rb_build_furnaces
 		icon = mission_rb_prospect_for_coal
 		position = 5
-		required_missions = { nhs_build_manufactories }
+		required_missions = { nhs_wonders_of_elysium }
 		trigger = {
 			owns = 953
 			has_institution = enlightenment
@@ -385,65 +714,32 @@ nhs_administrative_missions = {
 }
 
 nhs_left_start = {
-	slot = 1 
+	slot = 2
 	generic = no
 	ai = yes
 	potential = {
 		nhs_is_elysia_not_seen = yes
 	}
 	has_country_shield = yes
-	
-	take_powhatan = {
-		icon = nhs_mission_pf_soldier
-		completed_by = 1453.5.30
+
+	nhs_build_army_mission = {
+		# icon = mission_build_up_to_force_limit
+		icon = the_italian_league
 		position = 1
-		provinces_to_highlight = {
-			province_id = 952
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+		required_missions = {  } #None
 		trigger = {
-			#owns = 952
-			owns_or_non_sovereign_subject_of = 952
+			army_size = 10 #What you need to complete the mission, displayed for mission tooltip
 		}
-		effect = {
-			if = {
-				limit = {
-					NOT = {
-						952 = {
-							owner = {
-								is_subject_of = ROOT
-							}
-						}
-					}
-				}
-				952 = {
-					change_culture = ROOT
-					change_religion = ROOT
-				}
+		effect = { #This is what you get after you finished your mission.
+			add_country_modifier = {
+				name = "thriving_arms_industry"
+				duration = 9125 #25 years
 			}
-			add_prestige = 5
-			add_adm_power = 50
-			if = {
-				limit = {
-					OR = {
-						has_global_flag = nhs_pow_dead_done
-						952 = {
-							owner = {
-								is_subject_of = ROOT
-							}
-						}
-					}
-				}
-				add_dip_power = 50
-			}
-			else = {
-				custom_tooltip = nhs_powhatan_mission_dip_or_mil
-				hidden_effect = {
-					add_mil_power = 50
-				}
-			}
+			set_country_flag = nhs_completed_nhs_build_army_mission
 		}
 	}
+	
+	
 	
 	nhs_form_colonial_institution_mission = {
 		required_missions = {
@@ -498,9 +794,10 @@ nhs_left_start = {
 	nhs_form_colonial_institution_2_mission = {
 		required_missions = {
 			nhs_form_colonial_institution_mission
+			nhs_unite_home_region_mission
 		}
 		icon = mission_rb_scottish_north_sea_trade
-		position = 4
+		position = 5
 		trigger = {
 			has_institution = new_world_i
 			OR = {
@@ -526,93 +823,33 @@ nhs_left_start = {
 }
 
 nhs_right_start = {
-	slot = 5
+	slot = 4
 	generic = no
 	ai = yes
 	potential = {
 		nhs_is_elysia_not_seen = yes
 	}
 	has_country_shield = yes
-	
-	control_the_elysian_homelands = {
-		completed_by = 1453.5.30
-		icon = nhs_mission_pf_map_table
+
+	nhs_farming_mission = {
+		# icon = mission_high_income
+		icon = prosperity_for_all
 		position = 1
-		provinces_to_highlight = {
-			area = chesapeake_area
-			NOT = { is_core = ROOT }
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+		required_missions = {  } #None
 		trigger = {
-			# chesapeake_area = {
-				# type = all
-				# country_or_non_sovereign_subject_holds = ROOT
-			# }
-			custom_trigger_tooltip = {
-				tooltip = nhs_owns_core_elysia_tt
-				chesapeake_area = {
-					type = all
-					is_city = yes
-					OR = {
-						AND = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
-						owner = {
-							is_subject_of = ROOT
-						}
-					}
-				}
+			num_of_cities = 2
+			OR = {
+				NOT = { has_country_modifier = nhs2_colonial_needs_1 }
+				total_development = 40
 			}
 		}
 		effect = {
-			add_adm_power = 50
-			add_prestige = 10
 			953 = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
+				change_trade_goods = grain
 			}
-			if = {
-				limit = {
-					has_country_modifier = nhs2_breakdown_of_society
-				}
-				custom_tooltip = nhs_new_line_tt
-				custom_tooltip = nhs_replace_breakdown_with_cn2_tt
-				hidden_effect = {
-					remove_country_modifier = nhs2_breakdown_of_society
-					add_country_modifier = {
-						name = nhs2_colonial_needs_2
-						duration = 7300
-					}
-				}
-			}
-			# every_owned_province = {
-				# limit = {
-					# nhs_homelands_no_capital = yes
-				# }
-				# add_base_tax = 2
-				# add_base_production = 2
-				# add_base_manpower = 1
-				# set_province_flag = nhs_development_province1
-				# set_province_flag = nhs_development_province2
-				# set_province_flag = nhs_development_province3
-			# }
-			custom_tooltip = nhs_new_line_tt
-			if = {
-				limit = {
-					owns = 950
-					950 = { NOT = { has_province_modifier = nhs_toll_modifier_tm } }
-					NOT = { has_country_modifier = nhs_no_merchant_class }
-				}
-				country_event = { id = nhs_countryevents.2 }
-			}
-			if = {
-				limit = {
-					has_country_modifier = nhs_secrets_silk
-				}
-				country_event = { id = nhs2_countryevents.71 }
-			}
+			custom_tooltip = nhs_enable_grain_and_tobacco_tt
+			clr_country_flag = nhs_no_new_world_crops
+			set_country_flag = nhs_completed_nhs_farming_mission
 		}
 	}
 	
@@ -638,160 +875,37 @@ nhs_right_start = {
 	# 	}
 	# }
 
-	nhs_wonders_of_elysium = {
-		#icon = mission_conquer_alexandria
-		icon = africa_proconsulare
-		#icon = nhs_elysian_silk_with_secret2
+	nhs_high_income_mission = {
+		icon = mission_high_income
 		position = 3
-		# required_missions = { nhs_build_temples }
 		required_missions = { nhs_settling_mission }
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = nhs_owns_core_elysia_tt
-				chesapeake_area = {
-					type = all
-					OR = {
-						AND = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
-						owner = {
-							is_subject_of = ROOT
-						}
-					}
-				}
-			}
-			if = {
-				limit = {
-					has_country_flag = nhs_new_flight_taken_venetians
-				}
-				any_owned_province = {
-					OR = {
-						has_province_modifier = nhs_gilded_keep_tm
-						has_great_project = {
-							type = nhs_cothon
-							tier = 1
-						}
-						has_province_modifier = nhs_seagate_guardians_tm
-						has_great_project = {
-							type = nhs_hippodrome
-							tier = 1
-						}
-						has_great_project = {
-							type = nhs_alexandrian_library
-							tier = 1
-						}
-						has_great_project = {
-							type = nhs_elysian_arsenal
-							tier = 1
-						}
-					}
-				}
-			}
-			else = {
-				any_owned_province = {
-					OR = {
-						has_province_modifier = nhs_gilded_keep_tm
-						has_great_project = {
-							type = nhs_cothon
-							tier = 1
-						}
-						has_province_modifier = nhs_seagate_guardians_tm
-						has_great_project = {
-							type = nhs_hippodrome
-							tier = 1
-						}
-						has_great_project = {
-							type = nhs_alexandrian_library
-							tier = 1
-						}
-					}
-				}
-			}
+		trigger = { 
+			monthly_income = 50
+			NOT = { inflation = 1 }
+			NOT = { corruption = 0.1 }
 		}
 		effect = {
-			set_country_flag = nhs_completed_wonders_of_elysium
-			custom_tooltip = nhs_wineries_of_odessos_tt
-			2550 = {
-				change_trade_goods = wine
+			add_inflation = -1
+			add_country_modifier = {
+				name = "growing_economy"
+				duration = 9125 #25 years
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_native_dies_in_methenai_tt
+			957 = {
+				change_trade_goods = dyes
 			}
 			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = nhs_iron_in_alouion_tt
 			952 = {
 				change_trade_goods = iron
 			}
-			custom_tooltip = nhs_new_line_tt
-			custom_tooltip = nhs_ivos_shipyards_tt
-			950 = {
-				change_trade_goods = naval_supplies
-				if = {
-					limit = {
-						OR = {
-							# has_province_modifier = nhs_carthaginian_design_harbour_tm
-							has_great_project = {
-								type = nhs_cothon
-								tier = 1
-							}
-							has_great_project = {
-								type = nhs_elysian_arsenal
-								tier = 1
-							}
-						}
-					}
-					tooltip = {
-						add_province_modifier = {
-							name = nhs2_ivos_naval_supplies_boost
-							duration = -1
-						}
-					}
-				}
-				else_if = {
-					limit = {
-						ROOT = {
-							has_country_flag = nhs_new_flight_taken_venetians
-						}
-					}
-					custom_tooltip = nhs_naval_supplies_boost_with_harbour_ven_tt
-				}
-				else = {
-					custom_tooltip = nhs_naval_supplies_boost_with_harbour_tt
-				}
-				hidden_effect = {
-					add_province_triggered_modifier = nhs2_ivos_naval_supplies_boost_tm
-				}
-			}
-			custom_tooltip = nhs_new_line_tt
-			if = {
-				limit = {
-					2554 = {
-						has_great_project = {
-							type = nhs_alexandrian_library
-							tier = 1
-						}
-					}
-				}
-				custom_tooltip = nhs_paper_in_nea_alexandria_tt
-				2554 = {
-					change_trade_goods = paper
-				}
-				custom_tooltip = nhs_new_line_tt
-			}
-			custom_tooltip = nhs_native_dies_in_methenai_tt
-			957 = {
-				change_trade_goods = dyes
-			}
-			custom_tooltip = nhs_new_line_tt
-			add_country_modifier = {
-				name = "building_spree"
-				duration = 9125
-			}
 		}
 	}
-
 }
 
 nhs_right_start_silk_with_secret = {
-	slot = 5
+	slot = 4
 	generic = no
 	ai = yes
 	has_country_shield = yes
@@ -804,8 +918,11 @@ nhs_right_start_silk_with_secret = {
 	}
 	nhs_elysian_silk_with_secret = {
 		icon = nhs_elysian_silk_with_secret
-		position = 4
-		required_missions = { nhs_wonders_of_elysium }
+		position = 5
+		required_missions = { 
+			nhs_wonders_of_elysium
+			nhs_high_income_mission
+		}
 		provinces_to_highlight = {
 			OR = {
 				AND = {
@@ -954,7 +1071,7 @@ nhs_right_start_silk_with_secret = {
 }
 
 nhs_right_start_silk_without_secret = {
-	slot = 5
+	slot = 4
 	generic = no
 	ai = yes
 	has_country_shield = yes
@@ -967,8 +1084,11 @@ nhs_right_start_silk_without_secret = {
 	}
 	nhs_elysian_silk_without_secret = {
 		icon = nhs_elysian_silk_with_secret2
-		position = 4
-		required_missions = { nhs_wonders_of_elysium }
+		position = 5
+		required_missions = { 
+			nhs_wonders_of_elysium
+			nhs_high_income_mission
+		}
 		provinces_to_highlight = {
 			OR = {
 				area = thrace_area
@@ -1034,7 +1154,8 @@ nhs_centre_start = {
 	has_country_shield = yes
 	
 	nhs_reestablish_merchant_class_mission = {
-		icon = mission_dominate_home_trade_node
+		# icon = mission_dominate_home_trade_node
+		icon = trade_with_the_natives
 		completed_by = 1453.5.30
 		position = 1
 		trigger = {
@@ -1125,8 +1246,11 @@ nhs_centre_start = {
 	nhs_settling_mission = {
 		required_missions = {
 			nhs_reestablish_merchant_class_mission
-			take_powhatan
-			control_the_elysian_homelands
+			#take_powhatan
+			#control_the_elysian_homelands
+			# nhs_high_income_mission
+			nhs_build_army_mission
+			nhs_farming_mission
 		}
 		icon = Eflag
 		position = 2
@@ -1199,6 +1323,13 @@ nhs_centre_start = {
 						nhs_set_center_of_trade_2 = yes
 					}
 				}
+				northern_greece_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { province_id = 143 }
+					}
+					add_permanent_claim = GRE
+				}
 				#tooltip = {
 				#	remove_country_modifier = nhs_handicap_settlers	
 				#}
@@ -1254,13 +1385,6 @@ nhs_centre_start = {
 				#tooltip = {
 				#	remove_country_modifier = nhs_handicap_settlers	
 				#}
-			}
-			custom_tooltip = nhs_new_line_tt
-			950 = {
-				add_permanent_province_modifier = {
-					name = nhs2_drain_ivos_swamps
-					duration = -1
-				}
 			}
 		}
 	}
@@ -3085,6 +3209,7 @@ nhs_left_end = {
 			nhs_inward_focus
 		}
 		icon = mission_colonial
+		# icon = prosperity_for_all
 		position = 9
 		trigger = {
 			owns = 953
