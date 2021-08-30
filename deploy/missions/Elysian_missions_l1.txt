@@ -880,12 +880,39 @@ nhs_right_start = {
 		position = 3
 		required_missions = { nhs_settling_mission }
 		trigger = { 
-			monthly_income = 50
-			NOT = { inflation = 1 }
+			# monthly_income = 50
+			is_bankrupt = no
+			NOT = { inflation = 2 }
 			NOT = { corruption = 0.1 }
+			OR = {
+				has_idea = national_bank
+				NOT = { has_estate = estate_burghers }
+				NOT = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 30
+					}
+				}
+				AND = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_burghers
+							influence = 60
+						}
+					}
+				}
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 90
+				}
+			}
 		}
 		effect = {
-			add_inflation = -1
+			add_inflation = -2
 			add_country_modifier = {
 				name = "growing_economy"
 				duration = 9125 #25 years
@@ -1278,114 +1305,27 @@ nhs_centre_start = {
 			if = {
 				limit = {
 					has_country_modifier = nhs_handicap_settlers
-					NOT = { has_country_flag = nhs_settled_mission }
+					has_country_flag = nhs_settled_mission
 				}
-				#country_event = { id = nhs_countryevents.7 }
-				add_prestige = 10
-				remove_country_modifier = newnhs_chose_supplies
-				if = {
-					limit = {
-						has_country_flag = nhs_start_with_two
-					}
-					custom_tooltip = nhs_settler_heritage_0_2_tt
-					hidden_effect = {
-						remove_country_modifier = nhs_handicap_settlers
-						add_country_modifier = {
-							name = nhs_settler_heritage_two
-							duration = -1
-						}
-					}
-				}
-				else = {
-					custom_tooltip = nhs_settler_heritage_0_1_tt
-					#add_country_modifier = {
-					#	name = nhs_settler_heritage
-					#	duration = 21900
-					#}
-					hidden_effect = {
-						remove_country_modifier = nhs_handicap_settlers
-						add_country_modifier = {
-							name = nhs_settler_heritage
-							duration = -1
-						}
-					}
-				}
-				if = {
-					limit = {
-						owns = 953
-					}
-					953 = {
-						nhs_set_center_of_trade_2 = yes
-					}
-				}
-				else = {
-					capital_scope = {
-						nhs_set_center_of_trade_2 = yes
-					}
-				}
-				northern_greece_area = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { province_id = 143 }
-					}
-					add_permanent_claim = GRE
-				}
-				#tooltip = {
-				#	remove_country_modifier = nhs_handicap_settlers	
-				#}
+				custom_tooltip = nhs_mission_completed_via_event_tt
 			}
 			else_if = {
 				limit = {
-					has_country_modifier = nhs2_new_handicap_settlers
+					has_country_modifier = nhs_handicap_settlers
 					NOT = { has_country_flag = nhs_settled_mission }
 				}
 				#country_event = { id = nhs_countryevents.7 }
-				add_prestige = 10
-				remove_country_modifier = newnhs_chose_supplies
-				if = {
-					limit = {
-						has_country_flag = nhs_start_with_two
-					}
-					custom_tooltip = nhs_settler_heritage_0_2_tt
-					hidden_effect = {
-						remove_country_modifier = nhs2_new_handicap_settlers
-						add_country_modifier = {
-							name = nhs_settler_heritage_two
-							duration = -1
-						}
-					}
-				}
-				else = {
-					custom_tooltip = nhs_settler_heritage_0_1_tt
-					#add_country_modifier = {
-					#	name = nhs_settler_heritage
-					#	duration = 21900
-					#}
-					hidden_effect = {
-						remove_country_modifier = nhs2_new_handicap_settlers
-						add_country_modifier = {
-							name = nhs_settler_heritage
-							duration = -1
-						}
-					}
-				}
-				if = {
-					limit = {
-						owns = 953
-					}
-					953 = {
-						nhs_set_center_of_trade_2 = yes
-					}
-				}
-				else = {
-					capital_scope = {
-						nhs_set_center_of_trade_2 = yes
-					}
-				}
+				nhs_settled_mission_effect = yes
 				#tooltip = {
 				#	remove_country_modifier = nhs_handicap_settlers	
 				#}
 			}
+			else = {
+				tooltip = {
+					nhs_settled_mission_effect = yes
+				}
+			}
+			set_country_flag = nhs_settled_mission
 		}
 	}
 	
