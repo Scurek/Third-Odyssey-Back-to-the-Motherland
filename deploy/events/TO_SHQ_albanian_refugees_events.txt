@@ -1772,3 +1772,239 @@ country_event = {
 		}
 	}
 }
+
+# Integrate Shqiperi - triggered by flag set by parliament issue (-> shqipproi; is in Elysian group)
+country_event = {
+	id = nhs2_albania.9
+	title = nhs2_albania.9.t
+	desc = nhs2_albania.9.d
+	picture = SENATE_eventPicture
+	
+	trigger = {
+		has_country_flag = nhs_senate_integrate_shqiperi
+		NOT = { has_global_flag = nhs_shqiperi_into_elysian }
+		NOT = { has_country_flag = nhs_rev }
+		OR = {
+			AND = {
+				SHQ = { vassal_of = ROOT }
+				NOT = {
+					any_province = {
+						has_province_modifier = nhs2_albanian_majority
+						NOT = {
+							owner = {
+								OR = {
+									tag = ROOT
+									tag = SHQ
+								}
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				NOT = { exists = SHQ }
+				any_owned_province = {
+					has_province_modifier = nhs2_albanian_majority
+					culture = shqiperi
+				}
+				NOT = {
+					any_province = {
+						has_province_modifier = nhs2_albanian_majority
+						NOT = {
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+		modifier = {
+			factor = 2.0
+			has_country_flag = nhs_hadevent_elysIdeaEvents25
+		}
+	}
+	
+	immediate = {
+		set_country_flag = nhs_hadevent_elysIdeaEvents25
+		set_country_flag = nhs_rev
+	}
+	
+	
+	option = {	# Ai only because it's dumb
+		name = "nhs2_albania.9.a"
+		trigger = { ai = yes }
+		if = {
+			limit = {
+				SHQ = { vassal_of = ROOT }
+			}
+			nhs_squips_integration_exist = yes
+		}
+		if = {
+			limit = {
+				NOT = { exists = SHQ }
+			}
+			nhs_squips_integration_not_exists = yes
+		}
+	}
+	
+	option = {	# Currently not of interest
+		name = "nhs2_albania.9.a"
+		trigger = { ai = no }
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_elysIdeaEvents25_optionA }
+			}
+			add_legitimacy = 5
+			set_country_flag = nhs_elysIdeaEvents25_optionA
+		}
+	}
+	option = {	# Integrate (SHQ vassal)
+		name = "nhs2_albania.9.b"
+		trigger = {
+			SHQ = { vassal_of = ROOT }
+			ai = no
+		}
+		add_prestige = -5
+		add_years_of_income = -0.3
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = nhs_ingrate40
+					has_country_flag = nhs_ingrate60
+					has_country_flag = nhs_ingrate50
+				}
+			}
+			nhs_squips_integration_exist = yes
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_ingrate30
+				NOT = { has_country_flag = nhs_ingrate40 }
+			}
+			set_country_flag = nhs_ingrate40
+			random = {
+				chance = 90
+				nhs_squips_integration_exist = yes
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_ingrate20
+				NOT = { has_country_flag = nhs_ingrate30 }
+			}
+			set_country_flag = nhs_ingrate30
+			random = {
+				chance = 80
+				nhs_squips_integration_exist = yes
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_ingrate10
+				NOT = { has_country_flag = nhs_ingrate20 }
+			}
+			set_country_flag = nhs_ingrate20
+			random = {
+				chance = 70
+				nhs_squips_integration_exist = yes
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_ingrate10 }
+			}
+			set_country_flag = nhs_ingrate10
+			random = {
+				chance = 60
+				nhs_squips_integration_exist = yes
+			}
+		}
+	}
+	option = {	# Integrate (SHQ does not exist)
+		name = "nhs2_albania.9.c"
+		trigger = {
+			NOT = { exists = SHQ }
+			ai = no
+		}
+		add_prestige = -5
+		add_years_of_income = -0.3
+		if = {
+			limit = {
+				has_country_flag = nhs_ingrate60
+			}
+			nhs_squips_integration_not_exists = yes
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_ingrate50
+				NOT = { has_country_flag = nhs_ingrate60 }
+			}
+			set_country_flag = nhs_ingrate60
+			random = {
+				chance = 90
+				nhs_squips_integration_not_exists = yes
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_ingrate40
+				NOT = { has_country_flag = nhs_ingrate50 }
+			}
+			set_country_flag = nhs_ingrate50
+			random = {
+				chance = 80
+				nhs_squips_integration_not_exists = yes
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_ingrate30
+				NOT = { has_country_flag = nhs_ingrate40 }
+			}
+			set_country_flag = nhs_ingrate40
+			random = {
+				chance = 70
+				nhs_squips_integration_not_exists = yes
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_ingrate20
+				NOT = { has_country_flag = nhs_ingrate30 }
+			}
+			set_country_flag = nhs_ingrate30
+			random = {
+				chance = 60
+				nhs_squips_integration_not_exists = yes
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_ingrate10
+				NOT = { has_country_flag = nhs_ingrate20 }
+			}
+			set_country_flag = nhs_ingrate20
+			random = {
+				chance = 50
+				nhs_squips_integration_not_exists = yes
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_ingrate10 }
+			}
+			set_country_flag = nhs_ingrate10
+			random = {
+				chance = 40
+				nhs_squips_integration_not_exists = yes
+			}
+		}
+	}
+	
+	after = {
+		clr_country_flag = nhs_rev
+	}
+}
