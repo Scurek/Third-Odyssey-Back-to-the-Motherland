@@ -2231,3 +2231,106 @@ country_event = {
 		}
 	}
 }
+
+# Lose the modifier nhs_handicap_settlers, which is always given to Elysia
+country_event = {
+	id = nhs_mission_events.18
+	title = nhs_mission_events.18.t
+	desc = nhs_mission_events.18.d
+	picture = ATHENS_eventPicture
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		has_country_modifier = nhs_handicap_settlers
+		OR = {
+			is_year = 1520
+			AND = {
+				# Earlier if NHS has at least 5 provinces and 1 stability
+				is_year = 1500
+				num_of_cities = 5
+				stability = 1
+			}
+			has_country_flag = nhs_aqueducts_finished
+		}
+	}
+	
+	immediate = {
+		set_country_flag = nhs_settled_mission
+	}
+
+	option = {
+		name = "nhs_mission_events.18.a"
+		complete_mission = nhs_settling_mission
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				has_country_modifier = nhs_handicap_settlers
+			}
+			nhs_settled_mission_effect = yes
+		}
+	}
+}
+
+###################################################
+### ARCHIVED
+###################################################
+
+# Securing Chesapeake Bay, can demand toll - only when 953 is original capital
+## NOW DIRECTLY PART OF THE MISSION control_the_elysian_homelands
+# country_event = {
+# 	id = nhs_countryevents.2
+# 	title = nhs_countryevents.2.t
+# 	desc = nhs_countryevents.2.d
+# 	picture = HARBOUR_eventPicture
+	
+# 	fire_only_once = yes
+
+#     trigger = {
+# 		nhs_condition_all_ely = { KOMANDA = tag }
+# 		owns = 950 # Chesapeake
+# 		chesapeake_area = {
+# 			type = all
+# 			is_city = yes
+# 			country_or_non_sovereign_subject_holds = ROOT
+# 		}
+# 		950 = { NOT = { has_province_modifier = nhs_toll_modifier_tm } }
+# 		NOT = { has_country_modifier = nhs_no_merchant_class }
+# 	}
+
+# 	mean_time_to_happen = {
+# 		months = 1
+# 	}
+
+# 	option = {
+# 		name = "NHSCOUNTRYEVENTSNAME2"
+# 		add_years_of_income = 0.2
+# 		add_dip_power = 25
+# 		950 = {
+# 			add_base_tax = 1
+# 			add_base_production = 2
+# 			tooltip = {
+# 				add_permanent_province_modifier = {
+# 					name = "nhs_toll_modifier"
+# 					duration = -1
+# 				}
+# 			}
+# 			hidden_effect = {
+# 				add_province_triggered_modifier = nhs_toll_modifier_tm
+# 			}
+# 			set_province_flag = nhs_original_heartland
+# 		}
+# 		# Rename sea area
+# 		if = {
+# 			limit = {
+# 				NOT = { religion = pantheon_worship }
+# 				NOT = { religion = aztlan_worship }
+# 			}
+# 			1501 = { change_province_name = "Elysian Coast" }
+# 		}
+# 		else = {
+# 			1501 = { change_province_name = "Neptuno Adventus" }
+# 		}
+# 		5377 = { change_province_name = "Elysian Bay" }
+# 		1500 = { change_province_name = "Bay of Methenai" }
+# 	}
+# }

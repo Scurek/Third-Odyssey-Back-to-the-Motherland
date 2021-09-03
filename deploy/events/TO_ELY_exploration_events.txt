@@ -1,0 +1,251 @@
+namespace = nhs_exploration
+
+### CM1 related events
+
+# Discovery of the shipwrecked nation CM1
+country_event = {
+	id = nhs_exploration.1
+	title = nhs_exploration.1.t
+	desc = nhs_exploration.1.d
+	picture = ELYSHIP_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		exists = CM1
+		OR = {
+			capital_scope = { has_discovered = CM1 }
+			CM1 = { capital_scope = { has_discovered = ROOT } }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		hidden_effect = {
+			discover_province = 481
+			discover_province = 1572
+			discover_province = 1570
+		}
+	}
+	
+	option = {
+		name = "nhs_exploration.1.a"
+		# Event: our brethren!
+		CM1 = { country_event = { id = nhs_othersevents.52 days = 3 } }
+		set_country_flag = nhs_discovered_survivors
+	}
+}
+
+# If Elysia also orthodox: they want to join freely
+country_event = {
+	id = nhs_exploration.2
+	title = nhs_exploration.2.t
+	desc = nhs_exploration.2.d
+	picture = CITY_VIEW_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		OR = {
+			religion = orthodox
+			religion = elysian_orthodoxy
+		}
+		exists = CM1
+		has_country_flag = nhs_discovered_survivors
+		NOT = { has_country_flag = nhs_interacted_survivors }
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+
+	immediate = {
+		set_country_flag = nhs_interacted_survivors
+	}
+	
+	option = { # Welcome them with open arms
+		ai_chance = { 
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = { legitimacy = 60 }
+			}
+			modifier = {
+				factor = 0
+				CM1 = { ai = no }
+			}
+		}
+		name = "nhs_exploration.2.a"
+		create_subject = {
+			subject_type = elysian_subject_non_exarch
+			subject = CM1
+		}
+		add_legitimacy = -5
+		hidden_effect = {
+			CM1 = {
+				every_province = {
+					limit = {
+						has_discovered = ROOT
+					}
+					discover_country = CM1
+				}
+			}
+		}
+	}
+	option = { # They'll manage fine on their own
+		name = "nhs_exploration.2.b"
+		ai_chance = { 
+			factor = 50
+			modifier = {
+				factor = 3
+				NOT = { legitimacy = 60 }
+			}
+		}
+		add_legitimacy = 10
+		# Event: left on our own
+		CM1 = { country_event = { id = nhs_othersevents.53 days = 3 } }
+	}
+	after = {
+		CM1 = {
+			set_country_flag = nhs_interacted_survivors
+		}
+	}
+}
+
+# If Elysia pantheon: they need convincing to join
+country_event = {
+	id = nhs_exploration.3
+	title = nhs_exploration.3.t
+	desc = nhs_exploration.3.d
+	picture = CITY_VIEW_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		religion = pantheon_worship
+		exists = CM1
+		has_country_flag = nhs_discovered_survivors
+		NOT = { has_country_flag = nhs_interacted_survivors }
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+
+	immediate = {
+		set_country_flag = nhs_interacted_survivors
+	}
+	
+	option = { # Convince them of the power and glory of our nation and our gods
+		name = "nhs_exploration.3.a"
+		ai_chance = { 
+			factor = 40
+			modifier = {
+				factor = 0.2
+				NOT = { treasury = 250 }
+			}
+			modifier = {
+				factor = 0.2
+				NOT = { legitimacy = 60 }
+			}
+			modifier = {
+				factor = 0
+				CM1 = { ai = no }
+			}
+		}
+		create_subject = {
+			subject_type = elysian_subject_non_exarch
+			subject = CM1
+		}
+		CM1 = { 
+			change_religion = pantheon_worship
+			capital_scope = { change_religion = pantheon_worship }
+			hidden_effect = {
+				every_province = {
+					limit = {
+						has_discovered = ROOT
+					}
+					discover_country = CM1
+				}
+			}
+		}
+		add_treasury = -250
+		add_legitimacy = -10	
+	}
+	option = { # Leave them to their own doing
+		name = "nhs_exploration.3.b"
+		ai_chance = { 
+			factor = 60
+			modifier = {
+				factor = 2
+				NOT = { legitimacy = 70 }
+			}
+			modifier = {
+				factor = 2
+				NOT = { prestige = 10 }
+			}
+		}
+		add_legitimacy = 20
+		add_prestige = 10
+		# Event: left on our own
+		CM1 = { country_event = { id = nhs_othersevents.53 days = 3 } }
+	}
+	after = {
+		CM1 = {
+			set_country_flag = nhs_interacted_survivors
+		}
+	}
+}
+
+# Event to auto-discover CM1 when exploration idea 3 - event 54
+country_event = {
+	id = nhs_exploration.4
+	title = nhs_exploration.4.t
+	desc = nhs_exploration.4.d
+	picture = ELYSHIP_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		exists = CM1
+		OR = {
+			has_idea = quest_for_the_new_world
+			has_idea = a_new_start
+			is_year = 1480
+		}
+		is_year = 1476
+		NOT = { 481 = { has_discovered = ROOT } }
+		NOT = { has_country_flag = nhs_discovered_survivors }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 0.2
+			num_of_explorers = 1
+		}
+		modifier = {
+			factor = 0.25
+			1572 = { has_discovered = ROOT }
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			discover_province = 481
+			discover_province = 1572
+			discover_province = 1570
+		}
+	}
+	
+	option = {
+		name = "nhs_exploration.4.a"
+	}
+}

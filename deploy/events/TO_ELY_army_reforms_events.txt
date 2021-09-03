@@ -1,0 +1,1646 @@
+namespace = nhs2_army_reforms
+
+###################################################
+### ARMY REFORMS
+###################################################
+
+# 1st army reform
+country_event = {
+	id = nhs2_army_reforms.1
+	title = nhs2_army_reforms.1.t
+	desc = nhs2_army_reforms.1.d
+	picture = FORTENHANCE_eventPicture
+	
+	fire_only_once = yes
+
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		is_year = 1448
+		OR = {
+			num_of_cities = 5
+			is_year = 1450
+		}
+		NOT = {
+			OR = {
+				has_global_flag = nhs_europe_discovered
+				technology_group = modern_greek
+			}
+		}
+		NOT = {
+			OR = {
+				is_year = 1600
+				mil_tech = 16
+			}
+		}
+		NOT = {
+			OR = {
+				is_year = 1690
+				mil_tech = 23
+			}
+		}
+		is_at_war = no
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = nhs_first_a_reform
+			clr_country_flag = nhs_second_a_reform
+			clr_country_flag = nhs_third_a_reform
+			clr_country_flag = nhs_fourth_a_reform
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+
+	option = {
+		name = "nhs2_army_reforms.1.a"
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.5
+				religion_group = pagan
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { religion_group = pagan }
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.1.t1
+		add_country_modifier = {
+			name = nhs2_native_army_reform
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 365
+		}
+		clr_country_flag = nhs_fire_reform
+		
+	}
+	option = {
+		name = "nhs2_army_reforms.1.b"
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				religion_group = pagan
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { religion_group = pagan }
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.1.t2
+		add_country_modifier = {
+			name = nhs2_traditional_army_reform
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 365
+		}
+		clr_country_flag = nhs_fire_reform
+	}
+	
+	option = {
+		name = "nhs2_army_reforms.1.c"
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_has_taken_turks_tt
+				has_country_flag = nhs_new_flight_taken_turks
+			}
+		}
+		highlight = yes
+		ai_chance = {
+			factor = 300
+		}
+		custom_tooltip = nhs2_army_reforms.1.t3
+		add_country_modifier = {
+			name = nhs2_janissary_army_reform
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 730
+		}
+		every_country = {
+			limit = {
+				NOT = { border_distance = { who = ROOT distance = 100 } }
+				technology_group = north_american
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = nhs2_jannisaries_angry
+			}
+		}
+		clr_country_flag = nhs_fire_reform
+	}
+}
+
+# 2nd army reform
+country_event = {
+	id = nhs2_army_reforms.2
+	title = nhs2_army_reforms.2.t
+	desc = nhs2_army_reforms.2.d
+	picture = elysian_army_eventPicture
+	
+	fire_only_once = yes
+
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		OR = {
+			has_global_flag = nhs_europe_discovered
+			is_year = 1530
+		}
+		is_at_war = no
+		NOT = {
+			OR = {
+				is_year = 1600
+				mil_tech = 16
+			}
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = nhs_first_a_reform
+			set_country_flag = nhs_second_a_reform
+			clr_country_flag = nhs_third_a_reform
+			clr_country_flag = nhs_fourth_a_reform
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+
+	option = { ##  Implement the old Byzantine model
+		name = "nhs2_army_reforms.2.a"
+		ai_chance = {
+			factor = 40
+			modifier = {
+				factor = 1.2
+				religion_group = pagan
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.2.t1
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_army_reform_byz
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 1825
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_handicap_settlers
+			}
+			set_country_flag = nhs_start_with_two
+		}
+		else = {
+			custom_tooltip = nhs_settler_heritage_1_2_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						has_country_modifier = nhs_settler_heritage
+					}
+					remove_country_modifier = nhs_settler_heritage
+				}
+				if = {
+					limit = {
+						NOT = { has_country_modifier = nhs_settler_heritage_two }
+					}
+					add_country_modifier = {
+						name = nhs_settler_heritage_two
+						duration = -1
+					}
+				}
+			}
+		}
+		clr_country_flag = nhs_fire_reform
+	}
+	option = { ## European (quantity and sieges)
+		name = "nhs2_army_reforms.2.b"
+		custom_tooltip = nhs2_army_reforms.2.t2
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.2
+				religion_group = christian
+			}
+		}
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_army_reform_euro
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 2920
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_handicap_settlers
+			}
+			set_country_flag = nhs_start_with_two
+		}
+		else = {
+			custom_tooltip = nhs_settler_heritage_1_2_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						has_country_modifier = nhs_settler_heritage
+					}
+					remove_country_modifier = nhs_settler_heritage
+				}
+				if = {
+					limit = {
+						NOT = { has_country_modifier = nhs_settler_heritage_two }
+					}
+					add_country_modifier = {
+						name = nhs_settler_heritage_two
+						duration = -1
+					}
+				}
+			}
+		}
+		clr_country_flag = nhs_fire_reform
+	}
+	option = { ## Greek Fire
+		name = "nhs2_army_reforms.2.c"
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_has_fire_all_cases_tt
+				OR = {
+					has_country_modifier = nhs_secrets_greekfire
+					has_country_modifier = nhs_greekfire_update
+					has_country_flag = nhs2_had_greek_fire
+				}
+				has_country_flag = nhs_found_the_source
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_has_taken_turks_tt
+				has_country_flag = nhs_new_flight_taken_turks
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.2.t3
+		highlight = yes
+		ai_chance = {
+			factor = 0
+		}
+		nhs_remove_reforms = yes
+		if = {
+			limit = {
+				has_country_flag = nhs2_had_greek_fire
+			}
+			custom_tooltip = nhs_bonuses_later_tooltip
+			tooltip = {
+				add_country_modifier = {
+					name = nhs2_fire_army_reform
+					duration = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs2_had_greek_fire }
+			}
+			add_country_modifier = {
+				name = nhs2_fire_army_reform
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_noble_cataphracts
+				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
+			}
+			custom_tooltip = nhs_fire_nobles_tooltip
+			add_country_modifier = {
+				name = nhs2_disgruntled_nobles
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_fire_discovery_delay
+				NOT = { 
+					had_country_flag = { flag = nhs_fire_discovery_delay days = 27375 } 
+				}
+			}
+			add_mil_power = -200
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 5475
+			}
+			clr_country_flag = nhs_fire_discovery_delay
+		}
+		else = {
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 3650
+			}
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_handicap_settlers
+			}
+			set_country_flag = nhs_start_with_two
+		}
+		else = {
+			custom_tooltip = nhs_settler_heritage_1_2_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						has_country_modifier = nhs_settler_heritage
+					}
+					remove_country_modifier = nhs_settler_heritage
+				}
+				if = {
+					limit = {
+						NOT = { has_country_modifier = nhs_settler_heritage_two }
+					}
+					add_country_modifier = {
+						name = nhs_settler_heritage_two
+						duration = -1
+					}
+				}
+			}
+		}
+		set_country_flag = nhs_fire_reform
+	}
+	option = { ## No reform
+		name = "nhs2_army_reforms.2.e"
+		ai_chance = {
+			factor = 0
+		}
+		custom_tooltip = nhs2_army_reforms.2.t4
+		add_country_modifier = {
+			name = nhs2_army_reform_no
+			duration = -1
+		}
+		custom_tooltip = nhs_disadvantage_tootip
+		if = {
+			limit = {
+				has_country_modifier = nhs_handicap_settlers
+			}
+			set_country_flag = nhs_start_with_two
+		}
+		else = {
+			custom_tooltip = nhs_settler_heritage_1_2_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						has_country_modifier = nhs_settler_heritage
+					}
+					remove_country_modifier = nhs_settler_heritage
+				}
+				if = {
+					limit = {
+						NOT = { has_country_modifier = nhs_settler_heritage_two }
+					}
+					add_country_modifier = {
+						name = nhs_settler_heritage_two
+						duration = -1
+					}
+				}
+			}
+		}
+		clr_country_flag = nhs_fire_reform
+	}
+}
+
+# 3rd army reform (~1600)
+country_event = {
+	id = nhs2_army_reforms.3
+	title = nhs2_army_reforms.3.t
+	picture = ARMY_CHARGE_eventPicture
+	
+	desc = {
+		trigger = {
+			NOT = { has_country_modifier = nhs_noble_cataphracts }
+			NOT = { has_idea = noble_knights }
+			NOT = {
+				AND = {
+					OR = {
+						has_country_modifier = nhs_secrets_greekfire
+						has_country_modifier = nhs_greekfire_update
+						has_country_flag = nhs2_had_greek_fire
+					}
+					has_country_flag = nhs_found_the_source
+				}
+			}
+		}
+		desc = nhs2_army_reforms.3.d
+	}
+	desc = {
+		trigger = {
+			OR = {
+				has_country_modifier = nhs_noble_cataphracts
+				has_idea = noble_knights
+			}
+			NOT = {
+				AND = {
+					OR = {
+						has_country_modifier = nhs_secrets_greekfire
+						has_country_modifier = nhs_greekfire_update
+						has_country_flag = nhs2_had_greek_fire
+					}
+					has_country_flag = nhs_found_the_source
+				}
+			}
+		}
+		desc = nhs2_army_reforms.3.da
+	}
+	desc = {
+		trigger = {
+			NOT = { has_country_modifier = nhs_noble_cataphracts }
+			NOT = { has_idea = noble_knights }
+			AND = {
+				OR = {
+					has_country_modifier = nhs_secrets_greekfire
+					has_country_modifier = nhs_greekfire_update
+					has_country_flag = nhs2_had_greek_fire
+				}
+				has_country_flag = nhs_found_the_source
+			}
+		}
+		desc = nhs2_army_reforms.3.db
+	}
+	desc = {
+		trigger = {
+			OR = {
+				has_country_modifier = nhs_noble_cataphracts
+				has_idea = noble_knights
+			}
+			AND = {
+				OR = {
+					has_country_modifier = nhs_secrets_greekfire
+					has_country_modifier = nhs_greekfire_update
+					has_country_flag = nhs2_had_greek_fire
+				}
+				has_country_flag = nhs_found_the_source
+			}
+		}
+		desc = nhs2_army_reforms.3.dc
+	}
+	
+	fire_only_once = yes
+
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		OR = {
+			is_year = 1600
+			mil_tech = 16
+		}
+		is_at_war = no
+		NOT = {
+			OR = {
+				is_year = 1690
+				mil_tech = 23
+			}
+		}
+		NOT = { has_country_modifier = nhs_handicap_settlers }
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = nhs_first_a_reform
+			clr_country_flag = nhs_second_a_reform
+			set_country_flag = nhs_third_a_reform
+			clr_country_flag = nhs_fourth_a_reform
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+
+	option = { ## Massed Pike and shot (quantity based)
+		name = "nhs2_army_reforms.3.a"
+		ai_chance = {
+			factor = 60
+			modifier = {
+				factor = 1.5
+				religion_group = christian
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.3.t1
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_army_reform_pas
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 2555
+		}
+		custom_tooltip = nhs_settler_heritage_2_3_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_modifier = nhs_settler_heritage
+				}
+				remove_country_modifier = nhs_settler_heritage
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs_settler_heritage_two
+				}
+				remove_country_modifier = nhs_settler_heritage_two
+			}
+			if = {
+				limit = {
+					NOT = { has_country_modifier = nhs_settler_heritage_three }
+				}
+				add_country_modifier = {
+					name = nhs_settler_heritage_three
+					duration = -1
+				}
+			}
+		}
+		clr_country_flag = nhs_fire_reform
+	}
+	option = { ## Cavalry (if picked cataprach modifier)
+		trigger = {
+			OR = {
+				has_country_modifier = nhs_noble_cataphracts
+				has_idea = noble_knights
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.3.t2
+		highlight = yes
+		name = "nhs2_army_reforms.3.b"
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 1.5
+				religion_group = pagan
+			}
+		}
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_army_reform_cavalry
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 2555
+		}
+		custom_tooltip = nhs_settler_heritage_2_3_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_modifier = nhs_settler_heritage
+				}
+				remove_country_modifier = nhs_settler_heritage
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs_settler_heritage_two
+				}
+				remove_country_modifier = nhs_settler_heritage_two
+			}
+			if = {
+				limit = {
+					NOT = { has_country_modifier = nhs_settler_heritage_three }
+				}
+				add_country_modifier = {
+					name = nhs_settler_heritage_three
+					duration = -1
+				}
+			}
+		}
+		clr_country_flag = nhs_fire_reform
+	}
+	option = { ## Crossbow (Shock)
+		name = "nhs2_army_reforms.3.c"
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.5
+				religion_group = pagan
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.3.t3
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_army_reform_xbow
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 1825
+		}
+		custom_tooltip = nhs_settler_heritage_2_3_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_modifier = nhs_settler_heritage
+				}
+				remove_country_modifier = nhs_settler_heritage
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs_settler_heritage_two
+				}
+				remove_country_modifier = nhs_settler_heritage_two
+			}
+			if = {
+				limit = {
+					NOT = { has_country_modifier = nhs_settler_heritage_three }
+				}
+				add_country_modifier = {
+					name = nhs_settler_heritage_three
+					duration = -1
+				}
+			}
+		}
+		clr_country_flag = nhs_fire_reform
+	}
+	option = { ## MOAR Greek Fire 
+		name = "nhs2_army_reforms.3.e"
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_has_fire_all_cases_tt
+				OR = {
+					has_country_modifier = nhs_secrets_greekfire
+					has_country_modifier = nhs_greekfire_update
+					has_country_flag = nhs2_had_greek_fire
+				}
+				has_country_flag = nhs_found_the_source
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.3.t4
+		highlight = yes
+		ai_chance = {
+			factor = 0
+		}
+		nhs_remove_reforms = yes
+		if = {
+			limit = {
+				has_country_flag = nhs2_had_greek_fire
+			}
+			custom_tooltip = nhs_bonuses_later_tooltip
+			tooltip = {
+				add_country_modifier = {
+					name = nhs2_fire_army_reform2
+					duration = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs2_had_greek_fire }
+			}
+			add_country_modifier = {
+				name = nhs2_fire_army_reform2
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_noble_cataphracts
+				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
+			}
+			custom_tooltip = nhs_fire_nobles_tooltip
+			add_country_modifier = {
+				name = nhs2_disgruntled_nobles
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_fire_discovery_delay
+				NOT = { 
+					had_country_flag = { flag = nhs_fire_discovery_delay days = 27375 } 
+				}
+			}
+			add_mil_power = -200
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 5475
+			}
+			clr_country_flag = nhs_fire_discovery_delay
+		}
+		else = {
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 3650
+			}
+		}
+		custom_tooltip = nhs_settler_heritage_2_3_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_modifier = nhs_settler_heritage
+				}
+				remove_country_modifier = nhs_settler_heritage
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs_settler_heritage_two
+				}
+				remove_country_modifier = nhs_settler_heritage_two
+			}
+			if = {
+				limit = {
+					NOT = { has_country_modifier = nhs_settler_heritage_three }
+				}
+				add_country_modifier = {
+					name = nhs_settler_heritage_three
+					duration = -1
+				}
+			}
+		}
+		set_country_flag = nhs_fire_reform
+	}
+}
+
+# 4th army reform (~1690)
+country_event = {
+	id = nhs2_army_reforms.4
+	title = nhs2_army_reforms.4.t
+	desc = nhs2_army_reforms.4.d
+	picture = elysian_rifleman_eventPicture
+	
+	fire_only_once = yes
+
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		OR = {
+			is_year = 1690
+			mil_tech = 23
+		}
+		is_at_war = no
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = nhs_first_a_reform
+			clr_country_flag = nhs_second_a_reform
+			clr_country_flag = nhs_third_a_reform
+			set_country_flag = nhs_fourth_a_reform
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	
+	option = { ## Massed muskets
+		name = "nhs2_army_reforms.4.a"
+		ai_chance = {
+			factor = 50
+		}
+		custom_tooltip = nhs2_army_reforms.4.t1
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_amry_reform_mm
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 1460
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage
+			}
+			remove_country_modifier = nhs_settler_heritage
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage_two
+			}
+			remove_country_modifier = nhs_settler_heritage_two
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage_three
+			}
+			remove_country_modifier = nhs_settler_heritage_three
+		}
+		clr_country_flag = nhs_fire_reform
+	}
+	option = { ## New Model Army. profesional army (quality)
+		name = "nhs2_army_reforms.4.b"
+		ai_chance = {
+			factor = 50
+		}
+		custom_tooltip = nhs2_army_reforms.4.t2
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_amry_reform_nma
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 2920
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage
+			}
+			remove_country_modifier = nhs_settler_heritage
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage_two
+			}
+			remove_country_modifier = nhs_settler_heritage_two
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage_three
+			}
+			remove_country_modifier = nhs_settler_heritage_three
+		}
+		clr_country_flag = nhs_fire_reform
+	}
+	option = { ## Global Army, something to do with easier transport and mobilisation
+		name = "nhs2_army_reforms.4.c"
+		ai_chance = {
+			factor = 0
+		}
+		custom_tooltip = nhs2_army_reforms.4.t3
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_amry_reform_ga
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 1825
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage
+			}
+			remove_country_modifier = nhs_settler_heritage
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage_two
+			}
+			remove_country_modifier = nhs_settler_heritage_two
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage_three
+			}
+			remove_country_modifier = nhs_settler_heritage_three
+		}
+		clr_country_flag = nhs_fire_reform
+	}
+	option = { ## Last stage of Greek Fire, combined arms
+		name = "nhs2_army_reforms.4.e"
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_has_fire_all_cases_tt
+				OR = {
+					has_country_modifier = nhs_secrets_greekfire
+					has_country_modifier = nhs_greekfire_update
+					has_country_flag = nhs2_had_greek_fire
+				}
+				has_country_flag = nhs_found_the_source
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.4.t4
+		highlight = yes
+		ai_chance = {
+			factor = 0
+		}
+		nhs_remove_reforms = yes
+		if = {
+			limit = {
+				has_country_flag = nhs2_had_greek_fire
+			}
+			custom_tooltip = nhs_bonuses_later_tooltip
+			tooltip = {
+				add_country_modifier = {
+					name = nhs2_fire_army_reform3
+					duration = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs2_had_greek_fire }
+			}
+			add_country_modifier = {
+				name = nhs2_fire_army_reform3
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_noble_cataphracts
+				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
+			}
+			custom_tooltip = nhs_fire_nobles_tooltip
+			add_country_modifier = {
+				name = nhs2_disgruntled_nobles
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_fire_discovery_delay
+				NOT = { 
+					had_country_flag = { flag = nhs_fire_discovery_delay days = 27375 } 
+				}
+			}
+			add_mil_power = -200
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 5475
+			}
+			clr_country_flag = nhs_fire_discovery_delay
+		}
+		else = {
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 3650
+			}
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage
+			}
+			remove_country_modifier = nhs_settler_heritage
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage_two
+			}
+			remove_country_modifier = nhs_settler_heritage_two
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_settler_heritage_three
+			}
+			remove_country_modifier = nhs_settler_heritage_three
+		}
+		set_country_flag = nhs_fire_reform
+	}
+}
+
+# Switch reform
+country_event = {
+	id = nhs2_army_reforms.5
+	title = nhs2_army_reforms.5.t
+	desc = nhs2_army_reforms.5.d
+	picture = SENATE_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = "nhs2_army_reforms.1.a"
+		trigger = {
+			has_country_modifier = nhs2_traditional_army_reform
+			NOT = { has_country_modifier = nhs2_army_reform_no }
+		}
+		custom_tooltip = nhs2_army_reforms.1.t1
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.5
+				religion_group = pagan
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { religion_group = pagan }
+			}
+		}
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_native_army_reform
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 365
+		}
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	option = {
+		name = "nhs2_army_reforms.1.b"
+		trigger = {
+			has_country_modifier = nhs2_native_army_reform
+			NOT = { has_country_modifier = nhs2_army_reform_no }
+		}
+		custom_tooltip = nhs2_army_reforms.1.t2
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				religion_group = pagan
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { religion_group = pagan }
+			}
+		}
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_traditional_army_reform
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 365
+		}
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	##### 2
+	
+	option = { ##  Implement the old Byzantine model
+		name = "nhs2_army_reforms.2.a"
+		trigger = {
+			OR = {
+				has_country_modifier = nhs2_army_reform_euro
+				has_country_modifier = nhs2_fire_army_reform
+				has_country_modifier = nhs2_army_reform_no
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.2.t1
+		ai_chance = {
+			factor = 40
+			modifier = {
+				factor = 1.2
+				religion_group = pagan
+			}
+		}
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_army_reform_byz
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 1825
+		}
+		clr_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	option = { ## European (quantity and sieges)
+		name = "nhs2_army_reforms.2.b"
+		trigger = {
+			OR = {
+				has_country_modifier = nhs2_army_reform_byz
+				has_country_modifier = nhs2_fire_army_reform
+				has_country_modifier = nhs2_army_reform_no
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.2.t2
+		nhs_remove_reforms = yes
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.2
+				religion_group = christian
+			}
+		}
+		add_country_modifier = {
+			name = nhs2_army_reform_euro
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 2920
+		}
+		clr_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	option = { ## Greek Fire
+		name = "nhs2_army_reforms.2.c"
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_has_fire_all_cases_tt
+				OR = {
+					has_country_modifier = nhs_secrets_greekfire
+					has_country_modifier = nhs_greekfire_update
+					has_country_flag = nhs2_had_greek_fire
+				}
+				has_country_flag = nhs_found_the_source
+			}
+			OR = {
+				has_country_modifier = nhs2_army_reform_byz
+				has_country_modifier = nhs2_army_reform_euro
+				has_country_modifier = nhs2_army_reform_no
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.2.t3
+		highlight = yes
+		ai_chance = {
+			factor = 0
+		}
+		nhs_remove_reforms = yes
+		if = {
+			limit = {
+				has_country_flag = nhs2_had_greek_fire
+			}
+			custom_tooltip = nhs_bonuses_later_tooltip
+			tooltip = {
+				add_country_modifier = {
+					name = nhs2_fire_army_reform
+					duration = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs2_had_greek_fire }
+			}
+			add_country_modifier = {
+				name = nhs2_fire_army_reform
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_noble_cataphracts
+				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
+			}
+			custom_tooltip = nhs_fire_nobles_tooltip
+			add_country_modifier = {
+				name = nhs2_disgruntled_nobles
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_fire_discovery_delay
+				NOT = { 
+					had_country_flag = { flag = nhs_fire_discovery_delay days = 27375 } 
+				}
+			}
+			add_mil_power = -200
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 5475
+			}
+			clr_country_flag = nhs_fire_discovery_delay
+		}
+		else = {
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 3650
+			}
+		}
+		set_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	
+	##### 3
+	
+	option = { ## Massed Pike and shot (quantity based)
+		name = "nhs2_army_reforms.3.a"
+		trigger = {
+			OR = {
+				has_country_modifier = nhs2_army_reform_cavalry
+				has_country_modifier = nhs2_army_reform_xbow
+				has_country_modifier = nhs2_fire_army_reform2
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.3.t1
+		ai_chance = {
+			factor = 60
+			modifier = {
+				factor = 1.5
+				religion_group = christian
+			}
+		}
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_army_reform_pas
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 2555
+		}
+		clr_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	option = { ## Cavalry (if picked cataprach modifier)
+		trigger = {
+			OR = {
+				has_country_modifier = nhs_noble_cataphracts
+				has_idea = noble_knights
+			}
+			OR = {
+				has_country_modifier = nhs2_army_reform_pas
+				has_country_modifier = nhs2_army_reform_xbow
+				has_country_modifier = nhs2_fire_army_reform2
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.3.t2
+		highlight = yes
+		name = "nhs2_army_reforms.3.b"
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 1.5
+				religion_group = pagan
+			}
+		}
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_army_reform_cavalry
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 2555
+		}
+		clr_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	option = { ## Crossbow (Shock)
+		name = "nhs2_army_reforms.3.c"
+		trigger = {
+			OR = {
+				has_country_modifier = nhs2_army_reform_pas
+				has_country_modifier = nhs2_army_reform_cavalry
+				has_country_modifier = nhs2_fire_army_reform2
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.3.t3
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.5
+				religion_group = pagan
+			}
+		}
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_army_reform_xbow
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 1825
+		}
+		clr_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	option = { ## MOAR Greek Fire 
+		name = "nhs2_army_reforms.3.e"
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_has_fire_all_cases_tt
+				OR = {
+					has_country_modifier = nhs_secrets_greekfire
+					has_country_modifier = nhs_greekfire_update
+					has_country_flag = nhs2_had_greek_fire
+				}
+				has_country_flag = nhs_found_the_source
+			}
+			OR = {
+				has_country_modifier = nhs2_army_reform_pas
+				has_country_modifier = nhs2_army_reform_cavalry
+				has_country_modifier = nhs2_army_reform_xbow
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.3.t4
+		highlight = yes
+		ai_chance = {
+			factor = 0
+		}
+		nhs_remove_reforms = yes
+		if = {
+			limit = {
+				has_country_flag = nhs2_had_greek_fire
+			}
+			custom_tooltip = nhs_bonuses_later_tooltip
+			tooltip = {
+				add_country_modifier = {
+					name = nhs2_fire_army_reform2
+					duration = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs2_had_greek_fire }
+			}
+			add_country_modifier = {
+				name = nhs2_fire_army_reform2
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_noble_cataphracts
+				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
+			}
+			custom_tooltip = nhs_fire_nobles_tooltip
+			add_country_modifier = {
+				name = nhs2_disgruntled_nobles
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_fire_discovery_delay
+				NOT = { 
+					had_country_flag = { flag = nhs_fire_discovery_delay days = 27375 } 
+				}
+			}
+			add_mil_power = -200
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 5475
+			}
+			clr_country_flag = nhs_fire_discovery_delay
+		}
+		else = {
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 3650
+			}
+		}
+		set_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	
+	#### 4
+	
+	option = { ## Massed muskets
+		name = "nhs2_army_reforms.4.a"
+		ai_chance = {
+			factor = 50
+		}
+		trigger = {
+			OR = {
+				has_country_modifier = nhs2_amry_reform_nma
+				has_country_modifier = nhs2_amry_reform_ga
+				has_country_modifier = nhs2_fire_army_reform3
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.4.t1
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_amry_reform_mm
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 1460
+		}
+		clr_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	option = { ## New Model Army. profesional army (quality)
+		name = "nhs2_army_reforms.4.b"
+		trigger = {
+			OR = {
+				has_country_modifier = nhs2_amry_reform_mm
+				has_country_modifier = nhs2_amry_reform_ga
+				has_country_modifier = nhs2_fire_army_reform3
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.4.t2
+		ai_chance = {
+			factor = 50
+		}
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_amry_reform_nma
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 2920
+		}
+		clr_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	option = { ## Global Army, something to do with easier transport and mobilisation
+		trigger = {
+			OR = {
+				has_country_modifier = nhs2_amry_reform_mm
+				has_country_modifier = nhs2_amry_reform_nma
+				has_country_modifier = nhs2_fire_army_reform3
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.4.t3
+		name = "nhs2_army_reforms.4.c"
+		ai_chance = {
+			factor = 0
+		}
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = nhs2_amry_reform_ga
+			duration = -1
+		}
+		add_country_modifier = {
+			name = nhs_reforming_army
+			duration = 1825
+		}
+		clr_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	option = { ## Last stage of Greek Fire, combined arms
+		name = "nhs2_army_reforms.4.e"
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_has_fire_all_cases_tt
+				OR = {
+					has_country_modifier = nhs_secrets_greekfire
+					has_country_modifier = nhs_greekfire_update
+					has_country_flag = nhs2_had_greek_fire
+				}
+				has_country_flag = nhs_found_the_source
+			}
+			OR = {
+				has_country_modifier = nhs2_amry_reform_mm
+				has_country_modifier = nhs2_amry_reform_nma
+				has_country_modifier = nhs2_amry_reform_ga
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.4.t4
+		highlight = yes
+		ai_chance = {
+			factor = 0
+		}
+		nhs_remove_reforms = yes
+		if = {
+			limit = {
+				has_country_flag = nhs2_had_greek_fire
+			}
+			custom_tooltip = nhs_bonuses_later_tooltip
+			tooltip = {
+				add_country_modifier = {
+					name = nhs2_fire_army_reform3
+					duration = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs2_had_greek_fire }
+			}
+			add_country_modifier = {
+				name = nhs2_fire_army_reform3
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_modifier = nhs_noble_cataphracts
+				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
+			}
+			custom_tooltip = nhs_fire_nobles_tooltip
+			add_country_modifier = {
+				name = nhs2_disgruntled_nobles
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_fire_discovery_delay
+				NOT = { 
+					had_country_flag = { flag = nhs_fire_discovery_delay days = 27375 } 
+				}
+			}
+			add_mil_power = -200
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 5475
+			}
+			clr_country_flag = nhs_fire_discovery_delay
+		}
+		else = {
+			add_country_modifier = {
+				name = nhs_reforming_army
+				duration = 3650
+			}
+		}
+		set_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+	}
+	option = { ## Nevermind
+		name = "nhs2_army_reforms.5.a"
+		ai_chance = {
+			factor = 50
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_got50mil
+			}
+			add_mil_power = 50
+			clr_country_flag = nhs_got50mil
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_got65mil
+			}
+			add_mil_power = 65
+			clr_country_flag = nhs_got65mil
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_got80mil
+			}
+			add_mil_power = 80
+			clr_country_flag = nhs_got80mil
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_got95mil
+			}
+			add_mil_power = 95
+			clr_country_flag = nhs_got95mil
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_got110mil
+			}
+			add_mil_power = 110
+			clr_country_flag = nhs_got110mil
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_got125mil
+			}
+			add_mil_power = 125
+			clr_country_flag = nhs_got125mil
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_got140mil
+			}
+			add_mil_power = 140
+			clr_country_flag = nhs_got140mil
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_got155mil
+			}
+			add_mil_power = 155
+			clr_country_flag = nhs_got155mil
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_got170mil
+			}
+			add_mil_power = 170
+			clr_country_flag = nhs_got170mil
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_got185mil
+			}
+			add_mil_power = 185
+			clr_country_flag = nhs_got185mil
+		}
+		if = {
+			limit = {
+				has_country_flag = nhs_got200mil
+			}
+			add_mil_power = 200
+			clr_country_flag = nhs_got200mil
+		}
+	}
+}
