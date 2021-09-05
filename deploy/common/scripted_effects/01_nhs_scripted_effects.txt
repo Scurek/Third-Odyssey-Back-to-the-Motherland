@@ -598,29 +598,39 @@ nhs_decrease_variable = {
 	}
 }
 
+nhs_hightier_building_counter_trigger = {
+	continent = north_america
+}
+nhs_building_counter_clear_flag = {
+	set_country_flag = $FLAG$_$BUILDING$
+}
+nhs_building_counter_set_flag = {
+	clr_country_flag = $FLAG$_$BUILDING$
+}
 nhs_building_counter_effect_add = {
 	if = {
 		limit = {
 			owner = {
-				has_country_flag = nhs_start_counting_buildings
+				has_country_flag = $FLAG$ # nhs_high_tier_building_counter
 			}
-			NOT = { has_province_flag = $FLAGG$ }
-		}
-		tooltip = {
-			owner = {
-				change_variable = {
-					which = nhs_HighTierBuildingCount
-					value = 1
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $BUILDING$ 
 				}
 			}
+			[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$ = yes
+			]
 		}
-		hidden_effect = {
-			set_province_flag = $FLAGG$
-			owner = {
-				change_variable = {
-					which = nhs_HighTierBuildingCount
-					value = 1
-				}
+		nhs_building_counter_set_flag = { 
+			FLAG = $FLAG$ 
+			BUILDING = $BUILDING$ 
+		}
+		owner = {
+			change_variable = {
+				which = $VAR$ # nhs_HighTierBuildingCount
+				value = 1
 			}
 		}
 	}
@@ -628,13 +638,685 @@ nhs_building_counter_effect_add = {
 nhs_building_counter_effect_sub = {
 	if = {
 		limit = {
-			has_province_flag = $FLAGG$
+			nhs_building_counter_had_building = { 
+				FLAG = $FLAG$ 
+				BUILDING = $BUILDING$ 
+			}
 			owner = {
-				has_country_flag = nhs_start_counting_buildings
+				has_country_flag = $FLAG$ # nhs_high_tier_building_counter
 			}
 		}
-		clr_province_flag = $FLAGG$
+		nhs_building_counter_clear_flag = { 
+			FLAG = $FLAG$ 
+			BUILDING = $BUILDING$ 
+		}
 		owner = {
+			subtract_variable = {
+				which = $VAR$ # nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+}
+nhs_building_counter_effect_add_with_obsolete = {
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = $FLAG$ # nhs_high_tier_building_counter
+			}
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $BUILDING$ 
+				}
+			}
+			[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$ = yes
+			]
+		}
+		if = {
+			limit = {
+				NOT = {
+					nhs_building_counter_had_building = { 
+						FLAG = $FLAG$ 
+						BUILDING = $OLD_BUILDING$ 
+					}
+				}
+			}
+			nhs_building_counter_set_flag = { 
+				FLAG = $FLAG$ 
+				BUILDING = $BUILDING$ 
+			}
+			owner = {
+				change_variable = {
+					which = $VAR$ # nhs_HighTierBuildingCount
+					value = 1
+				}
+			}
+		}
+		else = {
+			nhs_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING$ }
+			nhs_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+		}
+	}
+}
+nhs_initiate_hightier_building_counter = {
+	set_variable = {
+		which = nhs_HighTierBuildingCount
+		value = 0
+	}
+
+	every_owned_province = {
+		limit = {
+			continent = north_america
+		}
+		nhs_hightier_building_counter_eval_local_province = yes
+	}
+}
+nhs_hightier_building_counter_eval_local_province = {
+	if = {
+		limit = {
+			has_building = town_hall
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = town_hall 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = {
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = town_hall 
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = counting_house
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = counting_house 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = counting_house 
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = cathedral
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = cathedral 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = cathedral 
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = university
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = university 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = university 
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = grand_shipyard
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = grand_shipyard 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = grand_shipyard 
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = drydock
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = drydock 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = drydock 
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = stock_exchange
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = stock_exchange 
+				} 
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					nhs_building_counter_had_building = { FLAG = nhs_high_tier_building_counter BUILDING = trade_depot }
+				}
+			}
+			nhs_building_counter_set_flag = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = stock_exchange
+			}
+		}
+		else = {
+			nhs_building_counter_clear_flag = { FLAG = nhs_high_tier_building_counter BUILDING = trade_depot }
+			nhs_building_counter_set_flag = { FLAG = nhs_high_tier_building_counter BUILDING = stock_exchange }
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = training_fields
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = training_fields 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = training_fields
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = trade_depot
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = trade_depot 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = trade_depot
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = conscription_center
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = conscription_center 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = conscription_center
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				has_building = mills
+				has_building = farm_estate
+				has_building = tradecompany
+				has_building = plantations
+				has_building = textile
+				has_building = weapons
+				has_building = wharf
+				has_building = furnace
+			}
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = manufactory 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = manufactory
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = ramparts
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = ramparts 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = ramparts
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = soldier_households
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = soldier_households 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = soldier_households
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = impressment_offices
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = impressment_offices 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = impressment_offices
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_building = state_house
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = nhs_high_tier_building_counter 
+					BUILDING = state_house 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = state_house
+		}
+		owner = {
+			change_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+}
+# province
+# FROM = old owner
+nhs_hightier_building_counter_eval_former_province = {
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = town_hall
+			} 
+		}
+		nhs_building_counter_clear_flag = {
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = town_hall 
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = counting_house 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = counting_house 
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = cathedral 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = cathedral 
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = university 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = university 
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = grand_shipyard 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = grand_shipyard 
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = drydock 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = drydock 
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = stock_exchange 
+			}
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = stock_exchange
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = training_fields 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = training_fields
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = trade_depot 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = trade_depot
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = conscription_center 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = conscription_center
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = manufactory 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = manufactory
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = ramparts 
+			}
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = ramparts
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = soldier_households 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = soldier_households
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = impressment_offices 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = impressment_offices
+		}
+		FROM = {
+			subtract_variable = {
+				which = nhs_HighTierBuildingCount
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = nhs_high_tier_building_counter 
+				BUILDING = state_house 
+			} 
+		}
+		nhs_building_counter_clear_flag = { 
+			FLAG = nhs_high_tier_building_counter 
+			BUILDING = state_house
+		}
+		FROM = {
 			subtract_variable = {
 				which = nhs_HighTierBuildingCount
 				value = 1
@@ -642,6 +1324,8 @@ nhs_building_counter_effect_sub = {
 		}
 	}
 }
+
+
 nhs_display_rel_center = {
 	tooltip = {
 		add_permanent_province_modifier = {
