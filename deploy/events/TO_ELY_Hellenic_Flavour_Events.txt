@@ -1,0 +1,1408 @@
+#Additional events for the Hellenic faith
+#Written by TheWerelizard
+
+namespace = nhs_hcd_hellenicflavor
+
+###################################
+#Reformation of the Hellenic Faith#
+###################################
+
+country_event = { #Reformation of the Hellenic Faith
+	id = nhs_hcd_hellenicflavor.1
+	title = nhs_hcd_hellenicflavor1.t
+	desc = nhs_hcd_hellenicflavor1.d
+	picture = BYZANTINE_EAGLE_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		religion = pantheon_worship
+		NOT = {
+			has_any_disaster = yes
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = nhs_hellenic_reformed_zeus
+			clr_country_flag = nhs_hellenic_reformed_poseidon
+			clr_country_flag = nhs_hellenic_reformed_apollo
+		}
+	}
+
+	option = { #Adopt primarily zeus
+		name = nhs_hcd_hellenicflavor.1.a
+
+		add_country_modifier = {
+			name = nhs_hcf_zeus_worship
+			duration = -1
+		}
+
+		set_country_flag = nhs_hellenic_reformed_zeus
+		custom_tooltip = zeus_worship.tt
+	}
+
+	option = { #Worship poseidon
+		name = nhs_hcd_hellenicflavor.1.b
+
+		add_country_modifier = {
+			name = nhs_hcf_poseidon_worship
+			duration = -1
+		}
+
+		set_country_flag = nhs_hellenic_reformed_poseidon
+		custom_tooltip = poseidon_worship.tt
+	}
+
+	option = { #Worship apollo
+		name = nhs_hcd_hellenicflavor.1.c
+
+		add_country_modifier = {
+			name = nhs_hcf_apollo_worship
+			duration = -1
+		}
+
+		set_country_flag = nhs_hellenic_reformed_apollo
+		custom_tooltip = apollo_worship.tt
+	}
+
+	option = { #Keep to our traditions
+		name = nhs_hcd_hellenicflavor.1.d
+
+		add_country_modifier = {
+			name = nhs_hcf_traditional_worship
+			duration = -1
+		}
+
+		add_stability = 1
+		custom_tooltip = traditional_worship.tt
+	}
+
+	after = {
+		set_country_flag = nhs_hcd_has_reformed_faith	
+	}
+}
+
+######################################
+#Relation with non Hellenic countries#
+######################################
+
+country_event = { #contact with christian / muslim colonists
+	id = nhs_hcd_hellenicflavor.21
+	title = nhs_hcd_hellenicflavor21.t
+	desc = nhs_hcd_hellenicflavor21.d
+	picture = PANTHEON_eventPicture
+
+    trigger = {
+		OR = {
+            tag = NHS
+            was_tag = NHS
+			any_owned_province = {
+				is_capital = yes
+				continent = north_america
+			}
+        }
+		religion = pantheon_worship
+		any_neighbor_country = { 
+			OR = {
+				religion_group = christian
+				religion_group = muslim
+				religion_group = jewish_group
+			}
+			OR = {
+				is_colonial_nation = yes
+				capital_scope = {
+					continent = north_america
+				}
+			}
+			NOT = {
+				has_opinion = {
+					who = ROOT
+					value = 50
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 3
+	}
+
+	fire_only_once = yes
+
+	option = { #stand by our ways
+		name = nhs_hcd_hellenicflavor.21.a
+
+		add_prestige = 10
+
+		every_known_country = {
+			limit = {
+				OR = {
+					capital_scope = {
+						continent = north_america
+					}
+					colony = 1
+				}
+				OR = {
+					religion_group = christian
+					religion_group = pagan
+					religion_group = jewish_group
+				}
+				NOT = {
+					OR = {
+						alliance_with = ROOT
+						has_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = nhs_hcd_heathen_state
+			}
+		}
+	}
+
+	option = { #make public concessions
+		name = nhs_hcd_hellenicflavor.21.b
+
+		add_dip_power = -100
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+	}
+}
+
+country_event = { #christian reaction to Hellenic threat
+	id = nhs_hcd_hellenicflavor.22
+	title = nhs_hcd_hellenicflavor22.t
+	desc = nhs_hcd_hellenicflavor22.d
+	picture = DIPLOMACY_SIGNING_eventPicture
+
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		NOT = {
+			is_at_war = yes
+		}
+		religion = pantheon_worship
+		any_known_country = {
+			religion_group = christian
+		}
+		num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+			value = 1
+			OR = { #check if the hellenic country owns a christian or holy site
+			province_id = 379 #jerusalem
+			province_id = 118 #roma
+			province_id = 151 #constantinople
+			province_id = 85 #cologne
+			province_id = 206 #santiago
+			}
+		}
+
+		NOT = {
+			has_country_flag = nhs_hcd_religious_coalition
+		}
+		num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+			value = 25
+			OR = {
+				continent = europe
+				region = maghreb_region
+				}
+		}
+	}
+
+	fire_only_once = yes
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = nhs_hcd_religious_coalition
+		}
+	}
+
+    mean_time_to_happen = {
+		months  = 24
+	}
+
+	option = { #Christian countries will be given the chance to join a coalition against Elysia
+		name = nhs_hcd_hellenicflavor.22.a
+
+		hidden_effect = {
+			every_known_country = {
+				limit = {
+					religion_group = christian
+					NOT = {
+						is_subject = yes
+	
+					}
+					NOT = { #exlcude high relation countries
+						has_opinion = {
+							who = ROOT
+							value = -30
+						}
+					}
+					NOT = {
+						alliance_with = ROOT
+					}
+					NOT = {
+						truce_with = ROOT
+					}
+					capital_scope = { #Make sure to only target european or neaby christian countries
+						OR = {
+							continent = europe
+							region = maghreb_region
+							superregion = near_east_superregion
+						}
+					}
+				}
+				country_event = {
+					id = nhs_hcd_hellenicflavor.221
+				}
+			}
+		}
+
+		custom_tooltip = nhs_hcd_anti_hellenic_coalition.tt
+	}
+
+	option = { #Promise peace
+		name = nhs_hcd_hellenicflavor.22.b
+
+		add_war_exhaustion = -2
+
+		add_ruler_modifier = {
+			name = nhs_hcd_promised_peace
+		}
+	}
+
+	option = { #Appease tensions available if enough diplo rep
+		name = nhs_hcd_hellenicflavor.22.c
+
+		trigger = {
+			diplomatic_reputation = 4
+		}
+
+		add_dip_power = -100
+	}
+}
+
+country_event = { #Coalition against Elysia event (Christian)
+	id = nhs_hcd_hellenicflavor.221
+	title = nhs_hcd_hellenicflavor221.t
+	desc = nhs_hcd_hellenicflavor221.d
+	picture = DIPLOMACY_SIGNING_eventPicture
+
+	is_triggered_only = yes
+
+	option = { #Join the coalition
+		name = nhs_hcd_hellenicflavor.221.a
+
+		ai_chance = {
+			factor = 50
+			modifier = { #Cannot join if bankrupt or too unstable
+				factor = 0
+				OR = {
+					war_exhaustion = 10
+					is_in_coalition_war = yes
+					is_bankrupt = yes
+					NOT = { 
+						stability = -2
+					}
+				}
+			}
+			modifier = { #Encouraged to join if hostile
+				factor = 3
+				OR = {
+					ai_attitude = {
+						who = FROM
+						attitude = attitude_hostile
+					}
+					ai_attitude = {
+						who = FROM
+						attitude = attitude_outraged
+					}
+				}
+			}
+			modifier = { #Encourage to join if defender of the faith
+				factor = 10
+				is_defender_of_faith = yes
+			}
+		}
+
+		form_coalition_against = FROM
+	}
+
+	option = { #Do not join the coalition
+		name = nhs_hcd_hellenicflavor.221.b
+
+		add_stability = 1
+
+		ai_chance = {
+			factor = 40
+			modifier = { #Discouraged if threatened
+				factor = 2
+				ai_attitude = {
+					who = FROM
+					attitude = attitude_threatened
+				}
+			}
+			modifier = { #Discouraged if already at war
+				factor = 2
+				is_at_war = yes
+			}
+			modifier = { #Discouraged if army is too weak
+				factor = 2
+				NOT = {
+					army_size_percentage = 0.5
+				}
+			}
+		}	
+	}
+}
+
+country_event = { #muslim reaction to Hellenic threat
+	id = nhs_hcd_hellenicflavor.23
+	title = nhs_hcd_hellenicflavor23.t
+	desc = nhs_hcd_hellenicflavor23.d
+	picture = DIPLOMACY_SIGNING_eventPicture
+
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		NOT = {
+			is_at_war = yes
+		}
+		religion = pantheon_worship
+		any_known_country = {
+			religion_group = muslim
+		}
+		num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+			value = 1
+			OR = { #check if the hellenic country owns a christian or holy site
+			province_id = 379 #jerusalem
+			province_id = 385 #mecca
+			province_id = 151 #constantinople
+			province_id = 361 #cairo
+			province_id = 384 #medina
+			}
+		}
+		NOT = {
+			has_country_flag = nhs_hcd_religious_coalition
+		}
+		num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+			value = 25
+			OR = {
+				superregion = near_east_superregion
+				region = maghreb_region
+				}
+		}
+	}
+
+	fire_only_once = yes
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = nhs_hcd_religious_coalition
+		}
+	}
+
+    mean_time_to_happen = {
+		months  = 24
+	}
+
+	option = { #Christian countries will be given the chance to join a coalition against Elysia
+		name = nhs_hcd_hellenicflavor.23.a
+
+		hidden_effect = {
+			every_known_country = {
+				limit = {
+					religion_group = muslim
+					NOT = {
+						is_subject = yes
+	
+					}
+					NOT = { #exlcude high relation countries
+						has_opinion = {
+							who = ROOT
+							value = -30
+						}
+					}
+					NOT = {
+						alliance_with = ROOT
+					}
+					NOT = {
+						truce_with = ROOT
+					}
+					capital_scope = { #Make sure to only target maghrebi or levantine countries
+						OR = {
+							continent = europe
+							region = maghreb_region
+							superregion = near_east_superregion
+						}
+					}
+				}
+				country_event = {
+					id = nhs_hcd_hellenicflavor.231
+				}
+			}
+		}
+
+		custom_tooltip = nhs_hcd_anti_hellenic_coalition_muslim.tt
+	}
+
+	option = { #Promise peace
+		name = nhs_hcd_hellenicflavor.23.b
+
+		add_war_exhaustion = -2
+
+		add_ruler_modifier = {
+			name = nhs_hcd_promised_peace
+		}
+	}
+
+	option = { #Appease tensions available if enough diplo rep
+		name = nhs_hcd_hellenicflavor.23.c
+
+		trigger = {
+			diplomatic_reputation = 4
+		}
+
+		add_dip_power = -100
+	}
+}
+
+country_event = { #Coalition against Elysia event (Muslim)
+	id = nhs_hcd_hellenicflavor.231
+	title = nhs_hcd_hellenicflavor231.t
+	desc = nhs_hcd_hellenicflavor231.d
+	picture = DIPLOMACY_SIGNING_eventPicture
+
+	is_triggered_only = yes
+
+	option = { #Join the coalition
+		name = nhs_hcd_hellenicflavor.231.a
+
+		ai_chance = {
+			factor = 50
+			modifier = { #Cannot join if bankrupt or too unstable
+				factor = 0
+				OR = {
+					war_exhaustion = 10
+					is_in_coalition_war = yes
+					is_bankrupt = yes
+					NOT = { 
+						stability = -2
+					}
+				}
+			}
+			modifier = { #Encouraged to join if hostile
+				factor = 3
+				OR = {
+					ai_attitude = {
+						who = FROM
+						attitude = attitude_hostile
+					}
+					ai_attitude = {
+						who = FROM
+						attitude = attitude_outraged
+					}
+				}
+			}
+			modifier = { #Encourage to join if defender of the faith
+				factor = 10
+				is_defender_of_faith = yes
+			}
+		}
+
+		form_coalition_against = FROM
+	}
+
+	option = { #Do not join the coalition
+		name = nhs_hcd_hellenicflavor.231.b
+
+		add_stability = 1
+
+		ai_chance = {
+			factor = 40
+			modifier = { #Discouraged if threatened
+				factor = 2
+				ai_attitude = {
+					who = FROM
+					attitude = attitude_threatened
+				}
+			}
+			modifier = { #Discouraged if already at war
+				factor = 2
+				is_at_war = yes
+			}
+			modifier = { #Discouraged if army is too weak
+				factor = 2
+				NOT = {
+					army_size_percentage = 0.5
+				}
+			}
+		}	
+	}
+}
+
+################
+#Flavour events#
+################
+
+##All Hellenic events##
+
+country_event = { #Pick a new deity
+	id =  nhs_hcd_hellenicflavor.31
+	title = nhs_hcd_hellenicflavor31.t
+	desc = nhs_hcd_hellenicflavor31.d
+	picture = OLYMPIANS_eventPicture
+
+	trigger = {
+		religion = pantheon_worship
+		ai = no
+		has_regency = no
+		NOT = { has_dlc = "Wealth of Nations" }
+		NOT = { has_personal_deity = nhs_hellenic_zeus }
+		NOT = { has_personal_deity = nhs_hellenic_hera }
+		NOT = { has_personal_deity = nhs_hellenic_poseidon }
+		NOT = { has_personal_deity = nhs_hellenic_athena }
+		NOT = { has_personal_deity = nhs_hellenic_ares }
+		NOT = { has_personal_deity = nhs_hellenic_hermes }
+		NOT = { has_personal_deity = nhs_hellenic_aphrodite} 
+		NOT = { has_personal_deity = nhs_hellenic_reformed_poseidon }
+		NOT = { has_personal_deity = nhs_hellenic_reformed_amphitrite }
+		NOT = { has_personal_deity = nhs_hellenic_reformed_oceanus }
+		NOT = { has_personal_deity = nhs_hellenic_reformed_atlas }
+		NOT = { has_personal_deity = nhs_hellenic_reformed_aphrodite }
+		NOT = { has_personal_deity = nhs_hellenic_reformed_orion }
+		NOT = { has_personal_deity = nhs_hellenic_reformed_triton }
+		NOT = { has_personal_deity = nhs_hellenic_reformed_zeus }
+		NOT = { has_personal_deity = nhs_hellenic_reformed_hera }
+		NOT = { has_personal_deity = nhs_hellenic_reformed_demeter }
+		NOT = { has_personal_deity = nhs_hellenic_reformed_hermes }
+		NOT = { has_personal_deity = nhs_hellenic_reformed_athena } 
+		NOT = { has_personal_deity = nhs_hellenic_reformed_heracles } 
+		NOT = { has_personal_deity = nhs_hellenic_reformed_hephasteus } 
+		NOT = { has_personal_deity = nhs_hellenic_reformed_apollo } 
+		NOT = { has_personal_deity = nhs_hellenic_reformed_artemis } 
+		NOT = { has_personal_deity = nhs_hellenic_reformed_dionysus  } 
+		NOT = { has_personal_deity = nhs_hellenic_reformed_leto } 
+		NOT = { has_personal_deity = nhs_hellenic_reformed_orpheus } 
+		NOT = { has_personal_deity = nhs_hellenic_reformed_chiron } 
+		NOT = { has_personal_deity = nhs_hellenic_reformed_perseus } 
+	}
+
+	immediate = {
+		set_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Zeus (unreformed)
+		name = nhs_hcd_hellenicflavor.31.a1
+
+		trigger = {
+			NOT = {
+				OR = {
+					has_country_flag = nhs_hellenic_reformed_zeus
+					has_country_flag = nhs_hellenic_reformed_poseidon
+					has_country_flag = nhs_hellenic_reformed_apollo
+				}
+			}
+		}
+
+		change_personal_deity = nhs_hellenic_zeus
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Hera (unreformed)
+		name = nhs_hcd_hellenicflavor.31.a2
+
+		trigger = {
+			NOT = {
+				OR = {
+					has_country_flag = nhs_hellenic_reformed_zeus
+					has_country_flag = nhs_hellenic_reformed_poseidon
+					has_country_flag = nhs_hellenic_reformed_apollo
+				}
+			}
+		}
+
+		change_personal_deity = nhs_hellenic_hera
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Poseidon (unreformed)
+		name = nhs_hcd_hellenicflavor.31.a3
+
+		trigger = {
+			NOT = {
+				OR = {
+					has_country_flag = nhs_hellenic_reformed_zeus
+					has_country_flag = nhs_hellenic_reformed_poseidon
+					has_country_flag = nhs_hellenic_reformed_apollo
+				}
+			}
+		}
+
+	    change_personal_deity = nhs_hellenic_poseidon
+	    clr_country_flag = nhs_hcd_choosing_deity
+    }
+
+	option = { #Athena (unreformed)
+		name = nhs_hcd_hellenicflavor.31.a4
+
+		trigger = {
+			NOT = {
+				OR = {
+					has_country_flag = nhs_hellenic_reformed_zeus
+					has_country_flag = nhs_hellenic_reformed_poseidon
+					has_country_flag = nhs_hellenic_reformed_apollo
+				}
+			}
+		}
+
+		change_personal_deity = nhs_hellenic_athena
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Ares (unreformed)
+		name = nhs_hcd_hellenicflavor.31.a5
+
+		trigger = {
+			NOT = {
+				OR = {
+					has_country_flag = nhs_hellenic_reformed_zeus
+					has_country_flag = nhs_hellenic_reformed_poseidon
+					has_country_flag = nhs_hellenic_reformed_apollo
+				}
+			}
+		}
+
+		change_personal_deity = nhs_hellenic_ares
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Hermes (unreformed)
+		name = nhs_hcd_hellenicflavor.31.a6
+
+		trigger = {
+			NOT = {
+				OR = {
+					has_country_flag = nhs_hellenic_reformed_zeus
+					has_country_flag = nhs_hellenic_reformed_poseidon
+					has_country_flag = nhs_hellenic_reformed_apollo
+				}
+			}
+		}
+
+		change_personal_deity = nhs_hellenic_hermes
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Aphrodite (unreformed)
+		name = nhs_hcd_hellenicflavor.31.a7
+
+		trigger = {
+			NOT = {
+				OR = {
+					has_country_flag = nhs_hellenic_reformed_zeus
+					has_country_flag = nhs_hellenic_reformed_poseidon
+					has_country_flag = nhs_hellenic_reformed_apollo
+				}
+			}
+		}
+
+		change_personal_deity = nhs_hellenic_aphrodite
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Poseidon
+		name = nhs_hcd_hellenicflavor.31.b1
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_poseidon
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_poseidon
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Amphitrite
+		name = nhs_hcd_hellenicflavor.31.b2
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_poseidon
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_amphitrite
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Oceanus
+		name = nhs_hcd_hellenicflavor.31.b3
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_poseidon
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_oceanus
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Atlas
+		name = nhs_hcd_hellenicflavor.31.b4
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_poseidon
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_atlas
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Aphrodite
+		name = nhs_hcd_hellenicflavor.31.b5
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_poseidon
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_aphrodite
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Orion
+		name = nhs_hcd_hellenicflavor.31.b6
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_poseidon
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_orion
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #Triton
+		name = nhs_hcd_hellenicflavor.31.b7
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_poseidon
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_triton
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #zeus
+		name = nhs_hcd_hellenicflavor.31.c1
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_zeus
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_zeus
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #hera
+		name = nhs_hcd_hellenicflavor.31.c2
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_zeus
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_hera
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #demeter
+		name = nhs_hcd_hellenicflavor.31.c3
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_zeus
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_demeter
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #hermes
+		name = nhs_hcd_hellenicflavor.31.c4
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_zeus
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_hermes
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #athena
+		name = nhs_hcd_hellenicflavor.31.c5
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_zeus
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_athena
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #heracles
+		name = nhs_hcd_hellenicflavor.31.c6
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_zeus
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_heracles
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #hephasteus
+		name = nhs_hcd_hellenicflavor.31.c7
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_zeus
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_hephasteus
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #apollo
+		name = nhs_hcd_hellenicflavor.31.d1
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_apollo
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_apollo
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #artemis
+		name = nhs_hcd_hellenicflavor.31.d2
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_apollo
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_artemis
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #dionysus
+		name = nhs_hcd_hellenicflavor.31.d3
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_apollo
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_dionysus
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #leto
+		name = nhs_hcd_hellenicflavor.31.d4
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_apollo
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_leto
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #orpheus
+		name = nhs_hcd_hellenicflavor.31.d5
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_apollo
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_orpheus
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #chiron
+		name = nhs_hcd_hellenicflavor.31.d6
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_apollo
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_chiron
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+
+	option = { #perseus
+		name = nhs_hcd_hellenicflavor.31.d7
+
+		trigger = {
+			has_country_flag = nhs_hellenic_reformed_apollo
+		}
+
+		change_personal_deity = nhs_hellenic_reformed_perseus
+		clr_country_flag = nhs_hcd_choosing_deity
+	}
+}
+
+country_event = { #Deification of emperors
+	id = nhs_hcd_hellenicflavor.32
+	title = nhs_hcd_hellenicflavor32.t
+	desc = nhs_hcd_hellenicflavor32.d
+	picture = BYZANTINE_EMPEROR_eventPicture
+
+	trigger = {
+		government = monarchy
+		religion = pantheon_worship
+		NOT = {
+			OR = {
+				has_ruler_modifier = nhs_hcd_deified_emperors_enforced
+				has_ruler_modifier = nhs_deified_emperors_refused
+			}
+		}
+	}
+
+	option = { #Deify the previous emperor (If the previous emperor was bad)
+		name = nhs_hcd_hellenicflavor.32.a
+
+		trigger = {
+			has_country_flag = nhs_hcd_deification_bad_emperor
+		}
+
+		clr_country_flag = nhs_hcd_deification_bad_emperor
+		add_estate_loyalty = {
+			estate = estate_nobles	
+			loyalty = -10
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		add_ruler_modifier = {
+			name = nhs_hcd_deified_emperors_enforced 
+		}
+	}
+
+	option = { #Deify the previous emperor (If the previous emperor was good)
+		name = nhs_hcd_hellenicflavor.32.b
+
+		trigger = {
+			NOT = { has_country_flag = nhs_hcd_deification_bad_emperor }
+		}
+
+		clr_country_flag = nhs_hcd_deification_bad_emperor
+		add_ruler_modifier = {
+			name = nhs_hcd_deified_emperors_enforced 
+		}
+	}
+
+	option = { #Refuse deification
+		name = nhs_hcd_hellenicflavor.32.c
+
+		clr_country_flag = nhs_hcd_deification_bad_emperor
+		add_ruler_modifier = {
+			name = nhs_hcd_deified_emperors_refused
+		}
+	}
+
+	after = {
+		country_event = {
+			id = nhs_hcd_hellenicflavor.321
+		}
+	}
+}
+
+country_event = { #Hidden event to mark the current ruler as "garbage"
+	id = nhs_hcd_hellenicflavor.321
+	title = nhs_hcd_hellenicflavor321.t
+	desc = nhs_hcd_hellenicflavor321.d
+	picture = BYZANTINE_EMPEROR_eventPicture
+
+	hidden = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		government = monarchy
+		religion = pantheon_worship
+	}
+
+	option = {
+		name = nhs_hcd_hellenicflavor.321.a
+
+		if = {
+			limit = {
+				NOT = {
+					mil = 3
+					adm = 3
+					dip = 3
+				}
+			}
+			set_country_flag = nhs_hcd_deification_bad_emperor
+		}
+	}
+}
+
+country_event = { #Sacrifices (Fires once a year)
+	id = nhs_hcd_hellenicflavor.33
+	title = nhs_hcd_hellenicflavor33.t
+	desc = nhs_hcd_hellenicflavor33.d
+	picture = OLYMPIANS_eventPicture
+
+	trigger = {
+		religion = pantheon_worship
+		is_month = 1
+		OR = {
+			had_country_flag = {
+				flag = nhs_hcd_proper_sacrifices
+				days = 365
+			}
+			NOT = {
+				has_country_flag = nhs_hcd_proper_sacrifices
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+	}
+
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = nhs_hcd_proper_sacrifices
+		}
+	}
+
+	option = { #Set aside money for the sacrifices
+		name = nhs_hcd_hellenicflavor.33.a
+
+		add_years_of_income = 0.5
+
+		add_country_modifier = {
+			name = nhs_hcd_sacrifices_modest 
+			duration = 364
+		}
+	}
+
+	option = { #Set aside a lot money for the sacrifices
+		name = nhs_hcd_hellenicflavor.33.b
+
+		add_years_of_income = 1
+
+		add_country_modifier = {
+			name = nhs_hcd_sacrifices_money
+			duration = 364
+		}
+	}
+
+	option = { #Grand festival
+		name = nhs_hcd_hellenicflavor.33.c
+
+		add_adm_power = -60
+
+		add_country_modifier = {
+			name = nhs_hcd_sacrifices_festival
+			duration = 364
+		}
+	}
+
+	option = { #Human sacrifices
+		name = nhs_hcd_hellenicflavor.33.d
+
+		trigger = {
+			at_war_with_religious_enemy = yes
+		}
+
+		every_known_country = {
+			limit = {
+				war_with = ROOT
+				NOT = {
+					religion = pantheon_worship
+				}
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = nhs_hcd_heathen_state
+			}
+		}
+
+		add_country_modifier = {
+			name = nhs_hcd_sacrifices_human
+			duration = 364
+		}
+	}
+
+	option = { #No sacrifices
+		name = nhs_hcd_hellenicflavor.33.e
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+
+		add_country_modifier = {
+			name = nhs_hcd_sacrifices_none
+			duration = 364
+		}
+	}
+
+	after = {
+		set_country_flag = nhs_hcd_proper_sacrifices
+	}
+}
+
+country_event = { #clerical reformation
+	id = nhs_hcd_hellenicflavor.34
+	title = nhs_hcd_hellenicflavor34.t
+	desc = nhs_hcd_hellenicflavor34.d
+	picture = OLYMPIANS_eventPicture
+
+    trigger = {
+		religion = pantheon_worship
+		has_country_flag = nhs_hcd_has_reformed_faith
+		num_of_owned_provinces_with = {
+			value = 30
+			religion = pantheon_worship
+		}
+		has_institution = printing_press
+		NOT = {
+			OR = {
+				has_any_disaster = yes
+				is_at_war = yes
+			}
+		}
+	}
+
+	fire_only_once = yes
+
+	mean_time_to_happen = {
+		months = 24
+
+		modifier = {
+			factor = 0.5
+			is_year = 1555
+		}
+		
+		modifier = {
+			factor = 0.25
+			is_year = 1560
+		}
+	}
+
+	option = { #Reform
+		name = nhs_hcd_hellenicflavor.34.a
+
+		take_estate_land_share_small = {
+			estate = estate_church
+		}
+
+		add_country_modifier = {
+			name = nhs_hcd_reform_clergy
+			religion = yes
+		}
+
+		custom_tooltip = nhs_hcd_hellenic_religion_reformed_clergy_yes.tt
+	}
+
+	option = { #Do not reform
+		name = nhs_hcd_hellenicflavor.34.b
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+
+		every_owned_province = {
+			limit = {
+				OR = {
+					religion = pantheon_worship
+					tolerance_to_this = 1
+				}
+			}
+			add_unrest = -3
+		}
+
+		custom_tooltip = nhs_hcd_hellenic_religion_reformed_clergy_no.tt
+	}
+}
+
+country_event = { #Good omens
+	id = nhs_hcd_hellenicflavor.35
+	title = nhs_hcd_hellenicflavor35.t
+	desc = nhs_hcd_hellenicflavor35.d
+	picture = OLYMPIANS_eventPicture
+
+	trigger = {
+		religion = pantheon_worship
+		NOT = {
+			is_bankrupt = yes 
+			has_regency = yes
+		}
+		stability = 0
+		OR = {
+			is_in_war = {
+				war_score = 0
+			}
+			NOT = { is_at_war = yes }
+		}
+		OR = {
+			NOT = { unrest = 1 }
+			legitimacy = 50
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 18
+
+		modifier = {
+			factor = 0.5
+			is_in_war = {
+				war_score = 10 
+			}
+		}
+
+		modifier = {
+			factor = 0.5
+			any_owned_province = {
+				is_prosperous = yes
+			}
+		}
+
+		modifier = {
+			factor = 0.25
+			
+			OR = {
+				adm = 4
+				dip = 4
+				mil = 4
+			}
+		}
+	}
+
+	option = { #Bask in the glory
+		name = nhs_hcd_hellenicflavor.35.a
+
+		add_prestige = 5
+	}
+
+	option = { #Have the oracly make an opfficial proclamation
+		name = nhs_hcd_hellenicflavor.35.b
+
+		add_legitimacy = 10
+	}
+
+	option = { #Say the omen are for the heir
+		name = nhs_hcd_hellenicflavor.35.c
+
+		trigger = {
+			government = monarchy
+			has_heir = yes
+		}
+
+		add_heir_claim = 25
+	}
+
+	option = { #the omen is clearly for the war
+		name = nhs_hcd_hellenicflavor.35.d
+
+		trigger = {
+			at_war_with_religious_enemy = yes
+		}
+
+		add_war_exhaustion = -2
+	}
+}
+
+country_event = { #Bad omens
+	id = nhs_hcd_hellenicflavor.36
+	title = nhs_hcd_hellenicflavor36.t
+	desc = nhs_hcd_hellenicflavor36.d
+	picture = OLYMPIANS_eventPicture
+
+	trigger = {
+		NOT = { has_regency = yes } 
+		religion = pantheon_worship
+		OR = {
+			NOT = { stability = 0 }
+			num_of_loans = 5
+			unrest = 1
+			war_exhaustion = 5
+			NOT = { legitimacy = 50 }
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 18
+
+		modifier = {
+			factor = 0.5
+			NOT = {
+				is_in_war = {
+					war_score = 0 
+			   }
+			}
+		}
+
+		modifier = {
+			factor = 0.8
+			NOT = {
+				government = monarchy
+				has_heir = yes
+			}
+		}
+
+		modifier = {
+			factor = 0.1
+			is_bankrupt = yes
+		}
+	}
+
+	option = { #Follow the recommendations of the oracle
+		name = nhs_hcd_hellenicflavor.36.a
+
+		add_country_modifier = {
+			name = nhs_hcd_prominent_oracle
+			duration = 1825
+		}
+	}
+
+	option = { #refuse to follow
+		name = nhs_hcd_hellenicflavor.36.b
+		
+		random_list = {
+			5 = { kill_ruler = yes }
+			45 = { change_adm = -1 }
+			50 = { add_prestige = 1 }
+		}
+	}
+
+	option = { #refuse to follow (but king is legitimate)
+		name = nhs_hcd_hellenicflavor.36.c
+
+		trigger = {
+			legitimacy = 90
+		}
+
+		add_legitimacy = -10
+	}
+
+	option = { #refuse to follow (but country is faifthul)
+		name = nhs_hcd_hellenicflavor.36.d
+
+		trigger = {
+			tolerance_to_this = 2 
+		}
+
+		add_prestige = -10
+	}
+	
+}
