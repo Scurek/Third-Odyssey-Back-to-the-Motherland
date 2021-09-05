@@ -1096,7 +1096,9 @@ country_event = {
 	immediate = {
 		set_country_flag = had_nhs2_countryevents25 #Makes noble estate appear
 		hidden_effect = {
-			country_event = { id = nhs2_countryevents.23 days = 183 random = 20 }
+			# country_event = { id = nhs2_countryevents.23 days = 183 random = 20 }
+			country_event = { id = nhs2_countryevents.26 days = 183 random = 20 }
+			country_event = { id = nhs2_countryevents.27 days = 183 random = 20 }
 			country_event = { id = nhs2_countryevents.73 days = 91 random = 10 }
 		}
 	}
@@ -1105,54 +1107,73 @@ country_event = {
 		name = "nhs2_countryevents.25.a"
 		custom_tooltip = nhs_enables_noble_estate_tt
 		capital_scope = {
-			add_base_tax = 2
+			# add_base_tax = 2
+			add_base_tax = 1
 		}
 	}
 	option = {
 		name = "nhs2_countryevents.25.b"
 		custom_tooltip = nhs_enables_noble_estate_tt
 		capital_scope = {
-			add_base_production = 2
-		}
-	}
-	option = {
-		name = "nhs2_countryevents.25.c"
-		custom_tooltip = nhs_enables_noble_estate_tt
-		capital_scope = {
-			add_base_tax = 1
+			# add_base_production = 2
 			add_base_production = 1
 		}
 	}
+	# option = {
+	# 	name = "nhs2_countryevents.25.c"
+	# 	custom_tooltip = nhs_enables_noble_estate_tt
+	# 	capital_scope = {
+	# 		add_base_tax = 1
+	# 		add_base_production = 1
+	# 	}
+	# }
 }
 
 
 #  Nobles request housing and land for farming estates
+# Now triggers upon gaining a second province
 country_event = {
 	id = nhs2_countryevents.23
 	title = nhs2_countryevents.23.t
 	desc = nhs2_countryevents.23.d
 	picture = byz_COURT_eventPicture
+
+	goto = nhs_noble_housing_target
 	
 	fire_only_once = yes
-	is_triggered_only = yes
+	# is_triggered_only = yes
 
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
+		num_of_cities = 2
 	}
 
 	immediate = {
-		hidden_effect = {
-			country_event = { id = nhs2_countryevents.26 days = 183 random = 20 }
-			country_event = { id = nhs2_countryevents.27 days = 183 random = 20 }
+		random_owned_province = {
+			limit = {
+				NOT = { is_capital = yes }
+			}
+			save_event_target_as = nhs_noble_housing_target
 		}
 	}
 
+	# immediate = {
+	# 	hidden_effect = {
+	# 		country_event = { id = nhs2_countryevents.26 days = 183 random = 20 }
+	# 		country_event = { id = nhs2_countryevents.27 days = 183 random = 20 }
+	# 	}
+	# }
+
 	option = {
 		name = "nhs2_countryevents.23.a"
-		capital_scope = {
+		event_target:nhs_noble_housing_target = {
 			add_base_tax = 1
 			add_base_production = 1
 		}
+		# capital_scope = {
+		# 	add_base_tax = 1
+		# 	add_base_production = 1
+		# }
 	}
 	option = {
 		name = "nhs2_countryevents.23.b"
@@ -1160,10 +1181,14 @@ country_event = {
 			estate = estate_nhs_nobles
 			loyalty = -20
 		}
-		capital_scope = {
+		event_target:nhs_noble_housing_target = {
 			add_base_tax = 1
 			add_base_production = 1
 		}
+		# capital_scope = {
+		# 	add_base_tax = 1
+		# 	add_base_production = 1
+		# }
 		add_treasury = 75
 		
 	}
@@ -2585,27 +2610,27 @@ country_event = {
 			name = "nhs2_colonial_boom"
 			duration = 7300
 		}
-		if = {
-			limit = {
-				any_owned_province = {
-					OR = {
-						has_province_modifier = nhs2_aqueducts5
-						has_province_modifier = nhs2_aqueducts4
-						has_province_modifier = nhs2_aqueducts2
-					}
-				}
-			}
-			every_owned_province = {
-				limit = {
-					OR = {
-						has_province_modifier = nhs2_aqueducts5
-						has_province_modifier = nhs2_aqueducts4
-						has_province_modifier = nhs2_aqueducts2
-					}
-				}
-				add_base_production = 1
-			}
-		}	
+		# if = {
+		# 	limit = {
+		# 		any_owned_province = {
+		# 			OR = {
+		# 				has_province_modifier = nhs2_aqueducts5
+		# 				has_province_modifier = nhs2_aqueducts4
+		# 				has_province_modifier = nhs2_aqueducts2
+		# 			}
+		# 		}
+		# 	}
+		# 	every_owned_province = {
+		# 		limit = {
+		# 			OR = {
+		# 				has_province_modifier = nhs2_aqueducts5
+		# 				has_province_modifier = nhs2_aqueducts4
+		# 				has_province_modifier = nhs2_aqueducts2
+		# 			}
+		# 		}
+		# 		add_base_production = 1
+		# 	}
+		# }	
 	}
 }
 
