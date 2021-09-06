@@ -1,6 +1,6 @@
 country_decisions = {
 
-	alaska_nation = {
+	usa_nation = {
 		major = yes
 		potential = {
 			NOT = { has_country_flag = changed_from_colonial_nation }
@@ -24,12 +24,12 @@ country_decisions = {
 						}
 					}
 					capital_scope = {
-						colonial_region = colonial_alaska
+						colonial_region = colonial_eastern_america
 						is_core = ROOT
 					}
 				}
 			}
-			colonial_alaska = {
+			colonial_eastern_america = {
 				owned_by = ROOT
 			}
 			OR = {
@@ -40,33 +40,20 @@ country_decisions = {
 				}
 			}
 		}
-		provinces_to_highlight = {
-			OR = {
-				area = alaska_area
-				area = hecate_strait_area
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				is_city = no
-			}
-		}
 		allow = {
 			adm_tech = 10
 			is_free_or_tributary_trigger = yes
 			is_at_war = no
-			NOT = { exists = ALA }
 			capital_scope = {
-				colonial_region = colonial_alaska
+				colonial_region = colonial_eastern_america
 				is_core = ROOT
 			}
 			num_of_owned_provinces_with = {
-				value = 5
+				value = 10
+				colonial_region = colonial_eastern_america
 				is_city = yes
-				OR = {
-					area = alaska_area
-					area = hecate_strait_area
-				}
 			}
+			NOT = { exists = USA }
 		}
 		effect = {
 			hidden_effect = {
@@ -77,7 +64,8 @@ country_decisions = {
 					ROOT = { save_event_target_as = old_tag_target }
 				}
 			}
-			change_tag = ALA
+			change_tag = USA
+			swap_non_generic_missions = yes
 			if = {
 				limit = {
 					NOT = { is_former_colonial_nation = yes }
@@ -99,26 +87,18 @@ country_decisions = {
 				change_primary_culture = american
 			}
 			if = {
-				limit = {
-					culture_group = iberian
-					NOT = { primary_culture = mexican }
-				}
-				change_primary_culture = mexican
+				limit = { has_custom_ideas = no }
+				country_event = { id = ideagroups.1 } #Swap Ideas
 			}
-			colonial_alaska = {
+			colonial_eastern_america = {
 				limit = {
 					NOT = { owned_by = ROOT }
 				}
-				add_permanent_claim = ALA
+				add_permanent_claim = USA
 			}
 			add_country_modifier = {
 				name = "centralization_modifier"
 				duration = 7300
-			}
-			add_prestige = 25
-			if = {
-				limit = { has_custom_ideas = no }
-				country_event = { id = ideagroups.1 } #Swap Ideas
 			}
 			#can't have more than one elective monarchy in the game
 			if = {
@@ -128,6 +108,7 @@ country_decisions = {
 				change_government = monarchy
 				add_government_reform = feudalism_reform
 			}
+			add_prestige = 25
 			set_country_flag = changed_from_colonial_nation
 		}
 		ai_will_do = {
