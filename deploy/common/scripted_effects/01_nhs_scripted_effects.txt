@@ -598,9 +598,6 @@ nhs_decrease_variable = {
 	}
 }
 
-nhs_hightier_building_counter_trigger = {
-	continent = north_america
-}
 nhs_building_counter_clear_flag = {
 	set_country_flag = $FLAG$_$BUILDING$
 }
@@ -700,12 +697,271 @@ nhs_building_counter_effect_add_with_obsolete = {
 		}
 	}
 }
+nhs_building_counter_effect_add_with_two_obsolete = {
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = $FLAG$
+			}
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $BUILDING$ 
+				}
+			}
+			[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$ = yes
+			]
+		}
+		if = {
+			limit = {
+				nhs_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $OLD_BUILDING$ 
+				}
+			}
+			nhs_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING$ }
+			nhs_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+		}
+		else_if = {
+			limit = {
+				nhs_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $OLD_BUILDING_2$ 
+				}
+			}
+			nhs_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING_2$ }
+			nhs_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+		}
+		else = {
+			nhs_building_counter_set_flag = { 
+				FLAG = $FLAG$ 
+				BUILDING = $BUILDING$ 
+			}
+			owner = {
+				change_variable = {
+					which = $VAR$
+					value = 1
+				}
+			}
+		}
+	}
+}
+nhs_building_counter_effect_add_with_three_obsolete = {
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = $FLAG$
+			}
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $BUILDING$ 
+				}
+			}
+			[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$ = yes
+			]
+		}
+		if = {
+			limit = {
+				nhs_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $OLD_BUILDING$ 
+				}
+			}
+			nhs_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING$ }
+			nhs_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+		}
+		else_if = {
+			limit = {
+				nhs_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $OLD_BUILDING_2$ 
+				}
+			}
+			nhs_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING_2$ }
+			nhs_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+		}
+		else_if = {
+			limit = {
+				nhs_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $OLD_BUILDING_3$ 
+				}
+			}
+			nhs_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING_3$ }
+			nhs_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+		}
+		else = {
+			nhs_building_counter_set_flag = { 
+				FLAG = $FLAG$ 
+				BUILDING = $BUILDING$ 
+			}
+			owner = {
+				change_variable = {
+					which = $VAR$
+					value = 1
+				}
+			}
+		}
+	}
+}
+nhs_homelands_building_counter_trigger = {
+	area = chesapeake_area
+}
+nhs_initiate_homelands_building_counter = {
+	set_variable = {
+		which = nhs_HomelandsBuildingCount
+		value = 0
+	}
+	set_country_flag = nhs_homelands_build_counter
+	every_owned_province = {
+		limit = {
+			nhs_homelands_building_counter_trigger = yes
+		}
+		nhs_homelands_building_counter_eval_local_province = yes
+	}
+}
+nhs_building_counter_local_province_check_building = {
+	if = {
+		limit = {
+			has_building = $BUILDING$
+			NOT = {
+				nhs_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $BUILDING$ 
+				} 
+			}
+		}
+		nhs_building_counter_set_flag = {
+			FLAG = $FLAG$ 
+			BUILDING = $BUILDING$ 
+		}
+		owner = {
+			change_variable = {
+				which = $VAR$
+				value = 1
+			}
+		}
+	}
+}
+nhs_building_counter_former_province_check_building = {
+	if = {
+		limit = {
+			nhs_building_counter_had_building = { 
+				FLAG = $FLAG$  
+				BUILDING = $BUILDING$ 
+			} 
+		}
+		nhs_building_counter_clear_flag = {
+			FLAG = $FLAG$  
+			BUILDING = $BUILDING$  
+		}
+		FROM = {
+			subtract_variable = {
+				which = $VAR$
+				value = 1
+			}
+		}
+	}
+}
+nhs_homelands_building_counter_eval_local_province = {
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = marketplace }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = workshop }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = temple }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = barracks }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = shipyard }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = fort_15th }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = coastal_defence }
+
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = courthouse }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = dock }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = regimental_camp }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = fort_16th }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = naval_battery }
+
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = cathedral }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = university }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = trade_depot }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = grand_shipyard }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = training_fields }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = fort_17th }
+
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = stock_exchange }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = counting_house }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = town_hall }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = drydock }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = conscription_center }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = fort_18th }
+
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = wharf }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = weapons }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = textile }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = plantations }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = tradecompany }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = farm_estate }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = mills }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = furnace }
+
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = ramparts }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = soldier_households }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = impressment_offices }
+	nhs_building_counter_local_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = state_house }
+}
+nhs_homelands_building_counter_eval_former_province = {
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = marketplace }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = workshop }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = temple }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = barracks }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = shipyard }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = fort_15th }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = coastal_defence }
+
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = courthouse }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = dock }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = regimental_camp }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = fort_16th }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = naval_battery }
+
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = cathedral }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = university }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = trade_depot }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = grand_shipyard }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = training_fields }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = fort_17th }
+
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = stock_exchange }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = counting_house }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = town_hall }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = drydock }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = conscription_center }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = fort_18th }
+
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = wharf }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = weapons }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = textile }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = plantations }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = tradecompany }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = farm_estate }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = mills }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = furnace }
+
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = ramparts }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = soldier_households }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = impressment_offices }
+	nhs_building_counter_former_province_check_building = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = state_house }
+}
+
+nhs_hightier_building_counter_trigger = {
+	continent = north_america
+}
 nhs_initiate_hightier_building_counter = {
 	set_variable = {
 		which = nhs_HighTierBuildingCount
 		value = 0
 	}
-
+	set_country_flag = nhs_high_tier_building_counter
 	every_owned_province = {
 		limit = {
 			continent = north_america
