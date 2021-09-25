@@ -19,12 +19,12 @@ else_if = {
 {%- endif %}
     limit = {
         {%- if loop.first %}
-        native_size = {{ pop }}
+        native_size = {{ pop - 0.5 }}
         {%- elif loop.last %}
-        NOT = { native_size = {{ loop.previtem }} }
+        NOT = { native_size = {{ loop.previtem - 0.5 }} }
         {%- else %}
-        NOT = { native_size = {{ loop.previtem }} }
-        native_size = {{ pop }}
+        NOT = { native_size = {{ loop.previtem - 0.5 }} }
+        native_size = {{ pop - 0.5 }}
         {%- endif %}
         NOT = { has_province_flag = to_local_natives_num_{{ pop }} }
     }
