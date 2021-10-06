@@ -1,0 +1,478 @@
+namespace = to_nat_governments
+
+###################################################
+### WAR CHIEF
+###################################################
+
+#War Chief
+country_event = {
+	id = to_nat_governments.1
+	title = to_nat_governments.1.t
+	desc = to_nat_governments.1.d
+	picture = LAND_MILITARY_eventPicture
+		
+	trigger = {
+		OR = {
+			has_reform = to_council_of_cities_reform
+			has_reform = to_native_parliament_reform
+		}
+		is_at_war = yes
+		NOT = { has_country_flag = appointed_war_chief }
+	}
+	
+	option = {
+		name = to_nat_governments.1.a
+		ai_chance = {
+			factor = 1
+		}
+		set_country_flag = appointed_war_chief
+		if = {
+			limit = {
+				has_country_flag = to_war_chief_exiled_@ROOT
+				NOT = {
+					had_country_flag = {
+						flag = to_war_chief_exiled_@ROOT
+						days = 7300
+					}
+				}
+			}
+			set_ruler = to_exiled_war_chief_@ROOT
+			clr_country_flag = to_war_chief_exiled_@ROOT
+		}
+		else = {
+			to_assign_war_chief = yes
+		}
+		convert_ruler_to_general = yes
+		clr_country_flag = to_war_chief_exiled_@ROOT
+	}
+	
+	option = {
+		name = to_nat_governments.1.b # The council shall retain the power
+		add_dip_power = 10
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#War Chief Dies, during war
+country_event = {
+	id = to_nat_governments.2
+	title = to_nat_governments.2.t
+	desc = to_nat_governments.2.d
+	picture = DEATH_OF_HEIR_eventPicture
+
+	is_triggered_only = yes
+		
+	trigger = {
+		OR = {
+			has_reform = to_council_of_cities_reform
+			has_reform = to_native_parliament_reform
+		}
+		is_at_war = yes
+		has_country_flag = appointed_war_chief
+	}
+	
+	option = {
+		name = to_nat_governments.2.a
+		ai_chance = {
+			factor = 1
+		}
+		set_country_flag = appointed_war_chief
+		to_assign_war_chief = yes
+		convert_ruler_to_general = yes
+	}
+	
+	option = {
+		name = to_nat_governments.2.b # The council shall retain the power
+		to_assign_native_council = yes
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+# Removing War Chief
+country_event = {
+	id = to_nat_governments.3
+	title = to_nat_governments.3.t
+	desc = to_nat_governments.3.d
+	picture = COURT_eventPicture
+		
+	trigger = {
+		OR = {
+			has_reform = to_council_of_cities_reform
+			has_reform = to_native_parliament_reform
+		}
+		is_at_war = no
+		has_country_flag = appointed_war_chief
+	}
+	
+	option = {
+		name = to_nat_governments.3.a
+		ai_chance = {
+			factor = 1
+		}
+		exile_ruler_as = to_exiled_war_chief_@ROOT
+		set_country_flag = to_war_chief_exiled_@ROOT
+		to_assign_native_council = yes
+	}
+	
+	option = {
+		name = to_nat_governments.3.b
+		highlight = yes
+		trigger = {
+			has_reform = martial_society_reform
+		}
+		add_republican_tradition = -25
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#War Chief Dies, after war
+country_event = {
+	id = to_nat_governments.4
+	title = to_nat_governments.4.t
+	desc = to_nat_governments.4.d
+	picture = DEATH_OF_HEIR_eventPicture
+
+	is_triggered_only = yes
+		
+	trigger = {
+		OR = {
+			has_reform = to_council_of_cities_reform
+			has_reform = to_native_parliament_reform
+		}
+		is_at_war = no
+		has_country_flag = appointed_war_chief
+	}
+
+	immediate = {
+		clr_country_flag = appointed_war_chief
+	}
+	
+	option = {
+		name = to_nat_governments.4.a # The council shall retain the power
+		to_assign_native_council = yes
+	}
+}
+
+###################################################
+### Elections
+###################################################
+
+# Council Election
+country_event = {
+	id = to_nat_governments.5
+	title = to_nat_governments.5.t
+	desc = to_nat_governments.5.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+
+	is_triggered_only = yes
+		
+	trigger = {
+		OR = {
+			has_reform = to_council_of_cities_reform
+			has_reform = to_native_parliament_reform
+		}
+		has_reform = to_native_elections_reform
+		NOT = { has_country_flag = appointed_war_chief }
+	}
+	
+	option = {
+		name = to_nat_governments.5.a
+		add_scaled_republican_tradition = -7.5
+		ai_chance = {
+			factor = 1
+		}
+		to_native_council_election_assign_mana = {
+			PRIMARY = adm
+			SECONDARY = dip
+			TERTIARY = mil
+		}
+	}
+	
+	option = {
+		name = to_nat_governments.5.b
+		add_scaled_republican_tradition = -7.5
+		ai_chance = {
+			factor = 1
+		}
+		to_native_council_election_assign_mana = {
+			PRIMARY = dip
+			SECONDARY = adm
+			TERTIARY = mil
+		}
+	}
+
+	option = {
+		name = to_nat_governments.5.c
+		add_scaled_republican_tradition = -7.5
+		ai_chance = {
+			factor = 1
+		}
+		to_native_council_election_assign_mana = {
+			PRIMARY = mil
+			SECONDARY = adm
+			TERTIARY = dip
+		}
+	}
+
+	option = {
+		name = to_nat_governments.5.e
+		ai_chance = {
+			factor = 1
+		}
+		add_scaled_republican_tradition = 3.75
+		if = {
+			limit = {
+				adm = 4
+			}
+			change_adm = -1
+		}
+		if = {
+			limit = {
+				dip = 4
+			}
+			change_dip = -1
+		}
+		if = {
+			limit = {
+				mil = 4
+			}
+			change_mil = -1
+		}
+		hidden_effect = {
+			to_native_council_election_save_stats = yes
+		}
+	}
+}
+
+# Election upon death
+country_event = {
+	id = to_nat_governments.6
+	title = to_nat_governments.6.t
+	desc = to_nat_governments.6.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+
+	is_triggered_only = yes
+		
+	trigger = {
+		OR = {
+			has_reform = to_council_of_cities_reform
+			has_reform = to_native_parliament_reform
+		}
+		has_reform = to_native_centralise_power_reform
+		NOT = { has_country_flag = appointed_war_chief }
+	}
+
+	immediate = {
+		hidden_effect = {
+			# Get cultures
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_owner_culture = yes
+						has_owner_accepted_culture = yes
+					}
+				}
+				save_event_target_as = first_ruler_alternative_province
+				set_province_flag = to_nat_election_culture_target
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_owner_culture = yes
+						has_owner_accepted_culture = yes
+					}
+					NOT = { has_province_flag = to_nat_election_culture_target }
+				}
+				save_event_target_as = second_ruler_alternative_province
+				set_province_flag = to_nat_election_culture_target
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_owner_culture = yes
+						has_owner_accepted_culture = yes
+					}
+					NOT = { has_province_flag = to_nat_election_culture_target }
+				}
+				save_event_target_as = third_ruler_alternative_province
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = first_ruler_alternative_province }
+				}
+				capital_scope = {
+					save_event_target_as = first_ruler_alternative_province
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = second_ruler_alternative_province }
+				}
+				capital_scope = {
+					save_event_target_as = second_ruler_alternative_province
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = third_ruler_alternative_province }
+				}
+				capital_scope = {
+					save_event_target_as = third_ruler_alternative_province
+				}
+			}
+			# Define Rulers
+			if = {
+				limit = {
+					republic_with_female_rulers_trigger = yes
+				}
+				define_exiled_ruler = {
+					exiled_as = native_candidate_a_@ROOT
+					random_gender = yes
+					culture = event_target:first_ruler_alternative_province
+					religion = event_target:first_ruler_alternative_province
+					min_age = 30
+					max_age = 60
+					adm = 2
+					dip = -1
+					mil = -1
+					option = 0
+				}
+			}
+			else = {
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_a_@ROOT
+					culture = event_target:first_ruler_alternative_province
+					religion = event_target:first_ruler_alternative_province
+					min_age = 30
+					max_age = 60
+					adm = 2
+					dip = -1
+					mil = -1
+					fixed = yes
+					option = 0
+				}
+			}
+			if = {
+				limit = {
+					republic_with_female_rulers_trigger = yes
+				}
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_b_@ROOT
+					culture = event_target:second_ruler_alternative_province
+					religion = event_target:second_ruler_alternative_province
+					min_age = 30
+					max_age = 60
+					adm = -1
+					dip = 2
+					mil = -1
+					random_gender = yes
+					option = 1
+				}
+			}
+			else = {
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_b_@ROOT
+					culture = event_target:second_ruler_alternative_province
+					religion = event_target:second_ruler_alternative_province
+					min_age = 30
+					max_age = 60
+					adm = -1
+					dip = 2
+					mil = -1
+					option = 1
+				}
+			}
+			if = {
+				limit = {
+					republic_with_female_rulers_trigger = yes
+				}
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_c_@ROOT
+					culture = event_target:third_ruler_alternative_province
+					religion = event_target:third_ruler_alternative_province
+					min_age = 30
+					max_age = 60
+					adm = -1
+					dip = -1
+					mil = 2
+					random_gender = yes
+					option = 2
+				}
+			}
+			else = {
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_c_@ROOT
+					culture = event_target:third_ruler_alternative_province
+					religion = event_target:third_ruler_alternative_province
+					min_age = 30
+					max_age = 60
+					adm = -1
+					dip = -1
+					mil = 2
+					option = 2
+				}
+			}
+			# Clear flags
+			every_owned_province = {
+				limit = {
+					has_province_flag = to_nat_election_culture_target
+				}
+				clr_province_flag = to_nat_election_culture_target
+			}
+		}
+	}
+	
+	option = {
+		name = to_nat_governments.6.a
+		ai_chance = {
+			factor = 0
+		}
+		add_republican_tradition = -25
+		set_ruler = lottery_candidate_a_@ROOT
+		custom_tooltip = to_nat_candidate_a_tt
+	}
+	option = {
+		name = to_nat_governments.6.b
+		ai_chance = {
+			factor = 0
+		}
+		add_republican_tradition = -25
+		set_ruler = lottery_candidate_b_@ROOT
+		custom_tooltip = to_nat_candidate_b_tt
+	}
+	option = {
+		name = to_nat_governments.6.c
+		ai_chance = {
+			factor = 0
+		}
+		add_republican_tradition = -25
+		set_ruler = lottery_candidate_c_@ROOT
+		custom_tooltip = to_nat_candidate_c_tt
+	}
+	option = { # lottery
+		name = to_nat_governments.6.e
+		ai_chance = {
+			factor = 90
+		}
+		random_list = {
+			33 = { 
+				set_ruler = lottery_candidate_a_@ROOT 
+				custom_tooltip = to_nat_candidate_a_tt
+			}
+			33 = { 
+				set_ruler = lottery_candidate_b_@ROOT
+				custom_tooltip = to_nat_candidate_b_tt
+			}
+			33 = { 
+				set_ruler = lottery_candidate_c_@ROOT
+				custom_tooltip = to_nat_candidate_c_tt
+			}
+		}
+	}
+}

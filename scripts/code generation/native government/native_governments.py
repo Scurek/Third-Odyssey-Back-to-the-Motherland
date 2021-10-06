@@ -3,6 +3,7 @@ from jinja2 import Template, Environment
 output_file = "output.txt"
 output_file_local = "output_localisation.txt"
 output_file_governments = "output_governments.txt"
+output_file_array = "output_array.txt"
 
 # sequence = range(5000, 0, -STEP)
 
@@ -75,13 +76,24 @@ republic_parliament = '''republic = yes
     }'''
 
 monarchy = '''monarchy = yes
-	heir = yes
 	queen = yes
 	republican_name = no'''
 
 theocracy = '''has_devotion = yes
 	different_religion_acceptance = -20
 	different_religion_group_acceptance = -50'''
+
+effect_republic = '''
+        add_republican_tradition = 80
+'''
+
+effect_theocracy = '''
+        add_devotion = 80
+'''
+
+effect_monarchy = '''
+        add_legitimacy = 80
+'''
 
 trigger_monarchy = '''
         has_reform = to_native_reform_stratified
@@ -90,6 +102,7 @@ trigger_monarchy = '''
 
 trigger_republic = '''
         OR = {
+            has_reform = to_native_parliament_reform
             AND = {
                 NOT = { has_reform = to_native_reform_theocracy }
                 has_reform = to_council_of_cities_reform
@@ -113,13 +126,18 @@ trigger_theocracy = '''
         }
 '''
 
-general_effects = '''custom_tooltip = to_remove_excess_gov_reforms_points_tt
-        custom_tooltip = to_remove_native_modifiers_tt
-        hidden_effect = {
-            change_government_reform_progress = -10000
-            save_native_gov_reforms = yes
-            change_government = native_reformed
-            load_native_gov_reforms = yes
+general_effects = '''if = {
+            limit = {
+                has_reform = native_basic_reform
+            }
+            custom_tooltip = to_remove_excess_gov_reforms_points_tt
+            custom_tooltip = to_remove_native_modifiers_tt
+            hidden_effect = {
+                change_government_reform_progress = -10000
+                to_save_native_reforms = yes
+                change_government = native_reformed
+                to_load_native_reforms = yes
+            }
         }'''
 
 trigger_none = '''
@@ -132,29 +150,30 @@ trigger_none = '''
             }
         } 
 '''
+governments = [(codified_power, "to_native_reform_codified_power_", "Codified Power"),
+               (government_power, "to_native_reform_government_power_", "Government Decree"),
+               (higher_powers, "to_native_reform_higher_powers_", "Divine Mandate")]
 
-variations = [("republic", republic, trigger_republic),
-              ("republic_parliament", republic_parliament, trigger_republic_parliament),
-              ("monarchy", monarchy, trigger_monarchy),
-              ("theocracy", theocracy, trigger_theocracy),
-              ("none", "", trigger_none)]
+variations = [("republic", republic, trigger_republic, effect_republic),
+              # ("republic_parliament", republic_parliament, trigger_republic_parliament, effect_republic),
+              ("monarchy", monarchy, trigger_monarchy, effect_monarchy),
+              ("theocracy", theocracy, trigger_theocracy, effect_theocracy),
+              ("none", "", trigger_none, "")]
 
 f = open(output_file, "w")
 f_local = open(output_file_local, "w")
 f_governments = open(output_file_governments, "w")
+f_array = open(output_file_array, "w")
 for variation in variations:
-    f.write(codified_power.render(type=variation[0], trigger=variation[2], gov_effects=variation[1], effects=general_effects))
-    name = "to_native_reform_codified_power_" + variation[0]
-    f_governments.write(name + "\n")
-    f_local.write(" " + name + ":0 \"Codified Power\"\n")
-    f.write(government_power.render(type=variation[0], trigger=variation[2], gov_effects=variation[1], effects=general_effects))
-    name = "to_native_reform_government_power_" + variation[0]
-    f_governments.write(name + "\n")
-    f_local.write(" " + name + ":0 \"Government Decree\"\n")
-    f.write(higher_powers.render(type=variation[0], trigger=variation[2], gov_effects=variation[1], effects=general_effects))
-    name = "to_native_reform_higher_powers_" + variation[0]
-    f_governments.write(name + "\n")
-    f_local.write(" " + name + ":0 \"Divine Mandate\"\n")
+    for government in governments:
+        f.write(government[0].render(type=variation[0], trigger=variation[2], gov_effects=variation[1],
+                                     effects=general_effects + variation[3]))
+        name = government[1] + variation[0]
+        f_array.write("\"" + name + "\",\n")
+        f_governments.write(name + "\n")
+        f_local.write(" " + name + ":0 \"" + government[2] + "\"\n")
+
 f.close()
 f_local.close()
 f_governments.close()
+f_array.close()
