@@ -52,8 +52,8 @@ higher_powers = Template('''to_native_reform_higher_powers_{{ type }} = {
 	nation_designer_cost = 20
 	potential = { {{ trigger }} \t}
 	modifiers = {
-		tolerance_own = 1
-		stability_cost_modifier = -0.5
+		tolerance_own = 2
+		stability_cost_modifier = -0.33
 	}
 	effect = {
 	    {{ effects }}
@@ -76,7 +76,7 @@ republic_parliament = '''republic = yes
     }'''
 
 monarchy = '''monarchy = yes
-	queen = yes
+    # heir = no
 	republican_name = no'''
 
 theocracy = '''has_devotion = yes
@@ -92,27 +92,54 @@ effect_theocracy = '''
 '''
 
 effect_monarchy = '''
-        add_legitimacy = 80
+        if = {
+            limit = {
+                has_ruler_flag = to_nat_has_native_council
+            }
+            define_ruler = {
+                claim = 80
+                min_age = 30
+                max_age = 60
+            }
+        }
+        else = {
+            hidden_effect = {
+                add_legitimacy = -100
+                add_legitimacy = 80
+            }
+        }
 '''
 
 trigger_monarchy = '''
-        has_reform = to_native_reform_stratified
-        has_reform = to_grand_chiefdom_reform
+        has_reform = to_native_kingdom_reform
 '''
+
+# trigger_monarchy = '''
+#         has_reform = to_native_reform_stratified
+#         has_reform = to_grand_chiefdom_reform
+# '''
 
 trigger_republic = '''
         OR = {
             has_reform = to_native_parliament_reform
-            AND = {
-                NOT = { has_reform = to_native_reform_theocracy }
-                has_reform = to_council_of_cities_reform
-            }
-            AND = {
-                has_reform = to_native_reform_egalitarian
-                has_reform = to_grand_chiefdom_reform
-            }
+            has_reform = to_council_of_cities_reform
+            has_reform = to_grand_chiefdom_reform
         }
 '''
+
+# trigger_republic = '''
+#         OR = {
+#             has_reform = to_native_parliament_reform
+#             AND = {
+#                 NOT = { has_reform = to_native_reform_theocracy }
+#                 has_reform = to_council_of_cities_reform
+#             }
+#             AND = {
+#                 has_reform = to_native_reform_egalitarian
+#                 has_reform = to_grand_chiefdom_reform
+#             }
+#         }
+# '''
 
 trigger_republic_parliament = '''
         has_reform = to_native_parliament_reform
@@ -133,23 +160,29 @@ general_effects = '''if = {
             custom_tooltip = to_remove_excess_gov_reforms_points_tt
             custom_tooltip = to_remove_native_modifiers_tt
             hidden_effect = {
-                change_government_reform_progress = -10000
                 to_save_native_reforms = yes
                 change_government = native_reformed
                 to_load_native_reforms = yes
+                change_government_reform_progress = -10000
             }
         }'''
 
 trigger_none = '''
-        OR = {
-            has_reform = to_native_kingdom_reform
-            AND = {
-                NOT = { has_reform = to_council_of_cities_reform }
-                NOT = { has_reform = to_native_parliament_reform }
-                NOT = { has_reform = to_grand_chiefdom_reform }
-            }
-        } 
+        NOT = { has_reform = to_native_kingdom_reform }
+        NOT = { has_reform = to_council_of_cities_reform }
+        NOT = { has_reform = to_native_parliament_reform }
+        NOT = { has_reform = to_grand_chiefdom_reform }
 '''
+# trigger_none = '''
+#         OR = {
+#             has_reform = to_native_kingdom_reform
+#             AND = {
+#                 NOT = { has_reform = to_council_of_cities_reform }
+#                 NOT = { has_reform = to_native_parliament_reform }
+#                 NOT = { has_reform = to_grand_chiefdom_reform }
+#             }
+#         }
+# '''
 governments = [(codified_power, "to_native_reform_codified_power_", "Codified Power"),
                (government_power, "to_native_reform_government_power_", "Government Decree"),
                (higher_powers, "to_native_reform_higher_powers_", "Divine Mandate")]
@@ -157,7 +190,7 @@ governments = [(codified_power, "to_native_reform_codified_power_", "Codified Po
 variations = [("republic", republic, trigger_republic, effect_republic),
               # ("republic_parliament", republic_parliament, trigger_republic_parliament, effect_republic),
               ("monarchy", monarchy, trigger_monarchy, effect_monarchy),
-              ("theocracy", theocracy, trigger_theocracy, effect_theocracy),
+              # ("theocracy", theocracy, trigger_theocracy, effect_theocracy),
               ("none", "", trigger_none, "")]
 
 f = open(output_file, "w")

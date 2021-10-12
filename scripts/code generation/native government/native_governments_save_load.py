@@ -6,7 +6,7 @@ output_file_load = "output_load.txt"
 reforms = [
     "to_native_reform_egalitarian",
     "to_native_reform_stratified",
-    "to_native_reform_theocracy",
+    # "to_native_reform_theocracy",
     "native_martial_tradition_reform",
     "native_oral_tradition_reform",
     "native_land_tradition_reform",
@@ -25,9 +25,6 @@ reforms = [
     "to_native_reform_codified_power_monarchy",
     "to_native_reform_government_power_monarchy",
     "to_native_reform_higher_powers_monarchy",
-    "to_native_reform_codified_power_theocracy",
-    "to_native_reform_government_power_theocracy",
-    "to_native_reform_higher_powers_theocracy",
     "to_native_reform_codified_power_none",
     "to_native_reform_government_power_none",
     "to_native_reform_higher_powers_none",

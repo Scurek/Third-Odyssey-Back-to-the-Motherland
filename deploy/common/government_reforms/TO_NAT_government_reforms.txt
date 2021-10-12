@@ -48,7 +48,7 @@ native_reformed_basic_reform = {
 	native_mechanic = yes
 	allow_migration = yes
 	valid_for_new_country = no
-	allow¸¸_convert = yes
+	allow_normal_conversion = yes
 	republican_name = yes
 	royal_marriage = no
 	custom_attributes = {
@@ -67,13 +67,14 @@ native_reformed_basic_reform = {
 
 to_native_reform_egalitarian = {
 	icon = "retain_tribal_hierarchy"
+	disallowed_trade_goods = { slaves }
 	allow_normal_conversion = yes
 	valid_for_nation_designer = yes
 	nation_designer_cost = 20
 	modifiers = {
 		land_morale = 0.10
 		female_advisor_chance = 0.3
-		max_absolutism = -20
+		max_absolutism = -10
 	}
 }
 
@@ -88,16 +89,16 @@ to_native_reform_stratified = {
 	}
 }
 
-to_native_reform_theocracy = {
-	icon = "tribal_religious_society"
-	allow_normal_conversion = yes
-	valid_for_nation_designer = yes
-	nation_designer_cost = 20
-	modifiers = {
-		tolerance_own = 2
-		manpower_in_true_faith_provinces = 0.20
-	}
-}
+# to_native_reform_theocracy = {
+# 	icon = "tribal_religious_society"
+# 	allow_normal_conversion = yes
+# 	valid_for_nation_designer = yes
+# 	nation_designer_cost = 20
+# 	modifiers = {
+# 		tolerance_own = 2
+# 		manpower_in_true_faith_provinces = 0.20
+# 	}
+# }
 
 # TIER II
 
@@ -204,28 +205,18 @@ to_native_parliament_reform = {
 to_grand_chiefdom_reform = {
 	icon = "chief"
 	allow_normal_conversion = yes
-	valid_for_nation_designer = yes
-	nation_designer_cost = 20
+	has_term_election = yes
+	duration = 40
 	modifiers = {
-		min_autonomy = -15
+		stability_cost_modifier = -0.33
+		max_absolutism = 10
 	}
-	conditional = {
-		allow = {
-			has_dlc = "Res Publica"
-		}
-		states_general_mechanic = {
-			council = {
-				advisor_cost = -0.25
-				administrative_efficiency = 0.05
-				stability_cost_modifier = -0.10
-				republican_tradition = 0.5
-				yearly_absolutism = -1
-			}
 
-			chief = {
-				all_power_cost = -0.05
-				global_autonomy = -0.05
-				republican_tradition = -0.5
+	effect = {
+		hidden_effect = {
+			set_variable = {
+				which = to_nat_chiefdom_dinasty_counter
+				value = 1
 			}
 		}
 	}
@@ -234,21 +225,22 @@ to_grand_chiefdom_reform = {
 to_native_kingdom_reform = {
 	icon = "chieftain"
 	allow_normal_conversion = yes
-	valid_for_nation_designer = yes
-	nation_designer_cost = 20
-	monarchy = yes
+	# monarchy = yes
 	heir = yes
 	queen = yes
 	trigger = {
-		OR = {
-			has_reform = to_native_reform_stratified
-			has_reform = to_native_reform_theocracy
-		}
+		has_reform = to_native_reform_stratified
+		# OR = {
+		# 	has_reform = to_native_reform_stratified
+		# 	has_reform = to_native_reform_theocracy
+		# }
 	}
 	modifiers = {
+		# prestige = 1
 		unjustified_demands = -0.2
-		# stability_cost_modifier = -0.5
-		governing_capacity = 200
+		all_power_cost = -0.05
+		max_absolutism = 10
+		# governing_capacity = 200
 	}
 
 	effect = {
@@ -264,13 +256,12 @@ to_native_kingdom_reform = {
 to_native_elections_reform = {
 	icon = "ballot_box"
 	allow_normal_conversion = yes
-	valid_for_nation_designer = yes
-	nation_designer_cost = 20
 
 	trigger = {
 		OR = {
 			has_reform = to_council_of_cities_reform
 			has_reform = to_native_parliament_reform
+			has_reform = to_grand_chiefdom_reform
 		}
 	}
 
@@ -288,9 +279,10 @@ to_native_elections_reform = {
 to_native_centralise_power_reform = {
 	icon = "man_on_podium"
 	allow_normal_conversion = yes
-	valid_for_nation_designer = yes
-	nation_designer_cost = 20
 	rulers_can_be_generals = yes
+	potential = {
+		has_dlc = "Res Publica"
+	}
 	trigger = {
 		OR = {
 			has_reform = to_council_of_cities_reform
@@ -299,10 +291,10 @@ to_native_centralise_power_reform = {
 	}
 
 	modifiers = {
-		monarch_military_power = 1
 		max_absolutism = 10
 	}
 	effect = {
+		custom_tooltip = to_nat_disable_war_chief_tt
 		if = {
 			limit = {
 				has_country_flag = appointed_war_chief
@@ -310,121 +302,233 @@ to_native_centralise_power_reform = {
 			custom_tooltip = to_nat_warchief_remains_tt
 		}
 		else = {
-			custom_tooltip = to_nat_warchief_will_remain_tt¸
-			define_ruler = {
-				hide_skills = yes
-				min_age = 30
-				max_age = 60
+			custom_tooltip = to_nat_warchief_will_remain_tt
+		}
+	}
+
+	conditional = {
+		allow = {
+			has_dlc = "Res Publica"
+		}
+		has_term_election = yes
+		duration = 8
+		states_general_mechanic = {
+			council = {
+				advisor_cost = -0.10
+				administrative_efficiency = 0.05
+				stability_cost_modifier = -0.20
+				republican_tradition = 0.5
+				# yearly_absolutism = -1
+			}
+
+			chief = {
+				all_power_cost = -0.05
+				global_autonomy = -0.05
+				republican_tradition = -1.5
 			}
 		}
 	}
-
-	custom_attributes = {
-		election_on_death = yes
-	}
 }
 
-to_native_promote_aristocracy_reform = {
-	icon = "queen"
+to_native_feudalism_reform = {
+	# icon = "queen"
+	icon = "tribal_centralize_power"
 	allow_normal_conversion = yes
-	valid_for_nation_designer = yes
-	nation_designer_cost = 20
 
 	trigger = {
 		has_reform = to_native_reform_stratified
+		has_reform = to_native_kingdom_reform
 	}
 
 	modifiers = {
-		army_tradition_decay = -0.03
-		nobles_loyalty_modifier = 0.1
-		nobles_influence_modifier = 0.05
+		governing_capacity = 200
+		global_manpower_modifier = 0.1
+		nobles_influence_modifier = 0.1
 	}
-
-	conditional = {
-        allow = {
-            has_dlc = "Common Sense"
-        }
-        has_parliament = yes
-    }
 }
 
-## TODO war chief
-
-to_native_later_parliament_reform = {
-	icon = "three_classes_reform"
+to_native_promote_the_council_reform = {
+	icon = "generic_people"
 	allow_normal_conversion = yes
-	valid_for_nation_designer = yes
-	nation_designer_cost = 20
 
 	trigger = {
 		OR = {
-			government = monarchy
-			government = theocracy
+			has_reform = to_grand_chiefdom_reform
+			has_reform = to_native_kingdom_reform
 		}
 	}
 
 	modifiers = {
-		free_adm_policy = 1
-		possible_adm_policy = 1
+		administrative_efficiency = 0.05
+		advisor_cost = -0.25
+		advisor_pool = 1
+		max_absolutism = -5
+	}
+}
+
+to_native_ruling_dynasties_reform = {
+	icon = "native_family"
+	allow_normal_conversion = yes
+	monarchy = yes
+
+	trigger = {
+		has_reform = to_grand_chiefdom_reform
+	}
+
+	modifiers = {
+		legitimacy = 0.5
+		candidate_random_bonus = 1
+	}
+
+	effect = {
+		if = {
+			limit = {
+				NOT = { government = monarchy }
+			}
+			custom_tooltip = to_ruling_dynasties_yearly_legitimacy_tt
+		}
+		custom_tooltip = to_ruling_dynasties_elections_tt
+	}
+}
+
+# to_native_absolute_rule_reform = {
+# 	icon = "queen"
+# 	allow_normal_conversion = yes
+
+# 	trigger = {
+# 		has_reform = to_native_reform_stratified
+# 		has_reform = to_native_kingdom_reform
+# 	}
+
+# 	modifiers = {
+# 		republican_tradition = -0.5
+# 		yearly_absolutism = 1
+# 		max_absolutism = 20
+# 	}
+# }
+
+to_native_military_rule_reform = {
+	icon = "axes"
+	allow_normal_conversion = yes
+
+	trigger = {
+		OR = {
+			has_reform = to_grand_chiefdom_reform
+			has_reform = to_native_kingdom_reform
+		}
+		OR = {
+		 	has_reform = martial_society_reform
+			has_native_reform_government_power = yes
+		}
+	}
+
+	modifiers = {
+		monarch_diplomatic_power = -1
+		monarch_military_power = 2
+		army_tradition = 0.5
+		governing_capacity_modifier = -0.5
 	}
 
 	conditional = {
-        allow = {
-            has_dlc = "Common Sense"
-        }
-        has_parliament = yes
-
-		custom_attributes = {
-			blocked_call_diet = yes
-		}
-    }
-
-	ai = {
-		factor = 1
-		modifier = {
-			NOT = { has_dlc = "Common Sense" }
-			factor = 0
-		}
+		allow = { has_dlc = "Rights of Man" }
+		militarised_society = yes
 	}
 }
 
-to_native_separation_of_power_reform = {
-	icon = "monks"
-	allow_normal_conversion = yes
-	valid_for_nation_designer = yes
-	nation_designer_cost = 20
+# to_native_later_parliament_reform = {
+# 	icon = "three_classes_reform"
+# 	allow_normal_conversion = yes
 
-	trigger = {
-		government = theocracy
-	}
+# 	trigger = {
+# 		OR = {
+# 			government = monarchy
+# 			government = theocracy
+# 		}
+# 	}
 
-	modifiers = {
-		diplomatic_upkeep = 1
-		yearly_corruption = -0.05
-	}
-}
+# 	modifiers = {
+# 		free_adm_policy = 1
+# 		possible_adm_policy = 1
+# 	}
+
+# 	conditional = {
+#         allow = {
+#             has_dlc = "Common Sense"
+#         }
+#         has_parliament = yes
+
+# 		custom_attributes = {
+# 			blocked_call_diet = yes
+# 		}
+#     }
+
+# 	ai = {
+# 		factor = 1
+# 		modifier = {
+# 			NOT = { has_dlc = "Common Sense" }
+# 			factor = 0
+# 		}
+# 	}
+# }
+
+# to_native_separation_of_power_reform = {
+# 	icon = "monks"
+# 	allow_normal_conversion = yes
+
+# 	trigger = {
+# 		has_reform = to_native_reform_theocracy
+#         OR = {
+#             has_reform = to_grand_chiefdom_reform
+#             has_reform = to_council_of_cities_reform
+#         }
+# 	}
+
+# 	modifiers = {
+# 		diplomatic_upkeep = 1
+# 		yearly_corruption = -0.05
+# 	}
+# }
 
 to_native_divine_dinasty_reform = {
 	icon = "divine_guidance_reform"
 	allow_normal_conversion = yes
-	valid_for_nation_designer = yes
-	nation_designer_cost = 20
-	heir = yes
-	royal_marriage = yes
+	has_devotion = yes
+	maintain_dynasty = yes
+
+	different_religion_acceptance = -20
+	different_religion_group_acceptance = -50
 
 	trigger = {
-		government = theocracy
+		has_reform = to_native_kingdom_reform
+		has_native_reform_higher_powers = yes
+
+		# has_reform = to_native_reform_theocracy
+		# NOT = { has_reform = to_council_of_cities_reform }
+		# NOT = { has_reform = to_native_parliament_reform }
 	}
 
 	modifiers = {
-		devotion = 2
-		prestige = 1
-		tolerance_own = 1
-		max_absolutism = 10
+		devotion = 1
+		tolerance_own = 2
+		global_manpower = -0.2
+		manpower_in_true_faith_provinces = 0.2
+		max_absolutism = 50
 	}
 }
 
 # TIER VI
+
+
+
+to_native_placeholder_reform = {
+	icon = "tribal_council"
+	allow_normal_conversion = yes
+	valid_for_nation_designer = yes
+	nation_designer_cost = 20
+	modifiers = {
+		global_manpower_modifier = 0.2
+	}
+}
 
 to_native_placeholder2_reform = {
 	icon = "tribal_council"
@@ -435,3 +539,25 @@ to_native_placeholder2_reform = {
 		global_manpower_modifier = 0.2
 	}
 }
+
+# to_native_promote_aristocracy_reform = {
+# 	icon = "queen"
+# 	allow_normal_conversion = yes
+
+# 	trigger = {
+# 		has_reform = to_native_reform_stratified
+# 	}
+
+# 	modifiers = {
+# 		army_tradition_decay = -0.03
+# 		nobles_loyalty_modifier = 0.1
+# 		nobles_influence_modifier = 0.05
+# 	}
+
+# 	conditional = {
+#         allow = {
+#             has_dlc = "Common Sense"
+#         }
+#         has_parliament = yes
+#     }
+# }
