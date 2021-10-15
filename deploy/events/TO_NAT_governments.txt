@@ -4,7 +4,8 @@ namespace = to_nat_governments
 ### WAR CHIEF
 ###################################################
 
-#War Chief
+# War Chief
+# War chiefs stats could be potentially determined by army tradition, but I just don't have time rn.
 country_event = {
 	id = to_nat_governments.1
 	title = to_nat_governments.1.t
@@ -19,6 +20,7 @@ country_event = {
 		NOT = { has_reform = to_native_centralise_power_reform }
 		is_at_war = yes
 		NOT = { has_country_flag = appointed_war_chief }
+		NOT = { has_country_flag = to_declined_war_chief }
 	}
 	
 	option = {
@@ -33,7 +35,7 @@ country_event = {
 				NOT = {
 					had_country_flag = {
 						flag = to_war_chief_exiled_@ROOT
-						days = 7300
+						days = 3650
 					}
 				}
 			}
@@ -43,13 +45,17 @@ country_event = {
 		else = {
 			to_assign_war_chief = yes
 		}
-		convert_ruler_to_general = yes
+		# This does not restore ruler stats, neither does it assign them properly upon being run the first time
+		# We can only hope AI makes the ruler into a general
+		# convert_ruler_to_general = yes
+		custom_tooltip = to_nat_warchief_becomes_general_tt
 		clr_country_flag = to_war_chief_exiled_@ROOT
 	}
 	
 	option = {
 		name = to_nat_governments.1.b # The council shall retain the power
 		add_dip_power = 10
+		set_country_flag = to_declined_war_chief
 		ai_chance = {
 			factor = 0
 		}
@@ -72,6 +78,11 @@ country_event = {
 		}
 		is_at_war = yes
 		has_country_flag = appointed_war_chief
+		NOT = { has_country_flag = to_do_not_trigger_warchief_death }
+	}
+
+	immediate = {
+		clr_country_flag = appointed_war_chief
 	}
 	
 	option = {
@@ -79,9 +90,9 @@ country_event = {
 		ai_chance = {
 			factor = 1
 		}
-		set_country_flag = appointed_war_chief
 		to_assign_war_chief = yes
-		convert_ruler_to_general = yes
+		# convert_ruler_to_general = yes
+		set_country_flag = appointed_war_chief
 	}
 	
 	option = {
@@ -114,8 +125,21 @@ country_event = {
 		ai_chance = {
 			factor = 1
 		}
-		exile_ruler_as = to_exiled_war_chief_@ROOT
-		set_country_flag = to_war_chief_exiled_@ROOT
+		# This is to prevent a case where he dies while this event is open
+		if = {
+			limit = {
+				has_country_flag = appointed_war_chief
+				NOT = { ruler_age = 50 }
+				# If not republic, might as well not exile then -1 stability happens
+				government = republic
+			}
+			# This is here because exiling a ruler causes on death election
+			set_country_flag = to_do_not_trigger_warchief_death
+			exile_ruler_as = to_exiled_war_chief_@ROOT
+			set_country_flag = to_war_chief_exiled_@ROOT
+			clr_country_flag = to_do_not_trigger_warchief_death
+		}
+		clr_country_flag = appointed_war_chief
 		to_assign_native_council = yes
 	}
 	
@@ -146,6 +170,7 @@ country_event = {
 			has_reform = to_council_of_cities_reform
 			has_reform = to_native_parliament_reform
 		}
+		NOT = { has_country_flag = to_do_not_trigger_warchief_death }
 		is_at_war = no
 		has_country_flag = appointed_war_chief
 	}
@@ -345,8 +370,8 @@ country_event = {
 					random_gender = yes
 					culture = event_target:first_ruler_alternative_province
 					religion = event_target:first_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = 2
 					dip = -1
 					mil = -1
@@ -358,8 +383,8 @@ country_event = {
 					exiled_as = lottery_candidate_a_@ROOT
 					culture = event_target:first_ruler_alternative_province
 					religion = event_target:first_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = 2
 					dip = -1
 					mil = -1
@@ -374,8 +399,8 @@ country_event = {
 					exiled_as = lottery_candidate_b_@ROOT
 					culture = event_target:second_ruler_alternative_province
 					religion = event_target:second_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = -1
 					dip = 2
 					mil = -1
@@ -388,8 +413,8 @@ country_event = {
 					exiled_as = lottery_candidate_b_@ROOT
 					culture = event_target:second_ruler_alternative_province
 					religion = event_target:second_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = -1
 					dip = 2
 					mil = -1
@@ -404,8 +429,8 @@ country_event = {
 					exiled_as = lottery_candidate_c_@ROOT
 					culture = event_target:third_ruler_alternative_province
 					religion = event_target:third_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = -1
 					dip = -1
 					mil = 2
@@ -418,8 +443,8 @@ country_event = {
 					exiled_as = lottery_candidate_c_@ROOT
 					culture = event_target:third_ruler_alternative_province
 					religion = event_target:third_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = -1
 					dip = -1
 					mil = 2
@@ -642,8 +667,8 @@ country_event = {
 					random_gender = yes
 					culture = event_target:first_ruler_alternative_province
 					religion = event_target:first_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = 2
 					dip = -1
 					mil = -1
@@ -655,8 +680,8 @@ country_event = {
 					exiled_as = lottery_candidate_a_@ROOT
 					culture = event_target:first_ruler_alternative_province
 					religion = event_target:first_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = 2
 					dip = -1
 					mil = -1
@@ -671,8 +696,8 @@ country_event = {
 					exiled_as = lottery_candidate_b_@ROOT
 					culture = event_target:second_ruler_alternative_province
 					religion = event_target:second_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = -1
 					dip = 2
 					mil = -1
@@ -685,8 +710,8 @@ country_event = {
 					exiled_as = lottery_candidate_b_@ROOT
 					culture = event_target:second_ruler_alternative_province
 					religion = event_target:second_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = -1
 					dip = 2
 					mil = -1
@@ -701,8 +726,8 @@ country_event = {
 					exiled_as = lottery_candidate_c_@ROOT
 					culture = event_target:third_ruler_alternative_province
 					religion = event_target:third_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = -1
 					dip = -1
 					mil = 2
@@ -715,8 +740,8 @@ country_event = {
 					exiled_as = lottery_candidate_c_@ROOT
 					culture = event_target:third_ruler_alternative_province
 					religion = event_target:third_ruler_alternative_province
-					min_age = 30
-					max_age = 60
+					min_age = 50
+					max_age = 65
 					adm = -1
 					dip = -1
 					mil = 2
@@ -941,18 +966,18 @@ country_event = {
 				random_gender = yes
 				culture = event_target:first_ruler_alternative_province
 				religion = event_target:first_ruler_alternative_province
-				min_age = 30
-				max_age = 60
-				claim = 50
+				min_age = 50
+				max_age = 65
+				claim = 60
 			}
 		}
 		else = {
 			define_ruler = {
 				culture = event_target:first_ruler_alternative_province
 				religion = event_target:first_ruler_alternative_province
-				min_age = 30
-				max_age = 60
-				claim = 50
+				min_age = 50
+				max_age = 65
+				claim = 60
 			}
 		}
 		hidden_effect = {
@@ -974,19 +999,19 @@ country_event = {
 			define_ruler = {
 				culture = event_target:second_ruler_alternative_province
 				religion = event_target:second_ruler_alternative_province
-				min_age = 30
-				max_age = 60
+				min_age = 50
+				max_age = 65
 				random_gender = yes
-				claim = 50
+				claim = 60
 			}
 		}
 		else = {
 			define_ruler = {
 				culture = event_target:second_ruler_alternative_province
 				religion = event_target:second_ruler_alternative_province
-				min_age = 30
-				max_age = 60
-				claim = 50
+				min_age = 50
+				max_age = 65
+				claim = 60
 			}
 		}
 		hidden_effect = {
@@ -1124,18 +1149,18 @@ country_event = {
 				random_gender = yes
 				culture = event_target:first_ruler_alternative_province
 				religion = event_target:first_ruler_alternative_province
-				min_age = 30
-				max_age = 60
-				claim = 50
+				min_age = 50
+				max_age = 65
+				claim = 60
 			}
 		}
 		else = {
 			define_ruler = {
 				culture = event_target:first_ruler_alternative_province
 				religion = event_target:first_ruler_alternative_province
-				min_age = 30
-				max_age = 60
-				claim = 50
+				min_age = 50
+				max_age = 65
+				claim = 60
 			}
 		}
 		hidden_effect = {
@@ -1157,19 +1182,19 @@ country_event = {
 			define_ruler = {
 				culture = event_target:second_ruler_alternative_province
 				religion = event_target:second_ruler_alternative_province
-				min_age = 30
-				max_age = 60
+				min_age = 50
+				max_age = 65
 				random_gender = yes
-				claim = 50
+				claim = 60
 			}
 		}
 		else = {
 			define_ruler = {
 				culture = event_target:second_ruler_alternative_province
 				religion = event_target:second_ruler_alternative_province
-				min_age = 30
-				max_age = 60
-				claim = 50
+				min_age = 50
+				max_age = 65
+				claim = 60
 			}
 		}
 		hidden_effect = {

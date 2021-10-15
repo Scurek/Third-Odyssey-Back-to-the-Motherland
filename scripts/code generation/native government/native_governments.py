@@ -16,7 +16,7 @@ codified_power = Template('''to_native_reform_codified_power_{{ type }} = {
 	modifiers = {
 		legitimacy = 1
 		monthly_heir_claim_increase = 0.5
-		republican_tradition = 1
+		republican_tradition = 0.5
 		horde_unity = 2
 	}
 	effect = {
@@ -64,7 +64,10 @@ higher_powers = Template('''to_native_reform_higher_powers_{{ type }} = {
 ''')
 
 republic = '''republic = yes
-	has_term_election = no'''
+	has_term_election = no
+	custom_attributes = {
+		election_on_death = yes
+	}'''
 
 republic_parliament = '''republic = yes
     has_term_election = no
@@ -84,7 +87,9 @@ theocracy = '''has_devotion = yes
 	different_religion_group_acceptance = -50'''
 
 effect_republic = '''
-        add_republican_tradition = 80
+        hidden_effect = {
+            add_republican_tradition = 80
+        }
 '''
 
 effect_theocracy = '''

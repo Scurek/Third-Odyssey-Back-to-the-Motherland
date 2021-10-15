@@ -1366,49 +1366,52 @@ to_load_native_reforms = {
 }
 
 to_assign_native_council = {
-	if = {
-		limit = {
-			culture_group = muskogean
+	custom_tooltip = to_nat_to_assign_native_council_tt
+	hidden_effect = {
+		if = {
+			limit = {
+				culture_group = muskogean
+			}
+			define_ruler = {
+				name = "Council of Cities"
+				regency = yes
+				adm = 3
+				dip = 3
+				mil = 3
+				fixed = yes
+			}
 		}
-		define_ruler = {
-			name = "(Council of Cities)"
-			regency = yes
-			adm = 0
-			dip = 0
-			mil = 0
-			fixed = yes
+		else_if = {
+			limit = {
+				OR = {
+					has_reform = to_native_reform_stratified
+					has_reform = to_native_parliament_reform
+				}	
+			}
+			define_ruler = {
+				name = "Council of Chiefs"
+				regency = yes
+				adm = 3
+				dip = 3
+				mil = 3
+				fixed = yes
+			}
 		}
+		else = {
+			define_ruler = {
+				name = "Council of Elders"
+				regency = yes
+				adm = 3
+				dip = 3
+				mil = 3
+				fixed = yes
+			}
+		}
+		set_ruler_flag = to_nat_has_native_council
+		to_native_promote_load_mana = { MANA = adm }
+		to_native_promote_load_mana = { MANA = dip }
+		to_native_promote_load_mana = { MANA = mil }
 	}
-	else_if = {
-		limit = {
-			OR = {
-				has_reform = to_native_reform_stratified
-				has_reform = to_native_parliament_reform
-			}	
-		}
-		define_ruler = {
-			name = "(Council of Chiefs)"
-			regency = yes
-			adm = 0
-			dip = 0
-			mil = 0
-			fixed = yes
-		}
-	}
-	else = {
-		define_ruler = {
-			name = "(Council of Elders)"
-			regency = yes
-			adm = 0
-			dip = 0
-			mil = 0
-			fixed = yes
-		}
-	}
-	set_ruler_flag = to_nat_has_native_council
-	to_native_promote_load_mana = { MANA = adm }
-	to_native_promote_load_mana = { MANA = dip }
-	to_native_promote_load_mana = { MANA = mil }
 }
 
 to_native_promote_load_mana = {
@@ -1416,19 +1419,10 @@ to_native_promote_load_mana = {
 		limit = {
 			check_variable = {
 				which = to_native_council_$MANA$
-				value = 7
-			}
-		}
-		change_$MANA$ = 6
-	}
-	else_if = {
-		limit = {
-			check_variable = {
-				which = to_native_council_$MANA$
 				value = 6
 			}
 		}
-		change_$MANA$ = 5
+		change_$MANA$ = 3
 	}
 	else_if = {
 		limit = {
@@ -1437,7 +1431,7 @@ to_native_promote_load_mana = {
 				value = 5
 			}
 		}
-		change_$MANA$ = 4
+		change_$MANA$ = 2
 	}
 	else_if = {
 		limit = {
@@ -1446,7 +1440,7 @@ to_native_promote_load_mana = {
 				value = 4
 			}
 		}
-		change_$MANA$ = 3
+		change_$MANA$ = 1
 	}
 	else_if = {
 		limit = {
@@ -1455,7 +1449,7 @@ to_native_promote_load_mana = {
 				value = 3
 			}
 		}
-		change_$MANA$ = 2
+		change_$MANA$ = 0
 	}
 	else_if = {
 		limit = {
@@ -1464,7 +1458,7 @@ to_native_promote_load_mana = {
 				value = 2
 			}
 		}
-		change_$MANA$ = 1
+		change_$MANA$ = -1
 	}
 	else_if = {
 		limit = {
@@ -1473,13 +1467,21 @@ to_native_promote_load_mana = {
 				value = 1
 			}
 		}
-		change_$MANA$ = 0
+		change_$MANA$ = -2
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = to_native_council_$MANA$
+				value = 0
+			}
+		}
+		change_$MANA$ = -3
 	}
 	else = {
-		change_$MANA$ = 3
 		set_variable = {
 			which = to_native_council_$MANA$
-			value = 4
+			value = 3
 		}
 	}
 }
@@ -1490,7 +1492,7 @@ to_assign_native_council_fixed_stats = {
 			culture_group = muskogean
 		}
 		define_ruler = {
-			name = "(Council of Cities)"
+			name = "Council of Cities"
 			regency = yes
 			adm = $ADM$
 			dip = $DIP$
@@ -1506,7 +1508,7 @@ to_assign_native_council_fixed_stats = {
 			}	
 		}
 		define_ruler = {
-			name = "(Council of Chiefs)"
+			name = "Council of Chiefs"
 			regency = yes
 			adm = $ADM$
 			dip = $DIP$
@@ -1516,7 +1518,7 @@ to_assign_native_council_fixed_stats = {
 	}
 	else = {
 		define_ruler = {
-			name = "(Council of Elders)"
+			name = "Council of Elders"
 			regency = yes
 			adm = $ADM$
 			dip = $DIP$
@@ -1597,7 +1599,7 @@ to_native_council_election_save_mana = {
 		}
 		set_variable = {
 			which = to_native_council_$MANA$
-			value = 7
+			value = 6
 		}
 	}
 	else_if = {
@@ -1606,7 +1608,7 @@ to_native_council_election_save_mana = {
 		}
 		set_variable = {
 			which = to_native_council_$MANA$
-			value = 6
+			value = 5
 		}
 	}
 	else_if = {
@@ -1615,7 +1617,7 @@ to_native_council_election_save_mana = {
 		}
 		set_variable = {
 			which = to_native_council_$MANA$
-			value = 5
+			value = 4
 		}
 	}
 	else_if = {
@@ -1624,7 +1626,7 @@ to_native_council_election_save_mana = {
 		}
 		set_variable = {
 			which = to_native_council_$MANA$
-			value = 4
+			value = 3
 		}
 	}
 	else_if = {
@@ -1633,7 +1635,7 @@ to_native_council_election_save_mana = {
 		}
 		set_variable = {
 			which = to_native_council_$MANA$
-			value = 3
+			value = 2
 		}
 	}
 	else_if = {
@@ -1642,7 +1644,7 @@ to_native_council_election_save_mana = {
 		}
 		set_variable = {
 			which = to_native_council_$MANA$
-			value = 2
+			value = 1
 		}
 	}
 	else_if = {
@@ -1651,19 +1653,21 @@ to_native_council_election_save_mana = {
 		}
 		set_variable = {
 			which = to_native_council_$MANA$
-			value = 1
+			value = 0
 		}
 	}
 }
 
 to_assign_war_chief = {
+	# This produces ~10 mana on average. I think.
 	define_ruler = {
-		adm = 1
+		adm = -1
 		max_random_adm = 4
-		dip = 0
+		dip = -1
 		max_random_dip = 3
 		mil = 5
-		max_age = 30
+		min_age = 20
+		max_age = 40
 	}
 }
 
@@ -1675,20 +1679,23 @@ to_define_monarchy_chieftain = {
 		define_ruler = {
 			random_gender = yes
 			dynasty = ROOT
+			name = "lastname"
 			culture = variable:old_ruler_culture
 			religion = variable:old_ruler_religion
-			max_age = 30
+			min_age = 25
+			max_age = 40
 			claim = $LEGITIMACY$
 		}
 	}
 	else = {
 		define_ruler = {
-			random_gender = yes
 			dynasty = ROOT
+			name = "lastname"
 			culture = variable:old_ruler_culture
 			religion = variable:old_ruler_religion
 			claim = $LEGITIMACY$
-			max_age = 30
+			min_age = 25
+			max_age = 40
 		}
 	}
 }

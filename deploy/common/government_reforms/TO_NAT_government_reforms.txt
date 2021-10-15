@@ -135,7 +135,9 @@ to_council_of_cities_reform = {
 	allow_normal_conversion = yes
 	valid_for_nation_designer = yes
 	nation_designer_cost = 20
-	rulers_can_be_generals = no
+	# If this is enabled then War Chiefs can't be defined as generals, even via events
+	# on the other hand council is a "regency" so it can't be a general anyway
+	# rulers_can_be_generals = no
 	trigger = {
 		NOT = { has_reform = to_native_parliament_reform }
 	}
@@ -177,7 +179,7 @@ to_native_parliament_reform = {
 	allow_normal_conversion = yes
 	valid_for_nation_designer = yes
 	nation_designer_cost = 20
-	rulers_can_be_generals = no
+	# rulers_can_be_generals = no
 	modifiers = {
 		native_assimilation = 1
 		global_unrest = -3
@@ -206,6 +208,7 @@ to_grand_chiefdom_reform = {
 	icon = "chief"
 	allow_normal_conversion = yes
 	has_term_election = yes
+	heir = no
 	duration = 40
 	modifiers = {
 		stability_cost_modifier = -0.33
@@ -217,6 +220,23 @@ to_grand_chiefdom_reform = {
 			set_variable = {
 				which = to_nat_chiefdom_dinasty_counter
 				value = 1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = appointed_war_chief
+			}
+			custom_tooltip = to_nat_warchief_remains_tt
+		}
+		else = {
+			custom_tooltip = to_nat_warchief_will_remain_tt
+			if = {
+				limit = {
+					has_ruler_flag = to_nat_has_native_council
+				}
+				define_ruler = {
+					hide_skills = yes
+				}
 			}
 		}
 	}
@@ -245,6 +265,23 @@ to_native_kingdom_reform = {
 
 	effect = {
 		add_legitimacy = 100
+		if = {
+			limit = {
+				has_country_flag = appointed_war_chief
+			}
+			custom_tooltip = to_nat_warchief_remains_tt
+		}
+		else = {
+			custom_tooltip = to_nat_warchief_will_remain_tt
+			if = {
+				limit = {
+					has_ruler_flag = to_nat_has_native_council
+				}
+				define_ruler = {
+					hide_skills = yes
+				}
+			}
+		}
 	}
 	custom_attributes = {
 		enables_aristocratic_idea_group = yes
@@ -269,9 +306,25 @@ to_native_elections_reform = {
 	duration = 8
 
 	modifiers = {
+		advisor_pool = 1
 	}
 
 	effect = {
+		if = {
+			limit = {
+				OR = {
+					has_reform = to_council_of_cities_reform
+					has_reform = to_native_parliament_reform
+				}
+				NOT = { has_ruler_flag = to_nat_has_native_council }
+				NOT = { has_country_flag = appointed_war_chief }
+			}
+			to_assign_native_council_fixed_stats = {
+				ADM = 3
+				DIP = 3
+				MIL = 3
+			}
+		}
 		custom_tooltip = to_nat_council_elections_tt
 	}
 }
@@ -300,9 +353,16 @@ to_native_centralise_power_reform = {
 				has_country_flag = appointed_war_chief
 			}
 			custom_tooltip = to_nat_warchief_remains_tt
+			change_statists_vs_orangists = 0.20
 		}
 		else = {
 			custom_tooltip = to_nat_warchief_will_remain_tt
+			if = {
+				limit = {
+					has_ruler_flag = to_nat_has_native_council
+				}
+				country_event = { id = to_nat_governments.10 }
+			}
 		}
 	}
 
@@ -370,7 +430,10 @@ to_native_promote_the_council_reform = {
 to_native_ruling_dynasties_reform = {
 	icon = "native_family"
 	allow_normal_conversion = yes
+	republic = no
 	monarchy = yes
+	has_term_election = yes
+	duration = 40
 
 	trigger = {
 		has_reform = to_grand_chiefdom_reform
