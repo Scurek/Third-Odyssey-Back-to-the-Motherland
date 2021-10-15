@@ -14,20 +14,13 @@ reforms = [
     "native_settle_down_reform",
     "native_war_band_reform",
     "to_native_reform_nomadic_raiders",
-    "to_council_of_cities_reform",
-    "to_native_parliament_reform",
-    "to_grand_chiefdom_reform",
-    "to_native_kingdom_reform",
-    # codegen
-    "to_native_reform_codified_power_republic",
-    "to_native_reform_government_power_republic",
-    "to_native_reform_higher_powers_republic",
-    "to_native_reform_codified_power_monarchy",
-    "to_native_reform_government_power_monarchy",
-    "to_native_reform_higher_powers_monarchy",
-    "to_native_reform_codified_power_none",
-    "to_native_reform_government_power_none",
-    "to_native_reform_higher_powers_none",
+    "to_native_reform_consensus_government",
+    "to_native_reform_law_of_peace",
+    "to_native_reform_grand_chiefdom",
+    "to_native_reform_kingdom",
+    "to_native_reform_codified_power",
+    "to_native_reform_government_power",
+    "to_native_reform_higher_powers",
 ]
 
 save = Template('''{% for reform in reforms %}

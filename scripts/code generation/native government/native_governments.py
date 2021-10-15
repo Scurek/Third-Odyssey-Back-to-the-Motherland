@@ -1,3 +1,5 @@
+# THIS IS DEPRECATED, CAUSED TO MANY PROBLEMS WITH THE RIGID WAY THE GOVERNMENTS WORK
+
 from jinja2 import Template, Environment
 
 output_file = "output.txt"
@@ -116,45 +118,45 @@ effect_monarchy = '''
 '''
 
 trigger_monarchy = '''
-        has_reform = to_native_kingdom_reform
+        has_reform = to_native_reform_kingdom
 '''
 
 # trigger_monarchy = '''
 #         has_reform = to_native_reform_stratified
-#         has_reform = to_grand_chiefdom_reform
+#         has_reform = to_native_reform_grand_chiefdom
 # '''
 
 trigger_republic = '''
         OR = {
-            has_reform = to_native_parliament_reform
-            has_reform = to_council_of_cities_reform
-            has_reform = to_grand_chiefdom_reform
+            has_reform = to_native_reform_law_of_peace
+            has_reform = to_native_reform_consensus_government
+            has_reform = to_native_reform_grand_chiefdom
         }
 '''
 
 # trigger_republic = '''
 #         OR = {
-#             has_reform = to_native_parliament_reform
+#             has_reform = to_native_reform_law_of_peace
 #             AND = {
 #                 NOT = { has_reform = to_native_reform_theocracy }
-#                 has_reform = to_council_of_cities_reform
+#                 has_reform = to_native_reform_consensus_government
 #             }
 #             AND = {
 #                 has_reform = to_native_reform_egalitarian
-#                 has_reform = to_grand_chiefdom_reform
+#                 has_reform = to_native_reform_grand_chiefdom
 #             }
 #         }
 # '''
 
 trigger_republic_parliament = '''
-        has_reform = to_native_parliament_reform
+        has_reform = to_native_reform_law_of_peace
 '''
 
 trigger_theocracy = '''
         has_reform = to_native_reform_theocracy
         OR = {
-            has_reform = to_grand_chiefdom_reform
-            has_reform = to_council_of_cities_reform
+            has_reform = to_native_reform_grand_chiefdom
+            has_reform = to_native_reform_consensus_government
         }
 '''
 
@@ -173,18 +175,18 @@ general_effects = '''if = {
         }'''
 
 trigger_none = '''
-        NOT = { has_reform = to_native_kingdom_reform }
-        NOT = { has_reform = to_council_of_cities_reform }
-        NOT = { has_reform = to_native_parliament_reform }
-        NOT = { has_reform = to_grand_chiefdom_reform }
+        NOT = { has_reform = to_native_reform_kingdom }
+        NOT = { has_reform = to_native_reform_consensus_government }
+        NOT = { has_reform = to_native_reform_law_of_peace }
+        NOT = { has_reform = to_native_reform_grand_chiefdom }
 '''
 # trigger_none = '''
 #         OR = {
-#             has_reform = to_native_kingdom_reform
+#             has_reform = to_native_reform_kingdom
 #             AND = {
-#                 NOT = { has_reform = to_council_of_cities_reform }
-#                 NOT = { has_reform = to_native_parliament_reform }
-#                 NOT = { has_reform = to_grand_chiefdom_reform }
+#                 NOT = { has_reform = to_native_reform_consensus_government }
+#                 NOT = { has_reform = to_native_reform_law_of_peace }
+#                 NOT = { has_reform = to_native_reform_grand_chiefdom }
 #             }
 #         }
 # '''
