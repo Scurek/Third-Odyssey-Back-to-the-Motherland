@@ -3,7 +3,7 @@ namespace = nhs_all_natives_estates
 
 # -- Change natives estate (early-mid-late) --
 
-# Remove flags from non-exile nations
+# Remove flags from non-exile nations and spartans
 country_event = {
     id = nhs_all_natives_estates.1
 	title = nhs_all_natives_estates.1.t
@@ -13,7 +13,10 @@ country_event = {
     hidden = yes
 
 	trigger = {
-		NOT = { nhs_check_all_exiles = { CONDITION = tag } }
+        OR = {
+		    NOT = { nhs_check_all_exiles = { CONDITION = tag } }
+            nhs_check_all_spartan = { CONDITION = tag }
+        }
         OR = {
             has_country_flag = native_council_enabled_early
             has_country_flag = native_council_enabled_mid
@@ -34,7 +37,7 @@ country_event = {
 
 }
 
-# Set early flag (always for all exiles - except for norse who immediatly get mid, and Elysia which needs to colonise some land)
+# Set early flag (always for all exiles - except spartans who gets none, norse who immediatly get mid, and Elysia which needs to colonise some land)
 country_event = {
     id = nhs_all_natives_estates.2
 	title = nhs_all_natives_estates.2.t
@@ -52,7 +55,8 @@ country_event = {
             }
         }
 		nhs_check_all_exiles = { CONDITION = tag }
-        NOT = { nhs_check_all_vinland { CONDITION = tag } }
+        NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+        NOT = { nhs_check_all_spartan = { CONDITION = tag } } 
         OR = {
             NOT = { tag = NHS }
             num_of_cities = 5  # Elysia needs some land before natives become relevant
@@ -73,7 +77,7 @@ country_event = {
 
 }
 
-# Set mid flag (always for norse, after colonialism for other exiles)
+# Set mid flag (except spartans who get none, always for norse, after colonialism for other exiles)
 country_event = {
     id = nhs_all_natives_estates.3
 	title = nhs_all_natives_estates.3.t
@@ -97,6 +101,7 @@ country_event = {
                 has_institution = new_world_i
             }
         }
+        NOT = { nhs_check_all_spartan = { CONDITION = tag } } 
 	}
 
     immediate = {
@@ -112,7 +117,7 @@ country_event = {
 
 }
 
-# Set late flag (after global trade for all exiles)
+# Set late flag (after global trade for all exiles, except for spartans who get none)
 country_event = {
     id = nhs_all_natives_estates.4
 	title = nhs_all_natives_estates.4.t
@@ -130,6 +135,7 @@ country_event = {
             has_country_flag = native_council_enabled_mid
             has_institution = global_trade
         }
+        NOT = { nhs_check_all_spartan = { CONDITION = tag } } 
 	}
 
     immediate = {
