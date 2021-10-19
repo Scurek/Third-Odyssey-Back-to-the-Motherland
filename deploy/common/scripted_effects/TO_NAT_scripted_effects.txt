@@ -1637,3 +1637,96 @@ to_define_monarchy_chieftain = {
 		}
 	}
 }
+
+to_nat_estate_save_territory = {
+	set_variable = {
+		which = to_nat_estate_clans_land_share
+		value = 0
+	}
+	while = {
+		limit = {
+			estate_territory = {
+				estate = $ESTATE$
+				territory = 1
+			}
+		}
+		change_estate_land_share = {
+			estate = $ESTATE$
+			share = -1
+		}
+		change_variable = {
+			which = to_nat_estate_clans_land_share
+			value = 1
+		}
+	}
+}
+
+to_nat_estate_load_territory = {
+	if = {
+		limit = {
+			check_variable = {
+				which = to_nat_estate_clans_land_share
+				value = 1
+			}
+		}
+		change_estate_land_share = {
+			estate = $ESTATE$
+			share = -100
+		}
+		while = {
+			limit = {
+				check_variable = {
+					which = to_nat_estate_clans_land_share
+					value = 1
+				}
+			}
+			change_estate_land_share = {
+				estate = $ESTATE$
+				share = 1
+			}
+			change_variable = {
+				which = to_nat_estate_clans_land_share
+				value = -1
+			}
+		}
+		set_variable = {
+			which = to_nat_estate_clans_land_share
+			value = 0
+		}
+	}
+}
+
+# $ESTATE$ Military Estate being enabled
+to_enables_native_estates = {
+	custom_tooltip = to_nat_enables_estates_with_$ESTATE$
+	set_country_flag = to_nat_estate_enabled_$ESTATE$
+}
+
+# $FROM_ESTATE$ estate being removed
+# $TO_ESTATE$ estate being added
+to_nat_switch_mal_estate = {
+	custom_tooltip = to_nat_switch_estate_from_$FROM_ESTATE$_to_$TO_ESTATE$
+	hidden_effect = {
+		to_nat_estate_save_territory = { ESTATE = $FROM_ESTATE$ }
+		to_nat_estate_load_territory = { ESTATE = $TO_ESTATE$ }
+	}
+	clr_country_flag = to_nat_estate_enabled_$FROM_ESTATE$
+	set_country_flag = to_nat_estate_enabled_$TO_ESTATE$
+}
+
+# $FROM_ESTATE$ estate being removed
+# $TO_ESTATE$ estate being added
+to_enables_or_switches_native_estates = {
+	if = {
+		limit = {
+			has_estate = $FROM_ESTATE$
+		}
+		to_nat_switch_mal_estate = {
+			FROM_ESTATE = $FROM_ESTATE$
+			TO_ESTATE = $TO_ESTATE$
+		}
+	}
+	else = {
+		to_enables_native_estates = { ESTATE = $TO_ESTATE$ }
+	}
+}

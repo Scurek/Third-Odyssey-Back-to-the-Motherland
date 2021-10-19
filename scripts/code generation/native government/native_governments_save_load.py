@@ -24,20 +24,13 @@ reforms = [
 ]
 
 save = Template('''{% for reform in reforms %}
-    if = {
-        limit = {
-            has_reform = {{ reform }}
-        }
-        set_country_flag = to_had_native_reform_{{ reform }}
-    }
+    if = { limit = { has_reform = {{ reform }} } 
+        set_country_flag = to_had_native_reform_{{ reform }} }
 {%- endfor %}
 ''')
 
 load = Template('''{% for reform in reforms %}
-    if = {
-        limit = {
-            has_country_flag = to_had_native_reform_{{ reform }}
-        }
+    if = { limit = { has_country_flag = to_had_native_reform_{{ reform }} } 
         add_government_reform = {{ reform }}
         clr_country_flag = to_had_native_reform_{{ reform }}
     }
