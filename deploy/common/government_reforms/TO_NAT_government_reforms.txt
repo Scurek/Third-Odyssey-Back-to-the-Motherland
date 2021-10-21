@@ -106,6 +106,7 @@ to_native_reform_nomadic_raiders = {
 	icon = "horde_riding"
 
 	potential = {
+		always = no
 		capital_scope = {
 			region = great_plains_region
 		}
@@ -407,6 +408,7 @@ to_native_reform_conquest = {
 	allow_normal_conversion = yes
 
 	trigger = {
+		is_subject = no
 		if = {
 			limit = {
 				ai = yes
@@ -420,6 +422,7 @@ to_native_reform_conquest = {
 	modifiers = {
 		war_exhaustion = -0.05
 		province_warscore_cost = -0.1
+		native_uprising_chance = -1
 	}
 }
 
@@ -428,6 +431,7 @@ to_native_reform_unite_culture = {
 	allow_normal_conversion = yes
 
 	trigger = {
+		is_subject = no
 		to_nat_is_major_native_nation = yes
 		NOT = { has_idea_group = expansion_ideas }
 	}
@@ -437,8 +441,34 @@ to_native_reform_unite_culture = {
 	}
 
 	effect = {
+		custom_tooltip = to_nat_unit_own_culture_confederation_tt
+		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = to_colonial_machanics_tt
 		custom_tooltip = to_nat_colonise_own_culture_tt
+		hidden_effect = {
+			every_owned_province = {
+				if = {
+					limit = {
+						to_nat_colonise_own_culture_province_trigger = yes
+					}
+					add_province_modifier = { 
+						name = to_nat_colonise_own_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	removed_effect = {
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					has_province_modifier = to_nat_colonise_own_modifier
+				}
+				remove_province_modifier = to_nat_colonise_own_modifier
+			}
+		}
 	}
 }
 
@@ -447,15 +477,48 @@ to_native_reform_expansion = {
 	allow_normal_conversion = yes
 
 	trigger = {
+		is_subject = no
+		to_nat_is_major_native_nation = yes
 		has_idea_group = expansion_ideas
 	}
 
 	modifiers = {
+		colonists = 1
 		province_warscore_cost = -0.1
 	}
 	effect = {
+		custom_tooltip = to_nat_unlocking_expansion_ideas_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_nat_unit_own_culture_confederation_tt
+		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = to_colonial_machanics_tt
 		custom_tooltip = to_nat_native_expansion_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_nat_unlocks_exploration_ideas_tt
+		hidden_effect = {
+			every_owned_province = {
+				if = {
+					limit = {
+						to_nat_native_expansion_province_trigger = yes
+					}
+					add_province_modifier = { 
+						name = to_nat_native_expansion_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	removed_effect = {
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					has_province_modifier = to_nat_native_expansion_modifier
+				}
+				remove_province_modifier = to_nat_native_expansion_modifier
+			}
+		}
 	}
 }
 
