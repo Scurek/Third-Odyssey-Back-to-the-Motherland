@@ -2,8 +2,7 @@ namespace = nhs_countryevents
 
 ### Flavor events for Elysia (NHS) and in the later stages Elysian Empire (ELY)
 
-# Allow second wives and concubines, ally with a native faction
-# Maybe remove
+# Marry native consort, ally with faction of origin
 country_event = {
 	id = nhs_countryevents.4
 	title = nhs_countryevents.4.t
@@ -13,28 +12,41 @@ country_event = {
 	fire_only_once = yes
 	
 	trigger = {
-		OR = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			nhs_check_all_spartan = { CONDITION = tag }
+		is_year = 1465
+		nhs_check_all_elysian = { CONDITION = tag }
+		has_government_attribute = queen
+		AND = {
+			has_dlc = "Rights of Man"
+			has_consort = no
 		}
-		is_year = 1460
-		religion = pantheon_worship
 		any_neighbor_country = {
-			religion_group = pagan
+			native_culture_primary = yes
 			is_at_war = no
 			has_opinion = { who = ROOT value = -50 }
 			NOT = { is_subject_of = ROOT }
 			NOT = { alliance_with = ROOT }
 		}
-		NOT = { has_country_modifier = nhs_allows_polygamy }
+	}
+
+	immediate = {
+		random_neighbor_country = {
+			limit = {
+				native_culture_primary = yes
+				is_at_war = no
+				has_opinion = { who = ROOT value = -50 }
+				NOT = { is_subject_of = ROOT }
+				NOT = { alliance_with = ROOT }
+			}
+			save_event_target_as = selected_country
+		}
 	}
 
 	mean_time_to_happen = {
-		months = 12
+		months = 6
 	}
 
 	option = {		# Allow for it
-		name = "NHSCOUNTRYEVENTSNAME4A"
+		name = "nhs_countryevents.4.a"
 		ai_chance = { 
 			factor = 60
 			modifier = {
@@ -49,47 +61,23 @@ country_event = {
 			}
 		}
 		add_legitimacy = -15
-		add_country_modifier = {
-			name = "nhs_allows_polygamy"
-			duration = -1
-		}
-		random_neighbor_country = {
-			limit = {
-				religion_group = pagan
-				is_at_war = no
-				has_opinion = { who = ROOT value = -50 }
-				NOT = { is_subject_of = ROOT }
-				NOT = { alliance_with = ROOT }
-			}
+		event_target:selected_country = {
 			create_alliance = ROOT
+			create_marriage = ROOT
 			if = {
 				limit = {
-					OR = {
-						has_reform = despotic_monarchy
-						has_reform = feudal_monarchy
-						has_reform = administrative_monarchy
-						has_reform = noble_republic
-						has_reform = constitutional_monarchy
-						has_reform = enlightened_despotism
-						has_reform = steppe_horde
-						has_reform = tribal_despotism
-						has_reform = tribal_federation
-					}
+					has_dlc = "Rights of Man"
 				}
-				create_marriage = ROOT
-			}
-			add_opinion = {
-				who = ROOT
-				modifier = nhs_accepted_gift
-			}
-			reverse_add_opinion = {
-				who = ROOT
-				modifier = nhs_accepted_gift
+				define_consort = {
+					country_of_origin = FROM
+					culture = FROM
+					religion = FROM
+				}
 			}
 		}
 	}
 	option = {		# Reject
-		name = "NHSCOUNTRYEVENTSNAME4B"
+		name = "nhs_countryevents.4.b"
 		ai_chance = { 
 			factor = 40
 			modifier = {
@@ -104,6 +92,12 @@ country_event = {
 			}
 		}
 		add_legitimacy = 10
+		event_target:selected_country = {
+			add_opinion = {
+				who = ROOT
+				modifier = insulted
+			}
+		}
 	}
 }
 
@@ -177,112 +171,6 @@ country_event = {
 		add_stability_or_adm_power = yes
 	}
 }
-
-# Natives discover Gold on our borders
-# country_event = {
-# 	id = nhs_countryevents.9
-# 	title = nhs_countryevents.9.t
-# 	desc = nhs_countryevents.9.d
-# 	picture = MINE_2_eventPicture
-
-# 	fire_only_once = yes
-
-#     trigger = {
-# 		nhs_condition_all_ely = { KOMANDA = tag }
-# 		is_year = 1500
-# 		any_owned_province = {
-# 			any_neighbor_province = {
-# 				NOT = { trade_goods = gold }
-# 				is_empty = no
-# 				NOT = { is_claim = ROOT }
-# 				religion_group = pagan
-# 				owner = {
-# 					NOT = { religion = norse_pagan_reformed }
-# 					NOT = { is_subject_of = ROOT }
-# 					NOT = { alliance_with = ROOT }
-# 					NOT = { nhs_condition_all_ely = { KOMANDA = tag } }
-# 				}
-# 			}
-# 		}
-# 	}
-
-# 	mean_time_to_happen = {
-# 		months = 1000
-# 		modifier = {
-# 			factor = 0.6
-# 			any_owned_province = {
-# 				any_neighbor_province = {
-# 					NOT = { trade_goods = gold }
-# 					is_empty = no
-# 					NOT = { is_claim = ROOT }
-# 					religion_group = pagan
-# 					owner = { 
-# 						NOT = { is_subject_of = ROOT }
-# 						NOT = { alliance_with = ROOT }
-# 						NOT = { religion = norse_pagan_reformed }
-# 						NOT = { nhs_condition_all_ely = { KOMANDA = tag } }
-# 						NOT = { has_opinion = { who = ROOT value = 0 } }
-# 					}
-# 				}
-# 			}
-# 		}
-# 	}
-	
-# 	immediate = {
-# 		hidden_effect = {
-# 			random_owned_province = {
-# 				limit = {
-# 					any_neighbor_province = {
-# 						NOT = { trade_goods = gold }
-# 						is_empty = no
-# 						NOT = { is_claim = ROOT }
-# 						religion_group = pagan
-# 						owner = { 
-# 							NOT = { is_subject_of = ROOT }
-# 							NOT = { religion = norse_pagan_reformed }
-# 							NOT = { alliance_with = ROOT }
-# 							NOT = { nhs_condition_all_ely = { KOMANDA = tag } }
-# 						}
-# 					}
-# 				}
-# 				random_neighbor_province = {
-# 					limit = {
-# 						NOT = { trade_goods = gold }
-# 						is_empty = no
-# 						NOT = { is_claim = ROOT }
-# 						religion_group = pagan
-# 						owner = { 
-# 							NOT = { nhs_condition_all_ely = { KOMANDA = tag } }
-# 							NOT = { religion = norse_pagan_reformed }
-# 							NOT = { is_subject_of = ROOT }
-# 							NOT = { alliance_with = ROOT }
-# 						}
-# 					}
-# 					save_event_target_as = nhs_province_gold_et
-# 					set_province_flag = nhs_province_gold
-# 				}
-# 			}
-# 		}
-# 	}
-
-# 	option = {
-# 		name = "NHSCOUNTRYEVENTSNAME9"
-# 		event_target:nhs_province_gold_et = { 
-# 			change_trade_goods = gold
-# 			add_claim = ROOT
-# 			owner = {
-# 				add_opinion = {
-# 					who = ROOT
-# 					modifier = nhs_borderconflict_gold
-# 				}
-# 				reverse_add_opinion = {
-# 					who = ROOT
-# 					modifier = nhs_borderconflict_gold
-# 				}
-# 			}
-# 		}
-# 	}
-# }
 
 
 # Elysian silk becomes even more valuable

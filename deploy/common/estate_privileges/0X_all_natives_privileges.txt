@@ -146,6 +146,7 @@ nhs_native_priv_local_councils_empowered = {
 			has_country_flag = native_council_enabled_early
 			has_country_flag = native_council_enabled_mid
 		}
+		NOT = { nhs_culturally_norse = yes }
 	}
 	on_granted = {
 		custom_tooltip = nhs_native_priv_local_councils_empowered_effect_tooltip
@@ -371,13 +372,14 @@ nhs_native_priv_citizenship_for_service = {
     icon = privilege_military_power
 
 	loyalty = 0.10
-	influence = 0.10
+	influence = 0.05
 
 	is_valid = {
 		OR = {
 			has_country_flag = native_council_enabled_mid
 			has_country_flag = native_council_enabled_late
 		}
+		NOT = { nhs_culturally_norse = yes }
 	}
 	on_granted = {
 		# Increases speed of passive culture conversion  # TODO: implement passive culture conversion
@@ -396,9 +398,8 @@ nhs_native_priv_citizenship_for_service = {
 		custom_tooltip = nhs_native_priv_citizenship_for_service_revoke_tooltip
 	}
 	penalties = {
-		stability_cost_modifier = 0.25
-		land_maintenance = 0.10
-		discipline = -0.10
+		stability_cost_modifier = 0.10
+		discipline = -0.05
 		army_tradition_decay = 0.01
 	}
 	benefits = {
@@ -424,7 +425,7 @@ nhs_native_priv_minor_pax_romana_early = {
 
 	is_valid = {
 		has_country_flag = native_council_enabled_early
-		nhs_is_elysia = yes
+		nhs_culturally_elysian = yes
 	}
 	can_select = {
 		NOT = {
@@ -487,7 +488,7 @@ nhs_native_priv_major_pax_romana_early = {
 
 	is_valid = {
 		has_country_flag = native_council_enabled_early
-		nhs_is_elysia = yes
+		nhs_culturally_elysian = yes
 	}
 	can_select = {
 		NOT = {
@@ -557,7 +558,7 @@ nhs_native_priv_major_pax_romana_mid = {
 
 	is_valid = {
 		has_country_flag = native_council_enabled_mid
-		nhs_is_elysia = yes
+		nhs_culturally_elysian = yes
 	}
 	can_select = {
 		NOT = {
@@ -620,7 +621,7 @@ nhs_native_priv_encourage_barbaroi_officials_early = {
 
 	is_valid = {
 		has_country_flag = native_council_enabled_early
-		nhs_is_elysia = yes
+		nhs_culturally_elysian = yes
 	}
 	on_granted = {
 		# Increases speed of passive culture conversion  # TODO: implement passive culture conversion
@@ -658,7 +659,7 @@ nhs_native_priv_symmachoi_noble_offices_mid = {
 	
 	is_valid = {
 		has_country_flag = native_council_enabled_mid
-		nhs_is_elysia = yes
+		nhs_culturally_elysian = yes
 	}
 	penalties = {
 		legitimacy = -0.25
@@ -689,7 +690,7 @@ nhs_native_priv_designate_development_zones_mid = {
 	
 	is_valid = {
 		has_country_flag = native_council_enabled_mid
-		nhs_is_elysia = yes
+		nhs_culturally_elysian = yes
 	}
 	on_granted = {
 		custom_tooltip = nhs_native_priv_designate_development_zones_mid_effect_tooltip
@@ -749,7 +750,7 @@ nhs_native_priv_designate_development_zones_late = {
 	
 	is_valid = {
 		has_country_flag = native_council_enabled_late
-		nhs_is_elysia = yes
+		nhs_culturally_elysian = yes
 	}
 	on_granted = {
 		custom_tooltip = nhs_native_priv_designate_development_zones_late_effect_tooltip
@@ -805,7 +806,7 @@ nhs_native_priv_divide_et_impera_early = {
 	
 	is_valid = {
 		has_country_flag = native_council_enabled_early
-		nhs_is_elysia = yes
+		nhs_culturally_elysian = yes
 	}
 	can_select = {
 		NOT = {
@@ -871,7 +872,7 @@ nhs_native_priv_divide_et_impera_mid = {
 	
 	is_valid = {
 		has_country_flag = native_council_enabled_mid
-		nhs_is_elysia = yes
+		nhs_culturally_elysian = yes
 	}
 	can_select = {
 		NOT = {
@@ -923,3 +924,100 @@ nhs_native_priv_divide_et_impera_mid = {
 		factor = 5
 	}
 }
+
+
+# -- Spartan Privileges --
+
+
+# -- Vinlandic Privileges --
+
+# Skraeling Thingas
+#  Variant of 'recognize local councils'
+
+nhs_native_priv_skraeling_thingas = {
+    icon = privilege_royal_authority
+
+	loyalty = 0.10
+	influence = 0.05
+	
+	is_valid = {
+		OR = {
+			has_country_flag = native_council_enabled_mid
+			has_country_flag = native_council_enabled_late
+		}
+		nhs_culturally_norse = yes
+	}
+	can_select = {
+	}
+	on_granted = {
+	}
+	on_revoked = {
+		every_owned_province = {
+			limit = {
+				nhs_culturally_native = yes
+			}
+			add_local_autonomy = 20
+		}
+	}
+	on_invalid = {
+	}
+	penalties = {
+		legitimacy = -0.25
+		global_autonomy = 0.05  # TODO: both autonomy modifiers should be province specific
+	}
+	benefits = {
+		num_accepted_cultures = 1
+		min_autonomy_in_territories = -0.10
+	}
+	ai_will_do = {
+		factor = 5
+	}
+
+}
+
+
+# Raiding hosts
+#  Variant of 'citizenship for service'
+
+nhs_native_priv_raiding_hosts = {
+	icon = privilege_military_power
+
+	loyalty = 0.15
+	influence = 0.15
+
+	is_valid = {
+		OR = {
+			has_country_flag = native_council_enabled_early
+			has_country_flag = native_council_enabled_mid
+			has_country_flag = native_council_enabled_late
+		}
+		nhs_culturally_norse = yes
+	}
+	on_granted = {
+	}
+	on_revoked = {
+		every_owned_province = {
+			limit = {
+				nhs_culturally_native = yes
+			}
+			add_devastation = 50
+		}
+	}
+	on_invalid = {
+	}
+	penalties = {
+		loot_amount = -0.5
+		discipline = -0.05
+		army_tradition_from_battle = -0.5
+		army_tradition_decay = 0.01
+	}
+	benefits = {
+		global_manpower = 0.50
+		land_forcelimit_modifier = 0.30
+	}
+	ai_will_do = {
+		factor = 10
+	}
+}
+
+
