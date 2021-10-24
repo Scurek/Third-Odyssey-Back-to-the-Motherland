@@ -819,17 +819,8 @@ to_native_reform_divine_dinasty = {
 	}
 }
 
-# TIER VI
+# TIER VIII
 
-to_native_placeholder_reform = {
-	icon = "tribal_council"
-	allow_normal_conversion = yes
-	valid_for_nation_designer = yes
-	nation_designer_cost = 20
-	modifiers = {
-		global_manpower_modifier = 0.2
-	}
-}
 
 to_native_placeholder2_reform = {
 	icon = "tribal_council"
@@ -841,24 +832,215 @@ to_native_placeholder2_reform = {
 	}
 }
 
-# to_native_promote_aristocracy_reform = {
-# 	icon = "queen"
-# 	allow_normal_conversion = yes
 
-# 	trigger = {
-# 		has_reform = to_native_reform_stratified
-# 	}
+# TIER XI
 
-# 	modifiers = {
-# 		army_tradition_decay = -0.03
-# 		nobles_loyalty_modifier = 0.1
-# 		nobles_influence_modifier = 0.05
-# 	}
+to_native_reform_promote_clan_leaders = {
+	icon = "native_man_with_pipe"
+	allow_normal_conversion = yes
 
-# 	conditional = {
-#         allow = {
-#             has_dlc = "Common Sense"
-#         }
-#         has_parliament = yes
-#     }
-# }
+	trigger = {
+		has_estate = estate_clans
+	}
+
+	modifiers = {
+		governing_capacity = 100
+		min_autonomy_in_territories = -0.10
+		clans_loyalty_modifier = 0.10
+		clans_influence_modifier = 0.10
+	}
+}
+
+to_native_reform_promote_aristocracy = {
+	icon = "queen"
+	allow_normal_conversion = yes
+
+	trigger = {
+		has_reform = to_native_reform_stratified
+	}
+
+	modifiers = {
+		army_tradition_decay = -0.03
+		nobles_loyalty_modifier = 0.15
+		nobles_influence_modifier = 0.05
+	}
+
+	effect = {
+		if = {
+			limit = {
+				has_estate = estate_clans
+			}
+			to_nat_switch_mal_estate = {
+				FROM_ESTATE = estate_clans
+				TO_ESTATE = estate_nobles
+			}
+		}
+	}
+}
+
+to_native_reform_meritocratic_recruitment = {
+	icon = "self_governing_colony_government"
+	allow_normal_conversion = yes
+
+	modifiers = {
+		yearly_corruption = -0.1
+		global_autonomy = -0.05
+	}
+}
+
+to_native_reform_clergy_in_administration = {
+	icon = "clergyman"
+	allow_normal_conversion = yes
+
+	modifiers = {
+		tolerance_own = 2
+		global_missionary_strength = 0.02
+		
+		brahmins_hindu_influence_modifier = 0.1
+		brahmins_hindu_loyalty_modifier = 0.05
+
+		church_influence_modifier = 0.1
+		church_loyalty_modifier = 0.05
+
+		estate_nhs_church_hellenic_influence_modifier = 0.1
+		estate_nhs_church_hellenic_loyalty_modifier = 0.05
+	}
+}
+
+# TIER X
+
+to_native_reform_unite_continent = {
+	allow_normal_conversion = yes
+	icon = "north_america_map"
+
+	effect = {
+		custom_tooltip = to_nat_colonise_continental_unification_tt
+		hidden_effect = {
+			every_owned_province = {
+				if = {
+					limit = {
+						to_nat_unite_continent_province_trigger = yes
+					}
+					add_province_modifier = { 
+						name = to_nat_unite_continent_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	removed_effect = {
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					has_province_modifier = to_nat_unite_continent_modifier
+				}
+				remove_province_modifier = to_nat_unite_continent_modifier
+			}
+		}
+	}
+
+	modifiers = {
+		same_culture_advisor_cost = -0.5
+	}
+}
+
+to_native_reform_envoy_to_the_world = {
+	allow_normal_conversion = yes
+	icon = "paper_with_seal"
+
+	effect = {
+		custom_tooltip = to_nat_opinion_with_diffenent_continent_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					NOT = { same_continent = ROOT }
+					NOT = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = to_nat_envoy_to_the_world_opinion
+						}
+					}
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = to_nat_envoy_to_the_world_opinion
+				}
+			}
+		}
+	}
+
+	removed_effect = {
+		every_country = {
+			limit = {
+				has_opinion_modifier = {
+					who = ROOT
+					modifier = to_nat_envoy_to_the_world_opinion
+				}
+			}
+			remove_opinion = {
+				who = ROOT
+				modifier = to_nat_envoy_to_the_world_opinion
+			}
+		}
+	}
+
+	modifiers = {
+		diplomatic_reputation = 3
+		envoy_travel_time = -0.50
+		ae_impact = -0.1
+	}
+}
+
+to_native_reform_expand_overseas = {
+	allow_normal_conversion = yes
+	icon = "merchant_ship"
+
+	effect = {
+		custom_tooltip = to_colonial_machanics_tt
+		custom_tooltip = to_nat_expand_overseas_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_nat_unlocks_exploration_ideas_tt
+		hidden_effect = {
+			every_owned_province = {
+				if = {
+					limit = {
+						to_nat_expand_overseas_province_trigger = yes
+					}
+					add_province_modifier = { 
+						name = to_nat_expand_overseas_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	removed_effect = {
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					has_province_modifier = to_nat_expand_overseas_modifier
+				}
+				remove_province_modifier = to_nat_expand_overseas_modifier
+			}
+		}
+	}
+
+	modifiers = {
+		range = 1
+		trade_range_modifier = 1
+		merchants = 1
+	}
+}
+
+to_native_placeholder_reform = {
+	icon = "tribal_council"
+	allow_normal_conversion = yes
+	valid_for_nation_designer = yes
+	nation_designer_cost = 20
+	modifiers = {
+		global_manpower_modifier = 0.2
+	}
+}

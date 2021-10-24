@@ -1771,3 +1771,79 @@ to_nat_handle_native_expansion_modifier = {
 	}
 }
 
+to_nat_handle_expand_overseas_modifier = {
+	if = {
+		limit = {
+			has_province_modifier = to_nat_expand_overseas_modifier
+			NOT = { owner = { has_reform = to_native_reform_expand_overseas } }
+		}
+		remove_province_modifier = to_nat_expand_overseas_modifier
+	}
+
+	if = {
+		limit = {
+			to_nat_expand_overseas_province_trigger = yes
+		}
+		add_province_modifier = { 
+			name = to_nat_expand_overseas_modifier
+			duration = -1
+		}
+	}
+}
+
+to_nat_handle_unite_continent_modifier = {
+	if = {
+		limit = {
+			has_province_modifier = to_nat_unite_continent_modifier
+			NOT = { owner = { has_reform = to_native_reform_unite_continent } }
+		}
+		remove_province_modifier = to_nat_unite_continent_modifier
+	}
+
+	if = {
+		limit = {
+			to_nat_unite_continent_province_trigger = yes
+		}
+		add_province_modifier = { 
+			name = to_nat_unite_continent_modifier
+			duration = -1
+		}
+	}
+}
+
+to_nat_handle_envoy_to_the_world = {
+	every_country = {
+		if = {
+			limit = {
+				has_reform = to_native_reform_envoy_to_the_world
+				NOT = { same_continent = ROOT }
+				NOT = {	
+					reverse_has_opinion_modifier = {
+						who = ROOT
+						modifier = to_nat_envoy_to_the_world_opinion
+					}
+				}
+			}
+			reverse_add_opinion = {
+				who = ROOT
+				modifier = to_nat_envoy_to_the_world_opinion
+			}
+		}
+		else_if = {
+			limit = {
+				reverse_has_opinion_modifier = {
+					who = ROOT
+					modifier = to_nat_envoy_to_the_world_opinion
+				}
+				OR = {
+					NOT = { has_reform = to_native_reform_envoy_to_the_world }
+					same_continent = ROOT
+				}
+			}
+			reverse_remove_opinion = {
+				who = ROOT
+				modifier = to_nat_envoy_to_the_world_opinion
+			}
+		}
+	}
+}
