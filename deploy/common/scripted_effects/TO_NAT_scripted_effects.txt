@@ -1287,6 +1287,82 @@ to_load_native_reforms = {
     }
 }
 
+to_nat_set_development = {
+	every_country = {
+		limit = {
+			technology_group = north_american
+			OR = {
+				has_reform = native_settle_down_reform
+				NOT = { has_dlc = "Conquest of Paradise" }
+			}
+		}
+		capital_scope = {
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+		}
+	}
+}
+
+to_nat_determine_new_confederation_leader = {
+	if = {
+		limit = {
+			has_subject_of_type = to_confederation_subject
+		}
+		random_subject_country = {
+			set_country_flag = to_nat_new_confederate_leader_@FROM
+		}
+		every_subject_country  = {
+			if = {
+				limit = {
+					any_country = {
+						has_country_flag = to_nat_new_confederate_leader_@FROM
+						NOT = { total_development = PREV }
+					}
+				}
+				FROM = {
+					random_subject_country = {
+						limit = {
+							has_country_flag = to_nat_new_confederate_leader_@FROM
+						}
+						clr_country_flag = to_nat_new_confederate_leader_@FROM
+					}
+				}
+				set_country_flag = to_nat_new_confederate_leader_@FROM
+			}
+		}
+		random_subject_country = {
+			limit = {
+				has_country_flag = to_nat_new_confederate_leader_@FROM
+			}
+			grant_independence = yes
+		}
+		every_subject_country = {
+			grant_independence = yes
+			if = {
+				limit = {
+					NOT = { has_country_flag = to_nat_new_confederate_leader_@FROM }
+				}
+				random_country = {
+					limit = {
+						has_country_flag = to_nat_new_confederate_leader_@FROM
+					}
+					create_subject = {
+						subject_type = to_confederation_subject
+						subject = PREV
+					}
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				has_country_flag = to_nat_new_confederate_leader_@FROM
+			}
+			clr_country_flag = to_nat_new_confederate_leader_@FROM
+		}
+	}
+}
+
 to_nat_reform_native_government = {
 	if = {
 		limit = {
@@ -1836,6 +1912,21 @@ to_nat_handle_envoy_to_the_world = {
 			reverse_remove_opinion = {
 				who = ROOT
 				modifier = to_nat_envoy_to_the_world_opinion
+			}
+		}
+	}
+}
+
+to_nat_integrate_confederation = {
+	custom_tooltip = to_nat_integrate_confederation_tt
+	hidden_effect = {
+		every_subject_country = {
+			limit = {
+				is_subject_of_type = to_confederation_subject
+				primary_culture = ROOT
+			}
+			ROOT = {
+				inherit = PREV
 			}
 		}
 	}
