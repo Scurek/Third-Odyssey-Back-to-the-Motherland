@@ -1,17 +1,24 @@
 # country
 nhs_on_startup = {
-	nhs_set_up_empty_province_flags = yes
-	vov_setup_coastal_bonus = yes
-	to_remove_tribal_land = yes
-	to_set_native_culture_flags = yes
-	every_province = {
+	if = {
 		limit = {
-			OR = {
-				is_empty = yes
-				is_colony = yes
-			}
+			NOT = { has_global_flag = to_setup_done }
 		}
-		to_check_native_size = yes
+		nhs_set_up_empty_province_flags = yes
+		vov_setup_coastal_bonus = yes
+		to_remove_tribal_land = yes
+		to_set_native_culture_flags = yes
+		to_nat_set_development = yes
+		every_province = {
+			limit = {
+				OR = {
+					is_empty = yes
+					is_colony = yes
+				}
+			}
+			to_check_native_size = yes
+		}
+		set_global_flag = to_setup_done
 	}
 }
 
@@ -303,6 +310,14 @@ to_on_war_won = {
 
 to_on_country_creation = {
 	to_nat_handle_envoy_to_the_world = yes
+}
+
+# Nation annexed.
+# FROM is the nation being annexed
+to_on_annexed = {
+	FROM = {
+		to_nat_determine_new_confederation_leader = yes
+	}	
 }
 
 nhs_save_previous_goods = {
