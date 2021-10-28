@@ -1363,6 +1363,230 @@ to_nat_determine_new_confederation_leader = {
 	}
 }
 
+to_nat_tribal_development_setup = {
+	every_province = {
+		limit = {
+			continent = north_america
+			OR = {
+				is_empty = yes
+				owner = {
+					is_native_government = yes
+					# NOT = { government = native }
+				}
+			}
+		}
+		to_nat_calc_local_tribal_development = yes
+	}
+}
+
+to_nat_restore_local_tribal_development = {
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					which = to_nat_local_tribal_development
+					value = 1
+				}
+			}
+		}
+		to_nat_calc_local_tribal_development = yes
+	}
+}
+
+to_nat_calc_local_tribal_development = {
+	## Export local development
+	export_to_variable = {
+		which = to_nat_local_tribal_tax
+		value = base_tax
+	}
+	export_to_variable = {
+		which = to_nat_local_tribal_production
+		value = base_production
+	}
+	export_to_variable = {
+		which = to_nat_local_tribal_manpower
+		value = base_manpower
+	}
+	## Substract migratory development
+	if = {
+		limit = {
+			check_variable = { which = to_nat_local_migratory_tax value = 1 }
+		}
+		change_variable = { which = to_nat_local_tribal_tax which = to_nat_local_migratory_tax }
+	}
+	if = {
+		limit = {
+			check_variable = { which = to_nat_local_migratory_production value = 1 }
+		}
+		change_variable = { which = to_nat_local_tribal_production which = to_nat_local_migratory_production }
+	}
+	if = {
+		limit = {
+			check_variable = { which = to_nat_local_migratory_manpower value = 1 }
+		}
+		change_variable = { which = to_nat_local_tribal_manpower which = to_nat_local_migratory_manpower }
+	}
+	## Substract "True" base development
+	if = {
+		limit = {
+			is_empty = yes
+		}
+		if = {
+			limit = {
+				check_variable = { which = to_nat_local_tribal_tax value = 1 }
+			}
+			change_variable = { which = to_nat_local_tribal_tax value = -1 }
+		}
+		if = {
+			limit = {
+				check_variable = { which = to_nat_local_migratory_production value = 1 }
+			}
+			change_variable = { which = to_nat_local_migratory_production value = -1 }
+		}
+	}
+	## Sum to get total tribal development (useful for triggers)
+	set_variable = {
+		which = to_nat_local_tribal_development
+		value = 0
+	}
+	change_variable = {
+		which = to_nat_local_tribal_development
+		which = to_nat_local_tribal_tax
+	}
+	change_variable = {
+		which = to_nat_local_tribal_development
+		which = to_nat_local_tribal_production
+	}
+	change_variable = {
+		which = to_nat_local_tribal_development
+		which = to_nat_local_tribal_manpower
+	}
+	## Set appropriate native population
+	change_native_size = -100
+	if = {
+		limit = {
+			development = 1
+			NOT = { development = 2 }
+		}
+		change_native_size = 1
+	}
+	else_if = {
+		limit = {
+			development = 2
+			NOT = { development = 3 }
+		}
+		change_native_size = 2
+	}
+	else = {
+		set_variable = {
+			which = local_development
+			which = to_nat_local_tribal_development
+		}
+		while = {
+			limit = {
+				check_variable = {
+					which = local_development
+					value = 1
+				}
+			}
+			change_variable = {
+				which = local_development
+				value = -1
+			}
+			change_native_size = 5
+		}
+	}
+	## Add province modifier
+	if = {
+		limit = {
+			NOT = { has_province_modifier = to_nat_tribal_development }
+		}
+		add_permanent_province_modifier = {
+			name = to_nat_tribal_development
+			duration = -1
+		}
+	}
+}
+
+to_nat_migratory_development_setup = {
+	every_province = {
+		limit = {
+			continent = north_america
+			owner = {
+				is_native_government = yes
+				# can_migrate = yes
+				NOT = { has_reform = native_settle_down_reform }
+			}
+		}
+		to_nat_set_local_migratory_development = yes
+	}
+}
+
+
+to_nat_add_local_migratory_development = {
+	if = {
+		limit = {
+			owner = {
+				is_native_government = yes
+				NOT = { has_reform = native_settle_down_reform }
+			}
+		}
+		to_nat_set_local_migratory_development = yes
+	}
+}
+
+to_nat_set_local_migratory_development = {
+	set_variable = {
+		which = to_nat_local_migratory_tax
+		value = 1
+	}
+	set_variable = {
+		which = to_nat_local_migratory_production
+		value = 1
+	}
+	set_variable = {
+		which = to_nat_local_migratory_manpower
+		value = 1
+	}
+	add_base_tax = 1
+	add_base_production = 1
+	add_base_manpower = 1
+	## Add province modifier
+	if = {
+		limit = {
+			NOT = { has_province_modifier = to_nat_migratory_development }
+		}
+		add_permanent_province_modifier = {
+			name = to_nat_migratory_development
+			duration = -1
+		}
+	}
+}
+
+to_nat_remove_local_migratory_development = {
+	if = {
+		limit = {
+			has_province_modifier = to_nat_migratory_development
+		}
+		set_variable = {
+			which = to_nat_local_migratory_tax
+			value = 0
+		}
+		set_variable = {
+			which = to_nat_local_migratory_production
+			value = 0
+		}
+		set_variable = {
+			which = to_nat_local_migratory_manpower
+			value = 0
+		}
+		add_base_tax = -1
+		add_base_production = -1
+		add_base_manpower = -1
+		remove_province_modifier = to_nat_migratory_development
+	}
+}
+
 to_nat_reform_native_government = {
 	if = {
 		limit = {

@@ -1,0 +1,120 @@
+namespace = to_nat_migration
+
+country_event = {
+	id = to_nat_migration.1
+	title = to_nat_migration.1.t
+	desc = to_nat_migration.1.d
+	picture = LAND_MILITARY_eventPicture
+
+	goto = migration_target
+		
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			has_reform = native_seasonal_travel_reform
+		}
+	}
+
+	immediate = {
+		random_province = {
+			limit = {
+				is_empty = yes
+				culture = FROM
+				any_neighbor_province = {
+					any_neighbor_province = {
+						is_core = FROM
+					}
+				}
+				NOT = {
+					any_neighbor_province = {
+						country_or_subject_holds = ROOT
+					}
+				}
+			}
+			save_event_target_as = migration_target
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = migration_target }
+			}
+			random_province = {
+				limit = {
+					is_empty = yes
+					culture = FROM
+					any_neighbor_province = {
+						any_neighbor_province = {
+							is_core = FROM
+						}
+					}
+				}
+				save_event_target_as = migration_target
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = migration_target }
+			}
+			random_province = {
+				limit = {
+					is_empty = yes
+					culture = FROM
+				}
+				save_event_target_as = migration_target
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = migration_target }
+			}
+			random_province = {
+				limit = {
+					is_empty = yes
+					any_neighbor_province = {
+						any_neighbor_province = {
+							is_core = FROM
+						}
+					}
+					NOT = {
+						any_neighbor_province = {
+							country_or_subject_holds = ROOT
+						}
+					}
+				}
+				save_event_target_as = migration_target
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = migration_target }
+			}
+			random_province = {
+				limit = {
+					is_empty = yes
+					any_neighbor_province = {
+						any_neighbor_province = {
+							is_core = FROM
+						}
+					}
+				}
+				save_event_target_as = migration_target
+			}
+		}
+		event_target:migration_target = {
+			cede_province = FROM
+			add_core = FROM
+			change_culture = FROM
+			change_religion = FROM
+			add_nationalism = -100
+		}
+		add_truce_with = FROM
+	}
+	
+	option = {
+		name = to_nat_governments.1.a
+		ai_chance = {
+			factor = 1
+		}
+		
+	}
+}
