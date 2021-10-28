@@ -10,8 +10,8 @@ reforms = [
     "native_martial_tradition_reform",
     "native_oral_tradition_reform",
     "native_land_tradition_reform",
-    "native_seasonal_travel_reform",
-    "native_settle_down_reform",
+    ("native_settle_down_reform", "to_native_reform_settle_down_reformed"),
+    ("to_native_reform_semipermanent_settlements", "to_native_reform_semipermanent_settlements_reformed"),
     "native_war_band_reform",
     "to_native_reform_nomadic_raiders",
     "to_native_reform_consensus_government",
@@ -23,17 +23,30 @@ reforms = [
     "to_native_reform_higher_powers",
 ]
 
-save = Template('''{% for reform in reforms %}
-    if = { limit = { has_reform = {{ reform }} } 
-        set_country_flag = to_had_native_reform_{{ reform }} }
+save = Template('''{%- for reform in reforms %}
+{%- if reform is not string %}
+    if = { limit = { has_reform = {{ reform[0] }} }
+        set_country_flag = to_had_native_reform_{{ reform[0] }}
+{%- else %}
+    if = { limit = { has_reform = {{ reform }} }
+        set_country_flag = to_had_native_reform_{{ reform }}
+{%- endif %}
+    }
 {%- endfor %}
 ''')
 
-load = Template('''{% for reform in reforms %}
+load = Template('''{%- for reform in reforms %}
+{%- if reform is not string %}
+    if = { limit = { has_country_flag = to_had_native_reform_{{ reform[0] }} } 
+        add_government_reform = {{ reform[1] }}
+        clr_country_flag = to_had_native_reform_{{ reform[0] }}
+    }
+{%- else %}
     if = { limit = { has_country_flag = to_had_native_reform_{{ reform }} } 
         add_government_reform = {{ reform }}
         clr_country_flag = to_had_native_reform_{{ reform }}
     }
+{%- endif %}
 {%- endfor %}
 ''')
 
