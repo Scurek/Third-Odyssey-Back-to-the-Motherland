@@ -1367,6 +1367,7 @@ to_nat_tribal_development_setup = {
 	every_province = {
 		limit = {
 			continent = north_america
+			to_nat_can_have_tribal_development = yes
 			OR = {
 				is_empty = yes
 				owner = {
@@ -1375,13 +1376,14 @@ to_nat_tribal_development_setup = {
 				}
 			}
 		}
-		to_nat_calc_local_tribal_development = yes
+		to_nat_set_local_tribal_development = yes
 	}
 }
 
 to_nat_restore_local_tribal_development = {
 	if = {
 		limit = {
+			to_nat_can_have_tribal_development = yes
 			NOT = {
 				check_variable = {
 					which = to_nat_local_tribal_development
@@ -1389,11 +1391,11 @@ to_nat_restore_local_tribal_development = {
 				}
 			}
 		}
-		to_nat_calc_local_tribal_development = yes
+		to_nat_set_local_tribal_development = yes
 	}
 }
 
-to_nat_calc_local_tribal_development = {
+to_nat_set_local_tribal_development = {
 	## Export local development
 	export_to_variable = {
 		which = to_nat_local_tribal_tax
@@ -1412,19 +1414,19 @@ to_nat_calc_local_tribal_development = {
 		limit = {
 			check_variable = { which = to_nat_local_migratory_tax value = 1 }
 		}
-		change_variable = { which = to_nat_local_tribal_tax which = to_nat_local_migratory_tax }
+		subtract_variable = { which = to_nat_local_tribal_tax which = to_nat_local_migratory_tax }
 	}
 	if = {
 		limit = {
 			check_variable = { which = to_nat_local_migratory_production value = 1 }
 		}
-		change_variable = { which = to_nat_local_tribal_production which = to_nat_local_migratory_production }
+		subtract_variable = { which = to_nat_local_tribal_production which = to_nat_local_migratory_production }
 	}
 	if = {
 		limit = {
 			check_variable = { which = to_nat_local_migratory_manpower value = 1 }
 		}
-		change_variable = { which = to_nat_local_tribal_manpower which = to_nat_local_migratory_manpower }
+		subtract_variable = { which = to_nat_local_tribal_manpower which = to_nat_local_migratory_manpower }
 	}
 	## Substract "True" base development
 	if = {
@@ -1439,10 +1441,16 @@ to_nat_calc_local_tribal_development = {
 		}
 		if = {
 			limit = {
-				check_variable = { which = to_nat_local_migratory_production value = 1 }
+				check_variable = { which = to_nat_local_tribal_production value = 1 }
 			}
-			change_variable = { which = to_nat_local_migratory_production value = -1 }
+			change_variable = { which = to_nat_local_tribal_production value = -1 }
 		}
+		# if = {
+		# 	limit = {
+		# 		check_variable = { which = to_nat_local_tribal_manpower value = 1 }
+		# 	}
+		# 	change_variable = { which = to_nat_local_tribal_manpower value = -1 }
+		# }
 	}
 	## Sum to get total tribal development (useful for triggers)
 	set_variable = {
@@ -1508,6 +1516,51 @@ to_nat_calc_local_tribal_development = {
 	}
 }
 
+to_nat_remove_all_tribal_development = {
+	hidden_effect = {
+		every_owned_province = {
+			limit = {
+				continent = north_america
+			}
+			to_nat_remove_local_tribal_development = yes
+		}
+	}
+}
+
+to_nat_remove_tribal_development = {
+	if = {
+		limit = {
+			owner = {
+				OR = {
+					AND = {
+						adm_tech = 17
+						NOT = { is_native_government = yes }
+					}
+					to_nat_has_any_tier_8_native_government_reform = yes
+				}
+			}
+		}
+		to_nat_clear_local_tribal_development = yes
+	}
+}
+
+to_nat_clear_local_tribal_development = {
+	set_province_flag = to_nat_tribal_development_removed
+	set_variable = {
+		which = to_nat_local_tribal_tax
+		value = 0
+	}
+	set_variable = {
+		which = to_nat_local_tribal_production
+		value = 0
+	}
+	set_variable = {
+		which = to_nat_local_tribal_manpower
+		value = 0
+	}
+	remove_province_modifier = to_nat_tribal_development
+}
+
 to_nat_migratory_development_setup = {
 	every_province = {
 		limit = {
@@ -1522,16 +1575,15 @@ to_nat_migratory_development_setup = {
 	}
 }
 
-
-to_nat_add_local_migratory_development = {
+to_nat_on_migrate_province = {
+	to_nat_set_local_migratory_development = yes
 	if = {
 		limit = {
-			owner = {
-				is_native_government = yes
-				NOT = { has_reform = native_settle_down_reform }
-			}
+			to_nat_can_have_tribal_development = yes
 		}
-		to_nat_set_local_migratory_development = yes
+		change_variable = { which = to_nat_local_tribal_tax value = 1 }
+		change_variable = { which = to_nat_local_tribal_production value = 1 }
+		# change_variable = { which = to_nat_local_tribal_manpower value = 1 }
 	}
 }
 
@@ -1584,6 +1636,78 @@ to_nat_remove_local_migratory_development = {
 		add_base_production = -1
 		add_base_manpower = -1
 		remove_province_modifier = to_nat_migratory_development
+	}
+}
+
+to_nat_on_conquered_migratory_development = {
+	if = {
+		limit = {
+			has_province_modifier = to_nat_migratory_development
+			is_empty = no
+			owner = {
+				num_of_cities = 2
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					exists = yes
+				}
+			}
+			FROM = {
+				capital_scope = {
+					to_nat_set_local_migratory_development = yes
+				}
+			}
+			to_nat_remove_local_migratory_development = yes
+		}
+		else = {
+			to_nat_merge_migratory_development = yes
+		}
+	}
+}
+
+to_nat_merge_migratory_development = {
+	if = {
+		limit = {
+			is_native_government = yes
+			NOT = { has_reform = native_settle_down_reform }
+		}
+		every_owned_province = {
+			limit = {
+				has_province_modifier = to_nat_migratory_development
+			}
+			to_nat_merge_local_migratory_development = yes
+		}
+	}
+}
+
+to_nat_merge_local_migratory_development = {
+	if = {
+		limit = {
+			has_province_modifier = to_nat_migratory_development
+		}
+		remove_province_modifier = to_nat_migratory_development
+		if = {
+			limit = {
+				to_nat_can_have_tribal_development = yes
+			}
+			change_variable = { which = to_nat_local_tribal_tax which = to_nat_local_migratory_tax }
+			change_variable = { which = to_nat_local_tribal_production which = to_nat_local_migratory_production }
+			change_variable = { which = to_nat_local_tribal_manpower which = to_nat_local_migratory_manpower }
+		}
+		set_variable = {
+			which = to_nat_local_migratory_tax
+			value = 0
+		}
+		set_variable = {
+			which = to_nat_local_migratory_production
+			value = 0
+		}
+		set_variable = {
+			which = to_nat_local_migratory_manpower
+			value = 0
+		}
 	}
 }
 
