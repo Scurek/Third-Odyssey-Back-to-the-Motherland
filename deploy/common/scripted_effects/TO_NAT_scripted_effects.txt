@@ -1290,11 +1290,12 @@ to_load_native_reforms = {
 to_nat_set_development = {
 	every_country = {
 		limit = {
-			technology_group = north_american
-			OR = {
-				has_reform = native_settle_down_reform
-				NOT = { has_dlc = "Conquest of Paradise" }
-			}
+			is_native_government = yes
+			has_reform = native_settle_down_reform
+			# OR = {
+			# 	has_reform = native_settle_down_reform
+			# 	NOT = { has_dlc = "Conquest of Paradise" }
+			# }
 		}
 		capital_scope = {
 			add_base_tax = 1
@@ -1366,15 +1367,7 @@ to_nat_determine_new_confederation_leader = {
 to_nat_tribal_development_setup = {
 	every_province = {
 		limit = {
-			continent = north_america
 			to_nat_can_have_tribal_development = yes
-			OR = {
-				is_empty = yes
-				owner = {
-					is_native_government = yes
-					# NOT = { government = native }
-				}
-			}
 		}
 		to_nat_set_local_tribal_development = yes
 	}
@@ -1517,12 +1510,18 @@ to_nat_set_local_tribal_development = {
 }
 
 to_nat_remove_all_tribal_development = {
+	custom_tooltip = to_nat_remove_tribal_and_migratory_development_tt
 	hidden_effect = {
 		every_owned_province = {
 			limit = {
-				continent = north_america
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+				is_colony = no
+				has_province_modifier = to_nat_tribal_development
 			}
-			to_nat_remove_local_tribal_development = yes
+			to_nat_clear_local_tribal_development = yes
 		}
 	}
 }
@@ -1530,6 +1529,12 @@ to_nat_remove_all_tribal_development = {
 to_nat_remove_tribal_development = {
 	if = {
 		limit = {
+			OR = {
+				continent = north_america
+				continent = south_america
+			}
+			is_colony = no
+			has_province_modifier = to_nat_tribal_development
 			owner = {
 				OR = {
 					AND = {
@@ -1564,7 +1569,10 @@ to_nat_clear_local_tribal_development = {
 to_nat_migratory_development_setup = {
 	every_province = {
 		limit = {
-			continent = north_america
+			OR = {
+				continent = north_america
+				continent = south_america
+			}
 			owner = {
 				is_native_government = yes
 				# can_migrate = yes
@@ -1662,12 +1670,12 @@ to_nat_on_conquered_migratory_development = {
 			to_nat_remove_local_migratory_development = yes
 		}
 		else = {
-			to_nat_merge_migratory_development = yes
+			to_nat_merge_local_migratory_development = yes
 		}
 	}
 }
 
-to_nat_merge_migratory_development = {
+to_nat_merge_all_migratory_development = {
 	if = {
 		limit = {
 			is_native_government = yes
