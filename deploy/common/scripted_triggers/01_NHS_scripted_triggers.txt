@@ -275,6 +275,11 @@ nhs_hesperidian_province = {
 	#NOT = { culture = elysameric }
 }
 
+to_gets_autonomy_hesperidian = {
+	NOT = {	primary_culture = hesperidian }
+	NOT = { capital_scope = { nhs_hesperidian_areas = yes } }
+}
+
 nhs_kykladian_province = {
 	OR = {
 		region = carribeans_region
@@ -304,13 +309,16 @@ nhs_kykladian_province = {
 	# }
 }
 
+to_gets_autonomy_kykladian = {
+	NOT = {	primary_culture = kykladian }
+	NOT = { capital_scope = { region = carribeans_region } }
+}
+
 nhs_borealian_province = {
 	OR = {
 		nhs_borealian_areas = yes
 		AND = {
-			owner = {
-				NOT = { has_global_flag = nhs_hyperborealians_appeared }
-			}
+			NOT = { has_global_flag = nhs_hyperborealians_appeared }
 			nhs_hyperborealian_areas = yes
 		}	
 	}
@@ -326,6 +334,21 @@ nhs_borealian_province = {
 	#NOT = { culture = borealian }
 }
 
+to_gets_autonomy_borealian = {
+	NOT = { primary_culture = borealian }
+	NOT = {
+		capital_scope = {
+			OR = {
+				nhs_borealian_areas = yes
+				AND = {
+					NOT = { has_global_flag = nhs_hyperborealians_appeared }
+					nhs_hyperborealian_areas = yes
+				}
+			}
+		}
+	}
+}
+
 nhs_hyperborealian_province = {
 	nhs_hyperborealian_areas = yes
 	#NOT = { culture = shqipproi }
@@ -339,6 +362,11 @@ nhs_hyperborealian_province = {
 		culture = borealian
 	}
 	#NOT = { culture = hyperborealian }
+}
+
+to_gets_autonomy_hyperborealian = {
+	NOT = { primary_culture = hyperborealian }
+	NOT = { capital_scope = { nhs_hyperborealian_areas = yes } }
 }
 
 nhs_gold_province_mod = {
@@ -1409,4 +1437,25 @@ nhs_homelands_building_counter_trigger = {
 
 nhs_hightier_building_counter_trigger = {
 	continent = north_america
+}
+
+to_ely_can_convert_to_barbaroi = {
+	is_core = ROOT
+	native_culture = yes
+	OR = {
+		has_owner_religion = yes
+		tolerance_to_this = 0
+	}
+	NOT = { culture = elysameric }
+	NOT = { nationalism = 1 }
+}
+
+to_ely_can_convert_to_elyric = {
+	is_core = ROOT
+	culture = elysameric
+	OR = {
+		has_owner_religion = yes
+		tolerance_to_this = 0
+	}
+	NOT = { nationalism = 1 }
 }
