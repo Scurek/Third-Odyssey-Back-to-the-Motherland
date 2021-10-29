@@ -10,57 +10,57 @@ namespace = nhs_hellenicconversion
 # Sets up the frame, custom variable and flag
 
 country_event = {
-    id = nhs_hellenicconversion.1
-    title = nhs_hellenicconversion1.t 
-    desc = nhs_hellenicconversion1.d
-    picture = OLYMPIANS_eventPicture
+	id = nhs_hellenicconversion.1
+	title = nhs_hellenicconversion1.t 
+	desc = nhs_hellenicconversion1.d
+	picture = OLYMPIANS_eventPicture
 
-    fire_only_once = yes
+	fire_only_once = yes
 
-    trigger = {
+	trigger = {
 		OR = {
-            tag = NHS
-            was_tag = NHS
-        }
-        is_year = 1447  
-    }
+			tag = NHS
+			was_tag = NHS
+		}
+		is_year = 1447  
+	}
 
-    mean_time_to_happen = {
-        months = 2
-    }
+	mean_time_to_happen = {
+		months = 2
+	}
 
-    immediate = {
-        hidden_effect = {
-            set_variable = {
-                which = HellenicUprising
-                value = 0
-            }
-            set_variable = {
-                which = OrthodoxUprising
-                value = 0
-            }
-        }
-    }
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				which = HellenicUprising
+				value = 0
+			}
+			set_variable = {
+				which = OrthodoxUprising
+				value = 0
+			}
+		}
+	}
 
-    option = {
-        name = nhs_hellenicconversion.1.a
-        set_country_flag = hellenic_conversion_preacher
-        set_country_flag = nhs_hcd_can_have_religious_disaster
-        add_country_modifier = {
-            name = nhs_hcd_hellenic_struggles
-            duration = -1
-        }
-        custom_tooltip = hellenicconversion_preacher.tt
-    }
+	option = {
+		name = nhs_hellenicconversion.1.a
+		set_country_flag = hellenic_conversion_preacher
+		set_country_flag = nhs_hcd_can_have_religious_disaster
+		add_country_modifier = {
+			name = nhs_hcd_hellenic_struggles
+			duration = -1
+		}
+		custom_tooltip = hellenicconversion_preacher.tt
+	}
 }
 
-#########################
-# Pre-Disaster Events   #
-#########################
+####################
+# Recurring Events #
+####################
 
-#Recurring events
 
-province_event = { #Pagans refuse to pay taxes
+#Pagans refuse to pay taxes
+province_event = {
 	id = nhs_hellenicconversion.101
 	title = nhs_hellenicconversion101.t 
 	desc = nhs_hellenicconversion101.d
@@ -69,13 +69,13 @@ province_event = { #Pagans refuse to pay taxes
 	trigger = {
 		owner = {
 			   OR = {
-                    tag = NHS
-                    was_tag = NHS
-                }
+					tag = NHS
+					was_tag = NHS
+				}
 			has_country_flag = hellenic_conversion_preacher
-            num_of_cities = 4
-            religion_group = christian
-	    	}
+			num_of_cities = 4
+			religion_group = christian
+			}
 		NOT = { has_province_modifier = nhs_hcd_Pagan_taxes }
 	}
 
@@ -86,86 +86,83 @@ province_event = { #Pagans refuse to pay taxes
 	}
 
 	option = {
-		name = nhs_hellenicconversion.101.a		# Increase tax collection efforts and drive them out
-			spawn_rebels = {
-				type = particularist_rebels
-				size = 1
-		    	}
-            add_province_modifier = {
-			    name = nhs_hcd_Pagan_taxes
-			    duration = 730
-	        	}  
+		# Increase tax collection efforts and drive them out
+		name = nhs_hellenicconversion.101.a
+		spawn_rebels = {
+			type = particularist_rebels
+			size = 1
+		}
+		add_province_modifier = {
+			name = nhs_hcd_Pagan_taxes
+			duration = 730
+		}
+		owner = {  
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 5
+			}
+			hidden_effect = {
+				change_variable = {
+					which = HellenicUprising
+					value = 2
+				}
+				subtract_variable = {
+					which = OrthodoxUprising
+					value = 1
+				}
+			} 
+		}
+		custom_tooltip = hellenicconversion_appease_Orthodox.tt
+	}
 
-    owner = {  
-            add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-            }      
-            hidden_effect = {        
-            change_variable = {
-                which = HellenicUprising
-                value = 2
-                }
-            subtract_variable = {
-                which = OrthodoxUprising
-                value = 1
-                }
-            } 
-    }
+	option = { 
+		# Increase tax collection efforts
+		name = nhs_hellenicconversion.101.b
+		add_province_modifier = {
+			name = nhs_hcd_Pagan_taxes
+			duration = 365
+		}
+		owner = {
+			hidden_effect = {
+				change_variable = {
+				which = HellenicUprising
+				value = 1
+				}
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
 
-        custom_tooltip = hellenicconversion_appease_Orthodox.tt
-    }
+	option = { # Tax the church
+		name = nhs_hellenicconversion.101.c
+		owner = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -10
+			} 
+			hidden_effect = {
+				change_variable = {
+				which = OrthodoxUprising
+				value = 1
+				}
+			}
+		}
+		custom_tooltip = hellenicconversion_appease_Pagans.tt
+	}
 
-    option = { # Increase tax collection efforts
-		name = nhs_hellenicconversion.101.b		
-        add_province_modifier = {
-			    name = nhs_hcd_Pagan_taxes
-			    duration = 365
-	        	}  
-
-        owner = {
-            hidden_effect = {
-                change_variable = {
-                which = HellenicUprising
-                value = 1
-                }
-            }
-        }
-
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { # Tax the church
-		name = nhs_hellenicconversion.101.c	
-        owner = {
-        add_estate_loyalty = {
-                estate = estate_church
-                loyalty = -10
-            } 
-
-        hidden_effect = {
-            change_variable = {
-            which = OrthodoxUprising
-            value = 1
-            }
-        } 
-    }
-
-        custom_tooltip = hellenicconversion_appease_Pagans.tt
-    }
-
-    option = { # Forfeit taxes
-		name = nhs_hellenicconversion.101.d		
-        owner ={
-            add_years_of_income = -1
-        }
-
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    } 
+	option = { # Forfeit taxes
+		name = nhs_hellenicconversion.101.d
+		owner ={
+			add_years_of_income = -1
+		}
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	} 
 
 }
 
-province_event = { #Zealots attack Pagans
+
+# Zealots attack Pagans
+province_event = { 
 	id = nhs_hellenicconversion.102
 	title = nhs_hellenicconversion102.t 
 	desc = nhs_hellenicconversion102.d
@@ -173,14 +170,14 @@ province_event = { #Zealots attack Pagans
 
 	trigger = {
 		owner = {
-			   OR = {
-                    tag = NHS
-                    was_tag = NHS
-                }
+			OR = {
+				tag = NHS
+				was_tag = NHS
+			}
 			has_country_flag = hellenic_conversion_preacher
-            num_of_cities = 4
-            religion_group = christian
-	    	}
+			num_of_cities = 4
+			religion_group = christian
+		}
 		NOT = { has_province_modifier = nhs_hcd_hellenic_conversion_strife }
 	}
 
@@ -191,87 +188,88 @@ province_event = { #Zealots attack Pagans
 	}
 
 	option = {
-		name = nhs_hellenicconversion.102.a		# Burn more Pagans
+		# Burn more Pagans
+		name = nhs_hellenicconversion.102.a
 
-        owner = {  
-            add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-            }      
-            hidden_effect = {        
-            change_variable = {
-                which = HellenicUprising
-                value = 2
-                }
-            subtract_variable = {
-                which = OrthodoxUprising
-                value = 1
-                }
-            } 
-    }
-
-        custom_tooltip = hellenicconversion_appease_Orthodox.tt
-    }
-
-    option = {
-		name = nhs_hellenicconversion.102.b		# Let the zealots do their thing
-        add_province_modifier = {
-			    name = nhs_hcd_hellenic_conversion_strife
-			    duration = 365
-	        	}  
-
-        owner = {
-            hidden_effect = {
-                change_variable = {
-                which = HellenicUprising
-                value = 1
-                }
-            }
-        }
-
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = {
-		name = nhs_hellenicconversion.102.c	# Stop the zealots
-        spawn_rebels = {
-		    type = Orthodox_rebels
-		    size = 1
+		owner = {  
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 5
+			}
+			hidden_effect = {        
+				change_variable = {
+					which = HellenicUprising
+					value = 2
+				}
+				subtract_variable = {
+					which = OrthodoxUprising
+					value = 1
+				}
+			} 
 		}
-        owner = {
-        add_estate_loyalty = {
-                estate = estate_church
-                loyalty = -10
-            } 
+		custom_tooltip = hellenicconversion_appease_Orthodox.tt
+	}
 
-        hidden_effect = {
-            change_variable = {
-            which = OrthodoxUprising
-            value = 1
-            }
-        } 
-    }
+	option = {
+		# Let the zealots do their thing
+		name = nhs_hellenicconversion.102.b
+		add_province_modifier = {
+			name = nhs_hcd_hellenic_conversion_strife
+			duration = 365
+		}
+		owner = {
+			hidden_effect = {
+				change_variable = {
+					which = HellenicUprising
+					value = 1
+				}
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
 
-        custom_tooltip = hellenicconversion_appease_Pagans.tt
-    }
+	option = {
+		# Stop the zealots
+		name = nhs_hellenicconversion.102.c
+		spawn_rebels = {
+			type = Orthodox_rebels
+			size = 1
+		}
+		owner = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -10
+			}
+			hidden_effect = {
+				change_variable = {
+					which = OrthodoxUprising
+					value = 1
+				}
+			} 
+		}
+		custom_tooltip = hellenicconversion_appease_Pagans.tt
+	}
 
-    option = {
-		name = nhs_hellenicconversion.102.d		# Restore order
-        owner ={
-            add_mil_power = -75
-        }
+	option = {
+		# Restore order
+		name = nhs_hellenicconversion.102.d
+		owner ={
+			add_mil_power = -75
+		}
 
-        add_province_modifier = {
+		add_province_modifier = {
 		name = nhs_hcd_hellenic_conversion_strife
 		duration = 180
-	    }  
+		}  
 
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    } 
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	} 
 
 }
 
-province_event = { #Priest killed
+
+# Priest killed
+province_event = {
 	id = nhs_hellenicconversion.103
 	title = nhs_hellenicconversion103.t 
 	desc = nhs_hellenicconversion103.d
@@ -279,14 +277,14 @@ province_event = { #Priest killed
 
 	trigger = {
 		owner = {
-			   OR = {
-                    tag = NHS
-                    was_tag = NHS
-                }
+			OR = {
+				tag = NHS
+				was_tag = NHS
+			}
 			has_country_flag = hellenic_conversion_preacher
-            num_of_cities = 4
-            religion_group = christian
-	    	}
+			num_of_cities = 4
+			religion_group = christian
+		}
 	}
 
 	is_mtth_scaled_to_size = 1
@@ -296,60 +294,61 @@ province_event = { #Priest killed
 	}
 
 	option = {
-		name = nhs_hellenicconversion.103.a		# Accuse the Pagans
+		# Accuse the Pagans
+		name = nhs_hellenicconversion.103.a
 
-        owner = {  
-            add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-            }      
-        hidden_effect = {        
-        change_variable = {
-            which = HellenicUprising
-            value = 1
-            }
-        } 
-    }
+		owner = {  
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 5
+			}      
+			hidden_effect = {        
+				change_variable = {
+					which = HellenicUprising
+					value = 1
+				}
+			} 
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
 
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
+	option = {
+		# Accuse natives
+		name = nhs_hellenicconversion.103.b
 
-    option = {
-		name = nhs_hellenicconversion.103.b		# Accuse natives
+		owner = {
+			hidden_effect = {
+				change_variable = {
+					which = OrthodoxUprising
+					value = 1
+				}
+			}
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -10
+			}   
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
 
-        owner = {
-            hidden_effect = {
-                change_variable = {
-                which = OrthodoxUprising
-                value = 1
-                }
-            }
-            add_estate_loyalty = {
-                estate = estate_church
-                loyalty = -10
-                }   
-        }
-
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-    option = {
+	option = {
 		name = nhs_hellenicconversion.103.c	# Let the matter drop
 
-        owner = {
-            add_estate_loyalty = {
-                estate = estate_church
-                loyalty = -5
-                } 
-            add_legitimacy = -20
-    }
-
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    }
+		owner = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -5
+			} 
+			add_legitimacy = -20
+		}
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	}
 
 }
 
-country_event = { #Angered church
+
+# Angered church
+country_event = {
 	id = nhs_hellenicconversion.104
 	title = nhs_hellenicconversion104.t 
 	desc = nhs_hellenicconversion104.d
@@ -357,66 +356,65 @@ country_event = { #Angered church
 
 	trigger = {
 		OR = {
-            tag = NHS
-            was_tag = NHS
-            }
+			tag = NHS
+			was_tag = NHS
+		}
 		has_country_flag = hellenic_conversion_preacher
-        num_of_cities = 4
-        religion_group = christian
-	    }
+		num_of_cities = 4
+		religion_group = christian
+	}
 	
 	mean_time_to_happen = {
 		months = 12
-	    }
+	}
 
-    option = { #Issue a public condemenation of Pagans
-    name = nhs_hellenicconversion.104.a
+	option = { 
+		# Issue a public condemenation of Pagans
+		name = nhs_hellenicconversion.104.a
 
-        add_estate_loyalty = {
-        estate = estate_church
-        loyalty = 5
-        }
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
 
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-                }
-            }
+	option = { 
+		# Refuse to hear the priest out
+		name = nhs_hellenicconversion.104.b
 
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -5
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
 
-    option = { #Refuse to hear the priest out
-    name = nhs_hellenicconversion.104.b
+	option = { 
+		# Make vague statements of supports to the church
+		name = nhs_hellenicconversion.104.c
 
-        add_estate_loyalty = {
-        estate = estate_church
-        loyalty = -5
-        }
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-                }
-            }
-
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-    option = { #Make vague statements of supports to the church
-        name = nhs_hellenicconversion.104.c
-
-        add_patriarch_authority = -0.25
-        add_adm_power = -50
-
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    }
-
+		add_patriarch_authority = -0.25
+		add_adm_power = -50
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	}
 }
 
-province_event = { #Pagan settlers
+
+# Pagan settlers
+province_event = { 
 	id = nhs_hellenicconversion.105
 	title = nhs_hellenicconversion105.t 
 	desc = nhs_hellenicconversion105.d
@@ -424,17 +422,17 @@ province_event = { #Pagan settlers
 
 	trigger = {
 		owner = {
-			   OR = {
-                    tag = NHS
-                    was_tag = NHS
-                }
+			OR = {
+				tag = NHS
+				was_tag = NHS
+			}
 			has_country_flag = hellenic_conversion_preacher
-            num_of_cities = 4
-            is_colony = yes
-            religion_group = christian
-	    	}
-        NOT = { has_province_modifier = nhs_hcd_land_dispute }
-        NOT = { has_province_modifier = nhs_hcd_colonial_tensions }
+			num_of_cities = 4
+			is_colony = yes
+			religion_group = christian
+		}
+		NOT = { has_province_modifier = nhs_hcd_land_dispute }
+		NOT = { has_province_modifier = nhs_hcd_colonial_tensions }
 	}
 
 	is_mtth_scaled_to_size = 1
@@ -444,84 +442,85 @@ province_event = { #Pagan settlers
 	}
 
 	option = {
-		name = nhs_hellenicconversion.105.a		# Conversion or death
+		# Conversion or death
+		name = nhs_hellenicconversion.105.a
 
-        add_colonysize = -500
-        add_province_modifier = {
-            name = nhs_hcd_land_dispute
-            duration = 90
-    }
-        owner = {  
-            add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-            }      
-        hidden_effect = {        
-        change_variable = {
-            which = HellenicUprising
-            value = 1
-            }
-        } 
-    }
-
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-	option = {
-		name = nhs_hellenicconversion.105.b		# Let them settle
-
-        add_colonysize = 100
-        add_province_modifier = {
-            name = nhs_hcd_land_dispute
-            duration = 60
-    }
-        owner = {  
-            add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-            }      
-        hidden_effect = {        
-        change_variable = {
-            which = OrthodoxUprising
-            value = 1
-            }
-        } 
-    }
-
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
+		add_colonysize = -500
+		add_province_modifier = {
+			name = nhs_hcd_land_dispute
+			duration = 90
+		}
+		owner = {  
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 5
+			}
+			hidden_effect = {
+				change_variable = {
+					which = HellenicUprising
+					value = 1
+				}
+			} 
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
 
 	option = {
-		name = nhs_hellenicconversion.105.c		# Protect the settlers
+		# Let them settle
+		name = nhs_hellenicconversion.105.b
 
-        add_colonysize = 200
-        add_province_modifier = {
-            name = nhs_hcd_land_dispute
-            duration = 30
-    }
-        owner = {  
-            add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -15
-            }      
-        hidden_effect = {        
-        change_variable = {
-            which = OrthodoxUprising
-            value = 2
-            }
-        subtract_variable = {
-            which = HellenicUprising
-            value = 1
-            }
-        } 
-    }
+		add_colonysize = 100
+		add_province_modifier = {
+			name = nhs_hcd_land_dispute
+			duration = 60
+		}
+		owner = {  
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -10
+			}      
+			hidden_effect = {        
+				change_variable = {
+					which = OrthodoxUprising
+					value = 1
+				}
+			} 
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
 
-        custom_tooltip = hellenicconversion_appease_Pagans.tt
-    }
+	option = {
+		# Protect the settlers
+		name = nhs_hellenicconversion.105.c
 
+		add_colonysize = 200
+		add_province_modifier = {
+			name = nhs_hcd_land_dispute
+			duration = 30
+		}
+		owner = {  
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -15
+			}
+			hidden_effect = {
+				change_variable = {
+					which = OrthodoxUprising
+					value = 2
+				}
+				subtract_variable = {
+					which = HellenicUprising
+					value = 1
+				}
+			} 
+		}
+		custom_tooltip = hellenicconversion_appease_Pagans.tt
+	}
 }
 
-province_event = { #Pagans Flee
+
+# Pagans Flee
+province_event = {
 	id = nhs_hellenicconversion.106
 	title = nhs_hellenicconversion106.t 
 	desc = nhs_hellenicconversion106.d
@@ -529,17 +528,17 @@ province_event = { #Pagans Flee
 
 	trigger = {
 		owner = {
-			   OR = {
-                    tag = NHS
-                    was_tag = NHS
-                }
+			OR = {
+				tag = NHS
+				was_tag = NHS
+			}
 			has_country_flag = hellenic_conversion_preacher
-            num_of_cities = 4
-            is_colony = yes
-            religion_group = christian
-	    	}
-        NOT = { has_province_modifier = nhs_hcd_land_dispute }
-        NOT = { has_province_modifier = nhs_hcd_colonial_tensions }
+			num_of_cities = 4
+			is_colony = yes
+			religion_group = christian
+		}
+		NOT = { has_province_modifier = nhs_hcd_land_dispute }
+		NOT = { has_province_modifier = nhs_hcd_colonial_tensions }
 	}
 
 	is_mtth_scaled_to_size = 1
@@ -549,93 +548,93 @@ province_event = { #Pagans Flee
 	}
 
 	option = {
-		name = nhs_hellenicconversion.106.a	# Stop them
+		# Stop them
+		name = nhs_hellenicconversion.106.a
 
-        add_colonysize = -100
-        owner = {  
-            add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-            }      
-        hidden_effect = {        
-        change_variable = {
-            which = HellenicUprising
-            value = 2
-            }
-        subtract_variable = {
-            which = OrthodoxUprising
-            value = 1
-            }
-        } 
-    }
-
-        custom_tooltip = hellenicconversion_appease_Orthodox.tt
-    }
-
-	option = {
-		name = nhs_hellenicconversion.106.b		# Let them go but seize their land
-
-        add_colonysize = -200
-        add_province_modifier = {
-            name = nhs_hcd_colonial_tensions
-            duration = 90
-    }
-        owner = {  
-        add_years_of_income = 0.25    
-        hidden_effect = {        
-        change_variable = {
-            which = HellenicUprising
-            value = 1
-            }
-        } 
-    }
-
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
+		add_colonysize = -100
+		owner = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 5
+			}
+			hidden_effect = {
+				change_variable = {
+					which = HellenicUprising
+					value = 2
+				}
+				subtract_variable = {
+					which = OrthodoxUprising
+					value = 1
+				}
+			} 
+		}
+		custom_tooltip = hellenicconversion_appease_Orthodox.tt
+	}
 
 	option = {
-		name = nhs_hellenicconversion.106.c	# Let them go
+		# Let them go but seize their land
+		name = nhs_hellenicconversion.106.b
 
-        add_colonysize = -200
-        add_province_modifier = {
-            name = nhs_hcd_colonial_tensions
-            duration = 90
-    }
-        owner = {  
-            add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-            }      
-        hidden_effect = {        
-        change_variable = {
-            which = OrthodoxUprising
-            value = 1
-            }
-        } 
-    }
-
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
+		add_colonysize = -200
+		add_province_modifier = {
+			name = nhs_hcd_colonial_tensions
+			duration = 90
+		}
+		owner = {
+			add_years_of_income = 0.25
+			hidden_effect = {
+				change_variable = {
+					which = HellenicUprising
+					value = 1
+				}
+			} 
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
 
 	option = {
-		name = nhs_hellenicconversion.106.d		# Send in new settlers
+		# Let them go
+		name = nhs_hellenicconversion.106.c
 
-        owner = {
-            add_years_of_income = -0.25
-    }
-        add_colonysize = -100
-        add_province_modifier = {
-            name = nhs_hcd_colonial_tensions
-            duration = 30
-    }  
+		add_colonysize = -200
+		add_province_modifier = {
+			name = nhs_hcd_colonial_tensions
+			duration = 90
+		}
+		owner = {  
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -10
+			}
+			hidden_effect = {
+				change_variable = {
+					which = OrthodoxUprising
+					value = 1
+				}
+			} 
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
 
-        
-        custom_tooltip = hellenicconversion_favour_neither.tt      
-    }
+	option = {
+		# Send in new settlers
+		name = nhs_hellenicconversion.106.d
 
+		owner = {
+			add_years_of_income = -0.25
+		}
+		add_colonysize = -100
+		add_province_modifier = {
+			name = nhs_hcd_colonial_tensions
+			duration = 30
+		}
+		custom_tooltip = hellenicconversion_favour_neither.tt      
+	}
 }
 
-country_event = { #Pagan advisor
+
+# Pagan advisor
+country_event = { 
 	id = nhs_hellenicconversion.107
 	title = nhs_hellenicconversion107.t 
 	desc = nhs_hellenicconversion107.d
@@ -643,19 +642,19 @@ country_event = { #Pagan advisor
 
 	trigger = {
 		OR = {
-            tag = NHS
-            was_tag = NHS
-            }
+			tag = NHS
+			was_tag = NHS
+		}
 		has_country_flag = hellenic_conversion_preacher
-        has_advisor = yes
-        religion_group = christian
-	    }
+		has_advisor = yes
+		religion_group = christian
+	}
 	
 	mean_time_to_happen = {
 		months = 12
-	    }
+	}
 
-    immediate = {
+	immediate = {
 		hidden_effect = {
 			random_list = {
 				1 = {
@@ -678,2203 +677,2160 @@ country_event = { #Pagan advisor
 					trigger = {
 						employed_advisor = {
 							category = MIL
-				    		}
-				    	}
+						}
+					}
 					set_country_flag = nhs_hcd_advisor_events_mil
-			    	}
-		    	}
+				}
+			}
 		}
 	}
 
-    option = { #Fire the advisor
-        name = nhs_hellenicconversion.107.a
+	option = { 
+		# Fire the advisor
+		name = nhs_hellenicconversion.107.a
 
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-        }
-
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
 		trigger_switch = {
 			on_trigger = has_country_flag
 			nhs_hcd_advisor_events_adm = { kill_advisor_by_category_effect = { ADM = yes } }
 			nhs_hcd_advisor_events_dip = { kill_advisor_by_category_effect = { DIP = yes } }
 			nhs_hcd_advisor_events_mil = { kill_advisor_by_category_effect = { MIL = yes } }
 		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 2
+			}
+			subtract_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_appease_Orthodox.tt
+	}
 
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 2
-                }
-            subtract_variable = {
-                which = OrthodoxUprising
-                value = 1
-                }
-            }
+	option = { 
+		# Fair trial
+		name = nhs_hellenicconversion.107.b
 
-        custom_tooltip = hellenicconversion_appease_Orthodox.tt
-    }
+		random_list = {
+			75 = {
+				trigger_switch = {
+					on_trigger = has_country_flag
+					nhs_hcd_advisor_events_adm = { kill_advisor_by_category_effect = { ADM = yes } }
+					nhs_hcd_advisor_events_dip = { kill_advisor_by_category_effect = { DIP = yes } }
+					nhs_hcd_advisor_events_mil = { kill_advisor_by_category_effect = { MIL = yes } }
+				}
+			}
+			25 = {
+				add_prestige = 10
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
 
-    option = { #Fair trial
-        name = nhs_hellenicconversion.107.b
+	option = { 
+		# Stand by the advisor
+		name = nhs_hellenicconversion.107.c
 
-        random_list = {
-            75 = {
-                trigger_switch = {
-                    on_trigger = has_country_flag
-                    nhs_hcd_advisor_events_adm = { kill_advisor_by_category_effect = { ADM = yes } }
-                    nhs_hcd_advisor_events_dip = { kill_advisor_by_category_effect = { DIP = yes } }
-                    nhs_hcd_advisor_events_mil = { kill_advisor_by_category_effect = { MIL = yes } }
-                }
-            }
-            25 = {
-                add_prestige = 10
-            }
-        }
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+
+	option = { 
+		# Pay retirement
+		name = nhs_hellenicconversion.107.d
+
+		add_years_of_income = -1
+		trigger_switch = {
+			on_trigger = has_country_flag
+			nhs_hcd_advisor_events_adm = { kill_advisor_by_category_effect = { ADM = yes } }
+			nhs_hcd_advisor_events_dip = { kill_advisor_by_category_effect = { DIP = yes } }
+			nhs_hcd_advisor_events_mil = { kill_advisor_by_category_effect = { MIL = yes } }
+		}
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	}
+
+	after = {
+		hidden_effect = {
+			trigger_switch = {
+				on_trigger = has_country_flag
+				nhs_hcd_advisor_events_adm = { clr_country_flag = nhs_hcd_advisor_events_adm }
+				nhs_hcd_advisor_events_dip = { clr_country_flag = nhs_hcd_advisor_events_dip }
+				nhs_hcd_advisor_events_mil = { clr_country_flag = nhs_hcd_advisor_events_mil }
+			}
+		}
+	}
+}
 
 
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-                }
-            }
+#########################
+# Funeral of Georgios   #
+#########################
 
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
+# Death of Georgios
+country_event = {
+	id = nhs_hellenicconversion.2
+	title = nhs_hellenicconversion2.t 
+	desc = nhs_hellenicconversion2.d
+	picture = REFORM_eventPicture
+	
+	fire_only_once = yes
 
-    option = { #Stand by the advisor
-        name = nhs_hellenicconversion.107.c
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		has_country_flag = hellenic_conversion_preacher
+		NOT = { has_country_flag = georgios_dead }
+		NOT = { has_country_flag = hellenic_conversion_major_event }
+		is_year = 1452
+		religion_group = christian  
+	}
 
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-        }
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = georgios_dead
+			set_country_flag = hellenic_conversion_major_event
+		}
+	}
+
+	option = {
+		# Organise an offical funeral 
+		name = nhs_hellenicconversion.2.a
+
+		add_years_of_income = -0.75
+		hidden_effect = {
+			random_list = {
+				10 = {
+					country_event = { id = nhs_hellenicconversion.21 days = 5 } # Emperor dies
+				}
+				90 = {
+					country_event = { id = nhs_hellenicconversion.22 days = 5 } # Backlash from church
+				}
+			}
+		}
+		custom_tooltip = nhs_hellenicconversion.2.a.tt
+	}
+
+	option = {
+		# Covertly fund a funeral
+		name = nhs_hellenicconversion.2.b
+
+		add_years_of_income = -0.75
+		hidden_effect = {
+			random_list = {
+				30 = {
+					country_event = { id = nhs_hellenicconversion.23 days = 5 } # Corruption discovered
+				}
+				70 = {
+					country_event = { id = nhs_hellenicconversion.24 days = 5 } # Funeral goes as planned
+				}
+			}
+		}
+		custom_tooltip = nhs_hellenicconversion.2.b.tt
+	}
+
+	option = { 
+		# Let the Pagans organise their own event
+		name = nhs_hellenicconversion.2.c
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -5
+		}
+		hidden_effect = {
+			random_list = {
+				60 = {
+					country_event = { id = nhs_hellenicconversion.25 days = 5 } # Violent clashes
+				}
+				40 = {
+					country_event = { id = nhs_hellenicconversion.26 days = 5 } # Peaceful vigil
+				}
+			}
+		}
+		custom_tooltip = nhs_hellenicconversion.2.c.tt
+	}
+
+	option = { 
+		# Condemn the man
+		name = nhs_hellenicconversion.2.d
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
 
 		hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-                }
-            }
+			random_list = {
+				40 = {
+					country_event = { id = nhs_hellenicconversion.27 days = 5 } #Pagans outraged
+				}
+				30 = {
+					country_event = { id = nhs_hellenicconversion.28 days = 5 } #Pagans rise up in violence
+				}
+				30 = {
+					country_event = { id = nhs_hellenicconversion.29 days = 5 } #Orthodox violence
+				}
+			}
+		}
+		custom_tooltip = nhs_hellenicconversion.2.d.tt
+	}
+}
 
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
 
-    option = { #Pay retirement
-        name = nhs_hellenicconversion.107.d
+# Ruler assassinated during funeral
+country_event = {
+	id = nhs_hellenicconversion.21
+	title = nhs_hellenicconversion21.t
+	desc = nhs_hellenicconversion21.d
+	picture = DEATH_OF_HEIR_eventPicture
 
-        add_years_of_income = -1
+	is_triggered_only = yes 
 
+	immediate = {
+		hidden_effect = {
+			kill_ruler = yes
+		}
+	}
+
+	option = { 
+		# Round up the Pagan leaders
+		name = nhs_hellenicconversion.21.a 
+
+		add_country_modifier = {
+			name = nhs_hcd_hellenic_coup
+			duration = 365
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 2
+			}
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+
+	option = { 
+		# Accuse the church of plotting against the emperor
+		name = nhs_hellenicconversion.21.b 
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -30
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 2
+			}
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+
+	option = { 
+		# Accuse no one
+		name = nhs_hellenicconversion.21.c 
+
+		add_stability = -1
+		hidden_effect = {
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	}
+}
+
+
+# Church angered by funeral
+country_event = { 
+	id = nhs_hellenicconversion.22
+	title = nhs_hellenicconversion22.t
+	desc = nhs_hellenicconversion22.d
+	picture = STREET_SPEECH_eventPicture
+
+	is_triggered_only = yes
+
+	option = { 
+		# The church can eat it
+		name = nhs_hellenicconversion.22.a
+
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 2
+			}
+			subtract_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		random_list = {
+			50 = {
+				add_estate_loyalty = {
+					estate = estate_church
+					loyalty = -30
+				}
+			}
+			50 = {
+				add_estate_loyalty = {
+					estate = estate_church
+					loyalty = -30
+				}
+				random_owned_province = {
+					limit = {
+						is_city = yes
+					}
+					spawn_rebels = {
+						type = Orthodox_rebels
+						size = 2
+					}
+				}
+			}
+		}
+		custom_tooltip = hellenicconversion_appease_Pagans.tt
+	}
+
+	option = { 
+		# Make sure the church stays quiet
+		name = nhs_hellenicconversion.22.b
+
+		hidden_effect = {
+			clr_country_flag = hellenic_conversion_major_event
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+					}
+		}
+		add_years_of_income = -0.5
+		random_list = {
+			50 = {
+				add_corruption = 2
+				custom_tooltip = nhs_hellenicconversion.22.b.1
+			}
+			50 = {
+				add_legitimacy = -20
+				add_estate_loyalty = {
+					estate = estate_church
+					loyalty = -5
+				}
+				custom_tooltip = nhs_hellenicconversion.22.b.2
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+}
+
+
+# Corruption discovered
+country_event = {
+	id = nhs_hellenicconversion.23
+	title = nhs_hellenicconversion23.t
+	desc = nhs_hellenicconversion23.d
+	picture = PROTESTANT_CATHOLIC_DEBATE_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = nhs_hellenicconversion.23.a
+
+		add_legitimacy = -15
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		hidden_effect = {
+			clr_country_flag = hellenic_conversion_major_event
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+}
+
+
+# Funeral goes as planned
+country_event = {
+	id = nhs_hellenicconversion.24
+	title = nhs_hellenicconversion24.t
+	desc = nhs_hellenicconversion24.d
+	picture = CATHOLIC_RULERS_PRAYING_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = nhs_hellenicconversion.24.a
+
+		add_prestige = 10
+		hidden_effect = {
+			clr_country_flag = hellenic_conversion_major_event
+		}
+	}
+}
+
+
+# Violent clashes
+country_event = {
+	id = nhs_hellenicconversion.25
+	title = nhs_hellenicconversion25.t
+	desc = nhs_hellenicconversion25.d
+	picture = SIEGE_PRAGUE_CASTLE_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		# Call down the guard
+		name = nhs_hellenicconversion.25.a
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 2
+			}
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = yes
+			}
+			spawn_rebels = {
+				type = particularist_rebels
+				size = 1
+			}
+		}
+		random_owned_province = {
+			limit = {
+					is_capital = no
+			}
+			spawn_rebels = {
+				type = particularist_rebels
+				size = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_appease_Orthodox.tt
+	}
+
+	option = {
+		# Attempt to talk them down
+		name = nhs_hellenicconversion.25.b
+
+		hidden_effect = {
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		add_dip_power = -100
+		random_list = {
+			50 = {
+				add_legitimacy = 5
+			}
+			50 = {
+				random_owned_province = {
+					limit = {
+						is_capital = yes
+					}
+					spawn_rebels = {
+						type = particularist_rebels
+						size = 1
+					}
+				}
+				random_owned_province = {
+					limit = {
+						is_capital = no
+					}
+					spawn_rebels = {
+						type = particularist_rebels
+						size = 1
+					}
+				}
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	}
+}
+
+
+# Peaceful vigil
+country_event = {
+	id = nhs_hellenicconversion.26
+	title = nhs_hellenicconversion26.t
+	desc = nhs_hellenicconversion26.d
+	picture = CITY_VIEW_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = nhs_hellenicconversion.26.a
+
+		hidden_effect = {
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		add_prestige = 10
+	}
+}
+
+
+# Pagans outraged
+country_event = {
+	id = nhs_hellenicconversion.27
+	title = nhs_hellenicconversion27.t
+	desc = nhs_hellenicconversion27.d
+	picture = DEBATE_REPUBLICAN_eventPicture
+
+	is_triggered_only = yes
+
+	option = { 
+		# Too bad
+		name = nhs_hellenicconversion.27.a
+
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 2
+			}
+			subtract_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		custom_tooltip = hellenicconversion_appease_Orthodox.tt
+	}
+}
+
+
+# Pagans rise up
+country_event = {
+	id = nhs_hellenicconversion.28
+	title = nhs_hellenicconversion28.t
+	desc = nhs_hellenicconversion28.d
+	picture = ANGRY_MOB_eventPicture
+
+	is_triggered_only = yes 
+
+	option = { 
+		# Stop them
+		name = nhs_hellenicconversion.28.a
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 2
+			}
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = yes
+			}
+			spawn_rebels = {
+				type = particularist_rebels
+				size = 1
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				is_city = yes
+			}
+			spawn_rebels = {
+				type = particularist_rebels
+				size = 2
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+
+	option = {
+		# Do not intervene
+		name = nhs_hellenicconversion.28.b
+
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 2
+			}
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -15
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = yes
+			}
+			add_base_tax = -2
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+}
+
+
+# Orthodox violence
+country_event = {
+	id = nhs_hellenicconversion.29 
+	title = nhs_hellenicconversion29.t 
+	desc = nhs_hellenicconversion29.d
+	picture = VILLAGE_RAIDED_eventPicture
+
+	is_triggered_only = yes 
+
+	option = { 
+		# Brutal
+		name = nhs_hellenicconversion.29.a
+
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 2
+			}
+			subtract_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		every_owned_province = {
+			limit = {
+				has_owner_religion = no
+			}
+			add_province_modifier = {
+				name = nhs_hcd_Pagan_persecution
+				duration = 1825
+			}
+			change_religion = ROOT
+		}
+		random_owned_province = {
+			limit = {
+				is_city = yes
+			}
+			spawn_rebels = {
+				type = particularist_rebels
+				size = 2
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_city = yes
+			}
+			spawn_rebels = {
+				type = particularist_rebels
+				size = 2
+			}
+		}
+		custom_tooltip = hellenicconversion_appease_Orthodox.tt
+	}
+
+	option = { 
+		# Let them fight
+		name = nhs_hellenicconversion.29.b
+
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		random_owned_province = {
+		   limit = {
+			   is_capital = yes
+		   }
+		   add_base_tax = -2 
+		}
+		random_owned_province = {
+		   limit = {
+			   is_capital = no
+		   }
+		   add_base_tax = -2 
+		}
+		random_owned_province = {
+		   limit = {
+			   is_capital = no
+		   }
+		   add_base_tax = -1 
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+
+	option = {
+		name = nhs_hellenicconversion.29.c
+
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+			clr_country_flag = hellenic_conversion_major_event
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = yes
+			}
+			spawn_rebels = {
+				type = orthodox_rebels
+				size = 2
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+}
+
+
+# Death of Georgios but Pagan revolt quelled
+country_event = {
+	id = nhs_hellenicconversion.201
+	title = nhs_hellenicconversion201.t 
+	desc = nhs_hellenicconversion201.d
+	picture = REFORM_eventPicture
+	
+	fire_only_once = yes
+
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		NOT = { has_country_flag = hellenic_conversion_preacher }
+		is_year = 1452
+		NOT = { has_country_flag = georgios_dead }  
+		NOT = { has_any_disaster = yes }
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = georgios_dead 
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 2
+	}
+
+	option = {
+		# Attend the funeral
+		name = nhs_hellenicconversion.201.a
+		
+		add_adm_power = -50
+	}
+
+	option = { 
+		# Make it an elaborate funeral
+		name = nhs_hellenicconversion.202.b
+		
+		add_adm_power = -50
+		add_prestige = 15
+		add_years_of_income = -0.25
+	}
+}
+
+
+##################
+# Royal Heresy   #
+##################
+
+# Heir accused of being a heretic
+country_event = {
+	id = nhs_hellenicconversion.3
+	title = nhs_hellenicconversion3.t
+	desc = nhs_hellenicconversion3.d
+	picture = orthodox_court_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		has_heir = yes
+		heir_age = 13
+		government = monarchy
+		has_country_flag = hellenic_conversion_preacher
+		NOT = { has_country_flag = hellenic_conversion_major_event }
+		religion_group = christian
+	}
+
+	mean_time_to_happen = {
+		months = 36
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = hellenic_conversion_major_event
+		}
+	}
+
+	option = { 
+		# Denounce the heir
+		name = nhs_hellenicconversion.3.a
+
+		add_heir_claim = -20
+		hidden_effect = {
+			change_variable = {
+				which = PaganUprising
+				value = 1
+			}
+			random_list = {
+				33 = {
+					country_event = { id = nhs_hellenicconversion.31 days = 31 } # Faifthul heir
+				}
+				33 = {
+					country_event = { id = nhs_hellenicconversion.32 days = 31 } # Heathen heir
+				}
+				33 = {
+					country_event = { id = nhs_hellenicconversion.33 days = 31 } # Heir assassinated
+				}
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+
+	option = {
+		# Stand by the heir
+		name = nhs_hellenicconversion.3.b
+
+		add_legitimacy = -10
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+			random_list = {
+				33 = {
+					country_event = { id = nhs_hellenicconversion.31 days = 31 } # Faifthul heir
+				}
+				33 = {
+					country_event = { id = nhs_hellenicconversion.32 days = 31 } # Heathen heir
+				}
+				33 = {
+					country_event = { id = nhs_hellenicconversion.33 days = 31 } # Heir assassinated
+				}
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+
+	option = { #Have the priest thrown in jail
+		name = nhs_hellenicconversion.3.c
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -15
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 2
+			}
+			subtract_variable = {
+				which = PaganUprising
+				value = 1
+			}
+			random_list = {
+				33 = {
+					country_event = { id = nhs_hellenicconversion.31 days = 31 } # Faifthul heir
+				}
+				33 = {
+					country_event = { id = nhs_hellenicconversion.32 days = 31 } # Heathen heir
+				}
+				33 = {
+					country_event = { id = nhs_hellenicconversion.33 days = 31 } # Heir assassinated
+				}
+			}
+		}
+		custom_tooltip = hellenicconversion_appease_Pagans.tt
+	}
+}
+
+
+# Faithful Heir
+country_event = {
+	id = nhs_hellenicconversion.31
+	title = nhs_hellenicconversion31.t
+	desc = nhs_hellenicconversion31.d
+	picture = RELIGIOUS_CONVERSION_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = nhs_hellenicconversion.31.a
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		add_heir_claim = 10
+		clr_country_flag = hellenic_conversion_major_event
+	}
+}
+
+
+# Heathen Heir
+country_event = {
+	id = nhs_hellenicconversion.32
+	title = nhs_hellenicconversion32.t
+	desc = nhs_hellenicconversion32.d
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_heir_religion = pantheon_worship
+	}
+
+	option = {
+		# Have the heir JAILED
+		name = nhs_hellenicconversion.32.a
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 10
+		}
+		add_stability = -1
+		kill_heir = yes
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 2
+			}
+			subtract_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		clr_country_flag = hellenic_conversion_major_event
+		custom_tooltip = hellenicconversion_appease_Orthodox.tt
+	}
+
+	option = {
+		# Refuse to hurt the heir
+		name = nhs_hellenicconversion.32.b
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		hidden_effect = {
+			random_list = {
+				50 = {
+					add_heir_claim = -100
+				}
+				50 = {
+					random_owned_province = {
+						limit = {
+							is_capital = no
+							is_city = yes
+						}
+						spawn_rebels = {
+							type = pretender_rebels
+							religion = ROOT
+							size = 3
+							use_heir_as_leader = yes
+						}
+					}
+				}
+			}
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		clr_country_flag = hellenic_conversion_major_event
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+}
+
+
+# Heir assassinated
+country_event = {
+	id = nhs_hellenicconversion.33
+	title = nhs_hellenicconversion33.t
+	desc = nhs_hellenicconversion33.d
+	picture = ASSASSINATION_eventPicture
+
+	is_triggered_only = yes  
+
+	immediate = {
+		hidden_effect = {
+			kill_heir = yes
+		}
+	}
+
+	option = {
+		name = nhs_hellenicconversion.33.a
+
+		clr_country_flag = hellenic_conversion_major_event
+	}
+}
+
+
+######################
+# Pagan Assemblies   #
+######################
+
+# Pagan assemblies
+country_event = {
+	id = nhs_hellenicconversion.4
+	title = nhs_hellenicconversion4.t
+	desc = nhs_hellenicconversion4.d
+	picture = REFORM_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		check_variable = {
+			which = HellenicUprising
+			value = 5
+		}
+		num_of_cities = 5
+		has_country_flag = hellenic_conversion_preacher
+		NOT = { has_country_flag = hellenic_conversion_major_event }
+		religion_group = christian
+	}
+
+	mean_time_to_happen = {
+		months = 36
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = hellenic_conversion_major_event
+			random_owned_province = {
+				limit = {
+					is_city = yes
+					is_capital = no
+				}
+				set_province_flag = nhs_pagan_assembly_target
+			}
+		}
+	}
+
+	option = {
+		# Immediately put it down
+		name = nhs_hellenicconversion.4.a
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_pagan_assembly_target
+			}
+			spawn_rebels = {
+				type = particularist_rebels
+				size = 3
+			}
+			hidden_effect  = {
+				clr_province_flag = nhs_pagan_assembly_target
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 2
+			}
+			subtract_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_appease_Orthodox.tt
+	}
+
+	option = { 
+		# Encourage them to emigrate
+		name = nhs_hellenicconversion.4.b
+
+		add_years_of_income = -1.25
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+			every_owned_province = {
+				limit = {
+					has_province_flag = nhs_pagan_assembly_target
+				}
+				hidden_effect  = {
+					clr_province_flag = nhs_pagan_assembly_target
+				}
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+
+	option = {
+		# Let them be
+		name = nhs_hellenicconversion.4.c
+	
+		add_stability = 1
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_pagan_assembly_target
+			}
+			add_province_modifier = {
+				name = nhs_hcd_Pagan_minority
+				duration = -1
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+			set_country_flag = nhs_pagan_assemblies
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
+	}
+}
+
+
+# Nearby christians angered
+country_event = {
+	id = nhs_hellenicconversion.41
+	desc = nhs_hellenicconversion41.d
+	title = nhs_hellenicconversion41.t
+	picture = PRINCE_BISHOP_RESIGN_eventPicture
+
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		has_country_flag = nhs_pagan_assemblies
+		any_owned_province = {
+			has_province_modifier = nhs_hcd_Pagan_minority
+		}
+		religion_group = christian
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					is_capital = no
+					is_city = yes
+					any_neighbor_province = {
+						has_province_modifier = nhs_hcd_Pagan_minority
+					}
+				}
+				set_province_flag = nhs_angered_christians_flag
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	option = {
+		# Demand compensation from the pagans
+		name = nhs_hellenicconversion.41.a
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		every_owned_province = {
+			limit = {
+				has_province_modifier = nhs_hcd_Pagan_minority
+			}
+			add_base_tax = -1
+		}
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_angered_christians_flag
+			}
+			add_base_tax = 1
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+
+	option = {
+		# Ignore the christians
+		name = nhs_hellenicconversion.41.b
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_angered_christians_flag
+			}
+			add_base_tax = -1
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+
+	option = {
+		# Settle the dispute
+		name = nhs_hellenicconversion.41.c
+
+		add_years_of_income = -1
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	}
+
+	after = {
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_angered_christians_flag
+			}
+			clr_province_flag = nhs_angered_christians_flag
+		}
+	}
+}
+
+
+# New pagan assembly
+country_event = {
+	id = nhs_hellenicconversion.42
+	desc = nhs_hellenicconversion42.d
+	title = nhs_hellenicconversion42.t
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		has_country_flag = nhs_pagan_assemblies
+		any_owned_province = {
+			has_province_modifier = nhs_hcd_Pagan_minority
+		}
+		religion_group = christian
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	option = {
+		# Allow it
+		name = nhs_hellenicconversion.42.a
+
+		add_estate_loyalty = {
+			estate  = estate_church
+			loyalty = -10
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				is_city = yes
+				any_neighbor_province = {
+					has_province_modifier = nhs_hcd_Pagan_minority
+					}
+				}
+			add_province_modifier = {
+				name = nhs_hcd_Pagan_minority
+				duration = -1
+			}
+			add_base_tax = 1
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+
+	option = { #Restrain it
+		name = nhs_hellenicconversion.42.b
+
+		add_estate_loyalty = {
+			estate  = estate_church
+			loyalty = 10
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				is_city = yes
+				any_neighbor_province = {
+					has_province_modifier = nhs_hcd_Pagan_minority
+				}
+			}
+			spawn_rebels = {
+				type = particularist_rebels
+				size = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+}
+
+
+# Pagans request tax exemption
+country_event = {
+	id = nhs_hellenicconversion.43
+	desc = nhs_hellenicconversion43.d
+	title = nhs_hellenicconversion43.t
+	picture = FAMINE_eventPicture
+
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		has_country_flag = nhs_pagan_assemblies
+		any_owned_province = {
+			has_province_modifier = nhs_hcd_Pagan_minority
+		}
+		religion_group = christian
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_province_modifier = nhs_hcd_Pagan_minority
+				}
+				set_province_flag = nhs_hcd_pagan_famine
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 24
+	}
+
+	option = { 
+		# Refuse
+		name = nhs_hellenicconversion.43.a
+
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_hcd_pagan_famine
+			}
+			add_unrest = 10
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+
+	option = {
+		# Offer assistance
+		name = nhs_hellenicconversion.43.b
+
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -5
+		}
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_hcd_pagan_famine
+			}
+			add_province_modifier = {
+				name = nhs_hcd_famine_aid
+				duration = 365
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+
+	option = {
+		# Offer exemption long term
+		name = nhs_hellenicconversion.43.c
+
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 2
+			}
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_hcd_pagan_famine
+			}
+			add_province_modifier = {
+				name = nhs_hcd_famine_exempt
+				duration = -1
+			}
+		}
+		custom_tooltip = hellenicconversion_appease_Pagans.tt
+	}
+
+	option = {
+		# Use the crown's ressources
+		name = nhs_hellenicconversion.43.d
+		
+		add_years_of_income = -1
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_hcd_pagan_famine
+			}
+			add_unrest = -3
+		}
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	}
+
+	after = {
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_hcd_pagan_famine
+			}
+			clr_province_flag = nhs_hcd_pagan_famine
+		}
+	}
+}
+
+
+# Pagans request representation
+country_event = {
+	id = nhs_hellenicconversion.44
+	desc = nhs_hellenicconversion44.d
+	title = nhs_hellenicconversion44.t
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		has_country_flag = nhs_pagan_assemblies
+		any_owned_province = {
+			has_province_modifier = nhs_hcd_Pagan_minority
+			OR = {
+				has_province_modifier = nhs_hcd_famine_exempt
+				has_province_modifier = nhs_hcd_famine_aid 
+			}
+		}
+		religion_group = christian
+	}
+
+	mean_time_to_happen = {
+		months = 24
+	}
+
+	option = {
+		# Accept
+		name = nhs_hellenicconversion.44.a
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -30
+		}
+		add_country_modifier = {
+			name = nhs_hcd_hellenic_representation
+			duration = -1
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 2
+			}
+			subtract_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_appease_Pagans.tt
+	}
+
+	option = {
+		# Refuse
+		name = nhs_hellenicconversion.44.b
+
+		add_patriarch_authority = 0.5
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		every_owned_province = {
+			limit = {
+				is_capital = no
+				is_city = yes
+				has_province_modifier = nhs_hcd_Pagan_minority
+			}
+			spawn_rebels = {
+				type = particularist_rebels
+				size = 1
+			}
+		}
+		every_owned_province = {
+			limit = {
+				is_capital = yes
+			}
+			spawn_rebels = {
+				type = particularist_rebels
+				size = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+
+	option = {
+		# Offer concessions
+		name = nhs_hellenicconversion.44.c
+
+		add_country_modifier = {
+			name = nhs_hcd_pagan_concessions 
+			duration = 7300
+		}
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	}
+
+	option = {
+		# Negotiate
+		name = nhs_hellenicconversion.44.d
+
+		highlight = yes
+		trigger = {
+			OR = {
+				ruler_has_personality = righteous_personality
+				ruler_has_personality = kind_hearted_personality
+				ruler_has_personality = charismatic_negotiator_personality
+				ruler_has_personality = silver_tongue_personality
+			}
+		}
+		add_prestige = -25
+		add_country_modifier = {
+			name = nhs_hcd_hellenic_representation
+			duration = 7300
+		}
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	}
+
+	after = {
+		every_owned_province ={
+			limit = {
+				has_province_modifier = nhs_hcd_Pagan_minority
+			}
+			remove_province_modifier = nhs_hcd_Pagan_minority
+		}
+		clr_country_flag = nhs_pagan_assemblies
+	}
+}
+
+
+########################
+# People's inquisition #
+########################
+
+# Establish inquisition
+country_event = {
+	id = nhs_hellenicconversion.5
+	title = nhs_hellenicconversion5.t
+	desc = nhs_hellenicconversion5.d
+	picture = COURT_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		has_country_flag = hellenic_conversion_preacher
+		check_variable = {
+			which = OrthodoxUprising
+			value = 5
+		}
+		religion_group = christian
+	}
+
+	fire_only_once = yes
+
+	mean_time_to_happen = {
+		months = 6
+		modifier = {
+			factor = 0.5
+			estate_loyalty = {
+				estate = estate_church 
+				loyalty = 50
+			}
+		}
+	}
+
+	option = {
+		# Allow the church to establish an inquisition
+		name = nhs_hellenicconversion.5.a
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 10
+		}
+		set_estate_privilege = estate_church_nhs_inquisition_privilege
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 2
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+
+	option = {
+		# Fund a state-backed inquisition
+		name = nhs_hellenicconversion.5.b
+
+		add_years_of_income = -2
+		add_country_modifier = {
+			name = nhs_hcd_state_inquistion
+			duration = 1825
+		}
+		custom_tooltip = hellenicconversion_favour_neither.tt
+	}
+
+	option = {
+		# An inquistion is not necessary
+		name = nhs_hellenicconversion.5.c
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -15
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 2
+			}
+		}
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+}
+
+
+# Purges
+country_event = {
+	id = nhs_hellenicconversion.51
+	title = nhs_hellenicconversion51.t
+	desc = nhs_hellenicconversion51.d
+	picture = CHURCH_ESTATE_1_eventPicture
+	
+	fire_only_once = yes
+
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		has_country_flag = hellenic_conversion_preacher
+		has_estate_privilege = estate_church_nhs_inquisition_privilege
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = nhs_hcd_had_event_nhs_hellenicconversion_51
+			random_list = {
+				1 = {
+					trigger = {
+						employed_advisor = {
+							category = ADM
+						}
+					}
+					set_country_flag = nhs_hcd_advisor_events_adm
+				}
+				1 = {
+					trigger = {
+						employed_advisor = {
+							category = DIP
+						}
+					}
+					set_country_flag = nhs_hcd_advisor_events_dip
+				}
+				1 = {
+					trigger = {
+						employed_advisor = {
+							category = MIL
+						}
+					}
+					set_country_flag = nhs_hcd_advisor_events_mil
+				}
+				1 = {
+					trigger = {
+						NOT = { has_advisor = yes }
+					}
+					set_country_flag = nhs_hcd_advisor_events_none
+				}
+			}
+		}
+	}
+
+	option = {
+		# Let the inquisition purge the suspected heathens (If advisor)
+		name = nhs_hellenicconversion.51.a
+
+		trigger = {
+			has_advisor = yes
+		}
 		trigger_switch = {
 			on_trigger = has_country_flag
 			nhs_hcd_advisor_events_adm = { kill_advisor_by_category_effect = { ADM = yes } }
 			nhs_hcd_advisor_events_dip = { kill_advisor_by_category_effect = { DIP = yes } }
 			nhs_hcd_advisor_events_mil = { kill_advisor_by_category_effect = { MIL = yes } }
 		}
-
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    }
-
-    after = {
-	    	hidden_effect = {
-		    	trigger_switch = {
-		    		on_trigger = has_country_flag
-		    		nhs_hcd_advisor_events_adm = { clr_country_flag = nhs_hcd_advisor_events_adm }
-		    		nhs_hcd_advisor_events_dip = { clr_country_flag = nhs_hcd_advisor_events_dip }
-		    		nhs_hcd_advisor_events_mil = { clr_country_flag = nhs_hcd_advisor_events_mil }
-		    	}
-		    }
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		set_country_flag = nhs_hcd_inquisition_purges
+		custom_tooltip = hellenicconversion_inquistion_approval.tt
+		custom_tooltip = blank_tooltip.tt
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
 	}
 
-}
+	option = {
+		# Let the inquisition purge the suspected heathens (No advisor)
+		name = nhs_hellenicconversion.51.a
 
-#Unique events
-
-###################### Funeral of Georgios
-
-country_event = { #Death of Georgios
-    id = nhs_hellenicconversion.2
-    title = nhs_hellenicconversion2.t 
-    desc = nhs_hellenicconversion2.d
-    picture = REFORM_eventPicture
-    
-    fire_only_once = yes
-
-    trigger = {
-		OR = {
-            tag = NHS
-            was_tag = NHS
-            }
-		has_country_flag = hellenic_conversion_preacher
-        NOT = { has_country_flag = georgios_dead }
-        NOT = { has_country_flag = hellenic_conversion_major_event }
-        is_year = 1452
-        religion_group = christian  
+		trigger = {
+			NOT = { has_advisor = yes }
+		}
+		
+		add_dip_power = -25
+		add_adm_power = -25
+		add_mil_power = -25
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		set_country_flag = nhs_hcd_inquisition_purges
+		custom_tooltip = hellenicconversion_inquistion_approval.tt
+		custom_tooltip = blank_tooltip.tt
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
 	}
 
-    mean_time_to_happen = {
-        months = 12
-    }
-
-    immediate = {
-        hidden_effect = {
-            set_country_flag = georgios_dead
-            set_country_flag = hellenic_conversion_major_event
-    }
-    }
-
-    option = { #Organise an offical funeral 
-        name = nhs_hellenicconversion.2.a
-
-        add_years_of_income = -0.75
-        
-        hidden_effect = {
-        random_list = {
-            10 = {
-                country_event = { id = nhs_hellenicconversion.21 days = 5 } #Emperor dies
-        }
-            90 = {
-                country_event = { id = nhs_hellenicconversion.22 days = 5 } #Backlash from church
-        }
-    }
-    }
-
-        custom_tooltip = nhs_hellenicconversion.2.a.tt
-    }
-
-    option = { #Covertly fund a funeral
-        name = nhs_hellenicconversion.2.b
-
-        add_years_of_income = -0.75
-
-        hidden_effect = {
-        random_list = {
-            30 = {
-                country_event = { id = nhs_hellenicconversion.23 days = 5 } #Corruption discovered
-        }
-            70 = {
-                country_event = { id = nhs_hellenicconversion.24 days = 5 } #Funeral goes as planned
-        }
-    }
-    }
-
-        custom_tooltip = nhs_hellenicconversion.2.b.tt
-    }
-
-    option = { #Let the Pagans organise their own event
-        name = nhs_hellenicconversion.2.c
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -5
-        }
-
-        hidden_effect = {
-        random_list = {
-            60 = {
-                country_event = { id = nhs_hellenicconversion.25 days = 5 } #Violent clashes
-        }
-            40 = {
-                country_event = { id = nhs_hellenicconversion.26 days = 5 } #Peaceful vigil
-        }
-    }
-    }
-
-        custom_tooltip = nhs_hellenicconversion.2.c.tt
-    }
-
-    option = { #Condemn the man
-        name = nhs_hellenicconversion.2.d
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-        }
-
-        hidden_effect = {
-        random_list = {
-            40 = {
-                country_event = { id = nhs_hellenicconversion.27 days = 5 } #Pagans outraged
-        }
-            30 = {
-                country_event = { id = nhs_hellenicconversion.28 days = 5 } #Pagans rise up in violence
-        }
-            30 = {
-                country_event = { id = nhs_hellenicconversion.29 days = 5 } #Orthodox violence
-        }
-    }
-    }
-
-        custom_tooltip = nhs_hellenicconversion.2.d.tt
-    }
-
-}
-
-country_event = { # Ruler assassinated during funeral
-    id = nhs_hellenicconversion.21
-    title = nhs_hellenicconversion21.t
-    desc = nhs_hellenicconversion21.d
-    picture = DEATH_OF_HEIR_eventPicture
-
-    is_triggered_only = yes 
-
-    immediate = {
-        hidden_effect = {
-            kill_ruler = yes
-        }
-    }
-
-    option = { #Round up the Pagan leaders
-        
-        name = nhs_hellenicconversion.21.a 
-
-        add_country_modifier = {
-            name = nhs_hcd_hellenic_coup
-            duration = 365
-    }
-        
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 2
-                }
-            clr_country_flag = hellenic_conversion_major_event
-            }
-
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Accuse the church of plotting against the emperor
-        
-        name = nhs_hellenicconversion.21.b 
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -30
-        }
-        
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 2
-                }
-            clr_country_flag = hellenic_conversion_major_event
-            }
-
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-    option = { #Accuse no one
-        
-        name = nhs_hellenicconversion.21.c 
-
-        add_stability = -1
-        
-        hidden_effect = {
-            clr_country_flag = hellenic_conversion_major_event
-            }
-
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    }
-
-}
-
-country_event = { #Church angered by funeral
-    id = nhs_hellenicconversion.22
-    title = nhs_hellenicconversion22.t
-    desc = nhs_hellenicconversion22.d
-    picture = STREET_SPEECH_eventPicture
-
-    is_triggered_only = yes
-
-    option = { #The church can eat it
-        name = nhs_hellenicconversion.22.a
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 2
-                }
-            subtract_variable = {
-                which = HellenicUprising
-                value = 1
-        }            
-            clr_country_flag = hellenic_conversion_major_event
-            }
-
-        random_list = {
-            50 = {
-                add_estate_loyalty = {
-                    estate = estate_church
-                    loyalty = -30
-                        }
-            }
-            50 = {
-                add_estate_loyalty = {
-                    estate = estate_church
-                    loyalty = -30
-                         }
-                random_owned_province = {
-                    limit = {
-                        is_city = yes
-                   }
-                    spawn_rebels = {
-                        type = Orthodox_rebels
-                        size = 2
-                    }
-                }
-            }
-        }
-
-        custom_tooltip = hellenicconversion_appease_Pagans.tt
-    }
-
-    option = { #Make sure the church stays quiet
-        name = nhs_hellenicconversion.22.b
-
-        hidden_effect = {
-            clr_country_flag = hellenic_conversion_major_event
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-                    }
-        }
-
-        add_years_of_income = -0.5
-
-        random_list = {
-            50 = {
-                add_corruption = 2
-                custom_tooltip = nhs_hellenicconversion.22.b.1
-            }
-            50 = {
-                add_legitimacy = -20
-                add_estate_loyalty = {
-                    estate = estate_church
-                    loyalty = -5
-                }
-                custom_tooltip = nhs_hellenicconversion.22.b.2
-            }
-        }
-    
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-}
-
-country_event = { #Corruption discovered
-    id = nhs_hellenicconversion.23
-    title = nhs_hellenicconversion23.t
-    desc = nhs_hellenicconversion23.d
-    picture = PROTESTANT_CATHOLIC_DEBATE_eventPicture
-
-    is_triggered_only = yes
-
-    option = {
-        name = nhs_hellenicconversion.23.a
-
-        add_legitimacy = -15
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-        }
-
-        hidden_effect = {
-            clr_country_flag = hellenic_conversion_major_event
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-                }
-    }
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-}
-
-country_event = { #Funeral goes as planned
-    id = nhs_hellenicconversion.24
-    title = nhs_hellenicconversion24.t
-    desc = nhs_hellenicconversion24.d
-    picture = CATHOLIC_RULERS_PRAYING_eventPicture
-
-    is_triggered_only = yes
-
-    option = {
-        name = nhs_hellenicconversion.24.a
-
-        add_prestige = 10
-
-        hidden_effect = {
-            clr_country_flag = hellenic_conversion_major_event
-    }
-    }
-}
-
-country_event = { #Violent clashes
-    id = nhs_hellenicconversion.25
-    title = nhs_hellenicconversion25.t
-    desc = nhs_hellenicconversion25.d
-    picture = SIEGE_PRAGUE_CASTLE_eventPicture
-
-    is_triggered_only = yes
-
-    option = { #Call down the guard
-        name = nhs_hellenicconversion.25.a
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-    }
-
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 2
-            }
-            clr_country_flag = hellenic_conversion_major_event
-        }
-
-        random_owned_province = {
-                limit = {
-                    is_capital = yes
-            }
-                spawn_rebels = {
-                    type = particularist_rebels
-                    size = 1
-        }
-    }
-            random_owned_province = {
-                limit = {
-                    is_capital = no
-            }
-                spawn_rebels = {
-                    type = particularist_rebels
-                    size = 1
-        }
-    }
-
-        custom_tooltip = hellenicconversion_appease_Orthodox.tt
-    }
-
-    option = { #Attempt to talk them down
-        name = nhs_hellenicconversion.25.b
-
-        hidden_effect = {
-            clr_country_flag = hellenic_conversion_major_event
-    }
-
-        add_dip_power = -100
-
-        random_list = {
-            50 = {
-                add_legitimacy = 5
-        }
-            50 = {
-            random_owned_province = {
-                    limit = {
-                        is_capital = yes
-                    }
-                    spawn_rebels = {
-                        type = particularist_rebels
-                        size = 1
-                }
-            }
-                random_owned_province = {
-                    limit = {
-                        is_capital = no
-                    }
-                    spawn_rebels = {
-                    type = particularist_rebels
-                    size = 1
-                }
-            }                
-                }
-        }
-
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    }
-    
-}
-
-country_event = { #Peaceful vigil
-    id = nhs_hellenicconversion.26
-    title = nhs_hellenicconversion26.t
-    desc = nhs_hellenicconversion26.d
-    picture = CITY_VIEW_eventPicture
-
-    is_triggered_only = yes
-
-    option = {
-        name = nhs_hellenicconversion.26.a
-        hidden_effect = {
-            clr_country_flag = hellenic_conversion_major_event
-    }
-
-        add_prestige = 10
-    }
-}
-
-country_event = { #pagans outraged
-    id = nhs_hellenicconversion.27
-    title = nhs_hellenicconversion27.t
-    desc = nhs_hellenicconversion27.d
-    picture = DEBATE_REPUBLICAN_eventPicture
-
-    is_triggered_only = yes
-
-    option = { #Too bad
-        name = nhs_hellenicconversion.27.a
-
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 2
-            }
-            subtract_variable = {
-                which = OrthodoxUprising
-                value = 1
-            }
-        clr_country_flag = hellenic_conversion_major_event
-        }
-        custom_tooltip = hellenicconversion_appease_Orthodox.tt
-    }
-}
-
-country_event = { #pagans rise up
-    id = nhs_hellenicconversion.28
-    title = nhs_hellenicconversion28.t
-    desc = nhs_hellenicconversion28.d
-    picture = ANGRY_MOB_eventPicture
-
-    is_triggered_only = yes 
-
-    option = { #Stop them
-        name = nhs_hellenicconversion.28.a
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 2
-            }
-            clr_country_flag = hellenic_conversion_major_event
-        }
-        random_owned_province = {
-            limit = {
-                is_capital = yes
-            }
-            spawn_rebels = {
-                type = particularist_rebels
-                size = 1
-            }
-        }
-        random_owned_province = {
-            limit = {
-                is_capital = no
-                is_city = yes
-            }
-            spawn_rebels = {
-                type = particularist_rebels
-                size = 2
-            }
-        }
-        
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = {#Do not intervene
-        name = nhs_hellenicconversion.28.b
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 2
-            }
-            clr_country_flag = hellenic_conversion_major_event
-        }
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -15
-        }
-
-        random_owned_province = {
-            limit = {
-                is_capital = yes
-            }
-            add_base_tax = -2
-        }
-
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-}
-
-country_event = { #Orthodox violence
-    id = nhs_hellenicconversion.29 
-    title = nhs_hellenicconversion29.t 
-    desc = nhs_hellenicconversion29.d
-    picture = VILLAGE_RAIDED_eventPicture
-
-    is_triggered_only = yes 
-
-    option = { #Brutal
-        name = nhs_hellenicconversion.29.a
-
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 2
-            }
-            subtract_variable = {
-                which = OrthodoxUprising
-                value = 1
-            }
-            clr_country_flag = hellenic_conversion_major_event
-        }
-
-        every_owned_province = {
-            limit = {
-                has_owner_religion = no
-        }
-            add_province_modifier = {
-                name = nhs_hcd_Pagan_persecution
-                duration = 1825
-        }
-            change_religion = ROOT
-    }
-
-        random_owned_province = {
-            limit = {
-                is_city = yes
-        }
-            spawn_rebels = {
-                type = particularist_rebels
-                size = 2
-        }
-    }
-        random_owned_province = {
-            limit = {
-                is_city = yes
-        }
-            spawn_rebels = {
-                type = particularist_rebels
-                size = 2
-        }
-    }
-
-        custom_tooltip = hellenicconversion_appease_Orthodox.tt
-    }
-
-    option = { #Let them fight
-        name = nhs_hellenicconversion.29.b
-      
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-            }
-            clr_country_flag = hellenic_conversion_major_event
-        }
-
-        random_owned_province = {
-           limit = {
-               is_capital = yes
-           }
-           add_base_tax = -2 
-        }
-        random_owned_province = {
-           limit = {
-               is_capital = no
-           }
-           add_base_tax = -2 
-        }
-        random_owned_province = {
-           limit = {
-               is_capital = no
-           }
-           add_base_tax = -1 
-        }
-
-
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = {
-        name = nhs_hellenicconversion.29.c
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-            }
-            clr_country_flag = hellenic_conversion_major_event
-        }
-        
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-    }
-
-        random_owned_province = {
-            limit = {
-                is_capital = yes
-        }
-            spawn_rebels = {
-                type = orthodox_rebels
-                size = 2
-        }
-    }
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-}
-
-country_event = { #Death of Georgios but Pagan revolt quelled
-    id = nhs_hellenicconversion.201
-    title = nhs_hellenicconversion201.t 
-    desc = nhs_hellenicconversion201.d
-    picture = REFORM_eventPicture
-    
-    fire_only_once = yes
-
-    trigger = {
-		OR = {
-            tag = NHS
-            was_tag = NHS
-            }
-		NOT = { has_country_flag = hellenic_conversion_preacher }
-        is_year = 1452
-        NOT = { has_country_flag = georgios_dead }  
-        NOT = { has_any_disaster = yes }
+	option = { 
+		# Have the list changed
+		name = nhs_hellenicconversion.51.b
+		
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		add_corruption = 3
+		add_years_of_income = -1
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		set_country_flag = nhs_hcd_inquisition_purges
+		custom_tooltip = hellenicconversion_inquistion_approval.tt
+		custom_tooltip = blank_tooltip.tt
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
 	}
 
-    immediate = {
-        hidden_effect = {
-            set_country_flag = georgios_dead 
-        }
-    }
-
-    mean_time_to_happen = {
-        months = 2
-    }
-
-    option = { #Attend the funeral
-        name = nhs_hellenicconversion.201.a
-        
-        add_adm_power = -50
-    }
-
-    option = { #Make it an elaborate funeral
-        name = nhs_hellenicconversion.202.b
-        
-        add_adm_power = -50
-        add_prestige = 15
-        add_years_of_income = -0.25
-    }
-
-}
-
-###################### Royal Heresy
-
-country_event = { #Heir accused of being a heretic
-    id = nhs_hellenicconversion.3
-    title = nhs_hellenicconversion3.t
-    desc = nhs_hellenicconversion3.d
-    picture = orthodox_court_eventPicture
-
-    fire_only_once = yes
-
-    trigger = {
-		OR = {
-            tag = NHS
-            was_tag = NHS
-                }
-
-        has_heir = yes
-        heir_age = 13
-        government = monarchy
-
-		has_country_flag = hellenic_conversion_preacher
-        NOT = { has_country_flag = hellenic_conversion_major_event }
-        religion_group = christian
-	    }
-
-    mean_time_to_happen = {
-        months = 36
-    }
-
-    immediate = {
-        hidden_effect = {
-            set_country_flag = hellenic_conversion_major_event
-        }
-    }
-
-    option = { #Denounce the heir
-        name = nhs_hellenicconversion.3.a
-
-        add_heir_claim = -20
-
-        hidden_effect = {
-            change_variable = {
-                which = PaganUprising
-                value = 1
-        }
-            random_list = {
-                33 = {
-                    country_event = { id = nhs_hellenicconversion.31 days = 31 } #Faifthul heir
-            }
-                33 = {
-                    country_event = { id = nhs_hellenicconversion.32 days = 31 } #Heathen heir
-            }
-                33 = {
-                    country_event = { id = nhs_hellenicconversion.33 days = 31 } #Heir assassinated
-            }
-        }
-    }
-
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Stand by the heir
-        name = nhs_hellenicconversion.3.b
-
-        add_legitimacy = -10
-        
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-        }
-            random_list = {
-                33 = {
-                    country_event = { id = nhs_hellenicconversion.31 days = 31 } #Faifthul heir
-            }
-                33 = {
-                    country_event = { id = nhs_hellenicconversion.32 days = 31 } #Heathen heir
-            }
-                33 = {
-                    country_event = { id = nhs_hellenicconversion.33 days = 31 } #Heir assassinated
-            }
-        }
-    }
-
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-    option = { #Have the priest thrown in jail
-        name = nhs_hellenicconversion.3.c
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -15
-    }
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 2
-        }
-            subtract_variable = {
-                which = PaganUprising
-                value = 1
-        }
-            random_list = {
-                33 = {
-                    country_event = { id = nhs_hellenicconversion.31 days = 31 } #Faifthul heir
-            }
-                33 = {
-                    country_event = { id = nhs_hellenicconversion.32 days = 31 } #Heathen heir
-            }
-                33 = {
-                    country_event = { id = nhs_hellenicconversion.33 days = 31 } #Heir assassinated
-            }
-        }
-    }
-
-        custom_tooltip = hellenicconversion_appease_Pagans.tt
-    }
-}
-
-country_event = { #Faithful Heir
-    id = nhs_hellenicconversion.31
-    title = nhs_hellenicconversion31.t
-    desc = nhs_hellenicconversion31.d
-    picture = RELIGIOUS_CONVERSION_eventPicture
-
-    is_triggered_only = yes
-
-    option = {
-        name = nhs_hellenicconversion.31.a
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-        }
-        add_heir_claim = 10
-
-        clr_country_flag = hellenic_conversion_major_event
-    }
-}
-
-country_event = { #Heathen Heir
-    id = nhs_hellenicconversion.32
-    title = nhs_hellenicconversion32.t
-    desc = nhs_hellenicconversion32.d
-    picture = COURT_eventPicture
-
-    is_triggered_only = yes
-
-    option = { #Have the heir JAILED
-        name = nhs_hellenicconversion.32.a
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 10
-        }
-        add_stability = -1
-        kill_heir = yes
-
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 2
-            }
-            subtract_variable = {
-                which = OrthodoxUprising
-                value = 1
-            }
-        }
-
-        clr_country_flag = hellenic_conversion_major_event
-        custom_tooltip = hellenicconversion_appease_Orthodox.tt
-    }
-
-    option = { #Refuse to hurt the heir
-        name = nhs_hellenicconversion.32.b
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-        }
-        
-        hidden_effect = {
-            random_list = {
-                50 = {
-                    add_heir_claim = -100
-                }
-                50 = {
-                    random_owned_province = {
-                            limit = {
-                                is_capital = no
-                                is_city = yes
-                            }
-                            spawn_rebels = {
-                                type = pretender_rebels
-                                religion = ROOT
-                                size = 3
-                                use_heir_as_leader = yes
-                            }
-                        }
-                    }
-                }
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-                }
-            }
-
-        clr_country_flag = hellenic_conversion_major_event
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-}
-
-country_event = { #Heir assassinated
-    id = nhs_hellenicconversion.33
-    title = nhs_hellenicconversion33.t
-    desc = nhs_hellenicconversion33.d
-    picture = ASSASSINATION_eventPicture
-
-    is_triggered_only = yes  
-
-    immediate = {
-        hidden_effect = {
-            kill_heir = yes
-        }
-    }
-
-    option = {
-        name = nhs_hellenicconversion.33.a
-
-        clr_country_flag = hellenic_conversion_major_event
-    }
-}
-
-###################### Pagan Assemblies
-
-country_event = { #Pagan assemblies
-    id = nhs_hellenicconversion.4
-    title = nhs_hellenicconversion4.t
-    desc = nhs_hellenicconversion4.d
-    picture = REFORM_eventPicture
-
-    fire_only_once = yes
-
-    trigger = {
-		OR = {
-            tag = NHS
-            was_tag = NHS
-                }
-        check_variable = {
-            which = HellenicUprising
-            value = 5
-        }
-        num_of_cities = 5
-		has_country_flag = hellenic_conversion_preacher
-        NOT = { has_country_flag = hellenic_conversion_major_event }
-        religion_group = christian
-	    }
-
-    mean_time_to_happen = {
-        months = 36
-    }
-
-    immediate = {
-        hidden_effect = {
-            set_country_flag = hellenic_conversion_major_event
-            random_owned_province = {
-                        limit = {
-                            is_city = yes
-                            is_capital = no
-                    }
-                        set_province_flag = nhs_pagan_assembly_target
-                }
-            }
-    }
-
-    option = { #Immediately put it down
-        name = nhs_hellenicconversion.4.a
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-    }
-        every_owned_province = {
-            limit = {
-                has_province_flag = nhs_pagan_assembly_target
-            }
-            spawn_rebels = {
-                type = particularist_rebels
-                size = 3
-            }
-            hidden_effect  = {
-                clr_province_flag = nhs_pagan_assembly_target
-            }
-        }
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 2
-            }
-            subtract_variable = {
-                which = OrthodoxUprising
-                value = 1
-            }
-        }
-
-        custom_tooltip = hellenicconversion_appease_Orthodox.tt
-        }
-
-    option = { #Encourage them to emigrate
-        name = nhs_hellenicconversion.4.b
-
-        add_years_of_income = -1.25
-
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-        }
-        every_owned_province = {
-            limit = {
-                has_province_flag = nhs_pagan_assembly_target
-            }
-            hidden_effect  = {
-                clr_province_flag = nhs_pagan_assembly_target
-            }
-        }
-    }
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Let them be
-        name = nhs_hellenicconversion.4.c
-      
-        add_stability = 1
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-    }
-        every_owned_province = {
-            limit = {
-                has_province_flag = nhs_pagan_assembly_target
-        }
-            add_province_modifier = {
-                name = nhs_hcd_Pagan_minority
-                duration = -1
-        }
-    }
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-            }
-            set_country_flag = nhs_pagan_assemblies
-        }
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-    after = {
-        clr_country_flag = hellenic_conversion_major_event
-    }
-        
-}
-
-country_event = { #Nearby christians angered
-    id = nhs_hellenicconversion.41
-    desc = nhs_hellenicconversion41.d
-    title = nhs_hellenicconversion41.t
-    picture = PRINCE_BISHOP_RESIGN_eventPicture
-
-    trigger = {
-		OR = {
-            tag = NHS
-            was_tag = NHS
-            }
-		has_country_flag = nhs_pagan_assemblies
-        any_owned_province = {
-            has_province_modifier = nhs_hcd_Pagan_minority
-        }
-        religion_group = christian
-    }
-
-    immediate = {
-        hidden_effect = {
-            random_owned_province = {
-              limit = {
-                is_capital = no
-                is_city = yes
-                any_neighbor_province = {
-                    has_province_modifier = nhs_hcd_Pagan_minority
-                    }
-                }
-                set_province_flag = nhs_angered_christians_flag
-            }
-        }
-    }
-
-    mean_time_to_happen = {
-        months = 12
-    }
-
-    option = { #Demand compensation from the pagans
-        name = nhs_hellenicconversion.41.a
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-        }
-
-        every_owned_province = {
-            limit = {
-                has_province_modifier = nhs_hcd_Pagan_minority
-        }
-            add_base_tax = -1
-        }
-        every_owned_province = {
-            limit = {
-                has_province_flag = nhs_angered_christians_flag
-        }
-            add_base_tax = 1
-        }
-
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-            }
-        }
-
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Ignore the christians
-        name = nhs_hellenicconversion.41.b
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-        }
-
-        every_owned_province = {
-            limit = {
-                has_province_flag = nhs_angered_christians_flag
-            }
-            add_base_tax = -1
-        }
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-            }
-        }   
-
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-    option = { #Settle the dispute
-        name = nhs_hellenicconversion.41.c
-
-        add_years_of_income = -1
-
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    }
-
-    after = {
-        every_owned_province = {
-            limit = {
-                has_province_flag = nhs_angered_christians_flag
-            }
-            clr_province_flag = nhs_angered_christians_flag
-        }
-    }
-}
-
-country_event = { #New pagan assembly
-    id = nhs_hellenicconversion.42
-    desc = nhs_hellenicconversion42.d
-    title = nhs_hellenicconversion42.t
-    picture = CITY_DEVELOPMENT_eventPicture
-
-    trigger = {
-		OR = {
-            tag = NHS
-            was_tag = NHS
-            }
-		has_country_flag = nhs_pagan_assemblies
-        any_owned_province = {
-            has_province_modifier = nhs_hcd_Pagan_minority
-            }
-            religion_group = christian
-    }
-
-    mean_time_to_happen = {
-        months = 12
-    }
-
-    option = { #Allow it
-        name = nhs_hellenicconversion.42.a
-
-        add_estate_loyalty = {
-            estate  = estate_church
-            loyalty = -10
-    }
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-        }
-    }
-
-        random_owned_province = {
-            limit = {
-                is_capital = no
-                is_city = yes
-                any_neighbor_province = {
-                    has_province_modifier = nhs_hcd_Pagan_minority
-                    }
-                }
-            add_province_modifier = {
-                name = nhs_hcd_Pagan_minority
-                duration = -1
-            }
-            add_base_tax = 1
-        }
-        
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-    option = { #Restrain it
-        name = nhs_hellenicconversion.42.b
-
-        add_estate_loyalty = {
-            estate  = estate_church
-            loyalty = 10
-    }
-
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-        }
-    }
-
-        random_owned_province = {
-            limit = {
-                is_capital = no
-                is_city = yes
-                any_neighbor_province = {
-                    has_province_modifier = nhs_hcd_Pagan_minority
-                    }
-                }
-            spawn_rebels = {
-                type = particularist_rebels
-                size = 1
-            }
-        }
-        
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-}
-
-country_event = { #Pagans request tax exemption
-    id = nhs_hellenicconversion.43
-    desc = nhs_hellenicconversion43.d
-    title = nhs_hellenicconversion43.t
-    picture = FAMINE_eventPicture
-
-    trigger = {
-		OR = {
-            tag = NHS
-            was_tag = NHS
-                }
-		has_country_flag = nhs_pagan_assemblies
-        any_owned_province = {
-            has_province_modifier = nhs_hcd_Pagan_minority
-        }
-        religion_group = christian
-    }
-
-    immediate = {
-        hidden_effect = {
-            random_owned_province = {
-                limit = {
-                    has_province_modifier = nhs_hcd_Pagan_minority
-                }
-                set_province_flag = nhs_hcd_pagan_famine
-            }
-        }
-    }
-
-    mean_time_to_happen = {
-        months = 24
-    }
-
-    option = { #Refuse
-        name = nhs_hellenicconversion.43.a
-
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-        }
-    }
-
-        every_owned_province = {
-            limit = {
-                has_province_flag = nhs_hcd_pagan_famine
-        }
-            add_unrest = 10
-    }
-
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Offer assistance
-        name = nhs_hellenicconversion.43.b
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-        }
-    }
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -5
-    }
-
-        every_owned_province = {
-            limit = {
-                has_province_flag = nhs_hcd_pagan_famine
-        }
-            add_province_modifier = {
-                name = nhs_hcd_famine_aid
-                duration = 365
-        }
-    }
-
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-    option = { #Offer exemption long term
-        name = nhs_hellenicconversion.43.c
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 2
-        }
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-        }
-    }
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-    }
-
-        every_owned_province = {
-            limit = {
-                has_province_flag = nhs_hcd_pagan_famine
-        }
-            add_province_modifier = {
-                name = nhs_hcd_famine_exempt
-                duration = -1
-        }
-    }
-
-        custom_tooltip = hellenicconversion_appease_Pagans.tt
-    }
-
-    option = { #Use the crown's ressources
-        name = nhs_hellenicconversion.43.d
-        
-        add_years_of_income = -1
-
-        every_owned_province = {
-            limit = {
-                has_province_flag = nhs_hcd_pagan_famine
-        }
-            add_unrest = -3
-    }
-
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    }
-
-    after = {
-        every_owned_province = {
-            limit = {
-                has_province_flag = nhs_hcd_pagan_famine
-            }
-            clr_province_flag = nhs_hcd_pagan_famine
-        }
-    }
-
-}
-
-country_event = { #Pagans request representation
-    id = nhs_hellenicconversion.44
-    desc = nhs_hellenicconversion44.d
-    title = nhs_hellenicconversion44.t
-    picture = BURGHER_ESTATE_UPSET_eventPicture
-
-    trigger = {
-		OR = {
-            tag = NHS
-            was_tag = NHS
-                }
-		has_country_flag = nhs_pagan_assemblies
-        any_owned_province = {
-            has_province_modifier = nhs_hcd_Pagan_minority
-            OR = {
-                has_province_modifier = nhs_hcd_famine_exempt
-                has_province_modifier = nhs_hcd_famine_aid 
-            }
-        }
-        religion_group = christian
-    }
-
-    mean_time_to_happen = {
-        months = 24
-    }
-
-    option = { #Accept
-        name = nhs_hellenicconversion.44.a
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -30
-        }
-
-        add_country_modifier = {
-            name = nhs_hcd_hellenic_representation
-            duration = -1
-        }
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 2
-            }
-            subtract_variable = {
-                which = HellenicUprising
-                value = 1
-            }
-        }
-        
-        custom_tooltip = hellenicconversion_appease_Pagans.tt
-    }
-
-    option = { #Refuse
-        name = nhs_hellenicconversion.44.b
-
-        add_patriarch_authority = 0.5
-
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-            }
-        }
-
-        every_owned_province = {
-            limit = {
-                is_capital = no
-                is_city = yes
-                has_province_modifier = nhs_hcd_Pagan_minority
-            }
-            spawn_rebels = {
-                type = particularist_rebels
-                size = 1
-            }
-        }
-        every_owned_province = {
-            limit = {
-                is_capital = yes
-            }
-            spawn_rebels = {
-                type = particularist_rebels
-                size = 1
-            }
-        }
-
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Offer concessions
-        name = nhs_hellenicconversion.44.c
-
-        add_country_modifier = {
-            name = nhs_hcd_pagan_concessions 
-            duration = 7300
-        }
-
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    }
-
-    option = { #Negotiate
-        name = nhs_hellenicconversion.44.d
-
-        highlight = yes
-        trigger = {
-            OR = {
-                ruler_has_personality = righteous_personality
-                ruler_has_personality = kind_hearted_personality
-                ruler_has_personality = charismatic_negotiator_personality
-                ruler_has_personality = silver_tongue_personality
-            }
-        }
-
-        add_prestige = -25
-        add_country_modifier = {
-            name = nhs_hcd_hellenic_representation
-            duration = 7300
-        }
-
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    }
-
-    after = {
-        every_owned_province ={
-            limit = {
-                has_province_modifier = nhs_hcd_Pagan_minority
-            }
-            remove_province_modifier = nhs_hcd_Pagan_minority
-        }
-        clr_country_flag = nhs_pagan_assemblies
-    }
-}
-
-###################### People's inquisition
-
-country_event = { #Establish inquisition
-    id = nhs_hellenicconversion.5
-    title = nhs_hellenicconversion5.t
-    desc = nhs_hellenicconversion5.d
-    picture = COURT_eventPicture
-    
-    trigger = {
-		OR = {
-            tag = NHS
-            was_tag = NHS
-            }
-		has_country_flag = hellenic_conversion_preacher
-        check_variable = {
-            which = OrthodoxUprising
-            value = 5
-        }
-        religion_group = christian
+	option = {
+		# Delay
+		name = nhs_hellenicconversion.51.c
+
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -5
+		}
+		add_adm_power = -25
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_inquistion_anger.tt
+		custom_tooltip = blank_tooltip.tt
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
 	}
 
-    fire_only_once = yes
+	option = {
+		# Refuse
+		name = nhs_hellenicconversion.51.d
 
-    mean_time_to_happen = {
-        months = 6
-        modifier = {
-            factor = 0.5
-            estate_loyalty = {
-                estate = estate_church 
-                loyalty = 50
-            }
-        }
-    }
-
-    option = { #Allow the church to establish an inquisition
-        name = nhs_hellenicconversion.5.a
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 10
-        }
-
-        set_estate_privilege = estate_church_nhs_inquisition_privilege
-
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 2
-            }
-        }
-
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Fund a state-backed inquisition
-        name = nhs_hellenicconversion.5.b
-
-        add_years_of_income = -2
-        add_country_modifier = {
-            name = nhs_hcd_state_inquistion
-            duration = 1825
-        }
-
-        custom_tooltip = hellenicconversion_favour_neither.tt
-    }
-
-    option = { #An inquistion is not necessary
-        name = nhs_hellenicconversion.5.c
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -15
-        }
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 2
-            }
-        }
-
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-}
-
-country_event = { #Purges
-    id = nhs_hellenicconversion.51
-    title = nhs_hellenicconversion51.t
-    desc = nhs_hellenicconversion51.d
-    picture = CHURCH_ESTATE_1_eventPicture
-    
-    fire_only_once = yes
-
-    trigger = {
-		OR = {
-            tag = NHS
-            was_tag = NHS
-            }
-		has_country_flag = hellenic_conversion_preacher
-        has_estate_privilege = estate_church_nhs_inquisition_privilege
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		add_stability = -1
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_inquistion_anger.tt
 	}
 
-    mean_time_to_happen = {
-        months = 12
-    }
-
-    immediate = {
-        hidden_effect = {
-            set_country_flag = nhs_hcd_had_event_nhs_hellenicconversion_51
-            random_list = {
-                1 = {
-                    trigger = {
-                        employed_advisor = {
-                            category = ADM
-                        }
-                    }
-                    set_country_flag = nhs_hcd_advisor_events_adm
-                }
-                1 = {
-                    trigger = {
-                        employed_advisor = {
-                            category = DIP
-                        }
-                    }
-                    set_country_flag = nhs_hcd_advisor_events_dip
-                }
-                1 = {
-                    trigger = {
-                        employed_advisor = {
-                            category = MIL
-                        }
-                    }
-                    set_country_flag = nhs_hcd_advisor_events_mil
-                }
-                1 = {
-                    trigger = {
-                        NOT = { has_advisor = yes }
-                    }
-                    set_country_flag = nhs_hcd_advisor_events_none
-                }
-            }
-        }
-    }
-
-    option = { #Let the inquisition purge the suspected heathens (If advisor)
-        name = nhs_hellenicconversion.51.a
-
-        trigger = {
-            has_advisor = yes
-        }
-
-        trigger_switch = {
-            on_trigger = has_country_flag
-            nhs_hcd_advisor_events_adm = { kill_advisor_by_category_effect = { ADM = yes } }
-            nhs_hcd_advisor_events_dip = { kill_advisor_by_category_effect = { DIP = yes } }
-            nhs_hcd_advisor_events_mil = { kill_advisor_by_category_effect = { MIL = yes } }
-        }
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-        }       
-        
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-            }
-        }   
-
-        set_country_flag = nhs_hcd_inquisition_purges
-
-        custom_tooltip = hellenicconversion_inquistion_approval.tt
-        custom_tooltip = blank_tooltip.tt
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Let the inquisition purge the suspected heathens (No advisor)
-        name = nhs_hellenicconversion.51.a
-
-        trigger = {
-            NOT = { has_advisor = yes }
-        }
-        
-        add_dip_power = -25
-        add_adm_power = -25
-        add_mil_power = -25
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-        }       
-        
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-            }
-        }   
-
-
-        set_country_flag = nhs_hcd_inquisition_purges
-        custom_tooltip = hellenicconversion_inquistion_approval.tt
-        custom_tooltip = blank_tooltip.tt
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Have the list changed
-        name = nhs_hellenicconversion.51.b
-        
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-        }
-
-        add_corruption = 3
-        add_years_of_income = -1
-    
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-            }
-        }  
-
-        set_country_flag = nhs_hcd_inquisition_purges
-        custom_tooltip = hellenicconversion_inquistion_approval.tt
-        custom_tooltip = blank_tooltip.tt
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Delay
-        name = nhs_hellenicconversion.51.c
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -5
-        }
-
-        add_adm_power = -25
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-            }
-        }  
-        
-        custom_tooltip = hellenicconversion_inquistion_anger.tt
-        custom_tooltip = blank_tooltip.tt
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-    option = { #Refuse
-        name = nhs_hellenicconversion.51.d
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-        }
-
-        add_stability = -1
-
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-            }
-        }
-
-        custom_tooltip = hellenicconversion_inquistion_anger.tt
-    }
-
-    after = {
-        hidden_effect = {
-            trigger_switch = {
-                on_trigger = has_country_flag
-                nhs_hcd_advisor_events_adm = { clr_country_flag = nhs_hcd_advisor_events_adm }
-                nhs_hcd_advisor_events_dip = { clr_country_flag = nhs_hcd_advisor_events_dip }
-                nhs_hcd_advisor_events_mil = { clr_country_flag = nhs_hcd_advisor_events_mil }
-                nhs_hcd_advisor_events_none = { clr_country_flag = nhs_hcd_advisor_events_none }
-            }
-        }
-    }
+	after = {
+		hidden_effect = {
+			trigger_switch = {
+				on_trigger = has_country_flag
+				nhs_hcd_advisor_events_adm = { clr_country_flag = nhs_hcd_advisor_events_adm }
+				nhs_hcd_advisor_events_dip = { clr_country_flag = nhs_hcd_advisor_events_dip }
+				nhs_hcd_advisor_events_mil = { clr_country_flag = nhs_hcd_advisor_events_mil }
+				nhs_hcd_advisor_events_none = { clr_country_flag = nhs_hcd_advisor_events_none }
+			}
+		}
+	}
 }
 
-country_event = { #Witch trials
-    id = nhs_hellenicconversion.52
-    title = nhs_hellenicconversion52.t
-    desc = nhs_hellenicconversion52.d
-    picture = aow_WITCHBURNING_eventPicture
+country_event = {
+	# Witch trials
+	id = nhs_hellenicconversion.52
+	title = nhs_hellenicconversion52.t
+	desc = nhs_hellenicconversion52.d
+	picture = aow_WITCHBURNING_eventPicture
 
-    fire_only_once = yes
+	fire_only_once = yes
 
-    trigger = {
+	trigger = {
 		OR = {
-            tag = NHS
-            was_tag = NHS
-            }
+			tag = NHS
+			was_tag = NHS
+		}
 		has_country_flag = hellenic_conversion_preacher
-        has_estate_privilege = estate_church_nhs_inquisition_privilege
+		has_estate_privilege = estate_church_nhs_inquisition_privilege
 	}
 
-    mean_time_to_happen = {
-        months = 12
-    }
-    
-    immediate = {
-        hidden_effect = {
-            random_owned_province = {
-                set_province_flag = nhs_hcd_inquisition_witch_trials
-            }
-        }
-        set_country_flag = nhs_hcd_had_event_nhs_hellenicconversion_52
-    }
-
-    option = { #Tacitly approve
-        name = nhs_hellenicconversion.52.a
-
-        random_owned_province = {
-            limit = {
-                has_province_flag = nhs_hcd_inquisition_witch_trials
-            }
-            add_unrest = 10
-            clr_province_flag = nhs_hcd_inquisition_witch_trials
-        }
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-        }       
-        
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-            }
-        }   
-    
-        set_country_flag = nhs_hcd_inquisition_trials
-    
-        custom_tooltip = hellenicconversion_inquistion_approval.tt
-        custom_tooltip = blank_tooltip.tt
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Condem the trials
-        name = nhs_hellenicconversion.52.b
-
-        random_owned_province = {
-            limit = {
-                has_province_flag = nhs_hcd_inquisition_witch_trials
-            }
-            add_unrest = 10
-            clr_province_flag = nhs_hcd_inquisition_witch_trials
-        }
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -5
-        }       
-        
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-            }
-        }   
-    
-        set_country_flag = nhs_hcd_inquisition_trials
-    
-        custom_tooltip = hellenicconversion_inquistion_anger.tt
-        custom_tooltip = blank_tooltip.tt
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-
-    option = { #Intervene
-        name = nhs_hellenicconversion.52.c
-
-        random_owned_province = {
-            limit = {
-                has_province_flag = nhs_hcd_inquisition_witch_trials
-            }
-            spawn_rebels = {
-                type = orthodox_rebels
-                size = 1
-            }
-            clr_province_flag = nhs_hcd_inquisition_witch_trials
-        }
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-        }       
-        
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 2
-            }
-        }   
-     
-        custom_tooltip = hellenicconversion_inquistion_anger.tt
-        custom_tooltip = blank_tooltip.tt
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
-}
-
-country_event = { #Appointing a new consort
-    id = nhs_hellenicconversion.53
-    title = nhs_hellenicconversion53.t
-    desc = {
-        trigger = {
-            has_consort = yes
-        }
-        desc = nhs_hellenicconversion53.d.a
-    }
-    desc = {
-        trigger = {
-            NOT = { has_consort = yes }
-        }
-        desc = nhs_hellenicconversion53.d.b
-    }
-    picture = BAD_WITH_MONARCH_eventPicture
-
-    fire_only_once = yes
-
-    trigger = {
-		OR = {
-            tag = NHS
-            was_tag = NHS
-            }
-        has_dlc = "Rights of Man"
-		has_country_flag = hellenic_conversion_preacher
-        has_estate_privilege = estate_church_nhs_inquisition_privilege
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				set_province_flag = nhs_hcd_inquisition_witch_trials
+			}
+		}
+		set_country_flag = nhs_hcd_had_event_nhs_hellenicconversion_52
 	}
 
-    mean_time_to_happen = {
-        months = 12
-    }
+	option = {
+		# Tacitly approve
+		name = nhs_hellenicconversion.52.a
 
-    immediate = {
-        hidden_effect = {
-            set_country_flag = nhs_hcd_had_event_nhs_hellenicconversion_53
-        }
-    }
+		random_owned_province = {
+			limit = {
+				has_province_flag = nhs_hcd_inquisition_witch_trials
+			}
+			add_unrest = 10
+			clr_province_flag = nhs_hcd_inquisition_witch_trials
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		set_country_flag = nhs_hcd_inquisition_trials
+		custom_tooltip = hellenicconversion_inquistion_approval.tt
+		custom_tooltip = blank_tooltip.tt
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
 
-    option = { #Divorce
-        name = nhs_hellenicconversion.53.a
+	option = {
+		# Condem the trials
+		name = nhs_hellenicconversion.52.b
 
-        trigger = {
-            has_consort = yes
-        }
+		random_owned_province = {
+			limit = {
+				has_province_flag = nhs_hcd_inquisition_witch_trials
+			}
+			add_unrest = 10
+			clr_province_flag = nhs_hcd_inquisition_witch_trials
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -5
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		set_country_flag = nhs_hcd_inquisition_trials
+		custom_tooltip = hellenicconversion_inquistion_anger.tt
+		custom_tooltip = blank_tooltip.tt
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
 
-        divorce_consort_effect = yes
+	option = {
+		# Intervene
+		name = nhs_hellenicconversion.52.c
 
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-        }       
-        
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-            }
-        }   
-    
-        set_country_flag = nhs_hcd_inquisition_divorce
-    
-        custom_tooltip = hellenicconversion_inquistion_approval.tt
-        custom_tooltip = blank_tooltip.tt
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Marry the woman
-        name = nhs_hellenicconversion.53.b
-
-        trigger = {
-            NOT = { has_consort = yes }
-        }
-
-        define_consort = {}
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = 5
-        }       
-        
-        hidden_effect = {
-            change_variable = {
-                which = HellenicUprising
-                value = 1
-            }
-        }   
-    
-        set_country_flag = nhs_hcd_inquisition_divorce
-    
-        custom_tooltip = hellenicconversion_inquistion_approval.tt
-        custom_tooltip = blank_tooltip.tt
-        custom_tooltip = hellenicconversion_favour_Orthodox.tt
-    }
-
-    option = { #Refuse
-        name = nhs_hellenicconversion.53.c
-        add_legitimacy = 10
-
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -5
-        }       
-        
-        hidden_effect = {
-            change_variable = {
-                which = OrthodoxUprising
-                value = 1
-            }
-        }   
-    
-        custom_tooltip = hellenicconversion_inquistion_anger.tt
-        custom_tooltip = blank_tooltip.tt
-        custom_tooltip = hellenicconversion_favour_Pagans.tt
-    }
+		random_owned_province = {
+			limit = {
+				has_province_flag = nhs_hcd_inquisition_witch_trials
+			}
+			spawn_rebels = {
+				type = orthodox_rebels
+				size = 1
+			}
+			clr_province_flag = nhs_hcd_inquisition_witch_trials
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 2
+			}
+		}
+		custom_tooltip = hellenicconversion_inquistion_anger.tt
+		custom_tooltip = blank_tooltip.tt
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
 }
 
-country_event = { #Breaking point (Church inquisition was never opposed). This event can stop the disaster.
-    id = nhs_hellenicconversion.54
-    title = nhs_hellenicconversion54.t
-    desc = nhs_hellenicconversion54.d
-    picture = RELIGIOUS_TURMOIL_eventPicture
 
-        trigger = {
-            has_estate_privilege = estate_church_nhs_inquisition_privilege
-            has_country_flag = nhs_hcd_inquisition_purges
-            has_country_flag = nhs_hcd_inquisition_trials
-        OR = {
-            NOT = { has_dlc = "Rights of Man" }
-            has_country_flag = nhs_hcd_inquisition_divorce
-        }
-        AND = {
-            has_country_flag = nhs_hcd_inquisition_purges
-            has_country_flag = nhs_hcd_inquisition_trials
-            has_country_flag = nhs_hcd_inquisition_divorce
-        }
-    }
+# Appointing a new consort
+country_event = {
+	id = nhs_hellenicconversion.53
+	title = nhs_hellenicconversion53.t
+	desc = {
+		trigger = {
+			has_consort = yes
+		}
+		desc = nhs_hellenicconversion53.d.a
+	}
+	desc = {
+		trigger = {
+			NOT = { has_consort = yes }
+		}
+		desc = nhs_hellenicconversion53.d.b
+	}
+	picture = BAD_WITH_MONARCH_eventPicture
 
-    mean_time_to_happen = {
-        months = 48
-    }
+	fire_only_once = yes
 
-    option = { #Accept the situation
-        name = nhs_hellenicconversion.54.a
+	trigger = {
+		OR = {
+			tag = NHS
+			was_tag = NHS
+		}
+		has_dlc = "Rights of Man"
+		has_country_flag = hellenic_conversion_preacher
+		has_estate_privilege = estate_church_nhs_inquisition_privilege
+	}
 
-        remove_estate_privilege = estate_church_nhs_inquisition_privilege
-        set_estate_privilege = estate_church_nhs_enforced_inquisition_privilege
+	mean_time_to_happen = {
+		months = 12
+	}
 
-        add_stability = 1
+	immediate = {
+		hidden_effect = {
+			set_country_flag = nhs_hcd_had_event_nhs_hellenicconversion_53
+		}
+	}
 
-        clr_country_flag = hellenic_conversion_preacher
-        clr_country_flag = nhs_hcd_can_have_religious_disaster
+	option = {
+		# Divorce
+		name = nhs_hellenicconversion.53.a
 
-        custom_tooltip = hellenicconversion_inquistion_coup.tt
+		trigger = {
+			has_consort = yes
+		}
 
-        hidden_effect = {
-            every_owned_province = {
+		divorce_consort_effect = yes
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		set_country_flag = nhs_hcd_inquisition_divorce
+		custom_tooltip = hellenicconversion_inquistion_approval.tt
+		custom_tooltip = blank_tooltip.tt
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+
+	option = {
+		# Marry the woman
+		name = nhs_hellenicconversion.53.b
+
+		trigger = {
+			NOT = { has_consort = yes }
+		}
+
+		define_consort = {}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		hidden_effect = {
+			change_variable = {
+				which = HellenicUprising
+				value = 1
+			}
+		}
+		set_country_flag = nhs_hcd_inquisition_divorce
+		custom_tooltip = hellenicconversion_inquistion_approval.tt
+		custom_tooltip = blank_tooltip.tt
+		custom_tooltip = hellenicconversion_favour_Orthodox.tt
+	}
+
+	option = { 
+		# Refuse
+		name = nhs_hellenicconversion.53.c
+
+		add_legitimacy = 10
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -5
+		}
+		hidden_effect = {
+			change_variable = {
+				which = OrthodoxUprising
+				value = 1
+			}
+		}
+		custom_tooltip = hellenicconversion_inquistion_anger.tt
+		custom_tooltip = blank_tooltip.tt
+		custom_tooltip = hellenicconversion_favour_Pagans.tt
+	}
+}
+
+
+# Breaking point (Church inquisition was never opposed). This event can stop the disaster.
+country_event = {
+	id = nhs_hellenicconversion.54
+	title = nhs_hellenicconversion54.t
+	desc = nhs_hellenicconversion54.d
+	picture = RELIGIOUS_TURMOIL_eventPicture
+
+	trigger = {
+		has_estate_privilege = estate_church_nhs_inquisition_privilege
+		has_country_flag = nhs_hcd_inquisition_purges
+		has_country_flag = nhs_hcd_inquisition_trials
+		OR = {
+			NOT = { has_dlc = "Rights of Man" }
+			has_country_flag = nhs_hcd_inquisition_divorce
+		}
+		AND = {
+			has_country_flag = nhs_hcd_inquisition_purges
+			has_country_flag = nhs_hcd_inquisition_trials
+			has_country_flag = nhs_hcd_inquisition_divorce
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 48
+	}
+
+	option = {
+		# Accept the situation
+		name = nhs_hellenicconversion.54.a
+
+		remove_estate_privilege = estate_church_nhs_inquisition_privilege
+		set_estate_privilege = estate_church_nhs_enforced_inquisition_privilege
+		add_stability = 1
+		clr_country_flag = hellenic_conversion_preacher
+		clr_country_flag = nhs_hcd_can_have_religious_disaster
+		custom_tooltip = hellenicconversion_inquistion_coup.tt
+		hidden_effect = {
+			every_owned_province = {
 				limit = {
 					has_province_modifier = nhs_hcd_Pagan_minority 
 				}
@@ -2892,142 +2848,145 @@ country_event = { #Breaking point (Church inquisition was never opposed). This e
 			remove_country_modifier = nhs_hcd_pagan_concessions
 			remove_country_modifier = nhs_hcd_lack_colonists
 			remove_country_modifier = nhs_hcd_state_inquistion
-        }
-    }
+		}
+	}
 
-    option = { #Fuck that
-        name = hs_hellenicconversion.54.b
+	option = {
+		# Fuck that
+		name = hs_hellenicconversion.54.b
 
-        remove_estate_privilege = estate_church_nhs_inquisition_privilege
-
-        random_owned_province = {
-            limit = {
-                is_capital = yes
-            }
-            spawn_rebels = {
-                type = orthodox_rebels
-                size = 2
-            }
-        }
-        random_owned_province = {
-            limit = {
-                is_capital = no
-            }
-            spawn_rebels = {
-                type = orthodox_rebels
-                size = 1
-            }
-        }
-    }
+		remove_estate_privilege = estate_church_nhs_inquisition_privilege
+		random_owned_province = {
+			limit = {
+				is_capital = yes
+			}
+			spawn_rebels = {
+				type = orthodox_rebels
+				size = 2
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+			}
+			spawn_rebels = {
+				type = orthodox_rebels
+				size = 1
+			}
+		}
+	}
 }
 
-country_event = { #Church coup (Once all events passed and the church was opposed at least once)
-    id = nhs_hellenicconversion.55
-    title = nhs_hellenicconversion55.t
-    desc = nhs_hellenicconversion55.d
-    picture = RELIGIOUS_TURMOIL_eventPicture
 
-    trigger = {
-        has_estate_privilege = estate_church_nhs_inquisition_privilege
-        OR = {
-            has_country_flag = nhs_hcd_supported_moderates
-            AND = {
-                has_country_flag = nhs_hcd_inquisition_purges
-                has_country_flag = nhs_hcd_inquisition_trials
-                OR = {
-                    NOT = { has_dlc = "Rights of Man" }
-                    has_country_flag = nhs_hcd_inquisition_divorce
-                }
-                NOT = {
-                    AND = {
-                           has_country_flag = nhs_hcd_inquisition_purges
-                           has_country_flag = nhs_hcd_inquisition_trials
-                           has_country_flag = nhs_hcd_inquisition_divorce
-                    }
-                }
-            }
-        }
-    }
+# Church coup (Once all events passed and the church was opposed at least once)
+country_event = {
+	id = nhs_hellenicconversion.55
+	title = nhs_hellenicconversion55.t
+	desc = nhs_hellenicconversion55.d
+	picture = RELIGIOUS_TURMOIL_eventPicture
 
-    fire_only_once = yes
+	trigger = {
+		has_estate_privilege = estate_church_nhs_inquisition_privilege
+		OR = {
+			has_country_flag = nhs_hcd_supported_moderates
+			AND = {
+				has_country_flag = nhs_hcd_inquisition_purges
+				has_country_flag = nhs_hcd_inquisition_trials
+				OR = {
+					NOT = { has_dlc = "Rights of Man" }
+					has_country_flag = nhs_hcd_inquisition_divorce
+				}
+				NOT = {
+					AND = {
+						has_country_flag = nhs_hcd_inquisition_purges
+						has_country_flag = nhs_hcd_inquisition_trials
+						has_country_flag = nhs_hcd_inquisition_divorce
+					}
+				}
+			}
+		}
+	}
 
-    mean_time_to_happen = {
-        months = 48
-    }
+	fire_only_once = yes
 
-    option = { #Negotiate
-        name = nhs_hellenicconversion.55.a
-        trigger = {
-            has_dlc = "Rights of Man"
-            OR = {
-                personality = zealot_personality 
-                personality = pious_personality
-            }
-        }
-        highlight = yes
+	mean_time_to_happen = {
+		months = 48
+	}
 
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -5
-        }  
+	option = {
+		# Negotiate
+		name = nhs_hellenicconversion.55.a
 
-        remove_estate_privilege = estate_church_nhs_inquisition_privilege
-        add_prestige = -20
-    }
+		trigger = {
+			has_dlc = "Rights of Man"
+			OR = {
+				personality = zealot_personality 
+				personality = pious_personality
+			}
+		}
+		highlight = yes
 
-    option = { #Kill them
-        name = nhs_hellenicconversion.55.b
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -5
+		}  
+		remove_estate_privilege = estate_church_nhs_inquisition_privilege
+		add_prestige = -20
+	}
 
-        remove_estate_privilege = estate_church_nhs_inquisition_privilege
-        random_owned_province = {
-            limit = {
-                is_capital = yes
-            }
-            spawn_rebels = {
-                type = orthodox_rebels
-                size = 2
-            }
-        }
+	option = {
+		# Kill them
+		name = nhs_hellenicconversion.55.b
 
-        add_estate_loyalty = {
-            estate = estate_church
-            loyalty = -10
-        }  
-    }
+		remove_estate_privilege = estate_church_nhs_inquisition_privilege
+		random_owned_province = {
+			limit = {
+				is_capital = yes
+			}
+			spawn_rebels = {
+				type = orthodox_rebels
+				size = 2
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}  
+	}
 }
 
-######################################
-#End of the crisis without a disaster#
-######################################
+
+########################################
+# End of the crisis without a disaster #
+########################################
 
 country_event = {
-    id = nhs_hellenicconversion.6
-    title = nhs_hellenicconversion6.t
-    desc = nhs_hellenicconversion6.d
-    picture = CATHOLIC_RULERS_PRAYING_eventPicture
+	id = nhs_hellenicconversion.6
+	title = nhs_hellenicconversion6.t
+	desc = nhs_hellenicconversion6.d
+	picture = CATHOLIC_RULERS_PRAYING_eventPicture
 
-    fire_only_once = yes
+	fire_only_once = yes
 
-    trigger = {
+	trigger = {
 		OR = {
-            tag = NHS
-            was_tag = NHS
-                }
+			tag = NHS
+			was_tag = NHS
+		}
 		has_country_flag = hellenic_conversion_preacher
-        is_year = 1467
-        religion_group = christian
-	    }
+		is_year = 1467
+		religion_group = christian
+	}
 
-    mean_time_to_happen = {
-        months = 12
-    }
+	mean_time_to_happen = {
+		months = 12
+	}
 
-    immediate = {
-        hidden_effect = {
-            clr_country_flag = nhs_hcd_can_have_religious_disaster
-            clr_country_flag = hellenic_conversion_preacher
-
-            every_owned_province = {
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = nhs_hcd_can_have_religious_disaster
+			clr_country_flag = hellenic_conversion_preacher
+			every_owned_province = {
 				limit = {
 					has_province_modifier = nhs_hcd_Pagan_minority 
 				}
@@ -3046,12 +3005,12 @@ country_event = {
 			remove_country_modifier = nhs_hcd_pagan_concessions
 			remove_country_modifier = nhs_hcd_lack_colonists
 			remove_country_modifier = nhs_hcd_state_inquistion
-        }
-    }
+		}
+	}
 
-    option = {
-        name = nhs_hellenicconversion.6.a
+	option = {
+		name = nhs_hellenicconversion.6.a
 
-        custom_tooltip = nhs_hellenicconversion.6.tt
-    }
+		custom_tooltip = nhs_hellenicconversion.6.tt
+	}
 }
