@@ -1269,7 +1269,7 @@ to_nat_determine_new_confederation_leader = {
 to_nat_tribal_development_setup = {
 	every_province = {
 		limit = {
-			to_nat_can_have_tribal_development = yes
+			to_nat_can_have_tribal_development_province = yes
 		}
 		to_nat_set_local_tribal_development = yes
 	}
@@ -1278,7 +1278,7 @@ to_nat_tribal_development_setup = {
 to_nat_restore_local_tribal_development = {
 	if = {
 		limit = {
-			to_nat_can_have_tribal_development = yes
+			to_nat_can_have_tribal_development_province = yes
 			NOT = {
 				check_variable = {
 					which = to_nat_local_tribal_development
@@ -1411,9 +1411,34 @@ to_nat_set_local_tribal_development = {
 	}
 }
 
-to_nat_remove_all_tribal_development = {
-	custom_tooltip = to_nat_remove_tribal_and_migratory_development_tt
+to_nat_integrate_all_tribal_development = {
+	custom_tooltip = to_nat_remove_tribal_development_tt
 	hidden_effect = {
+		every_owned_province = {
+			limit = {
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+				is_colony = no
+				has_province_modifier = to_nat_tribal_development
+			}
+			to_nat_clear_local_tribal_development = yes
+		}
+	}
+}
+
+
+to_nat_tier_5_integrate_tribal_development = {
+	if = {
+		limit = {
+			to_nat_has_any_tier_5_native_government_reform = yes
+			OR = {
+				has_reform = native_settle_down_reform
+				has_reform = to_native_reform_settle_down_reformed
+			}
+		}
+		custom_tooltip = to_nat_will_remove_tribal_development_tier_5_tt
 		every_owned_province = {
 			limit = {
 				OR = {
@@ -1438,21 +1463,38 @@ to_nat_remove_tribal_development = {
 			is_colony = no
 			has_province_modifier = to_nat_tribal_development
 			owner = {
-				OR = {
-					AND = {
-						adm_tech = 17
-						NOT = { is_native_government = yes }
-					}
-					to_nat_has_any_tier_8_native_government_reform = yes
-				}
+				to_nat_can_instantly_assimilate_development_country = yes
 			}
 		}
 		to_nat_clear_local_tribal_development = yes
 	}
 }
 
+to_nat_add_to_local_tribal_development = {
+	if = {
+		limit = {
+			to_nat_can_have_tribal_development_province = yes
+		}
+		change_variable = { which = to_nat_local_tribal_tax value = $TAX$ }
+		change_variable = { which = to_nat_local_tribal_production value = $PRODUCTION$ }
+		change_variable = { which = to_nat_local_tribal_manpower value = $MANPOWER$ }
+		set_variable = { which = to_nat_local_tribal_development value = 0 }
+		change_variable = { which = to_nat_local_tribal_development which = to_nat_local_tribal_tax }
+		change_variable = { which = to_nat_local_tribal_development which = to_nat_local_tribal_production }
+		change_variable = { which = to_nat_local_tribal_development which = to_nat_local_tribal_manpower }
+		if = {
+			limit = {
+				NOT = { has_province_modifier = to_nat_tribal_development }
+			}
+			add_permanent_province_modifier = {
+				name = to_nat_tribal_development
+				duration = -1
+			}
+		}
+	}
+}
+
 to_nat_clear_local_tribal_development = {
-	set_province_flag = to_nat_tribal_development_removed
 	set_variable = {
 		which = to_nat_local_tribal_tax
 		value = 0
@@ -1493,7 +1535,7 @@ to_nat_on_migrate_province = {
 	to_nat_set_local_migratory_development = yes
 	if = {
 		limit = {
-			to_nat_can_have_tribal_development = yes
+			to_nat_can_have_tribal_development_province = yes
 		}
 		change_variable = { which = to_nat_local_tribal_tax value = 1 }
 		change_variable = { which = to_nat_local_tribal_production value = 1 }
@@ -1585,14 +1627,19 @@ to_nat_on_conquered_migratory_development = {
 to_nat_merge_all_migratory_development = {
 	if = {
 		limit = {
-			is_native_government = yes
-			NOT = { has_reform = native_settle_down_reform }
-		}
-		every_owned_province = {
-			limit = {
+			# Lazy trigger
+			any_owned_province = {
 				has_province_modifier = to_nat_migratory_development
 			}
-			to_nat_merge_local_migratory_development = yes
+		}
+		custom_tooltip = to_nat_remove_migratory_development_tt
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					has_province_modifier = to_nat_migratory_development
+				}
+				to_nat_merge_local_migratory_development = yes
+			}
 		}
 	}
 }
@@ -1605,7 +1652,7 @@ to_nat_merge_local_migratory_development = {
 		remove_province_modifier = to_nat_migratory_development
 		if = {
 			limit = {
-				to_nat_can_have_tribal_development = yes
+				to_nat_can_have_tribal_development_province = yes
 			}
 			change_variable = { which = to_nat_local_tribal_tax which = to_nat_local_migratory_tax }
 			change_variable = { which = to_nat_local_tribal_production which = to_nat_local_migratory_production }
@@ -1628,7 +1675,8 @@ to_nat_merge_local_migratory_development = {
 		}
 	}
 }
-#Prov, $FRACTION$ - Fraction of tribal dev to remove
+# Prov, $FRACTION$ - Fraction of tribal dev to remove
+# TODO add potential culture change
 to_nat_displace_tribal_development_all = {
 	to_native_cultures_restore = yes
 	ROOT = {
@@ -1710,57 +1758,38 @@ to_nat_displace_tribal_development_all = {
 					which = to_nat_local_tribal_manpower
 				}
 			}
-			set_variable = {
-				which = local_tax_gained
-				which = ROOT
-			}
-			set_variable = {
-				which = local_production_gained
-				which = ROOT
-			}
-			set_variable = {
-				which = local_manpower_gained
-				which = ROOT
-			}
-			change_variable = {
-				which = local_development_gained
-				which = local_tax_gained
-			}
-			change_variable = {
-				which = local_development_gained
-				which = local_production_gained
-			}
-			change_variable = {
-				which = local_development_gained
-				which = local_manpower_gained
-			}
-			set_variable = {
-				which = change_culture_cap
-				which = to_nat_local_tribal_development
-			}
-			change_variable = {
-				which = change_culture_cap
-				value = 1
-			}
 			if = {
 				limit = {
-					check_variable = {
-						which = local_development_gained
-						which = change_culture_cap
+					to_nat_can_have_tribal_development_province = yes
+				}
+				set_variable = {
+					which = local_tax_gained
+					which = ROOT
+				}
+				set_variable = {
+					which = local_production_gained
+					which = ROOT
+				}
+				set_variable = {
+					which = local_manpower_gained
+					which = ROOT
+				}
+				change_variable = { which = to_nat_local_tribal_tax which = local_tax_gained }
+				change_variable = { which = to_nat_local_tribal_production which = local_production_gained }
+				change_variable = { which = to_nat_local_tribal_manpower which = local_manpower_gained }
+				change_variable = { which = to_nat_local_tribal_development which = local_tax_gained }
+				change_variable = { which = to_nat_local_tribal_development which = local_production_gained }
+				change_variable = { which = to_nat_local_tribal_development which = local_manpower_gained }
+				if = {
+					limit = {
+						NOT = { has_province_modifier = to_nat_tribal_development }
+					}
+					add_permanent_province_modifier = {
+						name = to_nat_tribal_development
+						duration = -1
 					}
 				}
-				change_culture = ROOT
-				# change_religion = ROOT
 			}
-			set_variable = {
-				which = change_culture_cap
-				value = 0
-			}
-
-			change_variable = { which = to_nat_local_tribal_tax which = local_tax_gained }
-			change_variable = { which = to_nat_local_tribal_production which = local_production_gained }
-			change_variable = { which = to_nat_local_tribal_manpower which = local_manpower_gained }
-			change_variable = { which = to_nat_local_tribal_development which = local_development_gained }
 		}
 	}
 	to_nat_clear_local_tribal_development = yes

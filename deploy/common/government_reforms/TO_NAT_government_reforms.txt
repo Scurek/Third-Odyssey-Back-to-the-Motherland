@@ -57,13 +57,122 @@ to_native_reform_stratified = {
 # 	}
 # }
 
+# TIER II
+
+native_martial_tradition_reform = {
+	icon = "native_martial_tradition_reform"
+	allow_normal_conversion = yes
+
+	modifiers = {
+		army_tradition = 0.5
+	}
+
+	effect = {
+		custom_tooltip = to_nat_can_retain_war_chief_tt
+	}
+
+	ai = {
+		factor = 0.5 #generic
+
+		modifier = {
+			factor = 2
+			personality = ai_militarist
+		}
+
+		modifier = {
+			factor = 2
+			is_at_war = yes
+		}
+
+		modifier = {
+			factor = 2
+			any_neighbor_country = {
+				ROOT = {
+					is_threat = PREV
+				}
+			}
+		}
+
+		modifier = {
+			factor = 2
+			any_neighbor_country = {
+				OR = {
+					is_rival = ROOT
+					is_enemy = ROOT
+				}
+			}
+		}
+	}
+}
+
+native_oral_tradition_reform = {
+	icon = "native_oral_tradition_reform"
+	modifiers = {
+		#monthly_reform_progress_modifier = 0.25
+		idea_cost = -0.10
+	}
+
+	ai = {
+		factor = 1.0
+	}
+}
+
+native_land_tradition_reform = {
+	icon = "native_land_tradition_reform"
+	modifiers = {
+		# add_tribal_land_cost = -0.25
+		# core_creation = -0.10
+		development_cost = -0.10
+	}
+
+	ai = {
+		factor = 0.5
+	}
+}
+
 # TIER III
+
+native_settle_down_reform = {
+	icon = "native_settle_down_reform"
+	fixed_rank = 0
+	native_mechanic = no
+	effect = {
+		to_nat_tier_5_integrate_tribal_development = yes
+		to_nat_merge_all_migratory_development = yes
+	}
+	modifiers = {
+		monthly_reform_progress_modifier = 0.25
+	}
+	conditional = {
+		allow = { has_dlc = "Conquest of Paradise" }
+		allow_migration = no
+	}
+
+	ai = {
+		factor = 0.5
+		
+
+		modifier = { 
+			factor = 2
+			tribal_development = 30
+		}
+
+		modifier = { 
+			factor = 2
+			tribal_development = 40
+		}
+	}
+}
 
 to_native_reform_settle_down_reformed = {
 	icon = "native_settle_down_reform"
 	modifiers = {
 		# global_institution_spread = 0.2
 		monthly_reform_progress_modifier = 0.125
+	}
+	effect = {
+		to_nat_merge_all_migratory_development = yes
+		to_nat_tier_5_integrate_tribal_development = yes
 	}
 	conditional = {
 		allow = { has_dlc = "Conquest of Paradise" }
@@ -326,6 +435,7 @@ to_native_reform_codified_power = {
 	}
 	effect = {
 		to_nat_reform_native_government = yes
+		to_nat_tier_5_integrate_tribal_development = yes
 	}
 	
 }
@@ -827,8 +937,18 @@ to_native_reform_central_administration = {
 	effect = {
 		to_nat_integrate_confederation = yes
 		custom_tooltip = nhs_new_line_tt
-		to_nat_remove_all_tribal_development = yes
+		if = {
+			limit = {
+				OR = {
+					has_reform = to_native_reform_semipermanent_settlements
+					has_reform = to_native_reform_semipermanent_settlements_reformed
+				}
+			}
+			add_government_reform = to_native_reform_settle_down_reformed
+		}
+		custom_tooltip = nhs_new_line_tt
 		to_nat_merge_all_migratory_development = yes
+		to_nat_integrate_all_tribal_development = yes
 	}
 
 	modifiers = {
@@ -848,8 +968,19 @@ to_native_reform_hooks_and_obligations = {
 		custom_tooltip = nhs_new_line_tt
 		to_nat_integrate_confederation = yes
 		custom_tooltip = nhs_new_line_tt
-		to_nat_remove_all_tribal_development = yes
+		if = {
+			limit = {
+				OR = {
+					has_reform = to_native_reform_semipermanent_settlements
+					has_reform = to_native_reform_semipermanent_settlements_reformed
+				}
+			}
+			add_government_reform = to_native_reform_settle_down_reformed
+		}
+		custom_tooltip = nhs_new_line_tt
 		to_nat_merge_all_migratory_development = yes
+		to_nat_integrate_all_tribal_development = yes
+		
 	}
 	
 	modifiers = {

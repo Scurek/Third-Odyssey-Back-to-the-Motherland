@@ -196,7 +196,48 @@ to_nat_grand_confederation_province_trigger = {
 	}
 }
 
-to_nat_can_have_tribal_development = {
+to_nat_can_have_tribal_development_country = {
+	OR = {
+		has_reform = native_basic_reform
+		has_reform = to_native_reform_semipermanent_settlements_reformed
+		has_reform = native_war_band_reform
+	}
+	NOT = {
+		AND = {
+			has_reform = native_settle_down_reform
+			to_nat_has_any_tier_5_native_government_reform = yes
+		}
+	}
+	NOT = { to_nat_has_any_tier_8_native_government_reform = yes }
+}
+
+to_nat_can_instantly_assimilate_development_country = {
+	is_native_government = yes
+	NOT = { to_nat_can_have_tribal_development_country = yes }
+	# OR = {
+	# 	AND = {
+	# 		adm_tech = 17
+	# 		NOT = { is_native_government = yes }
+	# 		native_culture_primary = yes
+	# 	}
+	# 	to_nat_has_any_tier_8_native_government_reform = yes
+	# }
+	# OR = {
+	# 	to_nat_province_has_same_native_culture = yes
+	# 	OR = {
+	# 		AND = {
+	# 			has_reform = native_settle_down_reform
+	# 			to_nat_has_any_tier_5_native_government_reform = yes
+	# 		}
+	# 		AND = {
+	# 			has_reform = native_settle_down_reform
+	# 			to_nat_has_any_tier_5_native_government_reform = yes
+	# 		}
+	# 	}
+	# }
+}
+
+to_nat_can_have_tribal_development_province = {
 	OR = {
 		continent = north_america
 		continent = south_america
@@ -205,6 +246,7 @@ to_nat_can_have_tribal_development = {
 		is_empty = yes
 		owner = {
 			is_native_government = yes
+			to_nat_can_have_tribal_development_country = yes
 		}
 	}
 	NOT = { has_province_flag = to_nat_tribal_development_removed }
