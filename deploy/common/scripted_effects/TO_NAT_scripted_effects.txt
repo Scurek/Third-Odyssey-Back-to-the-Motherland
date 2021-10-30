@@ -1465,6 +1465,10 @@ to_nat_clear_local_tribal_development = {
 		which = to_nat_local_tribal_manpower
 		value = 0
 	}
+	set_variable = {
+		which = to_nat_local_tribal_development
+		value = 0
+	}
 	remove_province_modifier = to_nat_tribal_development
 }
 
@@ -1493,6 +1497,7 @@ to_nat_on_migrate_province = {
 		}
 		change_variable = { which = to_nat_local_tribal_tax value = 1 }
 		change_variable = { which = to_nat_local_tribal_production value = 1 }
+		change_variable = { which = to_nat_local_tribal_development value = 2 }
 		# change_variable = { which = to_nat_local_tribal_manpower value = 1 }
 	}
 }
@@ -1605,6 +1610,9 @@ to_nat_merge_local_migratory_development = {
 			change_variable = { which = to_nat_local_tribal_tax which = to_nat_local_migratory_tax }
 			change_variable = { which = to_nat_local_tribal_production which = to_nat_local_migratory_production }
 			change_variable = { which = to_nat_local_tribal_manpower which = to_nat_local_migratory_manpower }
+			change_variable = { which = to_nat_local_tribal_development which = to_nat_local_migratory_tax }
+			change_variable = { which = to_nat_local_tribal_development which = to_nat_local_migratory_production }
+			change_variable = { which = to_nat_local_tribal_development which = to_nat_local_migratory_manpower }
 		}
 		set_variable = {
 			which = to_nat_local_migratory_tax
@@ -1617,6 +1625,378 @@ to_nat_merge_local_migratory_development = {
 		set_variable = {
 			which = to_nat_local_migratory_manpower
 			value = 0
+		}
+	}
+}
+#Prov, $FRACTION$ - Fraction of tribal dev to remove
+to_nat_displace_tribal_development_all = {
+	to_native_cultures_restore = yes
+	ROOT = {
+		set_variable = {
+			which = local_tax_lost
+			which = to_nat_local_tribal_tax
+		}
+		set_variable = {
+			which = local_production_lost
+			which = to_nat_local_tribal_production
+		}
+		set_variable = {
+			which = local_manpower_lost
+			which = to_nat_local_tribal_manpower
+		}
+	}
+	# Pick 3 provinces
+	to_nat_pick_suitable_tribal_development_displacement_province = { 
+		EVENT_TARGET = displace_tribal_development_target_alternative_1
+		ALTERNATIVE_TARGET_1 = displace_tribal_development_target_alternative_2
+		ALTERNATIVE_TARGET_2 = displace_tribal_development_target_alternative_3
+	}
+	if = {
+		limit = {
+			has_saved_event_target = displace_tribal_development_target_alternative_1
+		}
+		to_nat_pick_suitable_tribal_development_displacement_province = { 
+			EVENT_TARGET = displace_tribal_development_target_alternative_2
+			ALTERNATIVE_TARGET_1 = displace_tribal_development_target_alternative_1
+			ALTERNATIVE_TARGET_2 = displace_tribal_development_target_alternative_3
+		}
+	}
+	if = {
+		limit = {
+			has_saved_event_target = displace_tribal_development_target_alternative_2
+		}
+		to_nat_pick_suitable_tribal_development_displacement_province = { 
+			EVENT_TARGET = displace_tribal_development_target_alternative_3
+			ALTERNATIVE_TARGET_1 = displace_tribal_development_target_alternative_1
+			ALTERNATIVE_TARGET_2 = displace_tribal_development_target_alternative_2
+		}
+	}
+	# If no suitable province is found... RIP
+	if = {
+		limit = {
+			has_saved_event_target = displace_tribal_development_target_alternative_1
+		}
+		random_list = {
+			60 = {
+				event_target:displace_tribal_development_target_alternative_1 = {
+					save_event_target_as = displace_tribal_development_target
+				}
+			}
+			20 = {
+				trigger = {
+					has_saved_event_target = displace_tribal_development_target_alternative_2
+				}
+				save_event_target_as = displace_tribal_development_target
+			}
+			20 = {
+				trigger = {
+					has_saved_event_target = displace_tribal_development_target_alternative_3
+				}
+				save_event_target_as = displace_tribal_development_target
+			}
+		}
+		event_target:displace_tribal_development_target = {
+			ROOT = {
+				set_variable = {
+					which = local_tax_gained
+					which = to_nat_local_tribal_tax
+				}
+				set_variable = {
+					which = local_production_gained
+					which = to_nat_local_tribal_production
+				}
+				set_variable = {
+					which = local_manpower_gained
+					which = to_nat_local_tribal_manpower
+				}
+			}
+			set_variable = {
+				which = local_tax_gained
+				which = ROOT
+			}
+			set_variable = {
+				which = local_production_gained
+				which = ROOT
+			}
+			set_variable = {
+				which = local_manpower_gained
+				which = ROOT
+			}
+			change_variable = {
+				which = local_development_gained
+				which = local_tax_gained
+			}
+			change_variable = {
+				which = local_development_gained
+				which = local_production_gained
+			}
+			change_variable = {
+				which = local_development_gained
+				which = local_manpower_gained
+			}
+			set_variable = {
+				which = change_culture_cap
+				which = to_nat_local_tribal_development
+			}
+			change_variable = {
+				which = change_culture_cap
+				value = 1
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = local_development_gained
+						which = change_culture_cap
+					}
+				}
+				change_culture = ROOT
+				# change_religion = ROOT
+			}
+			set_variable = {
+				which = change_culture_cap
+				value = 0
+			}
+
+			change_variable = { which = to_nat_local_tribal_tax which = local_tax_gained }
+			change_variable = { which = to_nat_local_tribal_production which = local_production_gained }
+			change_variable = { which = to_nat_local_tribal_manpower which = local_manpower_gained }
+			change_variable = { which = to_nat_local_tribal_development which = local_development_gained }
+		}
+	}
+	to_nat_clear_local_tribal_development = yes
+}
+
+to_nat_displace_tribal_development_clear_variables = {
+	event_target:displace_tribal_development_target = {
+		ROOT = {
+			set_variable = {
+				which = local_tax_gained
+				which = to_nat_local_tribal_tax
+			}
+			set_variable = {
+				which = local_production_gained
+				which = to_nat_local_tribal_production
+			}
+			set_variable = {
+				which = local_manpower_gained
+				which = to_nat_local_tribal_manpower
+			}
+		}
+		set_variable = {
+			which = local_tax_gained
+			which = ROOT
+		}
+		set_variable = {
+			which = local_production_gained
+			which = ROOT
+		}
+		set_variable = {
+			which = local_manpower_gained
+			which = ROOT
+		}
+	}
+}
+
+to_nat_pick_suitable_tribal_development_displacement_province = {
+	## Reform, country same culture, province same culture
+	random_country = {
+		limit = {
+			OR = {
+				has_reform = to_native_reform_unite_culture
+				has_reform = to_native_reform_grand_confederation
+			}
+			primary_culture = ROOT
+			any_owned_province = {
+				culture = ROOT
+				to_nat_province_displacement_target_check = { 
+					ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+					ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+				}
+			}
+		}
+		## TODO pick lowest dev province
+		random_owned_province = {
+			limit = {
+				culture = ROOT
+				to_nat_province_displacement_target_check = { 
+					ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+					ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+				}
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	## No reform, country same culture, province same culture
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_country = {
+			limit = {
+				primary_culture = ROOT
+				any_owned_province = {
+					culture = ROOT
+					to_nat_province_displacement_target_check = { 
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					}
+				}
+			}
+			## TODO pick lowest dev province
+			random_owned_province = {
+				limit = {
+					culture = ROOT
+					to_nat_province_displacement_target_check = { 
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					}
+				}
+				save_event_target_as = $EVENT_TARGET$
+			}
+		}
+	}
+	## Reform, country same culture, province same culture group
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_country = {
+			limit = {
+				OR = {
+					has_reform = to_native_reform_unite_culture
+					has_reform = to_native_reform_grand_confederation
+				}
+				primary_culture = ROOT
+				any_owned_province = {
+					culture_group = ROOT
+					to_nat_province_displacement_target_check = { 
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					}
+				}
+			}
+			## TODO pick lowest dev province
+			random_owned_province = {
+				limit = {
+					culture_group = ROOT
+					to_nat_province_displacement_target_check = { 
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					}
+				}
+				save_event_target_as = $EVENT_TARGET$
+			}
+		}
+	}
+	## No reform, country same culture, province same culture group
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_country = {
+			limit = {
+				primary_culture = ROOT
+				any_owned_province = {
+					culture_group = ROOT
+					to_nat_province_displacement_target_check = { 
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					}
+				}
+			}
+			## TODO pick lowest dev province
+			random_owned_province = {
+				limit = {
+					culture_group = ROOT
+					to_nat_province_displacement_target_check = { 
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					}
+				}
+				save_event_target_as = $EVENT_TARGET$
+			}
+		}
+	}
+	## Reform, country same culture group, province same culture
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_country = {
+			limit = {
+				OR = {
+					has_reform = to_native_reform_unite_culture
+					has_reform = to_native_reform_grand_confederation
+				}
+				culture_group = ROOT
+				any_owned_province = {
+					culture = ROOT
+					to_nat_province_displacement_target_check = { 
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					}
+				}
+			}
+			## TODO pick lowest dev province
+			random_owned_province = {
+				limit = {
+					culture = ROOT
+					to_nat_province_displacement_target_check = { 
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					}
+				}
+				save_event_target_as = $EVENT_TARGET$
+			}
+		}
+	}
+	## Reform, country same culture group, province same culture group
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_country = {
+			limit = {
+				OR = {
+					has_reform = to_native_reform_unite_culture
+					has_reform = to_native_reform_grand_confederation
+				}
+				culture_group = ROOT
+				any_owned_province = {
+					culture_group = ROOT
+					to_nat_province_displacement_target_check = { 
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					}
+				}
+			}
+			## TODO pick lowest dev province
+			random_owned_province = {
+				limit = {
+					culture_group = ROOT
+					to_nat_province_displacement_target_check = { 
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					}
+				}
+				save_event_target_as = $EVENT_TARGET$
+			}
+		}
+	}
+	## Province same culture
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_province = {
+			limit = {
+				culture = ROOT
+				to_nat_province_displacement_target_check = { 
+					ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
+					ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+				}
+			}
+			save_event_target_as = $EVENT_TARGET$
 		}
 	}
 }
@@ -1645,6 +2025,7 @@ to_nat_reform_native_government = {
 		}
 	}
 }
+
 
 to_assign_native_council = {
 	custom_tooltip = to_nat_to_assign_native_council_tt

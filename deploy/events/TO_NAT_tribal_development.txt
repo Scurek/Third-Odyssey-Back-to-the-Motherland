@@ -1,0 +1,56 @@
+namespace = to_nat_tribal_development
+
+###################################################
+### TRIBAL DEVELOPMENT MIGRATION
+###################################################
+
+# Tribal development, dispacement on colonisation
+province_event = {
+	id = to_nat_tribal_development.1
+	title = to_nat_tribal_development.1.t
+	desc = to_nat_tribal_development.1.d
+	picture = LAND_MILITARY_eventPicture
+		
+	trigger = {
+		has_province_modifier = to_nat_tribal_development
+		check_variable = {
+			which = to_nat_local_tribal_development
+			value = 1
+		}
+		owner = {
+			OR = {
+				AND = {
+					has_estate = estate_all_natives
+					NOT = {
+						estate_loyalty = {
+							estate = estate_all_natives
+							loyalty = 30
+						}
+					}
+				}
+				AND = {
+					NOT = { has_estate = estate_all_natives }
+					NOT = { 
+						has_global_modifier_value = {
+							which = native_assimilation
+							value = 1.0
+						}
+					}
+				}
+			}
+		}
+		NOT = { to_nat_province_has_same_native_culture = yes }
+	}
+
+	immediate = {
+		hidden_effect = {
+			to_nat_displace_tribal_development_all = yes
+		}
+	}
+	
+	option = {
+		name = to_nat_tribal_development.1.a
+		custom_tooltip = to_nat_native_displacament_display_tt
+		change_culture = ROOT
+	}
+}
