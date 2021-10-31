@@ -12,6 +12,8 @@ province_event = {
 	picture = LAND_MILITARY_eventPicture
 
 	is_triggered_only = yes
+
+	goto = ROOT
 		
 	trigger = {
 		has_province_modifier = to_nat_tribal_development
@@ -41,19 +43,46 @@ province_event = {
 				}
 			}
 		}
-		NOT = { to_nat_province_has_same_native_culture = yes }
+		OR = {
+			is_city = no
+			NOT = { to_nat_province_has_same_native_culture = yes }
+		}
 	}
 
 	immediate = {
 		hidden_effect = {
+			owner = {
+				save_event_target_as = owner_of_the_province
+			}
 			to_nat_displace_tribal_development_all = yes
 		}
 	}
 	
 	option = {
 		name = to_nat_tribal_development.1.a
-		custom_tooltip = to_nat_native_displacament_display_tt
-		change_culture = ROOT
+		trigger = {
+			event_target:owner_of_the_province = {
+				event_target:displace_tribal_development_target = {
+					has_discovered = PREV
+				}
+			}
+		}
+		goto = displace_tribal_development_target
+		to_nat_tribal_displacement_show_effect = yes
+	}
+
+	option = {
+		name = to_nat_tribal_development.1.a
+		trigger = {
+			NOT = {
+				event_target:owner_of_the_province = {
+					event_target:displace_tribal_development_target = {
+						has_discovered = PREV
+					}
+				}
+			}	
+		}
+		to_nat_tribal_displacement_show_effect = yes
 	}
 }
 
