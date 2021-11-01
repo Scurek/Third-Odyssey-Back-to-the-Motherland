@@ -17,25 +17,26 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
+		add_stability = -2
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				has_owner_religion = yes 
+			}
+			change_religion = pantheon_worship
+			add_province_modifier = {
+				name = nhs_hcd_conversion_zeal
+				duration = 365
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_province_modifier = nhs_hcd_Pagan_minority 
+			}
+			change_religion = pantheon_worship
+			remove_province_modifier = nhs_hcd_Pagan_minority 
+		}
 		hidden_effect = {
-			random_owned_province = {
-				limit = {
-					is_capital = no
-					has_owner_religion = yes 
-				}
-				change_religion = pantheon_worship
-				add_province_modifier = {
-					name = nhs_hcd_conversion_zeal
-					duration = 365
-				}
-			}
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_hcd_Pagan_minority 
-				}
-				change_religion = pantheon_worship
-				remove_province_modifier = nhs_hcd_Pagan_minority 
-			}
 			every_owned_province = {
 				limit = {
 					has_province_modifier = nhs_hcd_famine_exempt
@@ -48,69 +49,15 @@ country_event = {
 			remove_country_modifier = nhs_hcd_pagan_concessions
 			remove_country_modifier = nhs_hcd_lack_colonists
 			remove_country_modifier = nhs_hcd_state_inquistion
-			add_stability = -3
 			clr_country_flag = hellenic_conversion_preacher
 			clr_country_flag = nhs_hcd_can_have_religious_disaster
 		}
 	}
 
 	option = {
-		# Side with pagans
-		name = nhs_hcd_hellenicrevolt.1.a
-
-		trigger = {
-			NOT = {
-				check_variable = {
-					which = HellenicUprising
-					value = 13
-				}
-			}
-		}
-
-		change_religion = pantheon_worship
-		set_ruler_religion = pantheon_worship
-		if = {
-			limit = {
-				has_heir = yes
-			}
-			set_heir_religion = pantheon_worship
-		}
-		set_country_flag = nhs_hcd_converted_to_hellenic
-		add_country_modifier = {
-			name= nhs_hcd_pagan_loyalty
-			duration = 3650
-		}
-		custom_tooltip = nhs_hellenicconversion.disaster_siding_with_Pagans.tt
-	}
-
-	option = { 
-		# Side with church
-		name = nhs_hcd_hellenicrevolt.1.b
-
-		trigger = {
-			NOT = {
-				check_variable = {
-					which = OrthodoxcUprising
-					value = 13
-				}
-			}
-		}
-
-		add_estate_loyalty = {
-			estate = estate_church
-			loyalty = 10
-		}
-		set_country_flag = nhs_hcd_supported_zealots
-		add_country_modifier = {
-			name = nhs_hcd_church_loyalty 
-			duration = 3650
-		}
-		custom_tooltip = nhs_hellenicconversion.disaster_siding_with_zealots.tt
-	}
-
-	option = {
 		# Side with moderates
 		name = nhs_hcd_hellenicrevolt.1.c
+		ai_chance = { factor = 100 }
 		
 		add_estate_loyalty = {
 			estate = estate_church
@@ -120,19 +67,47 @@ country_event = {
 		custom_tooltip = nhs_hellenicconversion.disaster_siding_with_moderates.tt
 	}
 
-	option = {
-		# Side with pagans (Lose stability)
-		name = nhs_hcd_hellenicrevolt.1.a
+	option = { 
+		# Side with church
+		name = nhs_hcd_hellenicrevolt.1.b
+		ai_chance = { factor = 0 }
 
-		trigger = {
-			check_variable = {
-				which = HellenicUprising
-				value = 13
+		if = {
+			limit = {
+				check_variable = {
+					which = OrthodoxUprising
+					value = 13
+				}
 			}
+			add_stability = -1
 		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 10
+		}
+		set_country_flag = nhs_hcd_supported_zealots
+		add_country_modifier = {
+			name = nhs_hcd_church_loyalty 
+			duration = 3650
+		}
+		custom_tooltip = nhs_hellenicconversion.disaster_siding_with_zealots.tt
+	}
 
+	option = {
+		# Side with pagans
+		name = nhs_hcd_hellenicrevolt.1.a
+		ai_chance = { factor = 0 }
+
+		if = {
+			limit = {
+				check_variable = {
+					which = HellenicUprising
+					value = 13
+				}
+			}
+			add_stability = -1
+		}
 		change_religion = pantheon_worship
-		set_country_flag = nhs_hcd_converted_to_hellenic
 		set_ruler_religion = pantheon_worship
 		if = {
 			limit = {
@@ -140,36 +115,12 @@ country_event = {
 			}
 			set_heir_religion = pantheon_worship
 		}
-		add_stability = -1
+		set_country_flag = nhs_hcd_converted_to_hellenic
 		add_country_modifier = {
 			name= nhs_hcd_pagan_loyalty
 			duration = 3650
 		}
 		custom_tooltip = nhs_hellenicconversion.disaster_siding_with_Pagans.tt
-	}
-
-	option = {
-		# Side with church (Lose stability)
-		name = nhs_hcd_hellenicrevolt.1.b
-
-		trigger = {
-			check_variable = {
-				which = OrthodoxcUprising
-				value = 13
-			}
-		}
-
-		add_estate_loyalty = {
-			estate = estate_church
-			loyalty = 10
-		}
-		set_country_flag = nhs_hcd_supported_zealots
-		add_stability = -1
-		add_country_modifier = {
-			name = nhs_hcd_church_loyalty 
-			duration = 3650
-		}
-		custom_tooltip = nhs_hellenicconversion.disaster_siding_with_zealots.tt
 	}
 }
 
@@ -557,9 +508,6 @@ country_event = {
 		name = nhs_hcd_hellenicrevolt.22.a
 
 		random_owned_province = {
-			limit = {
-				has_country_flag = nhs_hcd_hellenicrevolt_zealots
-			}
 			add_province_modifier = {
 				name = nhs_hrv_religious_persecution
 				duration = 120
@@ -580,9 +528,6 @@ country_event = {
 		name = nhs_hcd_hellenicrevolt.22.b
 
 		random_owned_province = {
-			limit = {
-				has_country_flag = nhs_hcd_hellenicrevolt_zealots
-			}
 			add_province_modifier = {
 				name = nhs_hrv_religious_persecution
 				duration = 365
@@ -596,9 +541,6 @@ country_event = {
 		name = nhs_hcd_hellenicrevolt.22.c
 
 		random_owned_province = {
-			limit = {
-				has_country_flag = nhs_hcd_hellenicrevolt_zealots
-			}
 			spawn_rebels = {
 				size = 2
 				type = orthodox_rebels
