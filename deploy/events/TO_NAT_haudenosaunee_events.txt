@@ -1,0 +1,171 @@
+namespace = to_nat_haudenosaunee
+
+###################################################
+### Haudenosaunee Diplomacy
+###################################################
+
+# Great Peacemaker appears
+country_event = {
+	id = to_nat_haudenosaunee.1
+	title = to_nat_haudenosaunee.1.t
+	desc = {
+		trigger = { NOT = { tag = MOH  } }
+		desc = to_nat_haudenosaunee.1.da
+	}
+
+	desc = {
+		trigger = { tag = MOH }
+		desc = to_nat_haudenosaunee.1.db
+	}
+	picture = LIBERUM_VETO_eventPicture
+		
+	trigger = {
+		is_haudenosaunee_tag = yes
+		is_year = 1449
+		NOT = { has_country_flag = to_nat_visited_by_great_peacemaker }
+		NOT = { has_global_flag = to_nat_haudenosaunee_confederation_formed }
+	}
+
+	mean_time_to_happen = {
+		months = 6
+		modifier = {
+			factor = 0.5
+			has_country_flag = to_nat_will_be_visited_by_great_peacemaker
+		}
+	}
+	
+	option = {
+		name = to_nat_haudenosaunee.1.a
+		ai_chance = {
+			factor = 1
+		}
+		every_country = {
+			limit = {
+				NOT = { tag = ROOT }
+				is_haudenosaunee_tag = yes
+			}
+			add_truce_with = ROOT
+			set_country_flag = to_nat_will_be_visited_by_great_peacemaker
+			hidden_effect = {
+				country_event = {
+					id = to_nat_haudenosaunee.1
+					days = 90
+					random = 30
+				}
+			}
+		}
+	}
+}
+
+# Formation of Haudenosaunee Confederation
+country_event = {
+	id = to_nat_haudenosaunee.2
+	title = to_nat_haudenosaunee.2.t
+	desc = to_nat_haudenosaunee.2.d
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+		
+	trigger = {
+		is_haudenosaunee_tag = yes
+		OR = {
+			tag = ONO
+			AND = {
+				NOT = { exists = ONO }
+				is_haudenosaunee_tag = yes
+			}
+		}
+		is_year = 1450
+		NOT = { has_global_flag = to_nat_haudenosaunee_confederation_formed }
+		NOT = {
+			any_country = {
+				is_haudenosaunee_tag = yes
+				NOT = { has_country_flag = to_nat_visited_by_great_peacemaker }
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	option = {
+		name = to_nat_haudenosaunee.2.a
+		define_ruler = {
+			name = "Deganawida"
+			adm = 5
+			dip = 6
+			mil = 3
+			age = 38
+			fixed = yes
+			force_republican_names = yes
+		}
+		add_ruler_personality = charismatic_negotiator_personality
+		add_ruler_personality = silver_tongue_personality
+		add_ruler_personality = lawgiver_personality
+		set_ruler_flag = to_nat_has_special_ruler
+		set_ruler_flag = to_nat_great_peacemaker
+		hidden_effect = {
+			set_ai_personality = {
+				personality = ai_diplomat
+				locked = yes
+			}
+		}
+		hidden_effect = {
+			add_ruler_modifier = {
+				name = to_nat_great_peacemaker
+				duration = 10
+				hidden = yes
+			}
+		}
+		define_advisor = {
+			type = diplomat
+			name = "Jigonhsasee"
+			culture = iroquois
+			religion = totemism
+			skill = 2
+			female = yes
+			cost_multiplier = 0.1
+		}
+		define_advisor = {
+			type = commandant
+			name = "Hiawatha"
+			culture = iroquois
+			religion = totemism
+			skill = 2
+			cost_multiplier = 0.1
+		}
+		add_government_reform = to_native_reform_law_of_peace
+		every_country = {
+			limit = {
+				is_haudenosaunee_tag = yes
+			}
+			if = {
+				limit = {
+					NOT = { tag = ROOT }
+				}
+				ROOT = {
+					create_subject = {
+						subject_type = to_confederation_subject
+						subject = PREV
+					}
+				}
+				hidden_effect = {
+					add_historical_friend = ROOT
+					ROOT = {
+						add_historical_friend = PREV
+					}
+					every_country = {
+						limit = {
+							NOT = { tag = ROOT }
+							NOT = { tag = PREV }
+							is_haudenosaunee_tag = yes
+						}
+						add_historical_friend = PREV
+					}
+				}
+			}
+			clr_country_flag = to_nat_will_be_visited_by_great_peacemaker
+		}
+	}
+}

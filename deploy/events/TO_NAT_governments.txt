@@ -18,6 +18,7 @@ country_event = {
 		is_at_war = yes
 		NOT = { has_country_flag = appointed_war_chief }
 		NOT = { has_country_flag = to_declined_war_chief }
+		NOT = { has_ruler_flag = to_nat_has_special_ruler }
 	}
 	
 	option = {
@@ -1314,5 +1315,37 @@ country_event = {
 			}
 			to_assign_native_council = yes
 		}
+	}
+}
+
+# Election upon death for Council. Should only happen with special rulers and it just sets the council, thus the event is hidden.
+country_event = {
+	id = to_nat_governments.12
+	title = to_nat_governments.12.t
+	desc = to_nat_governments.12.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+
+	is_triggered_only = yes
+	hidden = yes
+		
+	trigger = {
+		OR = {
+			has_reform = to_native_reform_consensus_government
+			has_reform = to_native_reform_law_of_peace
+		}
+		NOT = { has_reform = to_native_reform_centralise_power }
+		NOT = { has_country_flag = appointed_war_chief }
+	}
+
+	immediate = {
+		to_assign_native_council_fixed_stats = {
+			ADM = 3
+			DIP = 3
+			MIL = 3
+		}
+	}
+	
+	option = {
+		name = to_nat_governments.12.a
 	}
 }
