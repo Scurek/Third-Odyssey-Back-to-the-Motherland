@@ -285,6 +285,16 @@ to_nat_can_have_tribal_development_province = {
 	NOT = { has_province_flag = to_nat_tribal_development_removed }
 }
 
+to_nat_province_displacement_origin_check = {
+	is_colony = no
+	has_province_modifier = to_nat_tribal_development
+	check_variable = {
+		which = to_nat_local_tribal_development
+		value = 1
+	}
+	NOT = { to_nat_province_has_same_native_culture = yes }
+}
+
 to_nat_province_displacement_target_check = {
 	is_colony = no
 	OR = {
@@ -296,19 +306,19 @@ to_nat_province_displacement_target_check = {
 			}
 		}
 	}
-	OR = {
-		NOT = { has_saved_event_target = $ALTERNATIVE_TARGET_1$ }
+	$PROVINCE_SCOPE$ = {
+		NOT = { province_id = PREV }
+	}
+	[[ALTERNATIVE_TARGET_1]
 		event_target:$ALTERNATIVE_TARGET_1$ = {
 			NOT = { province_id = PREV }
 		}
-	}
-
-	OR = {
-		NOT = { has_saved_event_target = $ALTERNATIVE_TARGET_2$ }
+	]
+	[[ALTERNATIVE_TARGET_2]
 		event_target:$ALTERNATIVE_TARGET_2$ = {
 			NOT = { province_id = PREV }
 		}
-	}
+	]
 }
 
 # PROV, code generated

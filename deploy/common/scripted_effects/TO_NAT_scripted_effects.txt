@@ -187,6 +187,7 @@ to_check_native_size = {
 		set_province_flag = to_local_natives_num_5
 		clr_province_flag = to_local_natives_num_1
 		clr_province_flag = to_local_natives_num_0
+		
 	}
 	else_if = {
 		limit = {
@@ -1813,180 +1814,184 @@ to_nat_merge_all_migratory_development = {
 # Prov, $FRACTION$ - Fraction of tribal dev to remove
 # TODO add potential culture change
 to_nat_displace_tribal_development_all = {
-	to_native_cultures_restore = yes
-	ROOT = {
-  		set_variable = { which = tribal_tax_moved which = to_nat_local_tribal_tax }
-		set_variable = { which = tribal_production_moved which = to_nat_local_tribal_production }
-		set_variable = { which = tribal_manpower_moved which = to_nat_local_tribal_manpower }
+	$PROVINCE_SCOPE$ = {
+		$COUNTRY_SCOPE$ = {
+			save_event_target_as = owner_of_the_province
+		}
+		to_native_cultures_restore = yes
+		
+			set_variable = { which = tribal_tax_moved which = to_nat_local_tribal_tax }
+			set_variable = { which = tribal_production_moved which = to_nat_local_tribal_production }
+			set_variable = { which = tribal_manpower_moved which = to_nat_local_tribal_manpower }
 
-		set_variable = { which = tribal_development_moved value = 0 }
-		change_variable = { which = tribal_development_moved which = tribal_tax_moved }
-		change_variable = { which = tribal_development_moved which = tribal_production_moved }
-		change_variable = { which = tribal_development_moved which = tribal_manpower_moved }
+			set_variable = { which = tribal_development_moved value = 0 }
+			change_variable = { which = tribal_development_moved which = tribal_tax_moved }
+			change_variable = { which = tribal_development_moved which = tribal_production_moved }
+			change_variable = { which = tribal_development_moved which = tribal_manpower_moved }
 
-		to_nat_tribal_development_displacement_out = {
-			TYPE = tax
+			to_nat_tribal_development_displacement_out = {
+				TYPE = tax
+			}
+			to_nat_tribal_development_displacement_out = {
+				TYPE = production
+			}
+			to_nat_tribal_development_displacement_out = {
+				TYPE = manpower
+			}
+		# Substract a quarter of development
+		to_nat_tribal_development_remove_fraction = {
+			FRACTION = 4
+			VARIABLE_TAX = tribal_tax_moved
+			VARIABLE_PRODUCTION = tribal_production_moved
+			VARIABLE_MANPOWER = tribal_manpower_moved
 		}
-		to_nat_tribal_development_displacement_out = {
-			TYPE = production
-		}
-		to_nat_tribal_development_displacement_out = {
-			TYPE = manpower
-		}
-	}
-	# Substract a quarter of development
-	to_nat_tribal_development_remove_fraction = {
-		FRACTION = 4
-		VARIABLE_TAX = tribal_tax_moved
-		VARIABLE_PRODUCTION = tribal_production_moved
-		VARIABLE_MANPOWER = tribal_manpower_moved
-	}
-	# Pick 3 provinces
-	to_nat_pick_suitable_tribal_development_displacement_province = { 
-		EVENT_TARGET = displace_tribal_development_target_alternative_1
-		ALTERNATIVE_TARGET_1 = displace_tribal_development_target_alternative_2
-		ALTERNATIVE_TARGET_2 = displace_tribal_development_target_alternative_3
-	}
-	if = {
-		limit = {
-			has_saved_event_target = displace_tribal_development_target_alternative_1
-		}
+		# Pick 3 provinces
 		to_nat_pick_suitable_tribal_development_displacement_province = { 
-			EVENT_TARGET = displace_tribal_development_target_alternative_2
-			ALTERNATIVE_TARGET_1 = displace_tribal_development_target_alternative_1
-			ALTERNATIVE_TARGET_2 = displace_tribal_development_target_alternative_3
+			EVENT_TARGET = displace_tribal_development_target_alternative_1
+			PROVINCE_SCOPE = $PROVINCE_SCOPE$
 		}
-	}
-	if = {
-		limit = {
-			has_saved_event_target = displace_tribal_development_target_alternative_2
-		}
-		to_nat_pick_suitable_tribal_development_displacement_province = { 
-			EVENT_TARGET = displace_tribal_development_target_alternative_3
-			ALTERNATIVE_TARGET_1 = displace_tribal_development_target_alternative_1
-			ALTERNATIVE_TARGET_2 = displace_tribal_development_target_alternative_2
-		}
-	}
-	# If no suitable province is found... RIP
-	if = {
-		limit = {
-			has_saved_event_target = displace_tribal_development_target_alternative_1
-		}
-		random_list = {
-			60 = {
-				event_target:displace_tribal_development_target_alternative_1 = {
-					save_event_target_as = displace_tribal_development_target
-				}
+		if = {
+			limit = {
+				has_saved_event_target = displace_tribal_development_target_alternative_1
 			}
-			20 = {
-				trigger = {
-					has_saved_event_target = displace_tribal_development_target_alternative_2
-				}
-				event_target:displace_tribal_development_target_alternative_2 = {
-					save_event_target_as = displace_tribal_development_target
-				}
-			}
-			20 = {
-				trigger = {
-					has_saved_event_target = displace_tribal_development_target_alternative_3
-				}
-				event_target:displace_tribal_development_target_alternative_3 = {
-					save_event_target_as = displace_tribal_development_target
-				}
+			to_nat_pick_suitable_tribal_development_displacement_province = { 
+				EVENT_TARGET = displace_tribal_development_target_alternative_2
+				ALTERNATIVE_TARGET_1 = displace_tribal_development_target_alternative_1
+				PROVINCE_SCOPE = $PROVINCE_SCOPE$
 			}
 		}
-		event_target:displace_tribal_development_target = {
-			owner = {
-				save_event_target_as = displace_tribal_development_target_owner
+		if = {
+			limit = {
+				has_saved_event_target = displace_tribal_development_target_alternative_2
 			}
-			if = {
-				limit = {
-					to_nat_can_have_tribal_development_province = yes
-				}
-				set_variable = {
-					which = tribal_tax_moved
-					which = ROOT
-				}
-				set_variable = {
-					which = tribal_production_moved
-					which = ROOT
-				}
-				set_variable = {
-					which = tribal_manpower_moved
-					which = ROOT
-				}
-				####
-				set_variable = {
-					which = tribal_tax_gain
-					which = tribal_tax_moved
-				}
-				while = {
-					limit = {
-						check_variable = {
-							which = tribal_tax_gain
-							value = 1
-						}
+			to_nat_pick_suitable_tribal_development_displacement_province = { 
+				EVENT_TARGET = displace_tribal_development_target_alternative_3
+				ALTERNATIVE_TARGET_1 = displace_tribal_development_target_alternative_1
+				ALTERNATIVE_TARGET_2 = displace_tribal_development_target_alternative_2
+				PROVINCE_SCOPE = $PROVINCE_SCOPE$
+			}
+		}
+		# If no suitable province is found... RIP
+		if = {
+			limit = {
+				has_saved_event_target = displace_tribal_development_target_alternative_1
+			}
+			random_list = {
+				60 = {
+					event_target:displace_tribal_development_target_alternative_1 = {
+						save_event_target_as = displace_tribal_development_target
 					}
-					change_variable = {
-						which = tribal_tax_gain
-						value = -1
-					}
-					add_base_tax = 1
 				}
-				set_variable = {
-					which = tribal_production_gain
-					which = tribal_production_moved
-				}
-				while = {
-					limit = {
-						check_variable = {
-							which = tribal_production_gain
-							value = 1
-						}
+				20 = {
+					trigger = {
+						has_saved_event_target = displace_tribal_development_target_alternative_2
 					}
-					change_variable = {
-						which = tribal_production_gain
-						value = -1
+					event_target:displace_tribal_development_target_alternative_2 = {
+						save_event_target_as = displace_tribal_development_target
 					}
-					add_base_production = 1
 				}
-				set_variable = {
-					which = tribal_manpower_gain
-					which = tribal_manpower_moved
-				}
-				while = {
-					limit = {
-						check_variable = {
-							which = tribal_manpower_gain
-							value = 1
-						}
+				20 = {
+					trigger = {
+						has_saved_event_target = displace_tribal_development_target_alternative_3
 					}
-					change_variable = {
-						which = tribal_manpower_gain
-						value = -1
+					event_target:displace_tribal_development_target_alternative_3 = {
+						save_event_target_as = displace_tribal_development_target
 					}
-					add_base_manpower = 1
 				}
-				###
-				change_variable = { which = to_nat_local_tribal_tax which = tribal_tax_moved }
-				change_variable = { which = to_nat_local_tribal_production which = tribal_production_moved }
-				change_variable = { which = to_nat_local_tribal_manpower which = tribal_manpower_moved }
-				change_variable = { which = to_nat_local_tribal_development which = tribal_tax_moved }
-				change_variable = { which = to_nat_local_tribal_development which = tribal_production_moved }
-				change_variable = { which = to_nat_local_tribal_development which = tribal_manpower_moved }
+			}
+			event_target:displace_tribal_development_target = {
+				owner = {
+					save_event_target_as = displace_tribal_development_target_owner
+				}
 				if = {
 					limit = {
-						NOT = { has_province_modifier = to_nat_tribal_development }
+						to_nat_can_have_tribal_development_province = yes
 					}
-					add_permanent_province_modifier = {
-						name = to_nat_tribal_development
-						duration = -1
+					set_variable = {
+						which = tribal_tax_moved
+						which = $PROVINCE_SCOPE$
+					}
+					set_variable = {
+						which = tribal_production_moved
+						which = $PROVINCE_SCOPE$
+					}
+					set_variable = {
+						which = tribal_manpower_moved
+						which = $PROVINCE_SCOPE$
+					}
+					####
+					set_variable = {
+						which = tribal_tax_gain
+						which = tribal_tax_moved
+					}
+					while = {
+						limit = {
+							check_variable = {
+								which = tribal_tax_gain
+								value = 1
+							}
+						}
+						change_variable = {
+							which = tribal_tax_gain
+							value = -1
+						}
+						add_base_tax = 1
+					}
+					set_variable = {
+						which = tribal_production_gain
+						which = tribal_production_moved
+					}
+					while = {
+						limit = {
+							check_variable = {
+								which = tribal_production_gain
+								value = 1
+							}
+						}
+						change_variable = {
+							which = tribal_production_gain
+							value = -1
+						}
+						add_base_production = 1
+					}
+					set_variable = {
+						which = tribal_manpower_gain
+						which = tribal_manpower_moved
+					}
+					while = {
+						limit = {
+							check_variable = {
+								which = tribal_manpower_gain
+								value = 1
+							}
+						}
+						change_variable = {
+							which = tribal_manpower_gain
+							value = -1
+						}
+						add_base_manpower = 1
+					}
+					###
+					change_variable = { which = to_nat_local_tribal_tax which = tribal_tax_moved }
+					change_variable = { which = to_nat_local_tribal_production which = tribal_production_moved }
+					change_variable = { which = to_nat_local_tribal_manpower which = tribal_manpower_moved }
+					change_variable = { which = to_nat_local_tribal_development which = tribal_tax_moved }
+					change_variable = { which = to_nat_local_tribal_development which = tribal_production_moved }
+					change_variable = { which = to_nat_local_tribal_development which = tribal_manpower_moved }
+					if = {
+						limit = {
+							NOT = { has_province_modifier = to_nat_tribal_development }
+						}
+						add_permanent_province_modifier = {
+							name = to_nat_tribal_development
+							duration = -1
+						}
 					}
 				}
 			}
 		}
+		to_nat_clear_local_tribal_development = yes
 	}
-	to_nat_clear_local_tribal_development = yes
 }
 
 to_nat_tribal_development_displacement_out = {
@@ -2082,22 +2087,32 @@ to_nat_pick_suitable_tribal_development_displacement_province = {
 				has_reform = to_native_reform_unite_culture
 				has_reform = to_native_reform_grand_confederation
 			}
-			primary_culture = ROOT
+			primary_culture = $PROVINCE_SCOPE$
 			any_owned_province = {
-				culture = ROOT
+				culture = $PROVINCE_SCOPE$
 				to_nat_province_displacement_target_check = { 
-					ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-					ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					PROVINCE_SCOPE = $PROVINCE_SCOPE$
+					[[ALTERNATIVE_TARGET_1]
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+					]
+					[[ALTERNATIVE_TARGET_2]
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+					]
 				}
 			}
 		}
 		## TODO pick lowest dev province
 		random_owned_province = {
 			limit = {
-				culture = ROOT
+				culture = $PROVINCE_SCOPE$
 				to_nat_province_displacement_target_check = { 
-					ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-					ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					PROVINCE_SCOPE = $PROVINCE_SCOPE$
+					[[ALTERNATIVE_TARGET_1]
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+					]
+					[[ALTERNATIVE_TARGET_2]
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+					]
 				}
 			}
 			save_event_target_as = $EVENT_TARGET$
@@ -2113,22 +2128,32 @@ to_nat_pick_suitable_tribal_development_displacement_province = {
 				event_target:owner_of_the_province = {
 					NOT = { tag = PREV }
 				}
-				primary_culture = ROOT
+				primary_culture = $PROVINCE_SCOPE$
 				any_owned_province = {
-					culture = ROOT
+					culture = $PROVINCE_SCOPE$
 					to_nat_province_displacement_target_check = { 
-						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+						PROVINCE_SCOPE = $PROVINCE_SCOPE$
+						[[ALTERNATIVE_TARGET_1]
+							ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+						]
+						[[ALTERNATIVE_TARGET_2]
+							ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+						]
 					}
 				}
 			}
 			## TODO pick lowest dev province
 			random_owned_province = {
 				limit = {
-					culture = ROOT
+					culture = $PROVINCE_SCOPE$
 					to_nat_province_displacement_target_check = { 
-						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+						PROVINCE_SCOPE = $PROVINCE_SCOPE$
+						[[ALTERNATIVE_TARGET_1]
+							ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+						]
+						[[ALTERNATIVE_TARGET_2]
+							ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+						]
 					}
 				}
 				save_event_target_as = $EVENT_TARGET$
@@ -2149,22 +2174,32 @@ to_nat_pick_suitable_tribal_development_displacement_province = {
 					has_reform = to_native_reform_unite_culture
 					has_reform = to_native_reform_grand_confederation
 				}
-				primary_culture = ROOT
+				primary_culture = $PROVINCE_SCOPE$
 				any_owned_province = {
-					culture_group = ROOT
+					culture_group = $PROVINCE_SCOPE$
 					to_nat_province_displacement_target_check = { 
-						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+						PROVINCE_SCOPE = $PROVINCE_SCOPE$
+						[[ALTERNATIVE_TARGET_1]
+							ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+						]
+						[[ALTERNATIVE_TARGET_2]
+							ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+						]
 					}
 				}
 			}
 			## TODO pick lowest dev province
 			random_owned_province = {
 				limit = {
-					culture_group = ROOT
+					culture_group = $PROVINCE_SCOPE$
 					to_nat_province_displacement_target_check = { 
-						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+						PROVINCE_SCOPE = $PROVINCE_SCOPE$
+						[[ALTERNATIVE_TARGET_1]
+							ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+						]
+						[[ALTERNATIVE_TARGET_2]
+							ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+						]
 					}
 				}
 				save_event_target_as = $EVENT_TARGET$
@@ -2181,22 +2216,32 @@ to_nat_pick_suitable_tribal_development_displacement_province = {
 				event_target:owner_of_the_province = {
 					NOT = { tag = PREV }
 				}
-				primary_culture = ROOT
+				primary_culture = $PROVINCE_SCOPE$
 				any_owned_province = {
-					culture_group = ROOT
+					culture_group = $PROVINCE_SCOPE$
 					to_nat_province_displacement_target_check = { 
-						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+						PROVINCE_SCOPE = $PROVINCE_SCOPE$
+						[[ALTERNATIVE_TARGET_1]
+							ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+						]
+						[[ALTERNATIVE_TARGET_2]
+							ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+						]
 					}
 				}
 			}
 			## TODO pick lowest dev province
 			random_owned_province = {
 				limit = {
-					culture_group = ROOT
+					culture_group = $PROVINCE_SCOPE$
 					to_nat_province_displacement_target_check = { 
-						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+						PROVINCE_SCOPE = $PROVINCE_SCOPE$
+						[[ALTERNATIVE_TARGET_1]
+							ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+						]
+						[[ALTERNATIVE_TARGET_2]
+							ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+						]
 					}
 				}
 				save_event_target_as = $EVENT_TARGET$
@@ -2217,22 +2262,32 @@ to_nat_pick_suitable_tribal_development_displacement_province = {
 					has_reform = to_native_reform_unite_culture
 					has_reform = to_native_reform_grand_confederation
 				}
-				culture_group = ROOT
+				culture_group = $PROVINCE_SCOPE$
 				any_owned_province = {
-					culture = ROOT
+					culture = $PROVINCE_SCOPE$
 					to_nat_province_displacement_target_check = { 
-						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+						PROVINCE_SCOPE = $PROVINCE_SCOPE$
+						[[ALTERNATIVE_TARGET_1]
+							ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+						]
+						[[ALTERNATIVE_TARGET_2]
+							ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+						]
 					}
 				}
 			}
 			## TODO pick lowest dev province
 			random_owned_province = {
 				limit = {
-					culture = ROOT
+					culture = $PROVINCE_SCOPE$
 					to_nat_province_displacement_target_check = { 
-						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+						PROVINCE_SCOPE = $PROVINCE_SCOPE$
+						[[ALTERNATIVE_TARGET_1]
+							ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+						]
+						[[ALTERNATIVE_TARGET_2]
+							ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+						]
 					}
 				}
 				save_event_target_as = $EVENT_TARGET$
@@ -2253,22 +2308,32 @@ to_nat_pick_suitable_tribal_development_displacement_province = {
 					has_reform = to_native_reform_unite_culture
 					has_reform = to_native_reform_grand_confederation
 				}
-				culture_group = ROOT
+				culture_group = $PROVINCE_SCOPE$
 				any_owned_province = {
-					culture_group = ROOT
+					culture_group = $PROVINCE_SCOPE$
 					to_nat_province_displacement_target_check = { 
-						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+						PROVINCE_SCOPE = $PROVINCE_SCOPE$
+						[[ALTERNATIVE_TARGET_1]
+							ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+						]
+						[[ALTERNATIVE_TARGET_2]
+							ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+						]
 					}
 				}
 			}
 			## TODO pick lowest dev province
 			random_owned_province = {
 				limit = {
-					culture_group = ROOT
+					culture_group = $PROVINCE_SCOPE$
 					to_nat_province_displacement_target_check = { 
-						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+						PROVINCE_SCOPE = $PROVINCE_SCOPE$
+						[[ALTERNATIVE_TARGET_1]
+							ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+						]
+						[[ALTERNATIVE_TARGET_2]
+							ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+						]
 					}
 				}
 				save_event_target_as = $EVENT_TARGET$
@@ -2283,10 +2348,15 @@ to_nat_pick_suitable_tribal_development_displacement_province = {
 		random_province = {
 			limit = {
 				is_empty = yes
-				culture = ROOT
+				culture = $PROVINCE_SCOPE$
 				to_nat_province_displacement_target_check = { 
-					ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$ 
-					ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$ 
+					PROVINCE_SCOPE = $PROVINCE_SCOPE$
+					[[ALTERNATIVE_TARGET_1]
+						ALTERNATIVE_TARGET_1 = $ALTERNATIVE_TARGET_1$
+					]
+					[[ALTERNATIVE_TARGET_2]
+						ALTERNATIVE_TARGET_2 = $ALTERNATIVE_TARGET_2$
+					]
 				}
 			}
 			save_event_target_as = $EVENT_TARGET$
@@ -2337,7 +2407,7 @@ to_nat_tribal_displacement_show_effect = {
 			event_target:displace_tribal_development_target_owner = {
 				if = {
 					limit = {
-						ROOT = {
+						$PROVINCE_SCOPE$ = {
 							check_variable = {
 								which = tribal_tax_moved
 								value = 1
@@ -2348,7 +2418,7 @@ to_nat_tribal_displacement_show_effect = {
 				}
 				if = {
 					limit = {
-						ROOT = {
+						$PROVINCE_SCOPE$ = {
 							check_variable = {
 								which = tribal_production_moved
 								value = 1
@@ -2359,7 +2429,7 @@ to_nat_tribal_displacement_show_effect = {
 				}
 				if = {
 					limit = {
-						ROOT = {
+						$PROVINCE_SCOPE$ = {
 							check_variable = {
 								which = tribal_manpower_moved
 								value = 1
@@ -2373,7 +2443,7 @@ to_nat_tribal_displacement_show_effect = {
 		else = {
 			if = {
 				limit = {
-					ROOT = {
+					$PROVINCE_SCOPE$ = {
 						check_variable = {
 							which = tribal_tax_moved
 							value = 1
@@ -2384,7 +2454,7 @@ to_nat_tribal_displacement_show_effect = {
 			}
 			if = {
 				limit = {
-					ROOT = {
+					$PROVINCE_SCOPE$ = {
 						check_variable = {
 							which = tribal_production_moved
 							value = 1
@@ -2395,7 +2465,7 @@ to_nat_tribal_displacement_show_effect = {
 			}
 			if = {
 				limit = {
-					ROOT = {
+					$PROVINCE_SCOPE$ = {
 						check_variable = {
 							which = tribal_manpower_moved
 							value = 1
@@ -2406,7 +2476,40 @@ to_nat_tribal_displacement_show_effect = {
 			}
 		}
 	}
-	change_culture = event_target:owner_of_the_province
+	if = {
+		limit = {
+			is_empty = no
+			owner = {
+				event_target:owner_of_the_province = {
+					tag = PREV
+				}
+			}
+		}
+		change_culture = event_target:owner_of_the_province
+	}
+}
+
+to_nat_check_for_tribal_displacement_on_attack_natives = {
+	if = {
+		limit = {
+			FROM = {
+				tag = NAT
+			}
+		}
+		to_check_native_size = yes
+		random_country = {
+			limit = {
+				has_country_flag = to_natives_won_battle
+			}
+			clr_country_flag = to_natives_won_battle
+			if = {
+				limit = {
+					PREV = { has_province_flag = to_local_natives_num_0 }
+				}
+				country_event = { id = to_nat_tribal_development.2 }
+			}
+		}
+	}
 }
 
 to_nat_reform_native_government = {

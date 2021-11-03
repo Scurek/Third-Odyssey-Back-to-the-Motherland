@@ -22,9 +22,16 @@ province_event = {
 			value = 1
 		}
 		owner = {
+			# Natives will not displace other natives (unless they attack natives)
+			NOT = { is_native_government = yes }
+			ROOT = {
+				NOT = { to_nat_province_has_same_native_culture = yes }
+			}
+			#
 			OR = {
 				AND = {
 					has_estate = estate_all_natives
+					NOT = { has_estate_privilege = nhs_native_priv_ancestral_land }
 					NOT = {
 						estate_loyalty = {
 							estate = estate_all_natives
@@ -34,7 +41,7 @@ province_event = {
 				}
 				AND = {
 					NOT = { has_estate = estate_all_natives }
-					NOT = { 
+					NOT = {
 						has_global_modifier_value = {
 							which = native_assimilation
 							value = 1.0
@@ -43,18 +50,16 @@ province_event = {
 				}
 			}
 		}
-		OR = {
-			is_city = no
-			NOT = { to_nat_province_has_same_native_culture = yes }
-		}
+		# 	NOT = { to_nat_province_has_same_native_culture = yes }
 	}
 
 	immediate = {
 		hidden_effect = {
-			owner = {
-				save_event_target_as = owner_of_the_province
+			save_event_target_as = origin_province
+			to_nat_displace_tribal_development_all = {
+				PROVINCE_SCOPE = ROOT
+				COUNTRY_SCOPE = owner
 			}
-			to_nat_displace_tribal_development_all = yes
 		}
 	}
 	
@@ -68,7 +73,9 @@ province_event = {
 			}
 		}
 		goto = displace_tribal_development_target
-		to_nat_tribal_displacement_show_effect = yes
+		to_nat_tribal_displacement_show_effect = {
+			PROVINCE_SCOPE = ROOT
+		}
 	}
 
 	option = {
@@ -82,11 +89,186 @@ province_event = {
 				}
 			}	
 		}
-		to_nat_tribal_displacement_show_effect = yes
+		to_nat_tribal_displacement_show_effect = {
+			PROVINCE_SCOPE = ROOT
+		}
+	}
+}
+
+# Tribal development, dispacement on attack natives
+country_event = {
+	id = to_nat_tribal_development.2
+	title = to_nat_tribal_development.2.t
+	desc = to_nat_tribal_development.2.d
+	picture = LAND_MILITARY_eventPicture
+
+	is_triggered_only = yes
+
+	goto = FROM
+		
+	trigger = {
+		FROM = {
+			has_province_modifier = to_nat_tribal_development
+			check_variable = {
+				which = to_nat_local_tribal_development
+				value = 1
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			FROM = {
+				save_event_target_as = origin_province
+			}
+			to_nat_displace_tribal_development_all = {
+				PROVINCE_SCOPE = FROM
+				COUNTRY_SCOPE = ROOT
+			}
+		}
+	}
+	
+	option = {
+		name = to_nat_tribal_development.1.a
+		trigger = {
+			event_target:owner_of_the_province = {
+				event_target:displace_tribal_development_target = {
+					has_discovered = PREV
+				}
+			}
+		}
+		goto = displace_tribal_development_target
+		FROM = {
+			to_nat_tribal_displacement_show_effect = {
+				PROVINCE_SCOPE = FROM
+			}
+		}
+	}
+
+	option = {
+		name = to_nat_tribal_development.1.a
+		trigger = {
+			NOT = {
+				event_target:owner_of_the_province = {
+					event_target:displace_tribal_development_target = {
+						has_discovered = PREV
+					}
+				}
+			}	
+		}
+		FROM = {
+			to_nat_tribal_displacement_show_effect = {
+				PROVINCE_SCOPE = FROM
+			}
+		}
+	}
+}
+
+# Tribal development, dispacement over time
+# This is a country event for purposes of determining mtth, but it then triggers a province event
+country_event = {
+	id = to_nat_tribal_development.3
+	title = to_nat_tribal_development.3.t
+	desc = to_nat_tribal_development.3.d
+	picture = LAND_MILITARY_eventPicture
+
+	hidden = yes
+		
+	trigger = {
+		NOT = { is_native_government = yes }
+		OR = {
+			AND = {
+				has_estate = estate_all_natives
+				NOT = {
+					estate_loyalty = {
+						estate = estate_all_natives
+						loyalty = 30
+					}
+				}
+			}
+			AND = {
+				NOT = { has_estate = estate_all_natives }
+				NOT = {
+					has_global_modifier_value = {
+						which = native_assimilation
+						value = 1.0
+					}
+				}
+			}
+		}
+		any_owned_province = {
+			to_nat_province_displacement_origin_check = yes
+		}
+	}
+
+	immediate = {
+		random_owned_province = {
+			limit = {
+				to_nat_province_displacement_origin_check = yes
+			}
+			province_event = { id = to_nat_tribal_development.4 }
+		}
+	}
+	
+	option = {
+		name = to_nat_tribal_development.3.a
 	}
 }
 
 
+# Tribal development, dispacement over time
+# Triggered by to_nat_tribal_development.3
+province_event = {
+	id = to_nat_tribal_development.4
+	title = to_nat_tribal_development.4.t
+	desc = to_nat_tribal_development.4.d
+	picture = LAND_MILITARY_eventPicture
+
+	is_triggered_only = yes
+
+	goto = ROOT
+
+	immediate = {
+		hidden_effect = {
+			save_event_target_as = origin_province
+			to_nat_displace_tribal_development_all = {
+				PROVINCE_SCOPE = ROOT
+				COUNTRY_SCOPE = owner
+			}
+		}
+	}
+	
+	option = {
+		name = to_nat_tribal_development.4.a
+		trigger = {
+			event_target:owner_of_the_province = {
+				event_target:displace_tribal_development_target = {
+					has_discovered = PREV
+				}
+			}
+		}
+		goto = displace_tribal_development_target
+		to_nat_tribal_displacement_show_effect = {
+			PROVINCE_SCOPE = ROOT
+		}
+	}
+
+	option = {
+		name = to_nat_tribal_development.4.a
+		trigger = {
+			NOT = {
+				event_target:owner_of_the_province = {
+					event_target:displace_tribal_development_target = {
+						has_discovered = PREV
+					}
+				}
+			}	
+		}
+		to_nat_tribal_displacement_show_effect = {
+			PROVINCE_SCOPE = ROOT
+		}
+	}
+}
 
 
 ###################################################
