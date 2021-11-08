@@ -51,6 +51,7 @@ province_event = {
 
 	immediate = {
 		hidden_effect = {
+			log = "Tribal Dev. displacement (on colony finish) in [Root.GetName] by [Root.Owner.GetName]"
 			save_event_target_as = origin_province
 			to_nat_displace_tribal_development = {
 				PROVINCE_SCOPE = ROOT
@@ -63,6 +64,7 @@ province_event = {
 	option = {
 		name = to_nat_tribal_development.1.a
 		trigger = {
+			has_saved_event_target = displace_tribal_development_target
 			event_target:owner_of_the_province = {
 				event_target:displace_tribal_development_target = {
 					has_discovered = PREV
@@ -78,13 +80,16 @@ province_event = {
 	option = {
 		name = to_nat_tribal_development.1.a
 		trigger = {
-			NOT = {
-				event_target:owner_of_the_province = {
-					event_target:displace_tribal_development_target = {
-						has_discovered = PREV
+			OR = {
+				NOT = { has_saved_event_target = displace_tribal_development_target }
+				NOT = {
+					event_target:owner_of_the_province = {
+						event_target:displace_tribal_development_target = {
+							has_discovered = PREV
+						}
 					}
 				}
-			}	
+			}
 		}
 		to_nat_tribal_displacement_show_effect = {
 			PROVINCE_SCOPE = ROOT
@@ -115,6 +120,7 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
+			log = "Tribal Dev. displacement (attacked natives) in [From.GetName] by [Root.GetName]"
 			FROM = {
 				save_event_target_as = origin_province
 			}
@@ -247,6 +253,7 @@ province_event = {
 
 	immediate = {
 		hidden_effect = {
+			log = "Tribal Dev. displacement (overtime) in [Root.GetName] by [Root.Owner.GetName]"
 			save_event_target_as = origin_province
 			if = {
 				limit = {
