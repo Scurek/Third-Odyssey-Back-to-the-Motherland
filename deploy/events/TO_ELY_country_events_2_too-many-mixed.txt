@@ -153,14 +153,9 @@ country_event = {
 	id = nhs2_countryevents.13
 	title = nhs2_countryevents13.t
 	desc = nhs2_countryevents13.d
-	picture = EXPLORERS_eventPicture
+	picture = COLONIZATION_eventPicture
 
-	fire_only_once = yes
-
-    trigger = {
-		nhs_condition_all_ely = { KOMANDA = tag }
-		had_country_flag = { flag = nhs_eager_explorers days = 2 }
-	}
+	is_triggered_only = yes
 
 	option = {
 		name = "nhs2_countryevents13.a"
@@ -176,10 +171,14 @@ country_event = {
 		hidden_effect = {
 			every_province = {
 				limit = {
-					any_neighbor_province = { 
-						owned_by = ROOT 
+					# any_neighbor_province = { 
+					# 	owned_by = ROOT 
+					# }
+					OR = {
+						nhs_homelands_no_capital = yes
+						owned_by = LEN
+						owned_by = PIA
 					}
-					nhs_homelands_no_capital = yes
 					NOT = { has_discovered = ROOT }
 				}
 				every_country = {
@@ -187,7 +186,54 @@ country_event = {
 					discover_province = PREV
 				}
 			}
+			every_country = {
+				limit = {
+					OR = {
+						tag = PIA
+						tag = LEN
+						tag = POW
+					}
+				}
+				country_event = { id = nhs2_countryevents.12 days = 3 }
+			}
+
+			every_country = {
+				limit = {
+					OR = {
+						tag = SUS
+						tag = TSC
+					}
+				}
+				country_event = { id = nhs2_countryevents.12 days = 30 }
+			}
+
+			every_country = {
+				limit = {
+					OR = {
+						is_iroquois = yes
+						tag = PEQ
+						tag = WAM
+						tag = MAH
+						tag = WEN
+						tag = ERI
+					}
+				}
+				country_event = { id = nhs2_countryevents.12 days = 60 }
+			}
 		}
+	}
+}
+
+country_event = {
+	id = nhs2_countryevents.12
+	title = nhs2_countryevents12.t
+	desc = nhs2_countryevents12.d
+	picture = EXPLORERS_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = nhs2_countryevents12.a
 	}
 }
 
