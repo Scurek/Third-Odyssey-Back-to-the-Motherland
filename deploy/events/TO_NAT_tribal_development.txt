@@ -9,7 +9,7 @@ province_event = {
 	id = to_nat_tribal_development.1
 	title = to_nat_tribal_development.1.t
 	desc = to_nat_tribal_development.1.d
-	picture = LAND_MILITARY_eventPicture
+	picture = nat_LAND_MILITARY_eventPicture
 
 	is_triggered_only = yes
 
@@ -25,7 +25,7 @@ province_event = {
 			}
 			#
 			OR = {
-				to_nat_displacement_condition_with_estate = yes
+				to_nat_immidiate_displacement_condition_with_estate = yes
 				to_nat_displacement_condition_no_estate = yes
 			}
 		}
@@ -84,8 +84,19 @@ province_event = {
 country_event = {
 	id = to_nat_tribal_development.2
 	title = to_nat_tribal_development.2.t
-	desc = to_nat_tribal_development.2.d
-	picture = LAND_MILITARY_eventPicture
+	desc = {
+		desc = to_nat_tribal_development.2.da
+		trigger = {
+			FROM = { owned_by = ROOT }
+		}
+	}
+	desc = {
+		desc = to_nat_tribal_development.2.db
+		trigger = {
+			NOT = { FROM = { owned_by = ROOT } }
+		}
+	}
+	picture = nat_SIEGE_eventPicture
 
 	is_triggered_only = yes
 
@@ -94,10 +105,6 @@ country_event = {
 	trigger = {
 		FROM = {
 			has_province_modifier = to_nat_tribal_development
-			check_variable = {
-				which = to_nat_local_tribal_development
-				value = 1
-			}
 		}
 	}
 
@@ -108,8 +115,8 @@ country_event = {
 				save_event_target_as = origin_province
 			}
 			to_nat_displace_tribal_development = {
-				PROVINCE_SCOPE = ROOT
-				COUNTRY_SCOPE = owner
+				PROVINCE_SCOPE = FROM
+				COUNTRY_SCOPE = ROOT
 				FRACTION = 1
 			}
 		}
@@ -156,8 +163,8 @@ country_event = {
 country_event = {
 	id = to_nat_tribal_development.3
 	title = to_nat_tribal_development.3.t
-	desc = to_nat_tribal_development.3.d
-	picture = LAND_MILITARY_eventPicture
+	title = to_nat_tribal_development.3.b
+	picture = nat_LAND_MILITARY_eventPicture
 
 	hidden = yes
 		
@@ -173,7 +180,7 @@ country_event = {
 	}
 
 	mean_time_to_happen = {
-		months = 60
+		months = 36
 		# TODO think if some mtth modifiers
 		modifier = {
 			factor = 0.5
@@ -211,8 +218,23 @@ country_event = {
 province_event = {
 	id = to_nat_tribal_development.4
 	title = to_nat_tribal_development.4.t
-	desc = to_nat_tribal_development.4.d
-	picture = LAND_MILITARY_eventPicture
+	desc = {
+		desc = to_nat_tribal_development.4.da
+		trigger = {
+			owner = {
+				has_estate_privilege = nhs_native_priv_ancestral_land
+			}
+		}
+	}
+	desc = {
+		desc = to_nat_tribal_development.4.db
+		trigger = {
+			owner = {
+				NOT = { has_estate_privilege = nhs_native_priv_ancestral_land }
+			}
+		}
+	}
+	picture = nat_LAND_MILITARY_eventPicture
 
 	is_triggered_only = yes
 
