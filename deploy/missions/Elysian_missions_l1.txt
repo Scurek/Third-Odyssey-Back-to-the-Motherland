@@ -835,19 +835,22 @@ nhs_right_mid_start = {
 				limit = {
 					has_country_flag = nhs_new_flight_taken_venetians
 				}
-				any_owned_province = {
+				953 = {
+					has_great_project = {
+						type = nhs_hippodrome
+						tier = 1
+					}
+				}
+				2554 = {
+					has_great_project = {
+						type = nhs_alexandrian_library
+						tier = 1
+					}
+				}
+				950 = {
 					OR = {
 						has_great_project = {
 							type = nhs_cothon
-							tier = 1
-						}
-						has_province_modifier = nhs_seagate_guardians_tm
-						has_great_project = {
-							type = nhs_hippodrome
-							tier = 1
-						}
-						has_great_project = {
-							type = nhs_alexandrian_library
 							tier = 1
 						}
 						has_great_project = {
@@ -858,28 +861,35 @@ nhs_right_mid_start = {
 				}
 			}
 			else = {
-				any_owned_province = {
-					OR = {
-						has_great_project = {
-							type = nhs_cothon
-							tier = 1
-						}
-						has_province_modifier = nhs_seagate_guardians_tm
-						has_great_project = {
-							type = nhs_hippodrome
-							tier = 1
-						}
-						has_great_project = {
-							type = nhs_alexandrian_library
-							tier = 1
-						}
+				953 = {
+					has_great_project = {
+						type = nhs_hippodrome
+						tier = 1
+					}
+				}
+				2554 = {
+					has_great_project = {
+						type = nhs_alexandrian_library
+						tier = 1
+					}
+				}
+				950 = {
+					has_great_project = {
+						type = nhs_cothon
+						tier = 1
 					}
 				}
 			}
 		}
 		effect = {
-			set_country_flag = nhs_completed_wonders_of_elysium
-			custom_tooltip = nhs_200_splendor_each_era_tt
+			
+			#custom_tooltip = nhs_200_splendor_each_era_tt
+			add_prestige = 10
+			add_splendor = 100
+			add_country_modifier = {
+				name = nhs_expert_architects
+				duration = -1
+			}
 			chesapeake_area = {
 				add_base_tax = 1
 				add_base_production = 1
@@ -889,6 +899,7 @@ nhs_right_mid_start = {
 			# 	name = "building_spree"
 			# 	duration = 9125
 			# }
+			set_country_flag = nhs_completed_wonders_of_elysium
 		}
 	}
 
@@ -1232,32 +1243,18 @@ nhs_right_start = {
 		required_missions = { nhs_settling_mission }
 		provinces_to_highlight = {
 			has_discovered = ROOT
-			OR = {
-				# area = great_valley_area
-				area = south_appalachia_area
-				# province_id = 4889
-				province_id = 2563
-				province_id = 2548
-			}
+			to_ely_high_income_mission_is_gold_province = yes
 		}
 		trigger = { 
 			# monthly_income = 50
 			is_bankrupt = no
-			NOT = { inflation = 2 }
+			NOT = { inflation = 10 }
+			NOT = { num_of_loans = 1 }
 			NOT = { corruption = 0.1 }
-			OR = {
-				gold = 1
-				custom_trigger_tooltip = {
-					tooltip = nhs_high_income_mission_gold_province_tt
-					any_owned_province = {
-						OR = {
-							# area = great_valley_area
-							area = south_appalachia_area
-							# province_id = 4889
-							province_id = 2563
-							province_id = 2548
-						}
-					}
+			custom_trigger_tooltip = {
+				tooltip = nhs_high_income_mission_gold_province_tt
+				any_owned_province = {
+					to_ely_high_income_mission_is_gold_province = yes
 				}
 			}
 			OR = {
@@ -1272,25 +1269,42 @@ nhs_right_start = {
 				AND = {
 					estate_loyalty = {
 						estate = estate_burghers
-						loyalty = 60
+						loyalty = 50
 					}
 					NOT = {
 						estate_influence = {
 							estate = estate_burghers
-							influence = 60
+							influence = 50
 						}
 					}
 				}
 				estate_loyalty = {
 					estate = estate_burghers
-					loyalty = 90
+					loyalty = 70
 				}
 			}
 		}
 		effect = {
-			add_inflation = -2
+			add_inflation = -5
+			if = {
+				limit = {
+					any_owned_province = {
+						to_ely_high_income_mission_is_gold_province = yes
+					}
+				}
+				random_owned_province = {
+					limit = {
+						to_ely_high_income_mission_is_gold_province = yes
+					}
+					change_trade_goods = gold
+				}
+			}
+			else = {
+				custom_tooltip = nhs_high_income_mission_change_to_gold_tt
+			}
+			custom_tooltip = nhs_new_line_tt
 			add_country_modifier = {
-				name = "growing_economy"
+				name = "strong_treasury"
 				duration = 9125 #25 years
 			}
 			# If owns one of the target provinces spawn gold, otherwise spawn gold when acquired
@@ -1887,6 +1901,8 @@ nhs_centre_start = {
 		position = 4
 		trigger = { army_size = 80 }
 		effect = {
+			custom_tooltip = nhs_enable_invasion_decision_tt
+			custom_tooltip = nhs_new_line_tt
 			add_country_modifier = {
 				name = "army_enthusiasm"
 				duration = 9125 #25 years
