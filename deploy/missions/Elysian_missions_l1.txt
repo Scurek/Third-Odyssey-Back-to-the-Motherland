@@ -69,13 +69,14 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 		position = 2
 		trigger = {
 			OR = {
-				num_of_owned_provinces_with = {
-					value = 12
-					custom_trigger_tooltip = {
-						tooltip = nhs_is_native_culture_tt
-						native_culture = yes
-					}
-				}
+				# num_of_owned_provinces_with = {
+				# 	value = 12
+				# 	custom_trigger_tooltip = {
+				# 		tooltip = nhs_is_native_culture_tt
+				# 		native_culture = yes
+				# 	}
+				# }
+				num_of_cities = 12
 				calc_true_if = {
 					all_known_country = {
 						technology_group = north_american
@@ -153,19 +154,32 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			# }
 		}
 		effect = {
-			custom_tooltip = nhs_reduce_native_raids_tt
+			# custom_tooltip = nhs_reduce_native_raids_tt
 			define_advisor = {
 				type = fortification_expert
 				skill = 3
 				cost_multiplier = 0.25
 			}
+			custom_tooltip = nhs_new_line_tt
+			add_country_modifier = {
+				name = nhs_cheaper_fortifications
+				duration = 10950
+			}
 			if = {
 				limit = {
 					has_dlc = "Mandate of Heaven"
 				}
-				953 = {
+				chesapeake_area = {
+					add_devastation = -100
 					add_prosperity = 100
 				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			northeast_america_region = {
+				add_permanent_claim = ROOT
+			}
+			southeast_america_region = {
+				add_permanent_claim = ROOT
 			}
 			set_country_flag = nhs_completed_nhs_border_fortifications_mission
 		}
@@ -1046,6 +1060,13 @@ nhs_left_start = {
 			army_size = 10 #What you need to complete the mission, displayed for mission tooltip
 		}
 		effect = { #This is what you get after you finished your mission.
+			custom_tooltip = nhs_add_fort_manpower_tt
+			custom_tooltip = nhs_new_line_tt
+			hidden_effect = {
+				every_owned_province = {
+					nhs_handle_fort_manpower = yes
+				}
+			}
 			add_country_modifier = {
 				name = "thriving_arms_industry"
 				duration = 9125 #25 years
