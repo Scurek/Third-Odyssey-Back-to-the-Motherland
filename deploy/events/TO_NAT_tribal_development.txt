@@ -9,7 +9,7 @@ province_event = {
 	id = to_nat_tribal_development.1
 	title = to_nat_tribal_development.1.t
 	desc = to_nat_tribal_development.1.d
-	picture = LAND_MILITARY_eventPicture
+	picture = nat_LAND_MILITARY_eventPicture
 
 	is_triggered_only = yes
 
@@ -25,25 +25,8 @@ province_event = {
 			}
 			#
 			OR = {
-				AND = {
-					has_estate = estate_all_natives
-					NOT = { has_estate_privilege = nhs_native_priv_ancestral_land }
-					NOT = {
-						estate_loyalty = {
-							estate = estate_all_natives
-							loyalty = 30
-						}
-					}
-				}
-				AND = {
-					NOT = { has_estate = estate_all_natives }
-					NOT = {
-						has_global_modifier_value = {
-							which = native_assimilation
-							value = 1.0
-						}
-					}
-				}
+				to_nat_immidiate_displacement_condition_with_estate = yes
+				to_nat_displacement_condition_no_estate = yes
 			}
 		}
 		# 	NOT = { to_nat_province_has_same_native_culture = yes }
@@ -51,11 +34,13 @@ province_event = {
 
 	immediate = {
 		hidden_effect = {
+			log = "Tribal Dev. displacement (on colony finish) in [Root.GetName] by [Root.Owner.GetName]"
 			save_event_target_as = origin_province
 			to_nat_displace_tribal_development = {
 				PROVINCE_SCOPE = ROOT
 				COUNTRY_SCOPE = owner
 				FRACTION = 1
+				LOST_FRACTION = 0.20
 			}
 		}
 	}
@@ -63,6 +48,7 @@ province_event = {
 	option = {
 		name = to_nat_tribal_development.1.a
 		trigger = {
+			has_saved_event_target = displace_tribal_development_target
 			event_target:owner_of_the_province = {
 				event_target:displace_tribal_development_target = {
 					has_discovered = PREV
@@ -78,13 +64,16 @@ province_event = {
 	option = {
 		name = to_nat_tribal_development.1.a
 		trigger = {
-			NOT = {
-				event_target:owner_of_the_province = {
-					event_target:displace_tribal_development_target = {
-						has_discovered = PREV
+			OR = {
+				NOT = { has_saved_event_target = displace_tribal_development_target }
+				NOT = {
+					event_target:owner_of_the_province = {
+						event_target:displace_tribal_development_target = {
+							has_discovered = PREV
+						}
 					}
 				}
-			}	
+			}
 		}
 		to_nat_tribal_displacement_show_effect = {
 			PROVINCE_SCOPE = ROOT
@@ -96,8 +85,19 @@ province_event = {
 country_event = {
 	id = to_nat_tribal_development.2
 	title = to_nat_tribal_development.2.t
-	desc = to_nat_tribal_development.2.d
-	picture = LAND_MILITARY_eventPicture
+	desc = {
+		desc = to_nat_tribal_development.2.da
+		trigger = {
+			FROM = { owned_by = ROOT }
+		}
+	}
+	desc = {
+		desc = to_nat_tribal_development.2.db
+		trigger = {
+			NOT = { FROM = { owned_by = ROOT } }
+		}
+	}
+	picture = nat_SIEGE_eventPicture
 
 	is_triggered_only = yes
 
@@ -106,22 +106,20 @@ country_event = {
 	trigger = {
 		FROM = {
 			has_province_modifier = to_nat_tribal_development
-			check_variable = {
-				which = to_nat_local_tribal_development
-				value = 1
-			}
 		}
 	}
 
 	immediate = {
 		hidden_effect = {
+			log = "Tribal Dev. displacement (attacked natives) in [From.GetName] by [Root.GetName]"
 			FROM = {
 				save_event_target_as = origin_province
 			}
 			to_nat_displace_tribal_development = {
-				PROVINCE_SCOPE = ROOT
-				COUNTRY_SCOPE = owner
+				PROVINCE_SCOPE = FROM
+				COUNTRY_SCOPE = ROOT
 				FRACTION = 1
+				LOST_FRACTION = 0.30
 			}
 		}
 	}
@@ -168,31 +166,15 @@ country_event = {
 	id = to_nat_tribal_development.3
 	title = to_nat_tribal_development.3.t
 	desc = to_nat_tribal_development.3.d
-	picture = LAND_MILITARY_eventPicture
+	picture = nat_LAND_MILITARY_eventPicture
 
 	hidden = yes
 		
 	trigger = {
 		NOT = { is_native_government = yes }
 		OR = {
-			AND = {
-				has_estate = estate_all_natives
-				NOT = {
-					estate_loyalty = {
-						estate = estate_all_natives
-						loyalty = 30
-					}
-				}
-			}
-			AND = {
-				NOT = { has_estate = estate_all_natives }
-				NOT = {
-					has_global_modifier_value = {
-						which = native_assimilation
-						value = 1.0
-					}
-				}
-			}
+			to_nat_displacement_condition_with_estate = yes
+			to_nat_displacement_condition_no_estate = yes
 		}
 		any_owned_province = {
 			to_nat_province_displacement_origin_check = yes
@@ -200,7 +182,7 @@ country_event = {
 	}
 
 	mean_time_to_happen = {
-		months = 60
+		months = 36
 		# TODO think if some mtth modifiers
 		modifier = {
 			factor = 0.5
@@ -238,8 +220,23 @@ country_event = {
 province_event = {
 	id = to_nat_tribal_development.4
 	title = to_nat_tribal_development.4.t
-	desc = to_nat_tribal_development.4.d
-	picture = LAND_MILITARY_eventPicture
+	desc = {
+		desc = to_nat_tribal_development.4.da
+		trigger = {
+			owner = {
+				has_estate_privilege = nhs_native_priv_ancestral_land
+			}
+		}
+	}
+	desc = {
+		desc = to_nat_tribal_development.4.db
+		trigger = {
+			owner = {
+				NOT = { has_estate_privilege = nhs_native_priv_ancestral_land }
+			}
+		}
+	}
+	picture = nat_LAND_MILITARY_eventPicture
 
 	is_triggered_only = yes
 
@@ -247,6 +244,7 @@ province_event = {
 
 	immediate = {
 		hidden_effect = {
+			log = "Tribal Dev. displacement (overtime) in [Root.GetName] by [Root.Owner.GetName]"
 			save_event_target_as = origin_province
 			if = {
 				limit = {
@@ -259,6 +257,7 @@ province_event = {
 					PROVINCE_SCOPE = ROOT
 					COUNTRY_SCOPE = owner
 					FRACTION = 0.5
+					LOST_FRACTION = 0
 				}
 			}
 			else = {
@@ -266,6 +265,7 @@ province_event = {
 					PROVINCE_SCOPE = ROOT
 					COUNTRY_SCOPE = owner
 					FRACTION = 1
+					LOST_FRACTION = 0.20
 				}
 			}
 		}

@@ -18,6 +18,7 @@ reforms = [
     "to_native_reform_law_of_peace",
     "to_native_reform_grand_chiefdom",
     "to_native_reform_kingdom",
+    "to_native_reform_cahokian_dynasties",
     "to_native_reform_codified_power",
     "to_native_reform_government_power",
     "to_native_reform_higher_powers",

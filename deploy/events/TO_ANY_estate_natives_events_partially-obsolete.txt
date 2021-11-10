@@ -12,49 +12,40 @@ country_event = {
 	picture = NATIVE_CITY_VIEW_eventPicture
 	
 	#fire_only_once = yes
+
+	is_triggered_only = yes
 	
-	trigger = {
-		nhs_condition_all_ely = { KOMANDA = tag }
-		OR = {
-			culture_group = elysian_group
-			primary_culture = elysian
-		}
-		NOT = { has_country_flag = informed_native_council_enabled }
-		calc_true_if = {
-			all_core_province = {
-				continent = north_america
-				NOT = {
-					province_group = mesoamerica_pgroup
-				}
-				NOT = { region = central_america_region }
-				NOT = { has_province_modifier = nhs2_albanian_majority }
-				NOT = { has_province_modifier = nhs2_albanian_majority2 }
-				owned_by = ROOT
-				NOT = { culture = high_elysian }
-				is_capital = no
-			}
-			amount = 5
-		}
-	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
+	# trigger = {
+	# 	NOT = { has_country_flag = native_council_enabled_early }
+	# 	NOT = { has_country_flag = native_council_enabled_mid }
+	# 	NOT = { has_country_flag = native_council_enabled_late }
+	# 	nhs_check_all_exiles = { CONDITION = tag }
+	# 	NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+	# 	NOT = { nhs_check_all_spartan = { CONDITION = tag } }
+	# 	NOT = { is_subject_of_type = elysian_subject_varangian }
+	# 	num_of_cities = 5
+	# }
 	
 	immediate = {
-		set_country_flag = informed_native_council_enabled
-		province_recalculate_estate_privileges_effect_natives = yes
+		hidden_effect = {
+			# nhs_add_appropriate_native_estate_flag = yes
+			every_owned_province = {
+				province_recalculate_estate_privileges_effect_natives = yes
+			}
+		}
 	}
 	
 	option = {
 		name = natives_estate_events.100.a
 		custom_tooltip = nhs_enable_nat_estate_ely_tt
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			custom_tooltip = nhs_enable_nat_reform_tt
-		}
+		custom_tooltip = nhs_enable_nat_reform_tt
+		set_estate_privilege = nhs_native_priv_ancestral_land
+	}
+
+	option = {
+		name = natives_estate_events.100.b
+		custom_tooltip = nhs_enable_nat_estate_ely_tt
+		custom_tooltip = nhs_enable_nat_reform_tt
 	}
 }
 #For the Vinlanders
@@ -65,92 +56,91 @@ country_event = {
 	picture = NATIVE_CITY_VIEW_eventPicture
 	
 	#fire_only_once = yes
+
+	is_triggered_only = yes
 	
-	trigger = {
-		culture_group = norse_g
-		NOT = { has_country_flag = informed_native_council_enabled }
-		calc_true_if = {
-			all_core_province = {
-				continent = north_america
-				NOT = {
-					province_group = mesoamerica_pgroup
-				}
-				NOT = { region = central_america_region }
-				NOT = { has_province_modifier = nhs2_albanian_majority }
-				NOT = { has_province_modifier = nhs2_albanian_majority2 }
-				owned_by = ROOT
-				NOT = { culture = high_elysian }
-				is_capital = no
-			}
-			amount = 5
-		}
-	}
+	# trigger = {
+	# 	NOT = { has_country_flag = native_council_enabled_early }
+	# 	NOT = { has_country_flag = native_council_enabled_mid }
+	# 	NOT = { has_country_flag = native_council_enabled_late }
+	# 	nhs_check_all_vinland = { CONDITION = tag }
+	# 	num_of_cities = 3
+	# 	OR = {
+	# 		had_global_flag = { flag = nhs_visitors days = 90 }
+	# 		# Fallback, just in case
+	# 		is_year = 1455
+	# 	}
+	# }
 	
 	mean_time_to_happen = {
 		days = 1
 	}
 	
 	immediate = {
-		set_country_flag = informed_native_council_enabled
-		province_recalculate_estate_privileges_effect_natives = yes
+		hidden_effect = {
+			# nhs_add_appropriate_native_estate_flag = yes
+			every_owned_province = {
+				province_recalculate_estate_privileges_effect_natives = yes
+			}
+		}
 	}
 	
 	option = {
 		name = natives_estate_events.101.a
 		custom_tooltip = nhs_enable_nat_estate_nor_tt
+		set_estate_privilege = nhs_native_priv_ancestral_land
 	}
-}
-#For the rest of Elysians
-country_event = {
-	id = natives_estate_events.103
-	title = natives_estate_events.100.t
-	desc = natives_estate_events.100.d
-	picture = NATIVE_CITY_VIEW_eventPicture
-	
-	#fire_only_once = yes
-	hidden = yes
-	
-	trigger = {
-		OR = {
-			culture_group = elysian_group
-			primary_culture = elysian
-		}
-		NOT = { 
-			nhs_condition_all_ely = { KOMANDA = tag } 
-		}
-		NOT = { has_country_flag = informed_native_council_enabled }
-		calc_true_if = {
-			all_core_province = {
-				continent = north_america
-				NOT = {
-					province_group = mesoamerica_pgroup
-				}
-				NOT = { region = central_america_region }
-				NOT = { has_province_modifier = nhs2_albanian_majority }
-				NOT = { has_province_modifier = nhs2_albanian_majority2 }
-				owned_by = ROOT
-				NOT = { culture = high_elysian }
-				is_capital = no
-			}
-			amount = 5
-		}
-	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	immediate = {
-		set_country_flag = informed_native_council_enabled
-		province_recalculate_estate_privileges_effect_natives = yes
-	}
-	
+
 	option = {
-		name = natives_estate_events.101.a
-		custom_tooltip = nhs_enable_nat_estate_ely_tt
-		
+		name = natives_estate_events.101.b
+		custom_tooltip = nhs_enable_nat_estate_nor_tt
 	}
 }
+
+#For the rest of Elysians
+# country_event = {
+# 	id = natives_estate_events.103
+# 	title = natives_estate_events.103.t
+# 	desc = natives_estate_events.103.d
+# 	picture = NATIVE_CITY_VIEW_eventPicture
+	
+# 	#fire_only_once = yes
+# 	hidden = yes
+	
+# 	trigger = {
+# 		nhs_check_all_elysian_expanded = { CONDITION = tag }
+# 		NOT = {
+# 			nhs_condition_all_ely = { KOMANDA = tag } 
+# 		}
+# 		NOT = { has_country_flag = native_council_enabled_early }
+# 		NOT = { has_country_flag = native_council_enabled_mid }
+# 		NOT = { has_country_flag = native_council_enabled_late }
+# 		num_of_cities = 5
+# 		NOT = { has_institution = new_world_i }
+# 	}
+	
+# 	immediate = {
+# 		set_country_flag = native_council_enabled_early
+# 		hidden_effect = {
+# 			every_owned_province = {
+# 				province_recalculate_estate_privileges_effect_natives = yes
+# 			}
+# 		}
+# 	}
+
+# 	option = {
+# 		name = natives_estate_events.103.a
+# 		custom_tooltip = nhs_enable_nat_estate_ely_tt
+# 		custom_tooltip = nhs_enable_nat_reform_tt
+# 		set_estate_privilege = nhs_native_priv_ancestral_land
+# 	}
+
+# 	option = {
+# 		name = natives_estate_events.103.b
+# 		custom_tooltip = nhs_enable_nat_estate_ely_tt
+# 		custom_tooltip = nhs_enable_nat_reform_tt
+# 	}
+# }
 
 ###Events inspired by the Cossacks Estate events
 ##Colonization of the New World

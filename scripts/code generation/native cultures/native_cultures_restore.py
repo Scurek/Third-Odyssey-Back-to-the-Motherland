@@ -4,10 +4,8 @@ from cultures import *
 output_file = "output_restore_culture.txt"
 
 template_if = Template('''$if = {
-    limit = {
-        has_province_flag = nat_original_culture_$culture
-    }
-    change_culture = $culture
+    limit = { has_province_flag = nat_original_culture_$culture }
+    change_culture = $culture change_religion = totemism
 }
 ''')
 

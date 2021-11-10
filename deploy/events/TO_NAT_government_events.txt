@@ -958,11 +958,23 @@ country_event = {
 country_event = {
 	id = to_nat_governments.9
 	title = to_nat_governments.9.t
-	desc = to_nat_governments.9.d
+	desc = {
+		trigger = {
+			NOT = { has_ruler_flag = to_nat_has_native_council }
+		}
+		desc = to_nat_governments.9.da
+	}
+
+	desc = {
+		trigger = {
+			has_ruler_flag = to_nat_has_native_council
+		}
+		desc = to_nat_governments.9.db
+	}
 	picture = ELECTION_REPUBLICAN_eventPicture
 
 	is_triggered_only = yes
-		
+
 	trigger = {
 		OR = {
 			has_reform = to_native_reform_consensus_government
@@ -970,9 +982,14 @@ country_event = {
 		}
 		has_reform = to_native_reform_centralise_power
 		NOT = { has_country_flag = appointed_war_chief }
+		OR = {
+			NOT = { has_country_flag = to_nat_centralised_council_election_open }
+			had_country_flag = { flag = to_nat_centralised_council_election_open days = 365 }
+		}
 	}
 
 	immediate = {
+		set_country_flag = to_nat_centralised_council_election_open
 		hidden_effect = {
 			# Get cultures
 			random_owned_province = {
@@ -1070,11 +1087,18 @@ country_event = {
 			}
 		}
 	}
+
+	after = {
+		clr_country_flag = to_nat_centralised_council_election_open
+	}
 	
 	option = {
 		name = to_nat_governments.9.a
 		ai_chance = {
 			factor = 1
+		}
+		trigger = {
+			NOT = { has_ruler_flag = to_nat_has_native_council }
 		}
 		change_statists_vs_orangists = 0.20
 		random_list = {
@@ -1116,6 +1140,173 @@ country_event = {
 				NOT = { has_ruler_flag = to_nat_has_native_council }
 			}
 			to_assign_native_council = yes
+		}
+		else = {
+			clr_ruler_flag = to_nat_has_native_council
+			set_ruler_flag = to_nat_has_native_council
+		}
+	}
+}
+
+# Elections for Contralised Council
+country_event = {
+	id = to_nat_governments.13
+	title = to_nat_governments.13.t
+	desc = to_nat_governments.13.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			has_reform = to_native_reform_consensus_government
+			has_reform = to_native_reform_law_of_peace
+		}
+		has_reform = to_native_reform_centralise_power
+		had_ruler_flag = { flag = to_nat_has_native_council days = 2190 }
+		is_orangists_in_power = yes
+		NOT = { has_country_flag = appointed_war_chief }
+		OR = {
+			NOT = { has_country_flag = to_nat_centralised_council_election_open }
+			had_country_flag = { flag = to_nat_centralised_council_election_open days = 365 }
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = to_nat_centralised_council_election_open
+			# Get cultures
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_owner_culture = yes
+						has_owner_accepted_culture = yes
+					}
+				}
+				save_event_target_as = first_ruler_alternative_province
+				set_province_flag = to_nat_election_culture_target
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_owner_culture = yes
+						has_owner_accepted_culture = yes
+					}
+					NOT = { has_province_flag = to_nat_election_culture_target }
+				}
+				save_event_target_as = second_ruler_alternative_province
+				set_province_flag = to_nat_election_culture_target
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = first_ruler_alternative_province }
+				}
+				capital_scope = {
+					save_event_target_as = first_ruler_alternative_province
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = second_ruler_alternative_province }
+				}
+				capital_scope = {
+					save_event_target_as = second_ruler_alternative_province
+				}
+			}
+			# Define Rulers
+			if = {
+				limit = {
+					republic_with_female_rulers_trigger = yes
+				}
+				define_exiled_ruler = {
+					exiled_as = native_candidate_a_@ROOT
+					random_gender = yes
+					culture = event_target:first_ruler_alternative_province
+					religion = event_target:first_ruler_alternative_province
+					min_age = 40
+					max_age = 60
+					option = 0
+				}
+			}
+			else = {
+				define_exiled_ruler = {
+					exiled_as = native_candidate_a_@ROOT
+					culture = event_target:first_ruler_alternative_province
+					religion = event_target:first_ruler_alternative_province
+					min_age = 40
+					max_age = 60
+					option = 0
+				}
+			}
+			if = {
+				limit = {
+					republic_with_female_rulers_trigger = yes
+				}
+				define_exiled_ruler = {
+					exiled_as = native_candidate_b_@ROOT
+					culture = event_target:second_ruler_alternative_province
+					religion = event_target:second_ruler_alternative_province
+					min_age = 40
+					max_age = 60
+					random_gender = yes
+					option = 1
+				}
+			}
+			else = {
+				define_exiled_ruler = {
+					exiled_as = native_candidate_b_@ROOT
+					culture = event_target:second_ruler_alternative_province
+					religion = event_target:second_ruler_alternative_province
+					min_age = 30
+					max_age = 60
+					option = 1
+				}
+			}
+			# Clear flags
+			every_owned_province = {
+				limit = {
+					has_province_flag = to_nat_election_culture_target
+				}
+				clr_province_flag = to_nat_election_culture_target
+			}
+		}
+	}
+
+	after = {
+		clr_country_flag = to_nat_centralised_council_election_open
+	}
+	
+	option = {
+		name = to_nat_governments.9.b
+		ai_chance = {
+			factor = 1
+		}
+		set_ruler = native_candidate_a_@ROOT
+		custom_tooltip = to_nat_candidate_a_tt
+	}
+	option = {
+		name = to_nat_governments.9.c
+		ai_chance = {
+			factor = 1
+		}
+		set_ruler = native_candidate_b_@ROOT
+		custom_tooltip = to_nat_candidate_b_tt
+	}
+	option = { # council
+		name = to_nat_governments.9.e
+		ai_chance = {
+			factor = 1
+		}
+		change_statists_vs_orangists = -0.20
+		if = {
+			limit = {
+				NOT = { has_ruler_flag = to_nat_has_native_council }
+			}
+			to_assign_native_council = yes
+		}
+		else = {
+			clr_ruler_flag = to_nat_has_native_council
+			set_ruler_flag = to_nat_has_native_council
 		}
 	}
 }
@@ -1315,6 +1506,193 @@ country_event = {
 			}
 			to_assign_native_council = yes
 		}
+		else = {
+			clr_ruler_flag = to_nat_has_native_council
+			set_ruler_flag = to_nat_has_native_council
+		}
+	}
+}
+
+# Elections upon term for Great Chiefdom, monarchical
+country_event = {
+	id = to_nat_governments.11
+	title = to_nat_governments.11.t
+	desc = to_nat_governments.11.d
+	picture = ADVISOR_eventPicture
+
+	is_triggered_only = yes
+		
+	trigger = {
+		has_reform = to_native_reform_grand_chiefdom
+		has_government_attribute = to_nat_dynastic_elections
+		NOT = { has_country_flag = appointed_war_chief }
+	}
+
+	immediate = {
+		hidden_effect = {
+			# Get old ruler culture/religion
+			export_to_variable = {
+				variable_name = old_ruler_culture
+				value = ruler_culture
+			}
+			export_to_variable = {
+				variable_name = old_ruler_religion
+				value = ruler_religion
+			}
+			# Get cultures
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_owner_culture = yes
+						has_owner_accepted_culture = yes
+					}
+				}
+				save_event_target_as = first_ruler_alternative_province
+				set_province_flag = to_nat_election_culture_target
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_owner_culture = yes
+						has_owner_accepted_culture = yes
+					}
+					NOT = { has_province_flag = to_nat_election_culture_target }
+				}
+				save_event_target_as = second_ruler_alternative_province
+				set_province_flag = to_nat_election_culture_target
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = first_ruler_alternative_province }
+				}
+				capital_scope = {
+					save_event_target_as = first_ruler_alternative_province
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = second_ruler_alternative_province }
+				}
+				capital_scope = {
+					save_event_target_as = second_ruler_alternative_province
+				}
+			}			
+			# Clear flags
+			every_owned_province = {
+				limit = {
+					has_province_flag = to_nat_election_culture_target
+				}
+				clr_province_flag = to_nat_election_culture_target
+			}
+		}
+	}
+	
+	option = {
+		name = to_nat_governments.8.a
+		ai_chance = {
+			factor = 0
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = to_nat_chiefdom_dinasty_counter
+					value = 2
+				}
+			}
+			to_define_monarchy_chieftain = {
+				LEGITIMACY = 100
+			}
+		}
+		else_if = {
+			limit = { 
+				check_variable = {
+					which = to_nat_chiefdom_dinasty_counter
+					value = 1
+				}
+			}
+			to_define_monarchy_chieftain = {
+				LEGITIMACY = 80
+			}
+		}
+		else = {
+			to_define_monarchy_chieftain = {
+				LEGITIMACY = 60
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = to_nat_chiefdom_dinasty_counter
+				value = 1
+			}
+		}
+	}
+	option = {
+		name = to_nat_governments.8.b
+		ai_chance = {
+			factor = 0
+		}
+		if = {
+			limit = {
+				republic_with_female_rulers_trigger = yes
+			}
+			define_ruler = {
+				random_gender = yes
+				culture = event_target:first_ruler_alternative_province
+				religion = event_target:first_ruler_alternative_province
+				min_age = 50
+				max_age = 65
+				claim = 60
+			}
+		}
+		else = {
+			define_ruler = {
+				culture = event_target:first_ruler_alternative_province
+				religion = event_target:first_ruler_alternative_province
+				min_age = 50
+				max_age = 65
+				claim = 60
+			}
+		}
+		hidden_effect = {
+			set_variable = {
+				which = to_nat_chiefdom_dinasty_counter
+				value = 1
+			}
+		}
+	}
+	option = {
+		name = to_nat_governments.8.c
+		ai_chance = {
+			factor = 0
+		}
+		if = {
+			limit = {
+				republic_with_female_rulers_trigger = yes
+			}
+			define_ruler = {
+				culture = event_target:second_ruler_alternative_province
+				religion = event_target:second_ruler_alternative_province
+				min_age = 50
+				max_age = 65
+				random_gender = yes
+				claim = 60
+			}
+		}
+		else = {
+			define_ruler = {
+				culture = event_target:second_ruler_alternative_province
+				religion = event_target:second_ruler_alternative_province
+				min_age = 50
+				max_age = 65
+				claim = 60
+			}
+		}
+		hidden_effect = {
+			set_variable = {
+				which = to_nat_chiefdom_dinasty_counter
+				value = 1
+			}
+		}
 	}
 }
 
@@ -1349,3 +1727,4 @@ country_event = {
 		name = to_nat_governments.12.a
 	}
 }
+

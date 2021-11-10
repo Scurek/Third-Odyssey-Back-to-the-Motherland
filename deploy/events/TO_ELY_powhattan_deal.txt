@@ -50,118 +50,81 @@ country_event = {
 	
 	immediate = {
 		hidden_effect = {
-				if = {
-					limit = {
-						932 = {
+			capital_scope = {
+				save_event_target_as = nhs_pow_mig_origin
+			}
+			if = {
+				limit = {
+					932 = {
+						is_empty = yes
+					}
+				}
+				932 = {
+					save_event_target_as = nhs_pow_mig_tar
+				}
+			}
+			else_if = {
+				limit = {
+					932 = {
+						any_empty_neighbor_province = {
+							NOT = { nhs_homelands = yes }
 							is_empty = yes
 						}
 					}
-					932 = {
-						set_province_flag = nhs_pow_mig_tar
+				}
+				932 = {
+					random_empty_neighbor_province = {
+						save_event_target_as = nhs_pow_mig_tar
 					}
 				}
-				if = {
-					limit = {
-						NOT = {
-							932 = {
-								is_empty = yes
-							}
-						}
-						932 = {
+			}
+			else_if = {
+				limit = {
+					POW = {
+						any_owned_province = {
 							any_empty_neighbor_province = {
 								NOT = { nhs_homelands = yes }
-								is_empty = yes
 							}
 						}
 					}
-					932 = {
+				}
+				POW = {
+					random_owned_province = {
+						limit = {
+							any_empty_neighbor_province = {
+								NOT = { nhs_homelands = yes }
+							}
+						}
 						random_empty_neighbor_province = {
-							set_province_flag = nhs_pow_mig_tar
-						}
-					}
-				}
-				if = {
-					limit = {
-						NOT = {
-							932 = {
-								is_empty = yes
-							}
-						}
-						NOT = {
-							932 = {
-								any_empty_neighbor_province = {
-									NOT = { nhs_homelands = yes }
-									is_empty = yes
-								}
-							}
-						}
-						POW = {
-							any_owned_province = {
-								any_empty_neighbor_province = {
-									NOT = { nhs_homelands = yes }
-								}
-							}
-						}
-					}
-					POW = {
-						random_owned_province = {
-							limit = {
-								any_empty_neighbor_province = {
-									NOT = { nhs_homelands = yes }
-								}
-							}
-							random_empty_neighbor_province = {
-								set_province_flag = nhs_pow_mig_tar
-							}
-						}
-					}
-				}
-				if = {
-					limit = {
-						NOT = {
-							932 = {
-								is_empty = yes
-							}
-						}
-						NOT = {
-							932 = {
-								any_empty_neighbor_province = {
-									NOT = { nhs_homelands = yes }
-									is_empty = yes
-								}
-							}
-						}
-						NOT = {
-							POW = {
-								any_owned_province = {
-									any_empty_neighbor_province = {
-										NOT = { nhs_homelands = yes }
-									}
-								}
-							}
-						}
-						NHS = {
-							any_owned_province = {
-								any_empty_neighbor_province = {
-									NOT = { nhs_homelands = yes }
-								}
-							}
-						}
-					}
-					NHS = {
-						random_owned_province = {
-							limit = {
-								any_empty_neighbor_province = {
-									NOT = { nhs_homelands = yes }
-								}
-							}
-							random_empty_neighbor_province = {
-								set_province_flag = nhs_pow_mig_tar
-							}
+							save_event_target_as = nhs_pow_mig_tar
 						}
 					}
 				}
 			}
+			else_if = {
+				limit = {
+					NHS = {
+						any_owned_province = {
+							any_empty_neighbor_province = {
+								NOT = { nhs_homelands = yes }
+							}
+						}
+					}
+				}
+				NHS = {
+					random_owned_province = {
+						limit = {
+							any_empty_neighbor_province = {
+								NOT = { nhs_homelands = yes }
+							}
+						}
+						random_empty_neighbor_province = {
+							save_event_target_as = nhs_pow_mig_tar
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	option = {
@@ -170,21 +133,24 @@ country_event = {
 			NOT = { num_of_cities = 2 }
 		}
 		ai_chance = { factor = 100 }
-		random_province = {
-			limit = {
-				has_province_flag = nhs_pow_mig_tar
-			}
+		event_target:nhs_pow_mig_tar = {
+			cede_province = POW
+			add_core = ROOT
+			change_culture = ROOT
+			change_religion = ROOT
 			ROOT = {
 				set_capital = PREV
 			}
-			change_culture = ROOT
-			change_religion = ROOT
 			add_institution_embracement = {
 				which = "feudalism"
 				value = 50
 			}
-			cede_province = POW
-			add_core = ROOT
+			hidden_effect = {
+				to_nat_move_local_tribal_development = {
+					ORIGIN = event_target:nhs_pow_mig_origin
+					DESTINATION = event_target:nhs_pow_mig_tar
+				}
+			}
 		}
 		add_treasury = 200
 		add_adm_power = 100
@@ -212,27 +178,11 @@ country_event = {
 			}
 		}
 		NHS = { country_event = { id = nhs_powhatan_deal.3 days = 1 } }
-		hidden_effect = {
-			every_province = {
-				limit = {
-					has_province_flag = nhs_pow_mig_tar
-				}
-				clr_province_flag = nhs_pow_mig_tar
-			}
-		}
 	}
 	option = {
 		name = nhs_powhatan_deal.2.b # No
 		ai_chance = { factor = 0 }
 		NHS = { country_event = { id = nhs_powhatan_deal.4 days = 1 } }
-		hidden_effect = {
-			every_province = {
-				limit = {
-					has_province_flag = nhs_pow_mig_tar
-				}
-				clr_province_flag = nhs_pow_mig_tar
-			}
-		}
 	}
 }
 
@@ -268,12 +218,12 @@ country_event = {
 				remove_core = POW
 			}
 		}
-		952 = {
-			add_province_modifier = {
-				name = nhs2_settling
-				duration = 1095
-			}
-		}
+		# 952 = {
+		# 	add_province_modifier = {
+		# 		name = nhs2_settling
+		# 		duration = 1095
+		# 	}
+		# }
 		FROM = {
 			if = {
 				limit = {

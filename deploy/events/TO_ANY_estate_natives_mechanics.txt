@@ -37,7 +37,7 @@ country_event = {
 
 }
 
-# Set early flag (always for all exiles - except spartans who gets none, norse who immediatly get mid, and Elysia which needs to colonise some land)
+# Sets an appropriate native council estate flag and triggers an informative event with one day delay (have to do this because game only recalculates existing estates at the start of each day
 country_event = {
     id = nhs_all_natives_estates.2
 	title = nhs_all_natives_estates.2.t
@@ -55,26 +55,50 @@ country_event = {
             }
         }
 		nhs_check_all_exiles = { CONDITION = tag }
-        NOT = { nhs_check_all_vinland = { CONDITION = tag } }
-        NOT = { nhs_check_all_spartan = { CONDITION = tag } } 
+        NOT = { nhs_check_all_spartan = { CONDITION = tag } }
         OR = {
-            NOT = { tag = NHS }
-            num_of_cities = 5  # Elysia needs some land before natives become relevant
+            AND = {
+                NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+                NOT = { is_subject_of_type = elysian_subject_varangian }
+		        num_of_cities = 5
+            }
+            AND = {
+                nhs_check_all_vinland = { CONDITION = tag }
+                num_of_cities = 3
+                OR = {
+                    had_global_flag = { flag = nhs_visitors days = 90 }
+                    # Fallback, just in case
+                    is_year = 1455
+                }
+            }
         }
-        NOT = { has_institution = new_world_i }
 	}
 
     immediate = {
-		set_country_flag = native_council_enabled_early
-		clr_country_flag = native_council_enabled_mid
-		clr_country_flag = native_council_enabled_late
+		hidden_effect = {
+			nhs_add_appropriate_native_estate_flag = yes
+            if = {
+                limit = {
+                    nhs_check_all_vinland = { CONDITION = tag }
+                }
+                country_event = {
+                    id = natives_estate_events.101
+                    days = 1
+                }
+            }
+            else = {
+                country_event = {
+                    id = natives_estate_events.100
+                    days = 1
+                }
+            }
+		}
     }
 
 	option = {	
 		name = "Should not be visible!"
 		ai_chance = { factor = 100 }
 	}
-
 }
 
 # Set mid flag (except spartans who get none, always for norse, after colonialism for other exiles)
@@ -87,21 +111,14 @@ country_event = {
     hidden = yes
 
 	trigger = {
-        NOT = {
-            OR = {
-                has_country_flag = native_council_enabled_mid
-                has_country_flag = native_council_enabled_late
-            }
-        }
-        OR = {
-            nhs_check_all_vinland = { CONDITION = tag }
-            AND = {
-                nhs_check_all_exiles = { CONDITION = tag }
-                has_country_flag = native_council_enabled_early
-                has_institution = new_world_i
-            }
-        }
-        NOT = { nhs_check_all_spartan = { CONDITION = tag } } 
+        has_country_flag = native_council_enabled_early
+        NOT = { has_country_flag = native_council_enabled_mid }
+        NOT = { has_country_flag = native_council_enabled_late }
+        has_institution = new_world_i
+        nhs_check_all_exiles = { CONDITION = tag }
+		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+		NOT = { nhs_check_all_spartan = { CONDITION = tag } }
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 	}
 
     immediate = {
@@ -114,7 +131,6 @@ country_event = {
 		name = "Should not be visible!"
 		ai_chance = { factor = 100 }
 	}
-
 }
 
 # Set late flag (after global trade for all exiles, except for spartans who get none)
@@ -127,14 +143,13 @@ country_event = {
     hidden = yes
 
 	trigger = {
-        NOT = {
-            has_country_flag = native_council_enabled_late
-        }
-        AND = {
-            nhs_check_all_exiles = { CONDITION = tag }
+        OR = {
+            has_country_flag = native_council_enabled_early
             has_country_flag = native_council_enabled_mid
-            has_institution = global_trade
         }
+        NOT = { has_country_flag = native_council_enabled_late }
+        nhs_check_all_exiles = { CONDITION = tag }
+        has_institution = global_trade
         NOT = { nhs_check_all_spartan = { CONDITION = tag } } 
 	}
 
