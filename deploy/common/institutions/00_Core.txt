@@ -3329,7 +3329,24 @@ industrialization = {
 	}
 	
 	can_start = {
-		is_year = 1750
+		if = {
+			limit = {
+				owner = { nhs_condition_all_ely = { KOMANDA = tag } }
+			}
+			OR = {
+				is_year = 1750
+				AND = {
+					is_year = 1740
+					custom_trigger_tooltip = {
+						tooltip = nhs_has_completed_industrial_revolution_mission
+						owner = { has_country_flag = nhs_completed_industrial_revolution_mission }
+					}
+				}
+			}
+		}
+		else = {
+			is_year = 1750
+		}
 		is_in_capital_area = yes
 		is_island = no
 		is_state = yes
@@ -3341,47 +3358,123 @@ industrialization = {
 				has_dlc = "Rule Britannia"
 				NOT = { is_year = 1780 } #just in case no one develops their coal provinces
 			}
-			has_building = furnace
-			owner = {
+			if = {
+				limit = {
+					owner = { nhs_condition_all_ely = { KOMANDA = tag } }
+				}
 				OR = {
-					production_leader = {
-						trade_goods = iron
+					AND = {
+						province_id = 953
+						custom_trigger_tooltip = {
+							tooltip = nhs_has_completed_industrial_revolution_mission
+							owner = { has_country_flag = nhs_completed_industrial_revolution_mission }
+						}
 					}
-					production_leader = {
-						trade_goods = cloth
+					AND = {
+						has_building = furnace
+						owner = {
+							OR = {
+								production_leader = {
+									trade_goods = iron
+								}
+								production_leader = {
+									trade_goods = cloth
+								}
+								production_leader = {
+									trade_goods = coal
+								}
+								num_of_trading_bonuses = 3
+								is_year = 1770 #fallback
+							}
+						}
+						OR = {
+							highest_value_trade_node = yes
+							is_year = 1760 #fallback
+						}
 					}
-					production_leader = {
-						trade_goods = coal
-					}
-					num_of_trading_bonuses = 3
-					is_year = 1770 #fallback
 				}
 			}
-			OR = {
-				highest_value_trade_node = yes
-				is_year = 1760 #fallback
+			else = {
+				has_building = furnace
+				owner = {
+					OR = {
+						production_leader = {
+							trade_goods = iron
+						}
+						production_leader = {
+							trade_goods = cloth
+						}
+						production_leader = {
+							trade_goods = coal
+						}
+						num_of_trading_bonuses = 3
+						is_year = 1770 #fallback
+					}
+				}
+				OR = {
+					highest_value_trade_node = yes
+					is_year = 1760 #fallback
+				}
 			}
 		}
 		else = {
-			OR = {
-				has_building = weapons
-				has_building = textile
-			}
-			owner = {
+			if = {
+				limit = {
+					owner = { nhs_condition_all_ely = { KOMANDA = tag } }
+				}
 				OR = {
-					production_leader = {
-						trade_goods = iron
+					AND = {
+						province_id = 953
+						custom_trigger_tooltip = {
+							tooltip = nhs_has_completed_industrial_revolution_mission
+							owner = { has_country_flag = nhs_completed_industrial_revolution_mission }
+						}
 					}
-					production_leader = {
-						trade_goods = cloth
+					AND = {
+						OR = {
+							has_building = weapons
+							has_building = textile
+						}
+						owner = {
+							OR = {
+								production_leader = {
+									trade_goods = iron
+								}
+								production_leader = {
+									trade_goods = cloth
+								}
+								num_of_trading_bonuses = 3
+								is_year = 1770 #fallback
+							}
+						}
+						OR = {
+							highest_value_trade_node = yes
+							is_year = 1760 #fallback
+						}
 					}
-					num_of_trading_bonuses = 3
-					is_year = 1770 #fallback
 				}
 			}
-			OR = {
-				highest_value_trade_node = yes
-				is_year = 1760 #fallback
+			else = {
+				OR = {
+					has_building = weapons
+					has_building = textile
+				}
+				owner = {
+					OR = {
+						production_leader = {
+							trade_goods = iron
+						}
+						production_leader = {
+							trade_goods = cloth
+						}
+						num_of_trading_bonuses = 3
+						is_year = 1770 #fallback
+					}
+				}
+				OR = {
+					highest_value_trade_node = yes
+					is_year = 1760 #fallback
+				}
 			}
 		}
 	}
