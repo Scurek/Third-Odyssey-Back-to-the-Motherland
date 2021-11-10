@@ -1515,6 +1515,65 @@ to_nat_assimilate_local_tribal_development = {
 	}
 }
 
+to_nat_move_local_tribal_development = {
+	$ORIGIN$ = {
+		set_variable = { which = to_nat_moved_tribal_tax which = to_nat_local_tribal_tax }
+		set_variable = { which = to_nat_moved_tribal_production which = to_nat_local_tribal_production }
+		set_variable = { which = to_nat_moved_tribal_manpower which = to_nat_local_tribal_manpower }
+		to_nat_reduce_base_development = {
+			TYPE = tax
+			AMOUNT_VARIABLE = to_nat_moved_tribal_tax
+		}
+		to_nat_reduce_base_development = {
+			TYPE = production
+			AMOUNT_VARIABLE = to_nat_moved_tribal_production
+		}
+		to_nat_reduce_base_development = {
+			TYPE = manpower
+			AMOUNT_VARIABLE = to_nat_moved_tribal_manpower
+		}
+		$DESTINATION$ = {
+			set_variable = { which = to_nat_moved_tribal_tax which = PREV }
+			set_variable = { which = to_nat_moved_tribal_production which = PREV }
+			set_variable = { which = to_nat_moved_tribal_manpower which = PREV }
+			to_nat_increase_base_development = {
+				TYPE = tax
+				AMOUNT_VARIABLE = to_nat_moved_tribal_tax
+			}
+			to_nat_increase_base_development = {
+				TYPE = production
+				AMOUNT_VARIABLE = to_nat_moved_tribal_production
+			}
+			to_nat_increase_base_development = {
+				TYPE = manpower
+				AMOUNT_VARIABLE = to_nat_moved_tribal_manpower
+			}
+			to_nat_clear_local_tribal_development = yes
+			if = {
+				limit = {
+					to_nat_can_have_tribal_development_province = yes
+				}
+				change_variable = { which = to_nat_local_tribal_tax which = to_nat_moved_tribal_tax }
+				change_variable = { which = to_nat_local_tribal_production which = to_nat_moved_tribal_production }
+				change_variable = { which = to_nat_local_tribal_manpower which = to_nat_moved_tribal_manpower }
+				set_variable = { which = to_nat_local_tribal_development value = 0 }
+				change_variable = { which = to_nat_local_tribal_development which = to_nat_local_tribal_tax }
+				change_variable = { which = to_nat_local_tribal_development which = to_nat_local_tribal_production }
+				change_variable = { which = to_nat_local_tribal_development which = to_nat_local_tribal_manpower }
+				if = {
+					limit = {
+						NOT = { has_province_modifier = to_nat_tribal_development }
+					}
+					add_permanent_province_modifier = {
+						name = to_nat_tribal_development
+						duration = -1
+					}
+				}
+			}
+		}
+	}	
+}
+
 to_nat_clear_local_tribal_development = {
 	set_variable = {
 		which = to_nat_local_tribal_tax
@@ -1926,7 +1985,7 @@ to_nat_displace_tribal_development = {
 		# Substract a quarter of development
 		to_nat_tribal_development_remove_fraction = {
 			DEVELOPMENT_VARIABLE = tribal_development_moved
-			FRACTION = 0.25
+			FRACTION = $LOST_FRACTION$
 			VARIABLE_TAX_DECREASE = tribal_tax_moved
 			VARIABLE_PRODUCTION_DECREASE = tribal_production_moved
 			VARIABLE_MANPOWER_DECREASE = tribal_manpower_moved
@@ -2010,56 +2069,17 @@ to_nat_displace_tribal_development = {
 						which = $PROVINCE_SCOPE$
 					}
 					####
-					set_variable = {
-						which = tribal_tax_gain
-						which = tribal_tax_moved
+					to_nat_increase_base_development = {
+						TYPE = tax
+						AMOUNT_VARIABLE = tribal_tax_moved
 					}
-					while = {
-						limit = {
-							check_variable = {
-								which = tribal_tax_gain
-								value = 1
-							}
-						}
-						change_variable = {
-							which = tribal_tax_gain
-							value = -1
-						}
-						add_base_tax = 1
+					to_nat_increase_base_development = {
+						TYPE = production
+						AMOUNT_VARIABLE = tribal_production_moved
 					}
-					set_variable = {
-						which = tribal_production_gain
-						which = tribal_production_moved
-					}
-					while = {
-						limit = {
-							check_variable = {
-								which = tribal_production_gain
-								value = 1
-							}
-						}
-						change_variable = {
-							which = tribal_production_gain
-							value = -1
-						}
-						add_base_production = 1
-					}
-					set_variable = {
-						which = tribal_manpower_gain
-						which = tribal_manpower_moved
-					}
-					while = {
-						limit = {
-							check_variable = {
-								which = tribal_manpower_gain
-								value = 1
-							}
-						}
-						change_variable = {
-							which = tribal_manpower_gain
-							value = -1
-						}
-						add_base_manpower = 1
+					to_nat_increase_base_development = {
+						TYPE = manpower
+						AMOUNT_VARIABLE = tribal_manpower_moved
 					}
 					if = {
 						limit = {
@@ -2128,6 +2148,27 @@ to_nat_add_temporary_depopulation = {
 			name = to_nat_province_depopulated
 			duration = 5475
 		}
+	}
+}
+
+
+to_nat_increase_base_development = {
+	set_variable = {
+		which = to_nat_increase_development_counter
+		which = $AMOUNT_VARIABLE$
+	}
+	while = {
+		limit = {
+			check_variable = {
+				which = to_nat_increase_development_counter
+				value = 1
+			}
+		}
+		change_variable = {
+			which = to_nat_increase_development_counter
+			value = -1
+		}
+		add_base_$TYPE$ = 1
 	}
 }
 
