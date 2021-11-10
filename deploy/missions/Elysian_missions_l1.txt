@@ -72,13 +72,6 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 		position = 2
 		trigger = {
 			OR = {
-				# num_of_owned_provinces_with = {
-				# 	value = 12
-				# 	custom_trigger_tooltip = {
-				# 		tooltip = nhs_is_native_culture_tt
-				# 		native_culture = yes
-				# 	}
-				# }
 				num_of_cities = 12
 				calc_true_if = {
 					all_known_country = {
@@ -133,36 +126,44 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			}
 		}
 		trigger = {
-			elysian_fortification_pgroup = {
-				type = all
-				country_or_subject_or_ally_holds = { TAG = ROOT }
-				OR = {
-					has_influencing_fort = yes	
-					any_neighbor_province = {
-						has_influencing_fort = yes
-						country_or_subject_or_ally_holds = { TAG = ROOT }
-					}
-				}
-			}
-			# custom_trigger_tooltip = {
-			# 	tooltip = nhs_has_border_fortifications_tt
-			# 	NOT = {
-			# 		elysian_fortification_pgroup = {
-			# 			NOT = {
-			# 				AND = {
-			# 					country_or_subject_or_ally_holds = { TAG = ROOT }
-			# 					OR = {
-			# 						has_influencing_fort = yes	
-			# 						any_neighbor_province = {
-			# 							has_influencing_fort = yes
-			# 							country_or_subject_or_ally_holds = { TAG = ROOT }
-			# 						}
-			# 					}
-			# 				}
-			# 			}
+			# elysian_fortification_pgroup = {
+			# 	type = all
+			# 	is_empty = no
+			# 	country_or_subject_or_ally_holds = { TAG = ROOT }
+			# 	OR = {
+			# 		has_influencing_fort = yes	
+			# 		any_neighbor_province = {
+			# 			has_influencing_fort = yes
+			# 			country_or_subject_or_ally_holds = { TAG = ROOT }
 			# 		}
 			# 	}
 			# }
+			custom_trigger_tooltip = {
+				tooltip = nhs_border_fortifications_mission_trigger_tt
+				OR = {
+					# Let us not keep checking this
+					has_country_flag = nhs_completed_nhs_border_fortifications_mission
+					NOT = {
+						any_province = {
+							province_group = elysian_fortification_pgroup
+							OR = {
+								is_empty = yes
+								NOT = { country_or_subject_or_ally_holds = { TAG = ROOT } }
+								AND = {
+									NOT = { has_influencing_fort = yes }
+									NOT = {
+										any_neighbor_province = {
+											has_influencing_fort = yes
+											is_empty = no
+											country_or_subject_or_ally_holds = { TAG = ROOT }
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		effect = {
 			set_country_flag = nhs_completed_nhs_border_fortifications_mission
@@ -203,6 +204,7 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 		required_missions = { nhs_border_fortifications_mission }
 		position = 4
 		provinces_to_highlight = {
+			has_discovered = ROOT
 			OR = {
 				AND = {
 					OR = {
@@ -214,26 +216,18 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 				AND = {
 					region = carribeans_region
 					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					NOT = {
-						ROOT = {
-							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-								region = carribeans_region 
-								value = 5
-							}
-						}
-					}
+					# NOT = {
+					# 	ROOT = {
+					# 		num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					# 			region = carribeans_region 
+					# 			value = 5
+					# 		}
+					# 	}
+					# }
 				}
 			}
 		}
 		trigger = {
-			# northeast_america_region = {
-			# 	type = all
-			# 	country_or_subject_or_ally_holds = { TAG = ROOT }
-			# }
-			# southeast_america_region = {
-			# 	type = all
-			# 	country_or_subject_or_ally_holds = { TAG = ROOT }
-			# }
 			calc_true_if = {
 				amount = 55
 				all_province = {
@@ -241,12 +235,13 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 						region = northeast_america_region
 						region = southeast_america_region
 					}
-					country_or_subject_or_ally_holds = { TAG = ROOT }
+					# country_or_subject_or_ally_holds = { TAG = ROOT }
+					country_or_subject_holds = ROOT
 				}
 			}
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				region = carribeans_region 
 				value = 5
+				region = carribeans_region
 			}
 		}
 		effect = {
