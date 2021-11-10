@@ -212,16 +212,6 @@ country_event = {
 			}
 		}
 	}
-
-	
-	immediate = {
-		hidden_effect = {
-			random_list = {
-				80 = { set_country_flag = growing_influence_nobles_10 }
-				20 = { set_country_flag = growing_influence_nobles_20 }
-			}
-		}
-	}
 	
 	mean_time_to_happen = {
 		days = 1
@@ -230,26 +220,11 @@ country_event = {
 
 	option = {
 		name = nhs_nobles_estate_events.2.a #Ok
-		trigger_switch = {
-			on_trigger = has_country_flag
-			growing_influence_nobles_10 = {
-				add_estate_influence_modifier = {
-					estate = estate_nhs_nobles
-					desc = EST_VAL_NOBILITY_ADVANCES
-					influence = 10
-					duration = 5475
-				}
-				clr_country_flag = growing_influence_nobles_10
-			}
-			growing_influence_nobles_20 = {
-				add_estate_influence_modifier = {
-					estate = estate_nhs_nobles
-					desc = EST_VAL_NOBILITY_ADVANCES_20
-					influence = 20
-					duration = 5475
-				}
-				clr_country_flag = growing_influence_nobles_20
-			}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_nobles
+			desc = EST_VAL_NOBILITY_ADVANCES
+			influence = 10
+			duration = 5475
 		}
 	}
 }
@@ -260,12 +235,13 @@ country_event = {
 	title = nhs_nobles_estate_events.3.t
 	desc = nhs_nobles_estate_events.3.d
 	picture = ADVISOR_eventPicture
+
+	goto = noble_encroachment
 	
 	trigger = {
 		has_estate = estate_nhs_nobles
 		num_of_cities = 15
 		any_owned_province = {
-			NOT = { has_estate = yes }
 			is_overseas = no
 			is_capital = no
 			is_colony = no
@@ -280,14 +256,13 @@ country_event = {
 		hidden_effect = {
 			random_owned_province = {
 				limit = {
-					NOT = { has_estate = yes }
 					is_capital = no
 					is_overseas = no
 					is_colony = no
 					has_seat_in_parliament = no
 					is_territory = no
 				}
-				set_province_flag = noble_encroachment
+				save_event_target_as = noble_encroachment
 			}
 		}
 	}
@@ -317,7 +292,7 @@ country_event = {
 				factor = 0.25
 				estate_territory = {
 					estate = estate_nhs_nobles
-					territory = 0.12
+					territory = 12
 				}
 			}
 			modifier = {
@@ -337,13 +312,10 @@ country_event = {
 				}
 			}
 		}
-		random_owned_province = {
-			limit = {
-				has_province_flag = noble_encroachment
-			}
-			#set_estate = estate_nhs_nobles
-			clr_province_flag = noble_encroachment
+		event_target:noble_encroachment = {
+			add_local_autonomy = 25
 		}
+		give_estate_land_share_small = { estate = estate_nhs_nobles }
 	}
 	option = {
 		name = nhs_nobles_estate_events.3.b #Take it Back.
@@ -368,10 +340,7 @@ country_event = {
 				}
 			}
 		}
-		random_owned_province = {
-			limit = {
-				has_province_flag = noble_encroachment
-			}
+		event_target:noble_encroachment = {
 			random_list = {
 				50 = {
 					spawn_rebels = {
@@ -381,7 +350,6 @@ country_event = {
 				}
 				50 = {  }
 			}
-			clr_province_flag = noble_encroachment
 		}
 		add_estate_loyalty = {
 			estate = estate_nhs_nobles
@@ -399,9 +367,14 @@ country_event = {
 	
 	trigger = {
 		has_estate = estate_nhs_nobles
+		estate_territory = { 
+			estate = estate_nhs_nobles
+			territory = 1
+		}
 		any_owned_province = {
-			has_estate = estate_nhs_nobles
+			is_territory = no
 			base_tax = 2
+			is_city = yes
 		}
 	}
 	
@@ -434,8 +407,9 @@ country_event = {
 		}
 		random_owned_province = {
 			limit = {
-				has_estate = estate_nhs_nobles
+				is_territory = no
 				base_tax = 2
+				is_city = yes
 			}
 			add_base_tax = -1
 		}
@@ -816,8 +790,9 @@ country_event = {
 				loyalty = 30
 			}
 		}
-		any_owned_province = {
-			has_estate = estate_nhs_nobles
+		estate_territory = { 
+			estate = estate_nhs_nobles
+			territory = 10
 		}
 		NOT = {
 			has_estate_influence_modifier = {
@@ -831,57 +806,45 @@ country_event = {
 				modifier = EST_VAL_NOBLES_DENIED_RIGHTS
 			}
 		}
+		any_owned_province = {
+			is_territory = no
+			is_capital = no
+			is_city = yes
+		}
 	}
 	
 	is_triggered_only = yes
 	
 	immediate = {
 		hidden_effect = {
-			random_owned_province = {
+			while = {
 				limit = {
-					has_estate = estate_nhs_nobles
+					NOT = { 
+						development_in_provinces = {
+							has_province_flag = noble_estate_revolt
+							value = estate
+							estate = estate_nobles
+						}
+					}
+					any_owned_province = {
+						is_territory = no
+						is_capital = no
+						is_city = yes
+						NOT = { has_province_flag = noble_estate_revolt }
+					}
+					check_reducing_estate_revolt_size_trigger = {
+						FLAG = noble_estate_revolt
+					}
 				}
-				set_province_flag = noble_estate_revolt
-			}
-			random_owned_province = {
-				limit = {
-					has_estate = estate_nhs_nobles
-					NOT = { has_province_flag = noble_estate_revolt }
-					owner = { num_of_cities = 8 }
+				random_owned_province = {
+					limit = {
+						is_territory = no
+						is_capital = no
+						is_city = yes
+						NOT = { has_province_flag = noble_estate_revolt }
+					}
+					set_province_flag = noble_estate_revolt
 				}
-				set_province_flag = noble_estate_revolt
-			}
-			random_owned_province = {
-				limit = {
-					has_estate = estate_nhs_nobles
-					NOT = { has_province_flag = noble_estate_revolt }
-					owner = { num_of_cities = 14 }
-				}
-				set_province_flag = noble_estate_revolt
-			}
-			random_owned_province = {
-				limit = {
-					has_estate = estate_nhs_nobles
-					NOT = { has_province_flag = noble_estate_revolt }
-					owner = { num_of_cities = 18 }
-				}
-				set_province_flag = noble_estate_revolt
-			}
-			random_owned_province = {
-				limit = {
-					has_estate = estate_nhs_nobles
-					NOT = { has_province_flag = noble_estate_revolt }
-					owner = { num_of_cities = 25 }
-				}
-				set_province_flag = noble_estate_revolt
-			}
-			random_owned_province = {
-				limit = {
-					has_estate = estate_nhs_nobles
-					NOT = { has_province_flag = noble_estate_revolt }
-					owner = { num_of_cities = 30 }
-				}
-				set_province_flag = noble_estate_revolt
 			}
 		}
 	}
@@ -902,7 +865,7 @@ country_event = {
 			duration = 5475
 		}
 		every_owned_province = {
-			limit = { has_estate = estate_nhs_nobles }
+			limit = { has_province_flag = noble_estate_revolt }
 			add_local_autonomy = 33
 		}
 		hidden_effect = {
@@ -1697,8 +1660,14 @@ country_event = {
 			estate = estate_nhs_nobles
 			influence = 60
 		}
+		estate_territory = { 
+			estate = estate_nhs_nobles
+			territory = 1
+		}
 		any_owned_province = {
-			has_estate = estate_nhs_nobles
+			is_territory = no
+			is_city = yes
+			culture_group = ROOT
 		}
 	}
 
@@ -1723,7 +1692,11 @@ country_event = {
 				}
 			}
 			random_owned_province = {
-				limit = { has_estate = estate_nhs_nobles }
+				limit = {
+					is_territory = no
+					is_city = yes
+					culture_group = ROOT
+				}
 				save_event_target_as = noble_province
 			}
 		}
