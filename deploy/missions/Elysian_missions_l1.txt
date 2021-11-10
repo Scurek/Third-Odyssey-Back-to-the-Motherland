@@ -20,6 +20,7 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			owns_or_non_sovereign_subject_of = 952
 		}
 		effect = {
+			set_country_flag = nhs_completed_take_powhatan
 			if = {
 				limit = {
 					NOT = {
@@ -56,6 +57,8 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 					add_mil_power = 50
 				}
 			}
+			custom_tooltip = nhs_new_line_tt
+			to_ely_true_nation_mission_trigger_reduce = yes
 		}
 	}
 
@@ -96,15 +99,17 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			}
 		}
 		effect = {
+			set_country_flag = nhs_completed_nhs_diplomacy_mission
 			custom_tooltip = nhs_unlocks_mercs_tt
+			clr_country_flag = nhs_locked_native_mercenaries
 			custom_tooltip = nhs_new_line_tt
 			define_advisor = {
 				type = diplomat
 				skill = 3
 				cost_multiplier = 0.25
 			}
-			clr_country_flag = nhs_locked_native_mercenaries
-			set_country_flag = nhs_completed_nhs_diplomacy_mission
+			custom_tooltip = nhs_new_line_tt
+			to_ely_true_nation_mission_trigger_reduce = yes
 		}
 	}
 
@@ -160,6 +165,7 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			# }
 		}
 		effect = {
+			set_country_flag = nhs_completed_nhs_border_fortifications_mission
 			# custom_tooltip = nhs_reduce_native_raids_tt
 			define_advisor = {
 				type = fortification_expert
@@ -187,7 +193,8 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			southeast_america_region = {
 				add_permanent_claim = ROOT
 			}
-			set_country_flag = nhs_completed_nhs_border_fortifications_mission
+			custom_tooltip = nhs_new_line_tt
+			to_ely_true_nation_mission_trigger_reduce = yes
 		}
 	}
 
@@ -243,13 +250,15 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			}
 		}
 		effect = {
+			set_country_flag = nhs_completed_nhs_unite_home_region_mission
 			add_prestige = 20
 			custom_tooltip = nhs_unlock_our_place_in_the_sun_cb_tt
 			custom_tooltip = nhs_new_line_tt
 			carribeans_region = {
 				add_permanent_claim = ROOT
-			}
-			set_country_flag = nhs_completed_nhs_unite_home_region_mission
+			}	
+			custom_tooltip = nhs_new_line_tt
+			to_ely_true_nation_mission_trigger_reduce = yes
 		}
 	}
 
@@ -309,6 +318,7 @@ nhs_right_mid_start = {
 			}
 		}
 		effect = {
+			set_country_flag = nhs_completed_control_the_elysian_homelands
 			add_adm_power = 50
 			# 953 = {
 			# 	add_base_tax = 1
@@ -357,7 +367,9 @@ nhs_right_mid_start = {
 						duration = 7300
 					}
 				}
+				custom_tooltip = nhs_new_line_tt
 			}
+			to_ely_true_nation_mission_trigger_reduce = yes
 			# every_owned_province = {
 				# limit = {
 					# nhs_homelands_no_capital = yes
@@ -470,6 +482,7 @@ nhs_right_mid_start = {
 			# 2553, 953  , 2011, 2550  , 2549, 952  , 955, 2554	
 		}
 		effect = {
+			set_country_flag = nhs_completed_nhs_aqueducts_mission
 			add_prestige = 10
 			if = {
 				limit = {
@@ -650,6 +663,7 @@ nhs_right_mid_start = {
 			hidden_effect = {
 				nhs_initiate_homelands_building_counter = yes
 			}
+			to_ely_true_nation_mission_trigger_reduce = yes
 		}
 	}
 	# nhs_build_treasury = {
@@ -696,6 +710,11 @@ nhs_right_mid_start = {
 					}
 				}
 			}
+			# chesapeake_area = {
+			# 	type = all
+			# 	owned_by = ROOT
+			# 	num_of_buildings_in_province = 2
+			# }
 			OR = {
 				adm_tech = 13
 				AND = {
@@ -815,6 +834,8 @@ nhs_right_mid_start = {
 			hidden_effect = {
 				nhs_end_homelands_building_counter = yes
 			}
+			custom_tooltip = nhs_new_line_tt
+			to_ely_true_nation_mission_trigger_reduce = yes
 		}
 	}
 
@@ -882,7 +903,7 @@ nhs_right_mid_start = {
 			}
 		}
 		effect = {
-			
+			set_country_flag = nhs_completed_wonders_of_elysium
 			#custom_tooltip = nhs_200_splendor_each_era_tt
 			add_prestige = 10
 			add_splendor = 100
@@ -899,7 +920,9 @@ nhs_right_mid_start = {
 			# 	name = "building_spree"
 			# 	duration = 9125
 			# }
-			set_country_flag = nhs_completed_wonders_of_elysium
+			
+			custom_tooltip = nhs_new_line_tt
+			to_ely_true_nation_mission_trigger_reduce = yes
 		}
 	}
 
@@ -1719,17 +1742,80 @@ nhs_centre_start = {
 					has_country_modifier = nhs_handicap_settlers
 					NOT = { has_country_flag = nhs_settled_mission }
 				}
-				OR = {
-					is_year = 1520
-					custom_trigger_tooltip = {
-						has_country_flag = nhs_aqueducts_finished
-						tooltip = nhs_settling_counteraque
+				if = {
+					limit = {
+						check_variable = {
+							which = nhs_early_missions_completed
+							value = 8
+						}
 					}
-					AND = {
-						is_year = 1500
-						num_of_cities = 5
-						stability = 1
+					to_ely_true_nation_mission_trigger_year = { YEAR = 1480 }
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							which = nhs_early_missions_completed
+							value = 7
+						}
 					}
+					to_ely_true_nation_mission_trigger_year = { YEAR = 1485 }
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							which = nhs_early_missions_completed
+							value = 6
+						}
+					}
+					to_ely_true_nation_mission_trigger_year = { YEAR = 1490 }
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							which = nhs_early_missions_completed
+							value = 5
+						}
+					}
+					to_ely_true_nation_mission_trigger_year = { YEAR = 1495 }
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							which = nhs_early_missions_completed
+							value = 4
+						}
+					}
+					to_ely_true_nation_mission_trigger_year = { YEAR = 1500 }
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							which = nhs_early_missions_completed
+							value = 3
+						}
+					}
+					to_ely_true_nation_mission_trigger_year = { YEAR = 1505 }
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							which = nhs_early_missions_completed
+							value = 2
+						}
+					}
+					to_ely_true_nation_mission_trigger_year = { YEAR = 1510 }
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							which = nhs_early_missions_completed
+							value = 1
+						}
+					}
+					to_ely_true_nation_mission_trigger_year = { YEAR = 1515 }
+				}
+				else = {
+					to_ely_true_nation_mission_trigger_year = { YEAR = 1520 }
 				}
 			}
 		}
