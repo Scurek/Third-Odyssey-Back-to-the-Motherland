@@ -639,6 +639,10 @@ province_event = {
 	mean_time_to_happen = {
 		days = 1
 	}
+
+	after = {
+		clr_province_flag = rival_settlements
+	}
 	
 	option = {
 		name = "colonial.EVTOPTA10"
@@ -668,6 +672,10 @@ province_event = {
 	
 	mean_time_to_happen = {
 		days = 1
+	}
+
+	after = {
+		clr_province_flag = rival_settlements
 	}
 	
 	option = {
@@ -1120,29 +1128,56 @@ province_event = {
 }
 
 #Growth of Natural Port into CoT
-province_event = {
+country_event = {
 	id = colonial.19
 	title = "colonial.19.t"
 	desc = "colonial.19.d"
 	picture = CITY_DEVELOPMENT_eventPicture
+
+	goto = colonial_19_target_province
 	
 	trigger = {
-		province_has_center_of_trade_of_level = 1
-		has_port = yes
-		NOT = { province_has_center_of_trade_of_level = 2 }
-		OR = {
-			development = 15
-			has_building = marketplace
-			feudalism = 100
+		NOT = { has_dlc = "Dharma" }
+		stability = 1
+		has_institution = feudalism
+		any_owned_province = {
+			province_has_center_of_trade_of_level = 1
+			has_port = yes
+			NOT = { province_has_center_of_trade_of_level = 2 }
+			NOT = { province_id = 953 }
+			OR = {
+				development = 15
+				has_building = marketplace
+				feudalism = 100
+			}
+			OR = {
+				continent = new_world
+				continent = north_america
+				continent = south_america
+			}
 		}
-		owner = {
-			stability = 1
-			has_institution = feudalism
-		}
-		OR = {
-			continent = new_world
-			continent = north_america
-			continent = south_america
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					province_has_center_of_trade_of_level = 1
+					has_port = yes
+					NOT = { province_has_center_of_trade_of_level = 2 }
+					OR = {
+						development = 15
+						has_building = marketplace
+						feudalism = 100
+					}
+					OR = {
+						continent = new_world
+						continent = north_america
+						continent = south_america
+					}
+				}
+				save_event_target_as = colonial_19_target_province
+			}
 		}
 	}
 	
@@ -1151,32 +1186,32 @@ province_event = {
 		
 		modifier = {
 			factor = 0.9
-			owner = { full_idea_group = trade_ideas }
+			full_idea_group = trade_ideas
 		}
 		modifier = {
 			factor = 0.9
-			owner = { stability = 3 }
+			stability = 3
 		}
 		modifier = {
 			factor = 0.7
-			owner = { has_institution = global_trade }
+			has_institution = global_trade
 		}
-		modifier = {
-			factor = 0.8
-			development = 20
-		}
-		modifier = {
-			factor = 0.7
-			has_building = trade_depot
-		}
-		modifier = {
-			factor = 0.9
-			has_building = dock
-		}
-		modifier = {
-			factor = 0.5
-			development = 30
-		}
+		# modifier = {
+		# 	factor = 0.8
+		# 	development = 20
+		# }
+		# modifier = {
+		# 	factor = 0.7
+		# 	has_building = trade_depot
+		# }
+		# modifier = {
+		# 	factor = 0.9
+		# 	has_building = dock
+		# }
+		# modifier = {
+		# 	factor = 0.5
+		# 	development = 30
+		# }
 		modifier = {
 			factor = 0.95
 			current_age = age_of_reformation
@@ -1193,7 +1228,13 @@ province_event = {
 	
 	option = {
 		name = "colonial.19.a"
-
-		add_center_of_trade_level = 1
+		event_target:colonial_19_target_province = {
+			if = {
+				limit = {
+					NOT = { province_has_center_of_trade_of_level = 2 }
+				}
+				add_center_of_trade_level = 1
+			}
+		}
 	}
 }
