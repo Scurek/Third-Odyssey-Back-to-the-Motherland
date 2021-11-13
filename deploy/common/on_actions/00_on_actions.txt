@@ -4982,7 +4982,25 @@ on_colonist_boosting_colony = {
 		if = {
 			limit = {
 				OR = {
-					religion = noreligion
+					AND = {
+						religion = noreligion
+						religion = noculture
+					}
+					AND = {
+						NOT = {
+							OR = {
+								continent = north_america
+								continent = south_america
+								continent = new_world
+							}
+						}
+						NOT = {
+							OR = {
+								has_dlc = "Dharma"
+								has_dlc = "Wealth of Nations"
+							}
+						}
+					}
 					#test if colonists outnumber natives
 					variable_arithmetic_trigger = {
 						custom_tooltip = colonysize_is_larger_than_nativesize_tt
@@ -4994,61 +5012,19 @@ on_colonist_boosting_colony = {
 							which = vab_nativesize
 							value = trigger_value:native_size
 						}
+						# 1 native size == 100 natives
+						multiply_variable = {
+							which = vab_nativesize
+							value = 100
+						}
 						check_variable = {
 							which = vab_colonysize
 							which = vab_nativesize
-						}
-					}
-					is_in_capital_area = yes
-					OR = {
-						continent = north_america
-						continent = south_america
-						continent = new_world
-					}
-					NOT = {
-						OR = {
-							has_dlc = "Dharma"
-							has_dlc = "Wealth of Nations"
 						}
 					}
 				}
 			}
 			change_religion = FROM
-		}
-		if = {
-			limit = {
-				OR = {
-					culture = noculture
-					#test if colonists outnumber natives
-					variable_arithmetic_trigger = {
-						custom_tooltip = colonysize_is_larger_than_nativesize_tt
-						export_to_variable = {
-							which = vab_colonysize
-							value = trigger_value:colonysize
-						}
-						export_to_variable = {
-							which = vab_nativesize
-							value = trigger_value:native_size
-						}
-						check_variable = {
-							which = vab_colonysize
-							which = vab_nativesize
-						}
-					}
-					is_in_capital_area = yes
-					OR = {
-						continent = north_america
-						continent = south_america
-						continent = new_world
-					}
-					NOT = {
-						OR = {
-							has_dlc = "Dharma"
-							has_dlc = "Wealth of Nations"
-						}
-					}
-				}
-			}
 			change_culture = FROM
 			change_original_culture = FROM
 		}
