@@ -16,12 +16,87 @@ country_event = {
 
 	is_triggered_only = yes
 
-	immediate = {
+	option = {
+		# Side with moderates
+		name = nhs_hcd_hellenicrevolt.1.c
+		ai_chance = { factor = 100 }
+
 		add_stability = -2
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -5
+		}
+		set_country_flag = nhs_hcd_supported_moderates
+		custom_tooltip = nhs_hellenicconversion.disaster_siding_with_moderates.tt
+		
 		random_owned_province = {
 			limit = {
 				is_capital = no
-				has_owner_religion = yes 
+				religion_group = christian 
+			}
+			change_religion = pantheon_worship
+			add_province_modifier = {
+				name = nhs_hcd_conversion_zeal
+				duration = 365
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_province_modifier = nhs_hcd_Pagan_minority 
+			}
+			change_religion = pantheon_worship
+			remove_province_modifier = nhs_hcd_Pagan_minority 
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					has_province_modifier = nhs_hcd_famine_exempt
+				}
+				remove_province_modifier = nhs_hcd_famine_exempt
+			}
+			remove_country_modifier = nhs_hcd_hellenic_struggles
+			remove_country_modifier = nhs_hcd_hellenic_coup
+			remove_country_modifier = nhs_hcd_hellenic_representation 
+			remove_country_modifier = nhs_hcd_pagan_concessions
+			remove_country_modifier = nhs_hcd_lack_colonists
+			remove_country_modifier = nhs_hcd_state_inquistion
+			clr_country_flag = hellenic_conversion_preacher
+			clr_country_flag = nhs_hcd_can_have_religious_disaster
+		}
+	}
+
+	option = { 
+		# Side with church
+		name = nhs_hcd_hellenicrevolt.1.b
+		ai_chance = { factor = 0 }
+
+		if = {
+			limit = {
+				check_variable = {
+					which = OrthodoxUprising
+					value = 6
+				}
+			}
+			add_stability = -3
+		}
+		else = {
+			add_stability = -2
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 10
+		}
+		add_country_modifier = {
+			name = nhs_hcd_church_loyalty 
+			duration = 3650
+		}
+		set_country_flag = nhs_hcd_supported_zealots
+		custom_tooltip = nhs_hellenicconversion.disaster_siding_with_zealots.tt
+		
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				religion_group = christian 
 			}
 			change_religion = pantheon_worship
 			add_province_modifier = {
@@ -55,58 +130,10 @@ country_event = {
 	}
 
 	option = {
-		# Side with moderates
-		name = nhs_hcd_hellenicrevolt.1.c
-		ai_chance = { factor = 100 }
-		
-		add_estate_loyalty = {
-			estate = estate_church
-			loyalty = -5
-		}
-		set_country_flag = nhs_hcd_supported_moderates
-		custom_tooltip = nhs_hellenicconversion.disaster_siding_with_moderates.tt
-	}
-
-	option = { 
-		# Side with church
-		name = nhs_hcd_hellenicrevolt.1.b
-		ai_chance = { factor = 0 }
-
-		if = {
-			limit = {
-				check_variable = {
-					which = OrthodoxUprising
-					value = 13
-				}
-			}
-			add_stability = -1
-		}
-		add_estate_loyalty = {
-			estate = estate_church
-			loyalty = 10
-		}
-		set_country_flag = nhs_hcd_supported_zealots
-		add_country_modifier = {
-			name = nhs_hcd_church_loyalty 
-			duration = 3650
-		}
-		custom_tooltip = nhs_hellenicconversion.disaster_siding_with_zealots.tt
-	}
-
-	option = {
 		# Side with pagans
 		name = nhs_hcd_hellenicrevolt.1.a
 		ai_chance = { factor = 0 }
-
-		if = {
-			limit = {
-				check_variable = {
-					which = HellenicUprising
-					value = 13
-				}
-			}
-			add_stability = -1
-		}
+		
 		change_religion = pantheon_worship
 		set_ruler_religion = pantheon_worship
 		if = {
@@ -115,12 +142,59 @@ country_event = {
 			}
 			set_heir_religion = pantheon_worship
 		}
-		set_country_flag = nhs_hcd_converted_to_hellenic
+		if = {
+			limit = {
+				check_variable = {
+					which = HellenicUprising
+					value = 6
+				}
+			}
+			add_stability = -3
+		}
+		else = {
+			add_stability = -2
+		}
 		add_country_modifier = {
 			name= nhs_hcd_pagan_loyalty
 			duration = 3650
 		}
+		set_country_flag = nhs_hcd_converted_to_hellenic
 		custom_tooltip = nhs_hellenicconversion.disaster_siding_with_Pagans.tt
+
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				religion_group = christian 
+			}
+			change_religion = pantheon_worship
+			add_province_modifier = {
+				name = nhs_hcd_conversion_zeal
+				duration = 365
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_province_modifier = nhs_hcd_Pagan_minority 
+			}
+			change_religion = pantheon_worship
+			remove_province_modifier = nhs_hcd_Pagan_minority 
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					has_province_modifier = nhs_hcd_famine_exempt
+				}
+				remove_province_modifier = nhs_hcd_famine_exempt
+			}
+			remove_country_modifier = nhs_hcd_hellenic_struggles
+			remove_country_modifier = nhs_hcd_hellenic_coup
+			remove_country_modifier = nhs_hcd_hellenic_representation 
+			remove_country_modifier = nhs_hcd_pagan_concessions
+			remove_country_modifier = nhs_hcd_lack_colonists
+			remove_country_modifier = nhs_hcd_state_inquistion
+			clr_country_flag = hellenic_conversion_preacher
+			clr_country_flag = nhs_hcd_can_have_religious_disaster
+		}
 	}
 }
 
