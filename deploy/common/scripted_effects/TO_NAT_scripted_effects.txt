@@ -1125,15 +1125,18 @@ to_nat_displace_tribal_development = {
 			VARIABLE_TAX_INCREASE = tribal_tax_moved
 			VARIABLE_PRODUCTION_INCREASE = tribal_production_moved
 			VARIABLE_MANPOWER_INCREASE = tribal_manpower_moved
+			VARIABLE_TAX_DECREASE = to_nat_local_tribal_tax
+			VARIABLE_PRODUCTION_DECREASE = to_nat_local_tribal_production
+			VARIABLE_MANPOWER_DECREASE = to_nat_local_tribal_manpower
 		}
 
 		set_variable = { which = tribal_tax_loss which = tribal_tax_moved }
 		set_variable = { which = tribal_production_loss which = tribal_production_moved }
 		set_variable = { which = tribal_manpower_loss which = tribal_manpower_moved }
 
-		subtract_variable = { which = to_nat_local_tribal_tax which = tribal_tax_loss }
-		subtract_variable = { which = to_nat_local_tribal_production which = tribal_production_loss }
-		subtract_variable = { which = to_nat_local_tribal_manpower which = tribal_manpower_loss }
+		# subtract_variable = { which = to_nat_local_tribal_tax which = tribal_tax_loss }
+		# subtract_variable = { which = to_nat_local_tribal_production which = tribal_production_loss }
+		# subtract_variable = { which = to_nat_local_tribal_manpower which = tribal_manpower_loss }
 		subtract_variable = { which = to_nat_local_tribal_development which = tribal_development_moved }
 		
 		to_nat_reduce_base_development = {
@@ -1374,27 +1377,55 @@ to_nat_tribal_development_remove_fraction = {
 				which = tribal_development_loss
 				value = 1
 			}
-		}
-		change_variable = {
-			which = tribal_development_loss
-			value = -1
-		}
-		[[VARIABLE_MANPOWER_INCREASE]
-			change_variable = {
-				which = $VARIABLE_MANPOWER_INCREASE$
-				value = 1
+			OR = {
+				check_variable = {
+					which = $VARIABLE_TAX_DECREASE$
+					value = 1
+				}
+				check_variable = {
+					which = $VARIABLE_PRODUCTION_DECREASE$
+					value = 1
+				}
+				check_variable = {
+					which = $VARIABLE_MANPOWER_DECREASE$
+					value = 1
+				}
 			}
-		]	
-		[[VARIABLE_MANPOWER_DECREASE]
-			change_variable = {
-				which = $VARIABLE_MANPOWER_DECREASE$
-				value = -1
-			}
-		]
+		}
 		if = {
 			limit = {
 				check_variable = {
 					which = tribal_development_loss
+					value = 1
+				}
+				check_variable = {
+					which = $VARIABLE_MANPOWER_DECREASE$
+					value = 1
+				}
+			}
+			change_variable = {
+				which = tribal_development_loss
+				value = -1
+			}
+			[[VARIABLE_MANPOWER_INCREASE]
+				change_variable = {
+					which = $VARIABLE_MANPOWER_INCREASE$
+					value = 1
+				}
+			]	
+			change_variable = {
+				which = $VARIABLE_MANPOWER_DECREASE$
+				value = -1
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = tribal_development_loss
+					value = 1
+				}
+				check_variable = {
+					which = $VARIABLE_PRODUCTION_DECREASE$
 					value = 1
 				}
 			}
@@ -1408,17 +1439,19 @@ to_nat_tribal_development_remove_fraction = {
 					value = 1
 				}
 			]
-			[[VARIABLE_PRODUCTION_DECREASE]
-				change_variable = {
-					which = $VARIABLE_PRODUCTION_DECREASE$
-					value = -1
-				}
-			]
+			change_variable = {
+				which = $VARIABLE_PRODUCTION_DECREASE$
+				value = -1
+			}
 		}
 		if = {
 			limit = {
 				check_variable = {
 					which = tribal_development_loss
+					value = 1
+				}
+				check_variable = {
+					which = $VARIABLE_TAX_DECREASE$
 					value = 1
 				}
 			}
@@ -1436,12 +1469,10 @@ to_nat_tribal_development_remove_fraction = {
 					value = 1
 				}
 			]
-			[[VARIABLE_TAX_DECREASE]
-				change_variable = {
-					which = $VARIABLE_TAX_DECREASE$
-					value = -1
-				}
-			]
+			change_variable = {
+				which = $VARIABLE_TAX_DECREASE$
+				value = -1
+			}
 		}
 	}
 	set_variable = {
