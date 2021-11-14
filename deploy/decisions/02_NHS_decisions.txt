@@ -2138,7 +2138,6 @@ country_decisions = {
 			has_discovered = 952
 			#is_at_war = no
 			#owns = 953
-			#NOT = { has_global_flag = nhs_pow_dead_done }
 		}
 
 		allow = {
@@ -2146,7 +2145,7 @@ country_decisions = {
 			is_at_war = no
 			POW = {
 				is_at_war = no
-				has_opinion = { who = ROOT value = 80 }
+				has_opinion = { who = ROOT value = 50 }
 				NOT = { num_of_cities = 2 }
 				OR = {
 					is_subject = no
@@ -2154,11 +2153,15 @@ country_decisions = {
 				}
 			}
 			OR = {
-				treasury = 120
+				treasury = 100
 				AND = {
-					treasury = 60
-					num_of_cities = 5
+					treasury = 50
+					num_of_cities = 4
 				}
+			}
+			OR = {
+				reverse_has_opinion = { who = POW value = 100 }
+				dip_power = 50
 			}
 			custom_trigger_tooltip = {
 				OR = {
@@ -2191,20 +2194,26 @@ country_decisions = {
 		effect = {
 			if = {
 				limit = {
-					num_of_cities = 5
+					num_of_cities = 4
 				}
-				add_treasury = -60
-				set_global_flag = nhs_60_cash
+				add_treasury = -50
+				set_country_flag = nhs_powhattan_deal_med_cash
 			}
+			else = {
+				custom_tooltip = nhs_powhattan_deal_expensive_cities_tt
+				add_treasury = -100
+				set_country_flag = nhs_powhattan_deal_large_cash
+			}
+			custom_tooltip = nhs_new_line_tt
 			if = {
 				limit = {
-					NOT = { num_of_cities = 5 }
+					NOT = { reverse_has_opinion = { who = POW value = 100 } }
 				}
-				add_treasury = -120
-				set_global_flag = nhs_120_cash
+				custom_tooltip = nhs_powhattan_deal_expensive_opinion_tt
+				add_dip_power = -50
 			}
+			custom_tooltip = nhs_new_line_tt
 			POW = { country_event = { id = nhs_powhatan_deal.2 } }
-			set_global_flag = nhs_pow_dead_done
 			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = nhs_unlock_powhatan_deal_transfer_province_tt
 			custom_tooltip = nhs_new_line_tt
@@ -2219,6 +2228,7 @@ country_decisions = {
 			else = {
 				custom_tooltip = nhs_remove_powhattan_subject_warning_tt
 			}
+			clr_country_flag = nhs_enable_powhatan_deal
 		}
 			
 		ai_will_do = {
@@ -2233,6 +2243,7 @@ country_decisions = {
 			ai = yes
 			nhs_condition_all_ely = { KOMANDA = tag }
 			exists = POW
+			has_country_flag = nhs_enable_powhatan_deal
 			POW = {
 				ai = yes
 				owns_core_province = 952
@@ -2244,7 +2255,6 @@ country_decisions = {
 			}
 			has_discovered = 952
 			owns = 953
-			NOT = { has_global_flag = nhs_pow_dead_done }
 		}
 
 		allow = {
@@ -2257,7 +2267,7 @@ country_decisions = {
 				treasury = 60
 				AND = {
 					treasury = 30
-					num_of_cities = 5
+					num_of_cities = 4
 				}
 			}
 			custom_trigger_tooltip = {
@@ -2293,18 +2303,18 @@ country_decisions = {
 				limit = {
 					num_of_cities = 5
 				}
-				add_treasury = -30
-				set_global_flag = nhs_30_cash
+				add_treasury = -25
+				set_country_flag = nhs_powhattan_deal_small_cash
 			}
 			if = {
 				limit = {
 					NOT = { num_of_cities = 5 }
 				}
-				add_treasury = -60
-				set_global_flag = nhs_60_cash
+				add_treasury = -50
+				set_country_flag = nhs_powhattan_deal_med_cash
 			}
 			POW = { country_event = { id = nhs_powhatan_deal.2 } }
-			set_global_flag = nhs_pow_dead_done
+			clr_country_flag = nhs_enable_powhatan_deal
 		}
 		ai_will_do = {
 			factor = 1
