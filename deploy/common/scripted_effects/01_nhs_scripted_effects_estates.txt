@@ -92,6 +92,41 @@ province_recalculate_estate_privileges_effect_natives = {
 	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_divide_et_impera_mid MODIFIER = nhs_native_priv_divide_et_impera_mid_mod }
 }
 
+handle_nhs_native_priv_inclusive_citizenship_early_modifier = {
+	if = {
+		limit = {
+			nhs_native_priv_inclusive_citizenship_province = yes
+		}
+		add_province_modifier = {
+			name = nhs_native_priv_inclusive_citizenship_mod
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			has_province_modifier = nhs_native_priv_inclusive_citizenship_mod
+		}
+		remove_province_modifier = nhs_native_priv_inclusive_citizenship_mod
+	}
+}
+
+handle_nhs_native_priv_inclusive_citizenship_colony_finished = {
+	if = {
+		limit = {
+			has_province_modifier = nhs_native_priv_inclusive_citizenship_mod
+		}
+		remove_province_modifier = nhs_native_priv_inclusive_citizenship_mod
+		add_local_autonomy = 20
+		owner = {
+			change_estate_land_share = {
+				estate = estate_church
+				share = 5
+				province = PREV
+			}
+		}
+	}
+}
+
 nhs_add_noble_estate_influence_modifier = {
 	if = {
 		limit = {
