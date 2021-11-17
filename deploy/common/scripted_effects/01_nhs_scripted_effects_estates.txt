@@ -54,7 +54,95 @@ province_update_estate_privilege = {
 		limit = {
 			owner = { has_estate_privilege = $PRIVILEGE$ }
 			nhs_culturally_native = yes
+			[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$ = yes
+			]
 		}
+		[[EARLY_MODIFIER]
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = native_council_enabled_early
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_province_modifier = $EARLY_MODIFIER$ }
+				}
+				add_province_modifier = {
+					name = $EARLY_MODIFIER$
+					duration = -1
+				}
+			}
+			add_province_modifier = {
+				name = $EARLY_MODIFIER$
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = {
+				has_province_modifier = $EARLY_MODIFIER$
+			}
+			remove_province_modifier = $EARLY_MODIFIER$
+		}
+		]
+		[[MID_MODIFIER]
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = native_council_enabled_mid
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_province_modifier = $MID_MODIFIER$ }
+				}
+				add_province_modifier = {
+					name = $MID_MODIFIER$
+					duration = -1
+				}
+			}
+			add_province_modifier = {
+				name = $MID_MODIFIER$
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = {
+				has_province_modifier = $MID_MODIFIER$
+			}
+			remove_province_modifier = $MID_MODIFIER$
+		}
+		]
+		[[LATE_MODIFIER]
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = native_council_enabled_late
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_province_modifier = $LATE_MODIFIER$ }
+				}
+				add_province_modifier = {
+					name = $LATE_MODIFIER$
+					duration = -1
+				}
+			}
+			add_province_modifier = {
+				name = $LATE_MODIFIER$
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = {
+				has_province_modifier = $LATE_MODIFIER$
+			}
+			remove_province_modifier = $LATE_MODIFIER$
+		}
+		]
+		[[MODIFIER]
 		if = {
 			limit = {
 				NOT = { has_province_modifier = $MODIFIER$ }
@@ -64,13 +152,22 @@ province_update_estate_privilege = {
 				duration = -1
 			}
 		}
+		]
 	}
 	else_if = {
 		# Remove province modifier if present (and not applicable)
-		limit = {
-			has_province_modifier = $MODIFIER$
-		}
+		[[EARLY_MODIFIER]
+		remove_province_modifier = $EARLY_MODIFIER$
+		]
+		[[MID_MODIFIER]
+		remove_province_modifier = $MID_MODIFIER$
+		]
+		[[LATE_MODIFIER]
+		remove_province_modifier = $LATE_MODIFIER$
+		]
+		[[MODIFIER]
 		remove_province_modifier = $MODIFIER$
+		]
 	}
 	
 }
@@ -80,19 +177,20 @@ province_update_estate_privilege = {
 province_recalculate_estate_privileges_effect_natives = {
 	# TODO: effect can't use other effect?
 	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_local_councils_empowered MODIFIER = nhs_native_priv_local_councils_empowered_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_minor_pax_romana_early MODIFIER = nhs_native_priv_minor_pax_romana_early_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_major_pax_romana_early MODIFIER = nhs_native_priv_major_pax_romana_early_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_major_pax_romana_mid MODIFIER = nhs_native_priv_major_pax_romana_mid_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_increase_tribute_early MODIFIER = nhs_native_priv_increase_tribute_early_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_increase_tribute_mid MODIFIER = nhs_native_priv_increase_tribute_mid_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_increase_tribute_late MODIFIER = nhs_native_priv_increase_tribute_late_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_designate_development_zones_mid MODIFIER = nhs_native_priv_designate_development_zones_mid_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_designate_development_zones_late MODIFIER = nhs_native_priv_designate_development_zones_late_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_divide_et_impera_early MODIFIER = nhs_native_priv_divide_et_impera_early_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_divide_et_impera_mid MODIFIER = nhs_native_priv_divide_et_impera_mid_mod }
+	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_pax_romana EARLY_MODIFIER = nhs_native_priv_pax_romana_early_mod MID_MODIFIER = nhs_native_priv_pax_romana_mid_mod }
+	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_increase_tribute MODIFIER = nhs_native_priv_increase_tribute_mod }
+	province_update_estate_privilege = { 
+		PRIVILEGE = nhs_native_priv_encourage_barbaroi_officials 
+		EARLY_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_early_mod 
+		MID_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_mid_mod 
+		LATE_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_mid_mod
+		ADDITIONAL_TRIGGER = nhs_nhs_native_priv_encourage_barbaroi_officials_trigger
+	}
+	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_designate_development_zones MODIFIER = nhs_native_priv_designate_development_zones_mod }
+	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_divide_et_impera EARLY_MODIFIER = nhs_native_priv_divide_et_impera_early_mod MID_MODIFIER = nhs_native_priv_divide_et_impera_mid_mod }
 }
 
-handle_nhs_native_priv_inclusive_citizenship_early_modifier = {
+handle_nhs_native_priv_inclusive_citizenship_modifier = {
 	if = {
 		limit = {
 			nhs_native_priv_inclusive_citizenship_province = yes
@@ -123,6 +221,18 @@ handle_nhs_native_priv_inclusive_citizenship_colony_finished = {
 				share = 5
 				province = PREV
 			}
+		}
+	}
+}
+
+handle_nhs_native_priv_encourage_barbaroi_officials_modifier = {
+	every_owned_province = {
+		province_update_estate_privilege = { 
+			PRIVILEGE = nhs_native_priv_encourage_barbaroi_officials 
+			EARLY_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_early_mod 
+			MID_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_mid_mod 
+			LATE_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_mid_mod
+			ADDITIONAL_TRIGGER = nhs_nhs_native_priv_encourage_barbaroi_officials_trigger
 		}
 	}
 }

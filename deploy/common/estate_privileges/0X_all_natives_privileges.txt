@@ -26,7 +26,7 @@
 
 # Expansionist coexistance
 
-nhs_native_priv_inclusive_citizenship_early = {
+nhs_native_priv_inclusive_citizenship = {
     icon = privilege_grant_new_world_charter
 
 	# land_share = 5
@@ -47,7 +47,7 @@ nhs_native_priv_inclusive_citizenship_early = {
 		custom_tooltip = nhs_native_priv_inclusive_citizenship_tooltip
 	}
 	on_granted_province = {
-		handle_nhs_native_priv_inclusive_citizenship_early_modifier = yes
+		handle_nhs_native_priv_inclusive_citizenship_modifier = yes
 	}
 	on_revoked = {
 	}
@@ -60,12 +60,6 @@ nhs_native_priv_inclusive_citizenship_early = {
 		}
 	}
 	on_invalid = {
-		if = {
-			limit = {
-				has_country_flag = native_council_enabled_mid
-			}
-			set_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
-		}
 	}
 	on_invalid_province = {
 		if = {
@@ -84,88 +78,6 @@ nhs_native_priv_inclusive_citizenship_early = {
 	}
 }
 
-nhs_native_priv_inclusive_citizenship_mid = {
-    icon = privilege_grant_new_world_charter
-
-	land_share = 5
-	loyalty = 0.05
-	influence = 0.10
-
-	is_valid = {
-		has_estate_privilege = nhs_native_priv_ancestral_land
-		has_country_flag = native_council_enabled_mid
-	}
-	can_select = {
-		has_estate_privilege = nhs_native_priv_ancestral_land
-		to_num_of_privileges_check = {
-			ESTATE = estate_all_natives
-		}
-	}
-	on_invalid = {
-		if = {
-			limit = {
-				has_country_flag = native_council_enabled_late
-			}
-			set_estate_privilege = nhs_native_priv_inclusive_citizenship_late
-		}
-	}
-	on_revoked = {
-		every_owned_province = {
-			limit = {
-				nhs_culturally_native = yes
-			}
-			add_unrest = 10
-		}
-	}
-	penalties = {
-	}
-	benefits = {
-	}
-	ai_will_do = {
-		factor = 5
-	}
-
-	modifier_by_land_ownership = {
-		global_colonial_growth = 80
-	}
-}
-
-nhs_native_priv_inclusive_citizenship_late = {
-    icon = privilege_grant_new_world_charter
-
-	influence = 0.10
-
-	is_valid = {
-		has_estate_privilege = nhs_native_priv_ancestral_land
-		has_country_flag = native_council_enabled_late
-	}
-	can_select = {
-		has_estate_privilege = nhs_native_priv_ancestral_land
-		to_num_of_privileges_check = {
-			ESTATE = estate_all_natives
-		}
-	}
-	on_revoked = {
-		every_owned_province = {
-			limit = {
-				nhs_culturally_native = yes
-			}
-			add_unrest = 10
-		}
-	}
-	penalties = {
-	}
-	benefits = {
-	}
-	ai_will_do = {
-		factor = 5
-	}
-
-	modifier_by_land_ownership = {
-		global_colonial_growth = 60
-	}
-}
-
 # Ancestral land recognition
 
 nhs_native_priv_ancestral_land = {
@@ -173,8 +85,8 @@ nhs_native_priv_ancestral_land = {
 
 	max_absolutism = -5
 	land_share = 10
-	loyalty = 0.15
-	influence = 0.25
+	loyalty = 0
+	influence = 0
 
 	can_select = {
 		to_num_of_privileges_check = {
@@ -192,10 +104,43 @@ nhs_native_priv_ancestral_land = {
 	}
 	penalties = {
 		# culture_conversion_cost = 1.0
-		colonist_placement_chance = -0.05
+		
 	}
 	benefits = {
-		native_uprising_chance = -0.5
+		
+	}
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = native_council_enabled_early
+		}
+		modifier = {
+			native_uprising_chance = -0.5
+			colonist_placement_chance = -0.05
+			estate_all_natives_loyalty_modifier = 0.15
+			estate_all_natives_influence_modifier = 0.25
+		}
+	}
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = native_council_enabled_mid
+		}
+		modifier = {
+			native_uprising_chance = -0.5
+			colonist_placement_chance = -0.05
+			estate_all_natives_loyalty_modifier = 0.15
+			estate_all_natives_influence_modifier = 0.15
+		}
+	}
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = native_council_enabled_late
+		}
+		modifier = {
+			native_uprising_chance = -0.5
+			colonist_placement_chance = -0.05
+			estate_all_natives_loyalty_modifier = 0.15
+			estate_all_natives_influence_modifier = 0.15
+		}
 	}
 	ai_will_do = {
 		factor = 100
@@ -208,8 +153,8 @@ nhs_native_priv_local_councils_empowered = {
     icon = privilege_royal_authority
 
 	max_absolutism = -10
-	loyalty = 0.10
-	influence = 0.10
+	loyalty = 0
+	influence = 0
 
 	is_valid = {
 		OR = {
@@ -263,6 +208,24 @@ nhs_native_priv_local_councils_empowered = {
 	}
 	benefits = {
 	}
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = native_council_enabled_early
+		}
+		modifier = {
+			estate_all_natives_loyalty_modifier = 0.1
+			estate_all_natives_influence_modifier = 0.1
+		}
+	}
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = native_council_enabled_mid
+		}
+		modifier = {
+			estate_all_natives_loyalty_modifier = 0.1
+			estate_all_natives_influence_modifier = 0.05
+		}
+	}
 	ai_will_do = {
 		factor = 5
 	}
@@ -270,7 +233,7 @@ nhs_native_priv_local_councils_empowered = {
 
 # Increase tributary duties
 
-nhs_native_priv_increase_tribute_early = {
+nhs_native_priv_increase_tribute = {
     icon = privilege_give_money
 
 	loyalty = -0.15
@@ -282,6 +245,7 @@ nhs_native_priv_increase_tribute_early = {
 		to_num_of_privileges_check = {
 			ESTATE = estate_all_natives
 		}
+		NOT = { has_estate_privilege = nhs_native_priv_designate_development_zones }
 	}
 	can_revoke = {
 		custom_trigger_tooltip = {
@@ -292,7 +256,7 @@ nhs_native_priv_increase_tribute_early = {
 	on_granted = {
 		custom_tooltip = nhs_native_priv_always_revoke_tt
 		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = nhs_native_priv_increase_tribute_early_effect_tooltip
+		custom_tooltip = nhs_native_priv_increase_tribute_effect_tooltip
 	}
 	on_granted_province = {
 		if = {
@@ -300,159 +264,31 @@ nhs_native_priv_increase_tribute_early = {
 				nhs_culturally_native = yes
 			}
 			add_province_modifier = {
-				name = nhs_native_priv_increase_tribute_early_mod
+				name = nhs_native_priv_increase_tribute_mod
 				duration = -1
 			}
 		}
 	}
 	on_revoked = {
-		custom_tooltip = nhs_native_priv_increase_tribute_early_revoke_tooltip
+		custom_tooltip = nhs_native_priv_increase_tribute_revoke_tooltip
 	}
 	on_revoked_province = {
 		if = {
 			limit = {
-				has_province_modifier = nhs_native_priv_increase_tribute_early_mod
+				has_province_modifier = nhs_native_priv_increase_tribute_mod
 			}
-			remove_province_modifier = nhs_native_priv_increase_tribute_early_mod
+			remove_province_modifier = nhs_native_priv_increase_tribute_mod
 		}
 	}
 	on_invalid = {
-		custom_tooltip = nhs_native_priv_increase_tribute_early_revoke_tooltip
-		if = {
-			limit = {
-				has_country_flag = native_council_enabled_mid
-			}
-			set_estate_privilege = nhs_native_priv_increase_tribute_mid
-		}
+		custom_tooltip = nhs_native_priv_increase_tribute_revoke_tooltip
 	}
 	on_invalid_province = {
 		if = {
 			limit = {
-				has_province_modifier = nhs_native_priv_increase_tribute_early_mod
+				has_province_modifier = nhs_native_priv_increase_tribute_mod
 			}
-			remove_province_modifier = nhs_native_priv_increase_tribute_early_mod
-		}
-	}
-	penalties = {
-	}
-	benefits = {
-	}
-	ai_will_do = {
-		factor = 5
-	}
-}
-
-nhs_native_priv_increase_tribute_mid = {
-    icon = privilege_give_money
-
-	loyalty = -0.10
-	
-	is_valid = {
-		has_country_flag = native_council_enabled_mid
-	}
-	can_select = {
-		to_num_of_privileges_check = {
-			ESTATE = estate_all_natives
-		}
-	}
-	on_granted = {
-		custom_tooltip = nhs_native_priv_increase_tribute_mid_effect_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					nhs_culturally_native = yes
-				}
-				add_province_modifier = {
-					name = nhs_native_priv_increase_tribute_mid_mod
-					duration = -1
-				}
-			}
-		}
-	}
-	on_revoked = {
-		custom_tooltip = nhs_native_priv_increase_tribute_mid_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_increase_tribute_mid_mod
-				}
-				remove_province_modifier = nhs_native_priv_increase_tribute_mid_mod
-			}
-		}
-	}
-	on_invalid = {
-		custom_tooltip = nhs_native_priv_increase_tribute_mid_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_increase_tribute_mid_mod
-				}
-				remove_province_modifier = nhs_native_priv_increase_tribute_mid_mod
-			}
-		}
-		if = {
-			limit = {
-				has_country_flag = native_council_enabled_late
-			}
-			set_estate_privilege = nhs_native_priv_increase_tribute_late
-		}
-	}
-	penalties = {
-	}
-	benefits = {
-	}
-	ai_will_do = {
-		factor = 5
-	}
-}
-
-nhs_native_priv_increase_tribute_late = {
-    icon = privilege_give_money
-
-	loyalty = -0.10
-	
-	is_valid = {
-		has_country_flag = native_council_enabled_late
-	}
-	can_select = {
-		to_num_of_privileges_check = {
-			ESTATE = estate_all_natives
-		}
-	}
-	on_granted = {
-		custom_tooltip = nhs_native_priv_increase_tribute_late_effect_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					nhs_culturally_native = yes
-				}
-				add_province_modifier = {
-					name = nhs_native_priv_increase_tribute_late_mod
-					duration = -1
-				}
-			}
-		}
-	}
-	on_revoked = {
-		custom_tooltip = nhs_native_priv_increase_tribute_late_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_increase_tribute_late_mod
-				}
-				remove_province_modifier = nhs_native_priv_increase_tribute_late_mod
-			}
-		}
-	}
-	on_invalid = {
-		custom_tooltip = nhs_native_priv_increase_tribute_late_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_increase_tribute_late_mod
-				}
-				remove_province_modifier = nhs_native_priv_increase_tribute_late_mod
-			}
+			remove_province_modifier = nhs_native_priv_increase_tribute_mod
 		}
 	}
 	penalties = {
@@ -470,21 +306,9 @@ nhs_native_priv_increase_tribute_revoke = {
 	is_valid = {
 		if = {
 			limit = {
-				has_estate_privilege = nhs_native_priv_increase_tribute_early
+				has_estate_privilege = nhs_native_priv_increase_tribute
 			}
-			has_estate_privilege = nhs_native_priv_increase_tribute_early
-		}
-		else_if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_increase_tribute_mid
-			}
-			has_estate_privilege = nhs_native_priv_increase_tribute_mid
-		}
-		else_if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_increase_tribute_late
-			}
-			has_estate_privilege = nhs_native_priv_increase_tribute_late
+			has_estate_privilege = nhs_native_priv_increase_tribute
 		}
 		else = {
 			always = no
@@ -493,21 +317,9 @@ nhs_native_priv_increase_tribute_revoke = {
 	can_select = {
 		if = {
 			limit = {
-				has_estate_privilege = nhs_native_priv_increase_tribute_early
+				has_estate_privilege = nhs_native_priv_increase_tribute
 			}
-			has_estate_privilege = nhs_native_priv_increase_tribute_early
-		}
-		else_if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_increase_tribute_mid
-			}
-			has_estate_privilege = nhs_native_priv_increase_tribute_mid
-		}
-		else_if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_increase_tribute_late
-			}
-			has_estate_privilege = nhs_native_priv_increase_tribute_late
+			has_estate_privilege = nhs_native_priv_increase_tribute
 		}
 		else = {
 			always = no
@@ -518,21 +330,9 @@ nhs_native_priv_increase_tribute_revoke = {
 		hidden_effect = {
 			if = {
 				limit = {
-					has_estate_privilege = nhs_native_priv_increase_tribute_early
+					has_estate_privilege = nhs_native_priv_increase_tribute
 				}
-				remove_estate_privilege = nhs_native_priv_increase_tribute_early
-			}
-			else_if = {
-				limit = {
-					has_estate_privilege = nhs_native_priv_increase_tribute_mid
-				}
-				remove_estate_privilege = nhs_native_priv_increase_tribute_mid
-			}
-			else_if = {
-				limit = {
-					has_estate_privilege = nhs_native_priv_increase_tribute_late
-				}
-				remove_estate_privilege = nhs_native_priv_increase_tribute_late
+				remove_estate_privilege = nhs_native_priv_increase_tribute
 			}
 			remove_estate_privilege = nhs_native_priv_increase_tribute_revoke
 		}
@@ -561,7 +361,7 @@ nhs_native_priv_increase_tribute_revoke = {
 nhs_native_priv_citizenship_for_service = {
     icon = privilege_military_power
 
-	loyalty = 0.10
+	loyalty = 0.05
 	influence = 0.05
 
 	is_valid = {
@@ -578,28 +378,23 @@ nhs_native_priv_citizenship_for_service = {
 	}
 	on_granted = {
 		# Increases speed of passive culture conversion
-		custom_tooltip = nhs_native_priv_citizenship_for_service_effect_tooltip
+		# custom_tooltip = nhs_native_priv_citizenship_for_service_effect_tooltip
 	}
 	on_revoked = {
-		custom_tooltip = nhs_native_priv_citizenship_for_service_revoke_tooltip
-		every_owned_province = {
-			limit = {
-				nhs_culturally_native = yes
-			}
-			add_unrest = 10
-		}
+		# custom_tooltip = nhs_native_priv_citizenship_for_service_revoke_tooltip
 	}
 	on_invalid = {
-		custom_tooltip = nhs_native_priv_citizenship_for_service_revoke_tooltip
+		# custom_tooltip = nhs_native_priv_citizenship_for_service_revoke_tooltip
 	}
 	penalties = {
 		stability_cost_modifier = 0.10
-		discipline = -0.05
+		discipline = -0.025
 		army_tradition_decay = 0.01
 	}
 	benefits = {
 		global_manpower = 0.25
-		land_forcelimit_modifier = 0.25
+		land_forcelimit_modifier = 0.10
+		mil_advisor_cost = -0.2
 	}
 	ai_will_do = {
 		factor = 5
@@ -609,166 +404,9 @@ nhs_native_priv_citizenship_for_service = {
 
 # -- Elysian privileges --
 
+# Pax romana
 
-# Minor pax romana
-
-nhs_native_priv_minor_pax_romana_early = {
-    icon = privilege_spawn_rajput_regiments
-	cooldown_years = 5
-	loyalty = -0.05
-	influence = -0.10
-
-	is_valid = {
-		has_country_flag = native_council_enabled_early
-		nhs_culturally_elysian = yes
-	}
-	can_revoke = {
-		custom_trigger_tooltip = {
-			tooltip = nhs_native_priv_minor_pax_romana_can_revoke_tt
-			always = no
-		}
-	}
-	can_select = {
-		to_num_of_privileges_check = {
-			ESTATE = estate_all_natives
-		}
-		NOT = {
-			has_estate_privilege = nhs_native_priv_major_pax_romana_early
-			has_estate_privilege = nhs_native_priv_divide_et_impera_early
-		}
-	}
-	on_granted = {
-		custom_tooltip = nhs_native_priv_always_revoke_tt
-		custom_tooltip = nhs_native_priv_minor_pax_romana_early_incompatible_tooltip
-		custom_tooltip = nhs_new_line_tt
-		if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_major_pax_romana_early
-			}
-			custom_tooltip = nhs_native_priv_major_pax_romana_revoke_tooltip
-			hidden_effect = {
-				remove_estate_privilege = nhs_native_priv_major_pax_romana_early
-			}
-		}
-		else_if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_divide_et_impera_early
-			}
-			custom_tooltip = nhs_native_priv_divide_et_impera_revoke_tooltip
-			hidden_effect = {
-				remove_estate_privilege = nhs_native_priv_divide_et_impera_early
-			}
-		}
-		custom_tooltip = nhs_native_priv_minor_pax_romana_early_effect_tooltip
-
-		if = {
-			limit = {
-				NOT = { has_country_flag = enacted_nhs_native_priv_minor_pax_romana }
-			}
-			set_country_flag = enacted_nhs_native_priv_minor_pax_romana
-		}
-	}
-	on_granted_province = {
-		if = {
-			limit = {
-				nhs_culturally_native = yes
-			}
-			add_province_modifier = {
-				name = nhs_native_priv_minor_pax_romana_early_mod
-				duration = -1
-			}
-		}
-	}
-	on_revoked = {
-		custom_tooltip = nhs_native_priv_minor_pax_romana_early_revoke_tooltip
-		clr_country_flag = enacted_nhs_native_priv_minor_pax_romana
-	}
-	on_revoked_province = {
-		if = {
-			limit = {
-				has_province_modifier = nhs_native_priv_minor_pax_romana_early_mod
-			}
-			remove_province_modifier = nhs_native_priv_minor_pax_romana_early_mod
-		}
-	}
-	on_invalid = {
-		custom_tooltip = nhs_native_priv_minor_pax_romana_early_revoke_tooltip
-		clr_country_flag = enacted_nhs_native_priv_minor_pax_romana
-	}
-	on_invalid_province = {
-		if = {
-			limit = {
-				has_province_modifier = nhs_native_priv_minor_pax_romana_early_mod
-			}
-			remove_province_modifier = nhs_native_priv_minor_pax_romana_early_mod
-		}
-	}
-	penalties = {
-	}
-	benefits = {
-	}
-	ai_will_do = {
-		factor = 5
-	}
-}
-
-nhs_native_priv_minor_pax_romana_revoke = {
-    icon = privilege_spawn_rajput_regiments_revoke
-	
-	is_valid = {
-		if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_minor_pax_romana_early
-			}
-			has_estate_privilege = nhs_native_priv_minor_pax_romana_early
-		}
-		else = {
-			always = no
-		}
-	}
-	can_select = {
-		custom_trigger_tooltip = {
-			tooltip = nhs_native_priv_minor_pax_romana_revoke_can_do
-			had_country_flag = {
-				flag = enacted_nhs_native_priv_minor_pax_romana
-				days = 1825
-			}
-		}
-	}
-	on_granted = {
-		custom_tooltip = nhs_native_priv_minor_pax_romana_revoke_tooltip
-		hidden_effect = {
-			if = {
-				limit = {
-					has_estate_privilege = nhs_native_priv_minor_pax_romana_early
-				}
-				remove_estate_privilege = nhs_native_priv_minor_pax_romana_early
-			}
-			remove_estate_privilege = nhs_native_priv_minor_pax_romana_revoke
-		}
-	}
-	on_granted_province = {
-	}
-	on_revoked = {
-	}
-	on_revoked_province = {
-	}
-	on_invalid = {
-	}
-	on_invalid_province = {
-	}
-	penalties = {
-	}
-	benefits = {
-	}
-	ai_will_do = {
-		factor = 5
-	}
-}
-
-# Major pax romana
-
-nhs_native_priv_major_pax_romana_early = {
+nhs_native_priv_pax_romana = {
     icon = privilege_supply_arms
 	cooldown_years = 5
 	max_absolutism = 5
@@ -776,12 +414,15 @@ nhs_native_priv_major_pax_romana_early = {
 	influence = -0.20
 
 	is_valid = {
-		has_country_flag = native_council_enabled_early
+		OR = {
+			has_country_flag = native_council_enabled_early
+			has_country_flag = native_council_enabled_mid
+		}
 		nhs_culturally_elysian = yes
 	}
 	can_revoke = {
 		custom_trigger_tooltip = {
-			tooltip = nhs_native_priv_major_pax_romana_can_revoke_tt
+			tooltip = nhs_native_priv_pax_romana_can_revoke_tt
 			always = no
 		}
 	}
@@ -789,40 +430,29 @@ nhs_native_priv_major_pax_romana_early = {
 		to_num_of_privileges_check = {
 			ESTATE = estate_all_natives
 		}
-		NOT = {
-			has_estate_privilege = nhs_native_priv_minor_pax_romana_early
-			has_estate_privilege = nhs_native_priv_divide_et_impera_early
-		}
+		NOT = { has_estate_privilege = nhs_native_priv_divide_et_impera }
 	}
 	on_granted = {
 		custom_tooltip = nhs_native_priv_always_revoke_tt
-		custom_tooltip = nhs_native_priv_major_pax_romana_early_incompatible_tooltip
+		custom_tooltip = nhs_native_priv_pax_romana_incompatible_tooltip
 		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {
-				has_estate_privilege = nhs_native_priv_minor_pax_romana_early
+				has_country_flag = native_council_enabled_early
 			}
-			custom_tooltip = nhs_native_priv_minor_pax_romana_revoke_tooltip
-			hidden_effect = {
-				remove_estate_privilege = nhs_native_priv_minor_pax_romana_early
-			}
+			custom_tooltip = nhs_native_priv_pax_romana_early_effect_tooltip
 		}
 		else_if = {
 			limit = {
-				has_estate_privilege = nhs_native_priv_divide_et_impera_early
+				has_country_flag = native_council_enabled_mid
 			}
-			custom_tooltip = nhs_native_priv_divide_et_impera_revoke_tooltip
-			hidden_effect = {
-				remove_estate_privilege = nhs_native_priv_divide_et_impera_early
-			}
+			custom_tooltip = nhs_native_priv_pax_romana_mid_effect_tooltip
 		}
-		custom_tooltip = nhs_native_priv_major_pax_romana_early_effect_tooltip
-
 		if = {
 			limit = {
-				NOT = { has_country_flag = enacted_nhs_native_priv_major_pax_romana }
+				NOT = { has_country_flag = enacted_nhs_native_priv_pax_romana }
 			}
-			set_country_flag = enacted_nhs_native_priv_major_pax_romana
+			set_country_flag = enacted_nhs_native_priv_pax_romana
 		}
 	}
 	on_granted_province = {
@@ -830,107 +460,45 @@ nhs_native_priv_major_pax_romana_early = {
 			limit = {
 				nhs_culturally_native = yes
 			}
-			add_province_modifier = {
-				name = nhs_native_priv_major_pax_romana_early_mod
-				duration = -1
-			}
-		}
-	}
-	on_revoked = {
-		custom_tooltip = nhs_native_priv_major_pax_romana_early_revoke_tooltip
-		clr_country_flag = enacted_nhs_native_priv_major_pax_romana
-	}
-	on_revoked_province = {
-		if = {
-			limit = {
-				has_province_modifier = nhs_native_priv_major_pax_romana_early_mod
-			}
-			remove_province_modifier = nhs_native_priv_major_pax_romana_early_mod
-		}
-	}
-	on_invalid = {
-		custom_tooltip = nhs_native_priv_major_pax_romana_early_revoke_tooltip
-		if = {
-			limit = {
-				has_country_flag = native_council_enabled_mid
-			}
-			set_estate_privilege = nhs_native_priv_major_pax_romana_mid
-		}
-		else = {
-			clr_country_flag = enacted_nhs_native_priv_major_pax_romana
-		}
-	}
-	on_invalid_province = {
-		if = {
-			limit = {
-				has_province_modifier = nhs_native_priv_major_pax_romana_early_mod
-			}
-			remove_province_modifier = nhs_native_priv_major_pax_romana_early_mod
-		}
-	}
-	penalties = {
-	}
-	benefits = {
-	}
-	ai_will_do = {
-		factor = 5
-	}
-}
-
-nhs_native_priv_major_pax_romana_mid = {
-    icon = privilege_supply_arms
-
-	loyalty = -0.10
-	influence = -0.20
-
-	is_valid = {
-		has_country_flag = native_council_enabled_mid
-		nhs_culturally_elysian = yes
-	}
-	can_select = {
-		to_num_of_privileges_check = {
-			ESTATE = estate_all_natives
-		}
-		NOT = {
-			has_estate_privilege = nhs_native_priv_divide_et_impera_mid
-		}
-	}
-	on_granted = {
-		custom_tooltip = nhs_native_priv_major_pax_romana_mid_incompatible_tooltip
-		custom_tooltip = nhs_native_priv_major_pax_romana_mid_effect_tooltip
-		hidden_effect = {
-			every_owned_province = {
+			if = {
 				limit = {
-					nhs_culturally_native = yes
+					owner = {
+						has_country_flag = native_council_enabled_early
+					}
 				}
 				add_province_modifier = {
-					name = nhs_native_priv_major_pax_romana_mid_mod
+					name = nhs_native_priv_pax_romana_early_mod
+					duration = -1
+				}
+			}
+			else_if = {
+				limit = {
+					owner = {
+						has_country_flag = native_council_enabled_mid
+					}
+				}
+				add_province_modifier = {
+					name = nhs_native_priv_pax_romana_mid_mod
 					duration = -1
 				}
 			}
 		}
 	}
 	on_revoked = {
-		custom_tooltip = nhs_native_priv_major_pax_romana_mid_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_major_pax_romana_mid_mod
-				}
-				remove_province_modifier = nhs_native_priv_major_pax_romana_mid_mod
-			}
-		}
+		custom_tooltip = nhs_native_priv_pax_romana_revoke_tooltip
+		clr_country_flag = enacted_nhs_native_priv_pax_romana
+	}
+	on_revoked_province = {
+		remove_province_modifier = nhs_native_priv_pax_romana_early_mod
+		remove_province_modifier = nhs_native_priv_pax_romana_mid_mod
 	}
 	on_invalid = {
-		custom_tooltip = nhs_native_priv_major_pax_romana_mid_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_major_pax_romana_mid_mod
-				}
-				remove_province_modifier = nhs_native_priv_major_pax_romana_mid_mod
-			}
-		}
+		custom_tooltip = nhs_native_priv_pax_romana_revoke_tooltip
+		clr_country_flag = enacted_nhs_native_priv_pax_romana
+	}
+	on_invalid_province = {
+		remove_province_modifier = nhs_native_priv_pax_romana_early_mod
+		remove_province_modifier = nhs_native_priv_pax_romana_mid_mod
 	}
 	penalties = {
 	}
@@ -941,51 +509,26 @@ nhs_native_priv_major_pax_romana_mid = {
 	}
 }
 
-nhs_native_priv_major_pax_romana_revoke = {
+nhs_native_priv_pax_romana_revoke = {
     icon = privilege_supply_arms_revoke
 	
 	is_valid = {
-		if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_major_pax_romana_early
-			}
-			has_estate_privilege = nhs_native_priv_major_pax_romana_early
-		}
-		else_if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_major_pax_romana_mid
-			}
-			has_estate_privilege = nhs_native_priv_major_pax_romana_mid
-		}
-		else = {
-			always = no
-		}
+		has_estate_privilege = nhs_native_priv_pax_romana
 	}
 	can_select = {
 		custom_trigger_tooltip = {
-			tooltip = nhs_native_priv_major_pax_romana_revoke_can_do
+			tooltip = nhs_native_priv_pax_romana_revoke_can_do
 			had_country_flag = {
-				flag = enacted_nhs_native_priv_major_pax_romana
+				flag = enacted_nhs_native_priv_pax_romana
 				days = 1825
 			}
 		}
 	}
 	on_granted = {
-		custom_tooltip = nhs_native_priv_major_pax_romana_revoke_tooltip
+		custom_tooltip = nhs_native_priv_pax_romana_revoke_tooltip
 		hidden_effect = {
-			if = {
-				limit = {
-					has_estate_privilege = nhs_native_priv_major_pax_romana_early
-				}
-				remove_estate_privilege = nhs_native_priv_major_pax_romana_early
-			}
-			else_if = {
-				limit = {
-					has_estate_privilege = nhs_native_priv_major_pax_romana_mid
-				}
-				remove_estate_privilege = nhs_native_priv_major_pax_romana_mid
-			}
-			remove_estate_privilege = nhs_native_priv_major_pax_romana_revoke
+			remove_estate_privilege = nhs_native_priv_pax_romana
+			remove_estate_privilege = nhs_native_priv_pax_romana_revoke
 		}
 	}
 	on_granted_province = {
@@ -1009,88 +552,146 @@ nhs_native_priv_major_pax_romana_revoke = {
 
 # Encourage Barbaroi officials
 
-nhs_native_priv_encourage_barbaroi_officials_early = {
+nhs_native_priv_encourage_barbaroi_officials = {
     icon = privilege_empty_throne
 
-	loyalty = 0.10
-	influence = 0.05
+	loyalty = 0.1
+	influence = 0.1
 
 	is_valid = {
-		has_country_flag = native_council_enabled_early
 		nhs_culturally_elysian = yes
-		if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_encourage_barbaroi_officials_early
-			}
-			nhs_has_accepted_native_culture = yes
-		}
 	}
 	can_select = {
 		to_num_of_privileges_check = {
 			ESTATE = estate_all_natives
 		}
-		nhs_has_accepted_native_culture = yes
 	}
 	on_granted = {
-		custom_tooltip = nhs_native_priv_encourage_barbaroi_officials_condition_warning
-	}
-	on_revoked = {
-	}
-	on_revoked_province = {
-	}
-	on_invalid = {
-	}
-	penalties = {
-		same_culture_advisor_cost = 0.20
-	}
-	benefits = {
-		advisor_pool = 2
-		num_accepted_cultures = 1
-	}
-	ai_will_do = {
-		factor = 5
-	}
-}
-
-# Symmachoi noble offices
-
-nhs_native_priv_symmachoi_noble_offices_mid = {
-    icon = privilege_empty_throne
-
-	loyalty = 0.05
-	
-	is_valid = {
-		has_country_flag = native_council_enabled_mid
-		nhs_culturally_elysian = yes
-	}
-	can_select = {
-		to_num_of_privileges_check = {
-			ESTATE = estate_all_natives
+		if = {
+			limit = {
+				has_country_flag = native_council_enabled_early
+			}
+			custom_tooltip = nhs_native_priv_encourage_barbaroi_officials_early_effect_tooltip
+		}
+		else_if = {
+			limit = {
+				has_country_flag = native_council_enabled_mid
+			}
+			custom_tooltip = nhs_native_priv_encourage_barbaroi_officials_mid_effect_tooltip
+		}
+		else_if = {
+			limit = {
+				has_country_flag = native_council_enabled_late
+			}
+			custom_tooltip = nhs_native_priv_encourage_barbaroi_officials_mid_effect_tooltip
 		}
 	}
+	on_granted_province = {
+		if = {
+			limit = {
+				has_owner_accepted_culture = no
+				nhs_culturally_native = yes
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = native_council_enabled_early
+					}
+				}
+				add_province_modifier = {
+					name = nhs_native_priv_encourage_barbaroi_officials_early_mod
+					duration = -1
+				}
+			}
+			else_if = {
+				limit = {
+					owner = {
+						has_country_flag = native_council_enabled_mid
+					}
+				}
+				add_province_modifier = {
+					name = nhs_native_priv_encourage_barbaroi_officials_mid_mod
+					duration = -1
+				}
+			}
+			else_if = {
+				limit = {
+					owner = {
+						has_country_flag = native_council_enabled_late
+					}
+				}
+				add_province_modifier = {
+					name = nhs_native_priv_encourage_barbaroi_officials_mid_mod
+					duration = -1
+				}
+			}
+		}
+	}
+	on_revoked = {
+		custom_tooltip = nhs_native_priv_encourage_barbaroi_officials_revoke_tooltip
+	}
+	on_revoked_province = {
+		remove_province_modifier = nhs_native_priv_encourage_barbaroi_officials_early_mod
+		remove_province_modifier = nhs_native_priv_encourage_barbaroi_officials_mid_mod
+	}
+	on_invalid = {
+		custom_tooltip = nhs_native_priv_encourage_barbaroi_officials_revoke_tooltip
+	}
+	on_invalid_province = {
+		remove_province_modifier = nhs_native_priv_encourage_barbaroi_officials_early_mod
+		remove_province_modifier = nhs_native_priv_encourage_barbaroi_officials_mid_mod
+	}
 	penalties = {
-		legitimacy = -0.25
 		
-		estate_nhs_nobles_influence_modifier = -0.05
-		nobles_influence_modifier = -0.05
-		estate_nhs_pipiltin_influence_modifier = -0.05
-		estate_nhs_apogonoi_influence_modifier = -0.05
-
-		estate_nhs_nobles_loyalty_modifier = -0.05
-		nobles_loyalty_modifier = -0.05
-		estate_nhs_pipiltin_loyalty_modifier = -0.05
-		estate_nhs_apogonoi_loyalty_modifier = -0.05
 	}
 	benefits = {
+		
+	}
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = native_council_enabled_early
+		}
+		modifier = {
+			advisor_pool = 1
+			num_accepted_cultures = 1
+			# estate_all_natives_loyalty_modifier = 0.1
+			# estate_all_natives_influence_modifier = 0.05
+			same_culture_advisor_cost = 0.20
+		}
+	}
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = native_council_enabled_mid
+		}
+		modifier = {
+			advisor_pool = 1
+			num_accepted_cultures = 1
+			# estate_all_natives_loyalty_modifier = 0.1
+			# estate_all_natives_influence_modifier = 0.1
+			advisor_cost = 0.20
+		}
+	}
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = native_council_enabled_late
+		}
+		modifier = {
+			advisor_pool = 1
+			num_accepted_cultures = 1
+			# estate_all_natives_loyalty_modifier = 0.1
+			# estate_all_natives_influence_modifier = 0.1
+			advisor_cost = 0.20
+		}
 	}
 	ai_will_do = {
 		factor = 5
 	}
 }
+
 
 # Designate development zones
 
-nhs_native_priv_designate_development_zones_mid = {
+nhs_native_priv_designate_development_zones = {
     icon = privilege_reqruit_conouistador  # Yes, those typos are real
 	
 	is_valid = {
@@ -1101,107 +702,46 @@ nhs_native_priv_designate_development_zones_mid = {
 		to_num_of_privileges_check = {
 			ESTATE = estate_all_natives
 		}
+		NOT = { has_estate_privilege = nhs_native_priv_increase_tribute }
 	}
 	on_granted = {
-		custom_tooltip = nhs_native_priv_designate_development_zones_mid_effect_tooltip
+		custom_tooltip = nhs_native_priv_designate_development_zones_effect_tooltip
 		hidden_effect = {
 			every_owned_province = {
 				limit = {
 					nhs_culturally_native = yes
 				}
 				add_province_modifier = {
-					name = nhs_native_priv_designate_development_zones_mid_mod
+					name = nhs_native_priv_designate_development_zones_mod
 					duration = -1
 				}
 			}
 		}
 	}
 	on_revoked = {
-		custom_tooltip = nhs_native_priv_designate_development_zones_mid_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_designate_development_zones_mid_mod
-				}
-				remove_province_modifier = nhs_native_priv_designate_development_zones_mid_mod
-			}
-		}
+		custom_tooltip = nhs_native_priv_designate_development_zones_revoke_tooltip
 	}
-	on_invalid = {
-		custom_tooltip = nhs_native_priv_designate_development_zones_mid_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_designate_development_zones_mid_mod
-				}
-				remove_province_modifier = nhs_native_priv_designate_development_zones_mid_mod
-			}
-		}
+	on_revoked_province = {
 		if = {
 			limit = {
-				has_country_flag = native_council_enabled_late
+				has_province_modifier = nhs_native_priv_designate_development_zones_mod
 			}
-			set_estate_privilege = nhs_native_priv_designate_development_zones_late
-		}
-	}
-	penalties = {
-	}
-	benefits = {
-	}
-	ai_will_do = {
-		factor = 5
-	}
-}
-
-nhs_native_priv_designate_development_zones_late = {
-    icon = privilege_reqruit_conouistador
-	
-	is_valid = {
-		has_country_flag = native_council_enabled_late
-		nhs_culturally_elysian = yes
-	}
-	can_select = {
-		to_num_of_privileges_check = {
-			ESTATE = estate_all_natives
-		}
-	}
-	on_granted = {
-		custom_tooltip = nhs_native_priv_designate_development_zones_late_effect_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					nhs_culturally_native = yes
-				}
-				add_province_modifier = {
-					name = nhs_native_priv_designate_development_zones_late_mod
-					duration = -1
-				}
-			}
-		}
-	}
-	on_revoked = {
-		custom_tooltip = nhs_native_priv_designate_development_zones_late_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_designate_development_zones_late_mod
-				}
-				remove_province_modifier = nhs_native_priv_designate_development_zones_late_mod
-			}
+			remove_province_modifier = nhs_native_priv_designate_development_zones_mod
 		}
 	}
 	on_invalid = {
-		custom_tooltip = nhs_native_priv_designate_development_zones_late_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_designate_development_zones_late_mod
-				}
-				remove_province_modifier = nhs_native_priv_designate_development_zones_late_mod
+		custom_tooltip = nhs_native_priv_designate_development_zones_revoke_tooltip
+	}
+	on_invalid_province = {
+		if = {
+			limit = {
+				has_province_modifier = nhs_native_priv_designate_development_zones_mod
 			}
+			remove_province_modifier = nhs_native_priv_designate_development_zones_mod
 		}
 	}
 	penalties = {
+		global_tax_modifier = -0.2
 	}
 	benefits = {
 	}
@@ -1212,25 +752,25 @@ nhs_native_priv_designate_development_zones_late = {
 
 # Divide et Impera
 
-nhs_native_priv_divide_et_impera_early = {
+nhs_native_priv_divide_et_impera = {
     icon = privilege_new_world_mission
 	cooldown_years = 5
 	max_absolutism = 5
-	loyalty = 0.15
-	influence = -0.05
+	loyalty = 0
+	influence = 0
 	
 	is_valid = {
-		has_country_flag = native_council_enabled_early
+		OR = {
+			has_country_flag = native_council_enabled_early
+			has_country_flag = native_council_enabled_mid
+		}
 		nhs_culturally_elysian = yes
 	}
 	can_select = {
 		to_num_of_privileges_check = {
 			ESTATE = estate_all_natives
 		}
-		NOT = {
-			has_estate_privilege = nhs_native_priv_minor_pax_romana_early
-			has_estate_privilege = nhs_native_priv_major_pax_romana_early
-		}
+		NOT = { has_estate_privilege = nhs_native_priv_pax_romana }
 	}
 	can_revoke = {
 		custom_trigger_tooltip = {
@@ -1240,27 +780,21 @@ nhs_native_priv_divide_et_impera_early = {
 	}
 	on_granted = {
 		custom_tooltip = nhs_native_priv_always_revoke_tt
-		custom_tooltip = nhs_native_priv_divide_et_impera_early_incompatible_tooltip
+		custom_tooltip = nhs_native_priv_divide_et_impera_incompatible_tooltip
 		custom_tooltip = nhs_new_line_tt
+
 		if = {
 			limit = {
-				has_estate_privilege = nhs_native_priv_minor_pax_romana_early
+				has_country_flag = native_council_enabled_early
 			}
-			custom_tooltip = nhs_native_priv_minor_pax_romana_revoke_tooltip
-			hidden_effect = {
-				remove_estate_privilege = nhs_native_priv_minor_pax_romana_early
-			}
+			custom_tooltip = nhs_native_priv_divide_et_impera_early_effect_tooltip
 		}
 		else_if = {
 			limit = {
-				has_estate_privilege = nhs_native_priv_major_pax_romana_early
+				has_country_flag = native_council_enabled_mid
 			}
-			custom_tooltip = nhs_native_priv_major_pax_romana_revoke_tooltip
-			hidden_effect = {
-				remove_estate_privilege = nhs_native_priv_major_pax_romana_early
-			}
+			custom_tooltip = nhs_native_priv_divide_et_impera_mid_effect_tooltip
 		}
-		custom_tooltip = nhs_native_priv_divide_et_impera_early_effect_tooltip
 
 		if = {
 			limit = {
@@ -1274,77 +808,22 @@ nhs_native_priv_divide_et_impera_early = {
 			limit = {
 				nhs_culturally_native = yes
 			}
-			add_province_modifier = {
-				name = nhs_native_priv_divide_et_impera_early_mod
-				duration = -1
-			}
-		}
-	}
-	on_revoked = {
-		custom_tooltip = nhs_native_priv_divide_et_impera_early_revoke_tooltip
-		clr_country_flag = enacted_nhs_native_priv_divide_et_impera
-	}
-	on_revoked_province = {
-		if = {
-			limit = {
-				has_province_modifier = nhs_native_priv_divide_et_impera_early_mod
-			}
-			remove_province_modifier = nhs_native_priv_divide_et_impera_early_mod
-		}
-	}
-	on_invalid = {
-		custom_tooltip = nhs_native_priv_divide_et_impera_early_revoke_tooltip
-		if = {
-			limit = {
-				has_country_flag = native_council_enabled_mid
-			}
-			set_estate_privilege = nhs_native_priv_divide_et_impera_mid
-		}
-		else = {
-			clr_country_flag = enacted_nhs_native_priv_divide_et_impera
-		}
-	}
-	on_invalid_province = {
-		if = {
-			limit = {
-				has_province_modifier = nhs_native_priv_divide_et_impera_early_mod
-			}
-			remove_province_modifier = nhs_native_priv_divide_et_impera_early_mod
-		}
-	}
-	penalties = {
-	}
-	benefits = {
-	}
-	ai_will_do = {
-		factor = 5
-	}
-}
-
-nhs_native_priv_divide_et_impera_mid = {
-    icon = privilege_new_world_mission
-
-	loyalty = 0.10
-	
-	is_valid = {
-		has_country_flag = native_council_enabled_mid
-		nhs_culturally_elysian = yes
-	}
-	can_select = {
-		to_num_of_privileges_check = {
-			ESTATE = estate_all_natives
-		}
-		NOT = {
-			has_estate_privilege = nhs_native_priv_major_pax_romana_mid
-		}
-	}
-	on_granted = {
-		custom_tooltip = nhs_native_priv_divide_et_impera_mid_incompatible_tooltip
-		custom_tooltip = nhs_native_priv_divide_et_impera_mid_effect_tooltip
-		hidden_effect = {
-			every_owned_province = {
+			if = {
 				limit = {
-					nhs_culturally_native = yes
+					owner = {
+						has_country_flag = native_council_enabled_early
+					}
+				}
+				add_province_modifier = {
+					name = nhs_native_priv_divide_et_impera_early_mod
+					duration = -1
+				}
+			}
+			else_if = {
+				limit = {
+					owner = {
+						has_country_flag = native_council_enabled_mid
+					}
 				}
 				add_province_modifier = {
 					name = nhs_native_priv_divide_et_impera_mid_mod
@@ -1354,30 +833,42 @@ nhs_native_priv_divide_et_impera_mid = {
 		}
 	}
 	on_revoked = {
-		custom_tooltip = nhs_native_priv_divide_et_impera_mid_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_divide_et_impera_mid_mod
-				}
-				remove_province_modifier = nhs_native_priv_divide_et_impera_mid_mod
-			}
-		}
+		custom_tooltip = nhs_native_priv_divide_et_impera_revoke_tooltip
+		clr_country_flag = enacted_nhs_native_priv_divide_et_impera
+	}
+	on_revoked_province = {
+		remove_province_modifier = nhs_native_priv_divide_et_impera_early_mod
+		remove_province_modifier = nhs_native_priv_divide_et_impera_mid_mod
 	}
 	on_invalid = {
-		custom_tooltip = nhs_native_priv_divide_et_impera_mid_revoke_tooltip
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_modifier = nhs_native_priv_divide_et_impera_mid_mod
-				}
-				remove_province_modifier = nhs_native_priv_divide_et_impera_mid_mod
-			}
-		}
+		custom_tooltip = nhs_native_priv_divide_et_impera_revoke_tooltip
+		clr_country_flag = enacted_nhs_native_priv_divide_et_impera
+	}
+	on_invalid_province = {
+		remove_province_modifier = nhs_native_priv_divide_et_impera_early_mod
+		remove_province_modifier = nhs_native_priv_divide_et_impera_mid_mod
 	}
 	penalties = {
 	}
 	benefits = {
+	}
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = native_council_enabled_early
+		}
+		modifier = {
+			estate_all_natives_loyalty_modifier = 0.15
+			estate_all_natives_influence_modifier = -0.05
+		}
+	}
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = native_council_enabled_mid
+		}
+		modifier = {
+			estate_all_natives_loyalty_modifier = 0.10
+			estate_all_natives_influence_modifier = -0.05
+		}
 	}
 	ai_will_do = {
 		factor = 5
@@ -1388,21 +879,7 @@ nhs_native_priv_divide_et_impera_revoke = {
     icon = privilege_new_world_mission_revoke
 	
 	is_valid = {
-		if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_divide_et_impera_early
-			}
-			has_estate_privilege = nhs_native_priv_divide_et_impera_early
-		}
-		else_if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_divide_et_impera_mid
-			}
-			has_estate_privilege = nhs_native_priv_divide_et_impera_mid
-		}
-		else = {
-			always = no
-		}
+		has_estate_privilege = nhs_native_priv_divide_et_impera
 	}
 	can_select = {
 		custom_trigger_tooltip = {
@@ -1412,38 +889,13 @@ nhs_native_priv_divide_et_impera_revoke = {
 				days = 1825
 			}
 		}
-		if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_divide_et_impera_early
-			}
-			has_estate_privilege = nhs_native_priv_divide_et_impera_early
-		}
-		else_if = {
-			limit = {
-				has_estate_privilege = nhs_native_priv_divide_et_impera_mid
-			}
-			has_estate_privilege = nhs_native_priv_divide_et_impera_mid
-		}
-		else = {
-			always = no
-		}
+		has_estate_privilege = nhs_native_priv_divide_et_impera
 	}
 	on_granted = {
 		custom_tooltip = nhs_native_priv_divide_et_impera_revoke_tooltip
 		hidden_effect = {
 			remove_estate_privilege = nhs_native_priv_divide_et_impera_revoke
-			if = {
-				limit = {
-					has_estate_privilege = nhs_native_priv_divide_et_impera_early
-				}
-				remove_estate_privilege = nhs_native_priv_divide_et_impera_early
-			}
-			else_if = {
-				limit = {
-					has_estate_privilege = nhs_native_priv_divide_et_impera_mid
-				}
-				remove_estate_privilege = nhs_native_priv_divide_et_impera_mid
-			}
+			remove_estate_privilege = nhs_native_priv_divide_et_impera
 		}
 	}
 	on_granted_province = {
