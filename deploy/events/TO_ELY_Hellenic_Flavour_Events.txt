@@ -94,6 +94,9 @@ country_event = { #contact with christian / muslim colonists
 	picture = PANTHEON_eventPicture
 
     trigger = {
+
+		always = no  # -- Disable for now --
+
 		OR = {
             nhs_condition_all_ely = { KOMANDA = tag }
 			any_owned_province = {
@@ -183,6 +186,9 @@ country_event = { #christian reaction to Hellenic threat
 	picture = DIPLOMACY_SIGNING_eventPicture
 
 	trigger = {
+
+		always = no  # -- Disable for now --
+
 		nhs_condition_all_ely = { KOMANDA = tag }
 		NOT = {
 			is_at_war = yes
@@ -368,6 +374,9 @@ country_event = { #muslim reaction to Hellenic threat
 	picture = DIPLOMACY_SIGNING_eventPicture
 
 	trigger = {
+
+		always = no  # -- Disable for now --
+
 		nhs_condition_all_ely = { KOMANDA = tag }
 		NOT = {
 			is_at_war = yes
@@ -1079,19 +1088,24 @@ country_event = { #Hidden event to mark the current ruler as "garbage"
 	}
 }
 
-country_event = { #Sacrifices (Fires once a year) 
+
+# Sacrifices
+country_event = {
 	id = nhs_hcd_hellenicflavor.33
 	title = nhs_hcd_hellenicflavor33.t
 	desc = nhs_hcd_hellenicflavor33.d
 	picture = OLYMPIANS_eventPicture
 
 	trigger = {
+
+		always = no  # -- Disable for now --
+
 		religion = pantheon_worship
 		is_month = 1
 		OR = {
 			had_country_flag = {
 				flag = nhs_hcd_proper_sacrifices
-				days = 1460
+				days = 5475  # 15 years
 			}
 			NOT = {
 				has_country_flag = nhs_hcd_proper_sacrifices
@@ -1109,10 +1123,11 @@ country_event = { #Sacrifices (Fires once a year)
 		}
 	}
 
-	option = { #Set aside money for the sacrifices
+	option = { 
+		# Set aside money for the sacrifices
 		name = nhs_hcd_hellenicflavor.33.a
 
-		add_years_of_income = 0.5
+		add_years_of_income = -0.2
 
 		add_country_modifier = {
 			name = nhs_hcd_sacrifices_modest 
@@ -1120,10 +1135,11 @@ country_event = { #Sacrifices (Fires once a year)
 		}
 	}
 
-	option = { #Set aside a lot money for the sacrifices
+	option = { 
+		# Set aside a lot money for the sacrifices
 		name = nhs_hcd_hellenicflavor.33.b
 
-		add_years_of_income = 1
+		add_years_of_income = -0.4
 
 		add_country_modifier = {
 			name = nhs_hcd_sacrifices_money
@@ -1131,7 +1147,8 @@ country_event = { #Sacrifices (Fires once a year)
 		}
 	}
 
-	option = { #Grand festival
+	option = { 
+		# Grand festival
 		name = nhs_hcd_hellenicflavor.33.c
 
 		add_adm_power = -60
@@ -1142,33 +1159,8 @@ country_event = { #Sacrifices (Fires once a year)
 		}
 	}
 
-	option = { #Human sacrifices
-		name = nhs_hcd_hellenicflavor.33.d
-
-		trigger = {
-			at_war_with_religious_enemy = yes
-		}
-
-		every_known_country = {
-			limit = {
-				war_with = ROOT
-				NOT = {
-					religion = pantheon_worship
-				}
-			}
-			add_opinion = {
-				who = ROOT
-				modifier = nhs_hcd_heathen_state
-			}
-		}
-
-		add_country_modifier = {
-			name = nhs_hcd_sacrifices_human
-			duration = 1459
-		}
-	}
-
-	option = { #No sacrifices
+	option = {
+		# No sacrifices
 		name = nhs_hcd_hellenicflavor.33.e
 
 		add_estate_loyalty = {
@@ -1187,13 +1179,20 @@ country_event = { #Sacrifices (Fires once a year)
 	}
 }
 
-country_event = { #clerical reformation
+
+# Clerical reformation
+country_event = {
 	id = nhs_hcd_hellenicflavor.34
 	title = nhs_hcd_hellenicflavor34.t
 	desc = nhs_hcd_hellenicflavor34.d
 	picture = OLYMPIANS_eventPicture
 
+	fire_only_once = yes
+
     trigger = {
+
+		always = no  # -- Disable for now --
+
 		religion = pantheon_worship
 		has_country_flag = nhs_hcd_has_reformed_faith
 		num_of_owned_provinces_with = {
@@ -1209,10 +1208,8 @@ country_event = { #clerical reformation
 		}
 	}
 
-	fire_only_once = yes
-
 	mean_time_to_happen = {
-		months = 24
+		months = 48
 
 		modifier = {
 			factor = 0.5
@@ -1220,42 +1217,34 @@ country_event = { #clerical reformation
 		}
 		
 		modifier = {
-			factor = 0.25
+			factor = 0.5
 			is_year = 1560
 		}
 	}
 
-	option = { #Reform
+	option = { 
+		# Reform
 		name = nhs_hcd_hellenicflavor.34.a
 
-		take_estate_land_share_small = { #
+		take_estate_land_share_massive = { #
 			estate = estate_church
 		}
 
 		add_country_modifier = {
 			name = nhs_hcd_reform_clergy
-			duration = -1
+			duration = 3650
 		}
 
-		custom_tooltip = nhs_hcd_hellenic_religion_reformed_clergy_yes.tt
+		custom_tooltip = nhs_hcd_hellenic_religion_reformed_clergy_yes.tt  # TODO: meant to change available privileges
 	}
 
-	option = { #Do not reform #Swap it around - unrest for reform, no reform gets church loyalty (BE MEANER - Lichtkang)
+	option = { 
+		# Do not reform 
 		name = nhs_hcd_hellenicflavor.34.b
 
-		add_estate_loyalty = { #Change to permanent estate loyalty buff
+		add_estate_loyalty = { # TODO: Change to permanent estate loyalty buff
 			estate = estate_church
-			loyalty = 5
-		}
-
-		every_owned_province = {
-			limit = {
-				OR = {
-					religion = pantheon_worship
-					tolerance_to_this = 1
-				}
-			}
-			add_unrest = -3 #Change to province modifier
+			loyalty = 10
 		}
 
 		custom_tooltip = nhs_hcd_hellenic_religion_reformed_clergy_no.tt
@@ -1269,7 +1258,9 @@ country_event = { #Good omens
 	picture = OLYMPIANS_eventPicture
 
 	trigger = {
-		always = no
+
+		always = no  # -- Disable for now --
+
 		religion = pantheon_worship
 		NOT = {
 			is_bankrupt = yes 
@@ -1357,7 +1348,9 @@ country_event = { #Bad omens
 	picture = OLYMPIANS_eventPicture
 
 	trigger = {
-		always = no
+
+		always = no  # -- Disable for now --
+
 		NOT = { has_regency = yes } 
 		religion = pantheon_worship
 		OR = {
