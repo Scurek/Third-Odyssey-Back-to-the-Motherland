@@ -4,16 +4,21 @@ namespace = nhs2_cultureevents
 ### ELYSIAN CULTURAL EVOLUTION
 ###################################################
 
-# Cultural changes STAGE ONE - Greek to Elysian (still byzantine group)
+# Cultural change for ELysia - Greek to Elysian, native influences
 country_event = {
 	id = nhs2_cultureevents.100
 	title = nhs2_cultureevents.100.t
 	desc = nhs2_cultureevents.100.d
 	picture = byz_COURT_eventPicture
+
+	fire_only_once = yes
 	
 	trigger = {
-		is_year = 1470
+		nhs_condition_all_ely = { KOMANDA = tag }
+		has_country_flag = nhs_settled_mission
+		is_year = 1500
 		primary_culture = greek
+		NOT = { has_global_flag = nhs_elysian_culture_change }
 		OR = {
 			capital_scope = { continent = north_america }
 			capital_scope = { continent = south_america }
@@ -22,11 +27,59 @@ country_event = {
 			technology_group = exiled_greek
 			technology_group = modern_greek
 		}
-		NOT = { has_global_flag = nhs_started_at_bookmark }
+		OR = {
+			AND = {
+				is_year = 1520
+				NOT = {
+					to_ely_has_integrating_privilege = yes
+				}
+				calc_true_if = {
+					amount = 10
+					all_owned_province = {
+						to_ely_province_can_integrate = yes
+					}
+				}
+			}
+			AND = {
+				is_year = 1520
+				to_ely_has_integrating_privilege = yes
+				calc_true_if = {
+					amount = 10
+					all_owned_province = {
+						to_ely_province_can_integrate = yes
+					}
+				}
+			}
+			AND = {
+				is_year = 1510
+				to_ely_has_integrating_privilege = yes
+				calc_true_if = {
+					amount = 15
+					all_owned_province = {
+						to_ely_province_can_integrate = yes
+					}
+				}
+			}
+			AND = {
+				is_year = 1500
+				to_ely_has_integrating_privilege = yes
+				calc_true_if = {
+					amount = 20
+					all_owned_province = {
+						to_ely_province_can_integrate = yes
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		set_global_flag = nhs_elysian_culture_change
 	}
 
 	option = {		# What will be, will be
-		name = "nhs2_cultureevents.100.a"
+		name = nhs2_cultureevents.100.a
+		change_tag = ELY
 		change_primary_culture = elysian
 		hidden_effect = {
 			if = {
@@ -50,264 +103,418 @@ country_event = {
 				set_heir_culture = elysian
 			}
 		}
-		every_owned_province = {
-			limit = {
-				OR = {
-					is_capital = yes
-					nhs_homelands = yes
-				}
-				NOT = { has_albanian_majority_modifier = yes }
-				has_province_modifier = to_nat_tribal_development
-			}
-			change_culture = elysian
-			change_religion = ROOT
-			to_nat_assimilate_local_tribal_development = yes
-		}
+		set_global_flag = nhs_barbaroi_integration
+		custom_tooltip = nhs_convert_culture_capital_with_assimilation_tt
+		custom_tooltip = nhs_begin_barbaroi_integration_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_new_council_privileges_tt
+		custom_tooltip = nhs_native_priv_ancestral_land_mid_change_tt
+		custom_tooltip = nhs_native_priv_local_councils_empowered_change_tt
+		custom_tooltip = nhs_native_priv_pax_romana_change_tt
+		custom_tooltip = nhs_native_priv_divide_et_impera_tt
 		hidden_effect = {
 			every_owned_province = {
 				limit = {
 					OR = {
-						AND = {
-							NOT = { continent = europe }
-							culture = greek
-						}
-						# Free converts (for example: native powhattan if 953 is original)
 						is_capital = yes
 						nhs_homelands = yes
 					}
+					nhs_culturally_native = yes
 					NOT = { has_albanian_majority_modifier = yes }
 				}
 				change_culture = elysian
-				nhs_assign_names_ely = yes
+				change_religion = ROOT
+				to_nat_assimilate_local_tribal_development = yes
+			}
+			every_owned_province = {
+				limit = {
+					culture = greek
+					NOT = { continent = europe }
+					NOT = { has_albanian_majority_modifier = yes }
+				}
+				change_culture = elysian
+			}
+			every_province = {
+				limit = {
+					OR = {
+						continent = north_america
+						continent = south_america
+					}
+					culture = greek
+					NOT = {
+						owner = {
+							primary_culture = greek
+						}
+					}
+				}
+				change_culture = elysian
+			}
+			every_country = {
+				country_event = {
+					id = nhs2_cultureevents.106
+				}
+				country_event = {
+					id = nhs2_cultureevents.107
+				}
 			}
 		}
 	}
 }
 
-# Cultural changes STAGE TWO - Elysian to elysian_group with subsets
+# Cultural change - Greek to Elysian, no native influences
 country_event = {
-	id = nhs2_cultureevents.101
-	title = nhs2_cultureevents.101.t
-	desc = nhs2_cultureevents.101.d
+	id = nhs2_cultureevents.200
+	title = nhs2_cultureevents.200.t
+	desc = nhs2_cultureevents.200.d
 	picture = byz_COURT_eventPicture
+
+	fire_only_once = yes
 	
 	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		has_country_flag = nhs_settled_mission
+		primary_culture = greek
+		NOT = { has_global_flag = nhs_elysian_culture_change }
 		OR = {
-			is_year = 1510
+			capital_scope = { continent = north_america }
+			capital_scope = { continent = south_america }
+		}
+		OR = {
+			technology_group = exiled_greek
 			technology_group = modern_greek
 		}
-		primary_culture = elysian
-		# OR = {
-		# 	has_idea = senate_of_cities
-		# 	is_year = 1510
-		# 	ai = yes
-		# }
-		NOT = { has_country_modifier = nhs_handicap_settlers }
+		is_year = 1520
+		NOT = {
+			calc_true_if = {
+				amount = 10
+				all_owned_province = {
+					to_ely_province_can_integrate = yes
+				}
+			}
+		}
 	}
 
 	immediate = {
-		# Change province cultures
+		set_global_flag = nhs_elysian_culture_change
+	}
+
+	option = {		# What will be, will be
+		name = nhs2_cultureevents.200.a
+		change_tag = ELY
+		change_primary_culture = elysian
 		hidden_effect = {
+			if = {
+				limit = {
+					ruler_culture = greek
+				}
+				set_ruler_culture = elysian
+			}
+			if = {
+				limit = {
+					consort_culture = greek
+					has_consort = yes
+				}
+				set_consort_culture = elysian
+			}
+			if = {
+				limit = {
+					heir_culture = greek
+					has_heir = yes
+				}
+				set_heir_culture = elysian
+			}
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					culture = greek
+					NOT = { continent = europe }
+					NOT = { has_albanian_majority_modifier = yes }
+				}
+				change_culture = elysian
+			}
 			every_province = {
 				limit = {
-					culture = elysian
-				}
-				if = {
-					limit = {
-						nhs_homelands = yes
-						NOT = { has_albanian_majority_modifier = yes }
+					OR = {
+						continent = north_america
+						continent = south_america
 					}
-					change_culture = high_elysian
+					culture = greek
+					NOT = {
+						owner = {
+							primary_culture = greek
+						}
+					}
 				}
-				else = {
-					change_culture = elyric
-				}
-				nhs_assign_names_ely = yes
+				change_culture = elysian
 			}
-			every_subject_country = {
-				limit = {
-					primary_culture = elysian
-				}
-				country_event = { id = nhs2_cultureevents.101 }
-			}
-			if = {
-				limit = {
-					tag = CM1
-				}
-				capital_scope = {
-					change_culture = cretan_e
-				}
-				every_owned_province = {
-					limit = {
-						culture = elysian
-					}
-					change_culture = cretan_e
-				}
-				set_country_flag = ctm_culture_union1
-			}
-			if = {
-				limit = {
-					tag = MS1
-				}
-				capital_scope = {
-					change_culture = lakonian
-				}
-				every_owned_province = {
-					limit = {
-						culture = elysian
-					}
-					change_culture = lakonian
-				}
-			}
-			else = {
-				every_owned_province = {
-					limit = {
-						native_culture = yes
-						NOT = { has_albanian_majority_modifier = yes }
-					}
-					random = {
-						chance = 50
-						change_culture = elysameric
-						to_nat_assimilate_local_tribal_development = yes
-						nhs_assign_names_ely = yes
-					}
-				}
+		}
+	}
+}
+
+# Appearance of Symmachoi
+country_event = {
+	id = nhs2_cultureevents.201
+	title = nhs2_cultureevents.201.t
+	desc = nhs2_cultureevents.201.d
+	picture = byz_COURT_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		culture_group = elysian_group
+		had_global_flag = {
+			flag = nhs_elysian_culture_change
+			days = 7300
+		}
+		calc_true_if = {
+			amount = 10
+			all_owned_province = {
+				to_ely_province_can_integrate = yes
 			}
 		}
 	}
 
 	option = {		# What will be, will be
-		name = "nhs2_cultureevents.101.a"
-		if = {
-			limit = {
-				nhs_condition_all_ely = { KOMANDA = tag }
-			}
-			change_primary_culture = high_elysian
-			if = {
-				limit = {
-					OR = {
-						ruler_culture = elysian
-						ruler_culture = greek
-					}
-				}
-				set_ruler_culture = high_elysian
-			}
-			if = {
-				limit = {
-					OR = {
-						consort_culture = elysian
-						consort_culture = greek
-					}
-					has_consort = yes
-				}
-				set_consort_culture = high_elysian
-			}
-			if = {
-				limit = {
-					OR = {
-						heir_culture = elysian
-						heir_culture = greek
-					}
-					has_heir = yes
-				}
-				set_heir_culture = high_elysian
-			}
-			if = {
-				limit = {
-					has_dlc = "Common Sense"
-				}
-				every_owned_province = {
-					limit = {
-						nhs_homelands = yes
-						OR = {
-							culture_group = elysian_group
-							culture = elysian
-						}
-					}
-					custom_tooltip = nhs_set_seat_in_paliament_province_tt
-					hidden_effect = {
-						set_seat_in_parliament = yes
-					}
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				NOT = { tag = CM1 }
-				NOT = { tag = MS1 }
-			}
-			change_primary_culture = elyric
-			if = {
-				limit = {
-					ruler_culture = elysian
-				}
-				set_ruler_culture = elyric
-			}
-			if = {
-				limit = {
-					consort_culture = elysian
-				}
-				set_consort_culture = elyric
-			}
-			if = {
-				limit = {
-					heir_culture = elysian
-				}
-				set_heir_culture = elyric
-			}
-		}
-		else_if = {
-			limit = {
-				tag = CM1
-			}
-			change_primary_culture = cretan_e
-			if = {
-				limit = {
-					ruler_culture = elysian
-				}
-				set_ruler_culture = cretan_e
-			}
-			if = {
-				limit = {
-					consort_culture = elysian
-				}
-				set_consort_culture = cretan_e
-			}
-			if = {
-				limit = {
-					heir_culture = elysian
-				}
-				set_heir_culture = cretan_e
-			}
-		}
-		else_if = {
-			limit = {
-				tag = MS1
-			}
-			change_primary_culture = lakonian
-			if = {
-				limit = {
-					ruler_culture = lakonian
-				}
-				set_ruler_culture = lakonian
-			}
-			if = {
-				limit = {
-					consort_culture = lakonian
-				}
-				set_consort_culture = lakonian
-			}
-			if = {
-				limit = {
-					heir_culture = lakonian
-				}
-				set_heir_culture = lakonian
-			}
-		}
+		name = nhs2_cultureevents.201.a
+		set_global_flag = nhs_barbaroi_integration
+		custom_tooltip = nhs_convert_culture_capital_with_assimilation_tt
+		custom_tooltip = nhs_begin_barbaroi_integration_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_new_council_privileges_tt
+		custom_tooltip = nhs_native_priv_ancestral_land_mid_change_tt
+		custom_tooltip = nhs_native_priv_local_councils_empowered_change_tt
+		custom_tooltip = nhs_native_priv_pax_romana_change_tt
+		custom_tooltip = nhs_native_priv_divide_et_impera_tt
 	}
 }
 
-# Gradual cultural conversion of native american to Barbaroi provinces
+
+# # Cultural changes STAGE TWO - Elysian to elysian_group with subsets
+# country_event = {
+# 	id = nhs2_cultureevents.101
+# 	title = nhs2_cultureevents.101.t
+# 	desc = nhs2_cultureevents.101.d
+# 	picture = byz_COURT_eventPicture
+	
+# 	trigger = {
+# 		OR = {
+# 			is_year = 1510
+# 			technology_group = modern_greek
+# 		}
+# 		primary_culture = elysian
+# 		# OR = {
+# 		# 	has_idea = senate_of_cities
+# 		# 	is_year = 1510
+# 		# 	ai = yes
+# 		# }
+# 		NOT = { has_country_modifier = nhs_handicap_settlers }
+# 	}
+
+# 	immediate = {
+# 		# Change province cultures
+# 		hidden_effect = {
+# 			every_province = {
+# 				limit = {
+# 					culture = elysian
+# 				}
+# 				if = {
+# 					limit = {
+# 						nhs_homelands = yes
+# 						NOT = { has_albanian_majority_modifier = yes }
+# 					}
+# 					change_culture = high_elysian
+# 				}
+# 				else = {
+# 					change_culture = elyric
+# 				}
+# 				nhs_assign_names_ely = yes
+# 			}
+# 			every_subject_country = {
+# 				limit = {
+# 					primary_culture = elysian
+# 				}
+# 				country_event = { id = nhs2_cultureevents.101 }
+# 			}
+# 			if = {
+# 				limit = {
+# 					tag = CM1
+# 				}
+# 				capital_scope = {
+# 					change_culture = cretan_e
+# 				}
+# 				every_owned_province = {
+# 					limit = {
+# 						culture = elysian
+# 					}
+# 					change_culture = cretan_e
+# 				}
+# 				set_country_flag = ctm_culture_union1
+# 			}
+# 			if = {
+# 				limit = {
+# 					tag = MS1
+# 				}
+# 				capital_scope = {
+# 					change_culture = lakonian
+# 				}
+# 				every_owned_province = {
+# 					limit = {
+# 						culture = elysian
+# 					}
+# 					change_culture = lakonian
+# 				}
+# 			}
+# 			else = {
+# 				every_owned_province = {
+# 					limit = {
+# 						native_culture = yes
+# 						NOT = { has_albanian_majority_modifier = yes }
+# 					}
+# 					random = {
+# 						chance = 50
+# 						change_culture = elysameric
+# 						to_nat_assimilate_local_tribal_development = yes
+# 						nhs_assign_names_ely = yes
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+
+# 	option = {		# What will be, will be
+# 		name = "nhs2_cultureevents.101.a"
+# 		if = {
+# 			limit = {
+# 				nhs_condition_all_ely = { KOMANDA = tag }
+# 			}
+# 			change_primary_culture = high_elysian
+# 			if = {
+# 				limit = {
+# 					OR = {
+# 						ruler_culture = elysian
+# 						ruler_culture = greek
+# 					}
+# 				}
+# 				set_ruler_culture = high_elysian
+# 			}
+# 			if = {
+# 				limit = {
+# 					OR = {
+# 						consort_culture = elysian
+# 						consort_culture = greek
+# 					}
+# 					has_consort = yes
+# 				}
+# 				set_consort_culture = high_elysian
+# 			}
+# 			if = {
+# 				limit = {
+# 					OR = {
+# 						heir_culture = elysian
+# 						heir_culture = greek
+# 					}
+# 					has_heir = yes
+# 				}
+# 				set_heir_culture = high_elysian
+# 			}
+# 			if = {
+# 				limit = {
+# 					has_dlc = "Common Sense"
+# 				}
+# 				every_owned_province = {
+# 					limit = {
+# 						nhs_homelands = yes
+# 						OR = {
+# 							culture_group = elysian_group
+# 							culture = elysian
+# 						}
+# 					}
+# 					custom_tooltip = nhs_set_seat_in_paliament_province_tt
+# 					hidden_effect = {
+# 						set_seat_in_parliament = yes
+# 					}
+# 				}
+# 			}
+# 		}
+# 		else_if = {
+# 			limit = {
+# 				NOT = { tag = CM1 }
+# 				NOT = { tag = MS1 }
+# 			}
+# 			change_primary_culture = elyric
+# 			if = {
+# 				limit = {
+# 					ruler_culture = elysian
+# 				}
+# 				set_ruler_culture = elyric
+# 			}
+# 			if = {
+# 				limit = {
+# 					consort_culture = elysian
+# 				}
+# 				set_consort_culture = elyric
+# 			}
+# 			if = {
+# 				limit = {
+# 					heir_culture = elysian
+# 				}
+# 				set_heir_culture = elyric
+# 			}
+# 		}
+# 		else_if = {
+# 			limit = {
+# 				tag = CM1
+# 			}
+# 			change_primary_culture = cretan_e
+# 			if = {
+# 				limit = {
+# 					ruler_culture = elysian
+# 				}
+# 				set_ruler_culture = cretan_e
+# 			}
+# 			if = {
+# 				limit = {
+# 					consort_culture = elysian
+# 				}
+# 				set_consort_culture = cretan_e
+# 			}
+# 			if = {
+# 				limit = {
+# 					heir_culture = elysian
+# 				}
+# 				set_heir_culture = cretan_e
+# 			}
+# 		}
+# 		else_if = {
+# 			limit = {
+# 				tag = MS1
+# 			}
+# 			change_primary_culture = lakonian
+# 			if = {
+# 				limit = {
+# 					ruler_culture = lakonian
+# 				}
+# 				set_ruler_culture = lakonian
+# 			}
+# 			if = {
+# 				limit = {
+# 					consort_culture = lakonian
+# 				}
+# 				set_consort_culture = lakonian
+# 			}
+# 			if = {
+# 				limit = {
+# 					heir_culture = lakonian
+# 				}
+# 				set_heir_culture = lakonian
+# 			}
+# 		}
+# 	}
+# }
+
+# Gradual cultural conversion of native american to Symmachoi
 country_event = {
 	id = nhs2_cultureevents.102
 	title = nhs2_cultureevents.102.t
@@ -316,6 +523,7 @@ country_event = {
 	
 	trigger = {
 		culture_group = elysian_group
+		has_global_flag = nhs_barbaroi_integration
 		any_owned_province = {
 			to_ely_can_convert_to_barbaroi = yes
 		}
@@ -385,11 +593,12 @@ country_event = {
 			change_culture = elysameric
 			to_nat_assimilate_local_tribal_development = yes
 			nhs_assign_names_ely = yes
+			set_province_flag = nhs_culture_changed_to_symmachoi
 		}
 	}
 }
 
-# Gradual cultural conversion of Elysameric to Elyric provinces
+# Gradual cultural conversion of Symmachoi to Local Elysian group culture
 country_event = {
 	id = nhs2_cultureevents.103
 	title = nhs2_cultureevents.103.t
@@ -399,6 +608,7 @@ country_event = {
 	trigger = {
 		culture_group = elysian_group
 		NOT = { primary_culture = elysameric }
+		to_ely_has_integrating_privilege = yes
 		any_owned_province = {
 			to_ely_can_convert_to_elyric = yes
 		}
@@ -493,7 +703,7 @@ country_event = {
 				change_culture = kykladian
 			}
 			else = {
-				change_culture = elyric
+				change_culture = elysian
 			}
 		}
 	}
@@ -553,46 +763,82 @@ country_event = {
 # }
 
 # Colony culture
+# country_event = {
+# 	id = nhs2_cultureevents.105
+# 	title = nhs2_cultureevents.105.t
+# 	desc = nhs2_cultureevents.105.d
+# 	picture = COLONIZATION_eventPicture
+
+# 	trigger = {
+# 		primary_culture = high_elysian
+# 		NOT = { nhs_condition_all_ely = { KOMANDA = tag } }
+# 		is_colonial_nation = yes
+# 		# NOT = {
+# 		# 	nhs_condition_all_ely = { KOMANDA = tag }
+# 		# 	nhs_check_all_spartan = { CONDITION = tag }
+# 		# }
+# 		# OR = {
+# 		# 	primary_culture = high_elysian
+# 		# 	primary_culture = pipiltin
+# 		# }
+# 		NOT = {
+# 			capital_scope = {
+# 				continent = north_america
+# 			}
+# 		}
+# 	}
+
+# 	immediate = {
+# 		hidden_effect = {
+# 			change_primary_culture = elyric
+# 			every_owned_province = {
+# 				limit = {
+# 					culture = high_elysian
+# 					NOT = { continent = north_america }
+# 				}
+# 				change_culture = elyric
+# 			}
+# 		}
+# 	}
+
+# 	option = {
+# 		name = "nhs2_cultureevents.105.a"
+# 	}
+# }
+
+# Greek -> Elysian
 country_event = {
-	id = nhs2_cultureevents.105
-	title = nhs2_cultureevents.105.t
-	desc = nhs2_cultureevents.105.d
+	id = nhs2_cultureevents.106
+	title = nhs2_cultureevents.106.t
+	desc = nhs2_cultureevents.106.d
 	picture = COLONIZATION_eventPicture
 
-	trigger = {
-		primary_culture = high_elysian
-		NOT = { nhs_condition_all_ely = { KOMANDA = tag } }
-		is_colonial_nation = yes
-		# NOT = {
-		# 	nhs_condition_all_ely = { KOMANDA = tag }
-		# 	nhs_check_all_spartan = { CONDITION = tag }
-		# }
-		# OR = {
-		# 	primary_culture = high_elysian
-		# 	primary_culture = pipiltin
-		# }
-		NOT = {
-			capital_scope = {
-				continent = north_america
-			}
-		}
-	}
+	is_triggered_only = yes
 
-	immediate = {
-		hidden_effect = {
-			change_primary_culture = elyric
-			every_owned_province = {
-				limit = {
-					culture = high_elysian
-					NOT = { continent = north_america }
-				}
-				change_culture = elyric
-			}
+	trigger = {
+		NOT = {
+			nhs_condition_all_ely = { KOMANDA = tag }
 		}
+		NOT = { tag = CM1 }
+		primary_culture = greek
+		OR = {
+			capital_scope = { continent = north_america }
+			capital_scope = { continent = south_america }
+		}
+		has_global_flag = nhs_elysian_culture_change
 	}
 
 	option = {
-		name = "nhs2_cultureevents.105.a"
+		name = "nhs2_cultureevents.107.a"
+		change_primary_culture = elysian
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					culture = greek
+				}
+				change_culture = elysian
+			}
+		}
 	}
 }
 
@@ -603,11 +849,12 @@ country_event = {
 	desc = nhs2_cultureevents.107.d
 	picture = COLONIZATION_eventPicture
 
-	hidden = yes
+	is_triggered_only = yes
 
 	trigger = {
 		tag = CM1
-		primary_culture = high_elysian
+		primary_culture = greek
+		has_global_flag = nhs_elysian_culture_change
 		NOT = { has_country_flag = ctm_culture_union1 }
 	}
 
@@ -616,7 +863,7 @@ country_event = {
 		set_country_flag = ctm_culture_union1
 		every_owned_province = {
 			limit = {
-				is_capital = yes
+				culture = greek
 			}
 			change_culture = cretan_e
 		}
@@ -1231,7 +1478,7 @@ country_event = {
 # 					remove_province_modifier = nhs2_actual_elysian_minority
 # 				}
 # 				set_province_flag = nhs_conv_to_scythian
-# 				change_culture = skythiai
+# 				change_culture = eleutheroi
 # 				nhs_assign_names_effect = yes
 # 				add_province_modifier = {
 # 					name = nhs2_elysian_horselords
@@ -1262,7 +1509,7 @@ country_event = {
 # 		any_owned_province = {
 # 			is_colony = no
 # 			region = great_plains_region
-# 			culture = skythiai
+# 			culture = eleutheroi
 # 			NOT = { has_province_modifier = nhs2_elysian_horselords }
 # 		}
 # 	}
@@ -1273,7 +1520,7 @@ country_event = {
 # 				limit = {
 # 					is_colony = no
 # 					region = great_plains_region
-# 					culture = skythiai
+# 					culture = eleutheroi
 # 					NOT = { has_province_modifier = nhs2_elysian_horselords }
 # 				}
 # 				if = {
@@ -1326,7 +1573,7 @@ country_event = {
 # 					}
 # 				}
 # 				AND = {
-# 					NOT = { culture = skythiai }
+# 					NOT = { culture = eleutheroi }
 # 					has_province_modifier = nhs2_elysian_horselords
 # 				}
 # 			}
@@ -1347,7 +1594,7 @@ country_event = {
 # 							}
 # 						}
 # 						AND = {
-# 							NOT = { culture = skythiai }
+# 							NOT = { culture = eleutheroi }
 # 							has_province_modifier = nhs2_elysian_horselords
 # 						}
 # 					}
@@ -1373,7 +1620,7 @@ country_event = {
 # 				if = {
 # 					limit = {
 # 						AND = {
-# 							NOT = { culture = skythiai }
+# 							NOT = { culture = eleutheroi }
 # 							has_province_modifier = nhs2_elysian_horselords
 # 						}
 # 					}
@@ -1391,8 +1638,8 @@ country_event = {
 # Borealians timer
 country_event = {
 	id = nhs2_cultureevents.7
-	title = nhs2_cultureevents.7.t
-	desc = nhs2_cultureevents.7.d
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = niagara_falls_eventPicture
 	
 	hidden = yes
@@ -1401,11 +1648,6 @@ country_event = {
 		culture_group = elysian_group
 		NOT = { has_country_flag = nhs_borealians_appear }
 		NOT = { has_global_flag = nhs_borealians_appeared }
-		OR = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			primary_culture = high_elysian
-			primary_culture = borealian
-		}
 		any_owned_province = {
 			nhs_borealian_areas = yes
 			is_colony = no
@@ -1440,11 +1682,6 @@ country_event = {
 		culture_group = elysian_group
 		had_country_flag = { flag = nhs_borealians_appear days = 14600 }
 		NOT = { has_global_flag = nhs_borealians_appeared }
-		OR = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			primary_culture = high_elysian
-			primary_culture = borealian
-		}
 		any_owned_province = {
 			nhs_borealian_areas = yes
 			is_colony = no
@@ -1459,7 +1696,6 @@ country_event = {
 		hidden_effect = {
 			every_owned_province = {
 				limit = {
-					is_colony = no
 					NOT = { culture = shqipproi }
 					NOT = { culture = elysameric }
 					OR = {
@@ -1473,14 +1709,14 @@ country_event = {
 					culture_group = elysian_group
 				}
 				change_culture = borealian
-				if = {
-					limit = {
-						NOT = { has_province_flag = nhs_got_autonomy }
-						owner = { to_gets_autonomy_borealian = yes }
-					}
-					set_province_flag = nhs_got_autonomy
-					add_local_autonomy = 10
-				}
+				# if = {
+				# 	limit = {
+				# 		NOT = { has_province_flag = nhs_got_autonomy }
+				# 		owner = { to_gets_autonomy_borealian = yes }
+				# 	}
+				# 	set_province_flag = nhs_got_autonomy
+				# 	add_local_autonomy = 10
+				# }
 			}
 		}
 	}
@@ -1494,26 +1730,28 @@ country_event = {
 					nhs_hyperborealian_areas = yes
 				}
 			}
-			if = {
-				limit = {
-					to_gets_autonomy_borealian = yes
-				}
-				custom_tooltip = nhs_spawn_borealian_additional_autonomy_tt
-			}
-			else = {
-				custom_tooltip = nhs_spawn_borealian_additional_tt
-			}
+			custom_tooltip = nhs_spawn_borealian_additional_tt
+			# if = {
+			# 	limit = {
+			# 		to_gets_autonomy_borealian = yes
+			# 	}
+			# 	custom_tooltip = nhs_spawn_borealian_additional_autonomy_tt
+			# }
+			# else = {
+			# 	custom_tooltip = nhs_spawn_borealian_additional_tt
+			# }
 		}
 		else = {
-			if = {
-				limit = {
-					to_gets_autonomy_borealian = yes
-				}
-				custom_tooltip = nhs_spawn_borealian_autonomy_tt
-			}
-			else = {
-				custom_tooltip = nhs_spawn_borealian_tt
-			}
+			custom_tooltip = nhs_spawn_borealian_tt
+			# if = {
+			# 	limit = {
+			# 		to_gets_autonomy_borealian = yes
+			# 	}
+			# 	custom_tooltip = nhs_spawn_borealian_autonomy_tt
+			# }
+			# else = {
+			# 	custom_tooltip = nhs_spawn_borealian_tt
+			# }
 		}
 	}
 }
@@ -1521,8 +1759,8 @@ country_event = {
 # Hesperidians timer
 country_event = {
 	id = nhs2_cultureevents.9
-	title = nhs2_cultureevents.7.t
-	desc = nhs2_cultureevents.7.d
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = western_coast_eventPicture
 	
 	hidden = yes
@@ -1531,11 +1769,6 @@ country_event = {
 		culture_group = elysian_group
 		NOT = { has_country_flag = nhs_hesperidians_appear }
 		NOT = { has_global_flag = nhs_hesperidians_appeared }
-		OR = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			primary_culture = high_elysian
-			primary_culture = hesperidian
-		}
 		any_owned_province = {
 			culture_group = elysian_group
 			nhs_hesperidian_areas = yes
@@ -1566,14 +1799,10 @@ country_event = {
 			any_owned_province = {
 				OR = {
 					nhs_hesperidian_atlas = yes
-					AND = {
-						region = mexico_region
-						NOT = { province_group = mesoamerica_pgroup }
-					}
+					region = mexico_region
 					area = chihuahua_area
 				}
 				is_colony = no
-				NOT = { has_port = yes }
 				NOT = { culture = shqipproi }
 				NOT = { culture = elysameric }
 				culture_group = elysian_group
@@ -1583,14 +1812,7 @@ country_event = {
 				}
 			}
 			any_owned_province = {
-				OR = {
-					region = california_region
-					AND = {
-						NOT = { province_group = mesoamerica_pgroup }
-						area = nayarit_area
-					}
-				}
-				has_port = yes
+				region = california_region
 				is_colony = no
 				NOT = { culture = shqipproi }
 				NOT = { culture = elysameric }
@@ -1602,14 +1824,7 @@ country_event = {
 	desc = {
 		trigger = {
 			any_owned_province = {
-				OR = {
-					region = california_region
-					AND = {
-						area = nayarit_area
-						NOT = { province_group = mesoamerica_pgroup }
-					}
-				}
-				has_port = yes
+				region = california_region
 				is_colony = no
 				NOT = { culture = shqipproi }
 				NOT = { culture = elysameric }
@@ -1622,21 +1837,14 @@ country_event = {
 		trigger = {
 			always = yes
 		}
-		desc = nhs2_cultureevents.10.db #From the east
+		desc = nhs2_cultureevents.10.dc #From the east
 	}
 	
 	
 	picture = {
 		trigger = {
 			any_owned_province = {
-				OR = {
-					region = california_region
-					AND = {
-						NOT = { province_group = mesoamerica_pgroup }
-						area = nayarit_area
-					}
-				}
-				has_port = yes
+				region = california_region
 				is_colony = no
 				NOT = { culture = shqipproi }
 				NOT = { culture = elysameric }
@@ -1659,11 +1867,6 @@ country_event = {
 		had_country_flag = { flag = nhs_hesperidians_appear days = 14600 }
 		has_country_flag = nhs_hesperidians_appear # Just for testing
 		NOT = { has_global_flag = nhs_hesperidians_appeared }
-		OR = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			primary_culture = high_elysian
-			primary_culture = hesperidian
-		}
 		any_owned_province = {
 			nhs_hesperidian_areas = yes
 			is_colony = no
@@ -1679,7 +1882,6 @@ country_event = {
 		hidden_effect = {
 			every_owned_province = {
 				limit = {
-					is_colony = no
 					nhs_hesperidian_areas = yes
 					NOT = { culture = shqipproi }
 					NOT = { culture = elysameric }
@@ -1687,37 +1889,38 @@ country_event = {
 					culture_group = elysian_group
 				}
 				change_culture = hesperidian
-				if = {
-					limit = {
-						NOT = { has_province_flag = nhs_got_autonomy }
-						owner = { to_gets_autonomy_hesperidian = yes }
-					}
-					set_province_flag = nhs_got_autonomy
-					add_local_autonomy = 20
-				}
+				# if = {
+				# 	limit = {
+				# 		NOT = { has_province_flag = nhs_got_autonomy }
+				# 		owner = { to_gets_autonomy_hesperidian = yes }
+				# 	}
+				# 	set_province_flag = nhs_got_autonomy
+				# 	add_local_autonomy = 20
+				# }
 			}
 		}
 	}
 
 	option = {
 		name = "nhs2_cultureevents.10.a"
-		if = {
-			limit = {
-				to_gets_autonomy_hesperidian = yes
-			}
-			custom_tooltip = nhs_spawn_hesperidian_both_autonomy_tt
-		}
-		else = {
-			custom_tooltip = nhs_spawn_hesperidian_both_tt
-		}
+		custom_tooltip = nhs_spawn_hesperidian_both_tt
+		# if = {
+		# 	limit = {
+		# 		to_gets_autonomy_hesperidian = yes
+		# 	}
+		# 	custom_tooltip = nhs_spawn_hesperidian_both_autonomy_tt
+		# }
+		# else = {
+		# 	custom_tooltip = nhs_spawn_hesperidian_both_tt
+		# }
 	}
 }
 
 # The Lakonian Spartans timer
 country_event = {
 	id = nhs2_cultureevents.11
-	title = nhs2_cultureevents.7.t
-	desc = nhs2_cultureevents.7.d
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = RIVER_THROUGH_VALLEY_eventPicture
 	
 	hidden = yes
@@ -1829,8 +2032,8 @@ country_event = {
 # Kykladian timer
 country_event = {
 	id = nhs2_cultureevents.14
-	title = nhs2_cultureevents.7.t
-	desc = nhs2_cultureevents.7.d
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = caribbean_coast_eventPicture
 	
 	hidden = yes
@@ -1839,12 +2042,6 @@ country_event = {
 		culture_group = elysian_group
 		NOT = { has_country_flag = nhs_kykladian_appear }
 		NOT = { has_global_flag = nhs_kykladian_appeared }
-		OR = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			primary_culture = high_elysian
-			primary_culture = kykladian
-			primary_culture = cretan_e
-		}
 		any_owned_province = {
 			region = carribeans_region
 			NOT = { culture = shqipproi }
@@ -1909,12 +2106,6 @@ country_event = {
 		has_country_flag = nhs_kykladian_appear # Just for testing
 		NOT = { has_global_flag = nhs_kykladian_appeared }
 		culture_group = elysian_group
-		OR = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			primary_culture = high_elysian
-			primary_culture = kykladian
-			primary_culture = cretan_e
-		}
 		any_owned_province = {
 			region = carribeans_region
 			NOT = { culture = shqipproi }
@@ -1941,11 +2132,11 @@ country_event = {
 				nhs_condition_all_ely = { KOMANDA = tag }
 			}
 		}
-		custom_tooltip = nhs_spawn_kykladian_autonomy_tt
+		custom_tooltip = nhs_spawn_kykladian_tt
+		# custom_tooltip = nhs_spawn_kykladian_autonomy_tt
 		hidden_effect = {
 			every_owned_province = {
 				limit = {
-					is_colony = no
 					OR = {
 						region = carribeans_region
 						culture = cretan_e
@@ -1957,14 +2148,14 @@ country_event = {
 					culture_group = elysian_group
 				}
 				change_culture = kykladian
-				if = {
-					limit = {
-						NOT = { has_province_flag = nhs_got_autonomy }
-						owner = { to_gets_autonomy_kykladian = yes }
-					}
-					set_province_flag = nhs_got_autonomy
-					add_local_autonomy = 20
-				}
+				# if = {
+				# 	limit = {
+				# 		NOT = { has_province_flag = nhs_got_autonomy }
+				# 		owner = { to_gets_autonomy_kykladian = yes }
+				# 	}
+				# 	set_province_flag = nhs_got_autonomy
+				# 	add_local_autonomy = 20
+				# }
 			}
 		}
 	}
@@ -1980,7 +2171,6 @@ country_event = {
 		change_primary_culture = kykladian
 		every_owned_province = {
 			limit = {
-				is_colony = no
 				OR = {
 					region = carribeans_region
 					AND = {
@@ -2000,8 +2190,8 @@ country_event = {
 # Hyperborealians timer
 country_event = {
 	id = nhs2_cultureevents.16
-	title = nhs2_cultureevents.7.t
-	desc = nhs2_cultureevents.7.d
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = niagara_falls_eventPicture
 	
 	hidden = yes
@@ -2010,11 +2200,6 @@ country_event = {
 		culture_group = elysian_group
 		NOT = { has_country_flag = nhs_hyperborealians_appear }
 		NOT = { has_global_flag = nhs_hyperborealians_appeared }
-		OR = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			primary_culture = high_elysian
-			primary_culture = hyperborealian
-		}
 		any_owned_province = {
 			nhs_hyperborealian_areas = yes
 			culture_group = elysian_group
@@ -2048,11 +2233,6 @@ country_event = {
 		has_country_flag = nhs_hyperborealians_appear # Just for testing
 		NOT = { has_global_flag = nhs_hyperborealians_appeared }
 		culture_group = elysian_group
-		OR = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			primary_culture = high_elysian
-			primary_culture = hyperborealian
-		}
 		any_owned_province = {
 			nhs_hyperborealian_areas = yes
 			NOT = { culture = shqipproi }
@@ -2067,7 +2247,6 @@ country_event = {
 		hidden_effect = {
 			every_owned_province = {
 				limit = {
-					is_colony = no
 					nhs_hyperborealian_areas = yes
 					NOT = { culture = hyperborealian }
 					NOT = { culture = shqipproi }
@@ -2075,512 +2254,307 @@ country_event = {
 					culture_group = elysian_group
 				}
 				change_culture = hyperborealian
-				if = {
-					limit = {
-						NOT = { has_province_flag = nhs_got_autonomy }
-						owner = { to_gets_autonomy_hyperborealian = yes }
-					}
-					set_province_flag = nhs_got_autonomy
-					add_local_autonomy = 10
-				}
+				# if = {
+				# 	limit = {
+				# 		NOT = { has_province_flag = nhs_got_autonomy }
+				# 		owner = { to_gets_autonomy_hyperborealian = yes }
+				# 	}
+				# 	set_province_flag = nhs_got_autonomy
+				# 	add_local_autonomy = 10
+				# }
 			}
 		}
 	}
 
 	option = {
 		name = "nhs2_cultureevents.8.a"
-		if = {
-			limit = {
-				to_gets_autonomy_hyperborealian = yes
-			}
-			custom_tooltip = nhs_spawn_thoulean_autonomy_tt
-		}
-		else = {
-			custom_tooltip = nhs_spawn_thoulean_tt
-		}
+		custom_tooltip = nhs_spawn_thoulean_tt
+		# if = {
+		# 	limit = {
+		# 		to_gets_autonomy_hyperborealian = yes
+		# 	}
+		# 	custom_tooltip = nhs_spawn_thoulean_autonomy_tt
+		# }
+		# else = {
+		# 	custom_tooltip = nhs_spawn_thoulean_tt
+		# }
 	}
 }
 
-# Culture change to new cultures
-# NOW A SCRIPTED EFFECT to_ely_province_culture_check
-# country_event = {
-# 	id = nhs2_cultureevents.18
-# 	title = nhs2_cultureevents.17.t
-# 	desc = nhs2_cultureevents.17.d
-# 	picture = niagara_falls_eventPicture
-	
-# 	hidden = yes
-
-#     trigger = {
-# 		culture_group = elysian_group
-# 		any_owned_province = {
-# 			OR = {
-# 				AND = {
-# 					ROOT = {
-# 						NOT = { has_global_flag = nhs_skythiai_appear }
-# 						has_global_flag = nhs_scythians_appear
-# 					}
-# 					region = great_plains_region
-# 					NOT = { culture = shqipproi }
-# 					NOT = { culture = elysameric }
-# 					NOT = { culture = skythiai }
-# 					is_colony = no
-# 					culture_group = elysian_group
-# 				}
-# 				AND = {
-# 					ROOT = {
-# 						has_global_flag = nhs_skythiai_appear
-# 					}
-# 					region = great_plains_region
-# 					NOT = { culture = shqipproi }
-# 					NOT = { culture = skythiai }
-# 					is_colony = no
-# 					culture_group = elysian_group
-# 				}
-# 				AND = {
-# 					ROOT = {
-# 						OR = {
-# 							nhs_condition_all_ely = { KOMANDA = tag }
-# 							primary_culture = high_elysian
-# 						}
-# 						has_global_flag = nhs_hyperborealians_appeared
-# 					}
-# 					nhs_hyperborealian_province = yes
-# 				}
-# 				AND = {
-# 					ROOT = {
-# 						OR = {
-# 							nhs_condition_all_ely = { KOMANDA = tag }
-# 							primary_culture = high_elysian
-# 						}
-# 						has_global_flag = nhs_borealians_appeared
-# 					}
-# 					nhs_borealian_province = yes
-# 				}
-# 				AND = {
-# 					ROOT = {
-# 						OR = {
-# 							nhs_condition_all_ely = { KOMANDA = tag }
-# 							primary_culture = high_elysian
-# 						}
-# 						has_global_flag = nhs_hesperidians_appeared
-# 					}
-# 					nhs_hesperidian_province = yes
-# 				}
-# 				AND = {
-# 					ROOT = {
-# 						OR = {
-# 							nhs_condition_all_ely = { KOMANDA = tag }
-# 							primary_culture = high_elysian
-# 							primary_culture = kykladian
-# 						}
-# 						has_global_flag = nhs_kykladian_appeared
-# 					}
-# 					nhs_kykladian_province = yes
-# 				}
-# 			}
-# 		}
-# 	}
-	
-# 	immediate = {
-# 		hidden_effect = {
-# 			if = {
-# 				limit = {
-# 					AND = {
-# 						has_global_flag = nhs_skythiai_appear
-# 						any_owned_province = {
-# 							region = great_plains_region
-# 							NOT = { culture = shqipproi }
-# 							NOT = { culture = skythiai }
-# 							is_colony = no
-# 							culture_group = elysian_group
-# 						}
-# 					}	
-# 				}
-# 				every_owned_province = {
-# 					limit = {
-# 						region = great_plains_region
-# 						NOT = { culture = shqipproi }
-# 						NOT = { culture = skythiai }
-# 						is_colony = no
-# 						culture_group = elysian_group
-# 					}
-# 					change_culture = skythiai
-# 					if = {
-# 						limit = {
-# 							has_province_modifier = nhs2_elysian_minority
-# 						}
-# 						remove_province_modifier = nhs2_elysian_minority
-# 					}
-# 					if = {
-# 						limit = {
-# 							has_province_modifier = nhs2_actual_elysian_minority
-# 						}
-# 						remove_province_modifier = nhs2_actual_elysian_minority
-# 					}
-# 					add_province_modifier = {
-# 						name = nhs2_elysian_horselords
-# 						duration = -1
-# 					}
-# 				}
-# 			}
-# 			if = {
-# 				limit = {
-# 					AND = {
-# 						NOT = { has_global_flag = nhs_skythiai_appear }
-# 						has_global_flag = nhs_scythians_appear
-# 						any_owned_province = {
-# 							region = great_plains_region
-# 							NOT = { culture = shqipproi }
-# 							NOT = { culture = elysameric }
-# 							NOT = { culture = skythiai }
-# 							is_colony = no
-# 							culture_group = elysian_group
-# 						}
-# 					}
-# 				}
-# 				every_owned_province = {
-# 					limit = {
-# 						region = great_plains_region
-# 						NOT = { culture = shqipproi }
-# 						NOT = { culture = elysameric }
-# 						NOT = { culture = skythiai }
-# 						is_colony = no
-# 						culture_group = elysian_group
-# 					}
-# 					change_culture = scythian_c
-# 					if = {
-# 						limit = {
-# 							has_province_modifier = nhs2_elysian_minority
-# 						}
-# 						remove_province_modifier = nhs2_elysian_minority
-# 					}
-# 					add_province_modifier = {
-# 						name = nhs2_actual_elysian_minority
-# 						duration = -1
-# 					}
-# 					set_province_flag = nhs_conv_to_scythian
-# 				}
-# 			}
-# 			if = {
-# 				limit = {
-# 					OR = {
-# 						nhs_condition_all_ely = { KOMANDA = tag }
-# 						primary_culture = high_elysian
-# 					}
-# 					has_global_flag = nhs_hyperborealians_appeared
-# 					any_owned_province = {
-# 						nhs_hyperborealian_province = yes
-# 					}
-# 				}
-# 				every_owned_province = {
-# 					limit = {
-# 						nhs_hyperborealian_province = yes
-# 					}
-# 					if = {
-# 						limit = {
-# 							NOT = { has_province_flag = nhs_got_autonomy }
-# 							NOT = {
-# 								owner = { 
-# 									capital_scope = { 
-# 										nhs_hyperborealian_areas = yes
-# 									} 
-# 								} 
-# 							}
-# 						}
-# 						set_province_flag = nhs_got_autonomy
-# 						add_local_autonomy = 10
-# 					}
-# 					change_culture = hyperborealian
-# 				}
-# 			}
-# 			if = {
-# 				limit = {
-# 					OR = {
-# 						nhs_condition_all_ely = { KOMANDA = tag }
-# 						primary_culture = high_elysian
-# 					}
-# 					has_global_flag = nhs_borealians_appeared
-# 					any_owned_province = {
-# 						nhs_borealian_province = yes
-# 					}
-# 				}
-# 				every_owned_province = {
-# 					limit = {
-# 						nhs_borealian_province = yes
-# 					}
-# 					if = {
-# 						limit = {
-# 							NOT = { has_province_flag = nhs_got_autonomy }
-# 							NOT = {
-# 								owner = {
-# 									to_has_capital_in_borealian_areas = yes
-# 								} 
-# 							}
-# 						}
-# 						set_province_flag = nhs_got_autonomy
-# 						add_local_autonomy = 10
-# 					}
-# 					change_culture = borealian
-# 				}
-# 			}
-# 			if = {
-# 				limit = {
-# 					OR = {
-# 						nhs_condition_all_ely = { KOMANDA = tag }
-# 						primary_culture = high_elysian
-# 					}
-# 					has_global_flag = nhs_hesperidians_appeared
-# 					any_owned_province = {
-# 						nhs_hesperidian_province = yes
-# 					}
-# 				}
-# 				every_owned_province = {
-# 					limit = {
-# 						nhs_hesperidian_province = yes
-# 					}
-# 					if = {
-# 						limit = {
-# 							NOT = { has_province_flag = nhs_got_autonomy }
-# 							NOT = { owner = { capital_scope = { nhs_hesperidian_areas = yes } } }
-# 						}
-# 						set_province_flag = nhs_got_autonomy
-# 						add_local_autonomy = 20
-# 					}
-# 					change_culture = hesperidian
-# 				}
-# 			}
-# 			if = {
-# 				limit = {
-# 					OR = {
-# 						nhs_condition_all_ely = { KOMANDA = tag }
-# 						primary_culture = high_elysian
-# 						primary_culture = kykladian
-# 					}
-# 					has_global_flag = nhs_kykladian_appeared
-# 					any_owned_province = {
-# 						nhs_kykladian_province = yes
-# 					}
-# 				}
-# 				every_owned_province = {
-# 					limit = {
-# 						nhs_kykladian_province = yes
-# 					}
-# 					if = {
-# 						limit = {
-# 							NOT = { has_province_flag = nhs_got_autonomy }
-# 							NOT = { 
-# 								owner = {
-# 									OR = {
-# 										primary_culture = kykladian
-# 										capital_scope = { 
-# 											region = carribeans_region 
-# 										} 
-# 									}
-# 								}
-# 							}
-# 						}
-# 						set_province_flag = nhs_got_autonomy
-# 						add_local_autonomy = 20
-# 					}
-# 					change_culture = kykladian
-# 				}
-# 			}
-# 		}
-# 	}
-
-# 	option = {
-# 		name = "nhs2_cultureevents.8.a"
-# 	}
-# }
-
-
-# Culture change to new cultures
-# REMOVED WITH THE NEW ESTATE SYSTEM
-# province_event = {
-# 	id = nhs2_cultureevents.19
-# 	title = nhs2_cultureevents.17.t
-# 	desc = nhs2_cultureevents.17.d
-# 	picture = niagara_falls_eventPicture
-	
-# 	hidden = yes
-
-#     trigger = {
-# 		nhs_has_any_native_estate = yes
-# 		owner = {
-# 			OR = {
-# 				culture_group = elysian_group
-# 				primary_culture = elysian
-# 				culture_group = norse_g
-# 			}
-# 			nhs_has_any_native_estate = yes
-# 		}
-# 		NOT = {
-# 			native_culture = yes
-# 		}
-# 		NOT = { has_albanian_majority_modifier = yes }
-# 		OR = {
-# 			NOT = { owner = { primary_culture = elysian } }
-# 			any_neighbor_province = {
-# 				native_culture = yes
-# 			}
-# 			any_empty_neighbor_province = {
-# 				native_culture = yes
-# 			}
-# 		}
-# 		NOT = { culture = high_elysian }
-# 	}
-	
-# 	immediate = {
-# 		set_province_flag = nhs_gone_to_native
-# 		hidden_effect = {
-# 			if = {
-# 				limit = {
-# 					owner = {
-# 						primary_culture = elysian
-# 					}
-# 				}
-# 				if = {
-# 					limit = {
-# 						any_neighbor_province = {
-# 							native_culture = yes
-# 						}
-# 					}
-# 					random_neighbor_province = {
-# 						limit = {
-# 							native_culture = yes
-# 						}
-# 						ROOT = {
-# 							change_culture = PREV
-# 						}
-# 					}
-# 				}
-# 				else_if = {
-# 					limit = {
-# 						any_empty_neighbor_province = {
-# 							native_culture = yes
-# 						}
-# 					}
-# 					random_empty_neighbor_province = {
-# 						limit = {
-# 							native_culture = yes
-# 						}
-# 						ROOT = {
-# 							change_culture = PREV
-# 						}
-# 					}
-# 				}
-# 			}
-# 			else_if = {
-# 				limit = {
-# 					owner = {
-# 						culture_group = elysian_group
-# 					}
-# 					region = great_plains_region
-# 					has_global_flag = nhs_skythiai_appear
-# 				}
-# 				change_culture = skythiai
-# 				add_province_modifier = {
-# 					name = nhs2_elysian_horselords
-# 					duration = -1
-# 				}
-# 			}
-# 			else_if = {
-# 				limit = {
-# 					owner = {
-# 						culture_group = elysian_group
-# 					}
-# 					NOT = { region = great_plains_region }
-# 				}
-# 				change_culture = elysameric
-# 			}
-# 			else_if = {
-# 				limit = {
-# 					owner = {
-# 						culture_group = elysian_group
-# 						NOT = { culture = elysameric }
-# 					}
-# 					region = great_plains_region
-# 					has_global_flag = nhs_scythians_appear
-# 				}
-# 				change_culture = scythian_c
-# 			}
-# 			else_if = {
-# 				limit = {
-# 					owner = {
-# 						culture_group = norse_g
-# 					}
-# 				}
-# 				change_culture = skraeling
-# 			}
-# 		}
-# 	}
-
-# 	option = {
-# 		name = "nhs2_cultureevents.8.a"
-# 	}
-# }
-
-# After flip greek culture fix
+# Elyric timer
 country_event = {
-	id = nhs2_cultureevents.20
-	title = nhs2_cultureevents.17.t
-	desc = nhs2_cultureevents.17.d
+	id = nhs2_cultureevents.18
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = niagara_falls_eventPicture
 	
 	hidden = yes
 
     trigger = {
-		OR = {
-			primary_culture = elysian
-			culture_group = elysian_group
-		}
+		culture_group = elysian_group
+		NOT = { has_country_flag = nhs_elyric_appear }
+		NOT = { has_global_flag = nhs_elyric_appeared }
 		any_owned_province = {
-			culture = greek
-			OR = {
-				continent = north_america
-				continent = south_america
+			nhs_elyric_areas = yes
+			culture_group = elysian_group
+			is_colony = no
+			NOT = { culture = shqipproi }
+			NOT = { culture = elysameric }
+		}
+		
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = nhs_elyric_appear
+		}
+	}
+
+	option = {
+		name = "nhs2_cultureevents.7.a"
+	}
+}
+
+# Elyric appear
+country_event = {
+	id = nhs2_cultureevents.19
+	title = nhs2_cultureevents.19.t
+	desc = nhs2_cultureevents.19.d
+	picture = CITY_DEVELOPMENT_eventPicture
+
+    trigger = {
+		had_country_flag = { flag = nhs_elyric_appear days = 14600 }
+		has_country_flag = nhs_elyric_appear # Just for testing
+		NOT = { has_global_flag = nhs_elyric_appeared }
+		culture_group = elysian_group
+		any_owned_province = {
+			nhs_elyric_areas = yes
+			culture_group = elysian_group
+			NOT = { culture = shqipproi }
+			NOT = { culture = elysameric }
+			is_colony = no
+		}
+	}
+	
+	immediate = {
+		set_global_flag = nhs_elyric_appeared
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					culture_group = elysian_group
+					nhs_elyric_areas = yes
+					NOT = { culture = shqipproi }
+					NOT = { culture = elysameric }
+				}
+				change_culture = elyric
+				# if = {
+				# 	limit = {
+				# 		NOT = { has_province_flag = nhs_got_autonomy }
+				# 		owner = { to_gets_autonomy_hyperborealian = yes }
+				# 	}
+				# 	set_province_flag = nhs_got_autonomy
+				# 	add_local_autonomy = 10
+				# }
 			}
+		}
+	}
+
+	option = {
+		name = nhs2_cultureevents.19.a
+		custom_tooltip = nhs_spawn_elyric_tt
+		# if = {
+		# 	limit = {
+		# 		to_gets_autonomy_hyperborealian = yes
+		# 	}
+		# 	custom_tooltip = nhs_spawn_thoulean_autonomy_tt
+		# }
+		# else = {
+		# 	custom_tooltip = nhs_spawn_thoulean_tt
+		# }
+	}
+}
+
+# Arkadian timer
+country_event = {
+	id = nhs2_cultureevents.20
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = niagara_falls_eventPicture
+	
+	hidden = yes
+
+    trigger = {
+		culture_group = elysian_group
+		NOT = { has_country_flag = nhs_arkadians_appear }
+		NOT = { has_global_flag = nhs_arkadians_appeared }
+		any_owned_province = {
+			continent = south_america
+			culture_group = elysian_group
+			is_colony = no
+			NOT = { culture = shqipproi }
+			NOT = { culture = elysameric }
 		}
 	}
 	
 	immediate = {
 		hidden_effect = {
-			if = {
-				limit = {
-					primary_culture = elysian
-				}
-				every_owned_province = {
-					limit = {
-						culture = greek
-						OR = {
-							continent = north_america
-							continent = south_america
-						}
-					}
-					change_culture = elysian
-				}
-			}
-			if = {
+			set_country_flag = nhs_elyric_appear
+		}
+	}
+
+	option = {
+		name = "nhs2_cultureevents.7.a"
+	}
+}
+
+# Arkadians appear
+country_event = {
+	id = nhs2_cultureevents.21
+	title = nhs2_cultureevents.21.t
+	desc = nhs2_cultureevents.21.d
+	picture = caribbean_arrival_eventPicture
+
+    trigger = {
+		had_country_flag = { flag = nhs_arkadians_appear days = 14600 }
+		has_country_flag = nhs_arkadians_appear # Just for testing
+		NOT = { has_global_flag = nhs_arkadians_appeared }
+		culture_group = elysian_group
+		any_owned_province = {
+			continent = south_america
+			culture_group = elysian_group
+			NOT = { culture = shqipproi }
+			NOT = { culture = elysameric }
+			is_colony = no
+		}
+	}
+	
+	immediate = {
+		set_global_flag = nhs_arkadians_appeared
+		hidden_effect = {
+			every_owned_province = {
 				limit = {
 					culture_group = elysian_group
+					nhs_arkadian_areas = yes
+					NOT = { culture = shqipproi }
+					NOT = { culture = elysameric }
 				}
-				every_owned_province = {
-					limit = {
-						culture = greek
-						OR = {
-							continent = north_america
-							continent = south_america
-						}
-					}
-					change_culture = high_elysian
+				change_culture = arkadian
+				# if = {
+				# 	limit = {
+				# 		NOT = { has_province_flag = nhs_got_autonomy }
+				# 		owner = { to_gets_autonomy_hyperborealian = yes }
+				# 	}
+				# 	set_province_flag = nhs_got_autonomy
+				# 	add_local_autonomy = 10
+				# }
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_cultureevents.21.a
+		custom_tooltip = nhs_spawn_arkadian_tt
+		# if = {
+		# 	limit = {
+		# 		to_gets_autonomy_hyperborealian = yes
+		# 	}
+		# 	custom_tooltip = nhs_spawn_thoulean_autonomy_tt
+		# }
+		# else = {
+		# 	custom_tooltip = nhs_spawn_thoulean_tt
+		# }
+	}
+}
+
+
+# Eleutheroi timer
+country_event = {
+	id = nhs2_cultureevents.22
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = TO_GREAT_PLAINS_2_eventPicture
+	
+	hidden = yes
+
+    trigger = {
+		culture_group = elysian_group
+		NOT = { has_country_flag = nhs_eleutheroi_appear }
+		NOT = { has_global_flag = nhs_eleutheroi_appeared }
+		any_owned_province = {
+			nhs_eleutheroi_areas = yes
+			culture_group = elysian_group
+			is_colony = no
+			NOT = { culture = shqipproi }
+			NOT = { culture = elysameric }
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = nhs_elyric_appear
+		}
+	}
+
+	option = {
+		name = "nhs2_cultureevents.7.a"
+	}
+}
+
+# Eleutheroi appear
+country_event = {
+	id = nhs2_cultureevents.23
+	title = nhs2_cultureevents.23.t
+	desc = nhs2_cultureevents.23.d
+	picture = TO_GREAT_PLAINS_2_eventPicture
+
+    trigger = {
+		had_country_flag = { flag = nhs_eleutheroi_appear days = 14600 }
+		has_country_flag = nhs_eleutheroi_appear # Just for testing
+		NOT = { has_global_flag = nhs_eleutheroi_appeared }
+		culture_group = elysian_group
+		any_owned_province = {
+			nhs_eleutheroi_areas = yes
+			culture_group = elysian_group
+			NOT = { culture = shqipproi }
+			NOT = { culture = elysameric }
+			is_colony = no
+		}
+	}
+	
+	immediate = {
+		set_global_flag = nhs_eleutheroi_appeared
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					culture_group = elysian_group
+					nhs_eleutheroi_areas = yes
+					NOT = { culture = shqipproi }
+					NOT = { culture = elysameric }
 				}
+				change_culture = eleutheroi
+				# if = {
+				# 	limit = {
+				# 		NOT = { has_province_flag = nhs_got_autonomy }
+				# 		owner = { to_gets_autonomy_hyperborealian = yes }
+				# 	}
+				# 	set_province_flag = nhs_got_autonomy
+				# 	add_local_autonomy = 10
+				# }
 			}
 		}
 	}
 
 	option = {
 		name = "nhs2_cultureevents.8.a"
+		custom_tooltip = nhs_spawn_eleutheroi_tt
+		# if = {
+		# 	limit = {
+		# 		to_gets_autonomy_hyperborealian = yes
+		# 	}
+		# 	custom_tooltip = nhs_spawn_thoulean_autonomy_tt
+		# }
+		# else = {
+		# 	custom_tooltip = nhs_spawn_thoulean_tt
+		# }
 	}
 }
-
