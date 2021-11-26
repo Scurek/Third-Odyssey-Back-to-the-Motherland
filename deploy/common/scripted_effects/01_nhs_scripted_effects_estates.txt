@@ -1,17 +1,12 @@
+# -- NATIVE ESTATE EFFECTS --
 nhs_add_appropriate_native_estate_flag = {
 	clr_country_flag = native_council_enabled_early
 	clr_country_flag = native_council_enabled_mid
-	clr_country_flag = native_council_enabled_late
+	# clr_country_flag = native_council_enabled_late
 	if = {
 		limit = {
-			has_institution = global_trade
-		}
-		set_country_flag = native_council_enabled_early
-	}
-	else_if = {
-		limit = {
 			OR = {
-				has_institution = new_world_i
+				has_global_flag = nhs_first_barbaroi_integration
 				nhs_check_all_vinland = { CONDITION = tag }
 			}
 		}
@@ -21,8 +16,6 @@ nhs_add_appropriate_native_estate_flag = {
 		set_country_flag = native_council_enabled_early
 	}
 }
-
-# -- NATIVE ESTATE EFFECTS --
 
 # Add influence modifier to any existing native estate with amount QUANTITY, description DESC and duration DURATION
 # We can keep this, since we can easily change this if native estates ever differentiate (again)...
@@ -52,11 +45,13 @@ province_update_estate_privilege = {
 	if = {
 		# Add province modifier if needed (and applicable)
 		limit = {
-			owner = { has_estate_privilege = $PRIVILEGE$ }
-			nhs_culturally_native = yes
+			[[PRIVILEGE]
+				owner = { has_estate_privilege = $PRIVILEGE$ }
+			]
 			[[ADDITIONAL_TRIGGER]
 				$ADDITIONAL_TRIGGER$ = yes
 			]
+			nhs_culturally_native = yes
 		}
 		[[EARLY_MODIFIER]
 		if = {
@@ -172,22 +167,21 @@ province_update_estate_privilege = {
 	
 }
 
-
 # Recalculate all native estate modifiers for a single province
 province_recalculate_estate_privileges_effect_natives = {
 	# TODO: effect can't use other effect?
 	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_local_councils_empowered MODIFIER = nhs_native_priv_local_councils_empowered_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_pax_romana EARLY_MODIFIER = nhs_native_priv_pax_romana_early_mod MID_MODIFIER = nhs_native_priv_pax_romana_mid_mod }
+	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_pax_romana_early MODIFIER = nhs_native_priv_pax_romana_early_mod }
+	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_pax_romana_mid MODIFIER = nhs_native_priv_pax_romana_mid_mod }
 	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_increase_tribute MODIFIER = nhs_native_priv_increase_tribute_mod }
-	province_update_estate_privilege = { 
-		PRIVILEGE = nhs_native_priv_encourage_barbaroi_officials 
-		EARLY_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_early_mod 
-		MID_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_mid_mod 
-		LATE_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_mid_mod
-		ADDITIONAL_TRIGGER = nhs_nhs_native_priv_encourage_barbaroi_officials_trigger
+	province_update_estate_privilege = {
+		EARLY_MODIFIER = nhs_native_priv_cultural_sufferance_early_mod 
+		MID_MODIFIER = nhs_native_priv_cultural_sufferance_mid_mod 
+		ADDITIONAL_TRIGGER = nhs_native_priv_cultural_sufferance_province_trigger
 	}
 	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_designate_development_zones MODIFIER = nhs_native_priv_designate_development_zones_mod }
-	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_divide_et_impera EARLY_MODIFIER = nhs_native_priv_divide_et_impera_early_mod MID_MODIFIER = nhs_native_priv_divide_et_impera_mid_mod }
+	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_divide_et_impera_early MODIFIER = nhs_native_priv_divide_et_impera_early_mod }
+	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_divide_et_impera_mid MODIFIER = nhs_native_priv_divide_et_impera_mid_mod }
 }
 
 handle_nhs_native_priv_inclusive_citizenship_modifier = {
@@ -214,10 +208,10 @@ handle_nhs_native_priv_inclusive_citizenship_colony_finished = {
 			has_province_modifier = nhs_native_priv_inclusive_citizenship_mod
 		}
 		remove_province_modifier = nhs_native_priv_inclusive_citizenship_mod
-		add_local_autonomy = 20
+		add_local_autonomy = 25
 		owner = {
 			change_estate_land_share = {
-				estate = estate_church
+				estate = estate_all_natives
 				share = 5
 				province = PREV
 			}
@@ -225,17 +219,74 @@ handle_nhs_native_priv_inclusive_citizenship_colony_finished = {
 	}
 }
 
-handle_nhs_native_priv_encourage_barbaroi_officials_modifier = {
-	every_owned_province = {
-		province_update_estate_privilege = { 
-			PRIVILEGE = nhs_native_priv_encourage_barbaroi_officials 
-			EARLY_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_early_mod 
-			MID_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_mid_mod 
-			LATE_MODIFIER = nhs_native_priv_encourage_barbaroi_officials_mid_mod
-			ADDITIONAL_TRIGGER = nhs_nhs_native_priv_encourage_barbaroi_officials_trigger
+handle_nhs_native_priv_ancestral_land_colony_finished = {
+	if = {
+		limit = {
+			has_province_modifier = to_nat_tribal_development
+		}
+		owner = {
+			change_estate_land_share = {
+				estate = estate_all_natives
+				share = 5
+				province = PREV
+			}
 		}
 	}
 }
+
+handle_nhs_native_priv_cultural_sufferance_modifier = {
+	every_owned_province = {
+		province_update_estate_privilege = { 
+			PRIVILEGE = nhs_native_priv_encourage_barbaroi_officials 
+			EARLY_MODIFIER = nhs_native_priv_cultural_sufferance_early_mod 
+			MID_MODIFIER = nhs_native_priv_cultural_sufferance_mid_mod 
+			ADDITIONAL_TRIGGER = nhs_native_priv_cultural_sufferance_province_trigger
+		}
+	}
+}
+
+nhs_switch_elysian_native_estate_to_mid = {
+	set_country_flag = native_council_enabled_mid
+	clr_country_flag = native_council_enabled_early
+	custom_tooltip = nhs_begin_barbaroi_integration_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = nhs_new_council_privileges_tt
+	custom_tooltip = nhs_new_line_tt
+	# custom_tooltip = nhs_native_priv_ancestral_land_mid_change_tt
+	# custom_tooltip = nhs_native_priv_local_councils_empowered_change_tt
+	custom_tooltip = nhs_native_priv_divide_et_impera_change_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = nhs_native_priv_pax_romana_change_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = nhs_native_priv_inclusive_citizenship_change_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = nhs_increases_barbaroi_integration_change_tt
+	hidden_effect = {
+		if = {
+			limit = {
+				has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+			}
+			set_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+			remove_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+		}
+		if = {
+			limit = {
+				has_estate_privilege = nhs_native_priv_divide_et_impera_early
+			}
+			set_estate_privilege = nhs_native_priv_divide_et_impera_mid
+			remove_estate_privilege = nhs_native_priv_divide_et_impera_early
+		}
+		if = {
+			limit = {
+				has_estate_privilege = nhs_native_priv_pax_romana_early
+			}
+			set_estate_privilege = nhs_native_priv_pax_romana_mid
+			remove_estate_privilege = nhs_native_priv_pax_romana_early
+		}
+	}
+}
+
+# -- NOBLE ESTATE EFFECTS --
 
 nhs_add_noble_estate_influence_modifier = {
 	if = {
