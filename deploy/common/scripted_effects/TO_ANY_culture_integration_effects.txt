@@ -1,0 +1,249 @@
+nhs_find_most_conversion_years_remaining = {
+	set_variable = {
+		which = $VARIABLE_NAME$
+		value = 0
+	}
+	every_owned_province = {
+		limit = {
+			has_province_modifer = $MODIFIER$
+			check_variable = {
+				which = conversion_start_year
+				value = 1
+			}
+			check_variable = {
+				which = culture_conversion_duration
+				value = 1
+			}
+		}
+		export_to_variable = {
+			which = elapsed_years
+			value = trigger_value:is_year
+		}
+		subtract_variable = {
+			which = elapsed_years
+			which = conversion_start_year
+		}
+		set_variable = {
+			which = $VARIABLE_NAME$
+			which = culture_conversion_duration
+		}
+		subtract_variable = {
+			which = $VARIABLE_NAME$
+			which = elapsed_years
+		}
+
+		if = {
+			limit = {
+				check_variable = {
+					which = $VARIABLE_NAME$
+					which = PREV
+				}
+			}
+			PREV = {
+				set_variable = {
+					which = $VARIABLE_NAME$
+					which = PREV
+				}
+			}
+		}
+		set_variable = {
+			which = $VARIABLE_NAME$
+			value = 0
+		}
+	}
+}
+
+nhs_set_culture_integration_modifier = {
+	set_variable = {
+		which = modifier_duration_years
+		which = $VARIABLE_NAME$
+	}
+	add_province_modifier = {
+		name = $MODIFIER$
+		duration = 365
+	}
+	change_variable = {
+		which = modifier_duration_years
+		value = -1
+	}
+	while = {
+		limit = {
+			check_variable = {
+				which = modifier_duration_years
+				value = 1
+			}
+		}
+		change_variable = {
+			which = modifier_duration_years
+			value = -1
+		}
+		extend_province_modifier = {
+			name = $MODIFIER$
+			duration = 365
+		}
+	}
+	set_variable = {
+		which = modifier_duration_years
+		value = 0
+	}
+}
+
+nhs_handle_culture_integration_initial = {
+	every_owned_province = {
+		limit = {
+			$PROVINCE_TRIGGER$ = yes
+			NOT = { has_province_flag = to_culture_is_being_integrated }
+		}
+		# HAS_BASE_SCRIPTED_EFFECT = { 
+		# 	MODIFIER = $MODIFIER$
+		# 	BASE_DURATION = $BASE_DURATION$
+		# 	[[BASE_DURATION_2]
+		# 		BASE_DURATION_2 = $BASE_DURATION_2$
+		# 	]
+		# }
+		# add_province_modifier = {
+		# 	name = $MODIFIER$
+		# 	duration = $BASE_DURATION$
+		# }
+		export_to_variable = {
+			which = conversion_start_year
+			value = trigger_value:is_year
+		}
+		set_variable = {
+			which = culture_conversion_duration
+			value = $BASE_DURATION_YEARS$
+		}
+	}
+	every_owned_province = {
+		limit = {
+			$PROVINCE_TRIGGER$ = yes
+			NOT = { has_province_flag = to_culture_is_being_integrated }
+		}
+		area = {
+			limit = {
+				owned_by = ROOT
+			}
+			nhs_set_culture_integration_modifier = {
+				MODIFIER = $MODIFIER$
+				VARIABLE_NAME = culture_conversion_duration
+			}
+			set_province_flag = to_culture_is_being_integrated
+		}
+		PREV = {
+			every_owned_province = {
+				limit = {
+					$PROVINCE_TRIGGER$ = yes
+					NOT = { has_province_flag = to_culture_is_being_integrated }
+				}
+				# extend_province_modifier = { 
+				# 	name = $MODIFIER$
+				# 	duration = $DURATION_INCREASE$
+				# }
+				change_variable = {
+					which = culture_conversion_duration
+					value = $DURATION_INCREASE_YEARS$
+				}
+			}
+		}
+	}
+	# while = {
+	# 	limit = {
+	# 		any_owned_province = {
+	# 			$PROVINCE_TRIGGER$ = yes
+	# 			NOT = { has_province_flag = to_culture_is_being_integrated }
+	# 		}
+	# 	}
+	# 	random_owned_province = {
+	# 		limit = {
+	# 			$PROVINCE_TRIGGER$ = yes
+	# 			NOT = { has_province_flag = to_culture_is_being_integrated }
+	# 		}
+	# 		area = {
+	# 			set_province_flag = to_culture_is_being_integrated
+	# 		}
+	# 	}
+	# 	every_owned_province = {
+			
+	# 	}
+	# }
+}
+
+nhs_handle_culture_integration_new_province = {
+	clr_country_flag = to_culture_is_being_integrated
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = $FLAG$
+			}
+		}
+		export_to_variable = {
+			which = conversion_start_year
+			value = trigger_value:is_year
+		}
+		area = {
+			limit = {
+				has_province_modifer = $MODIFIER$
+				$PROVINCE_TRIGGER$ = yes
+				NOT = {
+					PREV = {
+						has_province_flag = to_culture_is_being_integrated
+					}
+				}
+				NOT = {
+					PREV = {
+						check_variable = {
+							which = conversion_start_year
+							which = PREV
+						}
+					}
+				}
+			}
+			PREV = {
+				set_province_flag = to_culture_is_being_integrated
+				set_variable = {
+					which = culture_conversion_duration
+					which = PREV
+				}
+				nhs_set_culture_integration_modifier = {
+					MODIFIER = $MODIFIER$
+					VARIABLE_NAME = culture_conversion_duration
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_province_flag = to_culture_is_being_integrated }
+			}
+			owner = {
+				nhs_find_most_conversion_years_remaining = { VARIABLE_NAME = most_conversion_years_remaining }
+				PREV = {
+					set_variable = {
+						which = most_conversion_years_remaining
+						which = PREV
+					}
+				}
+				set_variable = {
+					which = most_conversion_years_remaining
+					value = 0
+				}
+			}
+			set_variable = {
+				which = culture_conversion_duration
+				which = most_conversion_years_remaining
+			}
+			set_variable = {
+				which = most_conversion_years_remaining
+				value = 0
+			}
+			change_variable = {
+				which = culture_conversion_duration
+				duration = $DURATION_INCREASE_YEARS$
+			}
+			set_province_flag = to_culture_is_being_integrated
+			nhs_set_culture_integration_modifier = {
+				MODIFIER = $MODIFIER$
+				VARIABLE_NAME = culture_conversion_duration
+			}
+		}
+	}
+}

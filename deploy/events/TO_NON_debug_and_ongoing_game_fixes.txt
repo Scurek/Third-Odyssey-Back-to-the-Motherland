@@ -763,7 +763,7 @@ country_event = {
 	}
 }
 
-country_event = {
+province_event = {
 	id = nhs2_test.34
 	title = nhs2_test.34.t
 	desc = nhs2_test.34.d
@@ -775,23 +775,9 @@ country_event = {
 	}
 	immediate = {
 		hidden_effect = {
-			set_variable = {
+			export_to_variable = {
 				which = to_test_var
-				value = 0
-			}
-			every_province = {
-				limit = {
-					OR = {
-						region = northeast_america_region
-						region = southeast_america_region
-					}
-				}
-				ROOT = {
-					change_variable = {
-						which = to_test_var
-						value = 1
-					}
-				}
+				value = trigger_value:is_year
 			}
 		}
 		
@@ -799,25 +785,21 @@ country_event = {
 	option = {
 		name = "nhs2_mainlandevents1.a"
 		custom_tooltip = nhs_test_program_tt
+		add_province_modifier = {
+			name = judaism_abrahamic_roots
+			duration = 1825
+		}
 	}
 	option = {
-		name = "nhs2_mainlandevents1.a"
-		change_primary_culture = elysian
-		capital_scope = {
-			set_province_flag = nhs_enable_hippodrome
-			add_great_project = {
-				type = nhs_hippodrome
-			}
-			# add_great_project_tier = {
-			# 	type = nhs_hippodrome
-			# 	tier = 1
-			# }
+		extend_province_modifier = {
+			name = judaism_abrahamic_roots
+			duration = 3650
 		}
 	}
 }
 
 # Print Variable
-province_event = {
+country_event = {
 	id = nhs2_test.42
 	title = nhs2_test.42.t
 	desc = nhs2_test.42.d
@@ -827,17 +809,23 @@ province_event = {
 	hidden = yes
 	
 	immediate = {
-	
+		set_country_flag = nhs_spartan_integration
+		hidden_effect = {
+			nhs_handle_culture_integration_initial = {
+				PROVINCE_TRIGGER = nhs_spartan_integration_province
+				MODIFIER = nhs_mesoamerican_integration_mod
+				# BASE_DURATION = 3650
+				BASE_DURATION_YEARS = 10
+				# DURATION_INCREASE = 730
+				DURATION_INCREASE_YEARS = 2
+			}
+		}
 	}
 	
 	option = {
 		name = "nhs2_mainlandevents1.a"
-		owner = {
-			change_estate_land_share = {
-				estate = estate_church
-				share = 10.0
-				province = ROOT
-			}
+		every_owned_province = {
+			custom_tooltip = nhs_test_program2_tt
 		}
 	}
 }
