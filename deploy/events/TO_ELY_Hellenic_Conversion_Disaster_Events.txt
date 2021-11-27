@@ -28,7 +28,7 @@ country_event = {
 					value = 8
 				}
 			}
-			add_stability = -3
+			add_stability = -4
 		}
 		else_if = {
 			limit = {
@@ -37,7 +37,7 @@ country_event = {
 					value = 8
 				}
 			}
-			add_stability = -3
+			add_stability = -4
 		}
 		else_if = {
 			limit = {
@@ -46,7 +46,7 @@ country_event = {
 					value = 4
 				}
 			}
-			add_stability = -2
+			add_stability = -3
 		}
 		else_if = {
 			limit = {
@@ -55,12 +55,12 @@ country_event = {
 					value = 4
 				}
 			}
-			add_stability = -2
+			add_stability = -3
 		}
 		else = {
-			add_stability = -1
+			add_stability = -2
 			add_treasury = 100
-			add_manpower = 3000
+			add_manpower = 3
 		}
 		add_estate_loyalty = {
 			estate = estate_church
@@ -117,7 +117,7 @@ country_event = {
 					value = 8
 				}
 			}
-			add_stability = -3
+			add_stability = -4
 			add_adm_power = -50
 			add_dip_power = -50
 			add_mil_power = -50
@@ -129,14 +129,14 @@ country_event = {
 					value = 4
 				}
 			}
-			add_stability = -2
+			add_stability = -3
 			add_treasury = 100
-			add_manpower = 3000
+			add_manpower = 3
 		}
 		else = {
-			add_stability = -1
+			add_stability = -2
 			add_treasury = 200
-			add_manpower = 6000
+			add_manpower = 6
 		}
 		add_estate_loyalty = {
 			estate = estate_church
@@ -205,7 +205,7 @@ country_event = {
 					value = 8
 				}
 			}
-			add_stability = -3
+			add_stability = -4
 			add_adm_power = -50
 			add_dip_power = -50
 			add_mil_power = -50
@@ -217,14 +217,14 @@ country_event = {
 					value = 4
 				}
 			}
-			add_stability = -2
+			add_stability = -3
 			add_treasury = 100
-			add_manpower = 3000
+			add_manpower = 3
 		}
 		else = {
-			add_stability = -1
+			add_stability = -2
 			add_treasury = 200
-			add_manpower = 6000
+			add_manpower = 6
 		}
 		add_country_modifier = {
 			name= nhs_hcd_pagan_loyalty
@@ -808,7 +808,7 @@ country_event = {
 
 	option = {
 		# Do nothing
-		name = nhs_hcd_hellenicrevolt.24.b
+		name = nhs_hcd_hellenicrevolt.24.c
 		
 		event_target:nhs_hcd_target_province = {
 			add_unrest = 10
@@ -908,7 +908,6 @@ country_event = {
 
 
 # Human sacrifices
-# TODO: euhm, maybe remove this one?
 country_event = {
 	id = nhs_hcd_hellenicrevolt.26
 	title = nhs_hcd_hellenicrevolt26.t
@@ -919,6 +918,9 @@ country_event = {
 	fire_only_once = yes
 
 	trigger = {
+
+		always = no  # TODO: Write completely new event instead. Not only poorly localized, also completely nuts. "Suddenly human sacrifice". Doesn't fit the theme.
+
 		has_disaster = nhs_hcd_hellenic_crisis
 		religion = pantheon_worship
 		has_country_flag = nhs_hcd_converted_to_hellenic
@@ -1349,6 +1351,7 @@ country_event = {
 	picture = FAMINE_eventPicture
 
 	is_triggered_only = yes
+	fire_only_once = yes
 	goto = nhs_hcd_target_province
 
 	trigger = {
@@ -1362,13 +1365,14 @@ country_event = {
 	}
 
 	immediate = {
-		hidden_effect = {
-			remove_building = temple
-		}
 		random_owned_province = {
 			limit = {
+				capital = no
 				has_building = temple
 				religion = orthodox
+			}
+			hidden_effect = {
+				remove_building = temple
 			}
 			save_event_target_as = nhs_hcd_target_province
 		}
@@ -1382,13 +1386,20 @@ country_event = {
 			add_unrest = 5
 			if = {
 				limit = {
-					owner = {
-						religion = pantheon_worship
-					}
+					religion = orthodox
 				}
 				spawn_rebels = {
-					type = orthodox_rebels
 					size = 1
+					type = elysian_hellenic_rebels
+				}
+			}
+			else_if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				spawn_rebels = {
+					size = 1
+					type = orthodox_rebels
 				}
 			}
 		}
@@ -1398,25 +1409,25 @@ country_event = {
 		# Rebuild the church
 		name = nhs_hcd_hellenicrevolt.29.b
 
-		add_treasury = -100
+		add_treasury = -80
 		event_target:nhs_hcd_target_province = {
 			add_building = temple
 			if = {
 				limit = {
-					owner = {
-						religion = pantheon_worship
-					}
+					religion = orthodox
 				}
-				owner = {
-					random_owned_province = {
-						limit = {
-							is_capital = yes
-						}
-						spawn_rebels = {
-							size = 1
-							type = elysian_hellenic_rebels
-						}
-					}
+				spawn_rebels = {
+					size = 1
+					type = elysian_hellenic_rebels
+				}
+			}
+			else_if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				spawn_rebels = {
+					size = 1
+					type = orthodox_rebels
 				}
 			}
 		}
@@ -1424,11 +1435,29 @@ country_event = {
 
 	option = {
 		# Rebuild it but make the province pay for it
-		name = nhs_hcd_hellenicrevolt.29.v
+		name = nhs_hcd_hellenicrevolt.29.c
 
 		event_target:nhs_hcd_target_province = {
-			add_base_tax = -1
 			add_building = temple
+			add_base_tax = -1
+			if = {
+				limit = {
+					religion = orthodox
+				}
+				spawn_rebels = {
+					size = 1
+					type = elysian_hellenic_rebels
+				}
+			}
+			else_if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				spawn_rebels = {
+					size = 1
+					type = orthodox_rebels
+				}
+			}
 		}
 	}
 }

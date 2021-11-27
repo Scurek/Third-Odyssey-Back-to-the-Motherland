@@ -65,7 +65,7 @@ country_event = {
 	hidden = yes
 
 	trigger = {
-		NOT = { is_year = 1490 }  # Just something so it's definitely disabled by time disaster should even be over, maybe EU4 can optimize on this?
+		NOT = { is_year = 1468 }  # Just something so it's definitely disabled by time disaster should even be over, maybe EU4 can optimize on this?
 		has_country_flag = hellenic_conversion_preacher
 		nhs_condition_all_ely = { KOMANDA = tag }
 		religion_group = christian
@@ -81,15 +81,9 @@ country_event = {
 			limit = {
 				NOT = { has_country_flag = hellenic_conversion_major_event }
 				NOT = { has_country_modifier = nhs_hcd_majorevent_cooldown_timer }
-				OR = {
-					check_variable = {
-						which = HellenicUprising
-						value = 2
-					}
-					check_variable = {
-						which = OrthodoxUprising
-						value = 2
-					}
+				check_variable = {
+					which = HellenicDisasterProgress
+					value = 2
 				}
 				NOT = {
 					AND = {
@@ -99,21 +93,12 @@ country_event = {
 					}
 				}
 			}
-			set_country_flag = hellenic_conversion_major_event
-			add_country_modifier = {
-				name = nhs_hcd_majorevent_cooldown_timer
-				duration = 547  # ~1.5 year cooldown between, at minimum
-				hidden = yes
-			}
-			change_variable = {
-				which = HellenicDisasterProgress
-				value = 3
-			}
 			random_list = {
 				1 = {
 					trigger = {
 						NOT = { has_country_flag = TO_nhs_hellenicconversion_2 }
 					}
+					set_country_flag = TO_hcd_picked_major_event
 					set_country_flag = TO_nhs_hellenicconversion_2
 					country_event = { id = nhs_hellenicconversion.2 }  # Death of Georgios
 				}
@@ -124,20 +109,38 @@ country_event = {
 						government = monarchy
 						NOT = { has_country_flag = TO_nhs_hellenicconversion_3 }
 					}
+					set_country_flag = TO_hcd_picked_major_event
 					set_country_flag = TO_nhs_hellenicconversion_3
 					country_event = { id = nhs_hellenicconversion.3 }  # Heir accused of being a heretic
 				}
 				1 = {
 					trigger = {
 						check_variable = {
-							which = HellenicUprising
+							which = HellenicDisasterProgress
 							value = 5
 						}
 						num_of_cities = 4
 						NOT = { has_country_flag = TO_nhs_hellenicconversion_4 }
 					}
+					set_country_flag = TO_hcd_picked_major_event
 					set_country_flag = TO_nhs_hellenicconversion_4
 					country_event = { id = nhs_hellenicconversion.4 }  # Pagan assemblies
+				}
+			}
+			if = {
+				limit = {
+					has_country_flag =  TO_hcd_picked_major_event
+				}
+				clr_country_flag =  TO_hcd_picked_major_event
+				set_country_flag = hellenic_conversion_major_event
+				add_country_modifier = {
+					name = nhs_hcd_majorevent_cooldown_timer
+					duration = 547  # ~1.5 year cooldown between, at minimum
+					hidden = yes
+				}
+				change_variable = {
+					which = HellenicDisasterProgress
+					value = 3
 				}
 			}
 		}
@@ -398,7 +401,7 @@ country_event = {
 		
 		event_target:nhs_hcd_target_province = {
 			spawn_rebels = {
-				type = Orthodox_rebels
+				type = orthodox_rebels
 				size = 1
 			}
 		}
@@ -486,6 +489,7 @@ country_event = {
 			estate = estate_church
 			loyalty = -5
 		} 
+		add_dip_power = -50
 		add_legitimacy = -5
 		custom_tooltip = hellenicconversion_anger_neither.tt
 	}
@@ -859,7 +863,8 @@ country_event = {
 		# Pay retirement
 		name = nhs_hellenicconversion.107.d
 
-		add_years_of_income = -0.25
+		add_adm_power = -50
+		add_years_of_income = -0.2
 		trigger_switch = {
 			on_trigger = has_country_flag
 			nhs_hcd_advisor_events_adm = { kill_advisor_by_category_effect = { ADM = yes } }
@@ -1006,7 +1011,6 @@ country_event = {
 				which = HellenicUprising
 				value = 2
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_pagans_more.tt
 	}
@@ -1024,7 +1028,6 @@ country_event = {
 				which = OrthodoxUprising
 				value = 2
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_orthodox_more.tt
 	}
@@ -1034,10 +1037,11 @@ country_event = {
 		name = nhs_hellenicconversion.21.c 
 
 		add_stability = -1
-		hidden_effect = {
-			clr_country_flag = hellenic_conversion_major_event
-		}
 		custom_tooltip = hellenicconversion_anger_neither.tt
+	}
+
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
 	}
 }
 
@@ -1068,7 +1072,7 @@ country_event = {
 						religion_group = christian
 					}
 					spawn_rebels = {
-						type = Orthodox_rebels
+						type = orthodox_rebels
 						size = 2
 					}
 				}
@@ -1079,7 +1083,6 @@ country_event = {
 				which = OrthodoxUprising
 				value = 2
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_orthodox_more.tt
 	}
@@ -1104,9 +1107,12 @@ country_event = {
 				which = OrthodoxUprising
 				value = 1
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_orthodox.tt
+	}
+
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
 	}
 }
 
@@ -1133,9 +1139,12 @@ country_event = {
 				which = OrthodoxUprising
 				value = 1
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_orthodox.tt
+	}
+
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
 	}
 }
 
@@ -1151,10 +1160,10 @@ country_event = {
 
 	option = {
 		name = nhs_hellenicconversion.24.a
+	}
 
-		hidden_effect = {
-			clr_country_flag = hellenic_conversion_major_event
-		}
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
 	}
 }
 
@@ -1199,7 +1208,6 @@ country_event = {
 				which = HellenicUprising
 				value = 2
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_pagans_more.tt
 	}
@@ -1234,10 +1242,11 @@ country_event = {
 				}
 			}
 		}
-		hidden_effect = {
-			clr_country_flag = hellenic_conversion_major_event
-		}
 		custom_tooltip = hellenicconversion_anger_neither.tt
+	}
+
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
 	}
 }
 
@@ -1253,10 +1262,10 @@ country_event = {
 
 	option = {
 		name = nhs_hellenicconversion.26.a
+	}
 
-		hidden_effect = {
-			clr_country_flag = hellenic_conversion_major_event
-		}
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
 	}
 }
 
@@ -1279,9 +1288,12 @@ country_event = {
 				which = HellenicUprising
 				value = 1
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_pagans.tt
+	}
+
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
 	}
 }
 
@@ -1323,7 +1335,6 @@ country_event = {
 				which = HellenicUprising
 				value = 1
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_pagans.tt
 	}
@@ -1349,9 +1360,12 @@ country_event = {
 				which = OrthodoxUprising
 				value = 2
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_orthodox_more.tt
+	}
+
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
 	}
 }
 
@@ -1400,7 +1414,6 @@ country_event = {
 				which = HellenicUprising
 				value = 2
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_pagans_more.tt
 	}
@@ -1430,7 +1443,6 @@ country_event = {
 				which = HellenicUprising
 				value = 1
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_pagans.tt
 	}
@@ -1457,9 +1469,12 @@ country_event = {
 				which = OrthodoxUprising
 				value = 1
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_orthodox.tt
+	}
+
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
 	}
 }
 
@@ -1575,6 +1590,9 @@ country_event = {
 		}
 		add_heir_claim = 20
 		add_legitimacy = 10
+	}
+
+	after = {
 		clr_country_flag = hellenic_conversion_major_event
 	}
 }
@@ -1608,7 +1626,6 @@ country_event = {
 				which = HellenicUprising
 				value = 2
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_pagans_more.tt
 	}
@@ -1646,9 +1663,12 @@ country_event = {
 				which = OrthodoxUprising
 				value = 1
 			}
-			clr_country_flag = hellenic_conversion_major_event
 		}
 		custom_tooltip = hellenicconversion_anger_orthodox.tt
+	}
+
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
 	}
 }
 
@@ -1672,9 +1692,10 @@ country_event = {
 		name = nhs_hellenicconversion.33.a
 
 		add_stability = -1
-		hidden_effect = {
-			clr_country_flag = hellenic_conversion_major_event
-		}
+	}
+
+	after = {
+		clr_country_flag = hellenic_conversion_major_event
 	}
 }
 
