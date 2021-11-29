@@ -995,7 +995,8 @@ country_event = {
 	
 	immediate = {
 		hidden_effect = {
-			country_event = { id = nhs2_countryevents.24 days = 400 random = 30 }
+			country_event = { id = nhs2_countryevents.1 days = 183 random = 30 }
+			country_event = { id = nhs2_countryevents.24 days = 365 random = 30 }
 		}
 	}
 
@@ -1254,6 +1255,92 @@ country_event = {
 	}
 }
 
+# Church gets power on your arrival
+country_event = {
+	id = nhs2_countryevents.1
+	title = nhs2_countryevents.1.t
+	desc = nhs2_countryevents.1.d
+	picture = RELIGION_eventPicture
+
+	is_triggered_only = yes
+
+    trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		religion = orthodox
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = nhs_enable_estate_church
+			if = {
+				limit = {
+					any_country = {
+						exists = yes
+						ai = yes
+					}
+				}
+				random_country = {
+					limit = {
+						ai = yes
+					}
+					country_event = { id = nhs2_countryevents.1000 days = 1 }
+				}
+			}
+			else = {
+				country_event = { id = nhs2_countryevents.1000 days = 2 }
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents.1.a"
+		custom_tooltip = nhs_enables_church_estate_tt
+		custom_tooltip = nhs_church_estate_initial_land_tt
+		hidden_effect = {
+			add_patriarch_authority = 1
+			add_patriarch_authority = -0.5	
+		}
+		custom_tooltip = set_patriarch_authority_later_tt
+	}
+}
+
+# Sets church land
+country_event = {
+	id = nhs2_countryevents.1000
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = RELIGION_eventPicture
+
+	is_triggered_only = yes
+	hidden = yes
+
+	immediate = {
+		FROM = {
+			change_estate_land_share = {
+				estate = estate_church
+				share = -100
+			}
+			change_estate_land_share = {
+				estate = estate_church
+				share = 10
+			}
+		}
+	}
+
+	option = {
+		FROM = {
+			change_estate_land_share = {
+				estate = estate_church
+				share = -100
+			}
+			change_estate_land_share = {
+				estate = estate_church
+				share = 10
+			}
+		}
+	}
+}
+
 # Organising the masses
 country_event = {
 	id = nhs2_countryevents.24
@@ -1309,7 +1396,7 @@ country_event = {
 	}
 
 	immediate = {
-		set_country_flag = enable_estate_nhs_nobles #Makes noble estate appear
+		# set_country_flag = nhs_enable_estate_nhs_nobles
 		hidden_effect = {
 			# country_event = { id = nhs2_countryevents.23 days = 183 random = 20 }
 			country_event = { id = nhs2_countryevents.26 days = 183 random = 20 }
@@ -1320,13 +1407,13 @@ country_event = {
 
 	option = {
 		name = "nhs2_countryevents.25.a"
-		if = {
-			limit = {
-				NOT = { has_country_flag = enable_estate_nhs_nobles }
-			}
-			custom_tooltip = nhs_enables_noble_estate_tt
-			set_country_flag = enable_estate_nhs_nobles
-		}
+		# if = {
+		# 	limit = {
+		# 		NOT = { has_country_flag = nhs_enable_estate_nhs_nobles }
+		# 	}
+		# 	custom_tooltip = nhs_enables_noble_estate_tt
+		# 	set_country_flag = nhs_enable_estate_nhs_nobles
+		# }
 		capital_scope = {
 			# add_base_tax = 2
 			add_base_tax = 1
@@ -1334,13 +1421,13 @@ country_event = {
 	}
 	option = {
 		name = "nhs2_countryevents.25.b"
-		if = {
-			limit = {
-				NOT = { has_country_flag = enable_estate_nhs_nobles }
-			}
-			custom_tooltip = nhs_enables_noble_estate_tt
-			set_country_flag = enable_estate_nhs_nobles
-		}
+		# if = {
+		# 	limit = {
+		# 		NOT = { has_country_flag = nhs_enable_estate_nhs_nobles }
+		# 	}
+		# 	custom_tooltip = nhs_enables_noble_estate_tt
+		# 	set_country_flag = nhs_enable_estate_nhs_nobles
+		# }
 		capital_scope = {
 			# add_base_production = 2
 			add_base_production = 1
@@ -1401,6 +1488,10 @@ country_event = {
 
 	option = {
 		name = "nhs2_countryevents.23.a"
+		change_estate_land_share = {
+			estate = estate_nhs_nobles
+			share = 20
+		}
 		event_target:nhs_noble_housing_target = {
 			add_base_tax = 1
 			add_base_production = 1
@@ -1416,6 +1507,10 @@ country_event = {
 			estate = estate_nhs_nobles
 			loyalty = -20
 		}
+		change_estate_land_share = {
+			estate = estate_nhs_nobles
+			share = 20
+		}
 		event_target:nhs_noble_housing_target = {
 			add_base_tax = 1
 			add_base_production = 1
@@ -1429,65 +1524,65 @@ country_event = {
 	}
 }
 
-# A Basic Temple
-country_event = {
-	id = nhs2_countryevents.26
-	title = nhs2_countryevents.26.t
-	desc = nhs2_countryevents.26.d
-	picture = OLYMPIANS_eventPicture
+# # A Basic Temple
+# country_event = {
+# 	id = nhs2_countryevents.26
+# 	title = nhs2_countryevents.26.t
+# 	desc = nhs2_countryevents.26.d
+# 	picture = OLYMPIANS_eventPicture
 
-	fire_only_once = yes
-	is_triggered_only = yes
+# 	fire_only_once = yes
+# 	is_triggered_only = yes
 
-	trigger = {
-		religion_group = pagan
-		nhs_condition_all_ely = { KOMANDA = tag }
-		NOT = { has_country_flag = had_nhs2_countryevents26 }
-		NOT = { has_country_flag = had_nhs2_countryevents27 }
-	}
+# 	trigger = {
+# 		religion_group = pagan
+# 		nhs_condition_all_ely = { KOMANDA = tag }
+# 		NOT = { has_country_flag = had_nhs2_countryevents26 }
+# 		NOT = { has_country_flag = had_nhs2_countryevents27 }
+# 	}
 
-	immediate = {
-		set_country_flag = had_nhs2_countryevents26
-	}
+# 	immediate = {
+# 		set_country_flag = had_nhs2_countryevents26
+# 	}
 
-	option = {
-		name = "nhs2_countryevents.26.a"
-		trigger = {
-			capital_scope = {
-				NOT = { has_building = temple }
-				num_free_building_slots = 1
-			}
-		}
-		add_treasury = -80
-		capital_scope = {
-			add_building = temple
-		}
-		add_country_modifier = {
-			name = centralised_state
-			duration = 3650
-		}
-	}
-	option = {
-		name = "nhs2_countryevents.26.e"
-		trigger = {
-			capital_scope = {
-				NOT = { has_building = temple }
-				num_free_building_slots = 1
-			}
-		}
-		add_prestige = -5
-		capital_scope = {
-			add_building = temple
-		}
-	}
-	option = {
-		name = "nhs2_countryevents.26.c"
-		add_prestige = -5
-		capital_scope = {
-			add_base_tax = 1
-		}
-	}
-}
+# 	option = {
+# 		name = "nhs2_countryevents.26.a"
+# 		trigger = {
+# 			capital_scope = {
+# 				NOT = { has_building = temple }
+# 				num_free_building_slots = 1
+# 			}
+# 		}
+# 		add_treasury = -80
+# 		capital_scope = {
+# 			add_building = temple
+# 		}
+# 		add_country_modifier = {
+# 			name = centralised_state
+# 			duration = 3650
+# 		}
+# 	}
+# 	option = {
+# 		name = "nhs2_countryevents.26.e"
+# 		trigger = {
+# 			capital_scope = {
+# 				NOT = { has_building = temple }
+# 				num_free_building_slots = 1
+# 			}
+# 		}
+# 		add_prestige = -5
+# 		capital_scope = {
+# 			add_building = temple
+# 		}
+# 	}
+# 	option = {
+# 		name = "nhs2_countryevents.26.c"
+# 		add_prestige = -5
+# 		capital_scope = {
+# 			add_base_tax = 1
+# 		}
+# 	}
+# }
 
 # A Modest Church
 country_event = {
@@ -1575,58 +1670,59 @@ country_event = {
 }
 
 # Expanding city limits
-country_event = {
-	id = nhs2_countryevents.28
-	title = nhs2_countryevents.28.t
-	desc = nhs2_countryevents.28.d
-	picture = CITY_VIEW_eventPicture
+# Could be reworked as a barbaroi estate event
+# country_event = {
+# 	id = nhs2_countryevents.28
+# 	title = nhs2_countryevents.28.t
+# 	desc = nhs2_countryevents.28.d
+# 	picture = CITY_VIEW_eventPicture
 
-	fire_only_once = yes
+# 	fire_only_once = yes
 
-	trigger = {
-		is_year = 1450
-		num_of_cities = 4
-		nhs_condition_all_ely = { KOMANDA = tag }
-		NOT = { has_country_flag = had_nhs2_countryevents28 }
-		NOT = { has_global_flag = nhs_started_at_bookmark }
-	}
+# 	trigger = {
+# 		is_year = 1450
+# 		num_of_cities = 4
+# 		nhs_condition_all_ely = { KOMANDA = tag }
+# 		NOT = { has_country_flag = had_nhs2_countryevents28 }
+# 		NOT = { has_global_flag = nhs_started_at_bookmark }
+# 	}
 
-	immediate = {
-		set_country_flag = had_nhs2_countryevents28
-	}
+# 	immediate = {
+# 		set_country_flag = had_nhs2_countryevents28
+# 	}
 
-	option = {
-		name = "nhs2_countryevents.28.a"
-		capital_scope = {
-			add_base_tax = 2
-			add_base_production = 2
-			add_base_manpower = 2
-		}
-		every_country = {
-			limit = {
-				NOT = { border_distance = { who = ROOT distance = 100 } }
-				technology_group = north_american
-			}
-			add_opinion = {
-				who = ROOT
-				modifier = nhs2_expansion
-			}
-		}
-		set_country_flag = nhs_expanded_the_limits
-	}
-	option = {
-		name = "nhs2_countryevents.28.b"
-		capital_scope = {
-			add_base_production = 1
-			add_base_manpower = 1
-		}
-		add_treasury = 100
-		add_adm_power = 10
-		add_dip_power = 50
-		add_mil_power = 50
-		set_country_flag = nhs_didnot_expand_the_limits
-	}
-}
+# 	option = {
+# 		name = "nhs2_countryevents.28.a"
+# 		capital_scope = {
+# 			add_base_tax = 2
+# 			add_base_production = 2
+# 			add_base_manpower = 2
+# 		}
+# 		every_country = {
+# 			limit = {
+# 				NOT = { border_distance = { who = ROOT distance = 100 } }
+# 				technology_group = north_american
+# 			}
+# 			add_opinion = {
+# 				who = ROOT
+# 				modifier = nhs2_expansion
+# 			}
+# 		}
+# 		set_country_flag = nhs_expanded_the_limits
+# 	}
+# 	option = {
+# 		name = "nhs2_countryevents.28.b"
+# 		capital_scope = {
+# 			add_base_production = 1
+# 			add_base_manpower = 1
+# 		}
+# 		add_treasury = 100
+# 		add_adm_power = 10
+# 		add_dip_power = 50
+# 		add_mil_power = 50
+# 		set_country_flag = nhs_didnot_expand_the_limits
+# 	}
+# }
 
 ###################################################
 ### APPALACHIAN EVENTS
