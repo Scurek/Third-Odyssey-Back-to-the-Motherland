@@ -654,6 +654,8 @@ has_manufactory_no_custom_tooltip_trigger = { #Province Scope
 				trade_goods = cloth
 				trade_goods = silk
 				trade_goods = dyes
+				trade_goods = elysian_silk
+				trade_goods = skoros_silk
 			}
 		}
 		has_building = textile
@@ -677,6 +679,7 @@ has_manufactory_no_custom_tooltip_trigger = { #Province Scope
 				trade_goods = grain
 				trade_goods = livestock
 				trade_goods = wine
+				trade_goods = norse_mead
 			}
 		}
 		has_building = farm_estate
@@ -723,38 +726,34 @@ has_no_manufactory_trigger = { #Province Scope
 root_can_build_manufactory_here_trigger = {
     has_no_manufactory_trigger = yes
     num_free_building_slots = 1
-    if = {
-        limit = {
+	OR = {
+		AND = {
             OR = {
                 trade_goods = naval_supplies
                 trade_goods = fish
                 trade_goods = salt
             }
-        }
-        ROOT = { dip_tech = 11 }
-    }
-    else_if = {
-        limit = {
+			ROOT = { dip_tech = 11 }
+		}
+		AND = {
             OR = {
                 trade_goods = copper
                 trade_goods = iron
             }
-        }
-        ROOT = { mil_tech = 11 }
-    }
-    else_if = {
-        limit = {
+			ROOT = { mil_tech = 11 }
+		}
+		AND = {
             OR = {
                 trade_goods = wool
                 trade_goods = cloth
                 trade_goods = silk
                 trade_goods = dyes
+				trade_goods = elysian_silk
+				trade_goods = skoros_silk
             }
-        }
-        ROOT = { adm_tech = 11 }
-    }
-    else_if = {
-        limit = {
+			ROOT = { adm_tech = 11 }
+		}
+		AND = {
             OR = {
                 trade_goods = coffee
                 trade_goods = cotton
@@ -763,11 +762,9 @@ root_can_build_manufactory_here_trigger = {
                 trade_goods = tea
                 trade_goods = cocoa
             }
-        }
-        ROOT = { adm_tech = 14 }
-    }
-    else_if = {
-        limit = {
+			ROOT = { adm_tech = 14 }
+		}
+		AND = {
             OR = {
                 trade_goods = ivory
                 trade_goods = slaves
@@ -776,21 +773,18 @@ root_can_build_manufactory_here_trigger = {
                 trade_goods = fur
                 trade_goods = incense
             }
-        }
-        ROOT = { dip_tech = 14 }
-    }
-    else_if = {
-        limit = {
+			ROOT = { dip_tech = 14 }
+		}
+		AND = {
             OR = {
                 trade_goods = grain
                 trade_goods = livestock
                 trade_goods = wine
+				trade_goods = norse_mead
             }
-        }
-        ROOT = { adm_tech = 6 }
-    }
-    else_if = {
-        limit = {
+			ROOT = { adm_tech = 6 }
+		}
+		AND = {
             OR = {
                 trade_goods = paper
                 trade_goods = gems
@@ -798,15 +792,13 @@ root_can_build_manufactory_here_trigger = {
                 trade_goods = glass
                 trade_goods = chinaware
             }
-        }
-        ROOT = { adm_tech = 16 }
-    }
-    else_if = {
-        limit = {
+			ROOT = { adm_tech = 16 }
+		}
+		AND = {
             trade_goods = coal
-        }
-        ROOT = { adm_tech = 21 }
-    }
+			ROOT = { adm_tech = 21 }
+		}
+	}
 }
 
 has_nobles_trade_good_trigger = {
@@ -2120,12 +2112,9 @@ has_better_tech_than_westerns = {
 	custom_trigger_tooltip = {
 		tooltip = has_better_tech_than_westerns_tt
 		NOT = {
-			calc_true_if = {
-				all_country = {
-					tech_difference = 1
-					technology_group = western
-				}
-				amount = 1
+			any_country = {
+				tech_difference = 1
+				technology_group = western
 			}
 		}
 	}
@@ -2187,4 +2176,32 @@ mal_owns_provinces_in_region = {
 		AND = { has_country_flag = mal_journey_to_arabia			any_owned_province = { region = arabia_region			} }
 		AND = { has_country_flag = mal_journey_to_horn_of_africa	any_owned_province = { region = horn_of_africa_region	} }
 	}
+}
+
+province_is_or_accepts_culture = {
+	OR = {
+		has_owner_culture = yes
+		has_owner_accepted_culture = yes
+	}
+}
+
+province_is_buddhist_or_accepts_buddhism = {
+	OR = {
+		religion = buddhism
+		religion = vajrayana
+		religion = mahayana
+		AND = {
+			religion = hinduism
+			owner = {
+				has_personal_deity = buddha	
+			}						
+		}
+		AND = {
+			religion = shamanism
+			owner = {
+				has_unlocked_cult = buddhism_cult
+			}
+		}
+	}
+	has_owner_religion = yes
 }
