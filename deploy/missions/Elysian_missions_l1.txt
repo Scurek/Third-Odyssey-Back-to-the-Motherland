@@ -262,11 +262,53 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 		position = 5
 		required_missions = { nhs_unite_home_region_mission }
 		trigger = {
-			nhs_condition_all_ely = { KOMANDA = tag }
-			total_development = 1000
+			if = {
+				limit = {
+					has_dlc = "Emperor"
+				}
+				is_hegemon = yes
+			}
+			else_if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				is_great_power = yes
+				OR = {
+					AND = {
+						monthly_income = 1000
+						NOT = { any_other_great_power = { monthly_income = root } }
+					}
+					AND = {
+						num_of_heavy_ship = 250
+						NOT = { any_other_great_power = { num_of_heavy_ship = root } }
+					}
+					AND = {
+						army_size = 1000
+						NOT = { any_other_great_power = { army_size = root } }
+					}
+				}
+			}
+			else = {
+				OR = {
+					AND = {
+						monthly_income = 1000
+						NOT = { any_country = { monthly_income = root } }
+					}
+					AND = {
+						num_of_heavy_ship = 250
+						NOT = { any_country = { num_of_heavy_ship = root } }
+					}
+					AND = {
+						army_size = 1000
+						NOT = { any_country = { army_size = root } }
+					}
+				}
+			}
 		}
 		effect = {
 			add_prestige = 100
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_unlock_second_mission_path_tt
 			set_country_flag = nhs_completed_nhs_hegemony_mission
 		}
 	}
@@ -1151,6 +1193,7 @@ nhs_left_start = {
 					duration = -1
 				}
 			}
+			set_country_flag = nhs_completed_nhs_form_colonial_institution_mission
 		}
 	}
 	
@@ -1182,6 +1225,7 @@ nhs_left_start = {
 				}
 			}
 			add_dip_power = -25
+			set_country_flag = nhs_completed_nhs_form_colonial_institution_2_mission
 		}
 	}
 }
@@ -2276,13 +2320,32 @@ nhs_centre_end = {
 				has_discovered = ROOT
 		}
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = nhs_completed_outward_focus_tt
-				NOT = { has_country_flag = nhs_completed_outward_focus }
+			if = {
+				limit = {
+					NOT = { has_country_flag = nhs_completed_nhs_hegemony_mission }
+				}
+				custom_trigger_tooltip = {
+					tooltip = nhs_completed_outward_focus_tt
+					NOT = { has_country_flag = nhs_completed_outward_focus }
+				}
+				custom_trigger_tooltip = {
+					tooltip = nhs_completed_inward_focus_tt
+					NOT = { has_country_flag = nhs_completed_inward_focus }
+				}
 			}
-			custom_trigger_tooltip = {
-				tooltip = nhs_completed_inward_focus_tt
-				NOT = { has_country_flag = nhs_completed_inward_focus }
+			else = {
+				NOT = {
+					AND = {
+						custom_trigger_tooltip = {
+							tooltip = nhs_completed_outward_focus_tt
+							NOT = { has_country_flag = nhs_completed_outward_focus }
+						}
+						custom_trigger_tooltip = {
+							tooltip = nhs_completed_inward_focus_tt
+							NOT = { has_country_flag = nhs_completed_inward_focus }
+						}
+					}
+				}
 			}
 			## Anatolia
 			hudavendigar_area = {
@@ -2361,7 +2424,24 @@ nhs_centre_end = {
 		}
 		
 		effect = {
-			custom_tooltip = nhs_middle_lock
+			if = {
+				limit = {
+					NOT = { has_country_flag = nhs_completed_nhs_hegemony_mission }
+				}
+				custom_tooltip = nhs_middle_lock
+			}
+			else_if = {
+				limit = {
+					has_country_flag = nhs_completed_outward_focus
+				}
+				custom_tooltip = nhs_locks_inward_focus
+			}
+			else_if = {
+				limit = {
+					has_country_flag = nhs_completed_inward_focus
+				}
+				custom_tooltip = nhs_locks_outward_focus
+			}
 			set_country_flag = nhs_completed_nhs_heir_of_justinian
 			custom_tooltip = nhs_first_shift_into_roman_tt
 			hidden_effect = { swap_free_idea_group = yes }
@@ -3431,15 +3511,35 @@ nhs_left_end = {
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = nhs_completed_nhs_form_colonial_institution_2_mission_tt
-				has_country_modifier = nhs_organised_expansion_2
+				# has_country_modifier = nhs_organised_expansion_2
+				has_country_flag = nhs_completed_nhs_form_colonial_institution_2_mission
 			}
-			custom_trigger_tooltip = {
-				tooltip = nhs_completed_outward_focus_tt
-				NOT = { has_country_flag = nhs_completed_outward_focus }
+			if = {
+				limit = {
+					NOT = { has_country_flag = nhs_completed_nhs_hegemony_mission }
+				}
+				custom_trigger_tooltip = {
+					tooltip = nhs_completed_outward_focus_tt
+					NOT = { has_country_flag = nhs_completed_outward_focus }
+				}
+				custom_trigger_tooltip = {
+					tooltip = nhs_completed_restoration_focus_tt
+					NOT = { has_country_flag = nhs_completed_nhs_heir_of_justinian }
+				}
 			}
-			custom_trigger_tooltip = {
-				tooltip = nhs_completed_restoration_focus_tt
-				NOT = { has_country_flag = nhs_completed_nhs_heir_of_justinian }
+			else = {
+				NOT = {
+					AND = {
+						custom_trigger_tooltip = {
+							tooltip = nhs_completed_outward_focus_tt
+							NOT = { has_country_flag = nhs_completed_outward_focus }
+						}
+						custom_trigger_tooltip = {
+							tooltip = nhs_completed_restoration_focus_tt
+							NOT = { has_country_flag = nhs_completed_nhs_heir_of_justinian }
+						}
+					}
+				}
 			}
 			#owns = 953
 			chesapeake_area = {
@@ -3448,13 +3548,52 @@ nhs_left_end = {
 			}
 		}
 		effect = {
-			custom_tooltip = nhs_inwards_lock
-			custom_tooltip = nhs_replace_ambition_inward_tt
-			hidden_effect = {
-				remove_country_modifier = nhs_organised_expansion_2
+			if = {
+				limit = {
+					NOT = { has_country_flag = nhs_completed_nhs_hegemony_mission }
+				}
+				custom_tooltip = nhs_inwards_lock
+				custom_tooltip = nhs_replace_ambition_inward_tt
+				hidden_effect = {
+					remove_country_modifier = nhs_organised_expansion_2
+					add_country_modifier = {
+						name = nhs_organised_expansion_inwars_1
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = nhs_completed_outward_focus
+				}
+				custom_tooltip = nhs_locks_heir_of_justinian
 				add_country_modifier = {
 					name = nhs_organised_expansion_inwars_1
 					duration = -1
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = nhs_completed_nhs_heir_of_justinian
+				}
+				custom_tooltip = nhs_locks_outward_focus
+				custom_tooltip = nhs_replace_ambition_inward_tt
+				hidden_effect = {
+					remove_country_modifier = nhs_organised_expansion_2
+					add_country_modifier = {
+						name = nhs_organised_expansion_inwars_1
+						duration = -1
+					}
+				}
+			}
+			else = {
+				custom_tooltip = nhs_replace_ambition_inward_tt
+				hidden_effect = {
+					remove_country_modifier = nhs_organised_expansion_2
+					add_country_modifier = {
+						name = nhs_organised_expansion_inwars_1
+						duration = -1
+					}
 				}
 			}
 			custom_tooltip = nhs_unlocks_vinland_sub_dec
@@ -4743,28 +4882,87 @@ nhs_right_end = {
 			owns_or_non_sovereign_subject_of = 226
 			custom_trigger_tooltip = {
 				tooltip = nhs_completed_nhs_form_colonial_institution_2_mission_tt
-				has_country_modifier = nhs_organised_expansion_2
+				# has_country_modifier = nhs_organised_expansion_2
+				has_country_flag = nhs_completed_nhs_form_colonial_institution_2_mission
 			}
-			custom_trigger_tooltip = {
-				tooltip = nhs_completed_inward_focus_tt
-				NOT = { has_country_flag = nhs_completed_inward_focus }
+			if = {
+				limit = {
+					NOT = { has_country_flag = nhs_completed_nhs_hegemony_mission }
+				}
+				custom_trigger_tooltip = {
+					tooltip = nhs_completed_inward_focus_tt
+					NOT = { has_country_flag = nhs_completed_inward_focus }
+				}
+				custom_trigger_tooltip = {
+					tooltip = nhs_completed_restoration_focus_tt
+					NOT = { has_country_flag = nhs_completed_nhs_heir_of_justinian }
+				}
 			}
-			custom_trigger_tooltip = {
-				tooltip = nhs_completed_restoration_focus_tt
-				NOT = { has_country_flag = nhs_completed_nhs_heir_of_justinian }
+			else = {
+				NOT = {
+					AND = {
+						custom_trigger_tooltip = {
+							tooltip = nhs_completed_inward_focus_tt
+							NOT = { has_country_flag = nhs_completed_inward_focus }
+						}
+						custom_trigger_tooltip = {
+							tooltip = nhs_completed_restoration_focus_tt
+							NOT = { has_country_flag = nhs_completed_nhs_heir_of_justinian }
+						}
+					}
+				}
 			}
 		}
 		effect = {
-			custom_tooltip = nhs_outwards_lock
-			set_country_flag = nhs_completed_outward_focus
-			custom_tooltip = nhs_improve_ambition_outward_1_tt
-			hidden_effect = {
-				remove_country_modifier = nhs_organised_expansion_2
+			if = {
+				limit = {
+					NOT = { has_country_flag = nhs_completed_nhs_hegemony_mission }
+				}
+				custom_tooltip = nhs_outwards_lock
+				custom_tooltip = nhs_improve_ambition_outward_1_tt
+				hidden_effect = {
+					remove_country_modifier = nhs_organised_expansion_2
+					add_country_modifier = {
+						name = nhs_organised_expansion_3
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = nhs_completed_inward_focus
+				}
+				custom_tooltip = nhs_locks_heir_of_justinian
 				add_country_modifier = {
 					name = nhs_organised_expansion_3
 					duration = -1
 				}
 			}
+			else_if = {
+				limit = {
+					has_country_flag = nhs_completed_nhs_heir_of_justinian
+				}
+				custom_tooltip = nhs_locks_inward_focus
+				custom_tooltip = nhs_improve_ambition_outward_1_tt
+				hidden_effect = {
+					remove_country_modifier = nhs_organised_expansion_2
+					add_country_modifier = {
+						name = nhs_organised_expansion_3
+						duration = -1
+					}
+				}
+			}
+			else = {
+				custom_tooltip = nhs_improve_ambition_outward_1_tt
+				hidden_effect = {
+					remove_country_modifier = nhs_organised_expansion_2
+					add_country_modifier = {
+						name = nhs_organised_expansion_3
+						duration = -1
+					}
+				}
+			}
+			set_country_flag = nhs_completed_outward_focus
 			add_country_modifier = {
 				name = nhs2_naval_primacy1
 				duration = -1
