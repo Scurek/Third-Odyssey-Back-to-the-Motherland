@@ -4699,35 +4699,39 @@ on_trade_good_changed = {
 				has_province_modifier = wine_bonus_prod
 				has_province_modifier = grain_bonus_prod
 			}
-			FROM = { has_reform = monastic_breweries_reform }
-			NOT = { owner = { has_reform = monastic_breweries_reform } }
+			NOT = { FROM = { has_reform = monastic_breweries_reform } }
 		}
 		remove_province_modifier = wine_bonus_prod
 		remove_province_modifier = grain_bonus_prod
 	}
-	hidden_effect = {
-		if = {
-			limit = {
-				trade_goods = wine
-			}
-			remove_province_modifier = grain_bonus_prod
-			add_province_modifier = { 
-				name = wine_bonus_prod
-				duration = -1
-				hidden = yes
-			}
+	if = {
+		limit = {
+			trade_goods = wine
+			FROM = { has_reform = monastic_breweries_reform }
 		}
-		if = {
-			limit = {
-				trade_goods = grain
-			}
-			remove_province_modifier = wine_bonus_prod
-			add_province_modifier = { 
-				name = grain_bonus_prod
-				duration = -1
-				hidden = yes
-			}
+		add_province_modifier = { 
+			name = wine_bonus_prod
+			duration = -1
+			hidden = yes
 		}
+	}
+	else = {
+		remove_province_modifier = wine_bonus_prod
+	}
+	
+	if = {
+		limit = {
+			trade_goods = grain
+			FROM = { has_reform = monastic_breweries_reform }
+		}
+		add_province_modifier = { 
+			name = grain_bonus_prod
+			duration = -1
+			hidden = yes
+		}
+	}
+	else = {
+		remove_province_modifier = grain_bonus_prod
 	}
 	# Third Odyssey
 	vov_handle_grand_forestries = yes
