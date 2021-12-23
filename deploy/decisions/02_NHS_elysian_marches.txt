@@ -1,4 +1,366 @@
 country_decisions = {
+	# Konstantinia
+	nhs_form_konstantinia = {
+		potential = {
+			# nhs_condition_all_ely = { KOMANDA = tag }
+			OR = {
+				has_country_flag = nhs_enable_form_konstantinia_decision
+				has_country_flag = nhs_formed_greek
+			}
+			NOT = { exists = ELG }
+			if = {
+				limit = {
+					has_country_flag = nhs_invasion_second_part_begins
+					NOT = { has_country_flag = nhs_invasion_over }
+				}
+				any_owned_province = {
+					nhs_greek_areas = yes
+					NOT = { has_province_modifier = nhs2_base_of_operations }
+					NOT = {
+						nhs_is_current_base_of_operations_target = { FLAG_SCOPE = ROOT }
+					}
+					NOT = { province_id = 151 }
+					NOT = { has_construction = missionary }
+					NOT = { has_province_modifier = nhs2_supply_lines }
+				}
+			}
+			else = {
+				any_owned_province = {
+					nhs_greek_areas = yes
+					NOT = { province_id = 151 }
+					NOT = { has_construction = missionary }
+				}
+			}
+		}
+
+		allow = {
+			is_at_war = no
+		}
+
+		effect = {
+			clr_country_flag = nhs_enable_form_konstantinia_decision
+			tooltip = {
+				create_subject = {
+					subject_type = elysian_subject
+					subject = ELG
+				}
+			}
+			custom_tooltip = nhs_exarchate_modifiers_desc_elg_tt
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_konstantinia_provinces_tt
+			if = {
+				limit = {
+					has_country_flag = nhs_invasion_second_part_begins
+					NOT = { has_country_flag = nhs_invasion_over }
+				}
+				custom_tooltip = nhs_konstantinia_provinces_during_invasion_tt
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_exarchate_setting_desc_elg_tt
+			set_country_flag = nhs_formed_greek
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						nhs_greek_areas = yes
+						NOT = { has_province_modifier = nhs2_base_of_operations }
+						NOT = { province_id = 151 }
+						NOT = {
+							nhs_is_current_base_of_operations_target = { FLAG_SCOPE = ROOT }
+						}
+						NOT = { has_construction = missionary }
+						NOT = { has_province_modifier = nhs2_supply_lines }
+					}
+					tooltip = {
+						cede_province = ELG
+					}
+					add_core = ELG
+				}
+				release = ELG
+				create_subject = {
+					subject_type = elysian_subject
+					subject = ELG
+				}
+				if = {
+					limit = {
+						religion = pantheon_worship
+					}
+					country_event = {
+						id = nhs2_mainlandevents.21
+						days = 2
+						tooltip = nhs2_mainlandevents.21.t
+					}
+				}
+				ELG = {
+					nhs_change_government = { GOV = monarchy }
+					nhs_add_gov_reform = { REF = autocracy_reform }
+					change_technology_group = eastern
+					change_unit_type = eastern
+					add_manpower = 10
+					change_primary_culture = greek
+					change_religion = orthodox
+					reverse_add_opinion = {
+						who = ROOT
+						modifier = nhs_formed_greeko
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = nhs_formed_greeko
+					}
+					add_treasury = 200
+					add_mil_power = 100
+					add_dip_power = 100
+					add_adm_power = 100
+					random_owned_province = {
+						infantry = ROOT
+						infantry = ROOT
+						infantry = ROOT
+						infantry = ROOT
+						infantry = ROOT
+					}
+					clr_country_flag = nhs_ely_march_all
+					clr_country_flag = nhs_ely_march_territory
+					clr_country_flag = nhs_ely_march_no
+					set_country_flag = nhs_ely_march_no_core
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	nhs_grant_balkans_to_elg = {
+		potential = {
+			NOT = { has_global_flag = nhs_elg_got_balkans }
+			nhs_condition_all_ely = { KOMANDA = tag }
+			has_country_flag = nhs_formed_greek
+			NOT = { has_country_flag = nhs_no_greek_nation }
+			exists = ELG
+			ELG = {
+				is_subject_of = ROOT
+			}
+			any_owned_province = {
+				region = balkan_region
+				NOT = {
+					nhs_greek_areas = yes
+				}
+			}
+		}
+
+		allow = {
+			any_owned_province = {
+				region = balkan_region
+			}
+		}
+
+		effect = {
+			set_global_flag = nhs_elg_got_balkans
+			custom_tooltip = nhs_no_missionary_core_provinces
+			every_owned_province = {
+				limit = {
+					region = balkan_region
+					NOT = {
+						nhs_greek_areas = yes
+					}
+					NOT = { has_construction = core }
+					NOT = { has_construction = missionary }
+					NOT = { province_id = 151 }
+					NOT = { has_province_modifier = nhs2_base_of_operations }
+				}
+				cede_province = ELG
+				if = {
+					limit = {
+						culture_group = byzantine
+						NOT = { culture = turkish }
+						NOT = { is_core = ROOT }
+					}
+					add_core = ELG
+				}
+				if = {
+					limit = {
+						is_core = ROOT
+					}
+					hidden_effect = {
+						remove_core = ROOT
+					}
+					add_core = ELG
+				}
+			}
+			if = {
+				limit = {
+					has_country_flag = nhs_completed_nhs_ancestral_lands
+				}
+				balkan_region = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	nhs_grant_anatolia_to_elg = {
+		potential = {
+			NOT = { has_global_flag = nhs_elg_got_anatolia }
+			nhs_condition_all_ely = { KOMANDA = tag }
+			has_country_flag = nhs_formed_greek
+			NOT = { has_country_flag = nhs_no_greek_nation }
+			exists = ELG
+			ELG = {
+				is_subject_of = ROOT
+			}
+			any_owned_province = {
+				region = anatolia_region
+				NOT = {
+					nhs_greek_areas = yes
+				}
+			}
+		}
+
+		allow = {
+			any_owned_province = {
+				region = anatolia_region
+				NOT = { has_province_modifier = nhs2_supply_lines }
+			}
+		}
+
+		effect = {
+			set_global_flag = nhs_elg_got_anatolia
+			custom_tooltip = nhs_no_missionary_core_provinces
+			every_owned_province = {
+				limit = {
+					region = anatolia_region
+					NOT = {
+						nhs_greek_areas = yes
+					}
+					NOT = { has_province_modifier = nhs2_base_of_operations }
+					NOT = { has_construction = core }
+					NOT = { has_construction = missionary }
+					NOT = { has_province_modifier = nhs2_supply_lines }
+				}
+				cede_province = ELG
+				if = {
+					limit = {
+						culture_group = byzantine
+						NOT = { culture = turkish }
+						NOT = { is_core = ROOT }
+					}
+					add_core = ELG
+				}
+				if = {
+					limit = {
+						is_core = ROOT
+					}
+					hidden_effect = {
+						remove_core = ROOT
+					}
+					add_core = ELG
+				}
+			}
+			if = {
+				limit = {
+					has_country_flag = nhs_completed_nhs_spqe
+				}
+				anatolia_region = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = nhs_completed_nhs_back_to_the_motherland
+				}
+				hudavendigar_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				aydin_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				karaman_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				rum_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				kastamonu_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				erzurum_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				dulkadir_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				cukurova_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				ankara_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				aegean_archipelago_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+				germiyan_area = {
+					limit = {
+						NOT = { is_core = ELG }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = ELG
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
 	# Armenia
 	nhs_ely_march_armenia = {
 		potential = {
@@ -2955,239 +3317,6 @@ country_decisions = {
 		}
 		ai_will_do = {
 			factor = 0
-		}
-	}
-	
-	nhs_grant_balkans_to_elg = {
-		potential = {
-			NOT = { has_global_flag = nhs_elg_got_balkans }
-			nhs_condition_all_ely = { KOMANDA = tag }
-			has_country_flag = nhs_formed_greek
-			NOT = { has_country_flag = nhs_no_greek_nation }
-			exists = ELG
-			ELG = {
-				is_subject_of = ROOT
-			}
-			any_owned_province = {
-				region = balkan_region
-				NOT = {
-					nhs_greek_areas = yes
-				}
-			}
-		}
-
-		allow = {
-			any_owned_province = {
-				region = balkan_region
-			}
-		}
-
-		effect = {
-			set_global_flag = nhs_elg_got_balkans
-			custom_tooltip = nhs_no_missionary_core_provinces
-			every_owned_province = {
-				limit = {
-					region = balkan_region
-					NOT = {
-						nhs_greek_areas = yes
-					}
-					NOT = { has_construction = core }
-					NOT = { has_construction = missionary }
-					NOT = { province_id = 151 }
-					NOT = { has_province_modifier = nhs2_base_of_operations }
-				}
-				cede_province = ELG
-				if = {
-					limit = {
-						culture_group = byzantine
-						NOT = { culture = turkish }
-						NOT = { is_core = ROOT }
-					}
-					add_core = ELG
-				}
-				if = {
-					limit = {
-						is_core = ROOT
-					}
-					hidden_effect = {
-						remove_core = ROOT
-					}
-					add_core = ELG
-				}
-			}
-			if = {
-				limit = {
-					has_country_flag = nhs_completed_nhs_ancestral_lands
-				}
-				balkan_region = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-			}
-		}
-		ai_will_do = {
-			factor = 1
-		}
-	}
-	
-	nhs_grant_anatolia_to_elg = {
-		potential = {
-			NOT = { has_global_flag = nhs_elg_got_anatolia }
-			nhs_condition_all_ely = { KOMANDA = tag }
-			has_country_flag = nhs_formed_greek
-			NOT = { has_country_flag = nhs_no_greek_nation }
-			exists = ELG
-			ELG = {
-				is_subject_of = ROOT
-			}
-			any_owned_province = {
-				region = anatolia_region
-				NOT = {
-					nhs_greek_areas = yes
-				}
-			}
-		}
-
-		allow = {
-			any_owned_province = {
-				region = anatolia_region
-				NOT = { has_province_modifier = nhs2_supply_lines }
-			}
-		}
-
-		effect = {
-			set_global_flag = nhs_elg_got_anatolia
-			custom_tooltip = nhs_no_missionary_core_provinces
-			every_owned_province = {
-				limit = {
-					region = anatolia_region
-					NOT = {
-						nhs_greek_areas = yes
-					}
-					NOT = { has_province_modifier = nhs2_base_of_operations }
-					NOT = { has_construction = core }
-					NOT = { has_construction = missionary }
-					NOT = { has_province_modifier = nhs2_supply_lines }
-				}
-				cede_province = ELG
-				if = {
-					limit = {
-						culture_group = byzantine
-						NOT = { culture = turkish }
-						NOT = { is_core = ROOT }
-					}
-					add_core = ELG
-				}
-				if = {
-					limit = {
-						is_core = ROOT
-					}
-					hidden_effect = {
-						remove_core = ROOT
-					}
-					add_core = ELG
-				}
-			}
-			if = {
-				limit = {
-					has_country_flag = nhs_completed_nhs_spqe
-				}
-				anatolia_region = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-			}
-			else_if = {
-				limit = {
-					has_country_flag = nhs_completed_nhs_back_to_the_motherland
-				}
-				hudavendigar_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				aydin_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				karaman_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				rum_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				kastamonu_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				erzurum_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				dulkadir_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				cukurova_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				ankara_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				aegean_archipelago_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				germiyan_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-			}
-		}
-		ai_will_do = {
-			factor = 1
 		}
 	}
 	
