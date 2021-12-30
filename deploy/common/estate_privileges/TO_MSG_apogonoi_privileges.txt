@@ -1,0 +1,388 @@
+#All scopes are country scope
+#All parameters are optional
+
+# estate_privilege = {
+# 	is_valid = { triggers }						#Conditions for whether it is possible for the country to have this privilege (it will not display on the list if they are false, and will be revoked if it has already been granted)
+# 	can_select = { triggers } 					#Conditions for whether the country is allowed to select the privilege (with conditions for why not displayed)
+# 	on_granted = { effects } 					#Effects executed immediately upon the privilege being taken
+# 	can_revoke = { triggers } 					#Conditions for whether the country can revoke the privilege
+# 	on_revoked = { effects } 					#Effects executed upon the privilege being revoked by the country
+# 	on_invalid = { effects } 					#Effects executed upon the privilege being removed due to invalidity (is_valid becomes false or the estate is removed)
+# 	penalties = { modifiers } 					#Negative modifiers granted while the privilege is active (creates different tooltip to benefits)
+# 	conditional_modifier = { 					#Modifier that are applied if the specified conditions are true.
+# 		trigger = { triggers }
+# 		modifier = { modifiers }
+# 		is_bad = yes/no							#Specifies whether the modifier should be listed as positive or negative in the tooltips.
+# 	}
+# 	modifier_by_land_ownership = { modifiers } 	#Multiplies the modifier by the % of land owned by the estate.
+# 	mechanics = { mechanics } 					#Special mechanics the privilege enables
+# 	cooldown_years = int 						#Time limit before which the privilege cannot be revoked
+# 	on_cooldown_expires = { effects }			#Effect executed once the specified cooldown_years timer has run down
+#	ai_will_do									#If above ESTATE_PRIVILEGE_GRANT_THRESHOLD define, AI will try to apply. If below ESTATE_PRIVILEGE_REVOKE_THRESHOLD, AI will try to revoke.
+# }
+
+estate_apogonoi_land_rights = {
+	icon = privilege_grant_autonomy
+	land_share = 5
+	max_absolutism = -5
+	loyalty = 0.05
+	influence = 0.05
+	can_select = {
+		to_num_of_privileges_check = {
+			ESTATE = estate_nhs_apogonoi
+		}
+	}
+	on_granted = {
+	}
+	penalties = {
+	}
+	benefits = {
+		governing_capacity = 100
+	}
+	ai_will_do = {
+		factor = 5
+		modifier = {
+			factor = 1.4
+			num_of_territories = 5
+		}
+		modifier = {
+			factor = 1.5
+			num_of_territories = 10
+		}
+		modifier = {
+			factor = 1.5
+			num_of_territories = 15
+		}
+		modifier = {
+			factor = 0
+			OR = {
+				NOT = { crown_land_share = 25 }
+				estate_influence = {
+					estate = estate_nhs_apogonoi
+					influence = 75
+				}
+			}
+			NOT = { has_estate_privilege = estate_apogonoi_land_rights }
+		}
+		modifier = {
+			factor = 3
+			OR = {
+				AND = {
+					governing_capacity_percentage = 0.9
+					NOT = { has_estate_privilege = estate_apogonoi_land_rights }
+				}
+				#The trigger below should make sure that the AI actually keeps this privilege when enacting it early game
+				AND = {
+					governing_capacity_percentage = 0.6
+					has_estate_privilege = estate_apogonoi_land_rights
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			NOT = { governing_capacity_percentage = 0.5 }
+		}
+		modifier = {
+			factor = 0.8
+			OR = {
+				NOT = { crown_land_share = 40 }
+				AND = {
+					is_absolutism_active = yes
+					NOT = { crown_land_share = 60 }
+				}
+			}
+			NOT = { has_estate_privilege = estate_apogonoi_land_rights }
+		}
+		modifier = {
+			factor = 0.8
+			OR = {
+				NOT = { crown_land_share = 30 }
+				AND = {
+					is_absolutism_active = yes
+					NOT = { crown_land_share = 50 }
+				}
+			}
+			NOT = { has_estate_privilege = estate_apogonoi_land_rights }
+		}
+		modifier = {
+			factor = 0.8
+			is_absolutism_active = yes
+		}
+		modifier = {
+			factor = 2
+			governing_capacity_percentage = 0.9
+		}
+		modifier = {
+			factor = 3
+			governing_capacity_percentage = 1
+		}
+		modifier = {
+			factor = 10
+			governing_capacity_percentage = 1.2
+		}
+		modifier = {
+			factor = 8
+			NOT = { adm_tech = 12 }
+			governing_capacity_percentage = 0.8
+		}
+		modifier = {
+			factor = 5
+			NOT = { adm_tech = 12 }
+			NOT = { government_rank = 1 }
+			governing_capacity_percentage = 0.65
+		}
+		#Has already a similar privilege active
+		modifier = {
+			factor = 0.75
+			has_estate_privilege = estate_church_land_rights
+		}
+		modifier = {
+			factor = 0.75
+			has_estate_privilege = estate_burghers_land_rights
+		}
+	}
+}
+
+estate_apogonoi_nobility_primacy = {
+	icon = privilege_military_power
+	land_share = 10
+	max_absolutism = -5
+	loyalty = -0.05
+	can_select = {
+		to_num_of_privileges_check = {
+			ESTATE = estate_nhs_apogonoi
+		}
+	}
+	on_granted = {
+	}
+	penalties = {
+	}
+	benefits = {
+		country_military_power = 1
+	}
+	ai_will_do = {
+		factor = 12
+		modifier = {
+			factor = 0
+			OR = {
+				NOT = { crown_land_share = 30 }
+				estate_influence = {
+					estate = estate_nhs_apogonoi
+					influence = 75
+				}
+			}
+			NOT = { has_estate_privilege = estate_apogonoi_nobility_primacy }
+		}
+		modifier = {
+			factor = 0.8
+			OR = {
+				NOT = { crown_land_share = 35 }
+				AND = {
+					is_absolutism_active = yes
+					NOT = { crown_land_share = 55 }
+				}
+			}
+			NOT = { has_estate_privilege = estate_apogonoi_nobility_primacy }
+		}
+		modifier = {
+			factor = 0.8
+			is_absolutism_active = yes
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { mil = 2 }
+		}
+		modifier = {
+			factor = 0.8
+			mil = 5
+		}
+	}
+}
+
+estate_apogonoi_officer_corp = {
+	icon = privilege_promote_purbias
+	max_absolutism = -5
+	influence = 0.05
+	is_valid = {
+		if = {
+			limit = {
+				has_estate_privilege = estate_apogonoi_officer_corp
+			}
+			NOT = { has_estate_privilege = estate_pipiltin_officer_corp }
+		}
+	}
+	can_select = {
+		to_num_of_privileges_check = {
+			ESTATE = estate_nhs_pipiltin
+		}
+		NOT = { has_estate_privilege = estate_pipiltin_officer_corp }
+	}
+	on_granted = {
+	}
+	penalties = {
+		estate_nhs_pipiltin_influence_modifier = -0.05
+	}
+	benefits = {
+		army_tradition_decay = -0.01
+	}
+	ai_will_do = {
+		factor = 0
+	}
+}
+
+estate_apogonoi_advisors = {
+	icon = privilege_recruit_minister
+	max_absolutism = -5
+	influence = 0.1
+	loyalty = 0.05
+	is_valid = {
+		if = {
+			limit = {
+				has_estate_privilege = estate_apogonoi_advisors
+			}
+			NOT = { has_estate_privilege = estate_pipiltin_advisors }
+		}
+	}
+	can_select = {
+		to_num_of_privileges_check = {
+			ESTATE = estate_nhs_apogonoi
+		}
+		NOT = { has_estate_privilege = estate_pipiltin_advisors }
+	}
+	penalties = {
+		stability_cost_modifier = 0.1
+		estate_nhs_pipiltin_influence_modifier = -0.1
+	}
+	benefits = {
+		mil_advisor_cost = -0.25
+	}
+	ai_will_do = {
+		factor = 10
+		modifier = {
+			factor = 0.5
+			is_absolutism_active = yes
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { mil = 2 }
+		}
+		modifier = {
+			factor = 0.8
+			mil = 5
+		}
+	}
+}
+
+estate_apogonoi_right_of_counsel = {
+	icon = privilege_royal_authority
+	max_absolutism = -10
+	loyalty = 0.1
+	influence = 0.1
+	can_select = {
+		to_num_of_privileges_check = {
+			ESTATE = estate_nhs_apogonoi
+		}
+	}
+	penalties = {
+		estate_nhs_pipiltin_loyalty_modifier = -0.1
+		estate_nhs_pipiltin_influence_modifier = -0.1
+	}
+	benefits = {
+	}
+	ai_will_do = {
+		factor = 10
+		modifier = {
+			factor = 0
+			is_absolutism_active = yes
+		}
+	}
+}
+
+estate_apogonoi_supremacy_over_crown = {
+	icon = privilege_empty_throne
+	max_absolutism = -5
+	influence = 0.1
+	loyalty = 0.1
+	is_valid = {
+		has_dlc = "Emperor"
+	}
+	can_select = {
+		to_num_of_privileges_check = {
+			ESTATE = estate_nhs_apogonoi
+		}
+	}
+	penalties = {
+		burghers_loyalty_modifier = -0.05
+		church_loyalty_modifier = -0.05
+		estate_nhs_pipiltin_loyalty_modifier = -0.1
+		
+		burghers_influence_modifier = -0.05
+		church_influence_modifier = -0.05
+		estate_nhs_pipiltin_influence_modifier = -0.1
+	}
+	benefits = {
+		stability_cost_modifier = -0.1
+	}
+	mechanics = {
+		can_give_agendas_without_interaction
+	}
+	ai_will_do = {
+		factor = 0
+	}
+}
+
+estate_apogonoi_better_integration = {
+	icon = privilege_better_integration
+	max_absolutism = -10
+	influence = 0.15
+	loyalty = 0.05
+	is_valid = {
+		if = {
+			limit = {
+				has_estate_privilege = estate_apogonoi_better_integration
+			}
+			NOT = { has_estate_privilege = estate_pipiltin_strong_duchies }
+			any_subject_country = {
+				OR = {
+					is_subject_of_type = vassal
+					is_subject_of_type = client_vassal
+					is_subject_of_type = daimyo_vassal
+					is_subject_of_type = personal_union
+				}
+			}
+		}
+	}
+	can_select = {
+		to_num_of_privileges_check = {
+			ESTATE = estate_nhs_apogonoi
+		}
+		NOT = { has_estate_privilege = estate_pipiltin_strong_duchies }
+		any_subject_country = {
+			OR = {
+				is_subject_of_type = vassal
+				is_subject_of_type = client_vassal
+				is_subject_of_type = daimyo_vassal
+				is_subject_of_type = personal_union
+			}
+		}
+	}
+	on_granted = {
+		disable_annexation_penalty = yes
+	}
+	on_revoked = {
+		enable_annexation_penalty = yes
+	}
+	on_invalid = {
+		enable_annexation_penalty = yes
+	}
+	penalties = {
+		reduced_liberty_desire = -15
+	}
+	benefits = {
+		diplomatic_annexation_cost = -0.05
+	}
+	cooldown_years = 10
+	ai_will_do = {
+		factor = 10
+	}
+}

@@ -317,6 +317,440 @@ nhs_add_estate_influence_modifier_if_exists = {
 	}
 }
 
+# ESTATE - estate identifier
+# TERRITORY_VARIABLE - variable into which the territory will be stored
+nhs_export_estate_territory_to_variable = {
+	# You could also do this with else if bloc, but you can't get decimals.
+	set_variable = {
+		which = $TERRITORY_VARIABLE$
+		value = 0
+	}
+	while = {
+		limit = {
+			estate_territory = {
+				estate = $ESTATE$
+				territory = 10
+			}
+		}
+		change_estate_land_share = {
+			estate = $ESTATE$
+			share = -10
+		}
+		change_variable = {
+			which = $TERRITORY_VARIABLE$
+			value = 10
+		}
+	}
+	while = {
+		limit = {
+			estate_territory = {
+				estate = $ESTATE$
+				territory = 1
+			}
+		}
+		change_estate_land_share = {
+			estate = $ESTATE$
+			share = -1
+		}
+		change_variable = {
+			which = $TERRITORY_VARIABLE$
+			value = 1
+		}
+	}
+	# The following is the result of estate_territory not accepting decimals. Have fun.
+	change_estate_land_share = {
+		estate = $ESTATE$
+		share = 1
+	}
+	while = {
+		limit = {
+			estate_territory = {
+				estate = $ESTATE$
+				territory = 1
+			}
+		}
+		change_estate_land_share = {
+			estate = $ESTATE$
+			share = -0.1
+		}
+		change_variable = {
+			which = $TERRITORY_VARIABLE$
+			value = 0.1
+		}
+	}
+	change_variable = {
+		which = $TERRITORY_VARIABLE$
+		value = -0.1
+	}
+	change_estate_land_share = {
+		estate = $ESTATE$
+		share = 0.1
+	}
+	while = {
+		limit = {
+			estate_territory = {
+				estate = $ESTATE$
+				territory = 1
+			}
+		}
+		change_estate_land_share = {
+			estate = $ESTATE$
+			share = -0.01
+		}
+		change_variable = {
+			which = $TERRITORY_VARIABLE$
+			value = 0.01
+		}
+	}
+	change_variable = {
+		which = $TERRITORY_VARIABLE$
+		value = -0.01
+	}
+	change_estate_land_share = {
+		estate = $ESTATE$
+		share = 0.01
+	}
+	while = {
+		limit = {
+			estate_territory = {
+				estate = $ESTATE$
+				territory = 1
+			}
+		}
+		change_estate_land_share = {
+			estate = $ESTATE$
+			share = -0.001
+		}
+		change_variable = {
+			which = $TERRITORY_VARIABLE$
+			value = 0.001
+		}
+	}
+	change_variable = {
+		which = $TERRITORY_VARIABLE$
+		value = -0.001
+	}
+	change_estate_land_share = {
+		estate = $ESTATE$
+		share = -1
+	}
+	set_variable = {
+		which = estate_territory_temp
+		which = $TERRITORY_VARIABLE$
+	}
+	while = {
+		limit = {
+			check_variable = {
+				which = estate_territory_temp
+				value = 0.001
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = estate_territory_temp
+					value = 10
+				}
+			}
+			change_estate_land_share = {
+				estate = $ESTATE$
+				share = 10
+			}
+			change_variable = {
+				which = estate_territory_temp
+				value = -10
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = estate_territory_temp
+					value = 1
+				}
+			}
+			change_estate_land_share = {
+				estate = $ESTATE$
+				share = 1
+			}
+			change_variable = {
+				which = estate_territory_temp
+				value = -1
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = estate_territory_temp
+					value = 0.1
+				}
+			}
+			change_estate_land_share = {
+				estate = $ESTATE$
+				share = 0.1
+			}
+			change_variable = {
+				which = estate_territory_temp
+				value = -0.1
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = estate_territory_temp
+					value = 0.01
+				}
+			}
+			change_estate_land_share = {
+				estate = $ESTATE$
+				share = 0.01
+			}
+			change_variable = {
+				which = estate_territory_temp
+				value = -0.01
+			}
+		}
+		else = {
+			change_estate_land_share = {
+				estate = $ESTATE$
+				share = 0.001
+			}
+			change_variable = {
+				which = estate_territory_temp
+				value = -0.001
+			}
+		}
+	}
+	set_variable = {
+		which = estate_territory_temp
+		value = 0
+	}
+}
+
+# ESTATE - Estate which territory will be equalized
+# ESTATE_GOAL - Estate which territory will be equalized to
+# ONLY_POSITIVE
+# ONLY_POSITIVE_ERR_FLAG
+nhs_equalize_estate_territory = {
+	nhs_export_estate_territory_to_variable = {
+		ESTATE = $ESTATE$
+		TERRITORY_VARIABLE = estate_init_territory
+	}
+	nhs_export_estate_territory_to_variable = {
+		ESTATE = $ESTATE_GOAL$
+		TERRITORY_VARIABLE = estate_goal_territory
+	}
+	set_variable = {
+		which = territory_diff
+		which = estate_goal_territory
+	}
+	subtract_variable = {
+		which = territory_diff
+		which = estate_init_territory
+	}
+	if = {
+		limit = {
+			always = $ONLY_POSITIVE$
+			NOT = {
+				check_variable = {
+					which = territory_diff
+					value = 0
+				}
+			}
+		}
+		[[ONLY_POSITIVE]
+			set_country_flag = $ONLY_POSITIVE_ERR_FLAG$
+		]
+	}
+	else_if = {
+		limit = { 
+			check_variable = {
+				which = territory_diff
+				value = 0
+			}
+		}
+		while = {
+			limit = {
+				check_variable = {
+					which = territory_diff
+					value = 0.001
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = territory_diff
+						value = 10
+					}
+				}
+				change_estate_land_share = {
+					estate = $ESTATE$
+					share = 10
+				}
+				change_variable = {
+					which = territory_diff
+					value = -10
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = territory_diff
+						value = 1
+					}
+				}
+				change_estate_land_share = {
+					estate = $ESTATE$
+					share = 1
+				}
+				change_variable = {
+					which = territory_diff
+					value = -1
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = territory_diff
+						value = 0.1
+					}
+				}
+				change_estate_land_share = {
+					estate = $ESTATE$
+					share = 0.1
+				}
+				change_variable = {
+					which = territory_diff
+					value = -0.1
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = territory_diff
+						value = 0.01
+					}
+				}
+				change_estate_land_share = {
+					estate = $ESTATE$
+					share = 0.01
+				}
+				change_variable = {
+					which = territory_diff
+					value = -0.01
+				}
+			}
+			else = {
+				change_estate_land_share = {
+					estate = $ESTATE$
+					share = 0.001
+				}
+				change_variable = {
+					which = territory_diff
+					value = -0.001
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			OR = {
+				NOT = {
+					check_variable = {
+						which = territory_diff
+						value = -0.001
+					}
+				}
+				is_variable_equal = {
+					which = territory_diff
+					value = -0.001
+				}
+			}
+		}
+		while = {
+			limit = {
+				check_variable = {
+					which = territory_diff
+					value = -0.001
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = territory_diff
+						value = -10
+					}
+				}
+				change_estate_land_share = {
+					estate = $ESTATE$
+					share = -10
+				}
+				change_variable = {
+					which = territory_diff
+					value = 10
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = territory_diff
+						value = -1
+					}
+				}
+				change_estate_land_share = {
+					estate = $ESTATE$
+					share = -1
+				}
+				change_variable = {
+					which = territory_diff
+					value = 1
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = territory_diff
+						value = -0.1
+					}
+				}
+				change_estate_land_share = {
+					estate = $ESTATE$
+					share = -0.1
+				}
+				change_variable = {
+					which = territory_diff
+					value = 0.1
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = territory_diff
+						value = -0.01
+					}
+				}
+				change_estate_land_share = {
+					estate = $ESTATE$
+					share = -0.01
+				}
+				change_variable = {
+					which = territory_diff
+					value = 0.01
+				}
+			}
+			else = {
+				change_estate_land_share = {
+					estate = $ESTATE$
+					share = -0.001
+				}
+				change_variable = {
+					which = territory_diff
+					value = 0.001
+				}
+			}
+		}
+	}
+}
+
 # -- NOBLE ESTATE EFFECTS --
 
 nhs_add_noble_estate_influence_modifier = {
