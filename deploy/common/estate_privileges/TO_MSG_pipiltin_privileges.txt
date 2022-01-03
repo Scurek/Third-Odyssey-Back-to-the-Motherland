@@ -200,7 +200,7 @@ estate_pipiltin_nobility_primacy = {
 }
 
 estate_pipiltin_officer_corp = {
-	icon = privilege_promote_purbias
+	icon = privilege_demand_more_troops
 	max_absolutism = -5
 	influence = 0.05
 	is_valid = {
@@ -223,9 +223,11 @@ estate_pipiltin_officer_corp = {
 	}
 	penalties = {
 		estate_nhs_apogonoi_influence_modifier = -0.05
+		estate_nhs_apogonoi_loyalty_modifier = -0.05
 	}
 	benefits = {
 		general_cost = -0.25
+		free_leader_pool = 1
 	}
 	ai_will_do = {
 		factor = 0
@@ -254,6 +256,7 @@ estate_pipiltin_advisors = {
 	penalties = {
 		stability_cost_modifier = 0.1
 		estate_nhs_apogonoi_influence_modifier = -0.1
+		estate_nhs_apogonoi_loyalty_modifier = -0.05
 	}
 	benefits = {
 		mil_advisor_cost = -0.25
@@ -290,6 +293,7 @@ estate_pipiltin_right_of_counsel = {
 		estate_nhs_apogonoi_influence_modifier = -0.1
 	}
 	benefits = {
+		global_manpower_modifier = 0.1
 	}
 	ai_will_do = {
 		factor = 10
@@ -314,17 +318,17 @@ estate_pipiltin_supremacy_over_crown = {
 		}
 	}
 	penalties = {
-		burghers_loyalty_modifier = -0.05
-		church_loyalty_modifier = -0.05
-		estate_nhs_apogonoi_loyalty_modifier = -0.1
-		
 		burghers_influence_modifier = -0.05
 		church_influence_modifier = -0.05
 		estate_nhs_apogonoi_influence_modifier = -0.1
+
+		# burghers_loyalty_modifier = -0.05
+		# church_loyalty_modifier = -0.05
+		estate_nhs_apogonoi_loyalty_modifier = -0.1
 	}
-	benefits = {
-		global_manpower = 0.1
-	}
+	# benefits = {
+	# 	global_manpower = 0.1
+	# }
 	mechanics = {
 		can_give_agendas_without_interaction
 	}
@@ -390,6 +394,46 @@ estate_pipiltin_strong_duchies = {
 			factor = 10
 			has_estate_privilege = estate_nobles_strong_duchies
 		}
+	}
+}
+
+estate_pipiltin_sell_land = {
+	icon = privilege_give_money
+	land_share = 5
+	is_valid = {
+		NOT = { has_estate_privilege = estate_pipiltin_sell_land }
+	}
+	can_select = {
+		custom_trigger_tooltip = {
+			tooltip = msg_sell_land_cd_tt
+			NOT = { has_country_modifier = estate_pipiltin_sell_land_cd }
+		}
+	}
+	on_granted = {
+		# change_estate_land_share = {
+		# 	estate = estate_nhs_pipiltin
+		# 	share = 5
+		# }
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = 10
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -5
+		}
+		remove_estate_privilege = estate_pipiltin_sell_land
+		hidden_effect = {
+			add_country_modifier = {
+				name = estate_pipiltin_sell_land_cd
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	ai_will_do = {
+		factor = 0
 	}
 }
 

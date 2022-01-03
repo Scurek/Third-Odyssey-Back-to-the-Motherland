@@ -595,9 +595,9 @@ country_event = {
 	title = msg_arrival_events.11.t
 	desc = msg_arrival_events.11.d
 	picture = Tenochtitlan_eventPicture
-	
-	fire_only_once = yes
 
+	major = yes
+	
 	trigger = {
 		tag = MS1
 		OR = {	
@@ -612,31 +612,41 @@ country_event = {
 
 	immediate = {
 		# Change province cultures
+		
+	}
+
+	option = {		# What will be, will be
+		name = "msg_arrival_events.11.a"
+		change_tag = MSN
+		add_government_reform = spartan_kingdom
 		hidden_effect = {
-			nhs_change_government = { GOV = spartan_monarchy }
-			if = {
-				limit = {
-					has_dlc = "Dharma"
-				}
-				change_government_reform_progress = -1000
+			change_government_reform_progress = -1000
+		}
+		remove_country_modifier = nhs_secrets_greekfire
+		remove_country_modifier = nhs_greekfire_update
+		remove_country_modifier = nhs_noble_cataphracts
+		if = {
+			limit = {
+				has_country_modifier = msg_cultural_minority
 			}
-			add_government_reform = spartan_kingdom
-			set_variable = {
-				which = msg_apogonoi_provinces
-				value = 0
-			}
-			set_variable = {
-				which = msg_pipiltin_provinces
-				value = 0
-			}
-			set_variable = {
-				which = msg_estate_provinces_balance
-				value = 0
-			}
-			set_variable = {
-				which = msg_estate_provinces_balance_apog_view
-				value = 0
-			}
+			remove_country_modifier = msg_cultural_minority
+		}
+		tooltip = {
+			swap_non_generic_missions = yes
+		}
+		custom_tooltip = nhs_new_line_tt
+		change_primary_culture = apogonoi
+		add_accepted_culture = pipiltin
+		add_accepted_culture = pochteca
+		add_accepted_culture = macehualtin
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = msg_enable_estates_tt
+		custom_tooltip = nhs_new_line_tt
+		country_event = {
+			id = msg_reforms.1
+			days = 1
+		}
+		hidden_effect = {
 			every_owned_province = {
 				limit = {
 					has_province_flag = nhs_msg_original_capital
@@ -748,69 +758,6 @@ country_event = {
 					50 = { set_province_flag = nhs2_nope_culture_change }
 				}
 			}
-		}
-	}
-
-	option = {		# What will be, will be
-		name = "msg_arrival_events.11.a"
-		change_tag = MSN
-		add_government_reform = spartan_kingdom
-		remove_country_modifier = nhs_secrets_greekfire
-		remove_country_modifier = nhs_greekfire_update
-		remove_country_modifier = nhs_noble_cataphracts
-		if = {
-			limit = {
-				has_country_modifier = msg_cultural_minority
-			}
-			remove_country_modifier = msg_cultural_minority
-		}
-		tooltip = {
-			swap_non_generic_missions = yes
-		}
-		custom_tooltip = nhs_new_line_tt
-		change_primary_culture = apogonoi
-		add_accepted_culture = pipiltin
-		add_accepted_culture = pochteca
-		add_accepted_culture = macehualtin
-		custom_tooltip = nhs_new_line_tt
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			add_government_reform = msg_government0_ref
-			add_government_reform = msg_court_reform_no
-			add_government_reform = msg_diplomats_no
-			add_government_reform = msg_naval_reform_no
-			add_government_reform = msg_economy0_ref
-			add_government_reform = msg_reform_land_ref_no
-			add_government_reform = msg_unreformed_trade_ports
-			add_government_reform = msg_unreformed_gold_mines
-			if = {
-				limit = {
-					religion = pantheon_worship
-				}
-				add_government_reform = msg_hellenic0_ref
-				add_government_reform = msg_spartan_heralds_no
-				add_government_reform = msg_native_deities_no
-				add_government_reform = msg_deify_leonidas_no
-			}
-			else_if = {
-				limit = {
-					religion = aztlan_worship
-				}
-				add_government_reform = msg_aztlan0_ref
-				add_government_reform = msg_aztlan_priesthood_no
-				add_government_reform = msg_old_faith_no
-				add_government_reform = msg_sacrifice_no
-			}
-			else = {
-				add_government_reform = msg_christian0_ref
-				add_government_reform = msg_spartan_patriarch_no
-				add_government_reform = msg_holy_army_no
-				add_government_reform = msg_saint_leo_no
-			}
-		}
-		hidden_effect = {
 			set_ruler_culture = apogonoi
 			set_heir_culture = apogonoi
 			if = {
@@ -827,17 +774,131 @@ country_event = {
 	
 	after = {
 		swap_non_generic_missions = yes
+		if = {
+			limit = {
+				any_country = {
+					exists = yes
+					ai = yes
+				}
+			}
+			random_country = {
+				limit = {
+					ai = yes
+				}
+				country_event = { id = msg_arrival_events.23 days = 1 }
+			}
+		}
+		else = {
+			country_event = { id = msg_arrival_events.23 days = 2 }
+		}
+	}
+}
+
+# Set MSN estate territory
+country_event = {
+	id = msg_arrival_events.23
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = COURT_eventPicture
+
+	hidden = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			change_estate_land_share = {
+				estate = estate_nhs_pipiltin
+				share = -100
+			}
+			change_estate_land_share = {
+				estate = estate_nhs_pipiltin
+				share = 20
+			}
+			set_estate_privilege = estate_pipiltin_land_rights
+			set_estate_privilege = estate_pipiltin_supremacy_over_crown
+
+			change_estate_land_share = {
+				estate = estate_nhs_apogonoi
+				share = -100
+			}
+			change_estate_land_share = {
+				estate = estate_nhs_apogonoi
+				share = 20
+			}
+			set_estate_privilege = estate_apogonoi_land_rights
+			set_estate_privilege = estate_apogonoi_supremacy_over_crown
+
+			change_estate_land_share = {
+				estate = estate_church
+				share = -100
+			}
+			change_estate_land_share = {
+				estate = estate_church
+				share = 5
+			}
+			change_estate_land_share = {
+				estate = estate_burghers
+				share = -100
+			}
+			change_estate_land_share = {
+				estate = estate_burghers
+				share = 5
+			}
+		}
+	}
+	
+	option = {
+		name = nhs2_hidden.a
+		FROM = {
+			change_estate_land_share = {
+				estate = estate_nhs_pipiltin
+				share = -100
+			}
+			change_estate_land_share = {
+				estate = estate_nhs_pipiltin
+				share = 20
+			}
+			set_estate_privilege = estate_pipiltin_land_rights
+			set_estate_privilege = estate_pipiltin_supremacy_over_crown
+
+			change_estate_land_share = {
+				estate = estate_nhs_apogonoi
+				share = -100
+			}
+			change_estate_land_share = {
+				estate = estate_nhs_apogonoi
+				share = 20
+			}
+			set_estate_privilege = estate_apogonoi_land_rights
+			set_estate_privilege = estate_apogonoi_supremacy_over_crown
+
+			change_estate_land_share = {
+				estate = estate_church
+				share = -100
+			}
+			change_estate_land_share = {
+				estate = estate_church
+				share = 5
+			}
+			change_estate_land_share = {
+				estate = estate_burghers
+				share = -100
+			}
+			change_estate_land_share = {
+				estate = estate_burghers
+				share = 5
+			}
+		}
 	}
 }
 
 country_event = {
 	id = msg_arrival_events.21
-	title = msg_arrival_events.22.t
-	desc = msg_arrival_events.22.d
-	
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = COURT_eventPicture
+
 	hidden = yes
-	fire_only_once = yes
 	
 	trigger = {
 		tag = MS1
@@ -853,18 +914,17 @@ country_event = {
 	}
 	
 	option = {
-		name = "msg_arrival_events.11.a"
+		name = nhs2_hidden.a
 	}
 }
 
 country_event = {
 	id = msg_arrival_events.22
-	title = msg_arrival_events.22.t
-	desc = msg_arrival_events.22.d
-	
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = COURT_eventPicture
+
 	hidden = yes
-	fire_only_once = yes
 	
 	trigger = {
 		tag = MSN
@@ -881,6 +941,6 @@ country_event = {
 	}
 	
 	option = {
-		name = "msg_arrival_events.11.a"
+		name = nhs2_hidden.a
 	}
 }

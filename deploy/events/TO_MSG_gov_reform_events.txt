@@ -8,28 +8,53 @@ country_event = {
 	desc = msg_reforms.1.d
 	picture = spartan_rifleman_eventPicture
 	
-	fire_only_once = yes
+	is_triggered_only = yes
 	
 	trigger = {
 		tag = MSN
-		is_subject = no
 	}
-	
+
 	immediate = {
-		set_global_flag = msg_reforms_started
+		hidden_effect = {
+			nhs_change_government = { GOV = spartan_monarchy }
+			add_government_reform = msg_government0_ref
+			add_government_reform = msg_court_reform_no
+			add_government_reform = msg_diplomats_no
+			add_government_reform = msg_naval_reform_no
+			add_government_reform = msg_economy0_ref
+			add_government_reform = msg_reform_land_ref_no
+			add_government_reform = msg_unreformed_trade_ports
+			add_government_reform = msg_unreformed_gold_mines
+			if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				add_government_reform = msg_hellenic0_ref
+				add_government_reform = msg_spartan_heralds_no
+				add_government_reform = msg_native_deities_no
+				add_government_reform = msg_deify_leonidas_no
+			}
+			else_if = {
+				limit = {
+					religion = aztlan_worship
+				}
+				add_government_reform = msg_aztlan0_ref
+				add_government_reform = msg_aztlan_priesthood_no
+				add_government_reform = msg_old_faith_no
+				add_government_reform = msg_sacrifice_no
+			}
+			else = {
+				add_government_reform = msg_christian0_ref
+				add_government_reform = msg_spartan_patriarch_no
+				add_government_reform = msg_holy_army_no
+				add_government_reform = msg_saint_leo_no
+			}
+		}
 	}
 	
 	option = {
 		name = msg_reforms.1.a
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			custom_tooltip = nhs_spartan_reform_explained_dharma_tt
-		} 
-		else = {
-			custom_tooltip = nhs_spartan_reform_explained_tt
-		}
+		custom_tooltip = nhs_spartan_reform_explained_dharma_tt
 	}
 }
 
@@ -172,72 +197,72 @@ country_event = {
 		custom_tooltip = msg_consequences
 		set_global_flag = msg_pipiltin_gold
 		add_manpower = 5
-		every_owned_province = {
-			limit = {
-				has_estate = estate_nhs_apogonoi
-			}
-			add_unrest = 2
-		}
-		if = {
-			limit = {
-				any_owned_province = {
-					trade_goods = gold
-					has_estate = no
-					is_state = yes
-				}
-			}
-			random_owned_province = {
-				limit = {
-					trade_goods = gold
-					is_state = yes
-					has_estate = no
-				}
-				hidden_effect = {
-					msg_calc_assign_estate = yes
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				any_owned_province = {
-					trade_goods = gold
-					has_estate = yes
-					is_state = yes
-					NOT = { has_estate = estate_nhs_pipiltin }
-				}
-			}
-			random_owned_province = {
-				limit = {
-					trade_goods = gold
-					is_state = yes
-					has_estate = yes
-					NOT = { has_estate = estate_nhs_pipiltin }
-				}
-				hidden_effect = {
-					msg_calc_remove_estate = yes
-				}
-				hidden_effect = {
-					msg_calc_assign_estate = yes
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				any_owned_province = {
-					NOT = { has_estate = yes }
-					is_state = yes
-				}
-			}
-			random_owned_province = {
-				limit = {
-					NOT = { has_estate = yes }
-					is_state = yes
-				}
-				hidden_effect = {
-					msg_calc_assign_estate = yes
-				}
-			}
-		}
+		# every_owned_province = {
+		# 	limit = {
+		# 		has_estate = estate_nhs_apogonoi
+		# 	}
+		# 	add_unrest = 2
+		# }
+		# if = {
+		# 	limit = {
+		# 		any_owned_province = {
+		# 			trade_goods = gold
+		# 			has_estate = no
+		# 			is_state = yes
+		# 		}
+		# 	}
+		# 	random_owned_province = {
+		# 		limit = {
+		# 			trade_goods = gold
+		# 			is_state = yes
+		# 			has_estate = no
+		# 		}
+		# 		hidden_effect = {
+		# 			msg_calc_assign_estate = yes
+		# 		}
+		# 	}
+		# }
+		# else_if = {
+		# 	limit = {
+		# 		any_owned_province = {
+		# 			trade_goods = gold
+		# 			has_estate = yes
+		# 			is_state = yes
+		# 			NOT = { has_estate = estate_nhs_pipiltin }
+		# 		}
+		# 	}
+		# 	random_owned_province = {
+		# 		limit = {
+		# 			trade_goods = gold
+		# 			is_state = yes
+		# 			has_estate = yes
+		# 			NOT = { has_estate = estate_nhs_pipiltin }
+		# 		}
+		# 		hidden_effect = {
+		# 			msg_calc_remove_estate = yes
+		# 		}
+		# 		hidden_effect = {
+		# 			msg_calc_assign_estate = yes
+		# 		}
+		# 	}
+		# }
+		# else_if = {
+		# 	limit = {
+		# 		any_owned_province = {
+		# 			NOT = { has_estate = yes }
+		# 			is_state = yes
+		# 		}
+		# 	}
+		# 	random_owned_province = {
+		# 		limit = {
+		# 			NOT = { has_estate = yes }
+		# 			is_state = yes
+		# 		}
+		# 		hidden_effect = {
+		# 			msg_calc_assign_estate = yes
+		# 		}
+		# 	}
+		# }
 		add_estate_loyalty = {
 			estate = estate_nhs_pipiltin
 			loyalty = 15
@@ -266,72 +291,72 @@ country_event = {
 		custom_tooltip = msg_consequences
 		set_global_flag = msg_apogonoi_gold
 		add_army_tradition = 10
-		every_owned_province = {
-			limit = {
-				has_estate = estate_nhs_pipiltin
-			}
-			add_unrest = 2
-		}
-		if = {
-			limit = {
-				any_owned_province = {
-					trade_goods = gold
-					is_state = yes
-					has_estate = no
-				}
-			}
-			random_owned_province = {
-				limit = {
-					trade_goods = gold
-					is_state = yes
-					has_estate = no
-				}
-				hidden_effect = {
-					msg_calc_assign_estate = yes
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				any_owned_province = {
-					trade_goods = gold
-					is_state = yes
-					has_estate = yes
-					NOT = { has_estate = estate_nhs_apogonoi }
-				}
-			}
-			random_owned_province = {
-				limit = {
-					trade_goods = gold
-					is_state = yes
-					has_estate = yes
-					NOT = { has_estate = estate_nhs_apogonoi }
-				}
-				hidden_effect = {
-					msg_calc_remove_estate = yes
-				}
-				hidden_effect = {
-					msg_calc_assign_estate = yes
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				any_owned_province = {
-					NOT = { has_estate = yes }
-					is_state = yes
-				}
-			}
-			random_owned_province = {
-				limit = {
-					NOT = { has_estate = yes }
-					is_state = yes
-				}
-				hidden_effect = {
-					msg_calc_assign_estate = yes
-				}
-			}
-		}
+		# every_owned_province = {
+		# 	limit = {
+		# 		has_estate = estate_nhs_pipiltin
+		# 	}
+		# 	add_unrest = 2
+		# }
+		# if = {
+		# 	limit = {
+		# 		any_owned_province = {
+		# 			trade_goods = gold
+		# 			is_state = yes
+		# 			has_estate = no
+		# 		}
+		# 	}
+		# 	random_owned_province = {
+		# 		limit = {
+		# 			trade_goods = gold
+		# 			is_state = yes
+		# 			has_estate = no
+		# 		}
+		# 		hidden_effect = {
+		# 			msg_calc_assign_estate = yes
+		# 		}
+		# 	}
+		# }
+		# else_if = {
+		# 	limit = {
+		# 		any_owned_province = {
+		# 			trade_goods = gold
+		# 			is_state = yes
+		# 			has_estate = yes
+		# 			NOT = { has_estate = estate_nhs_apogonoi }
+		# 		}
+		# 	}
+		# 	random_owned_province = {
+		# 		limit = {
+		# 			trade_goods = gold
+		# 			is_state = yes
+		# 			has_estate = yes
+		# 			NOT = { has_estate = estate_nhs_apogonoi }
+		# 		}
+		# 		hidden_effect = {
+		# 			msg_calc_remove_estate = yes
+		# 		}
+		# 		hidden_effect = {
+		# 			msg_calc_assign_estate = yes
+		# 		}
+		# 	}
+		# }
+		# else_if = {
+		# 	limit = {
+		# 		any_owned_province = {
+		# 			NOT = { has_estate = yes }
+		# 			is_state = yes
+		# 		}
+		# 	}
+		# 	random_owned_province = {
+		# 		limit = {
+		# 			NOT = { has_estate = yes }
+		# 			is_state = yes
+		# 		}
+		# 		hidden_effect = {
+		# 			msg_calc_assign_estate = yes
+		# 		}
+		# 	}
+		# }
 		add_estate_loyalty = {
 			estate = estate_nhs_apogonoi
 			loyalty = 15
@@ -359,32 +384,32 @@ country_event = {
 		name = msg_reforms.2.e # Direct rule from Laconya
 		add_treasury = 50
 		add_corruption = 3
-		random_owned_province = {
-			limit = {
-				trade_goods = gold
-				OR = {
-					has_estate = estate_nhs_apogonoi
-					has_estate = estate_nhs_pipiltin
-				}
-				is_state = yes
-			}
-			if = {
-				limit = {
-					has_estate = estate_nhs_apogonoi
-				}
-				hidden_effect = {
-					msg_calc_remove_estate = yes
-				}
-			}
-			if = {
-				limit = {
-					has_estate = estate_nhs_pipiltin
-				}
-				hidden_effect = {
-					msg_calc_remove_estate = yes
-				}
-			}
-		}
+		# random_owned_province = {
+		# 	limit = {
+		# 		trade_goods = gold
+		# 		OR = {
+		# 			has_estate = estate_nhs_apogonoi
+		# 			has_estate = estate_nhs_pipiltin
+		# 		}
+		# 		is_state = yes
+		# 	}
+		# 	if = {
+		# 		limit = {
+		# 			has_estate = estate_nhs_apogonoi
+		# 		}
+		# 		hidden_effect = {
+		# 			msg_calc_remove_estate = yes
+		# 		}
+		# 	}
+		# 	if = {
+		# 		limit = {
+		# 			has_estate = estate_nhs_pipiltin
+		# 		}
+		# 		hidden_effect = {
+		# 			msg_calc_remove_estate = yes
+		# 		}
+		# 	}
+		# }
 		add_estate_loyalty = {
 			estate = estate_nhs_apogonoi
 			loyalty = -10
@@ -579,19 +604,19 @@ country_event = {
 			}
 		}
 		add_treasury = -100
-		random_owned_province = {
-			limit = {
-				has_estate = estate_nhs_pipiltin
-			}
-			hidden_effect = {
-				msg_calc_remove_estate = yes
-			}
-			add_province_modifier = {
-				name = "msg_land_distribution" #Reduced development and build cost
-				duration = 1825
-			}
-			set_province_flag = msg_land_distribution
-		}
+		# random_owned_province = {
+		# 	limit = {
+		# 		has_estate = estate_nhs_pipiltin
+		# 	}
+		# 	hidden_effect = {
+		# 		msg_calc_remove_estate = yes
+		# 	}
+		# 	add_province_modifier = {
+		# 		name = "msg_land_distribution" #Reduced development and build cost
+		# 		duration = 1825
+		# 	}
+		# 	set_province_flag = msg_land_distribution
+		# }
 		add_estate_influence_modifier = {
 			estate = estate_nhs_pipiltin
 			desc = "msg_purchased_land"
@@ -612,19 +637,19 @@ country_event = {
 			}
 		}
 		add_treasury = -100
-		random_owned_province = {
-			limit = {
-				has_estate = estate_nhs_apogonoi
-			}
-			hidden_effect = {
-				msg_calc_remove_estate = yes
-			}
-			add_province_modifier = {
-				name = "msg_land_distribution" #Reduced development and build cost
-				duration = 1825
-			}
-			set_province_flag = msg_land_distribution
-		}
+		# random_owned_province = {
+		# 	limit = {
+		# 		has_estate = estate_nhs_apogonoi
+		# 	}
+		# 	hidden_effect = {
+		# 		msg_calc_remove_estate = yes
+		# 	}
+		# 	add_province_modifier = {
+		# 		name = "msg_land_distribution" #Reduced development and build cost
+		# 		duration = 1825
+		# 	}
+		# 	set_province_flag = msg_land_distribution
+		# }
 		add_estate_influence_modifier = {
 			estate = estate_nhs_apogonoi
 			desc = "msg_purchased_land"
@@ -2220,7 +2245,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_gold_sold
 	}
 	
@@ -2243,7 +2268,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_trade_ports_done
 	}
 	
@@ -2267,7 +2292,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_land_redistributed
 	}
 	
@@ -2310,7 +2335,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_leonidas_done
 		set_global_flag = msg_third_religious_reform_done
 	}
@@ -2354,7 +2379,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_heralds_done
 		set_global_flag = msg_first_religious_reform_done
 	}
@@ -2398,7 +2423,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_native_deities
 		set_global_flag = msg_second_religious_reform_done
 	}
@@ -2442,7 +2467,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_priesthood_done
 		set_global_flag = msg_first_religious_reform_done
 	}
@@ -2484,7 +2509,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_old_faith
 		set_global_flag = msg_second_religious_reform_done
 	}
@@ -2526,7 +2551,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_FUN
 		set_global_flag = msg_third_religious_reform_done
 	}
@@ -2571,7 +2596,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_holy_army
 		set_global_flag = msg_second_religious_reform_done
 	}
@@ -2629,7 +2654,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_saint_leo
 		set_global_flag = msg_third_religious_reform_done
 	}
@@ -2700,7 +2725,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_ships_done
 	}
 	
@@ -2800,7 +2825,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_diplomats_done
 	}
 	
@@ -2822,7 +2847,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		msg_ai_or_does_not_have_dharma_clear_flag = yes
+		clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_court_done
 	}
 	
