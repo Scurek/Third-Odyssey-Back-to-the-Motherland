@@ -9,14 +9,13 @@ country_event = {
 	picture = spartan_rifleman_eventPicture
 	
 	is_triggered_only = yes
-	
-	trigger = {
-		tag = MSN
-	}
 
 	immediate = {
 		hidden_effect = {
 			nhs_change_government = { GOV = spartan_monarchy }
+			add_government_reform = spartan_kingdom
+			change_government_reform_progress = -1000
+
 			add_government_reform = msg_government0_ref
 			add_government_reform = msg_court_reform_no
 			add_government_reform = msg_diplomats_no
@@ -73,10 +72,6 @@ country_event = {
 	
 	is_triggered_only = yes
 	
-	trigger = {
-		tag = MSN
-	}
-	
 	immediate = { #Extra text
 		if = {
 			limit = {
@@ -96,80 +91,59 @@ country_event = {
 			}
 			custom_tooltip = msg_starting_war_bad_tt
 		}
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					trade_goods = gold
+					is_state = yes
+					NOT = {
+						any_province = {
+							NOT = { province_id = PREV }
+							owned_by = ROOT
+							is_state = yes
+							trade_goods = gold
+							base_production = PREV
+						}
+					}
+				}
+				save_event_target_as = gold_mine_target
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = gold_mine_target }
+				}
+				random_owned_province = {
+					limit = {
+						trade_goods = gold
+						is_state = yes
+					}
+					save_event_target_as = gold_mine_target
+				}
+			}
+		}
 	}
 	
 	option = {
 		name = msg_reforms.2.a # Burghers are yum
-		add_inflation = -1
-		add_mercantilism = -1
-		if = {
-			limit = {
-				any_owned_province = {
-					trade_goods = gold
-					is_state = yes
-					NOT = { has_estate = yes }
-					OR = {
-						development = 10
-						province_trade_power = 5
-					}
-				}
+		add_inflation = -2
+		add_mercantilism = 5
+		event_target:gold_mine_target = {
+			add_province_modifier = {
+				name = msg_imperial_mint
+				duration = -1
 			}
-			random_owned_province = {
-				limit = {
-					trade_goods = gold
-					is_state = yes
-					NOT = { has_estate = yes }
-					OR = {
-						development = 10
-						province_trade_power = 5
-					}
-				}
+			hidden_effect = {
+				add_province_triggered_modifier = msg_imperial_mint_tm
 			}
 		}
-		if = {
-			limit = {
-				any_owned_province = {
-					NOT = { has_estate = yes }
-					is_state = yes
-					OR = {
-						development = 10
-						province_trade_power = 5
-					}
-				}
-				NOT = {
-					any_owned_province = {
-						trade_goods = gold
-						is_state = yes
-						NOT = { has_estate = yes }
-						OR = {
-							development = 10
-							province_trade_power = 5
-						}
-					}
-				}
-			}
-			random_owned_province = {
-				limit = {
-					NOT = { has_estate = yes }
-					is_state = yes
-					OR = {
-						development = 10
-						province_trade_power = 5
-					}
-				}
-			}
+		change_estate_land_share = {
+			estate = estate_burghers
+			share = 75
+			province = event_target:gold_mine_target
 		}
 		add_estate_loyalty = {
 			estate = estate_burghers
 			loyalty = 10
-		}
-		add_estate_loyalty = {
-			estate = estate_nhs_apogonoi
-			loyalty = -10
-		}
-		add_estate_loyalty = {
-			estate = estate_nhs_pipiltin
-			loyalty = -10
 		}
 		add_estate_influence_modifier = {
 			estate = estate_burghers
@@ -177,11 +151,19 @@ country_event = {
 			influence = 10
 			duration = 3650
 		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
 		add_estate_influence_modifier = {
 			estate = estate_nhs_apogonoi
 			desc = msg_denied_gold_mines
 			influence = -10
 			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
 		}
 		add_estate_influence_modifier = {
 			estate = estate_nhs_pipiltin
@@ -189,194 +171,93 @@ country_event = {
 			influence = -10
 			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.18 days = 1095 }
 	}
 	
 	option = {
 		name = msg_reforms.2.b # Give it to the Pippies
-		custom_tooltip = msg_consequences
-		set_global_flag = msg_pipiltin_gold
+		# custom_tooltip = msg_consequences
+		# set_global_flag = msg_pipiltin_gold
 		add_manpower = 5
-		# every_owned_province = {
-		# 	limit = {
-		# 		has_estate = estate_nhs_apogonoi
-		# 	}
-		# 	add_unrest = 2
-		# }
-		# if = {
-		# 	limit = {
-		# 		any_owned_province = {
-		# 			trade_goods = gold
-		# 			has_estate = no
-		# 			is_state = yes
-		# 		}
-		# 	}
-		# 	random_owned_province = {
-		# 		limit = {
-		# 			trade_goods = gold
-		# 			is_state = yes
-		# 			has_estate = no
-		# 		}
-		# 		hidden_effect = {
-		# 			msg_calc_assign_estate = yes
-		# 		}
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		any_owned_province = {
-		# 			trade_goods = gold
-		# 			has_estate = yes
-		# 			is_state = yes
-		# 			NOT = { has_estate = estate_nhs_pipiltin }
-		# 		}
-		# 	}
-		# 	random_owned_province = {
-		# 		limit = {
-		# 			trade_goods = gold
-		# 			is_state = yes
-		# 			has_estate = yes
-		# 			NOT = { has_estate = estate_nhs_pipiltin }
-		# 		}
-		# 		hidden_effect = {
-		# 			msg_calc_remove_estate = yes
-		# 		}
-		# 		hidden_effect = {
-		# 			msg_calc_assign_estate = yes
-		# 		}
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		any_owned_province = {
-		# 			NOT = { has_estate = yes }
-		# 			is_state = yes
-		# 		}
-		# 	}
-		# 	random_owned_province = {
-		# 		limit = {
-		# 			NOT = { has_estate = yes }
-		# 			is_state = yes
-		# 		}
-		# 		hidden_effect = {
-		# 			msg_calc_assign_estate = yes
-		# 		}
-		# 	}
-		# }
+		event_target:gold_mine_target = {
+			add_province_modifier = {
+				name = msg_imperial_mint
+				duration = -1
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = msg_imperial_mint_tm
+			}
+		}
+		change_estate_land_share = {
+			estate = estate_nhs_pipiltin
+			share = 50
+			province = event_target:gold_mine_target
+		}
 		add_estate_loyalty = {
 			estate = estate_nhs_pipiltin
 			loyalty = 15
 		}
-		add_estate_loyalty = {
-			estate = estate_nhs_apogonoi
-			loyalty = -15
-		}
 		add_estate_influence_modifier = {
 			estate = estate_nhs_pipiltin
 			desc = msg_gave_gold_mines
-			influence = 15
+			influence = 10
 			duration = 3650
 		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -15
+		}	
 		add_estate_influence_modifier = {
 			estate = estate_nhs_apogonoi
 			desc = msg_denied_gold_mines
-			influence = -15
+			influence = -10
 			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.18 days = 1095 }
 	}
 	
 	option = {
 		name = msg_reforms.2.c # Give it to the Appies
-		custom_tooltip = msg_consequences
-		set_global_flag = msg_apogonoi_gold
+		# custom_tooltip = msg_consequences
+		# set_global_flag = msg_apogonoi_gold
 		add_army_tradition = 10
-		# every_owned_province = {
-		# 	limit = {
-		# 		has_estate = estate_nhs_pipiltin
-		# 	}
-		# 	add_unrest = 2
-		# }
-		# if = {
-		# 	limit = {
-		# 		any_owned_province = {
-		# 			trade_goods = gold
-		# 			is_state = yes
-		# 			has_estate = no
-		# 		}
-		# 	}
-		# 	random_owned_province = {
-		# 		limit = {
-		# 			trade_goods = gold
-		# 			is_state = yes
-		# 			has_estate = no
-		# 		}
-		# 		hidden_effect = {
-		# 			msg_calc_assign_estate = yes
-		# 		}
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		any_owned_province = {
-		# 			trade_goods = gold
-		# 			is_state = yes
-		# 			has_estate = yes
-		# 			NOT = { has_estate = estate_nhs_apogonoi }
-		# 		}
-		# 	}
-		# 	random_owned_province = {
-		# 		limit = {
-		# 			trade_goods = gold
-		# 			is_state = yes
-		# 			has_estate = yes
-		# 			NOT = { has_estate = estate_nhs_apogonoi }
-		# 		}
-		# 		hidden_effect = {
-		# 			msg_calc_remove_estate = yes
-		# 		}
-		# 		hidden_effect = {
-		# 			msg_calc_assign_estate = yes
-		# 		}
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		any_owned_province = {
-		# 			NOT = { has_estate = yes }
-		# 			is_state = yes
-		# 		}
-		# 	}
-		# 	random_owned_province = {
-		# 		limit = {
-		# 			NOT = { has_estate = yes }
-		# 			is_state = yes
-		# 		}
-		# 		hidden_effect = {
-		# 			msg_calc_assign_estate = yes
-		# 		}
-		# 	}
-		# }
+		event_target:gold_mine_target = {
+			add_province_modifier = {
+				name = msg_imperial_mint
+				duration = -1
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = msg_imperial_mint_tm
+			}
+		}
+		change_estate_land_share = {
+			estate = estate_nhs_apogonoi
+			share = 50
+			province = event_target:gold_mine_target
+		}
 		add_estate_loyalty = {
 			estate = estate_nhs_apogonoi
 			loyalty = 15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = msg_gave_gold_mines
+			influence = 10
+			duration = 3650
 		}
 		add_estate_loyalty = {
 			estate = estate_nhs_pipiltin
 			loyalty = -15
 		}
 		add_estate_influence_modifier = {
-			estate = estate_nhs_apogonoi
-			desc = msg_gave_gold_mines
-			influence = 15
-			duration = 3650
-		}
-		add_estate_influence_modifier = {
 			estate = estate_nhs_pipiltin
 			desc = msg_denied_gold_mines
-			influence = -15
+			influence = -10
 			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.18 days = 1095 }
 	}
 	
@@ -384,38 +265,17 @@ country_event = {
 		name = msg_reforms.2.e # Direct rule from Laconya
 		add_treasury = 50
 		add_corruption = 3
-		# random_owned_province = {
-		# 	limit = {
-		# 		trade_goods = gold
-		# 		OR = {
-		# 			has_estate = estate_nhs_apogonoi
-		# 			has_estate = estate_nhs_pipiltin
-		# 		}
-		# 		is_state = yes
-		# 	}
-		# 	if = {
-		# 		limit = {
-		# 			has_estate = estate_nhs_apogonoi
-		# 		}
-		# 		hidden_effect = {
-		# 			msg_calc_remove_estate = yes
-		# 		}
-		# 	}
-		# 	if = {
-		# 		limit = {
-		# 			has_estate = estate_nhs_pipiltin
-		# 		}
-		# 		hidden_effect = {
-		# 			msg_calc_remove_estate = yes
-		# 		}
-		# 	}
-		# }
-		add_estate_loyalty = {
-			estate = estate_nhs_apogonoi
-			loyalty = -10
+		event_target:gold_mine_target = {
+			add_province_modifier = {
+				name = msg_imperial_mint
+				duration = -1
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = msg_imperial_mint_tm
+			}
 		}
 		add_estate_loyalty = {
-			estate = estate_nhs_pipiltin
+			estate = estate_nhs_apogonoi
 			loyalty = -10
 		}
 		add_estate_influence_modifier = {
@@ -424,29 +284,31 @@ country_event = {
 			influence = -10
 			duration = 3650
 		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -10
+		}
 		add_estate_influence_modifier = {
 			estate = estate_nhs_pipiltin
 			desc = msg_denied_gold_mines
 			influence = -10
 			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.18 days = 1095 }
 	}
 	
 	option = {
 		name = msg_reforms.2.f # We're not ready yet
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_unreformed_gold_mines }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		trigger = {
+			ai = no
 		}
+		change_government_reform_progress = 50
 		add_stability = 1
 		add_treasury = 100
 		add_dip_power = 50
-		clr_country_flag = msg_reform_in_progress
+		nhs_add_reform = { REF = msg_unreformed_gold_mines }
+		# clr_country_flag = msg_reform_in_progress
 	}
 }
 
@@ -458,11 +320,7 @@ country_event = {
 	picture = Harbor_eventPicture
 	
 	is_triggered_only = yes
-	
-	trigger = {
-		tag = MSN
-	}
-	
+
 	immediate = { #Extra text
 		if = {
 			limit = {
@@ -488,9 +346,9 @@ country_event = {
 		name = msg_reforms.3.a #Free trade
 		add_country_modifier = {
 			name = "msg_free_trade" #Lots of global trade power
-			duration = 1825
+			duration = 3650
 		}
-		add_mercantilism = -1
+		add_mercantilism = -5
 		add_estate_loyalty = {
 			estate = estate_burghers
 			loyalty = 10
@@ -499,6 +357,7 @@ country_event = {
 			estate = estate_nhs_apogonoi
 			loyalty = -10
 		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.19 days = 1095 }
 	}
 	
@@ -506,29 +365,30 @@ country_event = {
 		name = msg_reforms.3.b #Local nobles can decide
 		add_country_modifier = {
 			name = "msg_local_trade_policy" # Global trade power and global autonomy increase
-			duration = 1825
+			duration = 3650
 		}
 		add_estate_loyalty = {
 			estate = estate_nhs_pipiltin
 			loyalty = 15
 		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = "msg_pipiltin_trade_policy"
+			influence = 5
+			duration = 3650
+		}
 		add_estate_loyalty = {
 			estate = estate_nhs_apogonoi
 			loyalty = -15
 		}
-		add_estate_influence_modifier = {
-			estate = estate_nhs_pipiltin
-			desc = "msg_pipiltin_trade_policy"
-			influence = 15
-			duration = 3650
-		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.19 days = 1095 }
 	}
 	
 	option = {
 		name = msg_reforms.3.c # Strictly state controlled
-		add_mercantilism = 2
-		add_corruption = 5
+		add_mercantilism = 5
+		add_corruption = 2
 		add_estate_loyalty = {
 			estate = estate_nhs_apogonoi
 			loyalty = 10
@@ -541,24 +401,21 @@ country_event = {
 			estate = estate_burghers
 			loyalty = -10
 		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.19 days = 1095 }
 	}
 	
 	option = {
 		name = msg_reforms.3.e # We're not ready
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_unreformed_trade_ports }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		trigger = {
+			ai = no
 		}
-		add_stability = 1
+		change_government_reform_progress = 50
 		add_corruption = -2
 		add_treasury = 50
 		add_dip_power = 50
-		clr_country_flag = msg_reform_in_progress
+		nhs_add_reform = { REF = msg_unreformed_trade_ports }
+		# clr_country_flag = msg_reform_in_progress
 	}
 }
 	
@@ -570,10 +427,6 @@ country_event = {
 	picture = RIVER_THROUGH_VALLEY_eventPicture
 	
 	is_triggered_only = yes
-	
-	trigger = {
-		tag = MSN
-	}
 	
 	immediate = { #Extra text
 		if = {
@@ -595,165 +448,92 @@ country_event = {
 			custom_tooltip = msg_starting_war_bad_tt
 		}
 	}
-	
+
 	option = {
-		name = msg_reforms.4.a #Buy land from the pipiltin
-		trigger = {
-			any_owned_province = {
-				has_estate = estate_nhs_pipiltin
+		name = msg_reforms.4.a # Pay for land
+		if = {
+			limit = {
+				ai = no
 			}
-		}
-		add_treasury = -100
-		# random_owned_province = {
-		# 	limit = {
-		# 		has_estate = estate_nhs_pipiltin
-		# 	}
-		# 	hidden_effect = {
-		# 		msg_calc_remove_estate = yes
-		# 	}
-		# 	add_province_modifier = {
-		# 		name = "msg_land_distribution" #Reduced development and build cost
-		# 		duration = 1825
-		# 	}
-		# 	set_province_flag = msg_land_distribution
-		# }
-		add_estate_influence_modifier = {
-			estate = estate_nhs_pipiltin
-			desc = "msg_purchased_land"
-			influence = 10
-			duration = 1825
+			if = {
+				limit = { current_age = age_of_discovery }
+				add_years_of_estate_land_income = -1.25
+			}
+			else_if = {
+				limit = { current_age = age_of_reformation }
+				add_years_of_estate_land_income = -1.0
+			}
+			else_if = {
+				limit = { current_age = age_of_absolutism }
+				add_years_of_estate_land_income = 0.75
+			}
+			else_if = {
+				limit = { current_age = age_of_revolutions }
+				add_years_of_estate_land_income = -0.5
+			}
+		}	
+		take_estate_land_share_massive = { estate = all }
+		custom_tooltip = nhs_new_line_tt
+		country_event = { id = msg_reforms.20 days = 1095 }
+	}
+
+	option = {
+		name = msg_reforms.4.b # Sieze land
+		trigger = {
+			ai = no
 		}
 		add_estate_loyalty = {
-			estate = estate_nhs_apogonoi
-			loyalty = -10
+			estate = all
+			loyalty = -20
+			short = yes
 		}
-		country_event = { id = msg_reforms.20 days = 1095 }
-	}
-	option = {
-		name = msg_reforms.4.b #Buy land from the apogonoi
-		trigger = {
-			any_owned_province = {
-				has_estate = estate_nhs_apogonoi
-			}
-		}
-		add_treasury = -100
-		# random_owned_province = {
-		# 	limit = {
-		# 		has_estate = estate_nhs_apogonoi
-		# 	}
-		# 	hidden_effect = {
-		# 		msg_calc_remove_estate = yes
-		# 	}
-		# 	add_province_modifier = {
-		# 		name = "msg_land_distribution" #Reduced development and build cost
-		# 		duration = 1825
-		# 	}
-		# 	set_province_flag = msg_land_distribution
-		# }
-		add_estate_influence_modifier = {
-			estate = estate_nhs_apogonoi
-			desc = "msg_purchased_land"
-			influence = 10
-			duration = 1825
-		}
-		add_estate_loyalty = {
-			estate = estate_nhs_pipiltin
-			loyalty = -10
-		}
-		country_event = { id = msg_reforms.20 days = 1095 }
-	}
-	option = {
-		name = msg_reforms.4.c # Sieze Church land
-		trigger = {
-			any_owned_province = {
-				OR = {
-					has_estate = estate_church
-					has_estate = estate_nhs_church_hellenic
+		custom_tooltip = seize_land_rebels_tt
+		if = { 
+			limit = {
+				NOT = {
+					estate_loyalty = {
+						estate = all
+						loyalty = 30
+					}
 				}
+				estate_influence = {
+					estate = all
+					influence = 1
+				}				
 			}
-			NOT = { religion = aztlan_worship }
+			spawn_rebels_seize_land_switch = yes
 		}
-		add_stability = -1
-		add_country_modifier = {
-			name = msg_siezed_church_land
-			duration = 1825
-		}
-		random_owned_province = {
-			limit = {
-				OR = {
-					has_estate = estate_church
-					has_estate = estate_nhs_church_hellenic
-				}
-			}
-			add_province_modifier = {
-				name = "msg_land_distribution" #Reduced development and build cost
-				duration = 1825
-			}
-			set_province_flag = msg_land_distribution
-		}
-		if = {
-			limit = {
-				religion = pantheon_worship
-			}
-			add_estate_influence_modifier = {
-				estate = estate_nhs_church_hellenic
-				desc = "msg_siezed_land"
-				influence = -15
-				duration = 1825
-			}
-			add_estate_loyalty = {
-				estate = estate_nhs_church_hellenic
-				loyalty = -15
-			}
-		}
-		if = {
-			limit = {
-				NOT = { religion = pantheon_worship }
-			}
-			add_estate_influence_modifier = {
-				estate = estate_church
-				desc = "msg_siezed_land"
-				influence = -15
-				duration = 1825
-			}
-			add_estate_loyalty = {
-				estate = estate_church
-				loyalty = -15
-			}
-		}
+		take_estate_land_share_massive = { estate = all }
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.20 days = 1095 }
 	}
 	option = {
-		name = msg_reforms.4.e # Redistribute state land
-		random_owned_province = {
-			limit = {
-				NOT = { has_estate = yes }
-				NOT = { is_capital = yes }
-			}
-			add_local_autonomy = 25
-			add_province_modifier = {
-				name = "msg_land_distribution" #Reduced development and build cost
-				duration = 1825
-			}
-			set_province_flag = msg_land_distribution
+		name = msg_reforms.4.c # Redistribute state land
+		trigger = {
+			ai = no
 		}
+		custom_tooltip = msg_10_automony_in_all_provinces_tt
+		hidden_effect = {
+			every_owned_province = {
+				add_unrest = -5
+				add_local_autonomy = 10
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.20 days = 1095 }
 	}
 	option = {
-		name = msg_reforms.4.f # We're not ready
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_reform_land_ref_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		name = msg_reforms.4.e # We're not ready
+		trigger = {
+			ai = no
 		}
+		change_government_reform_progress = 50
 		add_stability = 1
 		capital_scope = {
 			add_base_tax = 1
 		}
-		clr_country_flag = msg_reform_in_progress
+		nhs_add_reform = { REF = msg_reform_land_ref_no }
+		# clr_country_flag = msg_reform_in_progress
 	}
 }
 
@@ -771,7 +551,6 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		tag = MSN
 		religion = pantheon_worship
 	}
 	
@@ -799,20 +578,22 @@ country_event = {
 	option = {
 		name = msg_reforms.5.a # Leonidas is the Divine Son of Ares!
 		set_global_flag = msg_hellenic_leonidas_deity
-		add_estate_influence_modifier = {
-			estate = estate_nhs_church_hellenic
-			desc = "msg_leonidas_god_infl"
-			influence = 15
-			duration = 1825
+		custom_tooltip = msg_add_leonidas_deity_tt
+		add_country_modifier = {
+			name = "msg_leonidas_god"
+			duration = 3650
 		}
 		add_estate_loyalty = {
-			estate = estate_nhs_church_hellenic
-			loyalty = 15
+			estate = estate_church
+			loyalty = -10
 		}
-		add_country_modifier = {
-			name = "msg_leonidas_god" # missionary strength
-			duration = 1825
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = "msg_leonidas_god_infl"
+			influence = -10
+			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_first_religious_reform_done } }
 			country_event = { id = msg_reforms.21 days = 1095 }
@@ -825,17 +606,19 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.5.b # Leonidas is a mortal ascended!
-		add_estate_influence_modifier = {
-			estate = estate_nhs_church_hellenic
-			desc = "msg_leonidas_ascended"
-			influence = 5
-			duration = 1825
-		}
+		# add_treasury = 50
+		add_prestige = 15
 		add_estate_loyalty = {
-			estate = estate_nhs_church_hellenic
+			estate = estate_church
 			loyalty = 5
 		}
-		add_treasury = 50
+		# add_estate_influence_modifier = {
+		# 	estate = estate_church
+		# 	desc = "msg_leonidas_ascended"
+		# 	influence = 5
+		# 	duration = 3650
+		# }
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_first_religious_reform_done } }
 			country_event = { id = msg_reforms.21 days = 1095 }
@@ -848,21 +631,22 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.5.c # Does everyone have to be a god these days?
-		add_estate_influence_modifier = {
-			estate = estate_nhs_church_hellenic
-			desc = "msg_leonidas_mortal_infl"
-			influence = -15
-			duration = 1825
+		# add_treasury = 100
+		add_country_modifier = {
+			name = "msg_leonidas_mortal"
+			duration = 3650
 		}
 		add_estate_loyalty = {
-			estate = estate_nhs_church_hellenic
-			loyalty = -15
+			estate = estate_church
+			loyalty = 5
 		}
-		add_treasury = 100
-		add_country_modifier = {
-			name = "msg_leonidas_mortal" # minus missionary strength
-			duration = 1825
-		}
+		# add_estate_influence_modifier = {
+		# 	estate = estate_church
+		# 	desc = "msg_leonidas_mortal_infl"
+		# 	influence = -15
+		# 	duration = 3650
+		# }
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_first_religious_reform_done } }
 			country_event = { id = msg_reforms.21 days = 1095 }
@@ -875,17 +659,14 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.5.e # Can't we put this off for a year or so?
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_deify_leonidas_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		trigger = {
+			ai = no
 		}
-		clr_country_flag = msg_reform_in_progress
+		change_government_reform_progress = 50
 		add_stability = -1
 		add_adm_power = 50
+		nhs_add_reform = { REF = msg_deify_leonidas_no }
+		# clr_country_flag = msg_reform_in_progress
 	}
 }
 
@@ -899,7 +680,6 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		tag = MSN
 		religion = pantheon_worship
 	}
 	
@@ -929,6 +709,7 @@ country_event = {
 		trigger = {
 			nhs_condition_all_ely = { KOMANDA = exists }
 		}
+		msg_elysian_debt = yes
 		add_estate_loyalty = {
 			estate = estate_nhs_apogonoi
 			loyalty = -5
@@ -937,7 +718,7 @@ country_event = {
 			estate = estate_nhs_pipiltin
 			loyalty = -5
 		}
-		msg_elysian_debt = yes
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_second_religious_reform_done } }
 			country_event = { id = msg_reforms.22 days = 1095 }
@@ -950,23 +731,29 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.6.b # Train from the pipiltin
-		custom_tooltip = msg_consequences
-		set_global_flag = msg_pipiltin_heralds
+		# custom_tooltip = msg_consequences
+		# set_global_flag = msg_pipiltin_heralds
+		if = {
+			limit = {
+				ai = no
+			}
+			add_treasury = -50
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -10
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = 10
+		}
 		add_estate_influence_modifier = {
 			estate = estate_nhs_pipiltin
 			desc = "msg_trained_heralds"
 			influence = 10
 			duration = 1825
 		}
-		add_estate_loyalty = {
-			estate = estate_nhs_pipiltin
-			loyalty = 10
-		}
-		add_estate_loyalty = {
-			estate = estate_nhs_apogonoi
-			loyalty = -10
-		}
-		add_treasury = -50
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_second_religious_reform_done } }
 			country_event = { id = msg_reforms.22 days = 1095 }
@@ -979,8 +766,18 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.6.c # Train from the apogonoi
-		custom_tooltip = msg_consequences
-		set_global_flag = msg_apogonoi_heralds
+		# custom_tooltip = msg_consequences
+		# set_global_flag = msg_apogonoi_heralds
+		if = {
+			limit = {
+				ai = no
+			}
+			add_treasury = -50
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = 10
+		}
 		add_estate_influence_modifier = {
 			estate = estate_nhs_apogonoi
 			desc = "msg_trained_heralds"
@@ -988,14 +785,10 @@ country_event = {
 			duration = 1825
 		}
 		add_estate_loyalty = {
-			estate = estate_nhs_apogonoi
-			loyalty = 10
-		}
-		add_estate_loyalty = {
 			estate = estate_nhs_pipiltin
 			loyalty = -10
 		}
-		add_treasury = -50
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_second_religious_reform_done } }
 			country_event = { id = msg_reforms.22 days = 1095 }
@@ -1008,18 +801,14 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.6.e # We're not ready
-		clr_country_flag = msg_reform_in_progress
-		nhs_add_reform = { REF = msg_spartan_heralds_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		trigger = {
+			ai = no
 		}
-		add_stability = 1
+		# clr_country_flag = msg_reform_in_progress
+		change_government_reform_progress = 50
 		add_adm_power = 50
 		add_corruption = -3
-		ai_chance = { factor = 0 }
+		nhs_add_reform = { REF = msg_spartan_heralds_no }
 	}
 }
 
@@ -1034,7 +823,6 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		tag = MSN
 		religion = pantheon_worship
 	}
 	
@@ -1062,10 +850,12 @@ country_event = {
 	option = {
 		name = msg_reforms.7.a # Perhaps we could adopt a few into our pantheon...
 		set_global_flag = msg_hellenic_ketsalon_deity
+		custom_tooltip = msg_add_ketsalon_deity_tt
 		add_country_modifier = {
 			name = msg_aztec_gods_accepted # tolerance heretics, minus heretic missionary strength
-			duration = 1825
+			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_third_religious_reform_done } }
 			country_event = { id = msg_reforms.23 days = 1095 }
@@ -1080,8 +870,9 @@ country_event = {
 		name = msg_reforms.7.b # Which heretic suggested this?
 		add_country_modifier = {
 			name = msg_aztec_gods_denied # heretic missionary strength, minus tolerance heretics
-			duration = 1825
+			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_third_religious_reform_done } }
 			country_event = { id = msg_reforms.23 days = 1095 }
@@ -1094,24 +885,20 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.7.c # Good question. Let me think about this for a few years.
-		ai_chance = { factor = 0 }
-		clr_country_flag = msg_reform_in_progress
-		nhs_add_reform = { REF = msg_native_deities_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		trigger = {
+			ai = no
 		}
+		# clr_country_flag = msg_reform_in_progress
+		change_government_reform_progress = 50
 		add_stability = 1
 		add_prestige = 20
 		add_adm_power = 50
+		nhs_add_reform = { REF = msg_native_deities_no }
 	}
 }
 
 
 # Religious (Aztlan)
-
 
 #The question of a priesthood
 country_event = {
@@ -1123,7 +910,6 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		tag = MSN
 		religion = aztlan_worship
 	}
 	
@@ -1150,15 +936,16 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.8.a # Establish the High Priesthood in Laconya!
-		set_global_flag = msg_yes_priesthood # Will determine how clergy estate works for other Aztlan nations
+		# set_global_flag = msg_yes_priesthood # Will determine how clergy estate works for other Aztlan nations
 		add_estate_loyalty = {
 			estate = estate_church
-			loyalty = 15
+			loyalty = 10
 		}
 		add_country_modifier = {
 			name = msg_yes_priesthood
-			duration = 1825
+			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_first_religious_reform_done } }
 			country_event = { id = msg_reforms.24 days = 1095 }
@@ -1171,15 +958,16 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.8.b # On second thought big church is a bad idea
-		set_global_flag = msg_no_priesthood # Will determine how clergy estate works for other Aztlan nations
+		# set_global_flag = msg_no_priesthood # Will determine how clergy estate works for other Aztlan nations
 		add_estate_loyalty = {
 			estate = estate_church
-			loyalty = -15
+			loyalty = -10
 		}
 		add_country_modifier = {
 			name = msg_no_priesthood
-			duration = 1825
+			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_first_religious_reform_done } }
 			country_event = { id = msg_reforms.24 days = 1095 }
@@ -1192,16 +980,13 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.8.c # Let's put this problem off to the next generation to solve!
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_aztlan_priesthood_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		trigger = {
+			ai = no
 		}
-		clr_country_flag = msg_reform_in_progress
+		change_government_reform_progress = 50
+		# clr_country_flag = msg_reform_in_progress
 		add_adm_power = 50
+		nhs_add_reform = { REF = msg_aztlan_priesthood_no }
 	}
 }
 
@@ -1215,7 +1000,6 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		tag = MSN
 		religion = aztlan_worship
 	}
 	
@@ -1242,20 +1026,24 @@ country_event = {
 	
 	option = { #The Old Believers are heretics and must be burned!
 		name = msg_reforms.9.a
-		every_owned_province = {
-			limit = { religion = pantheon_worship }
-			add_unrest = 10
+		custom_tooltip = msg_10_unrest_in_hellenic_provinces_tt
+		hidden_effect = {
+			every_owned_province = {
+				limit = { religion = pantheon_worship }
+				add_unrest = 10
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 10
 		}
 		add_estate_influence_modifier = {
 			estate = estate_church
 			desc = "msg_old_heretics"
 			influence = 10
-			duration = 1825
+			duration = 3650
 		}
-		add_estate_loyalty = {
-			estate = estate_church
-			loyalty  = 10
-		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_second_religious_reform_done } }
 			country_event = { id = msg_reforms.25 days = 1095 }
@@ -1269,20 +1057,25 @@ country_event = {
 	option = {
 		name = msg_reforms.9.b #The Old Believers follow gods we once did, why the hate?
 		set_global_flag = msg_aztlan_zeus_deity
-		every_owned_province = {
-			limit = { religion = aztlan_worship }
-			add_unrest = 5
-		}
-		add_estate_influence_modifier = {
-			estate = estate_church
-			desc = "msg_old_true"
-			influence = -10
-			duration = 1825
+		custom_tooltip = msg_add_zeus_deity_tt
+		custom_tooltip = msg_5_unrest_in_aztlan_provinces_tt
+		hidden_effect  ={
+			every_owned_province = {
+				limit = { religion = aztlan_worship }
+				add_unrest = 5
+			}
 		}
 		add_estate_loyalty = {
 			estate = estate_church
 			loyalty = -10
 		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = "msg_old_true"
+			influence = -10
+			duration = 3650
+		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_second_religious_reform_done } }
 			country_event = { id = msg_reforms.25 days = 1095 }
@@ -1295,18 +1088,15 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.9.c #Weasel weasel weasel
-		clr_country_flag = msg_reform_in_progress
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_old_faith_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		trigger = {
+			ai = no
 		}
+		# clr_country_flag = msg_reform_in_progress
+		change_government_reform_progress = 50
 		add_stability = 1
 		add_prestige = 20
 		add_adm_power = 50
+		nhs_add_reform = { REF = msg_old_faith_no }
 	}
 }
 
@@ -1320,7 +1110,6 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		tag = MSN
 		religion = aztlan_worship
 	}
 	
@@ -1348,8 +1137,9 @@ country_event = {
 	option = {
 		name = msg_reforms.10.a #We're more civilized than that.
 		set_global_flag = msg_aztlan_no_sacrifice
-		custom_tooltip = msg_no_sacrifice_tooltip
+		# custom_tooltip = msg_no_sacrifice_tooltip
 		add_stability = -1
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_third_religious_reform_done } }
 			country_event = { id = msg_reforms.26 days = 1095 }
@@ -1369,7 +1159,8 @@ country_event = {
 			}
 			reverse_add_opinion = { who = ROOT modifier = msg_animal_sacrifice }
 		}
-		custom_tooltip = msg_animal_sacrifice_tooltip
+		# custom_tooltip = msg_animal_sacrifice_tooltip
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_third_religious_reform_done } }
 			country_event = { id = msg_reforms.26 days = 1095 }
@@ -1383,18 +1174,20 @@ country_event = {
 	option = {
 		name = msg_reforms.10.c # Give me the knife, I'm doing this one myself.
 		set_global_flag = msg_aztlan_human_sacrifice
+		add_legitimacy = 10
+		add_prestige = 10
 		every_country = {
 			limit = {
 				NOT = { religion = aztlan_worship }
 				NOT = { religion = mesoamerican_religion }
 				NOT = { religion = nahuatl }
+				NOT = { religion = animism }
 				has_discovered = ROOT
 			}
 			reverse_add_opinion = { who = ROOT modifier = msg_human_sacrifice }
 		}
-		add_legitimacy = 10
-		add_prestige = 10
-		custom_tooltip = msg_human_sacrifice_tooltip
+		# custom_tooltip = msg_human_sacrifice_tooltip
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_third_religious_reform_done } }
 			country_event = { id = msg_reforms.26 days = 1095 }
@@ -1407,24 +1200,20 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.10.e # Oh dear, I'm late for...
-		clr_country_flag = msg_reform_in_progress
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_sacrifice_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		# clr_country_flag = msg_reform_in_progress
+		trigger = {
+			ai = no
 		}
+		change_government_reform_progress = 50
 		add_stability = -1
 		add_legitimacy = 20
 		add_adm_power = 50
+		nhs_add_reform = { REF = msg_sacrifice_no }
 	}
 }
 
 
 #Religious (Orthodox)
-
 
 #The Spartan Patriarch
 country_event = {
@@ -1436,7 +1225,6 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		tag = MSN
 		OR = {
 			religion = elysian_orthodoxy
 			religion = orthodox
@@ -1478,6 +1266,7 @@ country_event = {
 			estate = estate_nhs_pipiltin
 			loyalty = -10
 		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_first_religious_reform_done } }
 			country_event = { id = nhs2_orthodoxevents.1992 days = 1095 }
@@ -1490,8 +1279,9 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.11.b # Pippie Pope!
-		custom_tooltip = msg_consequences
-		set_global_flag = msg_pipiltin_patriarch
+		# custom_tooltip = msg_consequences
+		# set_global_flag = msg_pipiltin_patriarch
+		# add_corruption = 2
 		add_estate_loyalty = {
 			estate = estate_nhs_apogonoi
 			loyalty = -15
@@ -1504,9 +1294,9 @@ country_event = {
 			estate = estate_nhs_pipiltin
 			desc = "msg_pipiltin_patriarch"
 			influence = 15
-			duration = 1825
+			duration = 3650
 		}
-		add_corruption = 2
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_first_religious_reform_done } }
 			country_event = { id = nhs2_orthodoxevents.1992 days = 1095 }
@@ -1519,12 +1309,9 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.11.c # Appie Pope!
-		custom_tooltip = msg_consequences
-		set_global_flag = msg_apogonoi_patriarch
-		add_estate_loyalty = {
-			estate = estate_nhs_pipiltin
-			loyalty = -15
-		}
+		# custom_tooltip = msg_consequences
+		# set_global_flag = msg_apogonoi_patriarch
+		# add_corruption = 2
 		add_estate_loyalty = {
 			estate = estate_nhs_apogonoi
 			loyalty = 15
@@ -1533,9 +1320,13 @@ country_event = {
 			estate = estate_nhs_apogonoi
 			desc = "msg_apogonoi_patriarch"
 			influence = 15
-			duration = 1825
+			duration = 3650
 		}
-		add_corruption = 2
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -15
+		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_first_religious_reform_done } }
 			country_event = { id = nhs2_orthodoxevents.1992 days = 1095 }
@@ -1548,18 +1339,14 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.11.e # The Elysians have a perfectly servicable patriarch...
-		clr_country_flag = msg_reform_in_progress
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_spartan_patriarch_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		# clr_country_flag = msg_reform_in_progress
+		trigger = {
+			ai = no
 		}
+		change_government_reform_progress = 50
 		add_corruption = -3
 		add_adm_power = 50
-		add_stability = 1
+		nhs_add_reform = { REF = msg_spartan_patriarch_no }
 	}
 }
 		
@@ -1573,7 +1360,6 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		tag = MSN
 		OR = {
 			religion = elysian_orthodoxy
 			religion = orthodox
@@ -1605,25 +1391,33 @@ country_event = {
 		name = msg_reforms.12.a #Establish the Order of Tenochtitlan
 		set_global_flag = msg_order_tenochtitlan
 		trigger = {
-			owns = 852
+			owns_or_non_sovereign_subject_of = 852
 		}
+		add_treasury = -50
 		852 = {
+			if = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				cede_province = ROOT
+				add_core = ROOT
+			}
 			add_province_modifier = {
 				name = "msg_order_tenochtitlan"
 				duration = -1
 			}
 		}
-		add_treasury = -50
-		add_estate_influence_modifier = {
-			estate = estate_church
-			desc = "msg_holy_order"
-			duration = 1825
-			influence = 10
-		}
 		add_estate_loyalty = {
 			estate = estate_church
 			loyalty = 10
 		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = "msg_holy_order"
+			duration = 3650
+			influence = 10
+		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_second_religious_reform_done } }
 			country_event = { id = msg_reforms.27 days = 1095 }
@@ -1638,25 +1432,33 @@ country_event = {
 		name = msg_reforms.12.b #Establish the Order of Itza
 		set_global_flag = msg_order_itza
 		trigger = {
-			owns = 846
+			owns_or_non_sovereign_subject_of = 846
 		}
+		add_treasury = -50
 		846 = {
+			if = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				cede_province = ROOT
+				add_core = ROOT
+			}
 			add_province_modifier = {
 				name = "msg_order_itza"
 				duration = -1
 			}
 		}
-		add_treasury = -50
-		add_estate_influence_modifier = {
-			estate = estate_church
-			desc = "msg_holy_order"
-			duration = 1825
-			influence = 10
-		}
 		add_estate_loyalty = {
 			estate = estate_church
 			loyalty = 10
 		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = "msg_holy_order"
+			duration = 3650
+			influence = 10
+		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_second_religious_reform_done } }
 			country_event = { id = msg_reforms.27 days = 1095 }
@@ -1672,18 +1474,19 @@ country_event = {
 		add_prestige = 20
 		add_country_modifier = {
 			name = "msg_disciplined_army"
-			duration = 1825
-		}
-		add_estate_influence_modifier = {
-			estate = estate_church
-			desc = "msg_no_order"
-			duration = 1825
-			influence = -10
+			duration = 3650
 		}
 		add_estate_loyalty = {
 			estate = estate_church
 			loyalty = -10
 		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = "msg_no_order"
+			duration = 3650
+			influence = -10
+		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_second_religious_reform_done } }
 			country_event = { id = msg_reforms.27 days = 1095 }
@@ -1696,18 +1499,14 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.12.e # Uhhhhhhhhhhhhhhhhhhhhhhhhhhh
-		ai_chance = { factor = 0 }
-		clr_country_flag = msg_reform_in_progress
-		nhs_add_reform = { REF = msg_holy_army_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		trigger = {
+			ai = no
 		}
-		add_stability = 1
+		# clr_country_flag = msg_reform_in_progress
+		change_government_reform_progress = 50
 		add_mil_power = 50
 		add_manpower = 5
+		nhs_add_reform = { REF = msg_holy_army_no }
 	}
 }
 	
@@ -1721,7 +1520,6 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		tag = MSN
 		OR = {
 			religion = elysian_orthodoxy
 			religion = orthodox
@@ -1755,18 +1553,19 @@ country_event = {
 		add_prestige = 10
 		add_country_modifier = {
 			name = msg_high_expectations
-			duration = 1825
+			duration = 3650
 		}
 		add_estate_loyalty = {
 			estate = estate_church
-			loyalty = 15
+			loyalty = 10
 		}
 		add_estate_influence_modifier = {
 			estate = estate_church
 			desc = "msg_glorified_leonidas"
-			influence = 15
-			duration = 1825
+			influence = 5
+			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_third_religious_reform_done } }
 			country_event = { id = msg_reforms.28 days = 1095 }
@@ -1779,22 +1578,23 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.13.b # Our leader is but a humble sinner
+		set_country_flag = msg_humble_sinner
 		add_legitimacy = -15
 		add_country_modifier = {
 			name = msg_low_expectations
-			duration = 1825
+			duration = 3650
 		}
 		add_estate_loyalty = {
 			estate = estate_church
-			loyalty = -15
+			loyalty = -10
 		}
 		add_estate_influence_modifier = {
 			estate = estate_church
 			desc = "msg_leonidas_sinner"
-			influence = -15
-			duration = 1825
+			influence = -5
+			duration = 3650
 		}
-		set_country_flag = msg_humble_sinner
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = { NOT = { has_global_flag = msg_third_religious_reform_done } }
 			country_event = { id = msg_reforms.28 days = 1095 }
@@ -1807,17 +1607,13 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.13.c # Blue! No, AAAAAAAAAAAAAAAAAAAAAAAAAAA
-		clr_country_flag = msg_reform_in_progress
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_saint_leo_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		# clr_country_flag = msg_reform_in_progress
+		trigger = {
+			ai = no
 		}
-		add_stability = 1
+		change_government_reform_progress = 50
 		add_adm_power = 50
+		nhs_add_reform = { REF = msg_saint_leo_no }
 	}
 }
 
@@ -1832,10 +1628,6 @@ country_event = {
 	picture = Harbor_eventPicture
 	
 	is_triggered_only = yes
-	
-	trigger = {
-		tag = MSN
-	}
 	
 	immediate = { #Extra text
 		if = {
@@ -1862,18 +1654,19 @@ country_event = {
 		name = msg_reforms.14.a # Bigger is always better!
 		add_country_modifier = {
 			name = msg_heavy_fleet
-			duration = 3650 # Longer because low naval capacity
-		}
-		add_estate_influence_modifier = {
-			estate = estate_nhs_apogonoi
-			desc = "msg_heavy_fleet_infl"
-			influence = 10
-			duration = 10
+			duration = 7300 # Longer because low naval capacity
 		}
 		add_estate_loyalty = {
 			estate = estate_nhs_apogonoi
 			loyalty = 10
 		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = "msg_heavy_fleet_infl"
+			influence = 5
+			duration = 3650
+		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.29 days = 1095 }
 	}
 	
@@ -1881,18 +1674,19 @@ country_event = {
 		name = msg_reforms.14.b # Piracy is always a legitimate option
 		add_country_modifier = {
 			name = msg_raider_fleet
-			duration = 3650 # Longer because low naval capacity
-		}
-		add_estate_influence_modifier = {
-			estate = estate_burghers
-			desc = "msg_raider_fleet_infl"
-			influence = 10
-			duration = 10
+			duration = 7300 # Longer because low naval capacity
 		}
 		add_estate_loyalty = {
 			estate = estate_burghers
 			loyalty = 10
 		}
+		add_estate_influence_modifier = {
+			estate = estate_burghers
+			desc = "msg_raider_fleet_infl"
+			influence = 5
+			duration = 3650
+		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.29 days = 1095 }
 	}
 	
@@ -1900,35 +1694,32 @@ country_event = {
 		name = msg_reforms.14.c # Let's just round up some galley slaves
 		add_country_modifier = {
 			name = msg_conscript_fleet
-			duration = 3650 # Longer because low naval capacity
-		}
-		add_estate_influence_modifier = {
-			estate = estate_nhs_pipiltin
-			desc = "msg_conscript_fleet_infl"
-			influence = 10
-			duration = 10
+			duration = 7300 # Longer because low naval capacity
 		}
 		add_estate_loyalty = {
 			estate = estate_nhs_pipiltin
 			loyalty = 10
 		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = "msg_conscript_fleet_infl"
+			influence = 5
+			duration = 3650
+		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.29 days = 1095 }
 	}
 	
 	option = {
 		name = msg_reforms.14.e # Navies are overrated anyway
-		clr_country_flag = msg_reform_in_progress
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_naval_reform_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		# clr_country_flag = msg_reform_in_progress
+		trigger = {
+			ai = no
 		}
+		change_government_reform_progress = 50
 		add_sailors = 500
 		add_mil_power = 50
-		add_stability = 1
+		nhs_add_reform = { REF = msg_naval_reform_no }
 	}
 }
 	
@@ -1940,10 +1731,6 @@ country_event = {
 	picture = GOLDEN_CITY_eventPicture
 	
 	is_triggered_only = yes
-	
-	trigger = {
-		tag = MSN
-	}
 	
 	immediate = { #Extra text
 		if = {
@@ -1968,38 +1755,37 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.15.a # All will bow to the glory of Laconya
-		custom_tooltip = msg_agressive_diplomacy_tooltip
+		# custom_tooltip = msg_agressive_diplomacy_tooltip
 		add_country_modifier = {
 			name = msg_agressive_diplomacy
-			duration = 1825
+			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.30 days = 1095 }
 	}
 	
 	option = {
 		name = msg_reforms.15.b # We have to be diplomatic
-		custom_tooltip = msg_prestigious_diplomacy_tooltip
+		# custom_tooltip = msg_prestigious_diplomacy_tooltip
 		add_country_modifier = {
 			name = msg_prestigious_diplomacy
-			duration = 1825
+			duration = 3650
 		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.30 days = 1095 }
 	}
 	
 	option = {
 		name = msg_reforms.15.c # Diplomacy. Who needs it?
-		clr_country_flag = msg_reform_in_progress
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_diplomats_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		# clr_country_flag = msg_reform_in_progress
+		trigger = {
+			ai = no
 		}
+		
+		change_government_reform_progress = 50
 		add_treasury = 100
 		add_dip_power = 50
-		add_stability = 1
+		nhs_add_reform = { REF = msg_diplomats_no }
 	}
 }
 
@@ -2011,10 +1797,6 @@ country_event = {
 	picture = CITY_VIEW_eventPicture
 	
 	is_triggered_only = yes
-	
-	trigger = {
-		tag = MSN
-	}
 	
 	immediate = { #Extra text
 		if = {
@@ -2039,29 +1821,30 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.16.a # Favor the pipiltin in recruitment
-		custom_tooltip = msg_consequences
-		set_global_flag = msg_pipiltin_court
+		# custom_tooltip = msg_consequences
+		# set_global_flag = msg_pipiltin_court
 		add_treasury = 100
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -15
+		}
 		add_estate_influence_modifier = {
-			estate = estate_nhs_pipiltin
-			desc = "msg_royal_assistants"
-			influence = 15
-			duration = 1825
+			estate = estate_nhs_apogonoi
+			desc = "msg_royal_spurning"
+			influence = -15
+			duration = 3650
 		}
 		add_estate_loyalty = {
 			estate = estate_nhs_pipiltin
 			loyalty = 15
 		}
 		add_estate_influence_modifier = {
-			estate = estate_nhs_apogonoi
-			desc = "msg_royal_spurning"
-			influence = -15
-			duration = 1825
+			estate = estate_nhs_pipiltin
+			desc = "msg_royal_assistants"
+			influence = 15
+			duration = 3650
 		}
-		add_estate_loyalty = {
-			estate = estate_nhs_apogonoi
-			loyalty = -15
-		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.31 days = 1095 }
 	}
 	
@@ -2070,26 +1853,27 @@ country_event = {
 		custom_tooltip = msg_consequences
 		set_global_flag = msg_apogonoi_court
 		add_legitimacy = 10
-		add_estate_influence_modifier = {
-			estate = estate_nhs_apogonoi
-			desc = "msg_royal_assistants"
-			influence = 15
-			duration = 1825
-		}
 		add_estate_loyalty = {
 			estate = estate_nhs_apogonoi
 			loyalty = 15
 		}
 		add_estate_influence_modifier = {
-			estate = estate_nhs_pipiltin
-			desc = "msg_royal_spurning"
-			influence = -15
-			duration = 1825
+			estate = estate_nhs_apogonoi
+			desc = "msg_royal_assistants"
+			influence = 15
+			duration = 3650
 		}
 		add_estate_loyalty = {
 			estate = estate_nhs_pipiltin
 			loyalty = -15
 		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = "msg_royal_spurning"
+			influence = -15
+			duration = 3650
+		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.31 days = 1095 }
 	}
 	
@@ -2101,51 +1885,36 @@ country_event = {
 		msg_elysian_debt = yes
 		set_global_flag = msg_elysian_court
 		add_prestige = 5
+		add_estate_loyalty = {
+			estate = estate_nhs_apogonoi
+			loyalty = -5
+		}
 		add_estate_influence_modifier = {
 			estate = estate_nhs_apogonoi
 			desc = "msg_royal_spurning"
 			influence = -5
-			duration = 1825
+			duration = 3650
 		}
 		add_estate_loyalty = {
-			estate = estate_nhs_apogonoi
+			estate = estate_nhs_pipiltin
 			loyalty = -5
 		}
 		add_estate_influence_modifier = {
 			estate = estate_nhs_pipiltin
 			desc = "msg_royal_spurning"
 			influence = -5
-			duration = 1825
+			duration = 3650
 		}
-		add_estate_loyalty = {
-			estate = estate_nhs_pipiltin
-			loyalty = -5
-		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.31 days = 1095 }
 	}
 	
 	option = {
 		name = msg_reforms.16.f # Defy tradition and recruit merchants' sons
 		add_legitimacy = -20
-		add_estate_influence_modifier = {
-			estate = estate_nhs_apogonoi
-			desc = "msg_royal_spurning"
-			influence = -5
-			duration = 1825
-		}
 		add_estate_loyalty = {
-			estate = estate_nhs_apogonoi
-			loyalty = -5
-		}
-		add_estate_influence_modifier = {
-			estate = estate_nhs_pipiltin
-			desc = "msg_royal_spurning"
-			influence = -5
-			duration = 1825
-		}
-		add_estate_loyalty = {
-			estate = estate_nhs_pipiltin
-			loyalty = -5
+			estate = estate_burghers
+			loyalty = 15
 		}
 		add_estate_influence_modifier = {
 			estate = estate_burghers
@@ -2154,26 +1923,40 @@ country_event = {
 			duration = 1825
 		}
 		add_estate_loyalty = {
-			estate = estate_burghers
-			loyalty = 15
+			estate = estate_nhs_apogonoi
+			loyalty = -5
 		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_apogonoi
+			desc = "msg_royal_spurning"
+			influence = -5
+			duration = 1825
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_pipiltin
+			loyalty = -5
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_pipiltin
+			desc = "msg_royal_spurning"
+			influence = -5
+			duration = 1825
+		}
+		custom_tooltip = nhs_new_line_tt
 		country_event = { id = msg_reforms.31 days = 1095 }
 	}
 	
 	option = {
 		name = msg_reforms.16.c # Courts are overrated
-		clr_country_flag = msg_reform_in_progress
-		ai_chance = { factor = 0 }
-		nhs_add_reform = { REF = msg_court_reform_no }
-		if = {
-			limit = {
-				has_dlc = "Dharma"
-			}
-			change_government_reform_progress = 25
+		# clr_country_flag = msg_reform_in_progress
+		trigger = {
+			ai = no
 		}
-		add_mil_power = 50
-		add_stability = 1
+		
+		change_government_reform_progress = 50
 		add_prestige = 20
+		add_mil_power = 50
+		nhs_add_reform = { REF = msg_court_reform_no }
 	}
 }
 		
@@ -2223,7 +2006,7 @@ country_event = {
 		name = msg_reforms.17.a # We are committed
 		hidden_effect = {
 			set_country_flag = msg_final_reform_in_progress
-			set_country_flag = msg_reform_in_progress
+			# set_country_flag = msg_reform_in_progress
 		}
 	}
 }
@@ -2245,7 +2028,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_gold_sold
 	}
 	
@@ -2268,7 +2051,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_trade_ports_done
 	}
 	
@@ -2292,34 +2075,19 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_land_redistributed
 	}
 	
 	option = {
 		name = msg_reforms.20.a
-		if = {
-			limit = { any_owned_province = { has_province_flag = msg_land_distribution } }
-			random_owned_province = {
-				limit = { has_province_flag = msg_land_distribution }
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-				clr_province_flag = msg_land_distribution
+		random_owned_province = {
+			limit = { 
+				NOT = { is_capital = yes } 
 			}
-		}
-		else_if = {
-			limit = { NOT = { any_owned_province = { has_province_flag = msg_land_distribution } } }
-			random_owned_province = {
-				limit = {
-					NOT = { has_estate = yes }
-					NOT = { is_capital = yes }
-				}
-				add_local_autonomy = 25
-				add_base_manpower = 1
-				add_base_tax = 1
-				add_base_production = 1
-			}
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
 		}
 		nhs_add_reform = { REF = msg_reformed_land }
 	}
@@ -2335,7 +2103,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_leonidas_done
 		set_global_flag = msg_third_religious_reform_done
 	}
@@ -2379,7 +2147,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_heralds_done
 		set_global_flag = msg_first_religious_reform_done
 	}
@@ -2423,7 +2191,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_native_deities
 		set_global_flag = msg_second_religious_reform_done
 	}
@@ -2467,7 +2235,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_priesthood_done
 		set_global_flag = msg_first_religious_reform_done
 	}
@@ -2509,7 +2277,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_old_faith
 		set_global_flag = msg_second_religious_reform_done
 	}
@@ -2551,7 +2319,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_FUN
 		set_global_flag = msg_third_religious_reform_done
 	}
@@ -2596,7 +2364,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_holy_army
 		set_global_flag = msg_second_religious_reform_done
 	}
@@ -2654,7 +2422,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_saint_leo
 		set_global_flag = msg_third_religious_reform_done
 	}
@@ -2678,18 +2446,13 @@ country_event = {
 		}
 		if = {
 			limit = {
-				has_dlc = "Dharma"
+				has_country_flag = msg_humble_sinner
+				
 			}
-			if = {
-				limit = {
-					has_country_flag = msg_humble_sinner
-					
-				}
-				nhs_add_reform = { REF = msg_saint_leo_yes_sinner }
-			}
-			else = {
-				nhs_add_reform = { REF = msg_saint_leo_yes }
-			}
+			nhs_add_reform = { REF = msg_saint_leo_yes_sinner }
+		}
+		else = {
+			nhs_add_reform = { REF = msg_saint_leo_yes }
 		}
 	}
 	option = {
@@ -2725,85 +2488,65 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_ships_done
+
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					OR = {
+						province_id = 854
+						province_id = 2657
+						province_id = 851
+						province_id = 2627
+						province_id = 2648
+						province_id = 849
+						province_id = 847
+						province_id = 844
+						province_id = 2649
+						province_id = 2638
+						province_id = 841
+						province_id = 2653
+						province_id = 893
+						province_id = 4580
+						province_id = 4576
+						province_id = 4578
+					}
+				}
+				save_event_target_as = msg_port_province
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = msg_port_province }
+				}
+				random_owned_province = {
+					limit = { has_port = yes }
+					save_event_target_as = msg_port_province
+				}
+			}
+		}
 	}
 	
 	option = {
 		name = msg_reforms.29.a
 		if = {
 			limit = { has_country_modifier = msg_heavy_fleet }
-			random_owned_province = {
-				limit = { has_port = yes }
+			event_target:msg_port_province = {
 				heavy_ship = THIS
 			}
 		}
 		else_if = {
 			limit = { has_country_modifier = msg_raider_fleet }
-			if = {
-				limit = {
-					any_owned_province = {
-						has_port = yes
-						OR = {
-							province_id = 854
-							province_id = 2657
-							province_id = 851
-							province_id = 2627
-							province_id = 2648
-							province_id = 849
-							province_id = 847
-							province_id = 844
-							province_id = 2649
-							province_id = 2638
-							province_id = 841
-							province_id = 2653
-							province_id = 893
-							province_id = 4580
-							province_id = 4576
-							province_id = 4578
-						}
-					}
-				}
-				random_owned_province = {
-					limit = { 
-						has_port = yes
-						OR = {
-							province_id = 854
-							province_id = 2657
-							province_id = 851
-							province_id = 2627
-							province_id = 2648
-							province_id = 849
-							province_id = 847
-							province_id = 844
-							province_id = 2649
-							province_id = 2638
-							province_id = 841
-							province_id = 2653
-							province_id = 893
-							province_id = 4580
-							province_id = 4576
-							province_id = 4578
-						}
-					}
-					light_ship = THIS
-					light_ship = THIS
-					light_ship = THIS
-				}
-			}
-			else = {
-				random_owned_province = {
-					limit = { has_port = yes }
-					light_ship = THIS
-					light_ship = THIS
-					light_ship = THIS
-				}
+			event_target:msg_port_province = {
+				light_ship = THIS
+				light_ship = THIS
+				light_ship = THIS
 			}
 		}
 		else_if = {
 			limit = { has_country_modifier = msg_conscript_fleet }
-			random_owned_province = {
-				limit = { has_port = yes }
+			event_target:msg_port_province = {
 				galley = THIS
 				galley = THIS
 				galley = THIS
@@ -2825,13 +2568,12 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_diplomats_done
 	}
 	
 	option = {
 		name = msg_reforms.30.a
-		add_treasury = 200
 		add_prestige = 10
 		nhs_add_reform = { REF = msg_diplomats_yes }
 	}
@@ -2847,7 +2589,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		clr_country_flag = msg_reform_in_progress
+		# clr_country_flag = msg_reform_in_progress
 		set_global_flag = msg_court_done
 	}
 	
@@ -2911,12 +2653,8 @@ country_event = {
 	
 	fire_only_once = yes
 	
-	mean_time_to_happen = {
-		days = 2
-	}
-	
-	immediate = {
-		clr_country_flag = msg_reform_in_progress
+	option = {
+		name = msg_reforms.32.a
 		set_global_flag = msg_reforms_done
 		set_global_flag = msg_reforms_done_new
 		clr_country_flag = msg_final_reform_in_progress
@@ -2924,85 +2662,45 @@ country_event = {
 		clr_country_flag = msg_apogonoi_tried_bribe
 		clr_country_flag = msg_had_pipiltin_palace_choice
 		clr_country_flag = msg_had_apogonoi_palace_choice
-		hidden_effect = {
-			change_government = monarchy
-			hidden_effect = {
-				change_government_reform_progress = -5000
-			}
-			add_government_reform = spartan_sovreignty
-			change_government_reform_progress = 500
-			if = {
-				limit = {
-					NOT = { has_global_flag = msg_pipiltin_bribe }
-					NOT = { has_global_flag = msg_apogonoi_bribe }
-					NOT = { has_global_flag = msg_no_pipiltin_palace }
-					NOT = { has_global_flag = msg_no_apogonoi_palace }
-				}
-				add_government_reform = msg_spartan_nobility_crushed
-			}
-			else_if = {
-				limit = {
-					NOT = {
-						AND = {
-							has_global_flag = msg_pipiltin_bribe
-							has_global_flag = msg_apogonoi_bribe
-							has_global_flag = msg_no_pipiltin_palace
-							has_global_flag = msg_no_apogonoi_palace
-						}
-					}
-				}
-				add_government_reform = msg_spartan_nobility_negotiated
-			}
-			else = {
-				limit = {
-					has_global_flag = msg_pipiltin_bribe
-					has_global_flag = msg_apogonoi_bribe
-					has_global_flag = msg_no_pipiltin_palace
-					has_global_flag = msg_no_apogonoi_palace
-				}
-				add_government_reform = msg_spartan_nobility_appeased
-			}
-		}
-	}
-	
-	option = {
-		name = msg_reforms.32.a
+
 		add_prestige = 30
 		add_legitimacy = 30
-		tooltip = {
-			add_government_reform = spartan_sovreignty
-			change_government_reform_progress = 500
-			if = {
-				limit = {
-					NOT = { has_global_flag = msg_pipiltin_bribe }
-					NOT = { has_global_flag = msg_apogonoi_bribe }
-					NOT = { has_global_flag = msg_no_pipiltin_palace }
-					NOT = { has_global_flag = msg_no_apogonoi_palace }
-				}
-				add_government_reform = msg_spartan_nobility_crushed
+		hidden_effect = {
+			change_government = monarchy
+			change_government_reform_progress = -5000
+		}
+		add_government_reform = spartan_sovreignty
+		change_government_reform_progress = 500
+		if = {
+			limit = {
+				NOT = { has_global_flag = msg_pipiltin_bribe }
+				NOT = { has_global_flag = msg_apogonoi_bribe }
+				NOT = { has_global_flag = msg_no_pipiltin_palace }
+				NOT = { has_global_flag = msg_no_apogonoi_palace }
 			}
-			else_if = {
-				limit = {
-					NOT = {
-						AND = {
-							has_global_flag = msg_pipiltin_bribe
-							has_global_flag = msg_apogonoi_bribe
-							has_global_flag = msg_no_pipiltin_palace
-							has_global_flag = msg_no_apogonoi_palace
-						}
+			add_government_reform = msg_spartan_nobility_crushed
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					AND = {
+						has_global_flag = msg_pipiltin_bribe
+						has_global_flag = msg_apogonoi_bribe
+						has_global_flag = msg_no_pipiltin_palace
+						has_global_flag = msg_no_apogonoi_palace
 					}
 				}
-				add_government_reform = msg_spartan_nobility_negotiated
 			}
-			else = {
-				limit = {
-					has_global_flag = msg_pipiltin_bribe
-					has_global_flag = msg_apogonoi_bribe
-					has_global_flag = msg_no_pipiltin_palace
-					has_global_flag = msg_no_apogonoi_palace
-				}
-				add_government_reform = msg_spartan_nobility_appeased
+			add_government_reform = msg_spartan_nobility_negotiated
+		}
+		else = {
+			limit = {
+				has_global_flag = msg_pipiltin_bribe
+				has_global_flag = msg_apogonoi_bribe
+				has_global_flag = msg_no_pipiltin_palace
+				has_global_flag = msg_no_apogonoi_palace
 			}
+			add_government_reform = msg_spartan_nobility_appeased
 		}
 	}
 }
@@ -3081,30 +2779,5 @@ country_event = {
 		event_target:msg_loose_subject = {
 			clr_country_flag = msg_subject_considering
 		}
-	}
-}
-	
-country_event = {
-	id = msg_reforms.34
-	title = msg_reforms.1.t #not like they're seeing it anyway
-	desc = msg_reforms.1.d
-	picture = CITY_VIEW_eventPicture
-	hidden = yes
-	
-	trigger = {
-		tag = MSN
-		had_country_flag = { flag = msg_reform_in_progress days = 3650 }
-	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	immediate = {
-		clr_country_flag = msg_reform_in_progress
-	}
-	
-	option = {
-		name = OK
 	}
 }

@@ -55,28 +55,28 @@ country_event = {
 	
 	option = {
 		name = msg_reforms.8.a # Establish the High Priesthood in Laconya!
-		set_global_flag = msg_yes_priesthood # Will determine how clergy estate works for other Aztlan nations
+		# set_global_flag = msg_yes_priesthood # Will determine how clergy estate works for other Aztlan nations
 		add_estate_loyalty = {
 			estate = estate_church
-			loyalty = 15
+			loyalty = 10
 		}
 		add_country_modifier = {
 			name = msg_yes_priesthood
-			duration = 1825
+			duration = 3650
 		}
 		set_global_flag = msg_priesthood_done
 	}
 	
 	option = {
 		name = msg_reforms.8.b # On second thought big church is a bad idea
-		set_global_flag = msg_no_priesthood # Will determine how clergy estate works for other Aztlan nations
+		# set_global_flag = msg_no_priesthood # Will determine how clergy estate works for other Aztlan nations
 		add_estate_loyalty = {
 			estate = estate_church
-			loyalty = -15
+			loyalty = -10
 		}
 		add_country_modifier = {
 			name = msg_no_priesthood
-			duration = 1825
+			duration = 3650
 		}
 		set_global_flag = msg_priesthood_done
 	}
@@ -96,44 +96,53 @@ country_event = {
 		religion = aztlan_worship
 		NOT = { has_global_flag = msg_old_faith }
 	}
-	
+
+	immediate = {
+		set_global_flag = msg_old_faith
+	}
+
 	option = { #The Old Believers are heretics and must be burned!
 		name = msg_reforms.9.a
-		every_owned_province = {
-			limit = { religion = pantheon_worship }
-			add_unrest = 10
+		custom_tooltip = msg_10_unrest_in_hellenic_provinces_tt
+		hidden_effect = {
+			every_owned_province = {
+				limit = { religion = pantheon_worship }
+				add_unrest = 10
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 10
 		}
 		add_estate_influence_modifier = {
 			estate = estate_church
 			desc = "msg_old_heretics"
 			influence = 10
-			duration = 1825
+			duration = 3650
 		}
-		add_estate_loyalty = {
-			estate = estate_church
-			loyalty  = 10
-		}
-		set_global_flag = msg_old_faith
 	}
 	
 	option = {
 		name = msg_reforms.9.b #The Old Believers follow gods we once did, why the hate?
 		set_global_flag = msg_aztlan_zeus_deity
-		every_owned_province = {
-			limit = { religion = aztlan_worship }
-			add_unrest = 5
-		}
-		add_estate_influence_modifier = {
-			estate = estate_church
-			desc = "msg_old_true"
-			influence = -10
-			duration = 1825
+		custom_tooltip = msg_add_zeus_deity_tt
+		custom_tooltip = msg_5_unrest_in_aztlan_provinces_tt
+		hidden_effect  ={
+			every_owned_province = {
+				limit = { religion = aztlan_worship }
+				add_unrest = 5
+			}
 		}
 		add_estate_loyalty = {
 			estate = estate_church
 			loyalty = -10
 		}
-		set_global_flag = msg_old_faith
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = "msg_old_true"
+			influence = -10
+			duration = 3650
+		}
 	}
 }
 
@@ -151,13 +160,16 @@ country_event = {
 		religion = aztlan_worship
 		NOT = { has_global_flag = msg_FUN }
 	}
-	
+
+	immediate = {
+		set_global_flag = msg_FUN
+	}
+
 	option = {
 		name = msg_reforms.10.a #We're more civilized than that.
 		set_global_flag = msg_aztlan_no_sacrifice
-		custom_tooltip = msg_no_sacrifice_tooltip
+		# custom_tooltip = msg_no_sacrifice_tooltip
 		add_stability = -1
-		set_global_flag = msg_FUN
 	}
 	
 	option = {
@@ -169,25 +181,22 @@ country_event = {
 			}
 			reverse_add_opinion = { who = ROOT modifier = msg_animal_sacrifice }
 		}
-		custom_tooltip = msg_animal_sacrifice_tooltip
-		set_global_flag = msg_FUN
 	}
 	
 	option = {
 		name = msg_reforms.10.c # Give me the knife, I'm doing this one myself.
 		set_global_flag = msg_aztlan_human_sacrifice
+		add_legitimacy = 10
+		add_prestige = 10
 		every_country = {
 			limit = {
 				NOT = { religion = aztlan_worship }
 				NOT = { religion = mesoamerican_religion }
 				NOT = { religion = nahuatl }
+				NOT = { religion = animism }
 				has_discovered = ROOT
 			}
 			reverse_add_opinion = { who = ROOT modifier = msg_human_sacrifice }
 		}
-		add_legitimacy = 10
-		add_prestige = 10
-		custom_tooltip = msg_human_sacrifice_tooltip
-		set_global_flag = msg_FUN
 	}
 }
