@@ -298,11 +298,28 @@ country_event = {
 	id = nhs2_greek_fire.5
 	title = nhs2_greek_fire.5.t
 	desc = nhs2_greek_fire.5.d
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = nhs2_had_greek_fire }
+		}
+		desc = nhs2_greek_fire.5.da
+	}
+	desc = {
+		trigger = {
+			has_country_flag = nhs2_had_greek_fire
+		}
+		desc = nhs2_greek_fire.5.db
+	}
 	picture = greek_fire_storage_eventpicture
+
+	goto = nhs_naphta_province
+
+	is_triggered_only = yes
 
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
 		has_country_flag = nhs_searching_for_naphtha
+		NOT = { has_country_flag = nhs_pending_naphtha_acquired_event }
 		any_province = {
 			is_colony = no
 			has_province_modifier = nhs2_source_of_naphta
@@ -317,103 +334,186 @@ country_event = {
 				}
 			}
 		}
-		NOT = { has_country_flag = nhs_temp_fire }
 	}
 
 	immediate = {
 		set_country_flag = nhs_found_the_source
+		set_country_flag = nhs_pending_naphtha_acquired_event
+		clr_country_flag = nhs2_had_greek_fire
+		hidden_effect = {
+			random_province = {
+				limit = {
+					is_colony = no
+					has_province_modifier = nhs2_source_of_naphta
+					NOT = { has_province_modifier = nhs2_source_of_naphta_e }
+					OR = {
+						owned_by = ROOT
+						owner = {
+							OR = {
+								has_country_modifier = nhs_greek_fire_deal
+								is_subject_of = ROOT
+							}
+						}
+					}
+				}
+				save_event_target_as = nhs_naphta_province
+			}
+		}
+	}
+
+	after = {
+		clr_country_flag = nhs_pending_naphtha_acquired_event
+		hidden_effect = {
+			if = {
+				limit = {
+					any_province = {
+						is_colony = no
+						has_province_modifier = nhs2_source_of_naphta
+						NOT = { has_province_modifier = nhs2_source_of_naphta_e }
+						OR = {
+							owned_by = ROOT
+							owner = {
+								OR = {
+									has_country_modifier = nhs_greek_fire_deal
+									is_subject_of = ROOT
+								}
+							}
+						}
+					}
+				}
+				country_event = { id = nhs2_greek_fire.5 }
+			}
+		}
 	}
 
 	option = { ##
 		name = "nhs2_greek_fire.5.a"
-		every_province = {
+		if = {
 			limit = {
-				has_province_modifier = nhs2_source_of_naphta
-				NOT = { has_province_modifier = nhs2_source_of_naphta_e }
-				OR = {
-					owned_by = ROOT
-					owner = {
-						OR = {
-							has_country_modifier = nhs_greek_fire_deal
-							is_subject_of = ROOT
+				event_target:nhs_naphta_province = {
+					is_colony = no
+					has_province_modifier = nhs2_source_of_naphta
+					NOT = { has_province_modifier = nhs2_source_of_naphta_e }
+					OR = {
+						owned_by = ROOT
+						owner = {
+							OR = {
+								has_country_modifier = nhs_greek_fire_deal
+								is_subject_of = ROOT
+							}
 						}
 					}
 				}
 			}
 			if = {
 				limit = {
-					has_province_modifier = nhs2_source_of_naphta
+					has_country_modifier = nhs2_depleting_fire_ships
 				}
-				remove_province_modifier = nhs2_source_of_naphta
+				remove_country_modifier = nhs2_depleting_fire_ships
 			}
 			if = {
 				limit = {
-					NOT = { has_province_modifier = nhs2_source_of_naphta_e }
+					has_country_modifier = nhs2_depleting_fire_forts
 				}
-				add_permanent_province_modifier = {
-					name = nhs2_source_of_naphta_e
-					duration = -1
+				remove_country_modifier = nhs2_depleting_fire_forts
+			}
+			nhs_set_the_fire_on = yes
+			event_target:nhs_naphta_province = {
+				if = {
+					limit = {
+						has_province_modifier = nhs2_source_of_naphta
+					}
+					remove_province_modifier = nhs2_source_of_naphta
+				}
+				if = {
+					limit = {
+						NOT = { has_province_modifier = nhs2_source_of_naphta_e }
+					}
+					add_permanent_province_modifier = {
+						name = nhs2_source_of_naphta_e
+						duration = -1
+					}
 				}
 			}
 		}
-		if = {
-			limit = {
-				has_country_modifier = nhs2_depleting_fire_ships
-			}
-			remove_country_modifier = nhs2_depleting_fire_ships
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs2_depleting_fire_forts
-			}
-			remove_country_modifier = nhs2_depleting_fire_forts
-		}
-		nhs_set_the_fire_on = yes
 	}
 }
 
-# Fuel running out, hidden
+# Naphtha source lost
 country_event = {
 	id = nhs2_greek_fire.6
-	title = nhs2_greek_fire.6.t  ###HIDDEN EVENT
-	desc = nhs2_greek_fire.6.d
-	picture = CITY_VIEW_eventPicture
-
-	hidden = yes
-
-	trigger = {
-		nhs_condition_all_ely = { KOMANDA = tag }
-		OR = {
-			has_country_modifier = nhs_secrets_greekfire
-			has_country_modifier = nhs_greekfire_update
+	title = nhs2_greek_fire.6.t
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = nhs_naphta_lost_in_trading_partner }
 		}
-		NOT = {
-			any_province = {
-				has_province_modifier = nhs2_source_of_naphta_e
-				OR = {
-					owned_by = ROOT
-					owner = {
-						OR = {
-							has_country_modifier = nhs_greek_fire_deal
-							is_subject_of = ROOT
-						}
-					}
-				}
-			}
-		}
+		desc = nhs2_greek_fire.6.da
 	}
+	desc = {
+		trigger = {
+			has_country_flag = nhs_naphta_lost_in_trading_partner
+		}
+		desc = nhs2_greek_fire.6.db
+	}
+	picture = alchemist_eventpicture
+
+	goto = FROM
+
+	is_triggered_only = yes
+
+	# trigger = {
+	# 	nhs_condition_all_ely = { KOMANDA = tag }
+	# 	OR = {
+	# 		has_country_modifier = nhs_secrets_greekfire
+	# 		has_country_modifier = nhs_greekfire_update
+	# 	}
+	# 	NOT = {
+	# 		any_province = {
+	# 			has_province_modifier = nhs2_source_of_naphta_e
+	# 			OR = {
+	# 				owned_by = ROOT
+	# 				owner = {
+	# 					OR = {
+	# 						has_country_modifier = nhs_greek_fire_deal
+	# 						is_subject_of = ROOT
+	# 					}
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+	# }
 
 	immediate = {
-		set_country_flag = nhs_depleting_fire_fuel
-		add_country_modifier = {
-			name = nhs2_depleting_fire_fuel_timer
-			duration = 1825
-			hidden = yes
-		}
+		# set_country_flag = nhs_depleting_fire_fuel
+		# hidden_effect = {
+		# 	if = {
+		# 		limit = {
+		# 			NOT = {
+		# 				nhs_owns_active_source_of_naphta = yes
+		# 			}
+		# 			NOT = { has_country_modifier = nhs2_depleting_fire_fuel_timer }
+		# 		}
+		# 		add_country_modifier = {
+		# 			name = nhs2_depleting_fire_fuel_timer
+		# 			duration = 1825
+		# 			hidden = yes
+		# 		}
+		# 	}
+		# }
 	}
 
 	option = { ##
 		name = "nhs2_greek_fire.6.a"
+		if = {
+			limit = {
+				NOT = { nhs_owns_active_source_of_naphta = yes }
+				NOT = { nhs_has_fire_depleting_modifier = yes }
+				NOT = { has_country_flag = nhs2_had_greek_fire }
+			}
+			set_country_flag = nhs_depleting_naphta
+			custom_tooltip = nhs_depleting_naphta_warning_tt
+			nhs_set_fire_depleting_modifier = yes
+		}
 	}
 }
 
@@ -430,119 +530,219 @@ country_event = {
 			has_country_modifier = nhs_secrets_greekfire
 			has_country_modifier = nhs_greekfire_update
 		}
-		has_country_flag = nhs_depleting_fire_fuel
+		# has_country_flag = nhs_depleting_fire_fuel
+		has_country_flag = nhs_depleting_naphta
+		NOT = { nhs_has_fire_depleting_modifier = yes }
 		NOT = { has_country_modifier = nhs2_depleting_fire_fuel_timer }
-		NOT = {
-			any_province = {
-				has_province_modifier = nhs2_source_of_naphta_e
-				OR = {
-					owned_by = ROOT
-					owner = {
-						OR = {
-							has_country_modifier = nhs_greek_fire_deal
-							is_subject_of = ROOT
-						}
-					}
-				}
-			}
-		}
+		NOT = { nhs_owns_active_source_of_naphta = yes }
 	}
 
 	immediate = {
-		set_country_flag = nhs2_had_greek_fire
+		
 	}
 
 	option = { ##
 		name = "nhs2_greek_fire.7.a"
+		custom_tooltip = nhs_greek_fire_regaining_benefits_tt
+		clr_country_flag = nhs_depleting_naphta
+		set_country_flag = nhs2_had_greek_fire
 		nhs_set_the_fire_off = yes
-		clr_country_flag = nhs_depleting_fire_fuel
+		# clr_country_flag = nhs_depleting_fire_fuel
 	}
 }
 
-# Fuel reserves reacquired before depleting, hidden
+# Naphtha source lost, for the trading partner
 country_event = {
 	id = nhs2_greek_fire.8
-	title = nhs2_greek_fire.8.t  ###HIDDEN EVENT
+	title = nhs2_greek_fire.8.t
 	desc = nhs2_greek_fire.8.d
-	picture = CITY_VIEW_eventPicture
+	picture = barrels_eventpicture
 
-	hidden = yes
-
-	trigger = {
-		nhs_condition_all_ely = { KOMANDA = tag }
-		OR = {
-			has_country_modifier = nhs_secrets_greekfire
-			has_country_modifier = nhs_greekfire_update
-		}
-		OR = {
-			has_country_flag = nhs_depleting_fire_fuel
-			has_country_modifier = nhs2_depleting_fire_fuel_timer
-		}
-		any_province = {
-			is_colony = no
-			has_province_modifier = nhs2_source_of_naphta_e
-			OR = {
-				owned_by = ROOT
-				owner = {
-					OR = {
-						has_country_modifier = nhs_greek_fire_deal
-						is_subject_of = ROOT
-					}
-				}
-			}
-		}
-	}
+	is_triggered_only = yes
 
 	immediate = {
-		clr_country_flag = nhs_depleting_fire_fuel
-		remove_country_modifier = nhs2_depleting_fire_fuel_timer
 	}
 
 	option = { ##
 		name = "nhs2_greek_fire.8.a"
+		if = {
+			limit = {
+				has_country_modifier = nhs_greek_fire_deal
+				NOT = {
+					any_owned_province = {
+						has_province_modifier = nhs2_source_of_naphta_e
+					}
+				}
+			}
+			remove_country_modifier = nhs_greek_fire_deal
+		}
 	}
 }
 
-# Fuel reserves reacquired after depleting
+# Elysia and trading partner find themselves at war, for Elysia
 country_event = {
 	id = nhs2_greek_fire.9
 	title = nhs2_greek_fire.9.t
 	desc = nhs2_greek_fire.9.d
-	picture = barrels_eventpicture
+	picture = greek_fire_storage_eventpicture
 
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
-		NOT = {
-			OR = {
-				has_country_modifier = nhs_secrets_greekfire
-				has_country_modifier = nhs_greekfire_update
-			}
-		}
-		has_country_flag = nhs2_had_greek_fire
-		any_province = {
-			is_colony = no
-			has_province_modifier = nhs2_source_of_naphta_e
-			OR = {
-				owned_by = ROOT
-				owner = {
-					OR = {
-						has_country_modifier = nhs_greek_fire_deal
-						is_subject_of = ROOT
-					}
-				}
-			}
+		is_at_war = yes
+		any_country = {
+			has_country_modifier = nhs_greek_fire_deal
+			war_with = ROOT
 		}
 	}
 
 	immediate = {
-		clr_country_flag = nhs2_had_greek_fire
+		hidden_effect = {
+			random_country = {
+				limit = {
+					has_country_modifier = nhs_greek_fire_deal
+					war_with = ROOT
+				}
+				country_event = { id = nhs2_greek_fire.14 }
+				save_event_target_as = nhs_former_trading_partner
+			}
+			# if = {
+			# 	limit = {
+			# 		NOT = {
+			# 			nhs_owns_active_source_of_naphta = yes
+			# 		}
+			# 		NOT = { has_country_modifier = nhs2_depleting_fire_fuel_timer }
+			# 	}
+			# 	add_country_modifier = {
+			# 		name = nhs2_depleting_fire_fuel_timer
+			# 		duration = 1825
+			# 	}
+			# }
+		}
+	}
+
+	after = {
+		if = {
+			limit = {
+				any_country = {
+					event_target:nhs_former_trading_partner = {
+						NOT = { tag = PREV }
+					}
+					has_country_modifier = nhs_greek_fire_deal
+					war_with = ROOT
+				}
+			}
+			country_event = { id = nhs2_greek_fire.9 days = 1 }
+		}
 	}
 
 	option = { ##
 		name = "nhs2_greek_fire.9.a"
-		nhs_set_the_fire_on = yes
+		if = {
+			limit = {
+				NOT = { nhs_owns_active_source_of_naphta = yes }
+				NOT = { nhs_has_fire_depleting_modifier = yes }
+				NOT = { has_country_flag = nhs2_had_greek_fire }
+			}
+			set_country_flag = nhs_depleting_naphta
+			custom_tooltip = nhs_depleting_naphta_warning_tt
+			nhs_set_fire_depleting_modifier = yes
+		}
 	}
 }
+
+# Elysia and trading partner find themselves at war, for trading partner
+country_event = {
+	id = nhs2_greek_fire.14
+	title = nhs2_greek_fire.14.t
+	desc = nhs2_greek_fire.14.d
+	picture = barrels_eventpicture
+
+	is_triggered_only = yes
+
+	option = { ##
+		name = "nhs2_greek_fire.9.a"
+		remove_country_modifier = nhs_greek_fire_deal
+		every_owned_province = {
+			limit = {
+				has_province_modifier = nhs2_source_of_naphta_e
+			}
+			remove_province_modifier = nhs2_source_of_naphta_e
+			add_permanent_province_modifier = {
+				name = nhs2_source_of_naphta
+				duration = -1
+			}
+		}
+	}
+}
+
+# For trading partner if Elysia dies
+country_event = {
+	id = nhs2_greek_fire.15
+	title = nhs2_greek_fire.15.t
+	desc = nhs2_greek_fire.15.d
+	picture = barrels_eventpicture
+
+	trigger = {
+		has_country_modifier = nhs_greek_fire_deal
+		NOT = { nhs_condition_all_ely = { KOMANDA = exists } }
+	}
+
+	option = { ##
+		name = "nhs2_greek_fire.9.a"
+		remove_country_modifier = nhs_greek_fire_deal
+		every_owned_province = {
+			limit = {
+				has_province_modifier = nhs2_source_of_naphta_e
+			}
+			remove_province_modifier = nhs2_source_of_naphta_e
+			add_permanent_province_modifier = {
+				name = nhs2_source_of_naphta
+				duration = -1
+			}
+		}
+	}
+}
+
+# Fuel reserves reacquired after depleting
+# country_event = {
+# 	id = nhs2_greek_fire.9
+# 	title = nhs2_greek_fire.9.t
+# 	desc = nhs2_greek_fire.9.d
+# 	picture = barrels_eventpicture
+
+# 	trigger = {
+# 		nhs_condition_all_ely = { KOMANDA = tag }
+# 		NOT = {
+# 			OR = {
+# 				has_country_modifier = nhs_secrets_greekfire
+# 				has_country_modifier = nhs_greekfire_update
+# 			}
+# 		}
+# 		has_country_flag = nhs2_had_greek_fire
+# 		any_province = {
+# 			is_colony = no
+# 			has_province_modifier = nhs2_source_of_naphta_e
+# 			OR = {
+# 				owned_by = ROOT
+# 				owner = {
+# 					OR = {
+# 						has_country_modifier = nhs_greek_fire_deal
+# 						is_subject_of = ROOT
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+
+# 	immediate = {
+# 		clr_country_flag = nhs2_had_greek_fire
+# 	}
+
+# 	option = { ##
+# 		name = "nhs2_greek_fire.9.a"
+# 		nhs_set_the_fire_on = yes
+# 	}
+# }
 
 # Elysian propose a naphta deal
 country_event = {
@@ -553,11 +753,36 @@ country_event = {
 
 	is_triggered_only = yes
 
+	after = {
+		hidden_effect = {
+			FROM = {
+				clr_country_flag = nhs_proposing_n_deal
+			}
+		}
+	}
+
 	option = {
 		ai_chance = {
 			factor = 90
 		}
 		name = "nhs2_greek_fire.10.a"
+		trigger = {
+			NOT = { has_country_modifier = nhs_greek_fire_deal }
+			any_owned_province = {
+				is_colony = no
+				OR = {
+					has_province_modifier = nhs2_source_of_naphta
+					has_province_modifier = nhs2_source_of_naphta_e
+				}
+			}
+			NOT = {
+				AND = {
+					is_subject = yes
+					is_subject_of = FROM
+				}
+			}
+		}
+
 		add_opinion = {
 			who = FROM
 			modifier = nhs_naphta_deal
@@ -567,11 +792,10 @@ country_event = {
 			duration = -1
 		}
 		tooltip = {
-			every_province = {
+			every_owned_province = {
 				limit = {
 					has_province_modifier = nhs2_source_of_naphta
 					NOT = { has_province_modifier = nhs2_source_of_naphta_e }
-					owned_by = ROOT
 				}
 				if = {
 					limit = {
@@ -590,15 +814,7 @@ country_event = {
 				}
 			}
 		}
-		hidden_effect = {
-			every_country = {
-				limit = {
-					has_country_modifier = nhs_greek_fire_deal
-				}
-				remove_country_modifier = nhs_greek_fire_deal
-			}
-		}
-		FROM = { country_event = { id = nhs2_greek_fire.11 days = 1 } }
+		FROM = { country_event = { id = nhs2_greek_fire.11 } }
 	}
 	
 	option = {
@@ -606,7 +822,54 @@ country_event = {
 		ai_chance = {
 			factor = 10
 		}
-		FROM = { country_event = { id = nhs2_greek_fire.12 days = 1 } }
+		trigger = {
+			NOT = { has_country_modifier = nhs_greek_fire_deal }
+			any_owned_province = {
+				is_colony = no
+				OR = {
+					has_province_modifier = nhs2_source_of_naphta
+					has_province_modifier = nhs2_source_of_naphta_e
+				}
+			}
+			NOT = {
+				AND = {
+					is_subject = yes
+					is_subject_of = FROM
+				}
+			}
+		}
+
+		FROM = { country_event = { id = nhs2_greek_fire.12 } }
+	}
+	# Fallback options
+	option = {
+		name = "nhs2_greek_fire.10.c"
+		trigger = {
+			AND = {
+				is_subject = yes
+				is_subject_of = FROM
+			}
+		}
+	}
+	option = {
+		name = "nhs2_greek_fire.10.e"
+		trigger = {
+			NOT = {
+				any_owned_province = {
+					is_colony = no
+					OR = {
+						has_province_modifier = nhs2_source_of_naphta
+						has_province_modifier = nhs2_source_of_naphta_e
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "nhs2_greek_fire.10.f"
+		trigger = {
+			has_country_modifier = nhs_greek_fire_deal
+		}
 	}
 }
 
@@ -617,68 +880,84 @@ country_event = {
 	desc = nhs2_greek_fire.11.d
 	picture = NATIVE_COURT_eventPicture
 
+	goto = nhs_naphta_province
+
 	is_triggered_only = yes
 	
 	immediate = {
-		set_country_flag = nhs_found_the_source
-		set_country_flag = nhs_temp_fire
-		clr_country_flag = nhs_proposing_n_deal
+		hidden_effect = {
+			FROM = {
+				random_owned_province = {
+					limit = {
+						is_colony = no
+						OR = {
+							has_province_modifier = nhs2_source_of_naphta
+							has_province_modifier = nhs2_source_of_naphta_e
+						}
+					}
+					save_event_target_as = nhs_naphta_province
+				}
+			}
+		}
 	}
 
-	option = { ##Agree
+	option = {
 		name = "nhs2_greek_fire.11.a"
 		if = {
 			limit = {
-				has_country_modifier = nhs2_depleting_fire_ships
+				FROM = {
+					any_owned_province = {
+						is_colony = no
+						OR = {
+							has_province_modifier = nhs2_source_of_naphta
+							has_province_modifier = nhs2_source_of_naphta_e
+						}	
+					}
+				}
 			}
-			remove_country_modifier = nhs2_depleting_fire_ships
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs2_depleting_fire_forts
-			}
-			remove_country_modifier = nhs2_depleting_fire_forts
-		}
-		nhs_set_the_fire_on = yes
-		add_opinion = {
-			who = FROM
-			modifier = nhs_naphta_deal
-		}
-		FROM = {
-			add_country_modifier = {
-				name = nhs_greek_fire_deal
-				duration = -1
-			}
-			every_province = {
+			set_country_flag = nhs_found_the_source
+			clr_country_flag = nhs2_had_greek_fire
+			if = {
 				limit = {
-					has_province_modifier = nhs2_source_of_naphta
-					NOT = { has_province_modifier = nhs2_source_of_naphta_e }
-					owned_by = ROOT
+					has_country_modifier = nhs2_depleting_fire_ships
 				}
-				if = {
-					limit = {
-						has_province_modifier = nhs2_source_of_naphta
-					}
-					remove_province_modifier = nhs2_source_of_naphta
+				remove_country_modifier = nhs2_depleting_fire_ships
+			}
+			if = {
+				limit = {
+					has_country_modifier = nhs2_depleting_fire_forts
 				}
-				if = {
-					limit = {
-						NOT = { has_province_modifier = nhs2_source_of_naphta_e }
-					}
-					add_permanent_province_modifier = {
-						name = nhs2_source_of_naphta_e
+				remove_country_modifier = nhs2_depleting_fire_forts
+			}
+			nhs_set_the_fire_on = yes
+			add_opinion = {
+				who = FROM
+				modifier = nhs_naphta_deal
+			}
+			FROM = {
+				tooltip = {
+					add_country_modifier = {
+						name = nhs_greek_fire_deal
 						duration = -1
 					}
 				}
-			}
-		}
-		clr_country_flag = nhs_temp_fire
-		hidden_effect = {
-			every_country = {
-				limit = {
-					has_country_modifier = nhs_greek_fire_deal
+				every_owned_province = {
+					if = {
+						limit = {
+							has_province_modifier = nhs2_source_of_naphta
+						}
+						remove_province_modifier = nhs2_source_of_naphta
+						if = {
+							limit = {
+								NOT = { has_province_modifier = nhs2_source_of_naphta_e }
+							}
+							add_permanent_province_modifier = {
+								name = nhs2_source_of_naphta_e
+								duration = -1
+							}
+						}
+					}
 				}
-				remove_country_modifier = nhs_greek_fire_deal
 			}
 		}
 	}
@@ -716,10 +995,12 @@ country_event = {
 	picture = BATTLE_eventPicture
 	
 	trigger = {
-		nhs_condition_all_ely = { KOMANDA = tag }
-		NOT = { has_country_modifier = nhs_greekfire_update }
 		has_country_modifier = nhs_secrets_greekfire
+		nhs_condition_all_ely = { KOMANDA = tag }
 		is_year = 1520
+		NOT = { has_country_modifier = nhs_greekfire_update }
+		NOT = { nhs_has_fire_depleting_modifier = yes }
+		NOT = { has_country_flag = nhs2_had_greek_fire }
 		had_country_flag = { flag = nhs_searching_for_naphtha days = 18250 }
 	}
 

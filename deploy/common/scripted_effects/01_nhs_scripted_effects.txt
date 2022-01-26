@@ -2089,6 +2089,7 @@ nhs_set_the_fire_on = {
 			}
 		}
 	}
+	nhs_remove_fire_depleting_modifier = yes
 }
 nhs_set_the_fire_off = {
 	if = {
@@ -2118,7 +2119,7 @@ nhs_set_the_fire_off = {
 			duration = 14600
 		}
 	}
-	if = {
+	else_if = {
 		limit = {
 			OR = {
 				has_country_flag = nhs_updated_fire
@@ -2145,7 +2146,7 @@ nhs_set_the_fire_off = {
 			duration = 14600
 		}
 	}
-	if = {
+	else_if = {
 		limit = {
 			OR = {
 				has_country_modifier = nhs2_fire_army_reform
@@ -2180,7 +2181,7 @@ nhs_set_the_fire_off = {
 			duration = 14600
 		}
 	}
-	if = {
+	else_if = {
 		limit = {
 			OR = {
 				has_country_modifier = nhs2_fire_army_reform
@@ -2215,7 +2216,192 @@ nhs_set_the_fire_off = {
 			duration = 14600
 		}
 	}
+	nhs_remove_fire_depleting_modifier = yes
 }
+# province
+# FROM = old owner
+nhs_handle_naphtha = {
+	if = {
+		limit = {
+			is_colony = no
+		}
+		if = {
+			limit = {
+				has_province_modifier = nhs2_source_of_naphta
+			}
+			if = {
+				limit = {
+					owner = {
+						nhs_condition_all_ely = { KOMANDA = tag }
+						has_country_flag = nhs_searching_for_naphtha
+					}
+				}
+				owner = {
+					country_event = { id = nhs2_greek_fire.5 days = 1 }
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						OR = {
+							has_country_modifier = nhs_greek_fire_deal
+							AND = {
+								is_subject = yes
+								overlord = {
+									nhs_condition_all_ely = { KOMANDA = tag }
+									has_country_flag = nhs_searching_for_naphtha
+								}
+							}
+						}
+					}
+				}
+				overlord = {
+					country_event = { id = nhs2_greek_fire.5 days = 1 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_province_modifier = nhs2_source_of_naphta_e
+				owner = {
+					NOT = { nhs_condition_all_ely = { KOMANDA = tag } }
+					NOT = {
+						OR = {
+							has_country_modifier = nhs_secrets_greekfire
+							has_country_modifier = nhs_greekfire_update
+						}
+					}
+					NOT = { has_country_modifier = nhs_greek_fire_deal }
+					NOT = {
+						AND = {
+							is_subject = yes
+							overlord = {
+								nhs_condition_all_ely = { KOMANDA = tag }
+								has_country_flag = nhs_searching_for_naphtha
+							}
+						}
+					}
+				}
+			}
+			remove_province_modifier = nhs2_source_of_naphta_e
+			add_permanent_province_modifier = {
+				name = nhs2_source_of_naphta
+				duration = -1
+			}
+			# NHS = {
+			# 	add_treasury = 1000
+			# 	country_event = { id = nhs2_greek_fire.6 days = 1 }
+			# }
+			if = {
+				limit = {
+					FROM = {
+						nhs_condition_all_ely = { KOMANDA = tag }
+					}
+				}
+				FROM = {
+					country_event = { id = nhs2_greek_fire.6 }
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						has_country_modifier = nhs_greek_fire_deal
+					}
+				}
+				FROM = {
+					country_event = { id = nhs2_greek_fire.8 }
+				}
+				nhs_scripted_effect_for_existing_elysia = { SCRIPTED_EFFECT = nhs_trigger_province_lost_event_from_trading_partner }
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_subject = yes
+						overlord = {
+							nhs_condition_all_ely = { KOMANDA = tag }
+							has_country_flag = nhs_searching_for_naphtha
+						}
+					}
+				}
+				FROM = {
+					overlord = {
+						country_event = { id = nhs2_greek_fire.6 }
+					}
+				}
+			}
+			# else = {
+			# 	nhs_scripted_effect_for_existing_elysia = { SCRIPTED_EFFECT = nhs_trigger_province_lost_event_from_trading_partner }
+			# }
+		}
+	}
+}
+nhs_trigger_province_lost_event_from_trading_partner = {
+	set_country_flag = nhs_naphta_lost_in_trading_partner
+	country_event = { id = nhs2_greek_fire.6 }
+	clr_country_flag = nhs_naphta_lost_in_trading_partner
+}
+nhs_set_fire_depleting_modifier = {
+	if = {
+		limit = {
+			has_country_modifier = nhs_secrets_greekfire
+			NOT = { has_country_modifier = nhs2_fire_army_reform }
+			NOT = { has_country_modifier = nhs2_fire_army_reform2 }
+			NOT = { has_country_modifier = nhs2_fire_army_reform3 }
+		}
+		add_country_modifier = {
+			name = nhs2_depleting_fire_fuel
+			duration = 1825
+		}
+	}
+	else_if = {
+		limit = {
+			has_country_modifier = nhs_greekfire_update
+			NOT = { has_country_modifier = nhs2_fire_army_reform }
+			NOT = { has_country_modifier = nhs2_fire_army_reform2 }
+			NOT = { has_country_modifier = nhs2_fire_army_reform3 }
+		}
+		add_country_modifier = {
+			name = nhs2_depleting_fire_fuel_update
+			duration = 1825
+		}
+	}
+	else_if = {
+		limit = {
+			has_country_modifier = nhs_secrets_greekfire
+			OR = {
+				has_country_modifier = nhs2_fire_army_reform
+				has_country_modifier = nhs2_fire_army_reform2
+				has_country_modifier = nhs2_fire_army_reform3
+			}
+		}
+		add_country_modifier = {
+			name = nhs2_depleting_fire_fuel_reform
+			duration = 1825
+		}
+	}
+	else_if = {
+		limit = {
+			has_country_modifier = nhs_greekfire_update
+			OR = {
+				has_country_modifier = nhs2_fire_army_reform
+				has_country_modifier = nhs2_fire_army_reform2
+				has_country_modifier = nhs2_fire_army_reform3
+			}
+		}
+		add_country_modifier = {
+			name = nhs2_depleting_fire_fuel_reform_update
+			duration = 1825
+		}
+	}
+}
+nhs_remove_fire_depleting_modifier = {
+	remove_country_modifier = nhs2_depleting_fire_fuel
+	remove_country_modifier = nhs2_depleting_fire_fuel_update
+	remove_country_modifier = nhs2_depleting_fire_fuel_reform
+	remove_country_modifier = nhs2_depleting_fire_fuel_reform_update
+	remove_country_modifier = nhs2_depleting_fire_fuel_timer
+}
+
 nhs_embrace_neighbor_institutions = {
 	if = {
 		limit = {
