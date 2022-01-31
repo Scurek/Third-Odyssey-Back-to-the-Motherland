@@ -6,7 +6,7 @@ nhs_hcd_hellenic_crisis = {
 	}
 		
 	can_start = {
-		num_of_cities = 6
+		# num_of_cities = 6
 		custom_trigger_tooltip = {
 			tooltip = nhs_hcd_hellenic_crisis_progress_high.tt
 			check_variable = {
@@ -14,6 +14,9 @@ nhs_hcd_hellenic_crisis = {
 				value = 10  # Note this value should be achievable without some of the more restrictive events (requiring advisor or teenage+ heir)
 			}
 			has_country_flag = TO_nhs_hellenicconversion_4  # This one is important, adds "pagan conversion centers"
+			any_owned_province = {
+				has_province_modifier = nhs_hcd_Pagan_minority
+			}
 		}
 	}
 	
@@ -33,7 +36,7 @@ nhs_hcd_hellenic_crisis = {
 	
 	progress = {
 		modifier = {
-			factor = 3.0
+			factor = 2.0
 			always = yes
 		}
 		modifier = {
@@ -57,29 +60,56 @@ nhs_hcd_hellenic_crisis = {
 	 }
 	
 	can_end = {
-		OR = {
-			AND = {
-				OR = {
-					NOT = {
-						any_owned_province = {
-							religion = pantheon_worship
-						}
-					}
-					NOT = {
-						any_owned_province = {
-							religion_group = christian
-						}
+		if = {
+			limit = {
+				religion_group = christian
+			}
+			OR = {
+				NOT = {
+					any_owned_province = {
+						religion = pantheon_worship
 					}
 				}
-				stability = 1
+				AND = {
+					religious_unity = 1.0
+					stability = 1
+				}
+				AND = {
+					religious_unity = 0.5
+					stability = 3
+				}
 			}
-			AND = {
-				religious_unity = 1.0
-				stability = 1
+		}
+		else_if = {
+			limit = {
+				religion = pantheon_worship
 			}
-			AND = {
-				religious_unity = 0.5
-				stability = 3
+			OR = {
+				NOT = {
+					any_owned_province = {
+						religion_group = christian
+					}
+				}
+				AND = {
+					religious_unity = 1.0
+					stability = 1
+				}
+				AND = {
+					religious_unity = 0.5
+					stability = 3
+				}
+			}
+		}
+		else = {
+			OR = {
+				AND = {
+					religious_unity = 1.0
+					stability = 1
+				}
+				AND = {
+					religious_unity = 0.5
+					stability = 3
+				}
 			}
 		}
 		NOT = {
