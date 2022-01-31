@@ -268,8 +268,23 @@ country_decisions = {
 		effect = {
 			add_mil_power = -50
 			custom_tooltip = nhs_invasion_modifiers_tt
-			custom_tooltip = nhs_new_line_ttw
-			custom_tooltip = nhs_invasion_range_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = nhs_new_flight_taken_venetians
+						950 = {
+							to_has_great_project_at_least_at_tier_1 = {
+								TYPE = nhs_elysian_arsenal
+							}
+						}
+					}
+				}
+				custom_tooltip = nhs_invasion_naval_wonder_modifiers_both_tt
+			}
+			else = {
+				custom_tooltip = nhs_invasion_naval_wonder_modifiers_cothon_tt
+			}
 			custom_tooltip = nhs_new_line_tt
 			country_event = { id = nhs2_mainlandevents.6 }
 			hidden_effect = {
@@ -296,11 +311,7 @@ country_decisions = {
 			nhs_condition_all_ely = { KOMANDA = tag }
 			has_country_flag = nhs_supply_lines
 			NOT = { has_country_flag = nhs_invasion_over }
-			NOT = {
-				any_owned_province = {
-					nhs_supply_lines_province = yes
-				}
-			}
+			NOT = { has_country_flag = nhs_supply_lines_secured }
 		}
 
 		allow = {
@@ -308,27 +319,36 @@ country_decisions = {
 			#	tooltip = nhs_not_owns_supplies_tt
 			#	
 			#}
-			NOT = {
-				any_owned_province = {
-					nhs_supply_lines_province = yes
+			custom_trigger_tooltip = {
+				tooltip = to_nhs_does_not_own_target_supply_lines_province_tt
+				NOT = {
+					any_owned_province = {
+						# nhs_supply_lines_province = yes
+						nhs_is_target_supply_lines_province = yes
+					}
 				}
 			}
 		}
 
 		effect = {
-			clr_country_flag = nhs_supply_lines
-			custom_tooltip = nhs_supply_claimst
-			add_mil_power = -50
-			add_years_of_income = -0.1
-			country_event = { id = nhs2_mainlandevents.7 }
 			hidden_effect = {
 				every_province = {
 					limit = {
-						nhs_supply_lines_province = yes
+						nhs_is_target_supply_lines_province = yes
 					}
 					remove_claim = ROOT
 				}
 			}
+			clr_country_flag = nhs_supply_lines
+			clr_country_flag = nhs_supply_lines_western_isles
+			clr_country_flag = nhs_supply_lines_eastern_isles
+			clr_country_flag = nhs_supply_lines_gibraltar
+			clr_country_flag = nhs_supply_lines_atlantic_port
+
+			custom_tooltip = nhs_supply_lines_remove_claims_tt
+			add_mil_power = -50
+			# add_years_of_income = -0.1
+			country_event = { id = nhs2_mainlandevents.7 }
 		}
 
 		ai_will_do = {
