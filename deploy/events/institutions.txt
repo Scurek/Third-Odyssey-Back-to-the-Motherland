@@ -212,67 +212,19 @@ country_event = {
 	id = institution_events.3
 	title = institution_events.3.t
 	picture = EXPLORERS_eventPicture
-	
+
 	desc = {
 		trigger = {
-			capital_scope = { continent = asia }
-			religion = confucianism
+			has_country_flag = nhs_portugese_secret
 		}
-		desc = institution_events.3.dc
-	}
-	
-	desc = {
-		trigger = {
-			capital_scope = { continent = asia }
-			OR = {
-				is_subject_of_type = daimyo_vassal
-				tag = JAP
-				has_reform = shogunate
-			}
-		}
-		desc = institution_events.3.djap1
-	}
-	
-	desc = {
-		trigger = {
-			capital_scope = { continent = asia }
-			OR = {
-				has_reform = indep_daimyo
-				AND = {
-					capital_scope = { region = japan_region }
-					NOT = { 
-						OR = {
-							tag = JAP
-							has_reform = shogunate
-						}
-					}
-					is_subject = no
-				}
-			}
-		}
-		desc = institution_events.3.djap2
-	}
-	
-	desc = {
-		trigger = {
-			capital_scope = { continent = asia }
-		}
-		desc = institution_events.3.da
-	}
-	
-	desc = {
-		trigger = {
-			capital_scope = { continent = oceania }
-			primary_culture = polynesian
-		}
-		desc = institution_events.3.dpoly
+		desc = institution_events.3.d.to.a
 	}
 
 	desc = {
 		trigger = {
-			capital_scope = { NOT = { continent = asia } }
+			NOT = { has_country_flag = nhs_portugese_secret }
 		}
-		desc = institution_events.3.d
+		desc = institution_events.3.d.to.b
 	}
 	
 	is_triggered_only = yes
@@ -295,6 +247,76 @@ country_event = {
 
 	option = {
 		name = institution_events.3.a
+		trigger = {
+			NOT = { has_country_flag = nhs_portugese_secret }
+		}
+		ai_chance = {
+			factor = 1
+		}
+		add_adm_power = 100
+		add_dip_power = 100
+		add_mil_power = 100
+		add_prestige = 20
+		if = {
+			limit = {
+				NOT = { has_completed_all_reforms_trigger = yes }
+			}
+			add_reform_progress_medium_effect = yes
+		}
+		custom_tooltip = to_colonialism_spread_europe_tt
+		custom_tooltip = institution_events.3.a.tt
+		FROM = {
+			add_permanent_province_modifier = {
+				name = "birthplace_of_the_new_world"
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_idea_group = exploration_ideas }
+				adm_tech = 5
+			}
+			to_replace_idea_group_with_exploration_master_effect = yes
+			custom_tooltip = nhs_new_line_tt
+		}
+		to_trigger_colonialism_events_no_portugal = yes
+	}
+
+	option = {
+		name = institution_events.3.b
+		trigger = {
+			NOT = { has_idea_group = exploration_ideas }
+			NOT = { has_country_flag = nhs_portugese_secret }
+		}
+		ai_chance = {
+			factor = 0
+		}
+		add_adm_power = 100
+		add_dip_power = 100
+		add_mil_power = 100
+		add_prestige = 20
+		if = {
+			limit = {
+				NOT = { has_completed_all_reforms_trigger = yes }
+			}
+			add_reform_progress_medium_effect = yes
+		}
+		custom_tooltip = to_colonialism_spread_europe_tt
+		custom_tooltip = institution_events.3.a.tt
+		FROM = {
+			add_permanent_province_modifier = {
+				name = "birthplace_of_the_new_world"
+				duration = -1
+			}
+		}
+		to_trigger_colonialism_events_no_portugal = yes
+	}
+
+	option = {
+		name = institution_events.3.to.c
+		trigger = {
+			has_country_flag = nhs_portugese_secret
+		}
 		add_adm_power = 100
 		add_dip_power = 100
 		add_mil_power = 100
@@ -311,23 +333,129 @@ country_event = {
 				name = "birthplace_of_the_new_world"
 				duration = -1
 			}
+			if = {
+				limit = {
+					owner = {
+						has_country_modifier = nhs2_por_ely_trade
+					}
+				}
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = to_por_gateway_to_elysia
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = to_por_gateway_to_elysia_tm
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_idea_group = exploration_ideas }
+				adm_tech = 5
+			}
+			to_replace_idea_group_with_exploration_master_effect = yes
+			custom_tooltip = nhs_new_line_tt
+		}
+		every_country = {
+			limit = {
+				NOT = { tag = ROOT }
+				technology_group = western
+				adm_tech = 5
+				is_subject = no
+				OR = {
+					ai = no
+					AND = {
+						num_of_cities = 8
+						num_of_owned_provinces_with = {
+							value = 3
+							has_port = yes
+							continent = europe
+							sea_zone = {
+								region = north_atlantic_region
+							}
+						}
+					}
+				}
+				OR = {
+					tag = GBR
+					tag = NED
+					tag = ENG
+					tag = FRA
+					tag = CAS
+					tag = SPA
+					tag = POR
+					capital_scope = {
+						OR = {
+							region = france_region
+							region = iberia_region
+							region = british_isles_region
+							region = low_countries_region
+						}
+					}
+				}
+				any_owned_province = {
+					has_port = yes
+					continent = europe
+					sea_zone = {
+						region = north_atlantic_region
+					}
+				}
+			}
+			country_event = { id = to_colonialism_events.1 }
 		}
 		hidden_effect = {
 			every_country = {
 				limit = {
-					ai = no
-					NOT = { tag = ROOT }
-					knows_country = ROOT
+					nhs_condition_all_ely = { KOMANDA = tag }
 				}
-				country_event = { id = institution_events.300 }
+				country_event = { id = to_colonialism_events.4 }
 			}
 			every_country = {
 				limit = {
-					ai = no
 					NOT = { tag = ROOT }
-					NOT = { knows_country = ROOT }
+					NOT = { nhs_condition_all_ely = { KOMANDA = tag } }
+					ai = no
+					NOT = {
+						AND = {
+							technology_group = western
+							OR = {
+								tag = GBR
+								tag = NED
+								tag = ENG
+								tag = FRA
+								tag = CAS
+								tag = SPA
+								tag = POR
+								capital_scope = {
+									OR = {
+										region = france_region
+										region = iberia_region
+										region = british_isles_region
+										region = low_countries_region
+									}
+								}
+							}
+							any_owned_province = {
+								has_port = yes
+								continent = europe
+								sea_zone = {
+									region = north_atlantic_region
+								}
+							}
+						}
+					}
 				}
-				country_event = { id = institution_events.301 }
+				if = {
+					limit = {
+						knows_country = ROOT
+					}
+					country_event = { id = institution_events.300 }
+				}
+				else = {
+					country_event = { id = institution_events.301 }
+				}
 			}
 		}
 	}
@@ -416,6 +544,12 @@ country_event = {
 
 	option = {
 		name = institution_events.3.a
+		if = {
+			limit = {
+				technology_group = western
+			}
+			custom_tooltip = to_colonialism_spread_europe_tt
+		}
 		custom_tooltip = institution_events.3.a.tt
 	}
 }

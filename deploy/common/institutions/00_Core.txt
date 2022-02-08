@@ -149,16 +149,18 @@ feudalism = {
 				owner = {
 					has_country_modifier = nhs2_elysian_free_trade
 				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
 			}
 			custom_trigger_tooltip = {
 				tooltip = NHS_FREE_TRADE
-				has_province_modifier = nhs2_small_por_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					feudalism = 100
 				}
 			}
@@ -225,11 +227,7 @@ feudalism = {
 				tooltip = EUROPEAN_ENCLAVE
 				has_province_modifier = nhs2_european_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					feudalism = 100
 				}
 			}
@@ -632,16 +630,18 @@ renaissance = {
 				owner = {
 					has_country_modifier = nhs2_elysian_free_trade
 				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
 			}
 			custom_trigger_tooltip = {
 				tooltip = NHS_FREE_TRADE
-				has_province_modifier = nhs2_small_por_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					renaissance = 100
 				}
 			}
@@ -708,11 +708,7 @@ renaissance = {
 				tooltip = EUROPEAN_ENCLAVE
 				has_province_modifier = nhs2_european_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					renaissance = 100
 				}
 			}
@@ -1029,29 +1025,124 @@ new_world_i = {
 	}
 
 	can_start = {
-		OR = {
-			custom_trigger_tooltip = {
-				tooltip = nhs_has_nhs_europe_discovered
-				has_global_flag = nhs_europe_discovered
+		if = {
+			limit = {
+				owner = {
+					tag = POR
+					has_country_flag = nhs_portugese_secret
+					# has_country_modifier = nhs2_por_ely_trade
+				}
 			}
-			is_year = 1535
+			is_year = 1500
+			if = {
+				limit = {
+					owner = {
+						capital_scope = {
+							has_port = yes
+						}
+					}
+				}
+				is_capital = yes
+			}
+			else_if = {
+				limit = {
+					owner = {
+						any_owned_province = {
+							province_has_center_of_trade_of_level = 1
+							has_port = yes
+						}
+					}
+				}
+				has_port = yes
+				province_has_center_of_trade_of_level = 1		
+			}
+			else_if = {
+				limit = {
+					owner = {
+						any_owned_province = {
+							has_port = yes
+						}
+					}
+				}
+				has_port = yes
+			}
+			else = {
+				has_port = yes
+			}
 		}
-		continent = europe
-		has_port = yes
-		is_island = no
-		is_state = yes
-		is_in_capital_area = yes
-		OR = {
-			province_has_center_of_trade_of_level = 1
-			development = 12
-			is_capital = yes
-		}
-		owner = {
-			has_idea = quest_for_the_new_world
-			capital_scope = { continent = europe }
+		else = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = nhs_has_nhs_europe_discovered
+					has_global_flag = nhs_europe_discovered
+				}
+				is_year = 1535
+			}
+			continent = europe
+			OR = {
+				province_has_center_of_trade_of_level = 1
+				development = 12
+				is_capital = yes
+			}
+			has_port = yes
+			is_island = no
+			is_state = yes
+			is_in_capital_area = yes
+			sea_zone = {
+				region = north_atlantic_region
+			}
+			owner = {
+				capital_scope = { continent = europe }
+				num_of_cities = 8
+				num_of_owned_provinces_with = {
+					value = 3
+					has_port = yes
+					continent = europe
+					sea_zone = {
+						region = north_atlantic_region
+					}
+				}
+			}
+
+			# owner = {
+			# 	has_idea = quest_for_the_new_world 
+			# 	capital_scope = { continent = europe }
+			# }
+			# owner = {
+			# 	has_idea = quest_for_the_new_world 
+			# 	capital_scope = { continent = europe }
+			# 	#at least one province colonised or colonising, or have a subject colony
+			# 	OR = {
+			# 		any_owned_province = {
+			# 			OR = {
+			# 				continent = north_america
+			# 				continent = south_america
+			# 			}
+			# 		}
+			# 		any_subject_country = {
+			# 			OR = {
+			# 				is_subject_of_type = colony
+			# 				is_subject_of_type = crown_colony
+			# 				is_subject_of_type = private_enterprise
+			# 				is_subject_of_type = self_governing_colony
+			# 			}
+			# 			capital_scope = {
+			# 				OR = {
+			# 					continent = north_america
+			# 					continent = south_america
+			# 				}
+			# 			}
+			# 		}
+			# 	}
+			# 	OR = {
+			# 		north_america = { has_discovered = PREV }
+			# 		south_america = { has_discovered = PREV }
+			# 		new_world = { has_discovered = PREV }
+			# 	}
+			# }
 		}
 	}
-	start_chance = 5		#in 100 for when a province can_start
+	start_chance = 33		#in 100 for when a province can_start
 	
 	
 	on_start = institution_events.3
@@ -1076,16 +1167,18 @@ new_world_i = {
 				owner = {
 					has_country_modifier = nhs2_elysian_free_trade
 				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
 			}
 			custom_trigger_tooltip = {
 				tooltip = NHS_FREE_TRADE
-				has_province_modifier = nhs2_small_por_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					new_world_i = 100
 				}
 			}
@@ -1152,11 +1245,7 @@ new_world_i = {
 				tooltip = EUROPEAN_ENCLAVE
 				has_province_modifier = nhs2_european_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					new_world_i = 100
 				}
 			}
@@ -1267,6 +1356,54 @@ new_world_i = {
 				}
 			}
 		}
+		
+		# Atlantic port of a nation with quest for the new world
+		modifier = {
+			factor = 2
+			scale = yes
+			potential = {
+				has_port = yes
+				continent = europe
+				owner = {
+					technology_group = western
+				}
+				sea_zone = {
+					region = north_atlantic_region
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_colonialism_spread_atlantic_ports_tt
+				owner = {
+					has_idea = quest_for_the_new_world
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1
+			scale = yes
+			potential = {
+				is_capital = yes
+				continent = europe
+				owner = {
+					technology_group = western
+					any_owned_province = {
+						has_port = yes
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_colonialism_spread_capital_tt
+				owner = {
+					has_idea = quest_for_the_new_world
+				}
+			}
+		}
+
 		modifier = {
 			factor = 30
 			potential = {
@@ -1520,16 +1657,18 @@ printing_press = {
 				owner = {
 					has_country_modifier = nhs2_elysian_free_trade
 				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
 			}
 			custom_trigger_tooltip = {
 				tooltip = NHS_FREE_TRADE
-				has_province_modifier = nhs2_small_por_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					printing_press = 100
 				}
 			}
@@ -1596,11 +1735,7 @@ printing_press = {
 				tooltip = EUROPEAN_ENCLAVE
 				has_province_modifier = nhs2_european_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					printing_press = 100
 				}
 			}
@@ -1958,16 +2093,18 @@ global_trade = {
 				owner = {
 					has_country_modifier = nhs2_elysian_free_trade
 				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
 			}
 			custom_trigger_tooltip = {
 				tooltip = NHS_FREE_TRADE
-				has_province_modifier = nhs2_small_por_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					global_trade = 100
 				}
 			}
@@ -2034,11 +2171,7 @@ global_trade = {
 				tooltip = EUROPEAN_ENCLAVE
 				has_province_modifier = nhs2_european_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					global_trade = 100
 				}
 			}
@@ -2361,16 +2494,18 @@ manufactories = {
 				owner = {
 					has_country_modifier = nhs2_elysian_free_trade
 				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
 			}
 			custom_trigger_tooltip = {
 				tooltip = NHS_FREE_TRADE
-				has_province_modifier = nhs2_small_por_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					manufactories = 100
 				}
 			}
@@ -2437,11 +2572,7 @@ manufactories = {
 				tooltip = EUROPEAN_ENCLAVE
 				has_province_modifier = nhs2_european_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					manufactories = 100
 				}
 			}
@@ -2944,16 +3075,18 @@ enlightenment = {
 				owner = {
 					has_country_modifier = nhs2_elysian_free_trade
 				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
 			}
 			custom_trigger_tooltip = {
 				tooltip = NHS_FREE_TRADE
-				has_province_modifier = nhs2_small_por_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					enlightenment = 100
 				}
 			}
@@ -3020,11 +3153,7 @@ enlightenment = {
 				tooltip = EUROPEAN_ENCLAVE
 				has_province_modifier = nhs2_european_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					enlightenment = 100
 				}
 			}
@@ -4047,16 +4176,18 @@ industrialization = {
 				owner = {
 					has_country_modifier = nhs2_elysian_free_trade
 				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
 			}
 			custom_trigger_tooltip = {
 				tooltip = NHS_FREE_TRADE
-				has_province_modifier = nhs2_small_por_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					industrialization = 100
 				}
 			}
@@ -4123,11 +4254,7 @@ industrialization = {
 				tooltip = EUROPEAN_ENCLAVE
 				has_province_modifier = nhs2_european_enclave
 				any_province = {
-					continent = europe
-					owner = {
-						technology_group = western
-					}
-					has_port = yes
+					to_european_trading_port = yes
 					industrialization = 100
 				}
 			}

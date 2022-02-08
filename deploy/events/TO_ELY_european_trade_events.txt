@@ -71,11 +71,21 @@ country_event = {
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
 		NOT = { has_country_modifier = nhs2_ely_por_trade }
+		had_global_flag = { flag = nhs_europe_discovered days = 1825 }
+		NOT = { has_country_modifier = nhs2_elysian_restricted_trade }
+		NOT = { has_country_modifier = nhs2_elysian_free_trade }
+		NOT = { has_country_modifier = nhs2_elysian_isolationism }
+		# OR = {
+		# 	NOT = { has_country_modifier = nhs2_elysian_isolationism }
+		# 	AND = {
+		# 		has_country_modifier = nhs2_elysian_isolationism
+		# 		NOT = { has_global_flag = nhs_no_more_deals }
+		# 	}
+		# }
 		any_country = {
 			technology_group = western
 			exists = yes
 		}
-		had_global_flag = { flag = nhs_europe_discovered days = 1825 }
 		any_owned_province = {
 			has_port = yes
 			OR = {
@@ -87,16 +97,6 @@ country_event = {
 						province_group = nhs_provinces_around_lakes
 					}
 				}
-			}
-		}
-		NOT = { has_country_modifier = nhs2_elysian_restricted_trade }
-		NOT = { has_country_modifier = nhs2_elysian_free_trade }
-		NOT = { has_country_modifier = nhs2_ely_por_trade }
-		OR = {
-			NOT = { has_country_modifier = nhs2_elysian_isolationism }
-			AND = {
-				has_country_modifier = nhs2_elysian_isolationism
-				NOT = { has_global_flag = nhs_no_more_deals }
 			}
 		}
 	}
@@ -111,6 +111,7 @@ country_event = {
 			}
 		}
 		custom_tooltip = nhs_institution_spread_enclave_eu_tt
+		custom_tooltip = nhs_new_line_tt
 		set_country_flag = nhs_has_eu_enclave
 		add_mercantilism = 5
 		add_country_modifier = {
@@ -206,6 +207,7 @@ country_event = {
 			}
 		}
 		custom_tooltip = nhs_institution_spread_enclave_free_tt
+		custom_tooltip = nhs_new_line_tt
 		add_mercantilism = -50
 		add_country_modifier = {
 			name = nhs2_elysian_free_trade
@@ -376,8 +378,8 @@ country_event = {
 		ai_chance = {
 			factor = 0
 		}
-		remove_country_modifier = nhs2_elysian_restricted_trade
 		add_mercantilism = 50
+		remove_country_modifier = nhs2_elysian_restricted_trade
 		add_country_modifier = {
 			name = nhs2_elysian_isolationism
 			duration = -1
@@ -406,12 +408,10 @@ country_event = {
 	fire_only_once = yes
 
 	trigger = {
-		tag = POR
-		nhs_condition_all_ely = { KOMANDA = exists }
+		# tag = POR
 		has_country_flag = nhs_portugese_secret
-		OR = {
-			is_year = 1485
-		}
+		nhs_condition_all_ely = { KOMANDA = exists }
+		is_year = 1485
 		any_province = {
 			nhs_condition_all_ely = { KOMANDA = owned_by }
 			has_port = yes
@@ -464,7 +464,10 @@ country_event = {
 	}
 	
 	immediate = {
-		nhs_make_event_target_elysia = yes
+		hidden_effect = {
+			nhs_make_event_target_elysia = yes
+			save_global_event_target_as = to_nhs_elysian_trading_partner
+		}
 	}
 
 	option = {
@@ -501,8 +504,12 @@ country_event = {
 	
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
-		exists = POR
+		#exists = POR
 		had_global_flag = { flag = nhs_portugal_discovers_ely days = 25 }
+		any_country = {
+			exists = yes
+			has_country_flag = nhs_portugese_secret
+		}
 		any_owned_province = {
 			has_port = yes
 			OR = {
@@ -510,7 +517,7 @@ country_event = {
 				region = southeast_america_region
 				AND = {
 					region = canada_region
-					NOT = { 
+					NOT = {
 						province_group = nhs_provinces_around_lakes
 					}
 				}
@@ -518,8 +525,19 @@ country_event = {
 		}
 	}
 
+	immediate = {
+		hidden_effect = {
+			random_country = {
+				limit = {
+					has_country_flag = nhs_portugese_secret
+				}
+				save_event_target_as = nhs_portugal_tar
+			}
+		}
+	}
+
 	option = {
-		name = "nhs2_european_trade_events.5.a" #Establish a Portuguese conclave, keeping them isolated from our people
+		name = "nhs2_european_trade_events.5.a" #Establish a Portuguese enclave, keeping them isolated from our people
 		ai_chance = {
 			factor = 70
 			modifier = {
@@ -536,6 +554,7 @@ country_event = {
 			}
 		}
 		custom_tooltip = nhs_institution_spread_enclave_tt
+		custom_tooltip = nhs_new_line_tt
 		set_country_flag = nhs_has_small_por_enclave
 		add_country_modifier = {
 			name = nhs2_ely_por_trade
@@ -543,26 +562,27 @@ country_event = {
 		}
 		nhs_reduce_skoros_silk_price = yes
 		tooltip = {
-			POR = {
+			event_target:nhs_portugal_tar = {
 				add_country_modifier = {
 					name = nhs2_por_ely_trade
 					duration = -1
 				}
 			}
 		}
-		POR = {
+		event_target:nhs_portugal_tar = {
 			add_opinion = {
 				who = ROOT
 				modifier = nhs_por_trade_deal
 			}
 		}
 		add_opinion = {
-			who = POR
+			who = event_target:nhs_portugal_tar
 			modifier = nhs_por_trade_deal
 		}
 		tooltip = {
-			POR = { add_trust = { who = ROOT value = 50 } }
+			event_target:nhs_portugal_tar = { add_trust = { who = ROOT value = 50 } }
 		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {
 				any_owned_province = {
@@ -587,19 +607,13 @@ country_event = {
 			limit = {
 				any_owned_province = {
 					nhs_eligible_for_enclave = yes
-					OR = {
-						culture_group = elysian_group
-						culture = elysian
-					}
+					culture_group = ROOT
 				}
 			}
 			random_owned_province = {
 				limit = {
 					nhs_eligible_for_enclave = yes
-					OR = {
-						culture_group = elysian_group
-						culture = elysian
-					}
+					culture_group = ROOT
 				}
 				if = {
 					limit = {
@@ -641,13 +655,13 @@ country_event = {
 		hidden_effect = {
 			random_province = {
 				limit = {
-					owned_by = POR
+					owned_by = event_target:nhs_portugal_tar
 					is_capital = yes
 				}
-				discover_country = ROOT
+				discover_country = event_target:nhs_portugal_tar
 			}
 		}
-		POR = { country_event = { id = nhs2_european_trade_events.6 } }
+		event_target:nhs_portugal_tar = { country_event = { id = nhs2_european_trade_events.6 } }
 	}
 	option = {
 		name = "nhs2_european_trade_events.5.b"
@@ -662,41 +676,67 @@ country_event = {
 				ruler_has_personality = zealot_personality
 			}
 		}
-		set_global_flag = nhs_broke_deals_with_por
+		# set_global_flag = nhs_broke_deals_with_por
 		add_prestige = 20
-		POR = {
+		add_mercantilism = 5
+		event_target:nhs_portugal_tar = {
 			add_opinion = {
 				who = ROOT
 				modifier = nhs_refused_trade_deal
-			}
+			}	
 		}
-		add_mercantilism = 5
-		add_country_modifier = {
-			name = nhs2_elysian_isolationism
-			duration = -1
+		custom_tooltip = nhs_new_line_tt
+		event_target:nhs_portugal_tar = {
+			country_event = { id = nhs2_european_trade_events.7 }
 		}
-		tooltip = {
-			POR = { add_trust = { who = ROOT value = -20 } }
-		}
-		POR = { country_event = { id = nhs2_european_trade_events.7 } }
 	}
 	option = {
 		name = "nhs2_european_trade_events.5.c"
 		ai_chance = {
-			factor = 10
+			factor = 5
 			modifier = {
 				factor = 0
 				ruler_has_personality = entrepreneur_personality
 			}
+			modifier = {
+				factor = 2
+				ruler_has_personality = malevolent_personality
+			}
 		}
-		set_global_flag = nhs_broke_deals_with_por
+		# set_global_flag = nhs_broke_deals_with_por
 		add_prestige = -10
-		POR = {
+		add_mercantilism = 5
+		if = {
+			limit = {
+				event_target:nhs_portugal_tar = {
+					num_of_explorers = 1
+				}
+			}
+			kill_leader = {
+				type = explorer
+			}
+		}
+		else_if = {
+			limit = {
+				event_target:nhs_portugal_tar = {
+					num_of_admirals = 1
+				}
+			}
+			kill_leader = {
+				type = admiral
+			}
+		}
+		event_target:nhs_portugal_tar = {
 			add_opinion = {
 				who = ROOT
 				modifier = nhs_you_done_f_up
 			}
 		}
+		# custom_tooltip = to_por_retaliation_claims_on_east_coast
+		tooltip = {
+			event_target:nhs_portugal_tar = { add_trust = { who = ROOT value = -100 } }
+		}
+		custom_tooltip = nhs_new_line_tt
 		tooltip = {
 			every_owned_province = {
 				limit = {
@@ -706,19 +746,11 @@ country_event = {
 						region = southeast_america_region
 					}
 				}
-				add_claim = POR
+				add_permanent_claim = event_target:nhs_portugal_tar
 			}
 		}
-		add_mercantilism = 5
-		add_country_modifier = {
-			name = nhs2_elysian_isolationism
-			duration = -1
-		}
-		set_country_flag = nhs_
-		tooltip = {
-			POR = { add_trust = { who = ROOT value = -100 } }
-		}
-		POR = { country_event = { id = nhs2_european_trade_events.8 } }
+		custom_tooltip = nhs_new_line_tt
+		event_target:nhs_portugal_tar = { country_event = { id = nhs2_european_trade_events.8 } }
 	}
 }
 
@@ -740,10 +772,14 @@ country_event = {
 		}
 		tooltip = {
 			FROM = {
-				add_opinion = {
-					who = ROOT
-					modifier = nhs_por_trade_deal
+				add_country_modifier = {
+					name = nhs2_ely_por_trade
+					duration = -1
 				}
+			}
+			reverse_add_opinion = {
+				who = FROM
+				modifier = nhs_por_trade_deal
 			}
 			add_opinion = {
 				who = FROM
@@ -790,7 +826,6 @@ country_event = {
 				modifier = nhs_refused_trade_deal
 			}
 		}
-		add_trust = { who = FROM value = -20 }
 		hidden_effect = {
 			if = {
 				limit = {
@@ -840,7 +875,7 @@ country_event = {
 				}
 				owned_by = FROM
 			}
-			add_claim = ROOT
+			add_permanent_claim = ROOT
 		}
 		hidden_effect = {
 			if = {
@@ -868,22 +903,37 @@ country_event = {
 	id = nhs2_european_trade_events.9
 	title = nhs2_european_trade_events.9.t
 	desc = nhs2_european_trade_events.9.d
-	picture = ELYEXPLORER_eventPicture
+	picture = nhs_DIPLOMAT_INTERROGATION_eventPicture
 	
 	fire_only_once = yes
 
 	trigger = {
-		exists = POR
+		is_year = 1492
 		has_country_modifier = nhs2_ely_por_trade
+		nhs_condition_all_ely = { KOMANDA = tag }
+		had_global_flag = { flag = nhs_portugal_discovers_ely days = 3650 }
+		any_country = {
+			exists = yes
+			has_country_flag = nhs_portugese_secret
+			has_country_modifier = nhs2_por_ely_trade
+		}
 		any_owned_province = {
 			OR = {
 				has_province_modifier = nhs2_small_por_enclave
 				has_province_modifier = nhs2_large_por_enclave
 			}
 		}
-		nhs_condition_all_ely = { KOMANDA = tag }
-		had_global_flag = { flag = nhs_portugal_discovers_ely days = 3650 }
-		is_year = 1492
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_country = {
+				limit = {
+					has_country_flag = nhs_portugese_secret
+				}
+				save_event_target_as = nhs_portugal_tar
+			}
+		}
 	}
 
 	option = {
@@ -907,95 +957,27 @@ country_event = {
 				ruler_has_personality = navigator_personality
 			}
 		}
-		custom_tooltip = nhs_institution_spread_enclave_increased_tt
+		custom_tooltip = nhs_treaty_of_lanthanopolis_tt
 		tooltip = {
-			if = {
-				limit = {
-					any_owned_province = {
-						has_province_modifier = nhs2_small_por_enclave
-					}
-				}
-				random_owned_province = {
-					limit = {
-						has_province_modifier = nhs2_small_por_enclave
-					}
-					remove_province_modifier = nhs2_small_por_enclave
-					add_province_modifier = {
-						name = nhs2_por_enclave
-						duration = -1
-					}
-				}
-			}
-			POR = {
+			event_target:nhs_portugal_tar = {
 				add_country_modifier = {
 					name = nhs2_treaty_of_lantanopolis_por
 					duration = -1
 				}
 			}
-			if = {
-				limit = {
-					any_province = {
-						region = brazil_region
-						owner = {
-							OR = {
-								nhs_condition_all_ely = { KOMANDA = tag }
-								AND = {
-									is_colonial_nation = yes
-									colonial_parent = {
-										nhs_condition_all_ely = { KOMANDA = tag }
-									}
-								}
-							}
-						}
-					}
-				}
-				every_province = {
-					limit = {
-						region = brazil_region
-						owner = {
-							OR = {
-								nhs_condition_all_ely = { KOMANDA = tag }
-								AND = {
-									is_colonial_nation = yes
-									colonial_parent = {
-										nhs_condition_all_ely = { KOMANDA = tag }
-									}
-								}
-							}
-						}
-					}
-					cede_province = POR
-					hidden_effect = {
-						add_core = POR
-						every_country = {
-							limit = {
-								OR = {
-									nhs_condition_all_ely = { KOMANDA = tag }
-									AND = {
-										is_colonial_nation = yes
-										colonial_parent = {
-											nhs_condition_all_ely = { KOMANDA = tag }
-										}
-									}
-								}
-							}
-							remove_core = PREV
-						}
-					}
-				}
-			}
+			nhs_cede_elysian_brazilian_settlements = { RECIPIENT = event_target:nhs_portugal_tar }
 		}
 		if = {
 			limit = {
 				any_province = {
 					continent = north_america
 					OR = {
-						owned_by = POR
+						owned_by = event_target:nhs_portugal_tar
 						owner = {
 							AND = {
 								is_colonial_nation = yes
 								colonial_parent = {
-									tag = POR
+									tag = event_target:nhs_portugal_tar
 								}
 							}
 						}
@@ -1004,23 +986,14 @@ country_event = {
 			}
 			custom_tooltip = nhs_fate_of_p_settlements_tt #Current Portugese settlements will be relocated to SA
 		}
-		POR = { country_event = { id = nhs2_european_trade_events.10 } }
-		hidden_effect = {
-			POR = {
-				discover_province = 1470
-				discover_province = 1469
-				discover_province = 1484
-				discover_province = 1530
-				discover_province = 1529
-				discover_province = 1528
-				discover_province = 747
-				discover_province = 2890
-				discover_province = 748
-				discover_province = 2927
-				discover_province = 2886
-				discover_province = 751
-				discover_province = 753	
+		event_target:nhs_portugal_tar = { country_event = { id = nhs2_european_trade_events.10 } }
+		if = {
+			limit = {
+				has_country_flag = nhs_has_small_por_enclave
 			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_dotted_line_tt
+			nhs_improve_portuguese_enclave_from_small = yes
 		}
 	}
 	option = {
@@ -1044,72 +1017,63 @@ country_event = {
 				ruler_has_personality = naive_personality
 			}
 		}
-		POR = {
+		event_target:nhs_portugal_tar = {
 			add_opinion = {
 				who = ROOT
 				modifier = nhs_unchecked_expansion
 			}
 		}
-		POR = { add_trust = { who = ROOT value = 50 } }
-		hidden_effect = {
-			POR = {
-				discover_province = 1470
-				discover_province = 1469
-				discover_province = 1484
-				discover_province = 1530
-				discover_province = 1529
-				discover_province = 1528
-				discover_province = 747
-				discover_province = 2890
-				discover_province = 748
-				discover_province = 2927
-				discover_province = 2886
-				discover_province = 751
-				discover_province = 753	
+		event_target:nhs_portugal_tar = { add_trust = { who = ROOT value = 50 } }
+		if = {
+			limit = {
+				has_country_flag = nhs_has_small_por_enclave
 			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_dotted_line_tt
+			nhs_improve_portuguese_enclave_from_small = yes
 		}
 	}
-	option = {
-		name = "nhs2_european_trade_events.9.c"
-		ai_chance = {
-			factor = 20
-			modifier = {
-				factor = 2
-				ruler_has_personality = malevolent_personality
-			}
-			modifier = {
-				factor = 2
-				ruler_has_personality = babbling_buffoon_personality
-			}
-			modifier = {
-				factor = 0
-				ruler_has_personality = just_personality
-			}
-			modifier = {
-				factor = 0
-				ruler_has_personality = righteous_personality
-			}
-		}
-		custom_tooltip = nhs_attract_eu_merchants_tt
-		nhs_break_por_deal = yes
-		hidden_effect = {
-			POR = {
-				discover_province = 1470
-				discover_province = 1469
-				discover_province = 1484
-				discover_province = 1530
-				discover_province = 1529
-				discover_province = 1528
-				discover_province = 747
-				discover_province = 2890
-				discover_province = 748
-				discover_province = 2927
-				discover_province = 2886
-				discover_province = 751
-				discover_province = 753	
-			}
-		}
-	}
+	# option = {
+	# 	name = "nhs2_european_trade_events.9.c"
+	# 	ai_chance = {
+	# 		factor = 20
+	# 		modifier = {
+	# 			factor = 2
+	# 			ruler_has_personality = malevolent_personality
+	# 		}
+	# 		modifier = {
+	# 			factor = 2
+	# 			ruler_has_personality = babbling_buffoon_personality
+	# 		}
+	# 		modifier = {
+	# 			factor = 0
+	# 			ruler_has_personality = just_personality
+	# 		}
+	# 		modifier = {
+	# 			factor = 0
+	# 			ruler_has_personality = righteous_personality
+	# 		}
+	# 	}
+	# 	custom_tooltip = nhs_attract_eu_merchants_tt
+	# 	nhs_break_por_deal = yes
+	# 	# hidden_effect = {
+	# 	# 	event_target:nhs_portugal_tar = {
+	# 	# 		discover_province = 1470
+	# 	# 		discover_province = 1469
+	# 	# 		discover_province = 1484
+	# 	# 		discover_province = 1530
+	# 	# 		discover_province = 1529
+	# 	# 		discover_province = 1528
+	# 	# 		discover_province = 747
+	# 	# 		discover_province = 2890
+	# 	# 		discover_province = 748
+	# 	# 		discover_province = 2927
+	# 	# 		discover_province = 2886
+	# 	# 		discover_province = 751
+	# 	# 		discover_province = 753	
+	# 	# 	}
+	# 	# }
+	# }
 }
 
 # Colonial Capital
@@ -1122,8 +1086,295 @@ country_event = {
 	fire_only_once = yes
 	is_triggered_only = yes
 
+	immediate = {
+		hidden_effect = {
+			# Search for alternate province
+			discover_province = 1470
+			discover_province = 1469
+			discover_province = 1096
+			discover_province = 1584
+			every_province = {
+				limit = {
+					has_port = yes
+					OR = {
+						area = amapa_area
+						area = grao_para_area
+						area = maranhao_area
+						area = piaui_area
+						area = ceara_area
+					}
+				}
+				discover_country = ROOT
+				sea_zone = {
+					discover_country = ROOT
+				}
+			}
+
+			random_province = {
+				limit = {
+					OR = {
+						area = amapa_area
+						area = grao_para_area
+						area = maranhao_area
+						area = piaui_area
+						area = ceara_area
+					}
+					owner = {
+						OR = {
+							tag = ROOT
+							AND = {
+								is_colonial_nation = yes
+								colonial_parent = {
+									nhs_condition_all_ely = { KOMANDA = tag }
+								}
+							}
+						}
+					}
+					any_empty_neighbor_province = {
+						has_port = yes
+					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						has_port = yes
+					}
+					save_event_target_as = colonial_capital_alternate_target
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = colonial_capital_alternate_target }
+				}
+				random_province = {
+					limit = {
+						OR = {
+							area = amapa_area
+							area = grao_para_area
+							area = maranhao_area
+							area = piaui_area
+							area = ceara_area
+						}
+						has_port = yes
+						is_empty = yes
+					}
+					save_event_target_as = colonial_capital_alternate_target
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = colonial_capital_alternate_target }
+				}
+				random_province = {
+					limit = {
+						region = brazil_region
+						owner = {
+							OR = {
+								tag = ROOT
+								AND = {
+									is_colonial_nation = yes
+									colonial_parent = {
+										nhs_condition_all_ely = { KOMANDA = tag }
+									}
+								}
+							}
+						}
+						any_empty_neighbor_province = {
+							has_port = yes
+						}
+					}
+					random_empty_neighbor_province = {
+						limit = {
+							has_port = yes
+						}
+						save_event_target_as = colonial_capital_alternate_target
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = colonial_capital_alternate_target }
+				}
+				random_province = {
+					limit = {
+						region = brazil_region
+						owner = {
+							OR = {
+								tag = ROOT
+								AND = {
+									is_colonial_nation = yes
+									colonial_parent = {
+										nhs_condition_all_ely = { KOMANDA = tag }
+									}
+								}
+							}
+						}
+						has_empty_adjacent_province = yes
+					}
+					random_empty_neighbor_province = {
+						save_event_target_as = colonial_capital_alternate_target
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = colonial_capital_alternate_target }
+				}
+				random_province = {
+					limit = {
+						region = brazil_region
+						is_empty = yes
+						has_port = yes
+					}
+					save_event_target_as = colonial_capital_alternate_target
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = colonial_capital_alternate_target }
+				}
+				random_province = {
+					limit = {
+						continent = south_america
+						region = colombia_region
+						sea_zone = {
+							region = caribbean_sea_region
+						}
+						owner = {
+							OR = {
+								tag = ROOT
+								AND = {
+									is_colonial_nation = yes
+									colonial_parent = {
+										nhs_condition_all_ely = { KOMANDA = tag }
+									}
+								}
+							}
+						}
+						any_empty_neighbor_province = {
+							has_port = yes
+						}
+					}
+					random_empty_neighbor_province = {
+						limit = {
+							has_port = yes
+						}
+						save_event_target_as = colonial_capital_alternate_target
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = colonial_capital_alternate_target }
+				}
+				random_province = {
+					limit = {
+						continent = south_america
+						region = colombia_region
+						sea_zone = {
+							region = caribbean_sea_region
+						}
+						owner = {
+							OR = {
+								tag = ROOT
+								AND = {
+									is_colonial_nation = yes
+									colonial_parent = {
+										nhs_condition_all_ely = { KOMANDA = tag }
+									}
+								}
+							}
+						}
+						has_empty_adjacent_province = yes
+					}
+					random_empty_neighbor_province = {
+						save_event_target_as = colonial_capital_alternate_target
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = colonial_capital_alternate_target }
+				}
+				random_province = {
+					limit = {
+						continent = south_america
+						region = colombia_region
+						sea_zone = {
+							region = caribbean_sea_region
+						}
+						is_empty = yes
+						has_port = yes
+					}
+					save_event_target_as = colonial_capital_alternate_target
+				}
+			}
+
+			if = {
+				limit = {
+					has_saved_event_target = colonial_capital_alternate_target
+					event_target:colonial_capital_alternate_target = {
+						OR = {
+							region = brazil_region
+							region = colombia_region
+						}
+					}
+				}
+				every_province = {
+					limit = {
+						region = brazil_region
+						has_port = yes
+					}
+					discover_country = ROOT
+					sea_zone = {
+						discover_country = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_saved_event_target = colonial_capital_alternate_target
+					event_target:colonial_capital_alternate_target = {
+						region = colombia_region
+						NOT = {
+							any_neighbor_province = {
+								region = brazil_region
+								has_port = yes
+							}
+						}
+					}
+				}
+				every_province = {
+					limit = {
+						region = colombia_region
+						continent = south_america
+						has_port = yes
+						sea_zone = {
+							region = caribbean_sea_region
+						}
+					}
+					discover_country = ROOT
+					sea_zone = {
+						discover_country = ROOT
+					}
+				}
+			}
+		}
+	}
+
 	option = {
 		name = "nhs2_european_trade_events.10.a"
+		goto = 747
+		trigger = {
+			747 = {
+				is_empty = yes
+				# OR = {
+				# 	is_empty = yes
+				# 	owner = {
+				# 		technology_group = south_american
+				# 	}
+				# }
+			}
+		}
 		ai_chance = {
 			factor = 33
 			modifier = {
@@ -1133,148 +1384,26 @@ country_event = {
 				}
 			}
 		}
+		
+		nhs_set_por_colonial_capital = { TARGET_PROVINCE = 747 }
 		hidden_effect = {
-			FROM = {
-				clr_country_flag = nhs_has_small_por_enclave
-				set_country_flag = nhs_has_por_enclave
-				if = {
-					limit = {
-						any_owned_province = {
-							has_province_modifier = nhs2_small_por_enclave
-						}
-					}
-					random_owned_province = {
-						limit = {
-							has_province_modifier = nhs2_small_por_enclave
-						}
-						remove_province_modifier = nhs2_small_por_enclave
-						add_province_modifier = {
-							name = nhs2_por_enclave
-							duration = -1
-						}
-					}
-				}
-				hidden_effect = {
-					discover_province = 1530
-					discover_province = 1529
-					discover_province = 1528
-					discover_province = 747
-					discover_province = 2890
-					discover_province = 748
-					discover_province = 2927
-					discover_province = 2886
-					discover_province = 751
-					discover_province = 753	
-				}
-			}
-			
-		}
-		set_global_flag = nhs_treaty_of_lantanopolis
-		add_country_modifier = {
-			name = nhs2_treaty_of_lantanopolis_por
-			duration = -1
-		}
-		if = {
-			limit = {
-				747 = {
-					is_empty = yes
-				}
-			}
-			747 = {
-				tooltip = {
-					create_colony = 1000
-				}
-				hidden_effect = { 
-					cede_province = ROOT 
-				}
-				change_culture = ROOT
-				change_religion = ROOT
-			}
-		}
-		else = {
-			747 = {
-				cede_province = ROOT
-				change_culture = ROOT
-				change_religion = ROOT
-			}
-		}
-		if = {
-			limit = {
-				any_province = {
-					region = brazil_region
-					owner = {
-						OR = {
-							nhs_condition_all_ely = { KOMANDA = tag }
-							AND = {
-								is_colonial_nation = yes
-								colonial_parent = {
-									nhs_condition_all_ely = { KOMANDA = tag }
-								}
-							}
-						}
-					}
-				}
-			}
-			every_province = {
-				limit = {
-					region = brazil_region
-					owner = {
-						OR = {
-							nhs_condition_all_ely = { KOMANDA = tag }
-							AND = {
-								is_colonial_nation = yes
-								colonial_parent = {
-									nhs_condition_all_ely = { KOMANDA = tag }
-								}
-							}
-						}
-					}
-				}
-				cede_province = POR
-				hidden_effect = {
-					add_core = POR
-					every_country = {
-						limit = {
-							OR = {
-								nhs_condition_all_ely = { KOMANDA = tag }
-								AND = {
-									is_colonial_nation = yes
-									colonial_parent = {
-										nhs_condition_all_ely = { KOMANDA = tag }
-									}
-								}
-							}
-						}
-						remove_core = PREV
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				any_province = {
-					continent = north_america
-					OR = {
-						owned_by = POR
-						owner = {
-							AND = {
-								is_colonial_nation = yes
-								colonial_parent = {
-									tag = POR
-								}
-							}
-						}
-					}
-				}
-			}
-			custom_tooltip = nhs_fate_of_o_settlements_tt #Our current settlements will be relocated to SA
-			hidden_effect = {
-				nhs_move_por_settlements = yes
-			}
+			nhs_discover_treaty_provinces_ely = yes
 		}
 	}
 	option = {
 		name = "nhs2_european_trade_events.10.b"
+		goto = 748
+		trigger = {
+			748 = {
+				is_empty = yes
+				# OR = {
+				# 	is_empty = yes
+				# 	owner = {
+				# 		technology_group = south_american
+				# 	}
+				# }
+			}
+		}
 		ai_chance = {
 			factor = 33
 			modifier = {
@@ -1284,147 +1413,26 @@ country_event = {
 				}
 			}
 		}
+		
+		nhs_set_por_colonial_capital = { TARGET_PROVINCE = 748 }
 		hidden_effect = {
-			FROM = {
-				clr_country_flag = nhs_has_small_por_enclave
-				set_country_flag = nhs_has_por_enclave
-				if = {
-					limit = {
-						any_owned_province = {
-							has_province_modifier = nhs2_small_por_enclave
-						}
-					}
-					random_owned_province = {
-						limit = {
-							has_province_modifier = nhs2_small_por_enclave
-						}
-						remove_province_modifier = nhs2_small_por_enclave
-						add_province_modifier = {
-							name = nhs2_por_enclave
-							duration = -1
-						}
-					}
-				}
-				hidden_effect = {
-					discover_province = 1530
-					discover_province = 1529
-					discover_province = 1528
-					discover_province = 747
-					discover_province = 2890
-					discover_province = 748
-					discover_province = 2927
-					discover_province = 2886
-					discover_province = 751
-					discover_province = 753	
-				}
-			}
-		}
-		set_global_flag = nhs_treaty_of_lantanopolis
-		add_country_modifier = {
-			name = nhs2_treaty_of_lantanopolis_por
-			duration = -1
-		}
-		if = {
-			limit = {
-				748 = {
-					is_empty = yes
-				}
-			}
-			748 = {
-				tooltip = {
-					create_colony = 1000
-				}
-				hidden_effect = { 
-					cede_province = ROOT 
-				}
-				change_culture = ROOT
-				change_religion = ROOT
-			}
-		}
-		else = {
-			748 = {
-				cede_province = ROOT
-				change_culture = ROOT
-				change_religion = ROOT
-			}
-		}
-		if = {
-			limit = {
-				any_province = {
-					region = brazil_region
-					owner = {
-						OR = {
-							nhs_condition_all_ely = { KOMANDA = tag }
-							AND = {
-								is_colonial_nation = yes
-								colonial_parent = {
-									nhs_condition_all_ely = { KOMANDA = tag }
-								}
-							}
-						}
-					}
-				}
-			}
-			every_province = {
-				limit = {
-					region = brazil_region
-					owner = {
-						OR = {
-							nhs_condition_all_ely = { KOMANDA = tag }
-							AND = {
-								is_colonial_nation = yes
-								colonial_parent = {
-									nhs_condition_all_ely = { KOMANDA = tag }
-								}
-							}
-						}
-					}
-				}
-				cede_province = POR
-				hidden_effect = {
-					add_core = POR
-					every_country = {
-						limit = {
-							OR = {
-								nhs_condition_all_ely = { KOMANDA = tag }
-								AND = {
-									is_colonial_nation = yes
-									colonial_parent = {
-										nhs_condition_all_ely = { KOMANDA = tag }
-									}
-								}
-							}
-						}
-						remove_core = PREV
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				any_province = {
-					continent = north_america
-					OR = {
-						owned_by = POR
-						owner = {
-							AND = {
-								is_colonial_nation = yes
-								colonial_parent = {
-									tag = POR
-								}
-							}
-						}
-					}
-				}
-			}
-			custom_tooltip = nhs_fate_of_o_settlements_tt #Our current settlements will be relocated to SA
-			hidden_effect = {
-				nhs_move_por_settlements = yes
-			}
+			nhs_discover_treaty_provinces_ely = yes
 		}
 	}
 	option = {
 		name = "nhs2_european_trade_events.10.c"
+		goto = 749
+		trigger = {
+			749 = {
+				is_empty = yes
+				# OR = {
+				# 	is_empty = yes
+				# 	owner = {
+				# 		technology_group = south_american
+				# 	}
+				# }
+			}
+		}
 		ai_chance = {
 			factor = 33
 			modifier = {
@@ -1434,146 +1442,72 @@ country_event = {
 				}
 			}
 		}
-		set_global_flag = nhs_treaty_of_lantanopolis
+
+		nhs_set_por_colonial_capital = { TARGET_PROVINCE = 749 }
 		hidden_effect = {
-			FROM = {
-				clr_country_flag = nhs_has_small_por_enclave
-				set_country_flag = nhs_has_por_enclave
-				if = {
-					limit = {
-						any_owned_province = {
-							has_province_modifier = nhs2_small_por_enclave
-						}
-					}
-					random_owned_province = {
-						limit = {
-							has_province_modifier = nhs2_small_por_enclave
-						}
-						remove_province_modifier = nhs2_small_por_enclave
-						add_province_modifier = {
-							name = nhs2_por_enclave
-							duration = -1
-						}
-					}
-				}
-				hidden_effect = {
-					discover_province = 1530
-					discover_province = 1529
-					discover_province = 1528
-					discover_province = 747
-					discover_province = 2890
-					discover_province = 748
-					discover_province = 2927
-					discover_province = 2886
-					discover_province = 751
-					discover_province = 753	
-				}
-			}
+			nhs_discover_treaty_provinces_ely = yes
 		}
-		add_country_modifier = {
-			name = nhs2_treaty_of_lantanopolis_por
-			duration = -1
-		}
-		if = {
-			limit = {
+	}
+
+	option = {
+		name = "nhs2_european_trade_events.10.f"
+		goto = colonial_capital_alternate_target
+		trigger = {
+			has_saved_event_target = colonial_capital_alternate_target
+			NOT = {
 				749 = {
 					is_empty = yes
 				}
 			}
-			749 = {
-				tooltip = {
-					create_colony = 1000
-				}
-				hidden_effect = { 
-					cede_province = ROOT 
-				}
-				change_culture = ROOT
-				change_religion = ROOT
-			}
-			
-		}
-		else = {
-			749 = {
-				cede_province = ROOT
-				change_culture = ROOT
-				change_religion = ROOT
-			}
-		}
-		if = {
-			limit = {
-				any_province = {
-					region = brazil_region
-					owner = {
-						OR = {
-							nhs_condition_all_ely = { KOMANDA = tag }
-							AND = {
-								is_colonial_nation = yes
-								colonial_parent = {
-									nhs_condition_all_ely = { KOMANDA = tag }
-								}
-							}
-						}
-					}
+			NOT = {
+				749 = {
+					is_empty = yes
 				}
 			}
-			every_province = {
-				limit = {
-					region = brazil_region
-					owner = {
-						OR = {
-							nhs_condition_all_ely = { KOMANDA = tag }
-							AND = {
-								is_colonial_nation = yes
-								colonial_parent = {
-									nhs_condition_all_ely = { KOMANDA = tag }
-								}
-							}
-						}
-					}
-				}
-				cede_province = POR
-				hidden_effect = {
-					add_core = POR
-					every_country = {
-						limit = {
-							OR = {
-								nhs_condition_all_ely = { KOMANDA = tag }
-								AND = {
-									is_colonial_nation = yes
-									colonial_parent = {
-										nhs_condition_all_ely = { KOMANDA = tag }
-									}
-								}
-							}
-						}
-						remove_core = PREV
-					}
+			NOT = {
+				749 = {
+					is_empty = yes
 				}
 			}
 		}
-		if = {
-			limit = {
-				any_province = {
-					continent = north_america
-					OR = {
-						owned_by = POR
-						owner = {
-							AND = {
-								is_colonial_nation = yes
-								colonial_parent = {
-									tag = POR
-								}
-							}
-						}
-					}
-				}
-			}
-			custom_tooltip = nhs_fate_of_o_settlements_tt #Our current settlements will be relocated to SA
-			hidden_effect = {
-				nhs_move_por_settlements = yes
-			}
+		ai_chance = {
+			factor = 33
+		}
+
+		nhs_set_por_colonial_capital = { TARGET_PROVINCE = event_target:colonial_capital_alternate_target }
+		hidden_effect = {
+			nhs_discover_treaty_provinces_ely = yes
 		}
 	}
+
+	option = {
+		name = "nhs2_european_trade_events.10.g"
+		trigger = {
+			NOT = { has_saved_event_target = colonial_capital_alternate_target }
+			NOT = {
+				749 = {
+					is_empty = yes
+				}
+			}
+			NOT = {
+				749 = {
+					is_empty = yes
+				}
+			}
+			NOT = {
+				749 = {
+					is_empty = yes
+				}
+			}
+		}
+		ai_chance = {
+			factor = 33
+		}
+		hidden_effect = {
+			nhs_discover_treaty_provinces_ely = yes
+		}
+	}
+
 	option = {
 		name = "nhs2_european_trade_events.10.e"
 		ai_chance = {
@@ -1584,7 +1518,40 @@ country_event = {
 				who = ROOT
 				modifier = nhs_dissapointed
 			}
-			add_trust = { who = ROOT value = -30 }	
+		}
+	}
+}
+
+# Portuguese Accept Treaty
+country_event = {
+	id = nhs2_european_trade_events.18
+	title = nhs2_european_trade_events.18.t
+	desc = nhs2_european_trade_events.18.d
+	picture = BURGHER_ESTATE_eventPicture
+	
+	is_triggered_only = yes
+
+	option = {
+		name = nhs2_european_trade_events.18.a
+	}
+}
+
+# Portuguese Refuse Treaty
+country_event = {
+	id = nhs2_european_trade_events.19
+	title = nhs2_european_trade_events.19.t
+	desc = nhs2_european_trade_events.19.d
+	picture = nhs_MERCHANTS_ARGUING_eventPicture
+	
+	is_triggered_only = yes
+
+	option = {
+		name = nhs2_european_trade_events.19.a
+		tooltip = {
+			add_opinion = {
+				who = FROM
+				modifier = nhs_dissapointed
+			}
 		}
 	}
 }
@@ -1600,20 +1567,35 @@ country_event = {
 
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
-		exists = POR
 		has_country_modifier = nhs2_ely_por_trade
 		had_global_flag = { flag = nhs_europe_discovered days = 1825 }
+		had_global_flag = { flag = nhs_portugal_discovers_ely days = 3650 }
+		# NOT = { has_global_flag = nhs_broke_deals_with_por }
+		NOT = { has_country_modifier = nhs2_elysian_restricted_trade }
+		NOT = { has_country_modifier = nhs2_elysian_free_trade }
+		NOT = { has_country_modifier = nhs2_elysian_isolationism }
+		any_country = {
+			exists = yes
+			has_country_flag = nhs_portugese_secret
+			has_country_modifier = nhs2_por_ely_trade
+		}
 		any_owned_province = {
 			OR = {
 				has_province_modifier = nhs2_por_enclave
 				has_province_modifier = nhs2_small_por_enclave
 			}
 		}
-		had_global_flag = { flag = nhs_portugal_discovers_ely days = 3650 }
-		NOT = { has_global_flag = nhs_broke_deals_with_por }
-		NOT = { has_country_modifier = nhs2_elysian_restricted_trade }
-		NOT = { has_country_modifier = nhs2_elysian_free_trade }
-		NOT = { has_country_modifier = nhs2_elysian_isolationism }
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_country = {
+				limit = {
+					has_country_flag = nhs_portugese_secret
+				}
+				save_event_target_as = nhs_portugal_tar
+			}
+		}
 	}
 
 	option = {
@@ -1621,20 +1603,47 @@ country_event = {
 		ai_chance = {
 			factor = 50
 		}
-		custom_tooltip = nhs_institution_spread_enclave_increased_tt
 		clr_country_flag = nhs_has_por_enclave
 		clr_country_flag = nhs_has_small_por_enclave
 		set_country_flag = nhs_has_large_por_enclave
 		add_dip_power = 50
-		add_prestige = 10
+		# add_prestige = 10
 		add_legitimacy = 5
-		POR = {
+		event_target:nhs_portugal_tar = {
 			add_opinion = {
 				who = ROOT
 				modifier = nhs_upheld_trade
 			}
 		}
-		add_trust = { who = POR value = 100 }
+		add_trust = { who = event_target:nhs_portugal_tar value = 100 }
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_institution_spread_enclave_increased_tt
+		tooltip = {
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_province_modifier = nhs2_por_enclave
+						has_province_modifier = nhs2_small_por_enclave
+					}
+				}
+				if = {
+					limit = {
+						has_province_modifier = nhs2_por_enclave
+					}
+					remove_province_modifier = nhs2_por_enclave
+				}
+				if = {
+					limit = {
+						has_province_modifier = nhs2_small_por_enclave
+					}
+					remove_province_modifier = nhs2_small_por_enclave
+				}
+				add_province_modifier = {
+					name = nhs2_large_por_enclave
+					duration = -1
+				}
+			}
+		}
 		random_owned_province = {
 			limit = {
 				OR = {
@@ -1642,21 +1651,23 @@ country_event = {
 					has_province_modifier = nhs2_small_por_enclave
 				}
 			}
-			if = {
-				limit = {
-					has_province_modifier = nhs2_por_enclave
+			hidden_effect = {
+				if = {
+					limit = {
+						has_province_modifier = nhs2_por_enclave
+					}
+					remove_province_modifier = nhs2_por_enclave
 				}
-				remove_province_modifier = nhs2_por_enclave
-			}
-			if = {
-				limit = {
-					has_province_modifier = nhs2_small_por_enclave
+				if = {
+					limit = {
+						has_province_modifier = nhs2_small_por_enclave
+					}
+					remove_province_modifier = nhs2_small_por_enclave
 				}
-				remove_province_modifier = nhs2_small_por_enclave
-			}
-			add_province_modifier = {
-				name = nhs2_large_por_enclave
-				duration = -1
+				add_province_modifier = {
+					name = nhs2_large_por_enclave
+					duration = -1
+				}
 			}
 			nhs_set_center_of_trade_2 = yes
 		}
@@ -1679,27 +1690,40 @@ country_event = {
 			}
 		}
 		custom_tooltip = nhs_institution_spread_enclave_eu_change_tt
-		clr_country_flag = nhs_has_por_enclave
-		clr_country_flag = nhs_has_small_por_enclave
-		set_country_flag = nhs_has_eu_enclave
-		set_global_flag = nhs_broke_deals_with_por
-		remove_country_modifier = nhs2_ely_por_trade
+		custom_tooltip = nhs_new_line_tt
+		add_dip_power = 25
+		# add_prestige = 5
+		
 		add_country_modifier = {
 			name = nhs2_elysian_restricted_trade
 			duration = -1
 		}
-		add_dip_power = 25
-		add_prestige = 5
-		POR = {
-			remove_country_modifier = nhs2_por_ely_trade
-			add_trust = { who = ROOT value = -40 }
-			add_opinion = {
-				who = ROOT
-				modifier = nhs_broke_the_deals
-			}
-			remove_opinion = {
-				who = ROOT
-				modifier = nhs2_por_ely_trade
+		nhs_break_por_deal = {}
+		custom_tooltip = nhs_new_line_tt
+		tooltip = {
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_province_modifier = nhs2_por_enclave
+						has_province_modifier = nhs2_small_por_enclave
+					}
+				}
+				if = {
+					limit = {
+						has_province_modifier = nhs2_por_enclave
+					}
+					remove_province_modifier = nhs2_por_enclave
+				}
+				if = {
+					limit = {
+						has_province_modifier = nhs2_small_por_enclave
+					}
+					remove_province_modifier = nhs2_small_por_enclave
+				}
+				add_province_modifier = {
+					name = nhs2_european_enclave
+					duration = -1
+				}
 			}
 		}
 		random_owned_province = {
@@ -1709,25 +1733,26 @@ country_event = {
 					has_province_modifier = nhs2_small_por_enclave
 				}
 			}
-			if = {
-				limit = {
-					has_province_modifier = nhs2_por_enclave
+			hidden_effect = {
+				if = {
+					limit = {
+						has_province_modifier = nhs2_por_enclave
+					}
+					remove_province_modifier = nhs2_por_enclave
 				}
-				remove_province_modifier = nhs2_por_enclave
-			}
-			if = {
-				limit = {
-					has_province_modifier = nhs2_small_por_enclave
+				if = {
+					limit = {
+						has_province_modifier = nhs2_small_por_enclave
+					}
+					remove_province_modifier = nhs2_small_por_enclave
 				}
-				remove_province_modifier = nhs2_small_por_enclave
-			}
-			add_province_modifier = {
-				name = nhs2_european_enclave
-				duration = -1
+				add_province_modifier = {
+					name = nhs2_european_enclave
+					duration = -1
+				}
 			}
 			nhs_set_center_of_trade_2 = yes
 		}
-		
 	}
 	option = {
 		name = "nhs2_european_trade_events.11.c"
@@ -1755,29 +1780,53 @@ country_event = {
 			}
 		}
 		custom_tooltip = nhs_institution_spread_enclave_free_change_tt
+		custom_tooltip = nhs_new_line_tt
 		clr_country_flag = nhs_has_small_por_enclave
 		clr_country_flag = nhs_has_por_enclave
-		set_global_flag = nhs_broke_deals_with_por
-		remove_country_modifier = nhs2_ely_por_trade
+		# set_global_flag = nhs_broke_deals_with_por
+		# remove_country_modifier = nhs2_ely_por_trade
+		add_dip_power = 25
 		add_mercantilism = -50
 		add_country_modifier = {
 			name = nhs2_elysian_free_trade
 			duration = -1
 		}
-		add_dip_power = 25
-		POR = {
-			remove_country_modifier = nhs2_por_ely_trade
-			add_trust = { who = ROOT value = -40 }
-			add_opinion = {
-				who = ROOT
-				modifier = nhs_broke_the_deals
-			}
-			remove_opinion = {
-				who = ROOT
-				modifier = nhs2_por_ely_trade
+		nhs_break_por_deal = {}
+		# POR = {
+		# 	remove_country_modifier = nhs2_por_ely_trade
+		# 	add_trust = { who = ROOT value = -40 }
+		# 	add_opinion = {
+		# 		who = ROOT
+		# 		modifier = nhs_broke_the_deals
+		# 	}
+		# 	remove_opinion = {
+		# 		who = ROOT
+		# 		modifier = nhs2_por_ely_trade
+		# 	}
+		# }
+		tooltip = {
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_province_modifier = nhs2_por_enclave
+						has_province_modifier = nhs2_small_por_enclave
+					}
+				}
+				if = {
+					limit = {
+						has_province_modifier = nhs2_por_enclave
+					}
+					remove_province_modifier = nhs2_por_enclave
+				}
+				if = {
+					limit = {
+						has_province_modifier = nhs2_small_por_enclave
+					}
+					remove_province_modifier = nhs2_small_por_enclave
+				}
 			}
 		}
-		
+		custom_tooltip = nhs_new_line_tt
 		random_owned_province = {
 			limit = {
 				OR = {
@@ -1785,20 +1834,23 @@ country_event = {
 					has_province_modifier = nhs2_small_por_enclave
 				}
 			}
-			if = {
-				limit = {
-					has_province_modifier = nhs2_por_enclave
+			hidden_effect = {
+				if = {
+					limit = {
+						has_province_modifier = nhs2_por_enclave
+					}
+					remove_province_modifier = nhs2_por_enclave
 				}
-				remove_province_modifier = nhs2_por_enclave
-			}
-			if = {
-				limit = {
-					has_province_modifier = nhs2_small_por_enclave
+				if = {
+					limit = {
+						has_province_modifier = nhs2_small_por_enclave
+					}
+					remove_province_modifier = nhs2_small_por_enclave
 				}
-				remove_province_modifier = nhs2_small_por_enclave
 			}
 			nhs_set_center_of_trade_2 = yes
 		}
+		
 	}
 	
 	option = {
@@ -1823,9 +1875,13 @@ country_event = {
 			}
 		}
 		add_mercantilism = 50
-		set_global_flag = nhs_no_more_deals
-		nhs_break_por_deal = yes
+		add_country_modifier = {
+			name = nhs2_elysian_isolationism
+			duration = -1
+		}
+		# set_global_flag = nhs_no_more_deals
 		nhs_increase_skoros_silk_price = yes
+		nhs_break_por_deal = { REMOVE_ENCLAVES = yes }
 	}
 }
 
@@ -1913,19 +1969,13 @@ country_event = {
 			limit = {
 				any_owned_province = {
 					nhs_eligible_for_enclave = yes
-					OR = {
-						culture_group = elysian_group
-						culture = elysian
-					}
+					culture_group = ROOT
 				}
 			}
 			random_owned_province = {
 				limit = {
 					nhs_eligible_for_enclave = yes
-					OR = {
-						culture_group = elysian_group
-						culture = elysian
-					}
+					culture_group = ROOT
 				}
 				if = {
 					limit = {
@@ -1963,14 +2013,14 @@ country_event = {
 			set_country_flag = nhs_enclave_pending
 		}
 	}
-	option = {
-		name = "nhs2_european_trade_events.12.b"
-		ai_chance = {
-			factor = 0
-		}
-		custom_tooltip = nhs_attract_eu_merchants_tt
-		nhs_break_por_deal = yes
-	}
+	# option = {
+	# 	name = "nhs2_european_trade_events.12.b"
+	# 	ai_chance = {
+	# 		factor = 0
+	# 	}
+	# 	custom_tooltip = nhs_attract_eu_merchants_tt
+	# 	nhs_break_por_deal = yes
+	# }
 }
 
 # Fall of Portugal
@@ -1982,68 +2032,79 @@ country_event = {
 	
 	trigger = {
 		has_country_modifier = nhs2_ely_por_trade
-		NOT = { exists = POR }
+		NOT = {
+			any_country = {
+				exists = yes
+				has_country_modifier = nhs2_por_ely_trade
+				# has_country_flag = nhs_portugese_secret
+			}
+		}
 	}
 
 	option = {
 		name = "nhs2_european_trade_events.13.a"
 		custom_tooltip = nhs_attract_eu_merchants_tt
-		clr_country_flag = nhs_has_por_enclave
-		clr_country_flag = nhs_has_large_por_enclave
-		clr_country_flag = nhs_has_small_por_enclave
-		clr_global_flag = nhs_treaty_of_lantanopolis
-		set_global_flag = nhs_broke_deals_with_por
-		remove_country_modifier = nhs2_ely_por_trade
-		hidden_effect = {
-			POR = {
-				if = {
-					limit = {
-						has_country_modifier = nhs2_treaty_of_lantanopolis_por
-					}
-					remove_country_modifier = nhs2_treaty_of_lantanopolis_por
-				}
-				remove_country_modifier = nhs2_por_ely_trade
-			}
-		}
-		if = {
-			limit = {
-				any_province = {
-					has_province_modifier = nhs2_small_por_enclave
-				}
-			}
-			every_province = {
-				limit = {
-					has_province_modifier = nhs2_small_por_enclave
-				}
-				remove_province_modifier = nhs2_small_por_enclave
-			}
-		}
-		if = {
-			limit = {
-				any_province = {
-					has_province_modifier = nhs2_por_enclave
-				}
-			}
-			every_province = {
-				limit = {
-					has_province_modifier = nhs2_por_enclave
-				}
-				remove_province_modifier = nhs2_por_enclave
-			}
-		}
-		if = {
-			limit = {
-				any_province = {
-					has_province_modifier = nhs2_large_por_enclave
-				}
-			}
-			every_province = {
-				limit = {
-					has_province_modifier = nhs2_large_por_enclave
-				}
-				remove_province_modifier = nhs2_large_por_enclave
-			}
-		}
+
+		nhs_break_por_deal = { REMOVE_ENCLAVES = yes }
+		# clr_country_flag = nhs_has_por_enclave
+		# clr_country_flag = nhs_has_large_por_enclave
+		# clr_country_flag = nhs_has_small_por_enclave
+		# clr_global_flag = nhs_treaty_of_lantanopolis
+		# # set_global_flag = nhs_broke_deals_with_por
+		# remove_country_modifier = nhs2_ely_por_trade
+		# hidden_effect = {
+		# 	random_country = {
+		# 		limit = {
+		# 			has_country_flag = nhs_portugese_secret
+		# 		}
+		# 		if = {
+		# 			limit = {
+		# 				has_country_modifier = nhs2_treaty_of_lantanopolis_por
+		# 			}
+		# 			remove_country_modifier = nhs2_treaty_of_lantanopolis_por
+		# 		}
+		# 		remove_country_modifier = nhs2_por_ely_trade
+		# 	}
+		# }
+		# if = {
+		# 	limit = {
+		# 		any_province = {
+		# 			has_province_modifier = nhs2_small_por_enclave
+		# 		}
+		# 	}
+		# 	every_province = {
+		# 		limit = {
+		# 			has_province_modifier = nhs2_small_por_enclave
+		# 		}
+		# 		remove_province_modifier = nhs2_small_por_enclave
+		# 	}
+		# }
+		# if = {
+		# 	limit = {
+		# 		any_province = {
+		# 			has_province_modifier = nhs2_por_enclave
+		# 		}
+		# 	}
+		# 	every_province = {
+		# 		limit = {
+		# 			has_province_modifier = nhs2_por_enclave
+		# 		}
+		# 		remove_province_modifier = nhs2_por_enclave
+		# 	}
+		# }
+		# if = {
+		# 	limit = {
+		# 		any_province = {
+		# 			has_province_modifier = nhs2_large_por_enclave
+		# 		}
+		# 	}
+		# 	every_province = {
+		# 		limit = {
+		# 			has_province_modifier = nhs2_large_por_enclave
+		# 		}
+		# 		remove_province_modifier = nhs2_large_por_enclave
+		# 	}
+		# }
 	}
 }
 
@@ -2056,14 +2117,17 @@ country_event = {
 	
 	trigger = {
 		has_country_modifier = nhs2_ely_por_trade
-		OR = {
-			is_in_war = {
-				attacker_leader = ROOT
-				defender_leader = POR
-			}
-			is_in_war = {
-				attacker_leader = POR
-				defender_leader = ROOT
+		any_country = {
+			has_country_modifier = nhs2_por_ely_trade
+			OR = {
+				is_in_war = {
+					attacker_leader = ROOT
+					defender_leader = THIS
+				}
+				is_in_war = {
+					attacker_leader = THIS
+					defender_leader = ROOT
+				}
 			}
 		}
 	}
@@ -2071,81 +2135,83 @@ country_event = {
 	option = {
 		name = "nhs2_european_trade_events.14.a"
 		custom_tooltip = nhs_attract_eu_merchants_tt
-		clr_country_flag = nhs_has_por_enclave
-		clr_country_flag = nhs_has_large_por_enclave
-		clr_country_flag = nhs_has_small_por_enclave
-		clr_global_flag = nhs_treaty_of_lantanopolis
-		set_global_flag = nhs_broke_deals_with_por
-		remove_country_modifier = nhs2_ely_por_trade
-		add_opinion = {
-			who = POR
-			modifier = nhs_broke_the_deals
-		}
-		remove_opinion = {
-			who = POR
-			modifier = nhs_por_trade_deal
-		}
-		POR = {
-			if = {
-				limit = {
-					has_country_modifier = nhs2_treaty_of_lantanopolis_por
-				}
-				remove_country_modifier = nhs2_treaty_of_lantanopolis_por
-			}
-			remove_country_modifier = nhs2_por_ely_trade
-			add_trust = { who = ROOT value = -40 mutual = yes }
-			add_opinion = {
-				who = ROOT
-				modifier = nhs_broke_the_deals
-			}
-			remove_opinion = {
-				who = ROOT
-				modifier = nhs2_por_ely_trade
-			}
-			remove_opinion = {
-				who = ROOT
-				modifier = nhs_unchecked_expansion
-			}
-		}
-		if = {
-			limit = {
-				any_province = {
-					has_province_modifier = nhs2_small_por_enclave
-				}
-			}
-			every_province = {
-				limit = {
-					has_province_modifier = nhs2_small_por_enclave
-				}
-				remove_province_modifier = nhs2_small_por_enclave
-			}
-		}
-		if = {
-			limit = {
-				any_province = {
-					has_province_modifier = nhs2_por_enclave
-				}
-			}
-			every_province = {
-				limit = {
-					has_province_modifier = nhs2_por_enclave
-				}
-				remove_province_modifier = nhs2_por_enclave
-			}
-		}
-		if = {
-			limit = {
-				any_province = {
-					has_province_modifier = nhs2_large_por_enclave
-				}
-			}
-			every_province = {
-				limit = {
-					has_province_modifier = nhs2_large_por_enclave
-				}
-				remove_province_modifier = nhs2_large_por_enclave
-			}
-		}
+
+		nhs_break_por_deal = { REMOVE_ENCLAVES = yes }
+		# clr_country_flag = nhs_has_por_enclave
+		# clr_country_flag = nhs_has_large_por_enclave
+		# clr_country_flag = nhs_has_small_por_enclave
+		# clr_global_flag = nhs_treaty_of_lantanopolis
+		# set_global_flag = nhs_broke_deals_with_por
+		# remove_country_modifier = nhs2_ely_por_trade
+		# add_opinion = {
+		# 	who = POR
+		# 	modifier = nhs_broke_the_deals
+		# }
+		# remove_opinion = {
+		# 	who = POR
+		# 	modifier = nhs_por_trade_deal
+		# }
+		# POR = {
+		# 	if = {
+		# 		limit = {
+		# 			has_country_modifier = nhs2_treaty_of_lantanopolis_por
+		# 		}
+		# 		remove_country_modifier = nhs2_treaty_of_lantanopolis_por
+		# 	}
+		# 	remove_country_modifier = nhs2_por_ely_trade
+		# 	add_trust = { who = ROOT value = -40 mutual = yes }
+		# 	add_opinion = {
+		# 		who = ROOT
+		# 		modifier = nhs_broke_the_deals
+		# 	}
+		# 	remove_opinion = {
+		# 		who = ROOT
+		# 		modifier = nhs2_por_ely_trade
+		# 	}
+		# 	remove_opinion = {
+		# 		who = ROOT
+		# 		modifier = nhs_unchecked_expansion
+		# 	}
+		# }
+		# if = {
+		# 	limit = {
+		# 		any_province = {
+		# 			has_province_modifier = nhs2_small_por_enclave
+		# 		}
+		# 	}
+		# 	every_province = {
+		# 		limit = {
+		# 			has_province_modifier = nhs2_small_por_enclave
+		# 		}
+		# 		remove_province_modifier = nhs2_small_por_enclave
+		# 	}
+		# }
+		# if = {
+		# 	limit = {
+		# 		any_province = {
+		# 			has_province_modifier = nhs2_por_enclave
+		# 		}
+		# 	}
+		# 	every_province = {
+		# 		limit = {
+		# 			has_province_modifier = nhs2_por_enclave
+		# 		}
+		# 		remove_province_modifier = nhs2_por_enclave
+		# 	}
+		# }
+		# if = {
+		# 	limit = {
+		# 		any_province = {
+		# 			has_province_modifier = nhs2_large_por_enclave
+		# 		}
+		# 	}
+		# 	every_province = {
+		# 		limit = {
+		# 			has_province_modifier = nhs2_large_por_enclave
+		# 		}
+		# 		remove_province_modifier = nhs2_large_por_enclave
+		# 	}
+		# }
 	}
 }
 
@@ -2407,10 +2473,6 @@ country_event = {
 	picture = BATTLE_eventPicture
 	
 	is_triggered_only = yes
-	
-	trigger = {
-		tag = POR
-	}
 
 	option = {
 		name = "nhs2_european_trade_events.16.a"
@@ -2426,10 +2488,6 @@ country_event = {
 	picture = BATTLE_eventPicture
 	
 	is_triggered_only = yes
-	
-	trigger = {
-		tag = POR
-	}
 
 	option = {
 		name = "nhs2_european_trade_events.17.a"

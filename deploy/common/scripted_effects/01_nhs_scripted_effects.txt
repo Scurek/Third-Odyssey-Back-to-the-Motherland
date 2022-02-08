@@ -177,6 +177,7 @@ nhs_reduce_skoros_silk_price = {
 			value = -0.5
 			duration = -1
 		}
+		custom_tooltip = nhs_new_line_tt
 	}
 	else_if = {
 		limit = {
@@ -208,6 +209,7 @@ nhs_increase_skoros_silk_price = {
 			value = 0.5
 			duration = -1
 		}
+		custom_tooltip = nhs_new_line_tt
 	}
 	else_if = {
 		limit = {
@@ -4058,18 +4060,123 @@ nhs_roll_the_next_battle = {
 	}
 }
 
+nhs_improve_portuguese_enclave_from_small = {
+	clr_country_flag = nhs_has_small_por_enclave
+	set_country_flag = nhs_has_por_enclave
+	custom_tooltip = nhs_enclave_expansion_tt
+	custom_tooltip = nhs_institution_spread_enclave_increased_tt
+	if = {
+		limit = {
+			any_owned_province = {
+				has_province_modifier = nhs2_small_por_enclave
+			}
+		}
+		random_owned_province = {
+			limit = {
+				has_province_modifier = nhs2_small_por_enclave
+			}
+			
+			remove_province_modifier = nhs2_small_por_enclave
+			add_province_modifier = {
+				name = nhs2_por_enclave
+				duration = -1
+			}
+		}
+	}
+}
+
+# RECIPIENT - country that provinces are ceeded to
+nhs_cede_elysian_brazilian_settlements = {
+	if = {
+		limit = {
+			any_province = {
+				continent = south_america
+				owner = {
+					OR = {
+						nhs_condition_all_ely = { KOMANDA = tag }
+						AND = {
+							is_colonial_nation = yes
+							colonial_parent = {
+								nhs_condition_all_ely = { KOMANDA = tag }
+							}
+						}
+						AND = {
+							nhs_condition_all_ely = { KOMANDA = is_subject_of }
+							NOT = {
+								capital_scope = {
+									continent = south_america
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		every_province = {
+			limit = {
+				continent = south_america
+				owner = {
+					OR = {
+						nhs_condition_all_ely = { KOMANDA = tag }
+						AND = {
+							is_colonial_nation = yes
+							colonial_parent = {
+								nhs_condition_all_ely = { KOMANDA = tag }
+							}
+						}
+						AND = {
+							nhs_condition_all_ely = { KOMANDA = is_subject_of }
+							NOT = {
+								capital_scope = {
+									continent = south_america
+								}
+							}
+						}
+					}
+				}
+			}
+			cede_province = $RECIPIENT$
+			hidden_effect = {
+				add_core = $RECIPIENT$
+				every_country = {
+					limit = {
+						OR = {
+							nhs_condition_all_ely = { KOMANDA = tag }
+							AND = {
+								is_colonial_nation = yes
+								colonial_parent = {
+									nhs_condition_all_ely = { KOMANDA = tag }
+								}
+							}
+							AND = {
+								nhs_condition_all_ely = { KOMANDA = is_subject_of }
+								NOT = {
+									capital_scope = {
+										continent = south_america
+									}
+								}
+							}
+						}
+					}
+					remove_core = PREV
+				}
+			}
+		}
+	}
+}
+
 nhs_move_por_settlements = {
 	while = {
 		limit = {
 			any_province = {
 				continent = north_america
 				OR = {
-					owned_by = POR
+					owned_by = ROOT
 					owner = {
 						AND = {
 							is_colonial_nation = yes
 							colonial_parent = {
-								tag = POR
+								tag = ROOT
 							}
 						}
 					}
@@ -4080,12 +4187,12 @@ nhs_move_por_settlements = {
 			limit = {
 				continent = north_america
 				OR = {
-					owned_by = POR
+					owned_by = ROOT
 					owner = {
 						AND = {
 							is_colonial_nation = yes
 							colonial_parent = {
-								tag = POR
+								tag = ROOT
 							}
 						}
 					}
@@ -4099,16 +4206,55 @@ nhs_move_por_settlements = {
 			limit = {
 				any_province = {
 					is_empty = yes
+					has_port = yes
 					region = brazil_region
 					any_neighbor_province = {
 						OR = {
-							owned_by = POR
+							owned_by = ROOT
 							owner = {
-								AND = {
-									is_colonial_nation = yes
-									colonial_parent = {
-										tag = POR
-									}
+								is_colonial_nation = yes
+								colonial_parent = {
+									tag = ROOT
+								}
+							}
+						}
+					}
+				}
+			}
+			random_province = {
+				limit = {
+					region = brazil_region
+					is_empty = yes
+					has_port = yes
+					any_neighbor_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_colonial_nation = yes
+								colonial_parent = {
+									tag = ROOT
+								}
+							}
+						}
+					}
+				}
+				cede_province = ROOT
+				change_culture = ROOT
+				change_religion = ROOT
+			}
+		}
+		else_if = {
+			limit = {
+				any_province = {
+					is_empty = yes
+					region = brazil_region
+					any_neighbor_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_colonial_nation = yes
+								colonial_parent = {
+									tag = ROOT
 								}
 							}
 						}
@@ -4121,13 +4267,11 @@ nhs_move_por_settlements = {
 					is_empty = yes
 					any_neighbor_province = {
 						OR = {
-							owned_by = POR
+							owned_by = ROOT
 							owner = {
-								AND = {
-									is_colonial_nation = yes
-									colonial_parent = {
-										tag = POR
-									}
+								is_colonial_nation = yes
+								colonial_parent = {
+									tag = ROOT
 								}
 							}
 						}
@@ -4142,16 +4286,16 @@ nhs_move_por_settlements = {
 			limit = {
 				any_province = {
 					continent = south_america
+					region = colombia_region
+					has_port = yes
 					is_empty = yes
 					any_neighbor_province = {
 						OR = {
-							owned_by = POR
+							owned_by = ROOT
 							owner = {
-								AND = {
-									is_colonial_nation = yes
-									colonial_parent = {
-										tag = POR
-									}
+								is_colonial_nation = yes
+								colonial_parent = {
+									tag = ROOT
 								}
 							}
 						}
@@ -4161,16 +4305,16 @@ nhs_move_por_settlements = {
 			random_province = {
 				limit = {
 					continent = south_america
+					region = colombia_region
+					has_port = yes
 					is_empty = yes
 					any_neighbor_province = {
 						OR = {
-							owned_by = POR
+							owned_by = ROOT
 							owner = {
-								AND = {
-									is_colonial_nation = yes
-									colonial_parent = {
-										tag = POR
-									}
+								is_colonial_nation = yes
+								colonial_parent = {
+									tag = ROOT
 								}
 							}
 						}
@@ -4184,36 +4328,194 @@ nhs_move_por_settlements = {
 		else_if = {
 			limit = {
 				any_province = {
-					region = brazil_region
+					continent = south_america
+					region = colombia_region
 					is_empty = yes
+					any_neighbor_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_colonial_nation = yes
+								colonial_parent = {
+									tag = ROOT
+								}
+							}
+						}
+					}
 				}
 			}
 			random_province = {
 				limit = {
-					region = brazil_region
+					continent = south_america
+					region = colombia_region
 					is_empty = yes
+					any_neighbor_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_colonial_nation = yes
+								colonial_parent = {
+									tag = ROOT
+								}
+							}
+						}
+					}
 				}
 				cede_province = ROOT
 				change_culture = ROOT
 				change_religion = ROOT
 			}
 		}
-		else_if = {
+		# At this point we say GG
+
+		# else_if = {
+		# 	limit = {
+		# 		any_province = {
+		# 			region = brazil_region
+		# 			is_empty = yes
+		# 		}
+		# 	}
+		# 	random_province = {
+		# 		limit = {
+		# 			region = brazil_region
+		# 			is_empty = yes
+		# 		}
+		# 		cede_province = ROOT
+		# 		change_culture = ROOT
+		# 		change_religion = ROOT
+		# 	}
+		# }
+		# else_if = {
+		# 	limit = {
+		# 		any_province = {
+		# 			continent = south_america
+		# 			is_empty = yes
+		# 		}
+		# 	}
+		# 	random_province = {
+		# 		limit = {
+		# 			continent = south_america
+		# 			is_empty = yes
+		# 		}
+		# 		cede_province = ROOT
+		# 		change_culture = ROOT
+		# 		change_religion = ROOT
+		# 	}
+		# }
+	}
+}
+
+nhs_discover_treaty_provinces_ely = {
+	every_province = {
+		limit = {
+			region = brazil_region
+			owner = {
+				OR = {
+					tag = ROOT
+					AND = {
+						is_colonial_nation = yes
+						colonial_parent = {
+							tag = ROOT
+						}
+					}
+				}
+			}
+		}
+		discover_country = FROM
+		if = {
 			limit = {
-				any_province = {
-					continent = south_america
-					is_empty = yes
+				has_port = yes
+			}
+			sea_zone = {
+				discover_country = FROM
+			}
+		}
+	}
+	# FROM = {	
+		# discover_province = 1530
+		# discover_province = 1529
+		# discover_province = 1528
+		# discover_province = 747
+		# discover_province = 2890
+		# discover_province = 748
+		# discover_province = 2927
+		# discover_province = 2886
+		# discover_province = 751
+		# discover_province = 753
+		# discover_province = 749
+		# discover_province = 2938
+	# }
+}
+
+nhs_set_por_colonial_capital = {
+	set_global_flag = nhs_treaty_of_lantanopolis
+	add_country_modifier = {
+		name = nhs2_treaty_of_lantanopolis_por
+		duration = -1
+	}
+	if = {
+		limit = {
+			$TARGET_PROVINCE$ = {
+				is_empty = yes
+			}
+		}
+		$TARGET_PROVINCE$ = {
+			tooltip = {
+				create_colony = 1000
+			}
+			hidden_effect = { 
+				cede_province = ROOT 
+			}
+			change_culture = ROOT
+			change_religion = ROOT
+		}
+	}
+	else_if = {
+		limit = {
+			$TARGET_PROVINCE$ = {
+				NOT = {
+					owner = {
+						OR = {
+							tag = ROOT
+							AND = {
+								is_colonial_nation = yes
+								colonial_parent = {
+									tag = POR
+								}
+							}
+						}
+					}
 				}
 			}
-			random_province = {
-				limit = {
-					continent = south_america
-					is_empty = yes
+		}
+		$TARGET_PROVINCE$ = {
+			cede_province = ROOT
+			add_core = ROOT
+			change_culture = ROOT
+			change_religion = ROOT
+		}
+	}
+	nhs_cede_elysian_brazilian_settlements = { RECIPIENT = ROOT }
+	if = {
+		limit = {
+			any_province = {
+				continent = north_america
+				OR = {
+					owned_by = POR
+					owner = {
+						AND = {
+							is_colonial_nation = yes
+							colonial_parent = {
+								tag = POR
+							}
+						}
+					}
 				}
-				cede_province = ROOT
-				change_culture = ROOT
-				change_religion = ROOT
 			}
+		}
+		custom_tooltip = nhs_fate_of_o_settlements_tt #Our current settlements will be relocated to SA
+		hidden_effect = {
+			nhs_move_por_settlements = yes
 		}
 	}
 }
@@ -4223,26 +4525,17 @@ nhs_break_por_deal = {
 	clr_country_flag = nhs_has_large_por_enclave
 	clr_country_flag = nhs_has_small_por_enclave
 	clr_global_flag = nhs_treaty_of_lantanopolis
-	set_global_flag = nhs_broke_deals_with_por
+	# set_global_flag = nhs_broke_deals_with_por
 	if = {
 		limit = {
 			has_country_modifier = nhs2_ely_por_trade
 		}
 		remove_country_modifier = nhs2_ely_por_trade
 	}
-	add_country_modifier = {
-		name = nhs2_elysian_isolationism
-		duration = -1
-	}
-	add_opinion = {
-		who = POR
-		modifier = nhs_broke_the_deals
-	}
-	remove_opinion = {
-		who = POR
-		modifier = nhs_por_trade_deal
-	}
-	POR = {
+	random_country = {
+		limit = {
+			has_country_flag = nhs_portugese_secret
+		}
 		if = {
 			limit = {
 				has_country_modifier = nhs2_treaty_of_lantanopolis_por
@@ -4255,60 +4548,71 @@ nhs_break_por_deal = {
 			}
 			remove_country_modifier = nhs2_por_ely_trade
 		}
+		add_trust = { who = ROOT value = -40 }
+		custom_tooltip = nhs_por_remove_150_opinion_tt
+		hidden_effect = {
+			add_opinion = {
+				who = ROOT
+				modifier = nhs_broke_the_deals
+			}
+			remove_opinion = {
+				who = ROOT
+				modifier = nhs_por_trade_deal
+			}
+			# remove_opinion = {
+			# 	who = ROOT
+			# 	modifier = nhs_unchecked_expansion
+			# }
+		}
 		
-		add_trust = { who = ROOT value = -40 mutual = yes }
-		add_opinion = {
+		reverse_remove_opinion = {
 			who = ROOT
-			modifier = nhs_broke_the_deals
+			modifier = nhs_por_trade_deal
 		}
-		remove_opinion = {
-			who = ROOT
-			modifier = nhs2_por_ely_trade
-		}
-		remove_opinion = {
-			who = ROOT
-			modifier = nhs_unchecked_expansion
-		}
+		
 	}
-	if = {
-		limit = {
-			any_province = {
-				has_province_modifier = nhs2_small_por_enclave
-			}
-		}
-		every_province = {
+	[[REMOVE_ENCLAVES]
+		custom_tooltip = nhs_new_line_tt
+		if = {
 			limit = {
-				has_province_modifier = nhs2_small_por_enclave
+				any_province = {
+					has_province_modifier = nhs2_small_por_enclave
+				}
 			}
-			remove_province_modifier = nhs2_small_por_enclave
-		}
-	}
-	if = {
-		limit = {
-			any_province = {
-				has_province_modifier = nhs2_por_enclave
+			every_province = {
+				limit = {
+					has_province_modifier = nhs2_small_por_enclave
+				}
+				remove_province_modifier = nhs2_small_por_enclave
 			}
 		}
-		every_province = {
+		if = {
 			limit = {
-				has_province_modifier = nhs2_por_enclave
+				any_province = {
+					has_province_modifier = nhs2_por_enclave
+				}
 			}
-			remove_province_modifier = nhs2_por_enclave
-		}
-	}
-	if = {
-		limit = {
-			any_province = {
-				has_province_modifier = nhs2_large_por_enclave
+			every_province = {
+				limit = {
+					has_province_modifier = nhs2_por_enclave
+				}
+				remove_province_modifier = nhs2_por_enclave
 			}
 		}
-		every_province = {
+		if = {
 			limit = {
-				has_province_modifier = nhs2_large_por_enclave
+				any_province = {
+					has_province_modifier = nhs2_large_por_enclave
+				}
 			}
-			remove_province_modifier = nhs2_large_por_enclave
+			every_province = {
+				limit = {
+					has_province_modifier = nhs2_large_por_enclave
+				}
+				remove_province_modifier = nhs2_large_por_enclave
+			}
 		}
-	}
+	]
 }
 
 nhs_add_proper_enclave = {
@@ -4629,10 +4933,7 @@ nhs_move_t_post = {
 				random_owned_province = {
 					limit = {
 						nhs_eligible_for_enclave = yes
-						OR = {
-							culture_group = elysian_group
-							culture = elysian
-						}
+						culture_group = ROOT
 					}
 					if = {
 						limit = {

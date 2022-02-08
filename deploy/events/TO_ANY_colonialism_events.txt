@@ -1,0 +1,413 @@
+namespace = to_colonialism_events
+
+# Brave New World - With Portugal
+country_event = {
+	id = to_colonialism_events.1
+	title = to_colonialism_events.1.t
+	desc = to_colonialism_events.1.d
+	picture = SPY_eventPicture
+
+	is_triggered_only = yes
+
+	goto = institution_origin
+
+	option = {
+		name = to_colonialism_events.1.a
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = { num_of_cities = 8 }
+			}
+			modifier = {
+				factor = 0
+				NOT = { tag = POR }
+				NOT = { adm_tech = 7 }
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						has_port = yes
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+				}
+			}
+			# 20% chance for England and France if they haven't finished 100 year war properly
+			# modifier = {
+			# 	factor = 0
+			# 	OR = {
+			# 		tag = FRA
+			# 		tag = ENG
+			# 	}
+			# 	ENG = {
+			# 		any_owned_province = {
+			# 			NOT = { province_id = 87 }
+			# 			region = france_region
+			# 		}
+			# 	}
+			# }
+			# half if missing any cores
+			# modifier = {
+			# 	factor = 0.5
+			# 	any_province = {
+			# 		is_core = ROOT
+			# 		NOT = { country_or_subject_holds = ROOT }
+			# 	}
+			# }
+		}
+		custom_tooltip = to_colonialism_spread_europe_tt
+		custom_tooltip = institution_events.3.a.tt
+		to_replace_idea_group_with_exploration_master_effect = yes
+	}
+
+	option = {
+		trigger = {
+			NOT = { has_idea_group = exploration_ideas }
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					AND = {
+						OR = {
+							tag = FRA
+							tag = ENG
+						}
+						ENG = {
+							any_owned_province = {
+								NOT = { province_id = 87 }
+								region = france_region
+							}
+						}
+					}
+				}
+				NOT = {
+					any_province = {
+						is_core = ROOT
+						NOT = { country_or_subject_holds = ROOT }
+					}
+				}
+			}
+			# 20% chance for England and France if they haven't finished 100 year war properly
+			modifier = {
+				factor = 5
+				OR = {
+					tag = FRA
+					tag = ENG
+				}
+				ENG = {
+					any_owned_province = {
+						NOT = { province_id = 87 }
+						region = france_region
+					}
+				}
+			}
+		}
+		name = to_colonialism_events.1.b
+		custom_tooltip = to_colonialism_spread_europe_tt
+		custom_tooltip = institution_events.3.a.tt
+	}
+}
+
+# Brave New World - Without Portugal
+country_event = {
+	id = to_colonialism_events.2
+	title = to_colonialism_events.2.t
+	desc = to_colonialism_events.2.d
+	picture = SHIP_SAILING_eventPicture
+
+	is_triggered_only = yes
+
+	# goto = institution_origin
+
+	option = {
+		name = to_colonialism_events.2.a
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = { num_of_cities = 8 }
+			}
+			modifier = {
+				factor = 0
+				NOT = { tag = POR }
+				NOT = { adm_tech = 7 }
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						has_port = yes
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = to_colonialism_spread_europe_tt
+		custom_tooltip = institution_events.3.a.tt
+		to_replace_idea_group_with_exploration_master_effect = yes
+	}
+
+	option = {
+		trigger = {
+			NOT = { has_idea_group = exploration_ideas }
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					AND = {
+						OR = {
+							tag = FRA
+							tag = ENG
+						}
+						ENG = {
+							any_owned_province = {
+								NOT = { province_id = 87 }
+								region = france_region
+							}
+						}
+					}
+				}
+				NOT = {
+					any_province = {
+						is_core = ROOT
+						NOT = { country_or_subject_holds = ROOT }
+					}
+				}
+			}
+			# 20% chance for England and France if they haven't finished 100 year war properly
+			modifier = {
+				factor = 5
+				OR = {
+					tag = FRA
+					tag = ENG
+				}
+				ENG = {
+					any_owned_province = {
+						NOT = { province_id = 87 }
+						region = france_region
+					}
+				}
+			}
+		}
+		name = to_colonialism_events.2.b
+		custom_tooltip = to_colonialism_spread_europe_tt
+		custom_tooltip = institution_events.3.a.tt
+	}
+}
+
+# Choice which idea group to replace for the player
+country_event = {
+	id = to_colonialism_events.3
+	title = to_colonialism_events.3.t
+	desc = to_colonialism_events.3.d
+	picture = ADVISOR_eventPicture
+
+	is_triggered_only = yes
+
+	# goto = institution_origin
+
+	trigger = {
+		NOT = { has_idea_group = exploration_ideas }
+	}
+
+	option = {
+		name = to_colonialism_events.3.spy_ideas
+		trigger = {
+			has_idea_group = spy_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = spy_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.maritime_ideas
+		trigger = {
+			has_idea_group = maritime_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = maritime_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.indigenous_ideas
+		trigger = {
+			has_idea_group = indigenous_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = indigenous_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.administrative_ideas
+		trigger = {
+			has_idea_group = administrative_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = administrative_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.influence_ideas
+		trigger = {
+			has_idea_group = influence_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = influence_ideas }
+	}
+
+	option = {
+		name = to_colonialism_events.3.diplomatic_ideas
+		trigger = {
+			has_idea_group = diplomatic_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = diplomatic_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.innovativeness_ideas
+		trigger = {
+			has_idea_group = innovativeness_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = innovativeness_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.trade_ideas
+		trigger = {
+			has_idea_group = trade_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = trade_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.economic_ideas
+		trigger = {
+			has_idea_group = economic_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = economic_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.humanist_ideas
+		trigger = {
+			has_idea_group = humanist_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = humanist_ideas }
+	}
+
+	option = {
+		name = to_colonialism_events.3.religious_ideas
+		trigger = {
+			has_idea_group = religious_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = religious_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.plutocracy_ideas
+		trigger = {
+			has_idea_group = plutocracy_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = plutocracy_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.horde_gov_ideas
+		trigger = {
+			has_idea_group = horde_gov_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = horde_gov_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.theocracy_gov_ideas
+		trigger = {
+			has_idea_group = theocracy_gov_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = theocracy_gov_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.aristocracy_ideas
+		trigger = {
+			has_idea_group = aristocracy_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = aristocracy_ideas }
+	}
+
+	option = {
+		name = to_colonialism_events.3.naval_ideas
+		trigger = {
+			has_idea_group = naval_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = naval_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.offensive_ideas
+		trigger = {
+			has_idea_group = offensive_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = offensive_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.defensive_ideas
+		trigger = {
+			has_idea_group = defensive_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = defensive_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.quality_ideas
+		trigger = {
+			has_idea_group = quality_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = quality_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.quantity_ideas
+		trigger = {
+			has_idea_group = quantity_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = quantity_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.quantity_ideas
+		trigger = {
+			has_idea_group = quantity_ideas
+		}
+		to_replace_idea_group_with_exploration_keep_progress = { IDEA_GROUP = expansion_ideas }
+	}
+	option = {
+		name = to_colonialism_events.3.a
+	}
+}
+
+# Elysian reaction to colonialism, with Portugal
+country_event = {
+	id = to_colonialism_events.4
+	title = to_colonialism_events.4.t
+	desc = to_colonialism_events.4.d
+	picture = ELYSHIP_eventPicture
+
+	is_triggered_only = yes
+
+	goto = institution_origin
+
+	option = {
+		name = to_colonialism_events.4.a
+		custom_tooltip = institution_events.3.a.tt
+	}
+}
+
+# Elysian reaction to colonialism, without Portugal
+country_event = {
+	id = to_colonialism_events.5
+	title = to_colonialism_events.5.t
+	desc = to_colonialism_events.5.d
+	picture = western_HARBOUR_eventPicture
+
+	is_triggered_only = yes
+
+	goto = institution_origin
+
+	option = {
+		name = to_colonialism_events.5.a
+		custom_tooltip = institution_events.3.a.tt
+	}
+}
