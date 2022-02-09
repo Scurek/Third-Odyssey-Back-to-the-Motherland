@@ -110,7 +110,7 @@ country_event = {
 				set_heir_culture = elysian
 			}
 		}
-		set_global_flag = nhs_barbaroi_integration
+		set_country_flag = nhs_barbaroi_integration
 		custom_tooltip = nhs_convert_culture_capital_with_assimilation_tt
 		custom_tooltip = nhs_new_line_tt
 		nhs_switch_elysian_native_estate_to_mid = yes
@@ -274,23 +274,10 @@ country_event = {
 	title = nhs2_cultureevents.201.t
 	desc = nhs2_cultureevents.201.d
 	picture = byz_COURT_eventPicture
-
-	fire_only_once = yes
 	
 	trigger = {
 		culture_group = elysian_group
-		if = {
-			limit = {
-				nhs_condition_all_ely_scoped_with_and = { KOMANDA = culture_group KOMANDA2 = elysian_group }
-			}
-			nhs_condition_all_ely = { KOMANDA = tag }
-		}
-		else_if = {
-			limit = {
-				nhs_check_all_elysian_expanded_existing_with_double_condition = { TRIGGER = culture_group CONDITION = elysian_group }
-			}
-			nhs_check_all_elysian_expanded = { CONDITION = tag }
-		}
+		nhs_check_all_elysian_expanded = { CONDITION = tag }
 		NOT = { is_subject_of_type = elysian_subject_varangian }
 		OR = {
 			has_country_flag = native_council_enabled_early
@@ -301,10 +288,18 @@ country_event = {
 			flag = nhs_elysian_culture_change
 			days = 7300
 		}
-		calc_true_if = {
-			amount = 10
-			all_owned_province = {
-				to_ely_province_can_integrate = yes
+		OR = {
+			AND = {
+				has_global_flag = nhs_first_barbaroi_integration
+				any_owned_province = {
+					to_ely_province_can_integrate = yes
+				}
+			}
+			calc_true_if = {
+				amount = 10
+				all_owned_province = {
+					to_ely_province_can_integrate = yes
+				}
 			}
 		}
 	}
@@ -315,7 +310,7 @@ country_event = {
 
 	option = {		# What will be, will be
 		name = nhs2_cultureevents.201.a
-		set_global_flag = nhs_barbaroi_integration
+		set_country_flag = nhs_barbaroi_integration
 		if = {
 			limit = {
 				nhs_condition_all_ely = { KOMANDA = tag }
@@ -356,7 +351,12 @@ country_event = {
 			custom_tooltip = nhs_convert_culture_capital_with_assimilation_tt
 			custom_tooltip = nhs_new_line_tt
 		}
-		nhs_switch_elysian_native_estate_to_mid = yes
+		if = {
+			limit = {
+				NOT = { has_country_flag = native_council_enabled_mid }
+			}
+			nhs_switch_elysian_native_estate_to_mid = yes
+		}
 	}
 }
 
@@ -593,7 +593,7 @@ country_event = {
 	
 	trigger = {
 		culture_group = elysian_group
-		has_global_flag = nhs_barbaroi_integration
+		has_country_flag = nhs_barbaroi_integration
 		any_owned_province = {
 			to_ely_can_convert_to_barbaroi = yes
 		}
