@@ -22,7 +22,7 @@
 # }
 
 
-# -- Generic Privileges --
+# -- Elysian privileges (move this down later) --
 
 # Expansionist coexistance
 
@@ -40,11 +40,19 @@ nhs_native_priv_inclusive_citizenship_early = {
 			}
 			has_estate_privilege = nhs_native_priv_ancestral_land
 		}
+		if = {
+			limit = {
+				has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+			}
+			NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
+		}
 		has_country_flag = native_council_enabled_early
 		NOT = { has_country_flag = native_council_enabled_mid }
+		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
 	}
 	can_select = {
 		has_estate_privilege = nhs_native_priv_ancestral_land
+		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
 		to_num_of_privileges_check = {
 			ESTATE = estate_all_natives
 		}
@@ -110,13 +118,29 @@ nhs_native_priv_inclusive_citizenship_early = {
 		}
 		remove_province_modifier = nhs_native_priv_cultural_sufferance_early_mod
 	}
-	penalties = {
-		stability_cost_modifier = 0.2
+	conditional_modifier = {
+		trigger = {
+			ai = no
+		}
+		modifier = {
+			stability_cost_modifier = 0.5
+		}
 	}
+	conditional_modifier = {
+		trigger = {
+			ai = yes
+		}
+		modifier = {
+			stability_cost_modifier = 0.2
+		}
+	}
+	# penalties = {
+	# 	stability_cost_modifier = 0.5
+	# }
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 100
 	}
 }
 
@@ -134,21 +158,29 @@ nhs_native_priv_inclusive_citizenship_mid = {
 			}
 			has_estate_privilege = nhs_native_priv_ancestral_land
 		}
+		if = {
+			limit = {
+				has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+			}
+			NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
+		}
 		has_country_flag = native_council_enabled_mid
+		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
 	}
 	can_select = {
 		has_estate_privilege = nhs_native_priv_ancestral_land
+		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
 		to_num_of_privileges_check = {
 			ESTATE = estate_all_natives
 		}
 		to_councils_formation_not_active = yes
 	}
 	on_granted = {
+		custom_tooltip = nhs_increases_barbaroi_integration_tt
+		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = nhs_native_priv_inclusive_citizenship_tooltip
 		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = nhs_native_priv_cultural_sufferance_mid_effect_tooltip
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = nhs_increases_barbaroi_integration_tt
+		custom_tooltip = nhs_native_priv_cultural_sufferance_mid_effect_tooltip		
 	}
 	on_granted_province = {
 		if = {
@@ -169,6 +201,7 @@ nhs_native_priv_inclusive_citizenship_mid = {
 		}
 	}
 	on_revoked = {
+		custom_tooltip = nhs_native_priv_inclusive_citizenship_revoke_tooltip
 		custom_tooltip = nhs_native_priv_cultural_sufferance_revoke_tooltip
 	}
 	on_revoked_province = {
@@ -181,6 +214,7 @@ nhs_native_priv_inclusive_citizenship_mid = {
 		remove_province_modifier = nhs_native_priv_cultural_sufferance_mid_mod
 	}
 	on_invalid = {
+		custom_tooltip = nhs_native_priv_inclusive_citizenship_revoke_tooltip
 		custom_tooltip = nhs_native_priv_cultural_sufferance_revoke_tooltip
 	}
 	on_invalid_province = {
@@ -198,115 +232,18 @@ nhs_native_priv_inclusive_citizenship_mid = {
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 100
 	}
 }
 
-# nhs_native_priv_inclusive_citizenship = {
-#     icon = privilege_grant_new_world_charter
-
-# 	# land_share = 5
-# 	loyalty = 0.10
-# 	influence = 0.15
-
-# 	is_valid = {
-# 		has_estate_privilege = nhs_native_priv_ancestral_land
-# 		has_country_flag = native_council_enabled_early
-# 	}
-# 	can_select = {
-# 		has_estate_privilege = nhs_native_priv_ancestral_land
-# 		to_num_of_privileges_check = {
-# 			ESTATE = estate_all_natives
-# 		}
-# 	}
-# 	on_granted = {
-# 		custom_tooltip = nhs_native_priv_inclusive_citizenship_tooltip
-# 		custom_tooltip = nhs_new_line_tt
-# 		if = {
-# 			limit = {
-# 				has_country_flag = native_council_enabled_early
-# 			}
-# 			custom_tooltip = nhs_native_priv_cultural_sufferance_early_effect_tooltip
-# 		}
-# 		else_if = {
-# 			limit = {
-# 				has_country_flag = native_council_enabled_mid
-# 			}
-# 			custom_tooltip = nhs_native_priv_cultural_sufferance_mid_effect_tooltip
-# 		}
-# 	}
-# 	on_granted_province = {
-# 		handle_nhs_native_priv_inclusive_citizenship_modifier = yes
-# 		if = {
-# 			limit = {
-# 				has_owner_accepted_culture = no
-# 				nhs_culturally_native = yes
-# 			}
-# 			if = {
-# 				limit = {
-# 					owner = {
-# 						has_country_flag = native_council_enabled_early
-# 					}
-# 				}
-# 				add_province_modifier = {
-# 					name = nhs_native_priv_cultural_sufferance_early_mod
-# 					duration = -1
-# 				}
-# 			}
-# 			else_if = {
-# 				limit = {
-# 					owner = {
-# 						has_country_flag = native_council_enabled_mid
-# 					}
-# 				}
-# 				add_province_modifier = {
-# 					name = nhs_native_priv_cultural_sufferance_mid_mod
-# 					duration = -1
-# 				}
-# 			}
-# 		}
-# 	}
-# 	on_revoked = {
-# 		custom_tooltip = nhs_native_priv_cultural_sufferance_revoke_tooltip
-# 	}
-# 	on_revoked_province = {
-# 		if = {
-# 			limit = {
-# 				has_province_modifier = nhs_native_priv_inclusive_citizenship_mod
-# 			}
-# 			remove_province_modifier = nhs_native_priv_inclusive_citizenship_mod
-# 		}
-# 		remove_province_modifier = nhs_native_priv_cultural_sufferance_early_mod
-# 		remove_province_modifier = nhs_native_priv_cultural_sufferance_mid_mod
-# 	}
-# 	on_invalid = {
-# 		custom_tooltip = nhs_native_priv_cultural_sufferance_revoke_tooltip
-# 	}
-# 	on_invalid_province = {
-# 		if = {
-# 			limit = {
-# 				has_province_modifier = nhs_native_priv_inclusive_citizenship_mod
-# 			}
-# 			remove_province_modifier = nhs_native_priv_inclusive_citizenship_mod
-# 		}
-# 		remove_province_modifier = nhs_native_priv_cultural_sufferance_early_mod
-# 		remove_province_modifier = nhs_native_priv_cultural_sufferance_mid_mod
-# 	}
-# 	penalties = {
-# 	}
-# 	benefits = {
-# 	}
-# 	ai_will_do = {
-# 		factor = 5
-# 	}
-# }
+# -- Generic Privileges --
 
 # Ancestral land recognition
 
 nhs_native_priv_ancestral_land = {
     icon = privilege_native_advancement
 
-	max_absolutism = -5
+	max_absolutism = -10
 	land_share = 10
 	loyalty = 0.15
 	influence = 0.25
@@ -360,6 +297,8 @@ nhs_native_priv_ancestral_land = {
 	}
 }
 
+# -- Elysian privileges --
+
 # Local councils recognized
 
 nhs_native_priv_local_councils_empowered = {
@@ -370,7 +309,7 @@ nhs_native_priv_local_councils_empowered = {
 	influence = 0.05
 
 	is_valid = {
-		NOT = { nhs_culturally_norse = yes }
+		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
 	}
 	can_select = {
 		to_num_of_privileges_check = {
@@ -420,6 +359,10 @@ nhs_native_priv_local_councils_empowered = {
 	}
 	ai_will_do = {
 		factor = 5
+		modifier = {
+			factor = 0
+			is_absolutism_active = yes
+		}
 	}
 }
 
@@ -494,7 +437,7 @@ nhs_native_priv_increase_tribute = {
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 0
 	}
 }
 
@@ -542,7 +485,7 @@ nhs_native_priv_increase_tribute_revoke = {
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 100
 	}
 }
 
@@ -556,7 +499,7 @@ nhs_native_priv_citizenship_for_service = {
 
 	is_valid = {
 		has_country_flag = native_council_enabled_mid
-		NOT = { nhs_culturally_norse = yes }
+		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
 	}
 	can_select = {
 		to_num_of_privileges_check = {
@@ -585,12 +528,12 @@ nhs_native_priv_citizenship_for_service = {
 		land_forcelimit_modifier = 0.25
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 0
 	}
 }
 
 
-# -- Elysian privileges --
+
 
 # Pax romana
 
@@ -602,7 +545,7 @@ nhs_native_priv_pax_romana_early = {
 	influence = -0.20
 
 	is_valid = {
-		nhs_culturally_elysian = yes
+		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
 		has_country_flag = native_council_enabled_early
 		NOT = { has_country_flag = native_council_enabled_mid }
 		if = {
@@ -686,7 +629,7 @@ nhs_native_priv_pax_romana_early = {
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 0
 	}
 }
 
@@ -698,7 +641,7 @@ nhs_native_priv_pax_romana_mid = {
 	influence = -0.10
 
 	is_valid = {
-		nhs_culturally_elysian = yes
+		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
 		has_country_flag = native_council_enabled_mid
 		if = {
 			limit = {
@@ -762,7 +705,7 @@ nhs_native_priv_pax_romana_mid = {
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 0
 	}
 }
 
@@ -819,7 +762,7 @@ nhs_native_priv_pax_romana_revoke = {
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 0
 	}
 }
 
@@ -832,9 +775,16 @@ nhs_native_priv_encourage_barbaroi_officials = {
 	influence = 0.1
 
 	is_valid = {
-		nhs_culturally_elysian = yes
+		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+		if = {
+			limit = {
+				has_estate_privilege = nhs_native_priv_encourage_barbaroi_officials
+			}
+			NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
+		}
 	}
 	can_select = {
+		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
 		to_num_of_privileges_check = {
 			ESTATE = estate_all_natives
 		}
@@ -902,7 +852,7 @@ nhs_native_priv_encourage_barbaroi_officials = {
 		}
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 0
 	}
 }
 
@@ -914,7 +864,7 @@ nhs_native_priv_designate_development_zones = {
 	
 	is_valid = {
 		has_country_flag = native_council_enabled_mid
-		nhs_culturally_elysian = yes
+		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
 		if = {
 			limit = {
 				has_estate_privilege = nhs_native_priv_designate_development_zones
@@ -971,7 +921,7 @@ nhs_native_priv_designate_development_zones = {
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 0
 	}
 }
 
@@ -985,7 +935,7 @@ nhs_native_priv_divide_et_impera_early = {
 	influence = -0.05
 	
 	is_valid = {
-		nhs_culturally_elysian = yes
+		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
 		has_country_flag = native_council_enabled_early
 		NOT = { has_country_flag = native_council_enabled_mid }
 		if = {
@@ -1069,7 +1019,7 @@ nhs_native_priv_divide_et_impera_early = {
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 0
 	}
 }
 
@@ -1081,7 +1031,7 @@ nhs_native_priv_divide_et_impera_mid = {
 	influence = -0.05
 	
 	is_valid = {
-		nhs_culturally_elysian = yes
+		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
 		has_country_flag = native_council_enabled_mid
 		if = {
 			limit = {
@@ -1146,7 +1096,7 @@ nhs_native_priv_divide_et_impera_mid = {
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 0
 	}
 }
 
@@ -1203,12 +1153,9 @@ nhs_native_priv_divide_et_impera_revoke = {
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 0
 	}
 }
-
-
-# -- Spartan Privileges --
 
 
 # -- Vinlandic Privileges --
@@ -1216,15 +1163,70 @@ nhs_native_priv_divide_et_impera_revoke = {
 # Skraeling Thingas
 #  Variant of 'recognize local councils'
 
-nhs_native_priv_skraeling_thingas = {
+to_vov_native_priv_skraeling_thingas = {
     icon = privilege_royal_authority
 
-	loyalty = 0.10
+	loyalty = 0.05
 	influence = 0.05
+	max_absolutism = -10
 	
 	is_valid = {
-		has_country_flag = native_council_enabled_mid
-		nhs_culturally_norse = yes
+		nhs_check_all_vinland = { CONDITION = tag }
+	}
+	can_select = {
+		to_num_of_privileges_check = {
+			ESTATE = estate_all_natives
+		}
+		to_councils_formation_not_active = yes
+	}
+	on_granted = {
+		custom_tooltip = to_vov_native_priv_skraeling_thingas_effect_tooltip
+	}
+	on_granted_province = {
+		if = {
+			limit = {
+				nhs_culturally_native = yes
+			}
+			add_province_modifier = {
+				name = to_vov_native_priv_skraeling_thingas_mod
+				duration = -1
+			}
+		}
+	}
+	on_revoked = {
+		custom_tooltip = to_vov_native_priv_skraeling_thingas_revoke_tooltip
+	}
+	on_revoked_province = {
+		remove_province_modifier = to_vov_native_priv_skraeling_thingas_mod
+	}
+	on_invalid = {
+		custom_tooltip = to_vov_native_priv_skraeling_thingas_revoke_tooltip
+	}
+	on_invalid_province = {
+		remove_province_modifier = to_vov_native_priv_skraeling_thingas_mod
+	}
+	penalties = {
+		legitimacy = -0.25
+	}
+	benefits = {
+	}
+	ai_will_do = {
+		factor = 10
+	}
+
+}
+
+# Raiding hosts
+#  Variant of 'citizenship for service'
+
+to_vov_native_priv_raiding_hosts = {
+	icon = privilege_military_power
+
+	loyalty = 0.05
+	influence = 0.05
+
+	is_valid = {
+		nhs_check_all_vinland = { CONDITION = tag }
 	}
 	can_select = {
 		to_num_of_privileges_check = {
@@ -1235,73 +1237,265 @@ nhs_native_priv_skraeling_thingas = {
 	on_granted = {
 	}
 	on_revoked = {
-		every_owned_province = {
-			limit = {
-				nhs_culturally_native = yes
-			}
-			add_local_autonomy = 20
-		}
 	}
 	on_invalid = {
 	}
 	penalties = {
-		legitimacy = -0.25
-		global_autonomy = 0.05  # TODO: both autonomy modifiers should be province specific
+		discipline = -0.025
+		loot_amount = -0.5
+		army_tradition_decay = 0.01
 	}
 	benefits = {
-		num_accepted_cultures = 1
-		min_autonomy_in_territories = -0.10
+		global_manpower_modifier = 0.25
+		land_forcelimit_modifier = 0.25
 	}
 	ai_will_do = {
-		factor = 5
+		factor = 0
 	}
-
 }
 
+# Benevolt Conquerors
+#  Variant of 'Inclusive Citizenship'
 
-# Raiding hosts
-#  Variant of 'citizenship for service'
-
-nhs_native_priv_raiding_hosts = {
-	icon = privilege_military_power
+to_vov_native_priv_benevolent_conquerors = {
+	icon = privilege_benevolt_conquerors
 
 	loyalty = 0.10
 	influence = 0.10
 
 	is_valid = {
-		nhs_culturally_norse = yes
+		nhs_check_all_vinland = { CONDITION = tag }
+		if = {
+			limit = {
+				has_estate_privilege = to_vov_native_priv_benevolent_conquerors
+			}
+			NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
+		}
 	}
 	can_select = {
+		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
 		to_num_of_privileges_check = {
 			ESTATE = estate_all_natives
 		}
 		to_councils_formation_not_active = yes
 	}
 	on_granted = {
+		custom_tooltip = to_vov_disables_raiding_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_increases_skraeling_integration_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_vov_native_priv_benevolent_conquerors_tooltip
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_native_priv_cultural_sufferance_mid_effect_tooltip
+		
+		hidden_effect = {
+			swap_free_idea_group = yes
+		}
 	}
-	on_revoked = {
-		every_owned_province = {
+	on_granted_province = {
+		if = {
 			limit = {
+				is_colony = yes
+			}
+			handle_to_vov_native_priv_benevolent_conquerors_modifier = yes
+		}
+		if = {
+			limit = {
+				has_owner_accepted_culture = no
 				nhs_culturally_native = yes
 			}
-			add_devastation = 50
+			add_province_modifier = {
+				name = nhs_native_priv_cultural_sufferance_mid_mod
+				duration = -1
+			}
 		}
+	}
+	on_revoked = {
+		custom_tooltip = to_vov_native_priv_benevolent_conquerors_revoke_tooltip
+		custom_tooltip = nhs_native_priv_cultural_sufferance_revoke_tooltip
+
+		hidden_effect = {
+			swap_free_idea_group = yes
+		}
+	}
+	on_revoked_province = {
+		remove_province_modifier = to_vov_native_priv_benevolent_conquerors_mod
+		remove_province_modifier = nhs_native_priv_cultural_sufferance_mid_mod
+	}
+	on_invalid = {
+		custom_tooltip = to_vov_native_priv_benevolent_conquerors_revoke_tooltip
+		custom_tooltip = nhs_native_priv_cultural_sufferance_revoke_tooltip
+
+		hidden_effect = {
+			swap_free_idea_group = yes
+		}
+	}
+	on_invalid_province = {
+		remove_province_modifier = to_vov_native_priv_benevolent_conquerors_mod
+		remove_province_modifier = nhs_native_priv_cultural_sufferance_mid_mod
+	}
+	penalties = {
+		# production_efficiency = -0.10
+		stability_cost_modifier = 0.20
+		vin_vikingr_influence = -0.5
+		# burghers_loyalty_modifier = -0.05
+		# burghers_influence_modifier = -0.05
+	}
+	benefits = {
+		# years_of_nationalism = -5
+	}
+	ai_will_do = {
+		factor = 0
+	}
+}
+
+# Freedom of worship
+
+to_vov_native_priv_freedom_of_worship = {
+    icon = privilege_tolerance_heathen
+
+	loyalty = 0.10
+	influence = 0.10
+
+	is_valid = {
+		if = {
+			limit = {
+				has_estate_privilege = to_vov_native_priv_freedom_of_worship
+			}
+			NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
+			NOT = { has_estate_privilege = estate_church_enforced_one_faith }
+		}
+		nhs_check_all_vinland = { CONDITION = tag }
+	}
+	can_select = {
+		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
+		NOT = { has_estate_privilege = estate_church_enforced_one_faith }
+		any_owned_province = {
+			nhs_culturally_native = yes
+			NOT = { religion = root }
+		}
+		to_num_of_privileges_check = {
+			ESTATE = estate_all_natives
+		}
+		to_councils_formation_not_active = yes
+	}
+	on_granted = {
+		custom_tooltip = to_vov_native_priv_freedom_of_worship_tooltip
+	}
+	on_granted_province = {
+		if = {
+			limit = {
+				nhs_culturally_native = yes
+				NOT = { religion = root }
+			}
+			add_province_modifier = {
+				name = to_vov_native_priv_freedom_of_worship_mod
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = {
+				has_province_modifier = to_vov_native_priv_freedom_of_worship_mod
+			}
+			remove_province_modifier = to_vov_native_priv_freedom_of_worship_mod
+		}
+	}
+	on_revoked = {
+		custom_tooltip = to_vov_native_priv_freedom_of_worship_revoke_tooltip
+	}
+	on_revoked_province = {
+		remove_province_modifier = to_vov_native_priv_freedom_of_worship_mod
+	}
+	on_invalid = {
+		custom_tooltip = to_vov_native_priv_freedom_of_worship_revoke_tooltip
+	}
+	on_invalid_province = {
+		remove_province_modifier = to_vov_native_priv_freedom_of_worship_mod
+	}
+	penalties = {
+		
+	}
+	benefits = {
+		
+	}
+	conditional_modifier = {
+		trigger = {
+			religion_group = pagan
+		}
+		modifier = {
+			tolerance_heretic = 1
+			church_loyalty_modifier = -0.05
+		}
+		
+	}
+	conditional_modifier = {
+		trigger = {
+			NOT = { religion_group = pagan }
+		}
+		modifier = {
+			tolerance_heathen = 1
+			church_loyalty_modifier = -0.05
+		}
+	}
+	ai_will_do = {
+		factor = 10
+		modifier = {
+			factor = 0
+			has_country_modifier = nhs_vov_reformed_faith
+		}
+	}
+}
+
+# Open Ranks
+#  Variant of 'Elysian Open Offices'
+
+to_vov_native_priv_open_ranks = {
+    icon = privilege_tolerance_heathen
+
+	loyalty = 0.15
+	influence = 0.1
+
+	is_valid = {
+		if = {
+			limit = {
+				has_estate_privilege = to_vov_native_priv_freedom_of_worship
+			}
+			NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
+		}
+		nhs_check_all_vinland = { CONDITION = tag }
+	}
+	can_select = {
+		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
+		to_num_of_privileges_check = {
+			ESTATE = estate_all_natives
+		}
+		to_councils_formation_not_active = yes
+	}
+	on_granted = {
+		custom_tooltip = nhs_increases_skraeling_integration_tt
+	}
+	on_granted_province = {
+	}
+	on_revoked = {
+	}
+	on_revoked_province = {
 	}
 	on_invalid = {
 	}
+	on_invalid_province = {
+	}
 	penalties = {
-		loot_amount = -0.5
-		discipline = -0.05
-		army_tradition_from_battle = -0.5
-		army_tradition_decay = 0.01
+		global_unrest = 2
+		nobles_loyalty_modifier = -0.05
+		nobles_influence_modifier = -0.05
+		church_loyalty_modifier = -0.05
+		church_influence_modifier = -0.05
 	}
 	benefits = {
-		global_manpower = 0.50
-		land_forcelimit_modifier = 0.30
+		advisor_pool = 1
+		free_leader_pool = 1
 	}
 	ai_will_do = {
 		factor = 10
 	}
 }
-
-

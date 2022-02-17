@@ -193,6 +193,7 @@ province_recalculate_estate_privileges_effect_natives = {
 	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_designate_development_zones MODIFIER = nhs_native_priv_designate_development_zones_mod }
 	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_divide_et_impera_early MODIFIER = nhs_native_priv_divide_et_impera_early_mod }
 	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_divide_et_impera_mid MODIFIER = nhs_native_priv_divide_et_impera_mid_mod }
+	province_update_estate_privilege = { PRIVILEGE = nhs_native_priv_local_councils_empowered MODIFIER = to_vov_native_priv_skraeling_thingas_mod }
 }
 
 handle_nhs_native_priv_inclusive_citizenship_modifier = {
@@ -219,7 +220,42 @@ handle_nhs_native_priv_inclusive_citizenship_colony_finished = {
 			has_province_modifier = nhs_native_priv_inclusive_citizenship_mod
 		}
 		remove_province_modifier = nhs_native_priv_inclusive_citizenship_mod
-		add_local_autonomy = 25
+		add_local_autonomy = 20
+		owner = {
+			change_estate_land_share = {
+				estate = estate_all_natives
+				share = 5
+				province = PREV
+			}
+		}
+	}
+}
+
+handle_to_vov_native_priv_benevolent_conquerors_modifier = {
+	if = {
+		limit = {
+			to_vov_native_priv_benevolent_conquerors_province = yes
+		}
+		add_province_modifier = {
+			name = to_vov_native_priv_benevolent_conquerors_mod
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			has_province_modifier = to_vov_native_priv_benevolent_conquerors_mod
+		}
+		remove_province_modifier = to_vov_native_priv_benevolent_conquerors_mod
+	}
+}
+
+handle_to_vov_native_priv_benevolent_conquerors_colony_finished = {
+	if = {
+		limit = {
+			has_province_modifier = to_vov_native_priv_benevolent_conquerors_mod
+		}
+		remove_province_modifier = to_vov_native_priv_benevolent_conquerors_mod
+		add_local_autonomy = 10
 		owner = {
 			change_estate_land_share = {
 				estate = estate_all_natives
@@ -252,6 +288,37 @@ handle_nhs_native_priv_cultural_sufferance_modifier = {
 			EARLY_MODIFIER = nhs_native_priv_cultural_sufferance_early_mod 
 			MID_MODIFIER = nhs_native_priv_cultural_sufferance_mid_mod 
 			ADDITIONAL_TRIGGER = nhs_native_priv_cultural_sufferance_province_trigger
+		}
+	}
+}
+
+handle_to_vov_native_priv_freedom_of_worship_modifier = {
+	if = {
+		limit = {
+			owner = {
+				has_estate_privilege = to_vov_native_priv_freedom_of_worship
+			}
+		}
+		if = {
+			limit = {
+				nhs_culturally_native = yes
+				NOT = { religion = root }
+			}
+			if = {
+				limit = {
+					NOT = { has_province_modifier = to_vov_native_priv_freedom_of_worship_mod }
+				}
+				add_province_modifier = {
+					name = to_vov_native_priv_freedom_of_worship_mod
+					duration = -1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_province_modifier = to_vov_native_priv_freedom_of_worship_mod
+			}
+			remove_province_modifier = to_vov_native_priv_freedom_of_worship_mod
 		}
 	}
 }
