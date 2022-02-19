@@ -138,29 +138,45 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			# 		}
 			# 	}
 			# }
-			custom_trigger_tooltip = {
-				tooltip = nhs_border_fortifications_mission_trigger_tt
-				OR = {
-					# Let us not keep checking this
-					has_country_flag = nhs_completed_nhs_border_fortifications_mission
-					NOT = {
-						any_province = {
-							province_group = elysian_fortification_pgroup
-							OR = {
-								is_empty = yes
-								NOT = { country_or_subject_or_ally_holds = { TAG = ROOT } }
-								AND = {
-									NOT = { has_influencing_fort = yes }
-									NOT = {
-										any_neighbor_province = {
-											has_influencing_fort = yes
-											is_empty = no
-											country_or_subject_or_ally_holds = { TAG = ROOT }
+			if = {
+				limit = {
+					ai = no
+				}
+				custom_trigger_tooltip = {
+					tooltip = nhs_border_fortifications_mission_trigger_tt
+					OR = {
+						# Let us not keep checking this
+						has_country_flag = nhs_completed_nhs_border_fortifications_mission
+						NOT = {
+							any_province = {
+								province_group = elysian_fortification_pgroup
+								OR = {
+									is_empty = yes
+									NOT = { country_or_subject_or_ally_holds = { TAG = ROOT } }
+									AND = {
+										NOT = { has_influencing_fort = yes }
+										NOT = {
+											any_neighbor_province = {
+												has_influencing_fort = yes
+												is_empty = no
+												country_or_subject_or_ally_holds = { TAG = ROOT }
+											}
 										}
 									}
 								}
 							}
 						}
+					}
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 4
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
 					}
 				}
 			}
