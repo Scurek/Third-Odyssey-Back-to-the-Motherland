@@ -1,13 +1,14 @@
+######################################################################
+# Orthodox rebels. Disgruntled fanatics.
+######################################################################
+orthodox_rebels = {
 
-######################################################################
-# Pantheon rebels. Disgruntled fanatics.
-######################################################################
-pantheon_worship_rebels = {
+	color = { 230 175 175 }
 
 	area = nation 					# Sticks to provinces of their nation
 	government = theocracy 			# Desires Theocracy
-	religion = pantheon_worship
-	defection = religion			# Defects to countries of their religion
+	religion = orthodox
+	defection = none				# Will not defect
 	defect_delay = 120				# Held provinces will auto-defect after 18 months, regardless of accept/enforce demands.
 	independence = none				# Does not strive for independence
 	unit_transfer = no
@@ -44,7 +45,7 @@ pantheon_worship_rebels = {
 		}
 		modifier = {
 			factor = 0.0
-			NOT = { religion = pantheon_worship }
+			NOT = { religion = orthodox }
 		}
 		modifier = {
 			factor = 0.001
@@ -89,21 +90,21 @@ pantheon_worship_rebels = {
 		}
 		modifier = {
 			factor = 0.0
-			religion = pantheon_worship
-			owner = { religion = pantheon_worship }
+			religion = orthodox
+			owner = { religion = orthodox }
 		}
 		modifier = {
 			factor = 2.0
-			NOT = { religion = pantheon_worship }
+			NOT = { religion = orthodox }
 			any_neighbor_province = {
-	 			religion = pantheon_worship
+	 			religion = orthodox
 	 			NOT = { has_province_modifier = "forced_conversion" }
 	 		}
 	 	}
 		modifier = {
-			factor = 1.5
+			factor = 5
 			has_missionary = yes
-			religion = pantheon_worship
+			religion = orthodox
 		}
 		modifier = {
 			factor = 1.5
@@ -129,34 +130,61 @@ pantheon_worship_rebels = {
 		}
  	}
 	siege_won_effect = {
+		custom_tooltip = religious_rebels_seige_effect_tooltip
 		if = {
 			limit = {
-				OR = {
-					religion = pantheon_worship
-					is_reformation_center = yes
-					owner = { religion = pantheon_worship }
+				owner = {
+					has_country_flag = hellenic_conversion_preacher
 				}
 			}
-			add_province_modifier = {
-				name = "religious_violence"
-				duration = 730
+			# custom_tooltip = nhs_rebels_seige_increase_hellenic_disaster_progress_tooltip
+			add_disaster_progress = {
+				disaster = nhs_hcd_hellenic_crisis
+				value = 2
 			}
 		}
-		if = {
-			limit = {
-				NOT = { religion = pantheon_worship }
+		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						religion = orthodox
+						is_reformation_center = yes
+						owner = { religion = orthodox }
+					}
+				}
+				add_province_modifier = {
+					name = "religious_violence"
+					duration = 730
+				}
 			}
-			change_religion = pantheon_worship
-			add_province_modifier = {
-				name = "forced_conversion"
-				duration = 730
+			if = {
+				limit = {
+					NOT = { religion = orthodox }
+					is_reformation_center = no
+					NOT = { owner = { religion = orthodox } }
+				}
+				change_religion = orthodox
+				add_province_modifier = {
+					name = "forced_conversion"
+					duration = 730
+				}
+			}
+		}
+		owner = {
+			change_estate_land_share = {
+				estate = estate_church
+				share = 10.0
+				province = ROOT
 			}
 		}
 	}
 	
 	# Country scope
 	can_negotiate_trigger = {
-		religion_group = pagan
+		OR = {
+			religion_group = christian
+			dominant_religion = orthodox
+		}
 	}
 	
 	# Country scope
@@ -165,13 +193,20 @@ pantheon_worship_rebels = {
 	}
 	
 	# Localisation for their demands
-	demands_description = "pantheon_worship_rebels_demand"
+	demands_description = "orthodox_rebels_demand"
 	
 	# Country Scope	
 	demands_enforced_effect = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = just_lost_to_rebels
+				duration = 10
+				hidden = yes
+			}
+		}
 		if = {
 			limit = {
-				NOT = { religion_group = pagan }
+				NOT = { religion_group = christian }
 			}
 			add_prestige = -50
 			every_owned_province = {
@@ -187,9 +222,40 @@ pantheon_worship_rebels = {
 			}
 			add_stability = -1
 		}
+		else_if = {
+			limit = {
+				NOT = { religion = orthodox }
+				dominant_religion = orthodox
+				NOT = { tag = PAP }
+			}
+			change_religion = orthodox
+			force_converted = yes
+		}
+		else_if = {
+			limit = {
+				religion = orthodox
+			}
+			add_country_modifier = {
+				name = "religious_intolerance_enforced"
+				duration = 3650
+			}
+		}	
+		else_if = {
+			limit = {
+				NOT = { religion = orthodox }
+				NOT = { dominant_religion = orthodox }
+				religion_group = christian
+				NOT = { has_country_modifier = heretic_tolerance }
+			}
+			add_country_modifier = {
+				name = "heretic_tolerance"
+				duration = 3650
+			}
+		}
+		else = { add_stability = -1 } #Should probably never get here
 		if = {
 			limit = {
-				religion = pantheon_worship
+				religion = orthodox
 				has_estate = estate_church
 				NOT = {
 					has_estate_influence_modifier = {
@@ -205,23 +271,9 @@ pantheon_worship_rebels = {
 				influence = 15
 			}
 		}
-		if = {
-			limit = {
-				religion = pantheon_worship
-			}
-			add_country_modifier = {
-				name = "religious_intolerance_enforced"
-				duration = 3650
-			}
-		}
-		if = {
-			limit = {
-				religion_group = pagan
-				NOT = { religion = pantheon_worship }
-			}
-			change_religion = pantheon_worship
-			force_converted = yes
+		change_estate_land_share = {
+			estate = estate_church
+			share = 10.0
 		}
 	}
 }
-

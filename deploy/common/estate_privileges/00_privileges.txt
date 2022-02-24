@@ -2840,13 +2840,22 @@ estate_church_enforced_one_faith = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check = {
-			ESTATE = estate_church
-		}
 		NOT = { has_estate_privilege = estate_burghers_enforced_interfaith_dialogue }
 		NOT = { has_estate_privilege = estate_dhimmi_tolerance }
 		NOT = { has_estate_privilege = estate_dhimmi_guarantee_of_traditions }
-		NOT = { has_estate_privilege = to_vov_native_priv_freedom_of_worship }
+		if = {
+			limit = {
+				has_estate = estate_all_natives
+				nhs_check_all_vinland = { CONDITION = tag }
+			}
+			NOT = { has_estate_privilege = to_vov_native_priv_freedom_of_worship }
+		}
+		to_nhs_disabled_due_to_tolerance_modifiers = yes
+		to_nhs_disabled_during_pre_hellenic_revolt = yes
+		to_nhs_disabled_until_1450 = yes
+		to_num_of_privileges_check = {
+			ESTATE = estate_church
+		}
 	}
 	penalties = {
 		tolerance_heathen = -2
@@ -8635,6 +8644,16 @@ estate_church_for_the_faith = {
 			NOT = { religion = root }
 		}
 		NOT = { has_estate_privilege = estate_church_inwards_perfection }
+		if = {
+			limit = {
+				has_estate = estate_all_natives
+				nhs_check_all_vinland = { CONDITION = tag }
+			}
+			NOT = { has_estate_privilege = to_vov_native_priv_freedom_of_worship }
+		}
+		to_nhs_disabled_due_to_tolerance_modifiers = yes
+		to_nhs_disabled_during_pre_hellenic_revolt = yes
+		to_nhs_disabled_until_1450 = yes
 	}
 	on_granted = {
 		custom_tooltip = estate_church_for_the_faith_effect_tooltip
@@ -9456,12 +9475,27 @@ estate_church_one_faith_one_culture = {
 		}
 	}
 	can_select = {
-		NOT = { has_estate_privilege = nhs_native_priv_inclusive_citizenship_early }
-		NOT = { has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid }
-		NOT = { has_estate_privilege = nhs_native_priv_encourage_barbaroi_officials }
-		NOT = { has_estate_privilege = to_vov_native_priv_benevolent_conquerors }
-		NOT = { has_estate_privilege = to_vov_native_priv_freedom_of_worship }
-		NOT = { has_estate_privilege = to_vov_native_priv_open_ranks }
+		if = {
+			limit = {
+				has_estate = estate_all_natives
+			}
+			if = {
+				limit = {
+					NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+				}
+				NOT = { has_estate_privilege = nhs_native_priv_inclusive_citizenship_early }
+				NOT = { has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid }
+				NOT = { has_estate_privilege = nhs_native_priv_encourage_barbaroi_officials }
+			}
+			else = {
+				NOT = { has_estate_privilege = to_vov_native_priv_benevolent_conquerors }
+				NOT = { has_estate_privilege = to_vov_native_priv_freedom_of_worship }
+				NOT = { has_estate_privilege = to_vov_native_priv_open_ranks }
+			}
+		}
+		to_nhs_disabled_due_to_tolerance_modifiers = yes
+		to_nhs_disabled_during_pre_hellenic_revolt = yes
+		to_nhs_disabled_until_1450 = yes
 		to_num_of_privileges_check = {
 			ESTATE = estate_church
 		}

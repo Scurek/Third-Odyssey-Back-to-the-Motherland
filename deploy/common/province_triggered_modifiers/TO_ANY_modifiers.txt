@@ -1,0 +1,73 @@
+# Province Triggered modifiers are here.
+# These are added to provinces through the add_province_triggered_modifier effect
+#
+# Effects are fully scriptable here.
+
+to_yearly_event_pulse = {
+	potential = {
+	}
+	
+	#viewer = {
+	#}
+	trigger = {
+		is_month = 0
+		NOT = { is_month = 1 }
+	}
+		
+	#Province scope
+	on_activation = {
+		to_yearly_event_pulse_effect = yes
+		if = {
+			limit = {
+				NOT = { has_province_flag = to_two_year_pulse_cd }
+			}
+			set_province_flag = to_two_year_pulse_cd
+			to_two_year_event_pulse_1_effect = yes
+		}
+		else = {
+			clr_province_flag = to_two_year_pulse_cd
+			to_two_year_event_pulse_2_effect = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = to_three_year_event_pulse_counter
+						value = 1
+					}
+				}
+			}
+			to_three_year_event_pulse_1_effect = yes
+			change_variable = {
+				which = to_three_year_event_pulse_counter
+				value = 1
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = to_three_year_event_pulse_counter
+						value = 2
+					}
+				}
+			}
+			to_three_year_event_pulse_2_effect = yes
+			change_variable = {
+				which = to_three_year_event_pulse_counter
+				value = 1
+			}
+		}
+		else = {
+			to_three_year_event_pulse_3_effect = yes
+			set_variable = {
+				which = to_three_year_event_pulse_counter
+				value = 0
+			}
+		}
+	}
+	on_deactivation = {
+		
+	}
+
+}

@@ -27,17 +27,11 @@
 estate_church_nhs_inquisition_privilege = {
 	icon = privilege_recruit_minister
 	max_absolutism = -10
-	influence = 0.10
+	influence = 0.20
 	loyalty = 0.05
 	is_valid = {
 		has_estate_privilege = estate_church_nhs_inquisition_privilege 
-		OR = {
-			religion = orthodox
-			religion = elysian_orthodoxy
-		}
-		NOT = {
-			has_estate_privilege = estate_church_nhs_enforced_inquisition_privilege
-		}
+		religion_group = christian
 	}
 	can_select = {
 		to_num_of_privileges_check = {
@@ -51,61 +45,45 @@ estate_church_nhs_inquisition_privilege = {
 			loyalty = 65
 		}
 		stability = 2
+		# DOES NOT HAVE PRE DISASTER OR DISASTER
+		NOT = { has_disaster = nhs_hcd_hellenic_crisis }
+	}
+	on_granted = {
+		custom_tooltip = nhs_increase_hellenic_disaster_progress_by_0.5
+		if = {
+			limit = {
+				has_country_flag = hellenic_conversion_preacher
+			}
+			custom_tooltip = nhs_enable_intolerant_church_priviles_tt
+		}
+		if = {
+			limit = {
+				OR = {
+					has_any_disaster = yes
+					religious_unity = 0.95
+				}
+			}
+			custom_tooltip = nhs_estate_church_nhs_inquisition_privilege_effect_bad_tt
+		}
+		else = {
+			custom_tooltip = nhs_estate_church_nhs_inquisition_privilege_effect_good_tt
+		}
+	}
+	on_revoked = {
+		add_stability = -1
 	}
 	penalties = {
 	}
-	benefits = {
-		tolerance_own = 1
-		missionary_maintenance_cost = -0.25 
-	}
+	# benefits = {
+	# 	tolerance_own = 1
+	# 	missionary_maintenance_cost = -0.25
+	# }
 
-	cooldown_years = 10
-
-	ai_will_do = {
-		factor = 0
-	}
-}
-
-estate_church_nhs_enforced_inquisition_privilege = {
-	icon = privilege_recruit_minister
-	max_absolutism = -15
-	influence = 0.15
-	loyalty = 0.05
-	is_valid = {
-		has_estate_privilege = estate_church_nhs_enforced_inquisition_privilege
-		OR = {
-			religion = orthodox
-			religion = elysian_orthodoxy
-		}
-	}
-	can_select = {
-		to_num_of_privileges_check = {
-			ESTATE = estate_church
-		}
-	}
-	can_revoke = {
-		estate_loyalty = {
-			estate = estate_church
-			loyalty = 65
-		}
-		stability = 2
-	}
-	on_revoked = {
-		add_stability = -3
-		random_owned_province = {
-			limit = {
-				is_capital = yes
-			}
-			spawn_rebels = {
-				type = orthodox_rebels
-				size = 2
-			}
-		}
-	}
 	conditional_modifier = {
 		trigger = {
+			has_any_disaster = no
 			NOT = { religious_unity = 0.95 }
-			}
+		}
 		modifier = {
 			church_loyalty_modifier = -0.15
 			legitimacy = -2
@@ -114,7 +92,10 @@ estate_church_nhs_enforced_inquisition_privilege = {
 	}
 	conditional_modifier = {
 		trigger = {
-			religious_unity = 0.95
+			OR = {
+				has_any_disaster = yes
+				religious_unity = 0.95
+			}
 		}
 		modifier = {
 			tolerance_own = 2
