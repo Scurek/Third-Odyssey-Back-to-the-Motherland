@@ -45,6 +45,153 @@ country_event = {
 				save_event_target_as = nhs_hcd_target_province
 			}
 			to_nhs_remove_pre_hellenic_disaster_flags = yes
+
+			random_owned_province = {
+				limit = {
+					religion = orthodox
+					culture_group = ROOT
+					is_capital = no
+					NOT = { has_province_modifier = nhs_hcd_Pagan_minority }
+				}
+				save_event_target_as = nhs_orthodox_first_revolt_province
+				set_province_flag = nhs_orthodox_revolt_province
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_orthodox_first_revolt_province }
+				}
+				random_owned_province = {
+					limit = {
+						religion = orthodox
+						is_capital = no
+						NOT = { has_province_modifier = nhs_hcd_Pagan_minority }
+					}
+					save_event_target_as = nhs_orthodox_first_revolt_province
+					set_province_flag = nhs_orthodox_revolt_province
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_orthodox_first_revolt_province }
+				}
+				capital_scope = {
+					save_event_target_as = nhs_orthodox_first_revolt_province
+					set_province_flag = nhs_orthodox_revolt_province
+				}
+			}
+			random_owned_province = {
+				limit = {
+					religion = orthodox
+					culture_group = ROOT
+					is_capital = no
+					NOT = { has_province_modifier = nhs_hcd_Pagan_minority }
+					NOT = { has_province_flag = nhs_orthodox_revolt_province }
+				}
+				save_event_target_as = nhs_orthodox_second_revolt_province
+				set_province_flag = nhs_orthodox_revolt_province
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_orthodox_second_revolt_province }
+				}
+				random_owned_province = {
+					limit = {
+						religion = orthodox
+						is_capital = no
+						NOT = { has_province_modifier = nhs_hcd_Pagan_minority }
+						NOT = { has_province_flag = nhs_orthodox_revolt_province }
+					}
+					save_event_target_as = nhs_orthodox_first_revolt_province
+					set_province_flag = nhs_orthodox_revolt_province
+				}
+			}
+
+			random_owned_province = {
+				limit = {
+					is_capital = no
+					culture_group = ROOT
+					has_province_modifier = nhs_hcd_Pagan_minority
+					NOT = { has_province_flag = nhs_orthodox_revolt_province }
+				}
+				save_event_target_as = nhs_pantheon_worship_first_revolt_province
+				set_province_flag = nhs_pantheon_worship_revolt_province
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_pantheon_worship_first_revolt_province }
+				}
+				random_owned_province = {
+					limit = {
+						is_capital = no
+						has_province_modifier = nhs_hcd_Pagan_minority
+						NOT = { has_province_flag = nhs_orthodox_revolt_province }
+					}
+					save_event_target_as = nhs_pantheon_worship_first_revolt_province
+					set_province_flag = nhs_pantheon_worship_revolt_province
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_pantheon_worship_first_revolt_province }
+				}
+				random_owned_province = {
+					limit = {
+						is_capital = no
+						NOT = { has_province_flag = nhs_orthodox_revolt_province }
+					}
+					save_event_target_as = nhs_pantheon_worship_first_revolt_province
+					set_province_flag = nhs_pantheon_worship_revolt_province
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_pantheon_worship_first_revolt_province }
+				}
+				random_owned_province = {
+					limit = {
+						is_capital = no
+					}
+					save_event_target_as = nhs_pantheon_worship_first_revolt_province
+					set_province_flag = nhs_pantheon_worship_revolt_province
+				}
+			}
+			random_owned_province = {
+				limit = {
+					is_capital = no
+					has_province_modifier = nhs_hcd_Pagan_minority
+					NOT = { has_province_flag = nhs_pantheon_worship_revolt_province }
+					NOT = { has_province_flag = nhs_orthodox_revolt_province }
+				}
+				save_event_target_as = nhs_pantheon_worship_second_revolt_province
+				set_province_flag = nhs_pantheon_worship_revolt_province
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_pantheon_worship_second_revolt_province }
+				}
+				random_owned_province = {
+					limit = {
+						is_capital = no
+						NOT = { has_province_flag = nhs_orthodox_revolt_province }
+						NOT = { has_province_flag = nhs_pantheon_worship_revolt_province }
+					}
+					save_event_target_as = nhs_pantheon_worship_second_revolt_province
+					set_province_flag = nhs_pantheon_worship_revolt_province
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_pantheon_worship_second_revolt_province }
+				}
+				random_owned_province = {
+					limit = {
+						is_capital = no
+						NOT = { has_province_flag = nhs_pantheon_worship_revolt_province }
+					}
+					save_event_target_as = nhs_pantheon_worship_second_revolt_province
+					set_province_flag = nhs_pantheon_worship_revolt_province
+				}
+			}
 		}
 	}
 
@@ -61,6 +208,10 @@ country_event = {
 			set_variable = {
 				which = HellenicDisasterProgress
 				value = 0
+			}
+			every_owned_province = {
+				clr_province_flag = nhs_orthodox_revolt_province
+				clr_province_flag = nhs_pantheon_worship_revolt_province
 			}
 		}
 	}
@@ -130,7 +281,15 @@ country_event = {
 			add_treasury = 150
 			add_manpower = 4
 		}
-		# custom_tooltip = nhs_new_line_tt
+		to_nhs_spawn_hellenic_disaster_revolt_moderate = {
+			ATTITUDE_VARIABLE = OrthodoxUprising
+			RELIGION = orthodox
+		}
+		to_nhs_spawn_hellenic_disaster_revolt_moderate = {
+			ATTITUDE_VARIABLE = HellenicUprising
+			RELIGION = pantheon_worship
+		}
+
 		custom_tooltip = nhs_dotted_line_tt
 
 		to_nhs_spawn_inquisition_revolt_disaster = {
@@ -202,7 +361,11 @@ country_event = {
 			add_treasury = 75
 			add_manpower = 3
 		}
-		# custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_new_line_tt
+		to_nhs_spawn_hellenic_disaster_revolt = {
+			RELIGION = pantheon_worship
+		}
+
 		custom_tooltip = nhs_dotted_line_tt
 		to_nhs_remove_pre_hellenic_disaster_country_modifiers = yes
 		
@@ -272,7 +435,10 @@ country_event = {
 			add_treasury = 75
 			add_manpower = 3
 		}
-		# custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_new_line_tt
+		to_nhs_spawn_hellenic_disaster_revolt = {
+			RELIGION = orthodox
+		}
 		custom_tooltip = nhs_dotted_line_tt
 
 		to_nhs_spawn_inquisition_revolt_disaster = {
