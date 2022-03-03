@@ -1,44 +1,49 @@
 vov_handle_coastal_bonus = {
 	if = {
 		limit = {
-			has_province_modifier = vov_coastal_bonus_tm
+			to_vov_eligible_for_coastal_bonus = yes
 		}
 		if = {
 			limit = {
-				is_empty = no
-				NOT = { has_active_triggered_province_modifier = vov_coastal_bonus_tm }
-				NOT = { has_province_flag = vov_coastal_bonus_settled }
-			}
-			set_province_flag = vov_coastal_bonus_settled
-			if = {
-				limit = {
-					owner = {
+				owner = {
+					OR = {
+						primary_culture = varangian_e
 						culture_group = norse_g
 					}
 				}
-				add_province_modifier = {
-					name = vov_coastal_bonus_norse
-					duration = -1
-				}
 			}
-			else = {
-				add_province_modifier = {
-					name = vov_coastal_bonus
-					duration = -1
+			if = {
+				limit = {
+					has_province_modifier = vov_coastal_bonus
 				}
+				remove_province_modifier = vov_coastal_bonus
+			}
+			add_province_modifier = {
+				name = vov_coastal_bonus_norse
+				duration = -1
 			}
 		}
-		else_if = {
-			limit = {
-				is_empty = yes
+		else = {
+			if = {
+				limit = {
+					has_province_modifier = vov_coastal_bonus_norse
+				}
+				remove_province_modifier = vov_coastal_bonus_norse
 			}
-			remove_province_modifier = vov_coastal_bonus_norse
 			add_province_modifier = {
 				name = vov_coastal_bonus
 				duration = -1
 			}
-			# clr_province_flag = vov_coastal_bonus_settled
 		}
+	}
+}
+
+vov_handle_coastal_bonus_all_owned_provinces = {
+	every_owned_province = {
+		limit = {
+			to_vov_eligible_for_coastal_bonus = yes
+		}
+		vov_handle_coastal_bonus = yes
 	}
 }
 
@@ -70,9 +75,7 @@ vov_handle_grand_forestries = {
 vov_setup_coastal_bonus = {
 	every_province = {
 		limit = {
-			region = canada_region
-			has_port = yes
-			NOT = { has_province_modifier = vov_coastal_bonus_tm }
+			to_vov_eligible_for_coastal_bonus = yes
 		}
 		if = {
 			limit = {
@@ -84,9 +87,12 @@ vov_setup_coastal_bonus = {
 			}
 		}
 		else = {
-			set_province_flag = vov_coastal_bonus_settled
+			# set_province_flag = vov_coastal_bonus_settled
+			add_province_modifier = {
+				name = vov_coastal_bonus_norse
+				duration = -1
+			}
 		}
-		add_province_triggered_modifier = vov_coastal_bonus_tm
 	}
 }
 
