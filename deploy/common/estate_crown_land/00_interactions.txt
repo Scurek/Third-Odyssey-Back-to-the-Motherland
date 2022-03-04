@@ -325,15 +325,6 @@ interaction = {
     effect = {
         custom_tooltip = ESTATES_SEIZE_LAND_DESC
         take_estate_land_share_massive = { estate = all }
-		custom_tooltip = SEPERATOR_TOOLTIP
-		
-		if = {
-			limit = {
-				has_country_flag = recent_land_seizure
-			}
-			clr_country_flag = recent_land_seizure
-		}
-		set_country_flag = recent_land_seizure
 		if = {
 			limit = {
 				has_reform = to_native_reform_hooks_and_obligations
@@ -351,36 +342,43 @@ interaction = {
 				short = yes
 			}
 		}
-		re_add_loyalty_from_seized_land = yes
-		custom_tooltip = seize_land_rebels_tt
+		custom_tooltip = SEPERATOR_TOOLTIP
 		if = {
 			limit = {
-				NOT = {
-					estate_loyalty = {
-						estate = all
-						loyalty = 50
-					}
-				}
-				estate_loyalty = {
-					estate = all
-					loyalty = 30
-				}
+				has_country_flag = recent_land_seizure
 			}
+			clr_country_flag = recent_land_seizure
 		}
-		else_if = { 
+		set_country_flag = recent_land_seizure
+		
+		re_add_loyalty_from_seized_land = yes
+		if = {
 			limit = {
-				NOT = {
-					estate_loyalty = {
-						estate = all
-						loyalty = 30
-					}
+				OR = {
+					to_estate_will_revolt = { ESTATE = estate_nobles }
+					to_estate_will_revolt = { ESTATE = estate_brahmins }
+					to_estate_will_revolt = { ESTATE = estate_burghers }
+					to_estate_will_revolt = { ESTATE = estate_church }
+					to_estate_will_revolt = { ESTATE = estate_cossacks }
+					to_estate_will_revolt = { ESTATE = estate_dhimmi }
+					to_estate_will_revolt = { ESTATE = estate_jains }
+					to_estate_will_revolt = { ESTATE = estate_maratha }
+					to_estate_will_revolt = { ESTATE = estate_nomadic_tribes }
+					to_estate_will_revolt = { ESTATE = estate_rajput }
+					to_estate_will_revolt = { ESTATE = estate_vaisyas }
+
+					to_estate_will_revolt = { ESTATE = estate_nhs_nobles }
+					to_estate_will_revolt = { ESTATE = estate_nhs_apogonoi }
+					to_estate_will_revolt = { ESTATE = estate_nhs_pipiltin }
+					to_estate_will_revolt = { ESTATE = estate_clans }
+					to_estate_will_revolt = { ESTATE = estate_all_natives }
 				}
-				estate_influence = {
-					estate = all
-					influence = 1
-				}				
 			}
+			custom_tooltip = seize_land_rebels_tt
 			spawn_rebels_seize_land_switch = yes
+		}
+		else = {
+			custom_tooltip = to_seize_land_rebels_potential_tt
 		}
 	}
 	ai_will_do = {
