@@ -1186,6 +1186,7 @@ country_event = {
 				heavy_ship = NHS
 			}
 		}
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {
 				check_variable = { which = nhs_num_of_light_ships value = 1 }
@@ -1266,11 +1267,12 @@ country_event = {
 # Church gets power on your arrival
 country_event = {
 	id = nhs2_countryevents.1
-	title = nhs2_countryevents.1.t
-	desc = nhs2_countryevents.1.d
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = RELIGION_eventPicture
 
 	is_triggered_only = yes
+	hidden = yes
 
     trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
@@ -1280,6 +1282,7 @@ country_event = {
 	immediate = {
 		hidden_effect = {
 			set_country_flag = nhs_enable_estate_church
+			set_country_flag = nhs_setting_church_land
 			if = {
 				limit = {
 					any_country = {
@@ -1293,22 +1296,16 @@ country_event = {
 					}
 					country_event = { id = nhs2_countryevents.1000 days = 1 }
 				}
+				country_event = { id = nhs2_countryevents.1002 days = 3 }
 			}
 			else = {
-				country_event = { id = nhs2_countryevents.1000 days = 2 }
+				country_event = { id = nhs2_countryevents.1002 days = 2 }
 			}
 		}
 	}
 
 	option = {
-		name = "nhs2_countryevents.1.a"
-		custom_tooltip = nhs_enables_church_estate_tt
-		custom_tooltip = nhs_church_estate_initial_land_tt
-		hidden_effect = {
-			add_patriarch_authority = 1
-			add_patriarch_authority = -0.5	
-		}
-		custom_tooltip = set_patriarch_authority_later_tt
+		name = nhs2_hidden.a
 	}
 }
 
@@ -1324,28 +1321,47 @@ country_event = {
 
 	immediate = {
 		FROM = {
-			change_estate_land_share = {
-				estate = estate_church
-				share = -100
-			}
-			change_estate_land_share = {
-				estate = estate_church
-				share = 20
-			}
+			to_nhs_setup_church_land = yes
 		}
 	}
 
 	option = {
+		name = nhs2_hidden.a
 		FROM = {
-			change_estate_land_share = {
-				estate = estate_church
-				share = -100
-			}
-			change_estate_land_share = {
-				estate = estate_church
-				share = 20
-			}
+			to_nhs_setup_church_land = yes
 		}
+	}
+}
+
+# Church gets power on your arrival
+country_event = {
+	id = nhs2_countryevents.1002
+	title = nhs2_countryevents.1.t
+	desc = nhs2_countryevents.1.d
+	picture = RELIGION_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		religion = orthodox
+	}
+
+	immediate = {
+		hidden_effect = {
+			to_nhs_setup_church_land = yes
+		}
+	}
+
+	option = {
+		name = "nhs2_countryevents.1.a"
+		custom_tooltip = nhs_enables_church_estate_tt
+		custom_tooltip = nhs_church_estate_initial_land_tt
+		hidden_effect = {
+			add_patriarch_authority = 1
+			add_patriarch_authority = -0.5	
+		}
+		custom_tooltip = set_patriarch_authority_later_tt
 	}
 }
 
