@@ -2432,6 +2432,18 @@ country_event = {
 	
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
+		capital_scope = {
+			unrest = 2
+		}
+		OR = {
+			NOT = { has_country_flag = nhs_had_event_varangian_order_events16 }
+			had_country_flag = {
+				flag = nhs_had_event_varangian_order_events16
+				days = 730
+			}
+		}
+		has_country_flag = established_varangians
+		NOT = { has_country_flag = nhs_varangians_end }
 		OR = {
 			NOT = { has_country_flag = nhs_disbanded_varangians }
 			any_subject_country = {
@@ -2444,20 +2456,6 @@ country_event = {
 				tag = VGD
 			}
 		}
-		has_country_flag = established_varangians
-		NOT = { has_country_flag = nhs_varangians_end }
-
-		OR = {
-			NOT = { has_country_flag = nhs_had_event_varangian_order_events16 }
-			had_country_flag = {
-				flag = nhs_had_event_varangian_order_events16
-				days = 730
-			}
-		}
-		capital_scope = {
-			unrest = 2
-		}
-
 		# OR = {
 		# 	unrest = 5
 		# 	capital_scope = {
@@ -2520,7 +2518,7 @@ country_event = {
 	
 	option = {
 		name = "nhs_vov_varangian_order_events.16.a"
-		add_prestige = 5
+		# add_prestige = 5
 		capital_scope = {
 			add_unrest = -5
 		}
@@ -2605,90 +2603,18 @@ country_event = {
 	title = nhs_vov_varangian_order_events.17.t
 	desc = nhs_vov_varangian_order_events.17.d
 	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
 	
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
+		is_year = 1460
 		capital_scope = {
 			has_province_modifier = nhs2_varangian_m
 		}
 		has_country_flag = established_varangians
 		NOT = { has_country_flag = nhs_varangians_end }
 		NOT = { has_country_flag = nhs_v_settled_on_malta }
-	}
-	
-	mean_time_to_happen = {
-		months = 360
-		modifier = {
-			factor = 10
-			has_country_flag = nhs_had_event_varangian_order_events17
-		}
-		modifier = {
-			factor = 0.8
-			has_country_modifier = nhs2_varangian_influnce_m
-		}
-	}
-	
-	immediate = {
-		set_country_flag = nhs_had_event_varangian_order_events17
-	}
-	
-	option = {
-		name = "nhs_vov_varangian_order_events.17.a"
-		add_prestige = -5
-		capital_scope = {
-			add_devastation = 15
-		}
-		# capital_scope = {
-		# 	add_province_modifier = {
-		# 		name = nhs_allowed_varangian_rampage
-		# 		duration = 730
-		# 	}
-		# }
-	}
-	option = {
-		name = "nhs_vov_varangian_order_events.17.b"
-		add_legitimacy = 5
-		add_manpower = -2
-		capital_scope = {
-			particularist_rebels = 1
-			# add_province_modifier = {
-			# 	name = nhs_send_in_city_guard
-			# 	duration = 730
-			# }
-		}
-	}
-}
-
-# Varangians want to return home
-country_event = {
-	id = nhs_vov_varangian_order_events.18
-	title = nhs_vov_varangian_order_events.18.t
-	desc = {
-		trigger = {
-			OR = {
-				army_tradition = 60
-				mil = 1
-			}
-		}
-		desc = nhs_vov_varangian_order_events.18.da
-	}
-	desc = {
-		trigger = {
-			NOT = {
-				OR = {
-					army_tradition = 60
-					mil = 1
-				}
-			}
-		}
-		desc = nhs_vov_varangian_order_events.18.db
-	}
-	picture = varangian_returning_eventPicture
-	
-	trigger = {
-		is_at_war = no
-		nhs_condition_all_ely = { KOMANDA = tag }
-		is_year = 1480
 		OR = {
 			NOT = { has_country_flag = nhs_disbanded_varangians }
 			any_country = {
@@ -2703,8 +2629,107 @@ country_event = {
 				is_subject_of = ROOT
 			}
 		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+		modifier = {
+			factor = 0.5
+			has_country_flag = nhs_had_event_varangian_order_events17
+		}
+		modifier = {
+			factor = 1.1
+			has_country_modifier = nhs2_varangian_influnce_m
+		}
+	}
+	
+	immediate = {
+		set_country_flag = nhs_had_event_varangian_order_events17
+	}
+	
+	option = {
+		name = "nhs_vov_varangian_order_events.17.a"
+		add_prestige = -5
+		capital_scope = {
+			add_devastation = 25
+		}
+		# capital_scope = {
+		# 	add_province_modifier = {
+		# 		name = nhs_allowed_varangian_rampage
+		# 		duration = 730
+		# 	}
+		# }
+	}
+	option = {
+		name = "nhs_vov_varangian_order_events.17.b"
+		add_legitimacy = 5
+		# add_manpower = -2
+		if = {
+			limit = {
+				total_development = 100
+			}
+			capital_scope = {
+				particularist_rebels = 2
+			}
+		}
+		else = {
+			capital_scope = {
+				particularist_rebels = 1
+			}
+		}
+	}
+}
+
+# Varangians want to return home
+country_event = {
+	id = nhs_vov_varangian_order_events.18
+	title = nhs_vov_varangian_order_events.18.t
+	desc = {
+		trigger = {
+			OR = {
+				army_tradition = 60
+				mil = 5
+			}
+		}
+		desc = nhs_vov_varangian_order_events.18.da
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				OR = {
+					army_tradition = 60
+					mil = 5
+				}
+			}
+		}
+		desc = nhs_vov_varangian_order_events.18.db
+	}
+	picture = varangian_returning_eventPicture
+
+	is_triggered_only = yes
+	
+	trigger = {
+		is_at_war = no
+		nhs_condition_all_ely = { KOMANDA = tag }
+		is_year = 1455
 		has_country_flag = established_varangians
 		NOT = { has_country_flag = nhs_varangians_end }
+		NOT = { has_country_flag = nhs_v_settled_on_malta }
+		NOT = { had_recent_war = 2 }
+		OR = {
+			NOT = { has_country_flag = nhs_disbanded_varangians }
+			any_country = {
+				tag = VGD
+				is_subject_of = ROOT
+			}
+		}
+		OR = {
+			NOT = { has_country_flag = nhs_varangian_guard_substate }
+			any_country = {
+				tag = VGD
+				is_subject_of = ROOT
+			}
+		}
 		OR = {
 			AND = {
 				exists = VIN
@@ -2728,33 +2753,24 @@ country_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 480
+		months = 1
 		modifier = {
-			factor = 0.5
-			is_year = 1550
+			factor = 2
+			is_year = 1500
 			NOT = { has_country_flag = nhs_had_event_varangian_order_events18 }
 		}
 		modifier = {
-			factor = 5
+			factor = 0.5
 			has_country_flag = nhs_had_event_varangian_order_events18
 		}
 		modifier = {
-			factor = 0.8
-			has_country_flag = nhs_had_event_varangian_order_events18
-		}
-		modifier = {
-			factor = 0.9
+			factor = 2
 			NOT = { had_recent_war = 10 }
 			had_recent_war = 5
 		}
 		modifier = {
-			factor = 0.75
+			factor = 1.5
 			NOT = { had_recent_war = 5 }
-			had_recent_war = 2
-		}
-		modifier = {
-			factor = 0.5
-			NOT = { had_recent_war = 2 }
 		}
 	}
 	
@@ -2765,14 +2781,29 @@ country_event = {
 	option = {
 		name = "nhs_vov_varangian_order_events.18.a"
 		add_prestige = 5
-		add_manpower = -4
+		if = {
+			limit = {
+				NOT = { total_development = 50 }
+			}
+			add_manpower = -1
+		}
+		else_if = {
+			limit = {
+				NOT = { total_development = 100 }
+			}
+			add_manpower = -2
+		}
+		else = {
+			add_manpower = -3
+		}
+		
 		if = {
 			limit = {
 				any_owned_province = {
 					culture_group = norse_g
 				}
 			}
-			every_owned_province = {
+			random_owned_province = {
 				limit = {
 					culture_group = norse_g
 				}
@@ -2809,7 +2840,7 @@ country_event = {
 			limit = {
 				is_at_war = no
 			}
-			add_war_exhaustion = 5
+			add_war_exhaustion = 4
 		}
 		else = {
 			add_war_exhaustion = 2
@@ -2821,17 +2852,18 @@ country_event = {
 		trigger = {
 			OR = {
 				army_tradition = 60
-				mil = 1
+				mil = 5
 			}
 		}
+		add_legitimacy = -5
+		add_mil_power = -25
+		add_treasury = -25
 		define_advisor = {
 			type = army_organiser
 			culture = varangian_e
 			skill = 3
-			discount = yes
+			cost_multiplier = 0.5
 		}
-		add_treasury = -25
-		add_legitimacy = -5
 	}
 }
 
@@ -2841,10 +2873,17 @@ country_event = {
 	title = nhs_vov_varangian_order_events.19.t
 	desc = nhs_vov_varangian_order_events.19.d
 	picture = varangian_argument_eventPicture
+
+	is_triggered_only = yes
 	
 	trigger = {
 		NOT = { has_country_flag = nhs_had_event_varangian_order_events19 }
 		nhs_condition_all_ely = { KOMANDA = tag }
+		has_country_modifier = nhs_epilektoi
+		is_year = 1455
+		has_country_flag = established_varangians
+		NOT = { has_country_flag = nhs_varangians_end }
+		NOT = { has_country_flag = nhs_v_settled_on_malta }
 		OR = {
 			NOT = { has_country_flag = nhs_disbanded_varangians }
 			any_country = {
@@ -2852,7 +2891,6 @@ country_event = {
 				is_subject_of = ROOT
 			}
 		}
-		has_country_modifier = nhs_epilektoi
 		OR = {
 			NOT = { has_country_flag = nhs_varangian_guard_substate }
 			any_country = {
@@ -2860,9 +2898,6 @@ country_event = {
 				is_subject_of = ROOT
 			}
 		}
-		has_country_flag = established_varangians
-		NOT = { has_country_flag = nhs_varangians_end }
-		NOT = { has_country_flag = nhs_v_settled_on_malta }
 	}
 	
 	mean_time_to_happen = {
