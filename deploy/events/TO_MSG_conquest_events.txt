@@ -23,23 +23,61 @@ country_event = {
 	option = { #Let us rebuild it in our image!
 		name = msg_conqevents.1.a
 		set_country_flag = msg_itza_project
-		846 = {
-			add_permanent_province_modifier = {
-				name = "msg_itza_construction"
-				duration = -1
-			}
-		}
 		add_prestige = 10
 		add_adm_power = -50
 		add_dip_power = -50
 		add_mil_power = -50
-		add_treasury = -150
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				has_dlc = "Leviathan"
+			}
+			custom_tooltip = msg_chicken_itza_enable_great_project_tt
+			if = {
+				limit = {
+					to_has_great_project_at_least_at_tier_1 = {
+						TYPE = chichen_itza
+					}
+				}
+				846 = {
+					set_province_flag = msg_chichen_itza_upgrade_bonus
+					change_province_name = "Chichen Itza"
+					rename_capital = "Chichen Itza"
+					custom_tooltip = nhs_new_line_tt
+					add_base_tax = 2
+					add_base_production = 1
+					add_base_manpower = 2
+					change_religion = ROOT
+				}
+				if = {
+					limit = {
+						religion = pantheon_worship
+					}
+					custom_tooltip = nhs_new_line_tt
+					custom_tooltip = msg_enable_itza_temple_decision_tt
+				}
+			}
+			else = {
+				custom_tooltip = msg_upgrading_monument_rewards_tt
+			}
+		}
+		else = {
+			add_treasury = -150
+			custom_tooltip = nhs_new_line_tt
+			846 = {
+				add_permanent_province_modifier = {
+					name = "msg_itza_construction"
+					duration = -1
+				}
+			}
+		}
 	}
 	option = { #Our resources are better spent elsewhere.
 		name = msg_conqevents.1.b
 		add_prestige = -10
 		set_country_flag = msg_no_itza
-		custom_tooltip = msg_avaliable_as_decision_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = msg_enable_chichen_itza_as_decision_tt
 	}
 }
 
@@ -56,14 +94,12 @@ country_event = {
 	
 	trigger = {
 		owns = 846
+		NOT = { has_dlc = "Leviathan" }
 		nhs_check_all_spartan = { CONDITION = tag }
 		846 = {
 			has_province_modifier = msg_itza_construction
 		}
 		had_country_flag = { flag = msg_itza_project days = 600 }
-	}
-	mean_time_to_happen = {
-		days = 1
 	}
 	
 	option = { #Trully Glorious!
@@ -75,15 +111,21 @@ country_event = {
 			rename_capital = "Chichen Itza"
 			add_base_tax = 2
 			add_base_production = 1
-			change_religion = ROOT
 			add_base_manpower = 2
+			change_religion = ROOT
 			remove_province_modifier = msg_itza_construction
 			add_permanent_province_modifier = {
 				name = "msg_itza_reconstructed"
 				duration = -1
 			}
 		}
-	
+		if = {
+			limit = {
+				religion = pantheon_worship
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = msg_enable_itza_temple_decision_tt
+		}
 	}
 }
 
@@ -102,6 +144,7 @@ country_event = {
 		owns = 852
 		nhs_check_all_spartan = { CONDITION = tag }
 	}
+
 	mean_time_to_happen = {
 		days = 30
 	}
@@ -109,15 +152,79 @@ country_event = {
 	option = { #Repair the damage and settle in the city!
 		name = msg_conqevents.3.a
 		set_country_flag = msg_teno_project
-		852 = {
-			add_permanent_province_modifier = {
-				name = "msg_teno_repairs"
-				duration = -1
+		add_prestige = 10
+		add_adm_power = -100
+		add_dip_power = -100
+		add_mil_power = -100
+		add_manpower = -3
+
+		if = {
+			limit = {
+				has_dlc = "Leviathan"
+			}
+			custom_tooltip = msg_tenochtitlan_enable_great_project_tt
+			if = {
+				limit = {
+					to_has_great_project_at_least_at_tier_2 = {
+						TYPE = tenochtitlan
+					}
+				}
+				852 = {
+					set_province_flag = nhs_msg_original_heartland
+					set_province_flag = msg_tenochtitlan_upgrade_bonus_1
+					set_province_flag = msg_tenochtitlan_upgrade_bonus_2
+					change_province_name = "Tenochtitlan"
+					rename_capital = "Tenochtitlan"
+					custom_tooltip = nhs_new_line_tt
+					add_base_tax = 4
+					add_base_production = 3
+					add_base_manpower = 5
+					change_religion = ROOT
+					change_culture = ROOT
+				}
+				if = {
+					limit = {
+						religion = aztlan_worship
+					}
+					custom_tooltip = nhs_new_line_tt
+					custom_tooltip = msg_enable_teotihuacan_decision_tt
+				}
+			}
+			else_if = {
+				limit = {
+					to_has_great_project_at_least_at_tier_1 = {
+						TYPE = tenochtitlan
+					}
+				}
+				852 = {
+					set_province_flag = nhs_msg_original_heartland
+					set_province_flag = msg_tenochtitlan_upgrade_bonus_1
+					change_province_name = "Tenochtitlan"
+					rename_capital = "Tenochtitlan"
+					custom_tooltip = nhs_new_line_tt
+					add_base_tax = 2
+					add_base_production = 1
+					add_base_manpower = 3
+					change_religion = ROOT
+					change_culture = ROOT
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = msg_upgrading_tenochtitlan_monument_rewards_2_tt
+			}
+			else = {
+				custom_tooltip = msg_upgrading_tenochtitlan_monument_rewards_1_tt
 			}
 		}
-		add_prestige = 10
-		add_treasury = -100
-		add_manpower = -3
+		else = {
+			add_treasury = -100
+			custom_tooltip = nhs_new_line_tt
+			852 = {
+				add_permanent_province_modifier = {
+					name = "msg_teno_repairs"
+					duration = -1
+				}
+			}
+		}
 	}
 	option = { #Leave the city and bring it's inhabitants to Laconia!
 		name = msg_conqevents.3.b
@@ -133,11 +240,71 @@ country_event = {
 				duration = -1
 			}
 		}
+		if = {
+			limit = {
+				has_dlc = "Leviathan"
+			}
+			if = {
+				limit = {
+					852 = {
+						has_great_project = {
+							type = tenochtitlan
+							tier = 3
+						}
+					}
+				}
+				add_treasury = 5000
+				852 = {
+					add_great_project_tier = {
+						type = tenochtitlan
+						tier = -3
+					}
+				}
+				custom_tooltip = nhs_new_line_tt
+			}
+			else_if = {
+				limit = {
+					852 = {
+						has_great_project = {
+							type = tenochtitlan
+							tier = 2
+						}
+					}
+				}
+				add_treasury = 2500
+				852 = {
+					add_great_project_tier = {
+						type = tenochtitlan
+						tier = -2
+					}
+				}
+				custom_tooltip = nhs_new_line_tt
+			}
+			else_if = {
+				limit = {
+					852 = {
+						has_great_project = {
+							type = tenochtitlan
+							tier = 1
+						}
+					}
+				}
+				add_treasury = 800
+				852 = {
+					add_great_project_tier = {
+						type = tenochtitlan
+						tier = -1
+					}
+				}
+				custom_tooltip = nhs_new_line_tt
+			}
+		}
 		capital_scope = {
-			add_base_tax = 1
-			add_base_manpower = 1
+			add_base_tax = 2
+			add_base_manpower = 2
 			add_base_production = 1
 		}
+		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = msg_avaliable_as_decision_teno_tt
 	}
 }
@@ -155,6 +322,7 @@ country_event = {
 
 	trigger = {
 		owns = 852
+		NOT = { has_dlc = "Leviathan" }
 		nhs_check_all_spartan = { CONDITION = tag }
 		
 		had_country_flag = { flag = msg_teno_project days = 600 }
@@ -205,15 +373,18 @@ country_event = {
 	}
 	option = { #AH! Let us see these ghosts!
 		name = msg_conqevents.5.a
-		country_event = { id = msg_conqevents.6 days = 30 }
 		add_treasury = -50
 		add_mil_power = -50
+		custom_tooltip = nhs_new_line_tt
+		country_event = { id = msg_conqevents.6 days = 30 }
+		
 	}
 	option = { #I want nothing to do with ghosts.
 		name = msg_conqevents.5.b
 		add_prestige = -5
 		set_country_flag = msg_no_ghost_city
-		custom_tooltip = msg_avaliable_as_decision_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = msg_explore_ghost_city_as_decision_tt
 	}
 }
 
@@ -233,25 +404,29 @@ country_event = {
 		owns = 848
 		nhs_check_all_spartan = { CONDITION = tag }
 	}
+
 	immediate = {
 		clr_country_flag = msg_no_ghost_city
 	}
+
 	option = { #Let's build a settlement here.
-		set_country_flag = msg_mictlan_project
 		name = msg_conqevents.6.a
+		set_country_flag = msg_mictlan_project
+		add_treasury = -50
+		add_adm_power = -50
+		custom_tooltip = nhs_new_line_tt
 		848 = {
 			add_permanent_province_modifier = {
 				name = "msg_mictlan_construction"
 				duration = -1
-				}
+			}
 		}
-		add_adm_power = -50
-		add_treasury = -50
+		
 	}
 	option = { #The dead shouldn't be disturbed. They should be sacked!
 		name = msg_conqevents.6.b
-		add_stability_or_adm_power = yes
 		add_treasury = 300
+		add_stability_or_adm_power = yes
 	}
 }
 
@@ -267,33 +442,31 @@ country_event = {
 	trigger = {
 		owns = 848
 		nhs_check_all_spartan = { CONDITION = tag }
-		had_country_flag = { flag = msg_mictlan_project days = 1200}
+		had_country_flag = { flag = msg_mictlan_project days = 1200 }
 		848 = {
 			has_province_modifier = msg_mictlan_construction
 		}
 	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
+
 	option = { #A good investment.
 		clr_country_flag = msg_mictlan_project
 		name = msg_conqevents.7.a
-		add_treasury = 50
 		848 = {
+			add_base_tax = 2
+			add_base_manpower = 2
+			add_base_production = 1
+			change_culture = ROOT
+			change_religion = ROOT
+			custom_tooltip = nhs_new_line_tt
 			remove_province_modifier = msg_mictlan_construction
 			add_permanent_province_modifier = {
 				name = "msg_mictlan_city"
 				duration = -1
 			}
-			change_culture = ROOT
-			change_religion = ROOT
-			add_base_tax = 2
-			add_base_manpower = 2
-			add_base_production = 1
 		}
 	}
 }
+
 #Tikal
 country_event = {
 	id = msg_conqevents.8
@@ -315,34 +488,80 @@ country_event = {
 	}
 	
 	option = { #Restore the city.
-		trigger = { religion_group = pagan }
 		name = msg_conqevents.8.a
 		set_country_flag = msg_tikal_project
-		842 = {
-			add_permanent_province_modifier = {
-				name = "msg_tikal_repair"
-				duration = -1
+		add_adm_power = -100
+		if = {
+			limit = {
+				has_dlc = "Leviathan"
+			}
+			custom_tooltip = msg_tikal_enable_great_project_tt
+			if = {
+				limit = {
+					to_has_great_project_at_least_at_tier_2 = {
+						TYPE = tikal
+					}
+				}
+				846 = {
+					set_province_flag = msg_tikal_upgrade_bonus_1
+					set_province_flag = msg_tikal_upgrade_bonus_2
+					change_province_name = "Tikal"
+					rename_capital = "Tikal"
+					custom_tooltip = nhs_new_line_tt
+					add_base_tax = 4
+					add_base_production = 1
+					add_base_manpower = 3
+					change_religion = ROOT
+				}
+			}
+			else_if = {
+				limit = {
+					to_has_great_project_at_least_at_tier_1 = {
+						TYPE = tikal
+					}
+				}
+				846 = {
+					set_province_flag = msg_tikal_upgrade_bonus_1
+					change_province_name = "Tikal"
+					rename_capital = "Tikal"
+					custom_tooltip = nhs_new_line_tt
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+					change_religion = ROOT
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = msg_upgrading_tikal_monument_rewards_2_tt
+			}
+			else = {
+				custom_tooltip = msg_upgrading_tikal_monument_rewards_1_tt
 			}
 		}
-		add_adm_power = -50
-		add_dip_power = -50
-		add_mil_power = -50
-		add_treasury = -400
+		else = {
+			add_treasury = -400
+			custom_tooltip = nhs_new_line_tt
+			842 = {
+				add_permanent_province_modifier = {
+					name = "msg_tikal_repair"
+					duration = -1
+				}
+			}
+		}
 	}
 	option = { #Loot the ruins.
-		trigger = { religion_group = christian }
 		name = msg_conqevents.8.b
-		add_treasury = 300
 		add_prestige = 10
-		add_manpower = -0.5
+		add_treasury = 300
 	}
 	option = {# Leave the ruins alone
 		name = msg_conqevents.8.c
-		add_prestige = -10
 		set_country_flag = msg_no_tikal
+		add_prestige = -10
+		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = msg_avaliable_as_decision_tt
 	}
 }
+
 #The city of many temples
 country_event = {
 	id = msg_conqevents.9
@@ -354,6 +573,7 @@ country_event = {
 	
 	trigger = {
 		owns = 842
+		NOT = { has_dlc = "Leviathan" }
 		nhs_check_all_spartan = { CONDITION = tag }
 		had_country_flag = { flag = msg_tikal_project days = 600 }
 		842 = {
@@ -375,10 +595,10 @@ country_event = {
 			add_base_tax = 1
 			add_base_manpower = 1
 			add_base_production = 1
+			change_religion = ROOT
 		}
 	}
 }
-
 
 #The bay of Acapulco
 country_event = {
@@ -399,9 +619,11 @@ country_event = {
 	mean_time_to_happen = {
 		months = 12
 	}
+
 	immediate = {
 		set_country_flag = msg_acapulco_bay
 	}
+
 	option = { #We shall settle a city here.
 		name = "msg_conqevents.10.a"
 		849 = {
@@ -411,6 +633,7 @@ country_event = {
 		}
 	}
 }
+
 #Explore Palenque 
 country_event = {
 	id = msg_conqevents.11
@@ -426,14 +649,16 @@ country_event = {
 		owns = 2632
 		nhs_check_all_spartan = { CONDITION = tag }
 	}
+
 	mean_time_to_happen = {
 		months = 12
 	}
+
 	option = { #Study it
 		name = msg_conqevents.11.a
 		set_country_flag = msg_palenque_project
 		add_treasury = -100
-		add_dip_power = -50
+		custom_tooltip = nhs_new_line_tt
 		2632 = {
 			add_permanent_province_modifier = {
 				name = "msg_palenque_investigation"
@@ -445,16 +670,16 @@ country_event = {
 	option = { #Settle it
 		name = msg_conqevents.11.b
 		set_country_flag = msg_palenque_project
+		add_treasury = -50
+		add_adm_power = -25
+		add_dip_power = -25
+		custom_tooltip = nhs_new_line_tt
 		2632 = {
 			add_permanent_province_modifier = {
 				name = "msg_palenque_repair"
 				duration = -1
 			}
 		}
-		add_adm_power = -25
-		add_dip_power = -25
-		add_treasury = -50
-
 	}
 	option = { #Leave it be
 		name = msg_conqevents.11.c
@@ -463,7 +688,6 @@ country_event = {
 }
 
 #Tomb of Pacal
-
 country_event = {
 	id = msg_conqevents.12
 	title = msg_conqevents.12.t
@@ -479,22 +703,23 @@ country_event = {
 		had_country_flag = { flag = msg_palenque_project days = 2000 }
 		2632 = { has_province_modifier = msg_palenque_investigation }
 	}
+
 	mean_time_to_happen = {
 		months = 20
 	}
+
 	option = { #A great find
 		name = msg_conqevents.12.a
 		clr_country_flag = msg_palenque_project
+		add_legitimacy = 10
+		add_prestige = 30
 		add_adm_power = 50
 		add_dip_power = 50
 		add_mil_power = 50
-		add_prestige = 30
-		add_legitimacy = 10
 	}
 }
 
 #Palenque Resettled
-
 country_event = {
 	id = msg_conqevents.13
 	title = msg_conqevents.13.t
@@ -510,9 +735,11 @@ country_event = {
 		had_country_flag = { flag = msg_palenque_project days = 500 }
 		2632 = { has_province_modifier = msg_palenque_repair }
 	}
+
 	mean_time_to_happen = {
 		months = 20
 	}
+
 	option = {
 		name = msg_conqevents.13.a
 		clr_country_flag = msg_palenque_project
@@ -522,11 +749,11 @@ country_event = {
 				name = "msg_palenque_settled"
 				duration = -1
 			}
-			change_culture = ROOT
-			change_religion = ROOT
 			add_base_tax = 1
 			add_base_manpower = 1
 			add_base_production = 1
+			change_culture = ROOT
+			change_religion = ROOT
 		}
 	}
 }
@@ -546,11 +773,15 @@ country_event = {
 		owns = 2629
 		nhs_check_all_spartan = { CONDITION = tag }
 	}
+
 	mean_time_to_happen = {
 		months = 12
 	}
+
 	option = {
 		name = msg_conqevents.14.a
+		add_treasury = -50
+		add_mil_power = -50
 		2629 = {
 			add_base_manpower = 1
 			add_permanent_province_modifier = {
@@ -558,13 +789,11 @@ country_event = {
 				duration = -1 
 			}
 		}
-		add_mil_power = -50
-		add_treasury = -50
 	}
 	option ={
 		name = msg_conqevents.14.b
-		add_treasury = 50
 		add_prestige = 10
+		add_treasury = 50
 	}
 }
 
@@ -590,17 +819,24 @@ country_event = {
 	option = {
 		name = msg_conqevents.50.a
 		clr_country_flag = msg_teno_project
+		add_prestige = 10
 		852 = {
 			remove_province_modifier = msg_teno_expanding
-			add_base_tax = 1
-			add_base_manpower = 1
-			add_base_production = 1
+			add_base_tax = 2
+			add_base_production = 2
+			add_base_manpower = 2
 			add_permanent_province_modifier = {
 				name = "msg_floating_city"
 				duration = -1
 			}
 		}
-		add_prestige = 10
+		if = {
+			limit = {
+				religion = aztlan_worship
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = msg_enable_teotihuacan_decision_tt
+		}
 	}
 }
 
@@ -616,38 +852,38 @@ country_event = {
 	goto = 842
 	
 	trigger = {
-		owns = 842
 		nhs_check_all_spartan = { CONDITION = tag }
+		owns = 842
+		NOT = { has_dlc = "Leviathan" }
 		had_country_flag = { flag = msg_tikal_project days = 1800 }
 	}
 	
 	option = { #Continue the repairs.
 		name = msg_conqevents.51.a
-		add_years_of_income = -0.75
+		add_adm_power = -100
 		842 = {
+			add_base_tax = 1
+			add_base_manpower = 1
+			add_base_production = 1
 			remove_province_modifier = msg_tikal_start
 			add_permanent_province_modifier = {
 				name = msg_tikal_continue
 				duration = -1
 			}
-			add_base_tax = 1
-			add_base_manpower = 1
-			add_base_production = 1
 		}
-		
 	}
 	option = { #This is good enough
 		name = msg_conqevents.51.b
 		clr_country_flag = msg_tikal_project
 		842 = {
+			add_base_tax = 1
+			add_base_manpower = 1
+			add_base_production = 1
 			remove_province_modifier = msg_tikal_start
 			add_permanent_province_modifier = {
 				name = "msg_tikal_repaired"
 				duration = -1
 			}
-			add_base_tax = 1
-			add_base_manpower = 1
-			add_base_production = 1
 		}
 	}
 }
@@ -664,8 +900,9 @@ country_event = {
 	goto = 842
 	
 	trigger = {
-		owns = 842
 		nhs_check_all_spartan = { CONDITION = tag }
+		NOT = { has_dlc = "Leviathan" }
+		owns = 842
 		had_country_flag = { flag = msg_tikal_project days = 3600 }
 		842 = {
 			has_province_modifier = msg_tikal_continue
@@ -679,6 +916,7 @@ country_event = {
 	option = { #A proper city!
 		name = msg_conqevents.52.a
 		clr_country_flag = msg_tikal_project
+		add_prestige = 20
 		842 = {
 			change_province_name = "Tikal"
 			rename_capital = "Tikal"
@@ -691,7 +929,7 @@ country_event = {
 				duration = -1
 			}
 		}
-		add_prestige = 20
+		
 	}
 }
 #Construction Halted!
