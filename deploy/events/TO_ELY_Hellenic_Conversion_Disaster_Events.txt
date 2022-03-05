@@ -517,7 +517,7 @@ country_event = {
 			limit = {
 				has_country_flag = nhs_hcd_supported_moderates
 				any_owned_province = {
-					NOT = { has_owner_religion = yes }
+					religion = pantheon_worship
 				}
 			}
 			add_country_modifier = {
@@ -530,7 +530,7 @@ country_event = {
 				has_country_flag = nhs_hcd_supported_moderates
 				NOT = {
 					any_owned_province = {
-						NOT = { has_owner_religion = yes }
+						religion = pantheon_worship
 					}
 				}
 			}
@@ -544,12 +544,22 @@ country_event = {
 				has_country_flag = nhs_hcd_converted_to_hellenic
 				religion = pantheon_worship
 			}
-			every_owned_province = {
+			if = {
 				limit = {
-					religion_group = christian
-					NOT = { development = 10 }
+					any_owned_province = {
+						religion_group = christian
+						NOT = { development = 10 }
+					}
 				}
-				change_religion = pantheon_worship
+				every_owned_province = {
+					limit = {
+						religion_group = christian
+						NOT = { development = 10 }
+					}
+					custom_tooltip = nhs_new_line_tt
+					custom_tooltip = nhs_hcd_convert_all_provinces_below_10_dev_to_hellenic_tt
+					change_religion = pantheon_worship
+				}
 			}
 		}
 		else_if = { # If hellenic and failed
@@ -1239,7 +1249,7 @@ country_event = {
 		any_owned_province = {
 			is_city = yes
 			NOT = {
-				has_province_modifier = nhs_hrv_religious_infighting
+				has_province_modifier = nhs_hrv_rampaging_zealots
 			}
 		}
 	}
@@ -1249,7 +1259,7 @@ country_event = {
 			limit = {
 				is_city = yes
 				NOT = {
-					has_province_modifier = nhs_hrv_religious_infighting
+					has_province_modifier = nhs_hrv_rampaging_zealots
 				}
 			}
 			save_event_target_as = nhs_hcd_target_province
@@ -1270,10 +1280,6 @@ country_event = {
 		event_target:nhs_hcd_target_province = {
 			add_unrest = 10
 			add_devastation = 10
-			# add_province_modifier = {
-			# 	name = nhs_hrv_religious_infighting
-			# 	duration = 90
-			# }
 		}
 	}
 
