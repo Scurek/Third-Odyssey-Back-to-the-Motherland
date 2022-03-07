@@ -181,21 +181,66 @@ country_event = {
 	picture = OLYMPIANS_eventPicture
 
     trigger = {
-		is_year = 1467
+		is_year = 1475
 		OR = {
 			religion = pantheon_worship
 			religion = aztlan_worship
 		}
-		stability = 0
 		NOT = { has_country_modifier = nhs_high_priests }
 		OR = {
 			nhs_condition_all_ely = { KOMANDA = tag }
 			nhs_check_all_spartan = { CONDITION = tag }
 		}
+		any_owned_province = {
+			religion = ROOT
+			is_city = yes
+			OR = {
+				is_capital = yes
+				is_in_capital_area = yes
+				has_province_flag = nhs_hcd_first_pagan_minority_province
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_province_flag = nhs_hcd_first_pagan_minority_province
+					religion = ROOT
+				}
+				save_event_target_as = nhs_high_priesthood_target
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_high_priesthood_target }
+				}
+				random_owned_province = {
+					limit = {
+						is_capital = yes
+						religion = ROOT
+					}
+					save_event_target_as = nhs_high_priesthood_target
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_high_priesthood_target }
+				}
+				random_owned_province = {
+					limit = {
+						is_city = yes
+						is_in_capital_area = yes
+						religion = ROOT
+					}
+					save_event_target_as = nhs_high_priesthood_target
+				}
+			}
+		}
 	}
 
 	mean_time_to_happen = {
-		months = 6
+		months = 12
 		modifier = {
 			factor = 0.75
 			stability = 1
@@ -232,23 +277,26 @@ country_event = {
 
 	option = {	
 		name = "NHSRELIGIONEVENTSNAME4A"
+		goto = nhs_high_priesthood_target
+		trigger = {
+			nhs_condition_all_ely = { KOMANDA = tag }
+		}
 		ai_chance = { factor = 100 }
-		add_dip_power = -50
 		custom_tooltip = nhs_enable_heralds_dispatch_tt
 		custom_tooltip = nhs_new_line_tt
 		add_country_modifier = {
 			name = nhs_high_priests
 			duration = -1
 		}
+
 		if = {
 			limit = {
-				nhs_condition_all_ely = { KOMANDA = tag }
-				capital_scope = {
-					NOT = { has_province_modifier = religious_center_pantheon }
+				has_saved_event_target = nhs_high_priesthood_target
+				event_target:nhs_high_priesthood_target = {
+					owned_by = ROOT
 				}
 			}
-			capital_scope = {
-				nhs_display_rel_center = yes
+			event_target:nhs_high_priesthood_target = {
 				tooltip = {
 					add_permanent_province_modifier = {
 						name = nhs_seat_of_high_priesthood_t
@@ -256,10 +304,91 @@ country_event = {
 					}
 				}
 				hidden_effect = {
-					add_province_triggered_modifier = religious_center_pantheon
 					add_province_triggered_modifier = nhs_seat_of_high_priesthood
 				}
 			}
+		}
+		else_if = {
+			limit = {
+				any_owned_province = {
+					religion = ROOT
+					is_capital = yes
+				}
+			}
+			capital_scope = {
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = nhs_seat_of_high_priesthood_t
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs_seat_of_high_priesthood
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_province = {
+					is_city = yes
+					religion = ROOT
+					OR = {
+						is_capital = yes
+						is_in_capital_area = yes
+						has_province_flag = nhs_hcd_first_pagan_minority_province
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					is_city = yes
+					religion = ROOT
+					OR = {
+						is_capital = yes
+						is_in_capital_area = yes
+						has_province_flag = nhs_hcd_first_pagan_minority_province
+					}
+				}
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = nhs_seat_of_high_priesthood_t
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs_seat_of_high_priesthood
+				}
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					is_city = yes
+				}
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = nhs_seat_of_high_priesthood_t
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs_seat_of_high_priesthood
+				}
+			}
+		}
+	}
+
+	option = {	
+		name = "NHSRELIGIONEVENTSNAME4A"
+		trigger = {
+			NOT = { nhs_condition_all_ely = { KOMANDA = tag } }
+		}
+		ai_chance = { factor = 100 }
+		custom_tooltip = nhs_enable_heralds_dispatch_tt
+		custom_tooltip = nhs_new_line_tt
+		add_country_modifier = {
+			name = nhs_high_priests
+			duration = -1
 		}
 	}
 }
