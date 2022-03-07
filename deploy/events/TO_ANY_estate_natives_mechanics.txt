@@ -77,73 +77,68 @@ country_event = {
     immediate = {
 		hidden_effect = {
 			nhs_add_appropriate_native_estate_flag = yes
+            set_country_flag = nhs_set_initial_councils_stats
+            set_country_flag = nhs_councils_formation_event_active
             if = {
                 limit = {
-                    nhs_check_all_vinland = { CONDITION = tag }
+                    any_country = {
+                        exists = yes
+                        ai = yes
+                    }
                 }
-                country_event = {
-                    id = natives_estate_events.101
-                    days = 1
+                if = {
+                    limit = {
+                        nhs_check_all_vinland = { CONDITION = tag }
+                    }
+                    country_event = {
+                        id = natives_estate_events.101
+                        days = 1
+                    }
+                }
+                else = {
+                    country_event = {
+                        id = natives_estate_events.100
+                        days = 1
+                    }
+                }
+                # Stupid problems require stupid solutions. Since setting crown land in immediate one day later doesn't work, we trigger the event for random ai that has this effect in option. For some reason this works.
+                
+                random_country = {
+                    limit = {
+                        ai = yes
+                    }
+                    country_event = {
+                        id = nhs_all_natives_estates.3
+                        days = 0
+                    }
+                }
+                random_country = {
+                    limit = {
+                        ai = yes
+                    }
+                    country_event = {
+                        id = nhs_all_natives_estates.3
+                        days = 1
+                    }
                 }
             }
             else = {
-                country_event = {
-                    id = natives_estate_events.100
-                    days = 1
+                if = {
+                    limit = {
+                        nhs_check_all_vinland = { CONDITION = tag }
+                    }
+                    country_event = {
+                        id = natives_estate_events.101
+                        days = 1
+                    }
+                }
+                else = {
+                    country_event = {
+                        id = natives_estate_events.100
+                        days = 1
+                    }
                 }
             }
-            # if = {
-            #     limit = {
-            #         any_country = {
-            #             exists = yes
-            #             ai = yes
-            #         }
-            #     }
-            #     if = {
-            #         limit = {
-            #             nhs_check_all_vinland = { CONDITION = tag }
-            #         }
-            #         country_event = {
-            #             id = natives_estate_events.101
-            #             days = 1
-            #         }
-            #     }
-            #     else = {
-            #         country_event = {
-            #             id = natives_estate_events.100
-            #             days = 1
-            #         }
-            #     }
-            #     # Stupid problems require stupid solutions. Since setting crown land in immediate one day later doesn't work, we trigger the event for random ai that has this effect in option. For some reason this works.
-            #     # ...and now it doesn't work anymore, it seems that ai now waits a day before "clicking" on an event.
-            #     set_country_flag = nhs_set_initial_councils_stats
-            #     random_country = {
-            #         limit = {
-            #             ai = yes
-            #         }
-            #         country_event = {
-            #             id = nhs_all_natives_estates.3
-            #             days = 1
-            #         }
-            #     }
-            # }
-            # else = {
-            #     if = {
-            #         limit = {
-            #             nhs_check_all_vinland = { CONDITION = tag }
-            #         }
-            #         country_event = {
-            #             id = natives_estate_events.101
-            #             days = 2
-            #         }
-            #     }
-            #     else = {
-            #         country_event = {
-            #             id = natives_estate_events.100
-            #             days = 2
-            #         }
-            #     }
-            # }
 		}
     }
 
@@ -154,53 +149,29 @@ country_event = {
 }
 
 # Stupid problems require stupid solutions. Since setting crown land in immediate one day later doesn't work, we trigger the event for random ai that has this effect in option. For some reason this works.
-# ...and now it doesn't work anymore, it seems that ai now waits a day before "clicking" on an event.
-# country_event = {
-#     id = nhs_all_natives_estates.3
-# 	title = nhs2_hidden.t
-# 	desc = nhs2_hidden.d
-# 	picture = COURT_eventPicture
+country_event = {
+    id = nhs_all_natives_estates.3
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = COURT_eventPicture
 
-#     hidden = yes
-#     is_triggered_only = yes
+    hidden = yes
+    is_triggered_only = yes
 
-#     immediate = {
-#     }
+    immediate = {
+        FROM = {
+            to_nhs_setup_council_land = yes
+        }
+    }
 
-# 	option = {	
-# 		name = "Should not be visible!"
-# 		ai_chance = { factor = 100 }
-#         every_country = {
-#             limit = {
-#                 has_country_flag = nhs_set_initial_councils_stats
-#             }
-#             clr_country_flag = nhs_set_initial_councils_stats
-#             change_estate_land_share = {
-#                 estate = estate_all_natives
-#                 share = -100
-#             }
-#             add_estate_loyalty = {
-#                 estate = estate_all_natives
-#                 loyalty = -100
-#             }
-#             if = {
-#                 limit = {
-#                     has_country_flag = native_council_enabled_early
-#                 }
-#                 add_estate_loyalty = {
-#                     estate = estate_all_natives
-#                     loyalty = 20
-#                 }
-#             }
-#             else = {
-#                 add_estate_loyalty = {
-#                     estate = estate_all_natives
-#                     loyalty = 25
-#                 }
-#             }
-#         }
-# 	}
-# }
+	option = {	
+		name = "Should not be visible!"
+		ai_chance = { factor = 100 }
+        FROM = {
+            to_nhs_setup_council_land = yes
+        }
+	}
+}
 
 # Set mid flag (except spartans who get none, always for norse, after colonialism for other exiles)
 # country_event = {
