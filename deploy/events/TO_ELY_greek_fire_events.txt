@@ -85,6 +85,8 @@ country_event = {
 
 	fire_only_once = yes
 
+	goto = 954
+
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
 		has_country_flag = nhs_searching_for_naphtha
@@ -118,7 +120,7 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
-			save_event_target_as = nhs2_greek_fire_3_target
+			discover_province = 954
 		}
 	}
 
@@ -128,9 +130,17 @@ country_event = {
 			limit = {
 				954 = {
 					NOT = {
-						owned_by = ROOT
-						owner = {
-							is_subject_of = ROOT
+						OR = {
+							country_or_subject_holds = ROOT
+							owner = {
+								OR = {
+									technology_group = north_american
+									# technology_group = hellenised_american
+									technology_group = south_american
+								}
+								has_country_modifier = nhs_greek_fire_deal
+								
+							}
 						}
 					}
 				}
@@ -142,7 +152,23 @@ country_event = {
 					duration = -1
 				}
 			}
-			custom_tooltip = nhs2_greek_fire.3.tt # Will have to either deal with natives (via decision), or conquer/colonise the province
+			custom_tooltip = nhs2_greek_fire.3.tt
+			if = {
+				limit = {
+					954 = {
+						owner = {
+							OR = {
+								technology_group = north_american
+								# technology_group = hellenised_american
+								technology_group = south_american
+							}
+							NOT = { is_subject_of = ROOT }
+							NOT = { has_country_modifier = nhs_greek_fire_deal }
+						}
+					}
+				}
+				custom_tooltip = nhs_enabled_naphtha_trade_titusville_tt
+			}
 		}
 		else = {
 			set_country_flag = nhs_found_the_source
@@ -215,6 +241,8 @@ country_event = {
 	}
 	picture = caribbean_arrival_eventPicture
 
+	goto = 502
+
 	fire_only_once = yes
 
 	trigger = {
@@ -231,21 +259,23 @@ country_event = {
 		}
 	}
 
-	immediate = {
-		hidden_effect = {
-			save_event_target_as = nhs2_greek_fire_4_target
-		}
-	}
-
 	option = { ##
 		name = "nhs2_greek_fire.4.a"
 		if = {
 			limit = {
 				502 = {
 					NOT = {
-						owned_by = ROOT
-						owner = {
-							is_subject_of = ROOT
+						OR = {
+							country_or_subject_holds = ROOT
+							owner = {
+								OR = {
+									technology_group = north_american
+									# technology_group = hellenised_american
+									technology_group = south_american
+								}
+								has_country_modifier = nhs_greek_fire_deal
+								
+							}
 						}
 					}
 				}
