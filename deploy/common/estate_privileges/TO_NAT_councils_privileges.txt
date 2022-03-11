@@ -21,6 +21,135 @@
 #	ai_will_do									#If above ESTATE_PRIVILEGE_GRANT_THRESHOLD define, AI will try to apply. If below ESTATE_PRIVILEGE_REVOKE_THRESHOLD, AI will try to revoke.
 # }
 
+# Base privilege
+
+nhs_native_privilege_foreign_invaders = {
+    icon = privilege_centralized
+
+	is_valid = {
+	}
+	can_select = {
+	}
+	can_revoke = {
+		always = no
+	}
+	on_granted = {
+		custom_tooltip = nhs_add_estate_all_natives_privilege_slot_tt
+		custom_tooltip = nhs_native_privilege_foreign_invaders_tooltip
+	}
+	mechanics = {
+		exempt_from_seize_land
+	}
+	conditional_modifier = {
+		trigger = {
+			NOT = { has_country_flag = native_council_enabled_mid }
+		}
+		modifier = { 
+			estate_all_natives_loyalty_modifier = -0.15
+			estate_all_natives_influence_modifier = -0.10
+		}
+	}
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = native_council_enabled_mid
+		}
+		modifier = { 
+			estate_all_natives_loyalty_modifier = -0.10
+			estate_all_natives_influence_modifier = -0.10
+		}
+	}
+	benefits = {
+	}
+	ai_will_do = {
+		factor = 100
+	}
+}
+
+# Seize Land
+
+nhs_native_privilege_seize_land = {
+    icon = privilege_better_integration
+
+	is_valid = {
+		has_estate_privilege = nhs_native_privilege_foreign_invaders
+		OR = {
+			NOT = { has_estate_privilege = nhs_native_privilege_seize_land }
+			has_country_modifier = estate_natives_sell_land_cd
+		}
+		# NOT = { has_estate_privilege = nhs_native_privilege_seize_land }
+	}
+	can_select = {
+		custom_trigger_tooltip = {
+			tooltip = to_natives_sell_land_cd_tt
+			NOT = { has_country_modifier = estate_natives_sell_land_cd }
+		}
+	}
+	on_granted = {
+		custom_tooltip = nhs_add_estate_all_natives_privilege_slot_tt
+		add_estate_loyalty = {
+			estate = estate_all_natives
+			loyalty = -20
+		}
+		nhs_change_any_native_estate_land_share = {
+			SHARE = -5
+		}
+		if = {
+			limit = {
+				# to_estate_will_revolt = { ESTATE = estate_all_natives }
+				NOT = {
+					estate_loyalty = {
+						estate = estate_all_natives
+						loyalty = 50
+					}
+				}
+			}
+			custom_tooltip = native_estate_seize_land_rebels_tt
+			spawn_native_estate_rebels_seize_land_switch = yes
+		}
+		else = {
+			custom_tooltip = to_native_estate_seize_land_rebels_potential_tt
+		}
+		hidden_effect = {
+			remove_estate_privilege = nhs_native_privilege_seize_land
+			# country_event = { id = nhs_all_natives_estates.4 days = 1 }
+			add_country_modifier = {
+				name = estate_natives_sell_land_cd
+				duration = 365
+				hidden = yes
+			}
+		}
+	}
+	cooldown_years = 1
+	# on_cooldown_expires = { 
+	# 	remove_estate_privilege = nhs_native_privilege_seize_land
+	# }
+	on_invalid = {
+		custom_tooltip = to_native_estate_seize_land_can_seize_again_tt
+	}
+	benefits = {
+	}
+	ai_will_do = {
+		factor = 1
+		modifier = {
+			factor = 0
+			to_estate_will_revolt = { ESTATE = estate_all_natives }
+		}
+		modifier = {
+			factor = 0
+			NOT = { is_absolutism_active = yes }
+			crown_land_share = 50
+		}
+		modifier = {
+			factor = 0
+			NOT = {
+				estate_territory = {
+					estate = estate_all_natives
+					territory = 5
+				}
+			}
+		}
+	}
+}
 
 # -- Elysian privileges (move this down later) --
 

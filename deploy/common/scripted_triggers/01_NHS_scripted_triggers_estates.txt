@@ -265,7 +265,8 @@ has_exempt_from_seize_land_for_estate_clans = {
 	always = no	#Doesn't have Exempt from Seize Land privileges
 }
 has_exempt_from_seize_land_for_estate_all_natives = {
-	always = no	#Doesn't have Exempt from Seize Land privileges
+	# always = no	#Doesn't have Exempt from Seize Land privileges
+	has_estate_privilege = nhs_native_privilege_foreign_invaders
 }
 
 to_base_num_of_privileges_check = {
@@ -379,7 +380,75 @@ to_num_of_privileges_check_estate_clans = {
 }
 
 to_num_of_privileges_check_estate_all_natives = {
-	to_base_num_of_privileges_check = {
-		ESTATE = estate_all_natives
+	OR = {
+		to_base_num_of_privileges_check = {
+			ESTATE = estate_all_natives
+		}
+		AND = {
+			has_estate_privilege = nhs_native_privilege_foreign_invaders
+			NOT = {		
+				num_of_estate_privileges = {
+					estate = estate_all_natives
+					value = 5
+				}
+			}
+		}
+	}
+}
+
+to_any_estate_will_revolt = {
+	OR = {
+		to_estate_will_revolt = { ESTATE = estate_nobles }
+		to_estate_will_revolt = { ESTATE = estate_brahmins }
+		to_estate_will_revolt = { ESTATE = estate_burghers }
+		to_estate_will_revolt = { ESTATE = estate_church }
+		to_estate_will_revolt = { ESTATE = estate_cossacks }
+		to_estate_will_revolt = { ESTATE = estate_dhimmi }
+		to_estate_will_revolt = { ESTATE = estate_jains }
+		to_estate_will_revolt = { ESTATE = estate_maratha }
+		to_estate_will_revolt = { ESTATE = estate_nomadic_tribes }
+		to_estate_will_revolt = { ESTATE = estate_rajput }
+		to_estate_will_revolt = { ESTATE = estate_vaisyas }
+	
+		to_estate_will_revolt = { ESTATE = estate_nhs_nobles }
+		to_estate_will_revolt = { ESTATE = estate_nhs_apogonoi }
+		to_estate_will_revolt = { ESTATE = estate_nhs_pipiltin }
+		to_estate_will_revolt = { ESTATE = estate_clans }
+		# to_estate_will_revolt = { ESTATE = estate_all_natives }
+	}
+}
+
+to_spawn_rebels_valid_province_tribal_land = {
+	has_province_modifier = to_nat_tribal_development
+	to_spawn_rebels_valid_province = yes
+}
+
+to_spawn_rebels_valid_province_integrated_native_land = {
+	OR = {
+		culture = elysameric
+		culture = skraeling
+	}
+	to_spawn_rebels_valid_province = yes
+}
+
+to_spawn_rebels_valid_province_native_land = {
+	nhs_culturally_native = yes
+	NOT = { culture = elysameric }
+	NOT = { culture = skraeling }
+	to_spawn_rebels_valid_province = yes
+}
+
+to_spawn_rebels_valid_province = {
+	OR = {
+		is_in_capital_area = yes
+		is_state_core = root
+	}
+	is_city = yes
+	is_capital = no
+	NOT = {
+		area_for_scope_province = {
+			owned_by = root
+			has_province_flag = seize_land_spawn_unrest_and_rebels
+		}
 	}
 }
