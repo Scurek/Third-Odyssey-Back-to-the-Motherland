@@ -964,11 +964,12 @@ country_decisions = {
 	nhs_looking_east = {
 		potential = {
 			OR = {
-				has_idea = controlled_treasury
-				has_idea = old_world_diplomacy
-				has_idea = ideology_of_superiority
+				has_idea_group = development_ideas
+				has_idea_group = discovery_ideas
+				has_idea_group = domination_ideas
 			}
 			NOT = { has_idea_group = exploration_ideas }
+			has_country_flag = nhs_europe_discovered_got
 		}
 
 		allow = {
@@ -977,16 +978,16 @@ country_decisions = {
 				full_idea_group = discovery_ideas
 				full_idea_group = domination_ideas
 			}
-			OR = {
-				technology_group = modern_greek
-				technology_group = modern_spartan
-				technology_group = modern_vinlandic
-				technology_group = western
-			}
+			# OR = {
+			# 	technology_group = modern_greek
+			# 	technology_group = modern_spartan
+			# 	technology_group = modern_vinlandic
+			# 	technology_group = western
+			# }
 			custom_trigger_tooltip = {
-				tooltip = nhs_idea_swap_cooldown_t
+				tooltip = nhs_idea_swap_cooldown_tt
 				NOT = {
-					has_country_modifier = nhs_idea_swap_cooldown
+					has_country_modifier = nhs_idea_swap_cooldown_cd
 				}
 			}
 		}
@@ -1010,27 +1011,42 @@ country_decisions = {
 				}
 				remove_idea_group = domination_ideas
 			}
-			add_idea_group = exploration_ideas
+			custom_tooltip = nhs_add_full_exploration_ideas_tt
+			
+			custom_tooltip = nhs_new_line_tt
 			if = {
 				limit = {
-					NOT = {
-						has_country_flag = nhs_ideas_unlocked
-					}
+					has_idea_group = development_ideas
 				}
-				#custom_tooltip = idea_groups_unlocked
-				set_country_flag = nhs_ideas_unlocked
+				custom_tooltip = nhs_idea_swap_cooldown_development_tt
 			}
+			if = {
+				limit = {
+					has_idea_group = discovery_ideas
+				}
+				custom_tooltip = nhs_idea_swap_cooldown_discovery_tt
+			}
+			if = {
+				limit = {
+					has_idea_group = domination_ideas
+				}
+				custom_tooltip = nhs_idea_swap_cooldown_domination_tt
+			}
+
 			hidden_effect = {
-				add_idea = global_empire
 				if = {
 					limit = {
-						has_country_flag = nhs_first_swap
+						NOT = { has_country_flag = nhs_ideas_unlocked }
 					}
-					add_country_modifier = {
-						name = nhs_idea_swap_cooldown
-						duration = 18250
-						hidden = yes
-					}
+					#custom_tooltip = idea_groups_unlocked
+					set_country_flag = nhs_ideas_unlocked
+				}
+				add_idea_group = exploration_ideas
+				add_idea = global_empire
+				add_country_modifier = {
+					name = nhs_idea_swap_cooldown_cd
+					duration = 18250
+					hidden = yes
 				}
 			}
 		}
@@ -1042,7 +1058,6 @@ country_decisions = {
 
 	nhs_back_to_the_roots = {
 		potential = {
-			full_idea_group = exploration_ideas
 			NOT = { has_idea_group = development_ideas }
 			NOT = { has_idea_group = discovery_ideas }
 			NOT = { has_idea_group = domination_ideas }
@@ -1060,13 +1075,21 @@ country_decisions = {
 				culture_group = norse_g
 				culture_group = spartakian_group
 			}
+			# has_country_flag = nhs_europe_discovered_got
 		}
 
 		allow = {
-			OR = {
-				technology_group = modern_greek
-				technology_group = modern_spartan
-				technology_group = modern_vinlandic
+			full_idea_group = exploration_ideas
+			# OR = {
+			# 	technology_group = modern_greek
+			# 	technology_group = modern_spartan
+			# 	technology_group = modern_vinlandic
+			# }
+			custom_trigger_tooltip = {
+				tooltip = nhs_idea_swap_cooldown_tt
+				NOT = {
+					has_country_modifier = nhs_idea_swap_cooldown_cd
+				}
 			}
 		}
 
@@ -1082,8 +1105,9 @@ country_decisions = {
 					}
 				}
 				remove_idea_group = exploration_ideas
-				add_idea_group = development_ideas
+				custom_tooltip = nhs_add_full_development_ideas_tt
 				hidden_effect = {
+					add_idea_group = development_ideas
 					add_idea = never_again_left_behind
 				}
 			}
@@ -1099,8 +1123,9 @@ country_decisions = {
 					}
 				}
 				remove_idea_group = exploration_ideas
-				add_idea_group = discovery_ideas
+				custom_tooltip = nhs_add_full_discovery_ideas_tt
 				hidden_effect = {
+					add_idea_group = discovery_ideas
 					# add_idea = prospecting_settlers
 					add_idea = adventurers
 				}
@@ -1113,8 +1138,9 @@ country_decisions = {
 					}
 				}
 				remove_idea_group = exploration_ideas
-				add_idea_group = domination_ideas
+				custom_tooltip = nhs_add_full_domination_ideas_tt
 				hidden_effect = {
+					add_idea_group = domination_ideas
 					add_idea = spread_our_dominion
 				}
 			}
@@ -1128,14 +1154,15 @@ country_decisions = {
 				}
 				country_event = { id = nhs2_countryevents.29 }
 			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_idea_swap_cooldown_exploration_tt
 			hidden_effect = {
 				add_country_modifier = {
-					name = nhs_idea_swap_cooldown
+					name = nhs_idea_swap_cooldown_cd
 					duration = 18250
 					hidden = yes
 				}
 			}
-			set_country_flag = nhs_first_swap
 		}
 
 		ai_will_do = {
