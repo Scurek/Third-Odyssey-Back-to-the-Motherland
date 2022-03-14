@@ -372,12 +372,7 @@ country_decisions = {
 			OR = {
 				NOT = { owns_or_vassal_of = 151 }
 				any_known_country = {
-					NOT = {
-						AND = {
-							culture_group = byzantine
-							NOT = { primary_culture = turkish }
-						}
-					}
+					NOT = { culture_group = byzantine }
 					any_owned_province = {
 						culture = greek
 					}
@@ -539,36 +534,31 @@ country_decisions = {
 				limit = {
 					has_country_flag = nhs_bo_athens
 				}
-				NOT = { owns = 146 }
+				NOT = { owns_or_subject_of = 146 }
 			}
 			else_if = {
 				limit = {
 					has_country_flag = nhs_bo_macedonia
 				}
-				NOT = { owns = 148 }
+				NOT = { owns_or_subject_of = 148 }
 			}
 			else_if = {
 				limit = {
 					has_country_flag = nhs_bo_sparta
 				}
-				NOT = { owns = 145 }
+				NOT = { owns_or_subject_of = 145 }
 			}
 			else_if = {
 				limit = {
 					has_country_flag = nhs_bo_rhodes
 				}
-				NOT = { owns = 320 }
+				NOT = { owns_or_subject_of = 320 }
 			}
 		}
 
 		effect = {
 			clr_country_flag = nhs_bo
-			clr_country_flag = nhs_bo_athens
-			clr_country_flag = nhs_bo_macedonia
-			clr_country_flag = nhs_bo_sparta
-			clr_country_flag = nhs_bo_rhodes
 			add_mil_power = -50
-			add_years_of_income = -0.1
 			if = {
 				limit = {
 					has_country_flag = nhs_bo_athens
@@ -593,6 +583,10 @@ country_decisions = {
 				}
 				remove_core = 320
 			}
+			clr_country_flag = nhs_bo_athens
+			clr_country_flag = nhs_bo_macedonia
+			clr_country_flag = nhs_bo_sparta
+			clr_country_flag = nhs_bo_rhodes
 			hidden_effect = {
 				country_event = { id = nhs2_mainlandevents.9 }
 			}
@@ -1440,10 +1434,7 @@ country_decisions = {
 	nhs_apply_for_protection = {
 		potential = {
 			OR = {
-				AND = {
-					culture_group = byzantine
-					NOT = { primary_culture = turkish }
-				}
+				culture_group = byzantine
 				culture_group = south_slavic
 			}
 			OR = {
@@ -3356,11 +3347,22 @@ country_decisions = {
 				}
 				nhs_set_center_of_trade_1 = yes
 			}
-			every_owned_province = {
+			if = {
 				limit = {
-					has_province_modifier = nhs2_base_of_operations
+					any_province = {
+						has_province_modifier = nhs2_base_of_operations_tm
+					}
 				}
-				remove_province_modifier = nhs2_base_of_operations
+				custom_tooltip = nhs_remove_base_of_operations_tt
+				hidden_effect = {
+					every_province = {
+						limit = {
+							has_province_modifier = nhs2_base_of_operations_tm
+						}
+						remove_province_triggered_modifier = nhs2_base_of_operations_tm
+					}
+					clear_global_event_target = nhs_base_of_operations_province
+				}
 			}
 			set_country_flag = nhs_invasion_over
 			clr_country_flag = nhs_bo_sparta
@@ -3368,7 +3370,7 @@ country_decisions = {
 			clr_country_flag = nhs_bo_macedonia
 			clr_country_flag = nhs_bo_athens
 			clr_country_flag = nhs_bo
-			clr_country_flag = nhs_bo2
+			clr_country_flag = nhs_got_bo_buff
 			clr_country_flag = nhs_invasion_second_part_begins
 			clr_country_flag = nhs_invasion_second_part
 			clr_country_flag = nhs_supply_lines
@@ -3930,7 +3932,6 @@ country_decisions = {
 			every_country = {
 				limit = {
 					culture_group = byzantine
-					NOT = { primary_culture = turkish }
 				}
 				reverse_add_opinion = {
 					who = ROOT
