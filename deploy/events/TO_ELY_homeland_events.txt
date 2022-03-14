@@ -570,76 +570,102 @@ country_event = {
 		name = "nhs2_mainlandevents.7.a"
 		ai_chance = { factor = 1 }
 		set_country_flag = nhs_supply_lines_western_isles
-		every_province = {
+		if = {
 			limit = {
-				nhs_supply_lines_western_isles_province = yes
+				any_owned_province = {
+					nhs_supply_lines_western_isles_province = yes
+				}
 			}
-			add_permanent_claim = ROOT
+			custom_tooltip = nhs_supply_lines_already_owned_province_tt
+			country_event = { id = nhs2_mainlandevents.8 }
 		}
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = nhs_invasion_range_modifier_tt
-		# add_permanent_claim = 1247
-		# add_permanent_claim = 127
-		# add_permanent_claim = 2986
-		# add_permanent_claim = 124
-		# add_permanent_claim = 125
-		# add_permanent_claim = 2982
-		# add_permanent_claim = 126
-		# add_permanent_claim = 333
-		# add_permanent_claim = 4735
-		# add_permanent_claim = 4559
-		# add_permanent_claim = 4560
-		# add_permanent_claim = 4737
-		# add_permanent_claim = 4736
+		else = {
+			every_province = {
+				limit = {
+					nhs_supply_lines_western_isles_province = yes
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_invasion_range_modifier_tt
+		}
 	}
 	
 	option = {           # Eastern Isles
 		name = "nhs2_mainlandevents.7.b"
 		ai_chance = { factor = 0 }
 		set_country_flag = nhs_supply_lines_eastern_isles
-		every_province = {
+		if = {
 			limit = {
-				nhs_supply_lines_eastern_isles_province = yes
+				any_owned_province = {
+					nhs_supply_lines_eastern_isles_province = yes
+				}
 			}
-			add_permanent_claim = ROOT
+			custom_tooltip = nhs_supply_lines_already_owned_province_tt
+			country_event = { id = nhs2_mainlandevents.8 }
 		}
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = nhs_invasion_range_modifier_tt
-		# add_permanent_claim = 163
-		# add_permanent_claim = 321
-		# add_permanent_claim = 142
-		# add_permanent_claim = 164
-		# add_permanent_claim = 2348
-		# add_permanent_claim = 320
-		# add_permanent_claim = 4698
+		else = {
+			every_province = {
+				limit = {
+					nhs_supply_lines_eastern_isles_province = yes
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_invasion_range_modifier_tt
+		}
 	}
 
 	option = {           # Gibraltar
 		name = "nhs2_mainlandevents.7.f"
 		ai_chance = { factor = 1 }
 		set_country_flag = nhs_supply_lines_gibraltar
-		every_province = {
+		
+		if = {
 			limit = {
-				nhs_supply_lines_gibraltar_province = yes
+				any_owned_province = {
+					nhs_supply_lines_gibraltar_province = yes
+				}
 			}
-			add_permanent_claim = ROOT
+			custom_tooltip = nhs_supply_lines_already_owned_province_tt
+			country_event = { id = nhs2_mainlandevents.8 }
 		}
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = nhs_invasion_range_modifier_tt
+		else = {
+			every_province = {
+				limit = {
+					nhs_supply_lines_gibraltar_province = yes
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_invasion_range_modifier_tt
+		}
 	}
 
 	option = {           # Atlantic Port
 		name = "nhs2_mainlandevents.7.g"
 		ai_chance = { factor = 1 }
 		set_country_flag = nhs_supply_lines_atlantic_port
-		every_province = {
+		
+		if = {
 			limit = {
-				nhs_supply_lines_atlantic_port_province = yes
+				any_owned_province = {
+					nhs_supply_lines_atlantic_port_province = yes
+				}
 			}
-			add_permanent_claim = ROOT
+			custom_tooltip = nhs_supply_lines_already_owned_province_tt
+			country_event = { id = nhs2_mainlandevents.8 }
 		}
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = nhs_invasion_range_modifier_tt
+		else = {
+			every_province = {
+				limit = {
+					nhs_supply_lines_atlantic_port_province = yes
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_invasion_range_modifier_tt
+		}
 	}
 	
 	# option = {           # North-Westren Africa
@@ -703,20 +729,22 @@ country_event = {
 	title = nhs2_mainlandevents.8.t
 	desc = nhs2_mainlandevents.8.d
 	picture = VICTORY_eventPicture
+
+	fire_only_once = yes
 	
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
-		has_country_flag = nhs_invasion_begins
+		has_country_flag = nhs_supply_lines
 		NOT = { has_country_flag = nhs_supply_lines_secured }
 		NOT = { has_country_flag = nhs_invasion_over }
 		# NOT = {
 		# 	any_province = {
-		# 		has_province_modifier = nhs2_supply_lines
+		# 		has_province_modifier = nhs2_supply_lines_tm
 		# 	}
 		# }
 		any_owned_province = {
 			#nhs_supply_lines_province = yes
-			nhs_is_target_supply_lines_province = yes
+			nhs_is_target_supply_lines_province = { FLAG_SCOPE = ROOT }
 		}
 	}
 	
@@ -725,7 +753,7 @@ country_event = {
 			random_owned_province = {
 				limit = {
 					# nhs_supply_lines_province = yes
-					nhs_is_target_supply_lines_province = yes
+					nhs_is_target_supply_lines_province = { FLAG_SCOPE = ROOT }
 					nhs_supply_lines_mediterranean_port_province = yes
 					province_has_center_of_trade_of_level = 1
 				}
@@ -738,7 +766,7 @@ country_event = {
 				random_owned_province = {
 					limit = {
 						# nhs_supply_lines_province = yes
-						nhs_is_target_supply_lines_province = yes
+						nhs_is_target_supply_lines_province = { FLAG_SCOPE = ROOT }
 						nhs_supply_lines_mediterranean_port_province = yes
 					}
 					save_event_target_as = supply_lines_target
@@ -751,7 +779,7 @@ country_event = {
 				random_owned_province = {
 					limit = {
 						# nhs_supply_lines_province = yes
-						nhs_is_target_supply_lines_province = yes
+						nhs_is_target_supply_lines_province = { FLAG_SCOPE = ROOT }
 					}
 					save_event_target_as = supply_lines_target
 				}
@@ -770,9 +798,18 @@ country_event = {
 		goto = supply_lines_target
 		event_target:supply_lines_target = {
 			add_core = ROOT
-			add_province_modifier = {
-				name = "nhs2_supply_lines"
-				duration = -1
+		}
+		event_target:supply_lines_target = {
+			tooltip = {
+				add_province_modifier = {
+					name = nhs2_supply_lines
+					duration = -1
+					desc = "END_OF_INVASION"
+				}
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = nhs2_supply_lines_tm
+				save_global_event_target_as = nhs_supply_lines_province
 			}
 		}
 		custom_tooltip = nhs_invasion_supply_lines_modifiers_tt
@@ -883,6 +920,7 @@ country_event = {
 		trigger = {
 			has_country_flag = nhs_supply_lines_secured
 		}
+		custom_tooltip = enables_invasion_second_part_decision_tt
 		clr_country_flag = nhs_invasion_second_part_begins
 		clr_country_flag = nhs_bo
 	}
@@ -1313,8 +1351,9 @@ country_event = {
 			}
 			tooltip = {
 				add_province_modifier = {
-					name = "nhs2_base_of_operations"
+					name = nhs2_base_of_operations
 					duration = -1
+					desc = "END_OF_INVASION"
 				}
 			}
 			hidden_effect = {
@@ -1573,7 +1612,7 @@ country_event = {
 			}
 			NOT = { province_id = 151 }
 			NOT = { has_construction = missionary }
-			NOT = { has_province_modifier = nhs2_supply_lines }
+			NOT = { has_province_modifier = nhs2_supply_lines_tm }
 		}
 	}
 	
@@ -1610,7 +1649,7 @@ country_event = {
 						nhs_is_current_base_of_operations_target = { FLAG_SCOPE = ROOT }
 					}
 					NOT = { has_construction = missionary }
-					NOT = { has_province_modifier = nhs2_supply_lines }
+					NOT = { has_province_modifier = nhs2_supply_lines_tm }
 				}
 				tooltip = {
 					cede_province = ELG
@@ -2261,12 +2300,22 @@ country_event = {
 			name = "nhs2_invasion_succeseful"
 			duration = -1
 		}
-		random_owned_province = {
+		if = {
 			limit = {
-				has_province_modifier = nhs2_supply_lines
+				any_province = {
+					has_province_modifier = nhs2_supply_lines_tm
+				}
 			}
-			remove_province_modifier = nhs2_supply_lines
-			nhs_set_center_of_trade_1 = yes
+			custom_tooltip = nhs_remove_supply_lines_tt
+			random_province = {
+				limit = {
+					has_province_modifier = nhs2_supply_lines_tm
+				}
+				nhs_set_center_of_trade_2 = yes
+				hidden_effect = {
+					remove_province_triggered_modifier = nhs2_supply_lines_tm
+				}
+			}
 		}
 		if = {
 			limit = {
@@ -2491,244 +2540,3 @@ country_event = {
 		}
 	}
 }
-
-# Regain claims
-
-# country_event = {
-# 	id = nhs2_mainlandevents.30
-# 	title = nhs2_mainlandevents.30.t
-# 	desc = nhs2_mainlandevents.30.d
-# 	picture = VICTORY_eventPicture
-	
-# 	hidden = yes
-	
-# 	trigger = {
-# 		nhs_condition_all_ely = { KOMANDA = tag }
-# 		NOT = { has_country_flag = nhs_invasion_over }
-# 		OR = {
-# 			AND = {
-# 				has_country_flag = nhs_supply_lines
-# 				has_country_flag = nhs_supply_lines_western_isles
-# 				any_province = {
-# 					OR = {
-# 						province_id = 1247
-# 						province_id = 127
-# 						province_id = 124
-# 						province_id = 125
-# 						province_id = 126
-# 					}
-# 					NOT = { nhs_condition_all_ely = { KOMANDA = is_claim } }
-# 				}
-# 			}
-# 			AND = {
-# 				has_country_flag = nhs_supply_lines
-# 				has_country_flag = nhs_supply_lines_eastern_isles
-# 				any_province = {
-# 					OR = {
-# 						province_id = 163
-# 						province_id = 321
-# 						province_id = 142
-# 						province_id = 164
-# 					}
-# 					NOT = { nhs_condition_all_ely = { KOMANDA = is_claim } }
-# 				}
-# 			}
-# 			AND = {
-# 				has_country_flag = nhs_supply_lines
-# 				has_country_flag = nhs_supply_lines_north_africa
-# 				any_province = {
-# 					region = maghreb_region
-# 					has_port = yes
-# 					NOT = { nhs_condition_all_ely = { KOMANDA = is_claim } }
-# 				}
-# 			}
-# 			AND = {
-# 				has_country_flag = nhs_supply_lines
-# 				has_country_flag = nhs_supply_lines_west_africa
-# 				any_province = {
-# 					OR = {
-# 						area = cap_verde_area
-# 						province_id = 1114
-# 						province_id = 1111
-# 						province_id = 367
-# 						province_id = 368
-# 						province_id = 366
-# 						province_id = 1096
-# 					}
-# 					has_port = yes
-# 					NOT = { nhs_condition_all_ely = { KOMANDA = is_claim } }
-# 				}
-# 			}
-# 			AND = {
-# 				has_country_flag = nhs_claims_greek
-# 				any_province = {
-# 					owner = {
-# 						NOT = { 
-# 							AND = {
-# 								culture_group = byzantine
-# 								NOT = { primary_culture = turkish }
-# 							}
-# 						}
-# 					}
-# 					nhs_greek_areas = yes
-# 					continent = europe
-# 					NOT = { nhs_condition_all_ely = { KOMANDA = is_claim } }
-# 				}
-# 			}
-# 		}
-# 	}
-	
-# 	mean_time_to_happen = {
-# 		days = 1
-# 	}
-	
-# 	immediate = {
-# 		hidden_effect = {
-# 			if = {
-# 				limit = {
-# 					ROOT = {
-# 						has_country_flag = nhs_supply_lines
-# 						has_country_flag = nhs_supply_lines_western_isles
-# 					}
-# 					any_province = {
-# 						OR = {
-# 							province_id = 1247
-# 							province_id = 127
-# 							province_id = 124
-# 							province_id = 125
-# 							province_id = 126
-# 						}
-# 						NOT = { nhs_condition_all_ely = { KOMANDA = is_claim } }
-# 					}
-# 				}
-# 				ROOT = {
-# 					add_permanent_claim = 1247
-# 					add_permanent_claim = 127
-# 					add_permanent_claim = 124
-# 					add_permanent_claim = 125
-# 					add_permanent_claim = 126
-# 				}
-# 			}
-# 			if = {
-# 				limit = {
-# 					ROOT = {
-# 						has_country_flag = nhs_supply_lines
-# 						has_country_flag = nhs_supply_lines_eastern_isles
-# 					}
-# 					any_province = {
-# 						OR = {
-# 							province_id = 163
-# 							province_id = 321
-# 							province_id = 142
-# 							province_id = 164
-# 						}
-# 						NOT = { nhs_condition_all_ely = { KOMANDA = is_claim } }
-# 					}
-# 				}
-# 				ROOT = {
-# 					add_permanent_claim = 163
-# 					add_permanent_claim = 321
-# 					add_permanent_claim = 142
-# 					add_permanent_claim = 164
-# 				}
-# 			}
-# 			if = {
-# 				limit = {
-# 					ROOT = {
-# 						has_country_flag = nhs_supply_lines
-# 						has_country_flag = nhs_supply_lines_north_africa
-# 					}
-# 					any_province = {
-# 						region = maghreb_region
-# 						has_port = yes
-# 						NOT = { nhs_condition_all_ely = { KOMANDA = is_claim } }
-# 					}
-# 				}
-# 				every_province = {
-# 					limit = {
-# 						region = maghreb_region
-# 						has_port = yes
-# 					}
-# 					add_permanent_claim = ROOT
-# 				}
-# 			}
-# 			if = {
-# 				limit = {
-# 					ROOT = {
-# 						has_country_flag = nhs_supply_lines
-# 						has_country_flag = nhs_supply_lines_west_africa
-# 					}
-# 					any_province = {
-# 						OR = {
-# 							area = cap_verde_area
-# 							province_id = 1114
-# 							province_id = 1111
-# 							province_id = 367
-# 							province_id = 368
-# 							province_id = 366
-# 							province_id = 1096
-# 						}
-# 						has_port = yes
-# 						NOT = { nhs_condition_all_ely = { KOMANDA = is_claim } }
-# 					}
-# 				}
-# 				every_province = {
-# 					limit = {
-# 						OR = {
-# 							area = cap_verde_area
-# 							province_id = 1114
-# 							province_id = 1111
-# 							province_id = 367
-# 							province_id = 368
-# 							province_id = 366
-# 							province_id = 1096
-# 						}
-# 						has_port = yes
-# 					}
-# 					add_permanent_claim = ROOT
-# 				}
-# 			}
-# 			if = {
-# 				limit = {
-# 					ROOT = {
-# 						has_country_flag = nhs_claims_greek
-# 					}
-# 					any_province = {
-# 						owner = {
-# 							NOT = { 
-# 								AND = {
-# 									culture_group = byzantine
-# 									NOT = { primary_culture = turkish }
-# 								}
-# 							}
-# 						}
-# 						nhs_greek_areas = yes
-# 						continent = europe
-# 						NOT = { nhs_condition_all_ely = { KOMANDA = is_claim } }
-# 					}
-# 				}
-# 				every_province = {
-# 					limit = {
-# 						owner = {
-# 							NOT = { 
-# 								AND = {
-# 									culture_group = byzantine
-# 									NOT = { primary_culture = turkish }
-# 								}
-# 							}
-# 						}
-# 						nhs_greek_areas = yes
-# 						continent = europe
-# 					}
-# 					add_permanent_claim = ROOT
-# 				}
-# 			}
-# 		}
-# 	}
-	
-# 	option = {
-# 		name = "nhs2_mainlandevents.30.a"
-# 	}
-# }
-
-

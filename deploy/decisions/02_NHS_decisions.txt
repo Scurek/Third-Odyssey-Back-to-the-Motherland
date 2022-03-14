@@ -324,7 +324,7 @@ country_decisions = {
 				NOT = {
 					any_owned_province = {
 						# nhs_supply_lines_province = yes
-						nhs_is_target_supply_lines_province = yes
+						nhs_is_target_supply_lines_province = { FLAG_SCOPE = ROOT }
 					}
 				}
 			}
@@ -334,7 +334,7 @@ country_decisions = {
 			hidden_effect = {
 				every_province = {
 					limit = {
-						nhs_is_target_supply_lines_province = yes
+						nhs_is_target_supply_lines_province = { FLAG_SCOPE = ROOT }
 					}
 					remove_claim = ROOT
 				}
@@ -3341,11 +3341,22 @@ country_decisions = {
 				name = "nhs2_invasion_succeseful"
 				duration = -1
 			}
-			random_owned_province = {
+			if = {
 				limit = {
-					has_province_modifier = nhs2_supply_lines
+					any_province = {
+						has_province_modifier = nhs2_supply_lines_tm
+					}
 				}
-				nhs_set_center_of_trade_1 = yes
+				custom_tooltip = nhs_remove_supply_lines_tt
+				random_province = {
+					limit = {
+						has_province_modifier = nhs2_supply_lines_tm
+					}
+					nhs_set_center_of_trade_2 = yes
+					hidden_effect = {
+						remove_province_triggered_modifier = nhs2_supply_lines_tm
+					}
+				}
 			}
 			if = {
 				limit = {
