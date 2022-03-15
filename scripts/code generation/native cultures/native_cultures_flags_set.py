@@ -1,14 +1,9 @@
 from string import Template
-from cultures import *
+from cultures_by_group import *
 
 output_file = "output_flags_set.txt"
 
-template_if = Template('''$if = {
-    limit = {
-        culture = $culture
-    }
-    set_province_flag = nat_original_culture_$culture
-}
+template_if = Template('''\t$if = { limit = { culture = $culture } set_province_flag = nat_original_culture_$culture }
 ''')
 
 f = open(output_file, "w")

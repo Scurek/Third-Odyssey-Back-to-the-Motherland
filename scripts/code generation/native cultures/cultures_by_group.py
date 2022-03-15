@@ -37,6 +37,7 @@ culture_groups = {
     ],
     "iroquoian": [
         "iroquois",
+        "tuscarora",
         "cherokee",
         "huron",
         "laurentian",
@@ -89,4 +90,67 @@ culture_groups = {
         "lipan",
         "navajo"
     ],
+    "central_american": [
+        "aztek",
+        "totonac",
+        "purepecha",
+        "matlatzinca"
+    ],
+    "aridoamerican": [
+        "tecos",
+        "tepic",
+        "chichimecan",
+        "guamares",
+        "otomi",
+        "yaqui",
+    ],
+    "maya": [
+        "yucatec",
+        "putun",
+        "mayan",
+        "highland_mayan",
+        "lacandon",
+        "wastek",
+        "chontales",
+    ],
+    "otomanguean": [
+        "zapotek",
+        "mixtec",
+        "tlapanec",
+    ],
+    "andean_group": [
+        "inca",
+        "aimara",
+        "diaguita",
+        "chimuan",
+    ],
+    "je_tupi": [
+        "tupinamba",
+        "guarani",
+    ],
+    "je": [
+        "charruan",
+        "ge"
+    ],
+    "maranon": [
+        "jivaro",
+        "chachapoyan",
+    ],
+    "chibchan": [
+        "muisca",
+        "cara",
+        "miskito",
+    ],
+    "mataco": [
+        "chacoan",
+    ],
+    "araucanian": [
+        "mapuche",
+        "patagonian",
+        "het",
+        "huarpe"
+    ],
 }
+
+
+cultures = [culture for cultures in culture_groups.values() for culture in cultures]
