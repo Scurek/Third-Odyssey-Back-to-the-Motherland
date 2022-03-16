@@ -1307,6 +1307,37 @@ to_nat_displace_tribal_development = {
 				}
 			}
 		}
+		set_variable = { which = total_dev_loss which = tribal_tax_loss }
+		change_variable = { which = total_dev_loss which = tribal_production_loss }
+		change_variable = { which = total_dev_loss which = tribal_manpower_loss }
+		while = {
+			limit = {
+				check_variable = {
+					which = total_dev_loss
+					value = 1
+				}
+			}
+			change_variable = {
+				which = tribal_development_plunder
+				value = 10
+			}
+			change_variable = {
+				which = total_dev_loss
+				value = -1
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = tribal_development_plunder
+					value = 1
+				}
+			}
+			add_permanent_province_modifier = {
+				name = to_nat_tribal_development_plunder_mod
+				duration = -1
+			}
+		}
 		if = {
 			limit = {
 				NOT = {
@@ -1958,6 +1989,69 @@ to_nat_check_for_tribal_displacement_on_attack_natives = {
 				}
 				country_event = { id = to_nat_tribal_development.2 }
 			}
+		}
+	}
+}
+
+to_nat_tribal_displacement_obtain_local_plunder = {
+	if = {
+		limit = {
+			$PROVINCE_SCOPE$ = {
+				has_province_modifier = to_nat_tribal_development_plunder_mod
+			}
+		}
+		if = {
+			limit = {
+				$PROVINCE_SCOPE$ = {
+					is_city = yes
+				}
+			}
+			custom_tooltip = to_nat_tribal_development_plunder_gain_money_tt
+			custom_tooltip = nhs_new_line_tt
+			hidden_effect = {
+				$PROVINCE_SCOPE$ = {
+					while = {
+						limit = {
+							check_variable = {
+								which = tribal_development_plunder
+								value = 10
+							}
+						}
+						change_variable = {
+							which = tribal_development_plunder
+							value = -10
+						}
+						$COUNTRY_SCOPE$ = {
+							add_treasury = 10
+						}
+					}
+					while = {
+						limit = {
+							check_variable = {
+								which = tribal_development_plunder
+								value = 1
+							}
+						}
+						change_variable = {
+							which = tribal_development_plunder
+							value = -1
+						}
+						$COUNTRY_SCOPE$ = {
+							add_treasury = 1
+						}
+					}
+					remove_province_modifier = to_nat_tribal_development_plunder_mod
+				}
+			}
+		}
+		else = {
+			custom_tooltip = to_nat_tribal_development_plunder_money_remains_tt
+			custom_tooltip = nhs_new_line_tt
+			# add_permanent_province_modifier = {
+			# 	name = to_nat_tribal_development_plunder_mod
+			# 	duration = -1
+			# 	desc = "TO_NAT_PLUNDER_MOD_DESC"
+			# }
 		}
 	}
 }
