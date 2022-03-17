@@ -399,6 +399,7 @@ nhs_squips_integration_exist = {
 				add_province_triggered_modifier = nhs2_albanian_majority2_tm
 			}
 		}
+		to_nhs_handle_post_disaster_tolerance_modifier_albanians = { COUNTRY_SCOPE = owner }
 	}
 	set_global_flag = nhs_shqiperi_into_elysian
 	clr_country_flag = nhs_ingrate40
@@ -426,6 +427,7 @@ nhs_squips_integration_not_exists = {
 				add_province_triggered_modifier = nhs2_albanian_majority2_tm
 			}
 		}
+		to_nhs_handle_post_disaster_tolerance_modifier_albanians = { COUNTRY_SCOPE = owner }
 	}
 	hidden_effect = {
 		SHQ = {
@@ -8650,6 +8652,222 @@ to_nhs_increase_hellenic_crisis_disaster_progress = {
 	add_disaster_progress = {
 		disaster = nhs_hcd_hellenic_crisis
 		value = 12
+	}
+}
+
+to_nhs_exempt_all_non_greek_provinces_from_hellenic_disaster = {
+	custom_tooltip = to_nhs_exempt_all_non_greek_provinces_from_hellenic_disaster_tt
+	hidden_effect = {
+		every_owned_province = {
+			add_province_triggered_modifier = nhs_hcd_exempt_from_disaster_tm
+		}
+	}
+}
+
+to_nhs_handle_exemption_from_hellenic_disaster = {
+	if = {
+		limit = {
+			is_empty = no
+			owner = {
+				has_disaster = nhs_hcd_hellenic_crisis
+			}
+		}
+		add_province_triggered_modifier = nhs_hcd_exempt_from_disaster_tm
+	}
+	else = {
+		remove_province_triggered_modifier = nhs_hcd_exempt_from_disaster_tm
+	}
+}
+
+to_nhs_handle_post_disaster_tolerance_modifier_all_provinces = {
+	every_owned_province = {
+		to_nhs_handle_post_disaster_tolerance_modifier = yes
+	}
+}
+
+to_nhs_handle_post_disaster_tolerance_modifier = {
+	if = {
+		limit = {
+			is_empty = no
+			owner = {
+				has_country_flag = nhs_enable_tolerated_minority
+				culture_group = PREV
+			}
+			OR = {
+				AND = {
+					religion = pantheon_worship
+					owner = {
+						OR = {
+							religion = orthodox
+							religion = elysian_orthodoxy
+						}
+					}
+				}
+				AND = {
+					religion = orthodox
+					owner = {
+						OR = {
+							religion = pantheon_worship
+							religion = aztlan_worship
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				religion = pantheon_worship
+			}
+			add_province_modifier = {
+				name = nhs_tolerated_minority
+				duration = -1
+				desc = "NHS_TOLERANCE_HELLENIC_DESC"
+			}
+		}
+		else = {
+			add_province_modifier = {
+				name = nhs_tolerated_minority
+				duration = -1
+				desc = "NHS_TOLERANCE_ORTHODOX_DESC"
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			is_empty = no
+			owner = {
+				has_country_flag = nhs_enable_semi_tolerated_minority
+				culture_group = PREV
+			}
+			religion = pantheon_worship
+			owner = {
+				OR = {
+					religion = orthodox
+					religion = elysian_orthodoxy
+				}
+			}
+		}
+		add_province_modifier = {
+			name = nhs_semi_tolerated_minority
+			duration = -1
+			desc = "NHS_TOLERANCE_HELLENIC_DESC"
+		}
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_province_modifier = nhs_tolerated_minority
+				has_province_modifier = nhs_semi_tolerated_minority
+			}
+		}
+		remove_province_modifier = nhs_tolerated_minority
+		remove_province_modifier = nhs_semi_tolerated_minority
+	}
+}
+
+to_nhs_remove_post_disaster_tolerance_modifier_albanians = {
+	if = {
+		limit = {
+			OR = {
+				has_province_modifier = nhs_tolerated_minority
+				has_province_modifier = nhs_semi_tolerated_minority
+			}
+		}
+		remove_province_modifier = nhs_tolerated_minority
+		remove_province_modifier = nhs_semi_tolerated_minority
+	}
+}
+
+to_nhs_handle_post_disaster_tolerance_modifier_albanians = {
+	if = {
+		limit = {
+			$COUNTRY_SCOPE$ = {
+				has_country_flag = nhs_enable_tolerated_minority
+				religion = pantheon_worship
+				[[CHECK_FLAG]
+					has_global_flag = nhs_shqiperi_into_elysian
+				]
+			}
+		}
+		add_province_modifier = {
+			name = nhs_tolerated_minority
+			duration = -1
+			desc = "NHS_TOLERANCE_ORTHODOX_DESC"
+		}
+	}
+	else_if = {
+		limit = {
+			has_province_modifier = nhs_tolerated_minority
+		}
+		remove_province_modifier = nhs_tolerated_minority
+	}
+}
+
+to_nhs_handle_post_disaster_tolerance_modifier_culture_integration = {
+	if = {
+		limit = {
+			is_empty = no
+			owner = {
+				has_country_flag = nhs_enable_tolerated_minority
+			}
+			OR = {
+				AND = {
+					religion = pantheon_worship
+					owner = {
+						OR = {
+							religion = orthodox
+							religion = elysian_orthodoxy
+						}
+					}
+				}
+				AND = {
+					religion = orthodox
+					owner = {
+						OR = {
+							religion = pantheon_worship
+							religion = aztlan_worship
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				religion = pantheon_worship
+			}
+			add_province_modifier = {
+				name = nhs_tolerated_minority
+				duration = -1
+				desc = "NHS_TOLERANCE_HELLENIC_DESC"
+			}
+		}
+		else = {
+			add_province_modifier = {
+				name = nhs_tolerated_minority
+				duration = -1
+				desc = "NHS_TOLERANCE_ORTHODOX_DESC"
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			is_empty = no
+			owner = {
+				has_country_flag = nhs_enable_semi_tolerated_minority
+			}
+			religion = pantheon_worship
+			owner = {
+				OR = {
+					religion = orthodox
+					religion = elysian_orthodoxy
+				}
+			}
+		}
+		add_province_modifier = {
+			name = nhs_semi_tolerated_minority
+			duration = -1
+			desc = "NHS_TOLERANCE_HELLENIC_DESC"
+		}
 	}
 }
 
