@@ -2276,8 +2276,23 @@ country_event = {
 	}
 
 	option = {
-		# Restrain it
+		# Placate the clergy
 		name = nhs_hellenicconversion.42.b
+		
+		add_legitimacy = -5
+		add_prestige = -5
+		event_target:nhs_hcd_new_assemblies_target_province = {
+			add_base_tax = 1
+			add_province_modifier = {
+				name = nhs_hcd_Pagan_minority
+				duration = -1
+			}
+		}
+	}
+
+	option = {
+		# Restrain it
+		name = nhs_hellenicconversion.42.c
 
 		add_estate_loyalty = {
 			estate  = estate_church
@@ -2982,7 +2997,6 @@ country_event = {
 		name = nhs_hellenicconversion.6.a
 		# custom_tooltip = nhs_hellenicconversion.6.tt
 		# custom_tooltip = to_nhs_hellenic_disaster_ends_tt
-		add_stability = 1
 		change_religion = pantheon_worship
 		nhs_set_clergy_loyalty_to_50 = yes
 		to_nhs_remove_all_clergy_privileges = yes
@@ -2991,6 +3005,46 @@ country_event = {
 			name = nhs_hrv_peaceful_resolution
 			duration = 36500
 		}
+		if = {
+			limit = {
+				OR = {
+					to_nhs_hellenic_disaster_attitude_hostile = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+					to_nhs_hellenic_disaster_attitude_hostile = {
+						ATTITUDE_VARIABLE = HellenicUprising
+					}
+					to_nhs_hellenic_disaster_attitude_unfriendly = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+					to_nhs_hellenic_disaster_attitude_unfriendly = {
+						ATTITUDE_VARIABLE = HellenicUprising
+					}
+				}
+			}
+			custom_tooltip = to_nhs_consequences_peaceful_unfriendly_hostile_tt
+		}
+		else_if = {
+			limit = {
+				OR = {
+					to_nhs_hellenic_disaster_attitude_neutral = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+					to_nhs_hellenic_disaster_attitude_neutral = {
+						ATTITUDE_VARIABLE = HellenicUprising
+					}
+				}
+			}
+			custom_tooltip = to_nhs_consequences_moderate_neutral_tt
+			add_legitimacy = 10
+			add_stability_or_adm_power = yes
+		}
+		else = {
+			custom_tooltip = to_nhs_consequences_moderate_friendly_tt
+			add_legitimacy = 20
+			add_stability = 2
+		}
+		custom_tooltip = nhs_dotted_line_tt
 		capital_scope = {
 			if = {
 				limit = {
@@ -3030,12 +3084,51 @@ country_event = {
 		name = nhs_hellenicconversion.6.b
 		# custom_tooltip = nhs_hellenicconversion.6.tt
 		# custom_tooltip = to_nhs_hellenic_disaster_ends_tt
-		add_stability = 1
 		to_nhs_remove_pre_hellenic_disaster_country_modifiers = yes
 		add_country_modifier = {
 			name = nhs_hrv_peaceful_resolution
 			duration = 36500
 		}
+		if = {
+			limit = {
+				OR = {
+					to_nhs_hellenic_disaster_attitude_hostile = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+					to_nhs_hellenic_disaster_attitude_hostile = {
+						ATTITUDE_VARIABLE = HellenicUprising
+					}
+					to_nhs_hellenic_disaster_attitude_unfriendly = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+					to_nhs_hellenic_disaster_attitude_unfriendly = {
+						ATTITUDE_VARIABLE = HellenicUprising
+					}
+				}
+			}
+			custom_tooltip = to_nhs_consequences_peaceful_unfriendly_hostile_tt
+		}
+		else_if = {
+			limit = {
+				OR = {
+					to_nhs_hellenic_disaster_attitude_neutral = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+					to_nhs_hellenic_disaster_attitude_neutral = {
+						ATTITUDE_VARIABLE = HellenicUprising
+					}
+				}
+			}
+			custom_tooltip = to_nhs_consequences_moderate_neutral_tt
+			add_legitimacy = 10
+			add_stability_or_adm_power = yes
+		}
+		else = {
+			custom_tooltip = to_nhs_consequences_moderate_friendly_tt
+			add_legitimacy = 20
+			add_stability = 2
+		}
+		custom_tooltip = nhs_dotted_line_tt
 		if = {
 			limit = {
 				capital_scope = {
@@ -3162,6 +3255,66 @@ country_event = {
 			name = nhs_hrv_loyal_orthodox
 			duration = 36500
 		}
+		if = {
+			limit = {
+				OR = {
+					to_nhs_hellenic_disaster_attitude_hostile = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+					to_nhs_hellenic_disaster_attitude_unfriendly = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+				}
+			}
+			custom_tooltip = to_nhs_consequences_peaceful_inquisition_unfriendly_hostile_tt
+		}
+		else_if = {
+			limit = {
+				to_nhs_hellenic_disaster_attitude_neutral = {
+					ATTITUDE_VARIABLE = OrthodoxUprising
+				}
+			}
+			custom_tooltip = to_nhs_consequences_orthodox_neutral_tt
+			add_war_exhaustion = -1
+			add_treasury = 25
+		}
+		else = {
+			custom_tooltip = to_nhs_consequences_orthodox_friendly_tt
+			add_war_exhaustion = -2
+			add_treasury = 50
+		}
+		custom_tooltip = nhs_dotted_line_tt
+		if = {
+			limit = {
+				any_owned_province = {
+					OR = {
+						has_province_modifier = nhs_semi_tolerated_minority
+						religion = pantheon_worship
+					}
+				}
+			}
+			every_owned_province = {
+				limit = {
+					OR = {
+						has_province_modifier = nhs_semi_tolerated_minority
+						religion = pantheon_worship
+					} 
+				}
+				if = {
+					limit = {
+						religion = pantheon_worship
+					}
+					change_religion = orthodox
+				}
+				add_devastation = 50
+				if = {
+					limit = {
+						has_province_modifier = nhs_semi_tolerated_minority
+					}
+					remove_province_modifier = nhs_semi_tolerated_minority
+				}
+			}
+		}
 		to_nhs_remove_pre_hellenic_disaster_country_modifiers = yes
 		to_nhs_remove_pre_hellenic_disaster_province_modifiers = yes
 	}
@@ -3173,15 +3326,57 @@ country_event = {
 		# custom_tooltip = to_nhs_hellenic_disaster_ends_tt
 		to_nhs_remove_all_non_tolerant_clergy_privileges = yes
 		# add_stability = -1
-		add_country_modifier = {
-			name = nhs_hrv_tolerance
-			duration = 36500
-		}
-		to_nhs_remove_pre_hellenic_disaster_country_modifiers = yes
 		add_estate_loyalty = {
 			estate = estate_church
 			loyalty = -20
 		}
+		add_country_modifier = {
+			name = nhs_hrv_tolerance
+			duration = 36500
+		}
+		if = {
+			limit = {
+				OR = {
+					to_nhs_hellenic_disaster_attitude_hostile = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+					to_nhs_hellenic_disaster_attitude_hostile = {
+						ATTITUDE_VARIABLE = HellenicUprising
+					}
+					to_nhs_hellenic_disaster_attitude_unfriendly = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+					to_nhs_hellenic_disaster_attitude_unfriendly = {
+						ATTITUDE_VARIABLE = HellenicUprising
+					}
+				}
+			}
+			custom_tooltip = to_nhs_consequences_peaceful_unfriendly_hostile_tt
+		}
+		else_if = {
+			limit = {
+				OR = {
+					to_nhs_hellenic_disaster_attitude_neutral = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+					to_nhs_hellenic_disaster_attitude_neutral = {
+						ATTITUDE_VARIABLE = HellenicUprising
+					}
+				}
+			}
+			custom_tooltip = to_nhs_consequences_moderate_neutral_tt
+			add_treasury = 50
+			add_manpower = 2
+			add_stability_or_adm_power = yes
+		}
+		else = {
+			custom_tooltip = to_nhs_consequences_moderate_friendly_tt
+			add_treasury = 100
+			add_manpower = 4
+			to_add_2_stability_or_adm_power = yes
+		}
+		custom_tooltip = nhs_dotted_line_tt
+		to_nhs_remove_pre_hellenic_disaster_country_modifiers = yes
 		to_nhs_spawn_inquisition_revolt = { EVENT_TARGET = nhs_hcd_target_province }
 		set_country_flag = nhs_enable_semi_tolerated_minority
 		every_owned_province = {
@@ -3364,6 +3559,26 @@ country_event = {
 				name = "religious_intolerance_enforced"
 				duration = 7300
 			}
+			if = {
+				limit = {
+					any_owned_province = {
+						religion = pantheon_worship
+					}
+				}
+				every_owned_province = {
+					limit = {
+						religion = pantheon_worship
+					}
+					change_religion = orthodox
+					add_devastation = 50
+					if = {
+						limit = {
+							has_province_modifier = nhs_semi_tolerated_minority
+						}
+						remove_province_modifier = nhs_semi_tolerated_minority
+					}
+				}
+			}
 		}
 		else = {
 			clr_country_flag = nhs_hcd_supported_moderates
@@ -3374,18 +3589,49 @@ country_event = {
 				duration = -1
 				desc = "END_OF_ELY_RELIGIOUS_WARS"
 			}
-		}
-		every_owned_province = {
-			limit = {
-				religion = pantheon_worship 
-			}
-			change_religion = orthodox
-			add_devastation = 50
 			if = {
 				limit = {
-					has_province_modifier = nhs_semi_tolerated_minority
+					any_owned_province = {
+						religion = pantheon_worship
+					}
 				}
-				remove_province_modifier = nhs_semi_tolerated_minority
+				if = {
+					limit = {
+						any_owned_province = {
+							religion = pantheon_worship
+							has_missionary = no
+						}
+					}
+					random_owned_province = {
+						limit = {
+							religion = pantheon_worship
+							has_missionary = no 
+						}
+						change_religion = orthodox
+						add_devastation = 50
+						if = {
+							limit = {
+								has_province_modifier = nhs_semi_tolerated_minority
+							}
+							remove_province_modifier = nhs_semi_tolerated_minority
+						}
+					}
+				}
+				else = {
+					random_owned_province = {
+						limit = {
+							religion = pantheon_worship
+						}
+						change_religion = orthodox
+						add_devastation = 50
+						if = {
+							limit = {
+								has_province_modifier = nhs_semi_tolerated_minority
+							}
+							remove_province_modifier = nhs_semi_tolerated_minority
+						}
+					}
+				}
 			}
 		}
 		hidden_effect = {
