@@ -914,6 +914,157 @@ spawn_native_estate_rebels_seize_land_switch = {
 	}
 }
 
+to_native_estate_spawn_disaster_rebels_find_province = {
+	random_owned_province = {
+		limit = {
+			is_colony = no
+			is_state = $IS_STATE$
+			nhs_culturally_native = yes
+			nationalism = 1
+			[[IGNORE_SELECTED]
+			NOT = { has_province_flag = to_native_estate_disaster_rebel_target }
+			]
+		}
+		save_event_target_as = to_native_estate_disaster_rebel_target
+		set_province_flag = to_native_estate_disaster_rebel_target
+		ROOT = {
+			set_country_flag = to_native_estate_disaster_found_rebel_target
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = to_native_estate_disaster_found_rebel_target }
+		}
+		random_owned_province = {
+			limit = {
+				is_colony = no
+				is_state = $IS_STATE$
+				nhs_culturally_native = yes
+				NOT = { culture_group = ROOT }
+				NOT = { nationalism = 1 }
+				[[IGNORE_SELECTED]
+				NOT = { has_province_flag = to_native_estate_disaster_rebel_target }
+				]
+			}
+			save_event_target_as = to_native_estate_disaster_rebel_target
+			set_province_flag = to_native_estate_disaster_rebel_target
+			ROOT = {
+				set_country_flag = to_native_estate_disaster_found_rebel_target
+			}
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = to_native_estate_disaster_found_rebel_target }
+		}
+		random_owned_province = {
+			limit = {
+				is_colony = no
+				is_state = $IS_STATE$
+				nhs_culturally_native = yes
+				culture_group = ROOT
+				NOT = { nationalism = 1 }
+				[[IGNORE_SELECTED]
+				NOT = { has_province_flag = to_native_estate_disaster_rebel_target }
+				]
+			}
+			save_event_target_as = to_native_estate_disaster_rebel_target
+			set_province_flag = to_native_estate_disaster_rebel_target
+			ROOT = {
+				set_country_flag = to_native_estate_disaster_found_rebel_target
+			}
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = to_native_estate_disaster_found_rebel_target }
+		}
+		random_owned_province = {
+			limit = {
+				is_colony = no
+				is_state = $IS_STATE$
+				NOT = {
+					nhs_culturally_native = yes
+				}
+				has_province_modifier = to_nat_tribal_development
+				[[IGNORE_SELECTED]
+				NOT = { has_province_flag = to_native_estate_disaster_rebel_target }
+				]
+			}
+			save_event_target_as = to_native_estate_disaster_rebel_target
+			set_province_flag = to_native_estate_disaster_rebel_target
+			ROOT = {
+				set_country_flag = to_native_estate_disaster_found_rebel_target
+			}
+		}
+	}
+}
+
+to_native_estate_spawn_disaster_rebels = {
+	clr_country_flag = to_native_estate_disaster_found_rebel_target
+	to_native_estate_spawn_disaster_rebels_find_province = { 
+		IGNORE_SELECTED = yes
+		IS_STATE = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = to_native_estate_disaster_found_rebel_target }
+		}
+		to_native_estate_spawn_disaster_rebels_find_province = { 
+			IGNORE_SELECTED = yes
+			IS_STATE = no
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = to_native_estate_disaster_found_rebel_target }
+		}
+		to_native_estate_spawn_disaster_rebels_find_province = { 
+			IS_STATE = yes
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = to_native_estate_disaster_found_rebel_target }
+		}
+		to_native_estate_spawn_disaster_rebels_find_province = { 
+			IS_STATE = no
+		}
+	}
+	if = {
+		limit = {
+			has_country_flag = to_native_estate_disaster_found_rebel_target
+		}
+		event_target:to_native_estate_disaster_rebel_target = {
+			if = {
+				limit = {
+					nhs_culturally_native = yes
+				}
+				spawn_rebels = {
+					type = nationalist_rebels
+					size = $SIZE$
+				}
+			}
+			else = {
+				spawn_rebels = {
+					type = particularist_rebels
+					size = $SIZE$
+				}
+			}
+			# spawn_rebels = {
+			# 	type = native_rebels
+			# 	size = $SIZE$
+			# }
+		}
+	}
+	else = {
+		set_variable = {
+			which = to_size_of_narive_revolt
+			value = 0
+		}
+	}
+}
+
 # -- GENERAL ESTATE EFFECTS --
 
 nhs_add_estate_loyalty_if_exists = {

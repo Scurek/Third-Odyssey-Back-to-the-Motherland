@@ -17,85 +17,296 @@ country_event = {
 				duration = 1095  # 3 years
 				hidden = yes
 			}
+			# Determine the number of native provinces with separatism
+			set_variable = {
+				which = to_number_of_native_provinces_separatism
+				value = 0
+			}
+			every_owned_province = {
+				limit = {
+					is_colony = no
+					nhs_culturally_native = yes
+					nationalism = 1
+				}
+				ROOT = {
+					change_variable = {
+						which = to_number_of_native_provinces_separatism
+						value = 1
+					}
+				}
+			}
+			# Determine the number of native provinces that you have in your state provinces
+			set_variable = {
+				which = to_number_of_native_provinces_stated
+				value = 0
+			}
+			every_owned_province = {
+				limit = {
+					is_colony = no
+					is_state = yes
+					nhs_culturally_native = yes
+					NOT = { culture_group = ROOT }
+					NOT = { nationalism = 1 }
+				}
+				ROOT = {
+					change_variable = {
+						which = to_number_of_native_provinces_stated
+						value = 1
+					}
+				}
+			}
+			# Determine the number of Barbaroi/Skraeling native provinces that you have in your state provinces
+			set_variable = {
+				which = to_number_of_friendly_native_provinces_stated
+				value = 0
+			}
+			every_owned_province = {
+				limit = {
+					is_colony = no
+					is_state = yes
+					nhs_culturally_native = yes
+					culture_group = ROOT
+					NOT = { nationalism = 1 }
+				}
+				ROOT = {
+					change_variable = {
+						which = to_number_of_friendly_native_provinces_stated
+						value = 1
+					}
+				}
+			}
+			# Determine the number of native provinces that you have in your territory provinces
+			set_variable = {
+				which = to_number_of_native_provinces_unstated
+				value = 0
+			}
+			every_owned_province = {
+				limit = {
+					is_colony = no
+					is_state = no
+					nhs_culturally_native = yes
+					NOT = { culture_group = ROOT }
+					NOT = { nationalism = 1 }
+				}
+				ROOT = {
+					change_variable = {
+						which = to_number_of_native_provinces_unstated
+						value = 1
+					}
+				}
+			}
+			# Determine the number of provinces of your culture that have tribal land in your state provinces
+			set_variable = {
+				which = to_number_of_native_provinces_tribal_land
+				value = 0
+			}
+			every_owned_province = {
+				limit = {
+					is_colony = no
+					is_state = yes
+					NOT = {
+						nhs_culturally_native = yes
+					}
+					has_province_modifier = to_nat_tribal_development
+				}
+				ROOT = {
+					change_variable = {
+						which = to_number_of_native_provinces_tribal_land
+						value = 1
+					}
+				}
+			}
+			# Determine the size of the revolt
+			set_variable = {
+				which = to_size_of_narive_revolt
+				which = to_number_of_native_provinces_separatism
+			}
+
+			multiply_variable = {
+				which = to_number_of_native_provinces_stated
+				value = 0.75
+			}
+			change_variable = {
+				which = to_size_of_narive_revolt
+				which = to_number_of_native_provinces_stated
+			}
+
+			multiply_variable = {
+				which = to_number_of_friendly_native_provinces_stated
+				value = 0.25
+			}
+			change_variable = {
+				which = to_size_of_narive_revolt
+				which = to_number_of_friendly_native_provinces_stated
+			}
+
+			multiply_variable = {
+				which = to_number_of_native_provinces_unstated
+				value = 0.25
+			}
+			change_variable = {
+				which = to_size_of_narive_revolt
+				which = to_number_of_native_provinces_unstated
+			}
+
+			multiply_variable = {
+				which = to_number_of_native_provinces_tribal_land
+				value = 0.125
+			}
+			change_variable = {
+				which = to_size_of_narive_revolt
+				which = to_number_of_native_provinces_tribal_land
+			}
+
+			divide_variable = {
+				which = to_size_of_narive_revolt
+				value = 4
+			}
+			# Round up
+			to_round_up_variable = { VARIABLE = to_size_of_narive_revolt }
+			
+			# Spawn rebels
+			while = {
+				limit = {
+					check_variable = {
+						which = to_size_of_narive_revolt
+						value = 1
+					}
+				}
+				if = {
+					limit = {
+						check_variable = {
+							which = to_size_of_narive_revolt
+							value = 40
+						}
+					}
+					to_native_estate_spawn_disaster_rebels = {
+						SIZE = 5
+					}
+					change_variable = {
+						which = to_size_of_narive_revolt
+						value = -5
+					}
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							which = to_size_of_narive_revolt
+							value = 20
+						}
+					}
+					to_native_estate_spawn_disaster_rebels = {
+						SIZE = 4
+					}
+					change_variable = {
+						which = to_size_of_narive_revolt
+						value = -4
+					}
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							which = to_size_of_narive_revolt
+							value = 10
+						}
+					}
+					to_native_estate_spawn_disaster_rebels = {
+						SIZE = 3
+					}
+					change_variable = {
+						which = to_size_of_narive_revolt
+						value = -3
+					}
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							which = to_size_of_narive_revolt
+							value = 3
+						}
+					}
+					to_native_estate_spawn_disaster_rebels = {
+						SIZE = 2
+					}
+					change_variable = {
+						which = to_size_of_narive_revolt
+						value = -2
+					}
+				}
+				else = {
+					to_native_estate_spawn_disaster_rebels = {
+						SIZE = 1
+					}
+					change_variable = {
+						which = to_size_of_narive_revolt
+						value = -1
+					}
+				}
+			}
+			set_variable = {
+				which = to_size_of_narive_revolt
+				value = 0
+			}
+			clr_country_flag = to_native_estate_disaster_found_rebel_target
+			every_owned_province = {
+				clr_province_flag = to_native_estate_disaster_rebel_target
+			}
+
 			# Add some trouble everywhere
 			every_province = {
 				limit = {
 					is_colony = no
-					owned_by = ROOT
 					nhs_culturally_native = yes
+					NOT = { culture_group = ROOT }
 				}
 				add_unrest = 10
-				add_local_autonomy = 20
 			}
-			# Select provinces
-			random_province = {
+			every_province = {
 				limit = {
 					is_colony = no
-					owned_by = ROOT
-					nhs_culturally_native = yes
-					NOT = { has_province_flag = nhs_prepped_for_estate_natives_rise_temp }
+					OR = {
+						has_province_modifier = to_nat_tribal_development
+						AND = {
+							nhs_culturally_native = yes
+							culture_group = ROOT
+						}
+					}
 				}
-				set_province_flag = nhs_prepped_for_estate_natives_rise_temp
-			}
-			random_province = {
-				limit = {
-					is_colony = no
-					owned_by = ROOT
-					nhs_culturally_native = yes
-					NOT = { has_province_flag = nhs_prepped_for_estate_natives_rise_temp }
-				}
-				set_province_flag = nhs_prepped_for_estate_natives_rise_temp
-			}
-			# Spawn rebels
-			every_owned_province = {
-				limit = {
-					owned_by = ROOT
-					has_province_flag = nhs_prepped_for_estate_natives_rise_temp
-				}
-				spawn_rebels = {
-					type = native_rebels
-					size = 3
-					win = yes
-				}
+				add_unrest = 5
 			}
 		}
 	}
 
 	option = {
 		name = "nhs2_estateevents.1.a"
-		add_stability = -3
-		tooltip = {
-			# Repeat immediate province effects for clarity
-			every_province = {
-				limit = {
-					is_colony = no
-					owned_by = ROOT
-					nhs_culturally_native = yes
-				}
-				add_unrest = 10
-				add_local_autonomy = 20
+		add_stability = -2
+		if = {
+			limit = {
+				has_spawned_rebels = native_rebels
 			}
-			every_owned_province = {
-				limit = {
-					owned_by = ROOT
-					has_province_flag = nhs_prepped_for_estate_natives_rise_temp
-				}
-				spawn_rebels = {
-					type = native_rebels
-					size = 3
-					win = yes
-				}
-			}
+			custom_tooltip = native_disaster_revolt_tt
 		}
-		hidden_effect = {
-			# Clear the flags when event is closed
-			every_owned_province = {
-				limit = {
-					owned_by = ROOT
-					has_province_flag = nhs_prepped_for_estate_natives_rise_temp
-				}
-				clr_province_flag = nhs_prepped_for_estate_natives_rise_temp
+		if = {
+			limit = {
+				culture_group = elysian_group
+				has_country_flag = nhs_barbaroi_integration
 			}
+			custom_tooltip = native_disaster_revolt_native_unrest_symmachoi
+		}
+		else_if = {
+			limit = {
+				culture_group = norse_g
+			}
+			custom_tooltip = native_disaster_revolt_native_unrest_skraeling
+		}
+		if = {
+			limit = {
+				any_owned_province = {
+					is_colony = no
+					has_province_modifier = to_nat_tribal_development
+				}
+			}
+			custom_tooltip = native_disaster_revolt_native_unrest_tribal_land
 		}
 	}
 }

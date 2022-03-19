@@ -6,26 +6,51 @@ estate_all_natives_disaster = {
 	}
 
 	can_start = {
-		nhs_has_any_native_estate = yes
-		has_any_disaster = no
-		any_country = {
-			nhs_culturally_native_primary = yes
-			defensive_war_with = ROOT
+		if = {
+			limit = {
+				ai = yes
+			}
+			always = no
 		}
-		nhs_check_influence_any_native_estate = { QUANTITY = 60 }
+		nhs_has_any_native_estate = yes
+		# has_any_disaster = no
+		any_country = {
+			defensive_war_with = ROOT
+			is_native_government = yes
+			nhs_culturally_native_primary = yes
+		}
+		any_owned_province = {
+			is_colony = no
+			OR = {
+				nhs_culturally_native = yes
+				has_province_modifier = to_nat_tribal_development
+			}
+		}
+		nhs_check_influence_any_native_estate = { QUANTITY = 30 }
 	}
 	
 	can_stop = {
 		OR = {
-			NOT = { nhs_has_any_native_estate = yes }
-			has_any_disaster = yes
-			NOT = { 
+			# has_any_disaster = yes
+			NOT = {
 				any_country = {
-					nhs_culturally_native_primary = yes
 					defensive_war_with = ROOT
+					is_native_government = yes
+					nhs_culturally_native_primary = yes
 				}
 			}
-			NOT = { nhs_check_influence_any_native_estate = { QUANTITY = 60 } }
+			NOT = {
+				nhs_check_influence_any_native_estate = { QUANTITY = 30 } 
+			}
+			NOT = {
+				any_owned_province = {
+					is_colony = no
+					OR = {
+						nhs_culturally_native = yes
+						has_province_modifier = to_nat_tribal_development
+					}
+				}
+			}
 		}
 	}
 
@@ -51,16 +76,30 @@ estate_all_natives_disaster = {
 	progress = {
 		modifier = {
 			factor = 0.5
+			if = {
+				limit = {
+					ai = yes
+				}
+				always = no
+			}
 			any_country = {
-				nhs_culturally_native_primary = yes
 				defensive_war_with = ROOT
+				is_native_government = yes
+				nhs_culturally_native_primary = yes
 			}
 		}
 		modifier = {
 			factor = 0.5
+			if = {
+				limit = {
+					ai = yes
+				}
+				always = no
+			}
 			any_country = {
-				nhs_culturally_native_primary = yes
 				defensive_war_with = ROOT
+				is_native_government = yes
+				nhs_culturally_native_primary = yes
 			}
 			NOT = {
 				nhs_check_loyalty_any_native_estate = { QUANTITY = 50 }
@@ -68,9 +107,16 @@ estate_all_natives_disaster = {
 		}
 		modifier = {
 			factor = 0.5
+			if = {
+				limit = {
+					ai = yes
+				}
+				always = no
+			}
 			any_country = {
-				nhs_culturally_native_primary = yes
 				defensive_war_with = ROOT
+				is_native_government = yes
+				nhs_culturally_native_primary = yes
 			}
 			estate_influence = {
 				estate = estate_all_natives
@@ -89,19 +135,18 @@ estate_all_natives_disaster = {
 	}
 	
 	can_end = {
-		AND = {
-			NOT = {
-				any_country = {
-					nhs_culturally_native_primary = yes
-					defensive_war_with = ROOT
-				}
+		NOT = {
+			any_country = {
+				defensive_war_with = ROOT
+				is_native_government = yes
+				nhs_culturally_native_primary = yes
 			}
-			NOT = { num_of_rebel_controlled_provinces = 1 }
-			NOT = { num_of_rebel_armies = 1 }
-			custom_trigger_tooltip = {
-				tooltip = nhs_natives_disaster_timer_tt
-				NOT = { has_country_modifier = nhs_natives_disaster_timer }
-			}
+		}
+		NOT = { num_of_rebel_controlled_provinces = 1 }
+		NOT = { num_of_rebel_armies = 1 }
+		custom_trigger_tooltip = {
+			tooltip = nhs_natives_disaster_timer_tt
+			NOT = { has_country_modifier = nhs_natives_disaster_timer }
 		}
 	}
 
