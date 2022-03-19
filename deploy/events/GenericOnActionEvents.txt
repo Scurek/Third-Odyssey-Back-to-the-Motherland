@@ -1,0 +1,149 @@
+# Integrating FROMCOUNTRY
+country_event = {
+	id = 610
+	title = "EVTNAME610"
+	desc = "EVTDESC610"
+	picture = DEBATE_REPUBLICAN_eventPicture
+
+	trigger = {
+		OR = {
+			AND = {
+				NOT = {
+					FROM = {
+						has_country_modifier = to_be_agenda_annexed_timer
+					}
+				}
+				NOT = { has_country_flag = no_integrate_penalty }
+			}
+			AND = {
+				nhs_condition_all_ely = { KOMANDA = tag }
+				952 = {
+					owned_by = FROM
+					NOT = { has_province_flag = nhs_is_colony }
+					NOT = { has_province_flag = nhs_got_core }
+					is_colony = no
+				}
+			}
+		}
+	}
+
+	is_triggered_only = yes
+	
+	option = {
+		trigger = {
+			NOT = {
+				AND = {
+					nhs_condition_all_ely = { KOMANDA = tag }
+					952 = {
+						owned_by = FROM
+						NOT = { has_province_flag = nhs_is_colony }
+						NOT = { has_province_flag = nhs_got_core }
+						is_colony = no
+					}
+					# FROM = {
+					# 	any_owned_province = {
+					# 		nhs_homelands_no_capital = yes
+					# 		is_colony = no
+					# 		NOT = { has_province_flag = nhs_is_colony }
+					# 		NOT = { has_province_flag = nhs_got_core }
+					# 	}
+					# }
+				}
+			}
+		}
+		name = "EVTOPTB610A"
+		add_country_modifier = {
+			name = "annexers_legacy"
+			duration = 3650
+		}
+	}
+
+	option = {
+		goto = 952
+		trigger = {
+			hidden_trigger = {
+				nhs_condition_all_ely = { KOMANDA = tag }
+				FROM = {
+					952 = {
+						owned_by = FROM
+						NOT = { has_province_flag = nhs_is_colony }
+						NOT = { has_province_flag = nhs_got_core }
+						is_colony = no
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_annex_event_option.b.tt
+				always = yes
+			}
+		}
+		highlight = yes
+		name = to_annex_event_option.b
+		add_country_modifier = {
+			name = "annexers_legacy"
+			duration = 3650
+		}
+		952 = {
+			rename_capital = "Nea Eborakon"
+			hidden_effect = {
+				set_province_flag = nhs_got_core
+				set_province_flag = nhs_had_dev_events_2
+			}
+		}
+		952 = {
+			add_base_tax = 1
+			add_base_manpower = 1
+		}
+	}
+}
+
+# Chance of being triggered when an heir with a weak claim succeeds to the throne
+country_event = {
+	id = 611
+	title = "EVTNAME611"
+	desc = "EVTDESC611"
+	picture = MILITARY_CAMP_eventPicture
+	goto = pretender_province
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		num_of_cities = 3 
+		government = monarchy
+		NOT = { has_country_flag = maj_pretender_event }
+		NOT = { has_disaster = decline_of_mali }	#Disaster is punishing enough already
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_saved_name = {
+				key = pretender
+				type = leader
+			}
+			random_owned_province = {
+				save_event_target_as = pretender_province
+			}
+			random_owned_province = {
+				limit = { 
+					is_in_capital_area = yes
+					highest_supply_limit_in_area = yes
+				}
+				save_event_target_as = pretender_province
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB611A"
+		event_target:pretender_province = {
+			spawn_large_scaled_rebels = {
+				type = pretender_rebels
+				saved_name = pretender
+			}
+		}
+	}
+	
+	after = {
+		clear_saved_name = pretender
+	}
+}

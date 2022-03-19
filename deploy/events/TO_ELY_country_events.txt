@@ -34,97 +34,106 @@ country_event = {
 }
 
 # Insta cores on homeland provinces
-country_event = {
+province_event = {
 	id = nhs2_countryevents.2
-	title = nhs2_countryevents.2.t
-	desc = nhs2_countryevents.2.d
+	title = nhs2_countryevents.2.t 
+	desc = {
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = had_event_nhs2_countryevents_2 }
+			}
+		}
+		desc = nhs2_countryevents.2.da
+	}
+	desc = {
+		trigger = {
+			owner = {
+				has_country_flag = had_event_nhs2_countryevents_2
+			}
+		}
+		desc = nhs2_countryevents.2.db
+	}
 	picture = CITY_VIEW_eventPicture
 
-	goto = nhs2_countryevents2_target
+	goto = root
+	is_triggered_only = yes
 
     trigger = {
-		nhs_condition_all_ely = { KOMANDA = tag }
-		any_province = {
-			nhs_homelands_no_capital = yes
-			is_colony = no
-			NOT = { has_province_flag = nhs_is_colony }
-			NOT = { has_province_flag = nhs_got_core }
-			owned_by = ROOT
+		nhs_homelands_no_capital = yes
+		is_colony = no
+		NOT = { has_province_flag = nhs_is_colony }
+		NOT = { has_province_flag = nhs_got_core }
+		# NOT = { province_id = 952 }
+		owner = {
+			nhs_condition_all_ely = { KOMANDA = tag }
 		}
 	}
 	
 	immediate = {
 		hidden_effect = {
-			random_owned_province = {
-				limit = {
-					nhs_homelands_no_capital = yes
-					owned_by = ROOT
-					NOT = { has_province_flag = nhs_got_core }
-					is_colony = no
-					NOT = { has_province_flag = nhs_is_colony }
-				}
-				save_event_target_as = nhs2_countryevents2_target
-				set_province_flag = nhs_got_core
-				set_province_flag = nhs_had_dev_events_2
-				hidden_effect = {
-					remove_core = ROOT
-				}
+			set_province_flag = nhs_got_core
+			set_province_flag = nhs_had_dev_events_2
+			owner = {
+				remove_core = ROOT
 				add_core = ROOT
 			}
 		}
 	}
 
+	after = {
+		owner = {
+			set_country_flag = had_event_nhs2_countryevents_2
+		}
+	}
+
 	option = {
 		name = "nhs2_countryevents.2.a"
-		event_target:nhs2_countryevents2_target = {
-			tooltip = {
+		tooltip = {
+			owner = {
 				add_core = ROOT
 			}
-			if = {
-				limit = {
-					province_id = 952 # Powhattan, Alouion
-				}
-				rename_capital = "Nea Eborakon"
-			}
-			else_if = {
-				limit = {
-					province_id = 957 # Delaware, Methanai
-				}
-				rename_capital = "Troizen"
-			}
-			else_if = {
-				limit = {
-					province_id = 2550 # Doeg, Odessos
-				}
-				rename_capital = "Neriton"
-			}
-			else_if = {
-				limit = {
-					province_id = 2554 # Nanticoke, Nea Aleksandra
-				}
-				rename_capital = "Kleomenon"
-			}
-			else_if = {
-				limit = {
-					province_id = 950 # Nanticoke, Nea Aleksandra
-				}
-				rename_capital = "Didymo Fylakes"
-			}
-			hidden_effect = {
-				province_recalculate_estate_privileges_effect_natives = yes
-			}
 		}
-		event_target:nhs2_countryevents2_target = {
-			add_base_tax = 1
-			# add_base_production = 1
-			add_base_manpower = 1
-			if = {
-				limit = {
-					NOT = { has_albanian_majority_modifier = yes }
-				}
-				change_culture = ROOT
-				change_religion = ROOT
+		if = {
+			limit = {
+				province_id = 952 # Powhattan, Alouion
 			}
+			rename_capital = "Nea Eborakon"
+		}
+		else_if = {
+			limit = {
+				province_id = 957 # Delaware, Methanai
+			}
+			rename_capital = "Troizen"
+		}
+		else_if = {
+			limit = {
+				province_id = 2550 # Doeg, Odessos
+			}
+			rename_capital = "Neriton"
+		}
+		else_if = {
+			limit = {
+				province_id = 2554 # Nanticoke, Nea Aleksandra
+			}
+			rename_capital = "Kleomenon"
+		}
+		else_if = {
+			limit = {
+				province_id = 950 # Nanticoke, Nea Aleksandra
+			}
+			rename_capital = "Didymo Fylakes"
+		}
+		add_base_tax = 1
+		add_base_manpower = 1
+		if = {
+			limit = {
+				NOT = { has_albanian_majority_modifier = yes }
+			}
+			change_culture = owner
+			change_religion = owner
+		}
+		hidden_effect = {
+			province_recalculate_estate_privileges_effect_natives = yes
 		}
 		# if = {
 		# 	limit = {
@@ -145,6 +154,68 @@ country_event = {
 		# }
 	}
 }
+
+# Powhattan conquered
+province_event = {
+	id = nhs2_countryevents.21
+	title = nhs2_countryevents.21.t
+	desc = nhs2_countryevents.21.d
+	picture = CITY_VIEW_eventPicture
+
+	goto = root
+	is_triggered_only = yes
+
+    trigger = {
+		province_id = 952
+		nhs_condition_all_ely = { KOMANDA = owned_by }
+		NOT = { has_province_flag = nhs_got_core }
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_province_flag = nhs_got_core
+			set_province_flag = nhs_had_dev_events_2
+		}
+	}
+
+	option = {
+		name = nhs2_countryevents.21.a
+		rename_capital = "Nea Eborakon"
+		add_base_tax = 1
+		add_base_manpower = 1
+		add_nationalism = -5
+	}
+}
+
+# Powhatan Diplo Annexed
+# province_event = {
+# 	id = nhs2_countryevents.34
+# 	title = nhs2_countryevents.34.t
+# 	desc = nhs2_countryevents.34.d
+# 	picture = CITY_VIEW_eventPicture
+
+# 	goto = root
+
+#     trigger = {
+# 		province_id = 952
+# 		nhs_condition_all_ely = { KOMANDA = owned_by }
+# 		NOT = { has_province_flag = nhs_got_core }
+# 	}
+	
+# 	immediate = {
+# 		hidden_effect = {
+# 			set_province_flag = nhs_got_core
+# 			set_province_flag = nhs_had_dev_events_2
+# 		}
+# 	}
+
+# 	option = {
+# 		name = nhs2_countryevents.34.a
+# 		rename_capital = "Nea Eborakon"
+# 		add_base_tax = 1
+# 		add_base_manpower = 1
+# 	}
+# }
 
 # Discover sorrounding provinces
 country_event = {
