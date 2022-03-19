@@ -1,0 +1,256 @@
+kreta_missions_colony_slot = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = CM1
+			tag = KYK
+		}
+	}
+	has_country_shield = yes
+	
+	#Lost Ones Mission
+	cm1_the_lost_ones = {
+		icon = mission_galleys_in_port
+		required_missions = {  }
+		position = 1
+		trigger = {
+			custom_trigger_tooltip = { 
+				tooltip = "CM1_has_nhs_hadevent_othersevents52_tt"
+				has_country_flag = "nhs_hadevent_othersevents52" 
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cm1_shipbuilding_buff
+				duration = 9125
+			}
+
+			add_sailors = 600
+			clr_country_flag = nhs_hadevent_othersevents52
+		}
+	}
+	
+	#Growing Nation
+	cm1_growing_nation = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { cm1_the_lost_ones }
+		position = 2
+		trigger = {
+			num_of_light_ship = 5
+		}
+		effect = {
+			481 = {
+				center_of_trade = 2
+			}
+
+			create_explorer = {
+				tradition = 50
+			}
+			immediate = {
+				hidden_effect = {
+					discover_province = 482
+					discover_province = 1572
+					discover_province = 1570
+				}
+			}
+		}
+	}
+	
+	#Islands to the South
+	cm1_south_islands = {
+		icon = mission_sea_battles
+		required_missions = { cm1_growing_nation }
+		position = 3
+		trigger = {
+			has_discovered = 482
+		}
+		effect = {
+			create_colony_mission_reward = {
+					province = 482
+			}
+		}
+	}
+	
+	#Colonise Bahamas
+	cm1_a_wealthy_land = {
+		icon = mississippi_company
+		required_missions = { cm1_south_islands }
+		position = 4
+		trigger = {
+			owns_core_province = 482
+		}
+		effect = {
+			create_colony_mission_reward = {
+				province = 488
+				}
+
+			482 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+		}
+	}
+	
+	#Colonise Havana
+	cm1_kykladia = {
+		icon = mission_colonial
+		required_missions = { cm1_a_wealthy_land }
+		position = 5
+		trigger = {
+			owns_core_province = 488
+		}
+		effect = {
+			488 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+				add_center_of_trade_level = 1
+			}
+
+			add_country_modifier = {
+				name = "cm1_colonial_range"
+				duration = -1
+			}
+
+			every_province = {
+				limit = {
+					OR = {
+						area = hispaniola_area
+						area = dominica_area
+					}
+					OR = {
+						is_empty = yes
+						AND = {
+							owned_by = ROOT
+							is_colony = yes
+						}
+					}
+				}
+				add_permanent_province_modifier = {
+					name = "cm1_colony_modifier"
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	#Kykladia Emerges
+	cm1_kykladia2 = {
+		icon = conquer_tuscany
+		required_missions = { cm1_kykladia }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = hispaniola_area
+				area = dominica_area
+			NOT = {
+				owned_by = ROOT
+			}
+			}
+		}
+		trigger = {
+			hispaniola_area = {
+				type = all
+				owned_by = ROOT
+			}
+			dominica_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			set_capital = 488
+
+			488 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 2
+				add_center_of_trade_level = 1
+			}
+
+			add_country_modifier = {
+				name = cm1_cretan_colonies
+				duration = -1
+			}
+			remove_country_modifier = {
+				name = "cm1_colonial_range"
+			}
+		}
+	}
+	
+
+kreta_missions_overlord_slot = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = CM1
+			tag = KYK
+		}
+	}
+	has_country_shield = yes
+	
+	#Capital Development
+	cm1_develop_capital = {
+		icon = mission_early_game_buildings
+		required_missions = { cm1_growing_nation }
+		position = 3
+		
+		trigger = {
+			capital_scope = {
+				AND = {
+					has_building = marketplace
+					has_building = workshop
+				}
+			}
+		}
+		effect = {
+			481 = {
+				add_building = grand_shipyard
+				add_unit_construction = {
+					type = light_ship
+					amount = 5
+					speed = 1
+					cost = 0
+				}
+			}
+
+			overlord = {
+				random_owned_province = {
+					limit = { has_port = yes }
+					add_unit_construction = {
+						type = light_ship
+						amount = 5
+						speed = 0.5
+						cost = 0
+					}
+				}
+			}
+		}
+	}
+	
+	cm1_ocean_freedom = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { cm1_develop_capital }
+		position = 4
+		
+		trigger = {
+			488 = {
+					trade_share = {
+						country = ROOT
+						share = 20
+					}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "cm1_naval_buff"
+				duration = -1
+			}
+		}
+	}
+		
