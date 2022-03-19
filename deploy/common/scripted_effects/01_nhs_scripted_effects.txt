@@ -4853,6 +4853,167 @@ nhs_add_proper_enclave = {
 	}
 }
 
+to_nhs_spawn_enclave = {
+	if = {
+		limit = {
+			any_owned_province = {
+				OR = {
+					province_id = 962
+					province_id = 2547
+				}
+				culture_group = ROOT
+				NOT = { has_albanian_majority_modifier = yes }
+			}
+		}
+		random_owned_province = {
+			limit = {
+				OR = {
+					province_id = 962
+					province_id = 2547
+				}
+				culture_group = ROOT
+				NOT = { has_albanian_majority_modifier = yes }
+			}
+			add_province_modifier = {
+				name = $ENCLAVE_MODIFIER$
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				OR = {
+					area = carolinas_area
+					area = new_york_area
+				}
+				has_port = yes
+				culture_group = ROOT
+				NOT = { has_albanian_majority_modifier = yes }
+			}
+		}
+		random_owned_province = {
+			limit = {
+				OR = {
+					area = carolinas_area
+					area = new_york_area
+				}
+				has_port = yes
+				culture_group = ROOT
+				NOT = { has_albanian_majority_modifier = yes }
+			}
+			add_province_modifier = {
+				name = $ENCLAVE_MODIFIER$
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				nhs_eligible_for_enclave = yes
+				culture_group = ROOT
+				NOT = { nhs_homelands = yes }
+				NOT = { has_albanian_majority_modifier = yes }
+			}
+		}
+		random_owned_province = {
+			limit = {
+				nhs_eligible_for_enclave = yes
+				culture_group = ROOT
+				NOT = { nhs_homelands = yes }
+				NOT = { has_albanian_majority_modifier = yes }
+			}
+			add_province_modifier = {
+				name = $ENCLAVE_MODIFIER$
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				nhs_eligible_for_enclave = yes
+				culture_group = ROOT
+				NOT = { has_albanian_majority_modifier = yes }
+			}
+		}
+		random_owned_province = {
+			limit = {
+				nhs_eligible_for_enclave = yes
+				culture_group = ROOT
+				NOT = { has_albanian_majority_modifier = yes }
+			}
+			if = {
+				limit = {
+					nhs_homelands = yes
+				}
+				custom_tooltip = nhs_temporary_enclave_tt
+			}
+			add_province_modifier = {
+				name = $ENCLAVE_MODIFIER$
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				nhs_eligible_for_enclave = yes
+				culture_group = ROOT
+			}
+		}
+		random_owned_province = {
+			limit = {
+				nhs_eligible_for_enclave = yes
+				culture_group = ROOT
+			}
+			if = {
+				limit = {
+					nhs_homelands = yes
+					has_albanian_majority_modifier = yes
+				}
+				custom_tooltip = nhs_temporary_enclave_tt
+			}
+			add_province_modifier = {
+				name = $ENCLAVE_MODIFIER$
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				nhs_eligible_for_enclave_with_canada = yes
+				culture_group = ROOT
+			}
+		}
+		random_owned_province = {
+			limit = {
+				nhs_eligible_for_enclave_with_canada = yes
+				culture_group = ROOT
+			}
+			if = {
+				limit = {
+					OR = {
+						nhs_homelands = yes
+						has_albanian_majority_modifier = yes
+					}
+				}
+				custom_tooltip = nhs_temporary_enclave_tt
+			}
+			add_province_modifier = {
+				name = $ENCLAVE_MODIFIER$
+				duration = -1
+			}
+		}
+	}
+	else = {
+		custom_tooltip = nhs_will_get_enclave_later_tt
+		set_country_flag = nhs_enclave_pending
+	}
+}
+
 nhs_move_t_post = {
 	if = {
 		limit = {
@@ -4860,77 +5021,7 @@ nhs_move_t_post = {
 		}
 		remove_province_modifier = nhs2_european_enclave
 		ROOT = {
-			if = {
-				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-						NOT = { nhs_homelands = yes }
-					}
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-						NOT = { nhs_homelands = yes }
-					}
-					add_province_modifier = {
-						name = nhs2_european_enclave
-						duration = -1
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-					}
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-					}
-					if = {
-						limit = {
-							nhs_homelands = yes
-						}
-						custom_tooltip = nhs_temporary_enclave_tt
-					}
-					add_province_modifier = {
-						name = nhs2_european_enclave
-						duration = -1
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					nhs_eligible_for_enclave_with_canada = yes
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave_with_canada = yes
-					}
-					if = {
-						limit = {
-							OR = {
-								nhs_homelands = yes
-								has_albanian_majority_modifier = yes
-							}
-						}
-						custom_tooltip = nhs_temporary_enclave_tt
-					}
-					add_province_modifier = {
-						name = nhs2_european_enclave
-						duration = -1
-					}
-				}
-			}
-			else = {
-				custom_tooltip = nhs_will_get_enclave_later_tt
-				set_country_flag = nhs_enclave_pending
-			}
+			to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_european_enclave }
 		}
 	}
 	if = {
@@ -4939,79 +5030,7 @@ nhs_move_t_post = {
 		}
 		remove_province_modifier = nhs2_small_por_enclave
 		ROOT = {
-			if = {
-				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-						NOT = { nhs_homelands = yes }
-					}
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-						NOT = { nhs_homelands = yes }
-					}
-					add_province_modifier = {
-						name = nhs2_small_por_enclave
-						duration = -1
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-					}
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-					}
-					if = {
-						limit = {
-							nhs_homelands = yes
-						}
-						custom_tooltip = nhs_temporary_enclave_tt
-					}
-					add_province_modifier = {
-						name = nhs2_small_por_enclave
-						duration = -1
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave_with_canada = yes
-					}
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave_with_canada = yes
-					}
-					if = {
-						limit = {
-							OR = {
-								nhs_homelands = yes
-								has_albanian_majority_modifier = yes
-							}
-						}
-						custom_tooltip = nhs_temporary_enclave_tt
-					}
-					add_province_modifier = {
-						name = nhs2_small_por_enclave
-						duration = -1
-					}
-				}
-			}
-			else = {
-				custom_tooltip = nhs_will_get_enclave_later_tt
-				set_country_flag = nhs_enclave_pending
-			}
+			to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_small_por_enclave }
 		}
 	}
 	if = {
@@ -5020,79 +5039,7 @@ nhs_move_t_post = {
 		}
 		remove_province_modifier = nhs2_por_enclave
 		ROOT = {
-			if = {
-				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-						NOT = { nhs_homelands = yes }
-					}
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-						NOT = { nhs_homelands = yes }
-					}
-					add_province_modifier = {
-						name = nhs2_por_enclave
-						duration = -1
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-					}
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-					}
-					if = {
-						limit = {
-							nhs_homelands = yes
-						}
-						custom_tooltip = nhs_temporary_enclave_tt
-					}
-					add_province_modifier = {
-						name = nhs2_por_enclave
-						duration = -1
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave_with_canada = yes
-					}
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave_with_canada = yes
-					}
-					if = {
-						limit = {
-							OR = {
-								nhs_homelands = yes
-								has_albanian_majority_modifier = yes
-							}
-						}
-						custom_tooltip = nhs_temporary_enclave_tt
-					}
-					add_province_modifier = {
-						name = nhs2_por_enclave
-						duration = -1
-					}
-				}
-			}
-			else = {
-				custom_tooltip = nhs_will_get_enclave_later_tt
-				set_country_flag = nhs_enclave_pending
-			}
+			to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_por_enclave }
 		}
 	}
 	if = {
@@ -5101,79 +5048,7 @@ nhs_move_t_post = {
 		}
 		remove_province_modifier = nhs2_large_por_enclave
 		ROOT = {
-			if = {
-				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-						NOT = { nhs_homelands = yes }
-					}
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-						NOT = { nhs_homelands = yes }
-					}
-					add_province_modifier = {
-						name = nhs2_large_por_enclave
-						duration = -1
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-					}
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave = yes
-						culture_group = ROOT
-					}
-					if = {
-						limit = {
-							nhs_homelands = yes
-						}
-						custom_tooltip = nhs_temporary_enclave_tt
-					}
-					add_province_modifier = {
-						name = nhs2_large_por_enclave
-						duration = -1
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave_with_canada = yes
-					}
-				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave_with_canada = yes
-					}
-					if = {
-						limit = {
-							OR = {
-								nhs_homelands = yes
-								has_albanian_majority_modifier = yes
-							}
-						}
-						custom_tooltip = nhs_temporary_enclave_tt
-					}
-					add_province_modifier = {
-						name = nhs2_large_por_enclave
-						duration = -1
-					}
-				}
-			}
-			else = {
-				custom_tooltip = nhs_will_get_enclave_later_tt
-				set_country_flag = nhs_enclave_pending
-			}
+			to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_large_por_enclave }
 		}
 	}
 }
@@ -9438,3 +9313,4 @@ to_nhs_setup_church_land = {
 		}
 	}
 }
+
