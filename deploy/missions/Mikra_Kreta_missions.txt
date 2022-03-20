@@ -1,8 +1,10 @@
+# DISABLED FOR NOW
 kreta_missions_colony_slot = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
+		always = no
 		OR = {
 			tag = CM1
 			tag = KYK
@@ -17,18 +19,44 @@ kreta_missions_colony_slot = {
 		position = 1
 		trigger = {
 			custom_trigger_tooltip = { 
-				tooltip = "CM1_has_nhs_hadevent_othersevents52_tt"
-				has_country_flag = "nhs_hadevent_othersevents52" 
+				tooltip = cm1_has_had_event_nhs_exploration_5_tt
+				has_country_flag = had_event_nhs_exploration_5
+			}
+			if = {
+				limit = {
+					has_country_flag = had_event_nhs_exploration_5
+					NOT = { has_country_flag = to_has_completed_cm1_the_lost_ones }
+				}
+				custom_trigger_tooltip = { 
+					tooltip = cm1_elysia_made_its_decision_tt
+					has_country_flag = cm1_elysia_made_its_decision
+				}
+			}
+			else = {
+				hidden_trigger = {
+					has_country_flag = cm1_elysia_made_its_decision
+				}
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = cm1_shipbuilding_buff
-				duration = 9125
-			}
-
 			add_sailors = 600
-			clr_country_flag = nhs_hadevent_othersevents52
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_settler_heritage_0_2_tt
+			custom_tooltip = to_cm1_settler_heritage_two_duration_tt
+			hidden_effect = {
+				remove_country_modifier = nhs_handicap_settlers
+				add_country_modifier = {
+					name = nhs_settler_heritage_two
+					duration = 18250
+				}
+			}
+			
+			# add_country_modifier = {
+			# 	name = cm1_shipbuilding_buff
+			# 	duration = 9125
+			# }
+			# clr_country_flag = had_event_nhs_exploration_5
+			set_country_flag = to_has_completed_cm1_the_lost_ones
 		}
 	}
 	
@@ -38,23 +66,44 @@ kreta_missions_colony_slot = {
 		required_missions = { cm1_the_lost_ones }
 		position = 2
 		trigger = {
-			num_of_light_ship = 5
+			if = {
+				limit = {
+					OR = {
+						is_subject = no
+						ai = no
+					}
+				}
+				has_idea = population_boom
+			}
+			else = {
+				custom_trigger_tooltip = { 
+					tooltip = cm1_elysia_has_completed_a_true_nation_tt
+					nhs_condition_all_ely_scoped_with_and = {
+						KOMANDA = has_country_flag
+						KOMANDA2 = nhs_settled_mission
+					}
+				}
+			}
+			# num_of_light_ship = 5
 		}
 		effect = {
 			481 = {
-				center_of_trade = 2
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
 			}
+			# 481 = {
+			# 	center_of_trade = 2
+			# }
 
-			create_explorer = {
-				tradition = 50
-			}
-			immediate = {
-				hidden_effect = {
-					discover_province = 482
-					discover_province = 1572
-					discover_province = 1570
-				}
-			}
+			# create_explorer = {
+			# 	tradition = 50
+			# }
+			# discover_province = 1571
+			# discover_province = 1504
+			# discover_province = 1503
+			# discover_province = 482
+			set_country_flag = to_has_completed_cm1_growing_nation
 		}
 	}
 	
@@ -64,12 +113,35 @@ kreta_missions_colony_slot = {
 		required_missions = { cm1_growing_nation }
 		position = 3
 		trigger = {
-			has_discovered = 482
+			# if = {
+			# 	limit = {
+			# 		is_subject = yes
+			# 	}
+			# 	overlord = {
+			# 		has_discovered = 482
+			# 	}
+			# }
+			481 = {
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+			}
 		}
 		effect = {
+			discover_province = 1571
+			discover_province = 1504
+			discover_province = 1503
+			discover_province = 482
 			create_colony_mission_reward = {
-					province = 482
+				province = 482
 			}
+			custom_tooltip = nhs_new_line_tt
+			add_country_modifier = {
+				name = nhs_early_uprising_reduction
+				duration = 3650
+			}
+			set_country_flag = to_has_completed_cm1_south_islands
 		}
 	}
 	
@@ -80,17 +152,45 @@ kreta_missions_colony_slot = {
 		position = 4
 		trigger = {
 			owns_core_province = 482
+			if = {
+				limit = {
+					is_subject = yes
+				}
+				482 = {
+					has_building = dock
+				}
+			}
 		}
 		effect = {
+			discover_province = 1524
+			discover_province = 1516
+			discover_province = 488
 			create_colony_mission_reward = {
 				province = 488
-				}
-
-			482 = {
-				add_base_tax = 2
-				add_base_production = 2
-				add_base_manpower = 2
 			}
+			482 = {
+				change_trade_goods = tobacco
+				add_base_production = 2
+				if = {
+					limit = {
+						is_subject = no
+						OR = {
+							has_country_flag = to_has_completed_cm1_a_wealthy_land
+							AND = {
+								NOT = { has_building = workshop }
+								NOT = { has_building = counting_house }
+							}
+						}
+					}
+					add_building = workshop
+				}
+			}
+			# 482 = {
+			# 	add_base_tax = 2
+			# 	add_base_production = 2
+			# 	add_base_manpower = 2
+			# }
+			set_country_flag = to_has_completed_cm1_a_wealthy_land
 		}
 	}
 	
@@ -103,12 +203,12 @@ kreta_missions_colony_slot = {
 			owns_core_province = 488
 		}
 		effect = {
-			488 = {
-				add_base_tax = 2
-				add_base_production = 2
-				add_base_manpower = 2
-				add_center_of_trade_level = 1
-			}
+			# 488 = {
+			# 	add_base_tax = 2
+			# 	add_base_production = 2
+			# 	add_base_manpower = 2
+			# 	add_center_of_trade_level = 1
+			# }
 
 			add_country_modifier = {
 				name = "cm1_colonial_range"
@@ -146,9 +246,9 @@ kreta_missions_colony_slot = {
 			OR = {
 				area = hispaniola_area
 				area = dominica_area
-			NOT = {
-				owned_by = ROOT
-			}
+				NOT = {
+					owned_by = ROOT
+				}
 			}
 		}
 		trigger = {
@@ -175,11 +275,10 @@ kreta_missions_colony_slot = {
 				name = cm1_cretan_colonies
 				duration = -1
 			}
-			remove_country_modifier = {
-				name = "cm1_colonial_range"
-			}
+			remove_country_modifier = cm1_colonial_range
 		}
 	}
+}
 	
 
 kreta_missions_overlord_slot = {
@@ -187,6 +286,7 @@ kreta_missions_overlord_slot = {
 	generic = no
 	ai = yes
 	potential = {
+		always = no
 		OR = {
 			tag = CM1
 			tag = KYK
@@ -253,4 +353,4 @@ kreta_missions_overlord_slot = {
 			}
 		}
 	}
-		
+}
