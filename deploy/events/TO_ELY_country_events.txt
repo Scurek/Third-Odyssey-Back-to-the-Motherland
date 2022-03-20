@@ -187,36 +187,6 @@ province_event = {
 	}
 }
 
-# Powhatan Diplo Annexed
-# province_event = {
-# 	id = nhs2_countryevents.34
-# 	title = nhs2_countryevents.34.t
-# 	desc = nhs2_countryevents.34.d
-# 	picture = CITY_VIEW_eventPicture
-
-# 	goto = root
-
-#     trigger = {
-# 		province_id = 952
-# 		nhs_condition_all_ely = { KOMANDA = owned_by }
-# 		NOT = { has_province_flag = nhs_got_core }
-# 	}
-	
-# 	immediate = {
-# 		hidden_effect = {
-# 			set_province_flag = nhs_got_core
-# 			set_province_flag = nhs_had_dev_events_2
-# 		}
-# 	}
-
-# 	option = {
-# 		name = nhs2_countryevents.34.a
-# 		rename_capital = "Nea Eborakon"
-# 		add_base_tax = 1
-# 		add_base_manpower = 1
-# 	}
-# }
-
 # Discover sorrounding provinces
 country_event = {
 	id = nhs2_countryevents.13
@@ -226,52 +196,35 @@ country_event = {
 
 	is_triggered_only = yes
 
-	immediate = {
-		hidden_effect = {
-			every_province = {
-				limit = {
-					# any_neighbor_province = { 
-					# 	owned_by = ROOT 
-					# }
-					OR = {
-						nhs_homelands_no_capital = yes
-						owned_by = LEN
-						owned_by = PIA
-					}
-					NOT = { has_discovered = ROOT }
-				}
-				every_country = {
-					limit = { tag = ROOT }
-					discover_province = PREV
-				}
-			}
-		}
-	}
-
 	option = {
 		name = "nhs2_countryevents.13.a"
-		if = {
+		every_country = {
 			limit = {
-				NOT = { has_country_modifier = nhs_new_world }
+				OR = {
+					tag = PIA
+					tag = LEN
+					tag = POW
+				}
 			}
-			add_country_modifier = {
-				name = "nhs_new_world"
-				duration = -1
+			add_opinion = {
+				who = ROOT
+				modifier = nhs_first_contact_o
 			}
 		}
 
-		hidden_effect = {
-			every_country = {
-				limit = {
-					OR = {
-						tag = PIA
-						tag = LEN
-						tag = POW
-					}
+		every_country = {
+			limit = {
+				OR = {
+					tag = PIA
+					tag = LEN
+					tag = POW
 				}
-				country_event = { id = nhs2_countryevents.12 days = 3 }
 			}
-
+			country_event = { id = nhs2_countryevents.12 days = 3 }
+		}
+		custom_tooltip = nhs_new_line_tt
+		country_event = { id = nhs2_countryevents.33 days = 5 }
+		hidden_effect = {
 			every_country = {
 				limit = {
 					OR = {
@@ -321,17 +274,38 @@ country_event = {
 	picture = NATIVES_eventPicture
 
 	fire_only_once = yes
-
-	trigger = {
-		nhs_condition_all_ely = { KOMANDA = tag }
-		any_owned_province = {
-			is_colony = yes
-			# colonysize = 20
-		}
-	}
+	is_triggered_only = yes
 
 	option = {
 		name = nhs2_countryevents.33.a
+		
+		add_country_modifier = {
+			name = nhs_new_world
+			duration = -1
+			desc = "UNTIL_SECOND_COLONIST"
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = nhs_new_flight_food_status_4
+					has_country_flag = nhs_new_flight_food_status_3
+					has_country_flag = nhs_new_flight_food_status_2
+				}
+			}
+			add_country_modifier = {
+				name = nhs_lots_of_ppl1
+				duration = -1
+				desc = "UNTIL_TWO_COLONIES_FINISHED"
+			}
+		}
+		else = {
+			add_country_modifier = {
+				name = nhs_lots_of_ppl1_halved
+				duration = -1
+				desc = "UNTIL_TWO_COLONIES_FINISHED"
+			}
+		}
+		
 		add_country_modifier = {
 			name = nhs_early_uprising_reduction
 			duration = 3650
@@ -3674,6 +3648,53 @@ country_event = {
 		is_year = 1445
 		is_month = 11
 		NOT = { is_year = 1447 }
+	}
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						has_country_modifier = nhs_lots_of_ppl1
+						has_country_modifier = nhs_lots_of_ppl1_halved
+					}
+				}
+				remove_country_modifier = nhs_lots_of_ppl1
+				remove_country_modifier = nhs_lots_of_ppl1_halved
+				add_country_modifier = {
+					name = nhs_lots_of_ppl1_winter
+					duration = -1
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_country_modifier = nhs_lots_of_ppl2
+						has_country_modifier = nhs_lots_of_ppl2_halved
+					}
+				}
+				remove_country_modifier = nhs_lots_of_ppl2
+				remove_country_modifier = nhs_lots_of_ppl2_halved
+				add_country_modifier = {
+					name = nhs_lots_of_ppl2_winter
+					duration = -1
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_country_modifier = nhs_lots_of_ppl3
+						has_country_modifier = nhs_lots_of_ppl3_halved
+					}
+				}
+				remove_country_modifier = nhs_lots_of_ppl3
+				remove_country_modifier = nhs_lots_of_ppl3_halved
+				add_country_modifier = {
+					name = nhs_lots_of_ppl3_winter
+					duration = -1
+				}
+			}
+		}
 	}
 
 	option = {

@@ -2573,7 +2573,6 @@ country_event = {
 				swap_non_generic_missions = yes
 				add_corruption = -100
 				country_event = { id = nhs_new_flightevents.16 days = 3 }
-				country_event = { id = nhs2_countryevents.13 days = 6 }
 				if = {
 					limit = {
 						has_country_flag = nhs_new_flight_taken_venetians
@@ -2624,7 +2623,15 @@ country_event = {
 				# 	share = 45
 				# }
 			}
-			country_event = { id = nhs_new_flightevents.16 days = 1 }
+
+			to_byz_undiscover_flight_path = yes
+			north_atlantic_region = {
+				every_country = {
+					limit = { tag = ROOT }
+					undiscover_province = PREV
+				}
+			}
+			undiscover_province = 1584
 			if = {
 				limit = {
 					ai = no
@@ -2734,13 +2741,39 @@ country_event = {
 			}
 			custom_tooltip = nhs_new_flight_taken_albanians_end_tt
 		}
-		BYZ = {
-			clr_country_flag = nhs_new_flight_food_status_4
-			clr_country_flag = nhs_new_flight_food_status_3
-			clr_country_flag = nhs_new_flight_food_status_2
-			clr_country_flag = nhs_new_flight_food_status_1
-			clr_country_flag = nhs_new_flight_food_status_0
-			clr_country_flag = nhs_new_flight_taken_albanians
+		custom_tooltip = nhs_new_line_tt
+		tooltip = {
+			country_event = { id = nhs2_countryevents.13 days = 3 }
+		}
+		hidden_effect = {
+			NHS = {
+				country_event = { id = nhs2_countryevents.13 days = 3 }
+			}
+			BYZ = {
+				clr_country_flag = nhs_new_flight_food_status_4
+				clr_country_flag = nhs_new_flight_food_status_3
+				clr_country_flag = nhs_new_flight_food_status_2
+				clr_country_flag = nhs_new_flight_food_status_1
+				clr_country_flag = nhs_new_flight_food_status_0
+				clr_country_flag = nhs_new_flight_taken_albanians
+			}
+			every_province = {
+				limit = {
+					# any_neighbor_province = { 
+					# 	owned_by = ROOT 
+					# }
+					OR = {
+						nhs_homelands_no_capital = yes
+						owned_by = LEN
+						owned_by = PIA
+					}
+					NOT = { has_discovered = ROOT }
+				}
+				every_country = {
+					limit = { tag = NHS }
+					discover_province = PREV
+				}
+			}
 		}
 	}
 }
