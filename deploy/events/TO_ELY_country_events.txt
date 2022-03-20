@@ -259,6 +259,7 @@ country_event = {
 				duration = -1
 			}
 		}
+
 		hidden_effect = {
 			every_country = {
 				limit = {
@@ -2635,12 +2636,14 @@ country_event = {
 ### CRETAN INHERITANCE
 ###################################################
 
-# Cretan Question
+# Kretan Question
 country_event = {
 	id = nhs2_countryevents.47
 	title = nhs2_countryevents.47.t
 	desc = nhs2_countryevents.47.d
 	picture = ELYSIAN_HARBOUR_eventPicture
+
+	goto = kretan_colony
 	
 	fire_only_once = yes
 
@@ -2649,11 +2652,21 @@ country_event = {
 		NOT = { has_reform = elysian_empire }
 		exists = CM1
 		CM1 = {
-			# OR = {
-			# 	is_subject_of_type = elysian_subject
-			# 	is_subject_of_type = elysian_subject_non_exarch
-			# }
 			is_subject_of = ROOT
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			to_nhs_discover_carribean = { TAG = ROOT }
+			to_nhs_discover_carribean = { TAG = CM1 }
+			CM1 = {
+				add_country_modifier = {
+					name = nhs_early_uprising_reduction
+					duration = 3650
+				}
+				to_cm1_spawn_carribean_colony = { EVENT_TARGET = kretan_colony }
+			}
 		}
 	}
 
@@ -2729,6 +2742,7 @@ country_event = {
 		}
 		inherit = CM1
 	}
+
 	option = {
 		name = "nhs2_countryevents.47.b"
 		ai_chance = {
@@ -2738,24 +2752,43 @@ country_event = {
 				ruler_has_personality = benevolent_personality
 			}
 		}
-		add_dip_power = 50
 		set_global_flag = nhs_ctm_allowed_to_exist
-		CM1 = {
-			if = {
-				limit = {
-					num_of_colonists = 1
-				}
+		# custom_tooltip = nhs_ctm_starts_colonising_tt
+		if = {
+			limit = {
+				NOT = { num_of_colonists = 1 }
+			}
+			CM1 = {
 				tooltip = {
+					if = {
+						limit = {
+							NOT = { num_of_colonists = 1 }
+						}
+						add_country_modifier = {
+							name = nhs_new_world
+							duration = -1
+							DESC = "UNTIL_SECOND_COLONIST"
+						}
+					}
+				}
+			}
+		}
+		CM1 = {
+			tooltip = {
+				remove_country_modifier = nhs_constrained_resources
+				if = {
+					limit = {
+						NOT = { has_country_flag = nhs_europe_discovered_got }
+					}
 					add_country_modifier = {
-						name = "nhs_new_world"
+						name = nhs_constrained_resources_cm1
 						duration = -1
 					}
-					custom_tooltip = nhs_lose_mod_on_two_colonists_tt
 				}
 			}
-			capital_scope = {
-				province_event = { id = nhs_othersevents.54 }
-			}
+		}
+		CM1 = {
+			country_event = { id = nhs_exploration.8 }
 		}
 	}
 }

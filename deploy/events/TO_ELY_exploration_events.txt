@@ -8,6 +8,8 @@ country_event = {
 	title = nhs_exploration.1.t
 	desc = nhs_exploration.1.d
 	picture = ELYSHIP_eventPicture
+
+	goto = 481
 	
 	fire_only_once = yes
 	
@@ -33,9 +35,26 @@ country_event = {
 	}
 	
 	option = {
-		name = "nhs_exploration.1.a"
+		name = nhs_exploration.1.a
 		# Event: our brethren!
-		CM1 = { country_event = { id = nhs_othersevents.52 days = 3 } }
+		if = {
+			limit = {
+				OR = {
+					religion = orthodox
+					religion = elysian_orthodoxy
+				}
+			}
+			country_events = { id = nhs_exploration.2 days = 10 }
+		}
+		else_if = {
+			limit = {
+				religion = pantheon_worship
+			}
+			country_events = { id = nhs_exploration.3 days = 10 }
+		}
+		hidden_effect = {
+			CM1 = { country_event = { id = nhs_exploration.5 days = 3 } }
+		}
 		set_country_flag = nhs_discovered_survivors
 	}
 }
@@ -46,8 +65,11 @@ country_event = {
 	title = nhs_exploration.2.t
 	desc = nhs_exploration.2.d
 	picture = CITY_VIEW_eventPicture
+
+	goto = 481
 	
 	fire_only_once = yes
+	is_triggered_only = yes
 	
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
@@ -70,25 +92,27 @@ country_event = {
 	
 	option = { # Welcome them with open arms
 		ai_chance = { 
-			factor = 50
-			modifier = {
-				factor = 0.5
-				NOT = { legitimacy = 60 }
-			}
-			modifier = {
-				factor = 0
-				CM1 = { ai = no }
-			}
+			factor = 90
+			# modifier = {
+			# 	factor = 0.5
+			# 	NOT = { legitimacy = 60 }
+			# }
+			# modifier = {
+			# 	factor = 0
+			# 	CM1 = { ai = no }
+			# }
 		}
-		name = "nhs_exploration.2.a"
+		name = nhs_exploration.2.a
 		vassalize = CM1
 		# create_subject = {
 		# 	subject_type = elysian_subject_non_exarch
 		# 	subject = CM1
 		# }
-		add_legitimacy = -5
+		# add_legitimacy = -5
+		add_adm_power = -50
 		hidden_effect = {
 			CM1 = {
+				set_country_flag = cm1_elysia_made_its_decision
 				every_province = {
 					limit = {
 						has_discovered = ROOT
@@ -99,17 +123,17 @@ country_event = {
 		}
 	}
 	option = { # They'll manage fine on their own
-		name = "nhs_exploration.2.b"
+		name = nhs_exploration.2.b
 		ai_chance = { 
-			factor = 50
-			modifier = {
-				factor = 3
-				NOT = { legitimacy = 60 }
-			}
+			factor = 10
+			# modifier = {
+			# 	factor = 3
+			# 	NOT = { legitimacy = 60 }
+			# }
 		}
-		add_legitimacy = 10
+		# add_legitimacy = 10
 		# Event: left on our own
-		CM1 = { country_event = { id = nhs_othersevents.53 days = 3 } }
+		CM1 = { country_event = { id = nhs_exploration.6 days = 3 } }
 	}
 	after = {
 		CM1 = {
@@ -124,8 +148,11 @@ country_event = {
 	title = nhs_exploration.3.t
 	desc = nhs_exploration.3.d
 	picture = CITY_VIEW_eventPicture
+
+	goto = 481
 	
 	fire_only_once = yes
+	is_triggered_only = yes
 	
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
@@ -146,29 +173,26 @@ country_event = {
 	option = { # Convince them of the power and glory of our nation and our gods
 		name = "nhs_exploration.3.a"
 		ai_chance = { 
-			factor = 40
+			factor = 60
 			modifier = {
-				factor = 0.2
-				NOT = { treasury = 250 }
-			}
-			modifier = {
-				factor = 0.2
-				NOT = { legitimacy = 60 }
-			}
-			modifier = {
-				factor = 0
-				CM1 = { ai = no }
+				factor = 0.33
+				NOT = { stability = 1 }
 			}
 		}
 		vassalize = CM1
+		add_stability = -1
+		add_adm_power = -50
+		add_dip_power = -50
 		# create_subject = {
 		# 	subject_type = elysian_subject_non_exarch
 		# 	subject = CM1
 		# }
+		custom_tooltip = nhs_new_line_tt
 		CM1 = { 
 			change_religion = pantheon_worship
 			capital_scope = { change_religion = pantheon_worship }
 			hidden_effect = {
+				set_country_flag = cm1_elysia_made_its_decision
 				every_province = {
 					limit = {
 						has_discovered = ROOT
@@ -177,26 +201,23 @@ country_event = {
 				}
 			}
 		}
-		add_treasury = -250
-		add_legitimacy = -10	
+		# add_treasury = -250
+		# add_legitimacy = -10	
 	}
 	option = { # Leave them to their own doing
-		name = "nhs_exploration.3.b"
-		ai_chance = { 
-			factor = 60
+		name = nhs_exploration.3.b
+		ai_chance = {
+			factor = 40
 			modifier = {
 				factor = 2
-				NOT = { legitimacy = 70 }
-			}
-			modifier = {
-				factor = 2
-				NOT = { prestige = 10 }
+				NOT = { stability = 1 }
 			}
 		}
 		add_legitimacy = 20
 		add_prestige = 10
+		custom_tooltip = nhs_new_line_tt
 		# Event: left on our own
-		CM1 = { country_event = { id = nhs_othersevents.53 days = 3 } }
+		CM1 = { country_event = { id = nhs_exploration.6 days = 3 } }
 	}
 	after = {
 		CM1 = {
@@ -211,6 +232,8 @@ country_event = {
 	title = nhs_exploration.4.t
 	desc = nhs_exploration.4.d
 	picture = ELYSHIP_eventPicture
+
+	goto = 481
 	
 	fire_only_once = yes
 	
@@ -248,6 +271,269 @@ country_event = {
 	}
 	
 	option = {
-		name = "nhs_exploration.4.a"
+		name = nhs_exploration.4.a
+	}
+}
+
+# CM1 survivors discovered event
+country_event = {
+	id = nhs_exploration.5
+	title = nhs_exploration.5.t
+	desc = nhs_exploration.5.d
+	picture = ELYSHIP_eventPicture
+
+	goto = elysian_capital
+	
+	is_triggered_only = yes
+
+    trigger = {
+		tag = CM1
+	}
+
+	immediate = {
+		hidden_effect = {
+			discover_province = 1570
+			FROM = {
+				capital_scope = {
+					save_event_target_as = elysian_capital
+					every_province = {
+						limit = {
+							area = PREV
+						}
+						discover_country = ROOT
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = nhs_exploration.5.a
+		add_stability = 2
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_settler_heritage_0_2_tt
+		custom_tooltip = to_cm1_settler_heritage_two_duration_tt
+		hidden_effect = {
+			remove_country_modifier = nhs_handicap_settlers
+			add_country_modifier = {
+				name = nhs_settler_heritage_two
+				duration = 18250
+			}
+		}
+		# capital_scope = { add_base_tax = 2 }
+		set_country_flag = had_event_nhs_exploration_5
+	}
+}
+
+# CM1 survivors left on their own
+country_event = {
+	id = nhs_exploration.6
+	title = nhs_exploration.6.t
+	desc = nhs_exploration.6.d
+	picture = ELYSHIP_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		tag = CM1
+	}
+
+	immediate = {
+		set_country_flag = cm1_elysia_made_its_decision
+	}
+	
+	option = {	
+		name = nhs_exploration.6.a
+		# if = {
+		# 	limit = {
+		# 		FROM = {
+		# 			OR = {
+		# 				religion = orthodox
+		# 				religion = elysian_orthodoxy
+		# 			}
+		# 		}
+		# 	}
+		# 	add_stability = -1
+		# 	add_prestige = -20
+		# }
+		add_stability = -1
+		add_treasury = 100
+		# Set flag for free colonies event
+		set_country_flag = nhs_hadevent_othersevents53
+	}
+}
+
+# Event that launches CM1 colonies
+country_event = {
+	id = nhs_exploration.7
+	title = nhs_exploration.7.t
+	desc = nhs_exploration.7.d
+	picture = ELYSHIP_eventPicture
+
+	goto = kretan_colony
+
+	fire_only_once = yes
+	
+	trigger = {
+		tag = CM1
+		NOT = { has_country_flag = cm1_had_spawned_colonies }
+		AND = {
+			has_country_flag = cm1_elysia_made_its_decision
+			is_subject = no
+		}
+		# Double check
+		NOT = { has_country_flag = cm1_had_spawned_colonies }
+	}
+
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	immediate = {
+		set_country_flag = cm1_had_spawned_colonies
+		hidden_effect = {
+			to_nhs_discover_carribean = { TAG = ROOT }
+			add_country_modifier = {
+				name = nhs_early_uprising_reduction
+				duration = 3650
+			}
+			to_cm1_spawn_carribean_colony = { EVENT_TARGET = kretan_colony }
+		}
+	}
+
+	option = {
+		name = nhs_exploration.7.a
+		# add_base_tax = -1
+		# add_base_manpower = -2
+		if = {
+			limit = {
+				NOT = { num_of_colonists = 1 }
+			}
+			add_country_modifier = {
+				name = "nhs_new_world"
+				duration = -1
+			}
+		}
+		remove_country_modifier = nhs_constrained_resources 
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_europe_discovered_got }
+			}
+			add_country_modifier = {
+				name = nhs_constrained_resources_cm1
+				duration = -1
+			}
+		}
+		tooltip = {
+			add_country_modifier = {
+				name = nhs_early_uprising_reduction_tooltip
+				duration = 3650
+			}
+		}
+		random_province = {
+			limit = {
+				region = carribeans_region
+				any_neighbor_province = { 
+					owned_by = ROOT 
+				}
+				is_empty = yes
+			}
+			custom_tooltip = cm1_colonise_tt
+			hidden_effect = {
+				save_event_target_as = second_kretan_colony
+			}
+			change_culture = ROOT
+			change_religion = ROOT	
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_saved_event_target = second_kretan_colony
+				}
+				capital_scope = {
+					event_target:second_kretan_colony = {
+						create_colony = 400
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = nhs_exploration.8
+	title = nhs_exploration.8.t
+	desc = nhs_exploration.8.d
+	picture = ELYSHIP_eventPicture
+
+	goto = kretan_colony
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		tag = CM1
+		# Double check
+		NOT = { has_country_flag = cm1_had_spawned_colonies }
+	}
+	
+	immediate = {
+		set_country_flag = cm1_had_spawned_colonies
+	}
+
+	option = {
+		name = nhs_exploration.8.a
+		if = {
+			limit = {
+				NOT = { num_of_colonists = 1 }
+			}
+			add_country_modifier = {
+				name = "nhs_new_world"
+				duration = -1
+			}
+		}
+		remove_country_modifier = nhs_constrained_resources
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_europe_discovered_got }
+			}
+			add_country_modifier = {
+				name = nhs_constrained_resources_cm1
+				duration = -1
+			}
+		}
+		tooltip = {
+			add_country_modifier = {
+				name = nhs_early_uprising_reduction_tooltip
+				duration = 3650
+			}
+		}
+		random_province = {
+			limit = {
+				region = carribeans_region
+				any_neighbor_province = { 
+					owned_by = ROOT 
+				}
+				is_empty = yes
+			}
+			custom_tooltip = cm1_colonise_tt
+			hidden_effect = {
+				save_event_target_as = second_kretan_colony
+			}
+			change_culture = ROOT
+			change_religion = ROOT	
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_saved_event_target = second_kretan_colony
+				}
+				capital_scope = {
+					event_target:second_kretan_colony = {
+						create_colony = 400
+					}
+				}
+			}
+		}
 	}
 }
