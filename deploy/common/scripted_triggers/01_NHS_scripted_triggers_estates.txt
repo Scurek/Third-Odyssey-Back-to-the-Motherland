@@ -297,17 +297,22 @@ to_num_of_privileges_check_estate_burghers = {
 }
 
 to_num_of_privileges_check_estate_church = {
-	OR = {
-		to_base_num_of_privileges_check = {
-			ESTATE = estate_church
-		}
-		AND = {
+	if = {
+		limit = {
 			has_estate_privilege = estate_church_nhs_inquisition_privilege
-			NOT = {		
-				num_of_estate_privileges = {
-					estate = estate_church
-					value = 5
-				}
+		}
+		NOT = {		
+			num_of_estate_privileges = {
+				estate = estate_church
+				value = 5
+			}
+		}
+	}
+	else = {
+		NOT = {		
+			num_of_estate_privileges = {
+				estate = estate_church
+				value = 4
 			}
 		}
 	}
@@ -380,17 +385,37 @@ to_num_of_privileges_check_estate_clans = {
 }
 
 to_num_of_privileges_check_estate_all_natives = {
-	OR = {
-		to_base_num_of_privileges_check = {
-			ESTATE = estate_all_natives
-		}
-		AND = {
+	if = {
+		limit = {
 			has_estate_privilege = nhs_native_privilege_foreign_invaders
-			NOT = {		
-				num_of_estate_privileges = {
-					estate = estate_all_natives
-					value = 5
-				}
+			has_estate_privilege = nhs_native_privilege_seize_land
+		}
+		NOT = {
+			num_of_estate_privileges = {
+				estate = estate_all_natives
+				value = 6
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_estate_privilege = nhs_native_privilege_foreign_invaders
+				has_estate_privilege = nhs_native_privilege_seize_land
+			}
+		}
+		NOT = {
+			num_of_estate_privileges = {
+				estate = estate_all_natives
+				value = 5
+			}
+		}
+	}
+	else = {
+		NOT = {
+			num_of_estate_privileges = {
+				estate = estate_all_natives
+				value = 4
 			}
 		}
 	}
