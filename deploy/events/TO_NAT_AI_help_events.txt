@@ -15,8 +15,21 @@ country_event = {
 		NOT = { num_of_cities = 20 }
 		NOT = { num_of_colonies = 1 }
 		NOT = { has_country_modifier = nhs2_ai_colonising_timer }
-		any_owned_province = {
-			has_empty_adjacent_province = yes
+		OR = {
+			AND = {
+				NOT = { has_reform = to_native_reform_unite_culture }
+				any_owned_province = {
+					has_empty_adjacent_province = yes
+				}
+			}
+			AND = {
+				has_reform = to_native_reform_unite_culture
+				any_owned_province = {
+					any_empty_neighbor_province = {
+						culture_group = ROOT
+					}
+				}
+			}
 		}
 	}
 
@@ -26,12 +39,61 @@ country_event = {
 			duration = 20
 			hidden = yes
 		}
-		random_owned_province = {
+		if = {
 			limit = {
-				has_empty_adjacent_province = yes
+				any_owned_province = {
+					any_empty_neighbor_province = {
+						culture = ROOT
+					}
+				}
 			}
-			random_empty_neighbor_province = {
-				create_colony = 20
+			random_owned_province = {
+				limit = {
+					any_empty_neighbor_province = {
+						culture = ROOT
+					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						culture = ROOT
+					}
+					create_colony = 20
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_province = {
+					any_empty_neighbor_province = {
+						culture_group = ROOT
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					any_empty_neighbor_province = {
+						culture_group = ROOT
+					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						culture_group = ROOT
+					}
+					create_colony = 20
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = { has_reform = to_native_reform_unite_culture }
+			}
+			random_owned_province = {
+				limit = {
+					has_empty_adjacent_province = yes
+				}
+				random_empty_neighbor_province = {
+					create_colony = 20
+				}
 			}
 		}
 	}
