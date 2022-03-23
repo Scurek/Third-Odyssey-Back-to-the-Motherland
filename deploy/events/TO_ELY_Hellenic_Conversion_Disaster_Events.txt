@@ -1007,6 +1007,7 @@ country_event = {
 			NOT = { has_province_modifier = nhs_hrv_rampaging_zealots }
 			is_city = yes
 			religion = orthodox
+			culture_group = ROOT
 		}
 	}
 
@@ -1090,6 +1091,7 @@ country_event = {
 			NOT = { has_construction = cathedral }
 			NOT = { has_construction = temple }
 			num_free_building_slots = 1
+			culture_group = ROOT
 		}
 	}
 
@@ -1273,7 +1275,6 @@ country_event = {
 # Events for siding with nobody #
 #################################
 
-
 # Religious infighting
 country_event = {
 	id = nhs_hcd_hellenicrevolt.30
@@ -1290,6 +1291,7 @@ country_event = {
 		has_country_flag = nhs_hcd_supported_moderates
 		any_owned_province = {
 			is_city = yes
+			culture_group = ROOT
 			NOT = {
 				has_province_modifier = nhs_hrv_rampaging_zealots
 			}
@@ -1297,15 +1299,35 @@ country_event = {
 	}
 
 	immediate = {
-		random_owned_province = {
-			limit = {
-				is_city = yes
-				NOT = {
-					has_province_modifier = nhs_hrv_rampaging_zealots
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					is_city = yes
+					culture_group = ROOT
+					religion = pantheon_worship
+					NOT = {
+						has_province_modifier = nhs_hrv_rampaging_zealots
+					}
+				}
+				save_event_target_as = nhs_hcd_target_province
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_hcd_target_province }
+				}
+				random_owned_province = {
+					limit = {
+						is_city = yes
+						culture_group = ROOT
+						NOT = {
+							has_province_modifier = nhs_hrv_rampaging_zealots
+						}
+					}
+					save_event_target_as = nhs_hcd_target_province
 				}
 			}
-			save_event_target_as = nhs_hcd_target_province
 		}
+		
 	}
 
 	option = {
@@ -1458,6 +1480,7 @@ country_event = {
 		any_owned_province = {
 			has_missionary = yes
 			religion = pantheon_worship
+			culture_group = ROOT
 			NOT = { has_province_modifier = nhs_hrv_no_missionary }
 		}
 	}
@@ -1468,6 +1491,7 @@ country_event = {
 				limit = {
 					has_missionary = yes
 					religion = pantheon_worship
+					culture_group = ROOT
 					NOT = { has_province_modifier = nhs_hrv_no_missionary }
 				}
 				save_event_target_as = nhs_hcd_target_province
@@ -1549,6 +1573,7 @@ country_event = {
 		any_owned_province = {
 			is_city = yes
 			is_capital = no
+			culture_group = ROOT
 		}
 	}
 
@@ -1557,6 +1582,7 @@ country_event = {
 			limit = {
 				is_city = yes
 				is_capital = no
+				culture_group = ROOT
 			}
 			save_event_target_as = nhs_hcd_target_province
 		}
@@ -1629,15 +1655,23 @@ country_event = {
 
 	trigger = {
 		has_disaster = nhs_hcd_hellenic_crisis
+		any_owned_province = {
+			is_capital = no
+			is_city = yes
+			NOT = { has_province_flag = nhs_hcd_had_disaster_famine }
+		}
 	}
 
 	immediate = {
 		hidden_effect = {
 			random_owned_province = {
 				limit = {
+					is_capital = no
 					is_city = yes
+					NOT = { has_province_flag = nhs_hcd_had_disaster_famine }
 				}
 				save_event_target_as = nhs_hcd_target_province
+				set_province_flag = nhs_hcd_had_disaster_famine
 			}
 		}
 	}
