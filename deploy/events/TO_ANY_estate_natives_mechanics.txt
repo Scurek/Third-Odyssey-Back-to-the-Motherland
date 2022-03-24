@@ -4,38 +4,39 @@ namespace = nhs_all_natives_estates
 # -- Change natives estate (early-mid-late) --
 
 # Remove flags from non-exile nations and spartans
-country_event = {
-    id = nhs_all_natives_estates.1
-	title = nhs2_hidden.t
-	desc = nhs2_hidden.d
-	picture = COURT_eventPicture
+# Added checks to the estate instead
+# country_event = {
+#     id = nhs_all_natives_estates.1
+# 	title = nhs2_hidden.t
+# 	desc = nhs2_hidden.d
+# 	picture = COURT_eventPicture
 
-    hidden = yes
+#     hidden = yes
 
-	trigger = {
-        OR = {
-		    NOT = { nhs_check_all_exiles = { CONDITION = tag } }
-            nhs_check_all_spartan = { CONDITION = tag }
-        }
-        OR = {
-            has_country_flag = native_council_enabled_early
-            has_country_flag = native_council_enabled_mid
-            # has_country_flag = native_council_enabled_late
-        }
-	}
+# 	trigger = {
+#         OR = {
+# 		    NOT = { nhs_check_all_exiles = { CONDITION = tag } }
+#             nhs_check_all_spartan = { CONDITION = tag }
+#         }
+#         OR = {
+#             has_country_flag = native_council_enabled_early
+#             has_country_flag = native_council_enabled_mid
+#             # has_country_flag = native_council_enabled_late
+#         }
+# 	}
 
-    immediate = {
-		clr_country_flag = native_council_enabled_early
-		clr_country_flag = native_council_enabled_mid
-		# clr_country_flag = native_council_enabled_late
-    }
+#     immediate = {
+# 		clr_country_flag = native_council_enabled_early
+# 		clr_country_flag = native_council_enabled_mid
+# 		# clr_country_flag = native_council_enabled_late
+#     }
 
-	option = {	
-		name = "Should not be visible!"
-		ai_chance = { factor = 100 }
-	}
+# 	option = {	
+# 		name = "Should not be visible!"
+# 		ai_chance = { factor = 100 }
+# 	}
 
-}
+# }
 
 # Sets an appropriate native council estate flag and triggers an informative event with one day delay (have to do this because game only recalculates existing estates at the start of each day
 country_event = {
@@ -63,7 +64,10 @@ country_event = {
                 OR = {
                     num_of_cities = 5
                     any_owned_province = {
-                        is_colony = no
+                        OR = {
+                            is_city = yes
+                            colonysize = 500
+                        }
                         to_nat_tribal_native_culture_province = yes
                         OR = {
                             NOT = { nhs_homelands = yes }
