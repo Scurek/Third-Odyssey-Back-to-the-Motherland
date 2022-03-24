@@ -918,14 +918,27 @@ country_event = {
 	
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
-		OR = {
-			has_reform = senatorial_empire
-			has_reform = elysian_patriarchy
-		}
+		has_reform = senatorial_empire
 		religion = pantheon_worship
-		any_owned_province = {
-			religion_group = christian
-			has_seat_in_parliament = yes
+		NOT = { has_country_modifier = nhs_hrv_peaceful_resolution }
+		NOT = { has_country_modifier = nhs_hrv_tolerance }
+		if = {
+			limit = {
+				has_reform = nhs_expand_senate_of_cities
+			}
+			any_owned_province = {
+				religion_group = christian
+				NOT = { has_province_modifier = nhs_tolerated_minority }
+				has_seat_in_parliament = yes
+			}
+		}
+		else = {
+			any_owned_province = {
+				religion_group = christian
+				culture_group = ROOT
+				NOT = { has_province_modifier = nhs_tolerated_minority }
+				has_seat_in_parliament = yes
+			}
 		}
 	}
 	
