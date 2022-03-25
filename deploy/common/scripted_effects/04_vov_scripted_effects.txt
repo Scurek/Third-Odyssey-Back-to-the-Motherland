@@ -127,3 +127,117 @@ vov_handle_brave_the_elements = {
 		remove_province_modifier = nhs_brave_the_elements_modifier2
 	}
 }
+
+to_nhs_set_up_varangians_in_province = {
+	tooltip = {
+		$PROVINCE_ID$ = {
+			cede_province = VGD
+			add_base_manpower = 3
+		}
+		create_subject = {
+			subject_type = elysian_subject_varangian
+			subject = VGD
+		}
+	}
+	if = {
+		limit = {
+			any_province = {
+				has_province_modifier = nhs2_varangian_m
+			}
+		}
+		every_province = {
+			limit = {
+				has_province_modifier = nhs2_varangian_m
+			}
+			remove_province_modifier = nhs2_varangian_m
+		}
+	}
+	set_country_flag = nhs_varangian_guard_substate
+	if = {
+		limit = {
+			$PROVINCE_ID$ = {
+				OR = {
+					has_province_modifier = nhs2_european_enclave
+					has_province_modifier = nhs2_small_por_enclave
+					has_province_modifier = nhs2_por_enclave
+					has_province_modifier = nhs2_large_por_enclave
+				}
+			}
+		}
+		$PROVINCE_ID$ = {
+			nhs_move_t_post = yes
+		}
+	}
+	
+	hidden_effect = {
+		$PROVINCE_ID$ = {
+			add_core = VGD
+			ROOT = {
+				release = VGD
+			}
+			change_culture = varangian_n
+			change_religion = ROOT
+			province_recalculate_estate_privileges_effect_natives = yes
+			VGD = {
+				set_capital = $PROVINCE_ID$
+				change_religion = ROOT
+				change_primary_culture = varangian_n
+				hidden_effect = {
+					nhs_change_government = { GOV = varangian_order_gov }
+				}
+				nhs_add_gov_reform = { REF = varangian_guard }
+			}
+			add_base_manpower = 3
+		}
+		every_province = {
+			limit = {
+				has_discovered = ROOT
+			}
+			discover_country = VGD
+		}
+		VGD = {
+			if = {
+				limit = {
+					technology_group = exiled_greek
+				}
+				change_technology_group = viking
+			}
+			else_if = {
+				limit = {
+					technology_group = modern_greek
+				}
+				change_technology_group = modern_vinlandic
+			}
+		}
+		create_subject = {
+			subject_type = elysian_subject_varangian
+			subject = VGD
+		}
+	}
+}
+
+to_nhs_set_up_independant_varangians_in_province = {
+	hidden_effect = {
+		cede_province = ROOT
+		change_religion = norse_pagan_reformed
+		change_culture = varangian_n
+		province_recalculate_estate_privileges_effect_natives = yes
+		add_core = VGD
+		ROOT = { release = VGD }
+		VGD = {
+			change_religion = norse_pagan_reformed
+			change_primary_culture = varangian_n
+			hidden_effect = {
+				nhs_change_government = { GOV = varangian_order_gov }
+			}
+			nhs_add_gov_reform = { REF = varangian_guard }
+			add_country_modifier = { 
+				name = nhs_early_uprising_reduction
+				duration = 3650
+			}
+		}
+	}
+	tooltip = {
+		cede_province = VGD
+	}
+}
