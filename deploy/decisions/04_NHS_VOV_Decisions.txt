@@ -577,7 +577,15 @@ country_decisions = {
 			remove_country_modifier = nhs_vov_no_merchant
 			add_dip_power = -100
 			capital_scope = {
-				nhs_set_center_of_trade_2 = yes
+				if = {
+					limit = {
+						province_id = 994
+					}
+					nhs_set_center_of_trade_2 = yes
+				}
+				else = {
+					nhs_set_center_of_trade_1 = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -879,6 +887,11 @@ country_decisions = {
 			primary_culture = vinlandic
 		}
 		effect = {
+			add_stability = 1
+			add_country_modifier = {
+				name = "centralization_modifier"
+				duration = 7300
+			}
 			if = {
 				limit = {
 					capital_scope = {
@@ -977,11 +990,14 @@ country_decisions = {
 					}
 					change_religion = ROOT
 				}
-			}
-			add_stability = 1
-			add_country_modifier = {
-				name = "centralization_modifier"
-				duration = 7300
+				if = {
+					limit = {
+						owner = {
+							NOT = { has_country_modifier = nhs_vov_no_merchant }
+						}
+					}
+					nhs_set_center_of_trade_2 = yes
+				}
 			}
 			hidden_effect = {
 				every_province = {
