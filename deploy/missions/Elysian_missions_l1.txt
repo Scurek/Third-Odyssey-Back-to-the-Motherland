@@ -2150,19 +2150,34 @@ nhs_centre_start = {
 		}
 	}
 	
-	nhs_assemble_an_army = {
-		icon = mission_assemble_an_army
+	nhs_assemble_an_invasion_force = {
+		# icon = mission_assemble_an_army
+		icon = neapolitan_govenance
 		required_missions = { nhs_modernise_mission }
 		position = 4
-		trigger = { army_size = 80 }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = nhs_europe_discovered_tt
+				has_global_flag = nhs_europe_discovered
+			}
+			army_size = 50
+			num_of_heavy_ship = 10
+			num_of_transport = 25
+		}
 		effect = {
 			custom_tooltip = nhs_enable_invasion_decision_tt
 			custom_tooltip = nhs_new_line_tt
 			add_country_modifier = {
-				name = "army_enthusiasm"
-				duration = 9125 #25 years
+				name = "nhs_assemble_in_invasion_force"
+				duration = -1
 			}
-			set_country_flag = nhs_completed_assemble_an_army
+			custom_tooltip = nhs_assemble_an_invasion_force_effect_tt
+			set_country_flag = nhs_assemble_assemble_an_invasion_force
+			hidden_effect = {
+				every_owned_province = {
+					nhs_assemble_an_invasion_force_handle_modifiers = yes
+				}
+			}
 		}
 	}
 }
@@ -2179,7 +2194,7 @@ nhs_centre_end = {
 	nhs_back_to_the_motherland = {
 		icon = mission_sea_battles
 		required_missions = {
-			nhs_assemble_an_army
+			nhs_assemble_an_invasion_force
 		}
 		position = 5
 		provinces_to_highlight = {
