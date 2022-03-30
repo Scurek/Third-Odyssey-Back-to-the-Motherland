@@ -9764,9 +9764,158 @@ nhs_inward_focus_mission_effect = {
 			limit = {
 				continent = north_america
 				is_wasteland = no
+				owner = {
+					nhs_elysia_or_subject = yes
+				}
 			}
-			add_province_triggered_modifier = nhs_inward_focus_build_cost_reduction
+			add_province_modifier = {
+				name = nhs_inward_focus_build_cost_reduction
+				duration = -1
+			}
 		}
 		nhs_initiate_hightier_building_counter = yes
+	}
+}
+
+to_nhs_handle_inwards_path_province_modifiers_all_provinces = {
+	if = {
+		limit = {
+			OR = {
+				has_country_flag = nhs_completed_promised_land
+				has_country_flag = nhs_completed_the_city_of_cities
+				has_country_flag = nhs_completed_development_of_the_true_homeland
+				has_country_flag = nhs_completed_inward_focus
+			}
+		}
+		every_province = {
+			limit = {
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+				owner = {
+					nhs_elysia_or_subject = yes
+				}
+			}
+			to_nhs_handle_inwards_path_province_modifiers = yes
+		}
+	}
+}
+
+to_nhs_handle_inwards_path_province_modifiers = {
+	if = {
+		limit = {
+			OR = {
+				continent = north_america
+				continent = south_america
+			}
+			owner = {
+				OR = {
+					has_country_flag = nhs_completed_promised_land
+					AND = {
+						is_subject = yes
+						overlord = {
+							OR = {
+								has_country_flag = nhs_completed_promised_land
+								AND = {
+									is_subject = yes
+									overlord = {
+										has_country_flag = nhs_completed_promised_land
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		add_province_modifier = {
+			name = nhs_nhs_the_city_of_cities_bonus
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			continent = north_america
+			owner = {
+				OR = {
+					has_country_flag = nhs_completed_the_city_of_cities
+					AND = {
+						is_subject = yes
+						overlord = {
+							OR = {
+								has_country_flag = nhs_completed_the_city_of_cities
+								AND = {
+									is_subject = yes
+									overlord = {
+										has_country_flag = nhs_completed_the_city_of_cities
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		add_province_modifier = {
+			name = nhs_nhs_the_city_of_cities_bonus
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			continent = north_america
+			owner = {
+				OR = {
+					has_country_flag = nhs_completed_development_of_the_true_homeland
+					AND = {
+						is_subject = yes
+						overlord = {
+							OR = {
+								has_country_flag = nhs_completed_development_of_the_true_homeland
+								AND = {
+									is_subject = yes
+									overlord = {
+										has_country_flag = nhs_completed_development_of_the_true_homeland
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		add_province_modifier = {
+			name = nhs_inward_focus_development_red
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			continent = north_america
+			owner = {
+				OR = {
+					has_country_flag = nhs_completed_inward_focus
+					AND = {
+						is_subject = yes
+						overlord = {
+							OR = {
+								has_country_flag = nhs_completed_inward_focus
+								AND = {
+									is_subject = yes
+									overlord = {
+										has_country_flag = nhs_completed_inward_focus
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		add_province_modifier = {
+			name = nhs_inward_focus_build_cost_reduction
+			duration = -1
+		}
 	}
 }
