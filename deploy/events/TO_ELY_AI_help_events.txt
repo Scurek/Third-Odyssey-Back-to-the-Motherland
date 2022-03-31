@@ -105,15 +105,40 @@ country_event = {
 		OR = {
 			tag = SHQ
 			tag = CM1
+			was_tag = CM1
 		}
-		is_subject = no
 		ai = yes
 		NOT = { num_of_colonies = 1 }
-		NOT = { num_of_cities = 20 }
 		num_of_colonists = 1
 		NOT = { has_country_modifier = nhs2_ai_colonising_timer }
-		any_owned_province = {
-			has_empty_adjacent_province = yes
+		is_subject = no
+		NOT = { num_of_cities = 20 }
+		# Wanted to extend the help to subject with a good balance, but apparently current_income_balance does ignore the subsidies. Fun.
+		# OR = {
+		# 	AND = {
+		# 		is_subject = no
+		# 		NOT = { num_of_cities = 20 }
+		# 	}
+		# 	AND = {
+		# 		OR = {
+		# 			tag = CM1
+		# 			was_tag = CM1
+		# 		}
+		# 		current_income_balance = 3
+		# 	}
+		# }
+		OR = {
+			any_owned_province = {
+				has_empty_adjacent_province = yes
+			}
+			capital_scope = {
+				any_province = {
+					has_port = yes
+					is_empty = yes
+					range = ROOT
+					region = PREV
+				}
+			}
 		}
 		# OR = {
 		# 	any_owned_province = {
@@ -181,6 +206,58 @@ country_event = {
 					has_empty_adjacent_province = yes
 				}
 				random_empty_neighbor_province = {
+					create_colony = 10
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				capital_scope = {
+					any_province = {
+						has_port = yes
+						is_empty = yes
+						has_discovered = ROOT
+						province_has_center_of_trade_of_level = 1
+						range = ROOT
+						region = PREV
+					}
+				}
+			}
+			capital_scope = {
+				random_province = {
+					limit = {
+						has_port = yes
+						is_empty = yes
+						has_discovered = ROOT
+						province_has_center_of_trade_of_level = 1
+						range = ROOT
+						region = PREV
+					}
+					create_colony = 10
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				capital_scope = {
+					any_province = {
+						has_port = yes
+						is_empty = yes
+						has_discovered = ROOT
+						range = ROOT
+						region = PREV
+					}
+				}
+			}
+			capital_scope = {
+				random_province = {
+					limit = {
+						has_port = yes
+						is_empty = yes
+						has_discovered = ROOT
+						range = ROOT
+						region = PREV
+					}
 					create_colony = 10
 				}
 			}
