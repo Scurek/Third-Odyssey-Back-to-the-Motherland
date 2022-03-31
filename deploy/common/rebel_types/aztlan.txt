@@ -166,6 +166,13 @@ aztlan_worship_rebels = {
 	
 	# Country Scope	
 	demands_enforced_effect = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = just_lost_to_rebels
+				duration = 10
+				hidden = yes
+			}
+		}
 		if = {
 			limit = {
 				NOT = { religion_group = pagan }
@@ -184,7 +191,7 @@ aztlan_worship_rebels = {
 			}
 			add_stability = -1
 		}
-		if = {
+		else_if = {
 			limit = {
 				religion = aztlan_worship
 			}
@@ -193,6 +200,32 @@ aztlan_worship_rebels = {
 				duration = 3650
 			}
 		}
+		else_if = {
+			limit = {
+				NOT = { religion = aztlan_worship }
+				OR = {
+					religion_group = pagan
+					dominant_religion = aztlan_worship
+				}
+			}
+			change_religion = aztlan_worship
+			force_converted = yes
+		}
+		else_if = {
+			limit = {
+				NOT = { religion = aztlan_worship }
+				NOT = { dominant_religion = aztlan_worship }
+				religion_group = pagan
+				NOT = { has_country_modifier = heretic_tolerance }
+			}
+			add_country_modifier = {
+				name = "heretic_tolerance"
+				duration = 3650
+			}
+		}
+		else = { add_stability = -1 }
+
+
 		if = {
 			limit = {
 				religion = aztlan_worship
@@ -210,14 +243,10 @@ aztlan_worship_rebels = {
 				duration = 3650
 				influence = 15
 			}
-		}
-		if = {
-			limit = {
-				religion_group = pagan
-				NOT = { religion = aztlan_worship }
+			change_estate_land_share = {
+				estate = estate_church
+				share = 10.0
 			}
-			change_religion = aztlan_worship
-			force_converted = yes
 		}
 	}
 }

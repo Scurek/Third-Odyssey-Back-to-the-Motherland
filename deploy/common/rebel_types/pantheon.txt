@@ -145,6 +145,8 @@ pantheon_worship_rebels = {
 		if = {
 			limit = {
 				NOT = { religion = pantheon_worship }
+				is_reformation_center = no
+				NOT = { owner = { religion = pantheon_worship } }
 			}
 			change_religion = pantheon_worship
 			add_province_modifier = {
@@ -169,6 +171,13 @@ pantheon_worship_rebels = {
 	
 	# Country Scope	
 	demands_enforced_effect = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = just_lost_to_rebels
+				duration = 10
+				hidden = yes
+			}
+		}
 		if = {
 			limit = {
 				NOT = { religion_group = pagan }
@@ -187,6 +196,41 @@ pantheon_worship_rebels = {
 			}
 			add_stability = -1
 		}
+		else_if = {
+			limit = {
+				religion = pantheon_worship
+			}
+			add_country_modifier = {
+				name = "religious_intolerance_enforced"
+				duration = 3650
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = { religion = pantheon_worship }
+				OR = {
+					religion_group = pagan
+					dominant_religion = pantheon_worship
+				}
+			}
+			change_religion = pantheon_worship
+			force_converted = yes
+		}
+		else_if = {
+			limit = {
+				NOT = { religion = pantheon_worship }
+				NOT = { dominant_religion = pantheon_worship }
+				religion_group = pagan
+				NOT = { has_country_modifier = heretic_tolerance }
+			}
+			add_country_modifier = {
+				name = "heretic_tolerance"
+				duration = 3650
+			}
+		}
+		else = { add_stability = -1 }
+
+
 		if = {
 			limit = {
 				religion = pantheon_worship
@@ -204,23 +248,10 @@ pantheon_worship_rebels = {
 				duration = 3650
 				influence = 15
 			}
-		}
-		if = {
-			limit = {
-				religion = pantheon_worship
+			change_estate_land_share = {
+				estate = estate_church
+				share = 10.0
 			}
-			add_country_modifier = {
-				name = "religious_intolerance_enforced"
-				duration = 3650
-			}
-		}
-		if = {
-			limit = {
-				religion_group = pagan
-				NOT = { religion = pantheon_worship }
-			}
-			change_religion = pantheon_worship
-			force_converted = yes
 		}
 	}
 }
