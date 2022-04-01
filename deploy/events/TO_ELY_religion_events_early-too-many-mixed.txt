@@ -84,7 +84,7 @@ country_event = {
 	}
 }
 
-# Ares/Poseidon worship
+# Ares/Poseidon Temple
 country_event = {	
 	id = nhs_religionevents.2
 	title = nhs_religionevents.2.t
@@ -92,84 +92,246 @@ country_event = {
 	picture = AWESOMECITY_eventPicture
 	
     trigger = {
-		is_year = 1500
+		is_year = 1501
 		religion = pantheon_worship
-		treasury = 75
-		NOT = { has_country_modifier = nhs_ares_worship }
-		NOT = { has_country_modifier = nhs_poseidon_worship }
 		has_country_modifier = nhs_high_priests
-		nhs_condition_all_ely = { KOMANDA = tag }
+		owns = 953
+		NOT = { has_country_flag = nhs_enable_hellenic_temple_decision }
+		953 = {
+			religion = pantheon_worship
+			NOT = {
+				OR = {
+					has_province_modifier = nhs_ares_temple
+					has_province_modifier = nhs_poseidon_temple
+				}
+			}
+		}
 	}
 
 	mean_time_to_happen = {
 		months = 60
 		modifier = {
-			factor = 0.9
-			stability = 1
-		}
-		modifier = {
-			factor = 0.9
-			stability = 2
-		}
-		modifier = {
-			factor = 0.9
-			stability = 3
-		}
-		modifier = {
-			factor = 0.8
-			treasury = 100
-		}
-		modifier = {
-			factor = 2.0
-			has_country_flag = nhs_hadevent_religionevents2
-		}
-		modifier = {
-			factor = 0.1
-			is_at_war = yes
-			NOT = { has_country_flag = nhs_hadevent_religionevents2 }
+			factor = 0.25
+			OR = {
+				ruler_has_personality = architectural_visionary_personality
+				treasury = 300
+			}
 		}
 	}
 
-	option = {	# Worship Ares
+	option = {	# Ares
 		name = "NHSRELIGIONEVENTSNAME2A"
 		ai_chance = {
 			factor = 50
-			modifier = {
-				factor = 10
-				nhs_check_all_spartan = { CONDITION = tag }
+		}
+		if = {
+			limit = {
+				953 = {
+					NOT = { has_building = cathedral }
+				}
+			}
+			if = {
+				limit = {
+					953 = {
+						has_building = temple
+					}
+				}
+				add_treasury = -150
+			}
+			else = {
+				add_treasury = -250
 			}
 		}
-		add_treasury = -100
 		add_army_tradition = 5
-		add_country_modifier = {
-			name = nhs_ares_worship
-			duration = -1
-		}	
+		953 = {
+			if = {
+				limit = {
+					NOT = { has_building = cathedral }
+				}
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+				}
+				add_building = cathedral
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = nhs_ares_temple
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = nhs_ares_temple_tm
+			}
+		}
 	}
-	option = {	# Worship Poseidon
+	option = {	# Poseidon
 		name = "NHSRELIGIONEVENTSNAME2B"
 		ai_chance = {
 			factor = 50
-			modifier = {
-				factor = 0
-				nhs_check_all_spartan = { CONDITION = tag }
+		}
+		if = {
+			limit = {
+				953 = {
+					NOT = { has_building = cathedral }
+				}
+			}
+			if = {
+				limit = {
+					953 = {
+						has_building = temple
+					}
+				}
+				add_treasury = -150
+			}
+			else = {
+				add_treasury = -250
 			}
 		}
-		add_treasury = -100
 		add_stability_or_adm_power = yes
 		add_navy_tradition = 5
-		add_country_modifier = {
-			name = nhs_poseidon_worship
-			duration = -1
+		953 = {
+			if = {
+				limit = {
+					NOT = { has_building = cathedral }
+				}
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+				}
+				add_building = cathedral
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = nhs_poseidon_temple
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = nhs_poseidon_temple_tm
+			}
 		}
 	}
+	# With Architect Trait:
+	option = {	# Ares
+		name = "NHSRELIGIONEVENTSNAME2A"
+		ai_chance = {
+			factor = 50
+		}
+		trigger = {
+			ruler_has_personality = architectural_visionary_personality
+		}
+		highlight = yes
+		if = {
+			limit = {
+				953 = {
+					NOT = { has_building = cathedral }
+				}
+			}
+			if = {
+				limit = {
+					953 = {
+						has_building = temple
+					}
+				}
+				add_treasury = -15
+			}
+			else = {
+				add_treasury = -25
+			}
+		}
+		add_army_tradition = 5
+		add_prestige = 10
+		953 = {
+			if = {
+				limit = {
+					NOT = { has_building = cathedral }
+				}
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+				}
+				add_building = cathedral
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = nhs_ares_temple
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = nhs_ares_temple_tm
+			}
+		}
+	}
+	option = {	# Poseidon
+		name = "NHSRELIGIONEVENTSNAME2B"
+		ai_chance = {
+			factor = 50
+		}
+		trigger = {
+			ruler_has_personality = architectural_visionary_personality
+		}
+		highlight = yes
+		if = {
+			limit = {
+				953 = {
+					NOT = { has_building = cathedral }
+				}
+			}
+			if = {
+				limit = {
+					953 = {
+						has_building = temple
+					}
+				}
+				add_treasury = -15
+			}
+			else = {
+				add_treasury = -25
+			}
+		}
+		add_stability_or_adm_power = yes
+		add_prestige = 10
+		add_navy_tradition = 5
+		953 = {
+			if = {
+				limit = {
+					NOT = { has_building = cathedral }
+				}
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+				}
+				add_building = cathedral
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = nhs_poseidon_temple
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = nhs_poseidon_temple_tm
+			}
+		}
+	}
+
 	option = {	# Can't afford it right now
 		name = "NHSRELIGIONEVENTSNAME2C"
-		add_prestige = -10
-		set_country_flag = nhs_hadevent_religionevents2
 		ai_chance = {
 			factor = 0
 		}
+		custom_tooltip = nhs_enable_hellenic_temple_decision_tt
+		set_country_flag = nhs_enable_hellenic_temple_decision
 	}
 }
 
