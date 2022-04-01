@@ -5,7 +5,7 @@
 
 defined_text = {
 	name = GetCouncilName
-
+	random = no
 	text = {
 		localisation_key = to_council_name_cities
 		trigger = {
@@ -230,7 +230,7 @@ defined_text = {
 
 defined_text = {
 	name = GetTDResRemovingDevelopment
-	
+	random = no
 	text = {
 		localisation_key = to_nat_td_res_removing_development_no_city_tt
 		trigger = {
@@ -240,12 +240,22 @@ defined_text = {
 
 	text = {
 		localisation_key = to_nat_td_res_removing_development_city_tt
+		trigger = {
+			nhs_culturally_native = yes
+			owner = {
+				NOT = { primary_culture = PREV }
+			}
+		}
+	}
+
+	text = {
+		localisation_key = to_nat_td_res_removing_development_city_same_culture_tt
 	}
 }
 
 defined_text = {
 	name = GetTDResPopulation
-
+	random = no
 	text = {
 		localisation_key = to_nat_td_res_status_change_tt
 		trigger = {
@@ -253,12 +263,27 @@ defined_text = {
 			is_empty = no
 			# has_owner_culture = no
 			owner = {
-				# Natives will not displace other natives (unless they attack natives)
-				NOT = { has_native_government = yes }
-				#
-				OR = {
-					to_nat_immidiate_displacement_condition_with_estate = yes
-					to_nat_displacement_condition_no_estate = yes
+				if = {
+					limit = {
+						is_colonial_nation = no
+					}
+					# Natives will not displace other natives (unless they attack natives)
+					NOT = { has_native_government = yes }
+					#
+					OR = {
+						to_nat_immidiate_displacement_condition_with_estate = yes
+						to_nat_displacement_condition_no_estate = yes
+					}
+				}
+				else = {
+					overlord = {
+						NOT = { has_native_government = yes }
+						#
+						OR = {
+							to_nat_immidiate_displacement_condition_with_estate = yes
+							to_nat_displacement_condition_no_estate = yes
+						}
+					}
 				}
 			}
 		}
@@ -321,8 +346,31 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetTDResChangingCulture
+	name = GetTDResDisplacementPreText
+	random = no
 	
+	text = {
+		localisation_key = to_nat_td_res_displacement_pretext_no_colony_tt
+		trigger = {
+			owner = {
+				is_colonial_nation = no
+			}
+		}
+	}
+	
+	text = {
+		localisation_key = to_nat_td_res_displacement_pretext_colony_tt
+		trigger = {
+			owner = {
+				is_colonial_nation = yes
+			}
+		}
+	}
+}
+
+defined_text = {
+	name = GetTDResChangingCulture
+	random = no
 	text = {
 		localisation_key = to_nat_td_res_culture_change_tt
 		trigger = {
@@ -343,7 +391,17 @@ defined_text = {
 		localisation_key = to_nat_x_icon_tt
 		trigger = {
 			owner = {
-				has_native_government = yes
+				if = {
+					limit = {
+						is_colonial_nation = no
+					}
+					has_native_government = yes
+				}
+				else = {
+					overlord = {
+						has_native_government = yes
+					}
+				}
 			}
 		}
 	}
@@ -380,9 +438,22 @@ defined_text = {
 		localisation_key = to_nat_y_icon_tt
 		trigger = {
 			owner = {
-				OR = {
-					to_nat_displacement_condition_with_estate = yes
-					to_nat_displacement_condition_no_estate = yes
+				if = {
+					limit = {
+						is_colonial_nation = no
+					}
+					OR = {
+						to_nat_displacement_condition_with_estate = yes
+						to_nat_displacement_condition_no_estate = yes
+					}
+				}
+				else = {
+					overlord = {
+						OR = {
+							to_nat_displacement_condition_with_estate = yes
+							to_nat_displacement_condition_no_estate = yes
+						}
+					}
 				}
 			}
 		}
@@ -401,7 +472,17 @@ defined_text = {
 		localisation_key = to_nat_y_icon_tt
 		trigger = {
 			owner = {
-				to_nat_displacement_condition_with_estate = yes
+				if = {
+					limit = {
+						is_colonial_nation = no
+					}
+					to_nat_displacement_condition_with_estate = yes
+				}
+				else = {
+					overlord = {
+						to_nat_displacement_condition_with_estate = yes
+					}
+				}
 			}
 		}
 	}
@@ -419,7 +500,17 @@ defined_text = {
 		localisation_key = to_nat_y_icon_tt
 		trigger = {
 			owner = {
-				to_nat_displacement_condition_no_estate = yes
+				if = {
+					limit = {
+						is_colonial_nation = no
+					}
+					to_nat_displacement_condition_no_estate = yes
+				}
+				else = {
+					overlord = {
+						to_nat_displacement_condition_no_estate = yes
+					}
+				}
 			}
 		}
 	}
@@ -430,6 +521,7 @@ defined_text = {
 }
 
 defined_text = {
+	random = no
 	name = to_nat_tribal_development_2_GetTitle
 	
 	text = {
