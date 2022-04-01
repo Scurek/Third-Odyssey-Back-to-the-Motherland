@@ -259,7 +259,7 @@ country_decisions = {
 			technology_group = modern_greek
 			custom_trigger_tooltip = {
 				tooltip = nhs_has_completed_assemble_an_army
-				has_country_flag = nhs_assemble_assemble_an_invasion_force
+				has_country_flag = nhs_completed_assemble_an_invasion_force
 			}
 			dip_tech = 12
 			mil_power = 50
@@ -3827,12 +3827,12 @@ country_decisions = {
 			NOT = { has_country_flag = nhs_invasion_over }
 			NOT = { has_country_flag = nhs_completed_nhs_back_to_the_motherland }
 			NOT = { has_country_flag = nhs_completed_inward_focus }
-			#NOT = { has_country_flag = nhs_abandoned_greece }
+			NOT = { has_country_flag = nhs_abandoned_greece }
 		}
 
 		allow = {
-			technology_group = modern_greek
 			is_year = 1550
+			technology_group = modern_greek
 			OR = {
 				NOT = { religion_group = christian }
 				stability = 1
@@ -3848,7 +3848,7 @@ country_decisions = {
 		}
 
 		effect = {
-			#set_country_flag = nhs_took_abandon
+			set_country_flag = nhs_abandoned_greece
 			custom_tooltip = nhs_no_longer_invade_tt
 			if = {
 				limit = {
@@ -3862,6 +3862,7 @@ country_decisions = {
 				add_prestige = -20
 				add_legitimacy = -10
 			}
+			
 			every_country = {
 				limit = {
 					culture_group = byzantine
@@ -3872,6 +3873,23 @@ country_decisions = {
 				}
 			}
 			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					has_country_flag = nhs_completed_assemble_an_invasion_force
+				}
+				clr_country_flag = nhs_assemble_an_invasion_force_enable_effects
+				custom_tooltip = nhs_assemble_in_invasion_force_modifiers_restored_tt
+				remove_country_modifier = nhs_assemble_in_invasion_force
+				custom_tooltip = nhs_assemble_an_invasion_force_remove_effect_tt
+				hidden_effect = {
+					nhs_assemble_an_invasion_force_remove_all_modifiers = yes
+				}
+				custom_tooltip = nhs_new_line_tt
+			}
+			else = {
+				custom_tooltip = nhs_will_remove_assemble_an_invasion_force_remove_effects_tt
+				custom_tooltip = nhs_new_line_tt
+			}
 			custom_tooltip = nhs_completes_nhs_inward_focus
 			hidden_effect = {
 				complete_mission = nhs_inward_focus
@@ -3922,6 +3940,24 @@ country_decisions = {
 				add_dip_power = -50
 			}
 			clr_country_flag = nhs_abandoned_greece
+			if = {
+				limit = {
+					has_country_flag = nhs_completed_assemble_an_invasion_force
+				}
+				custom_tooltip = nhs_new_line_tt
+				set_country_flag = nhs_assemble_an_invasion_force_enable_effects
+				add_country_modifier = {
+					name = "nhs_assemble_in_invasion_force"
+					duration = -1
+				}
+				custom_tooltip = nhs_assemble_an_invasion_force_effect_tt
+				hidden_effect = {
+					every_owned_province = {
+						nhs_assemble_an_invasion_force_handle_modifiers = yes
+					}
+				}
+				
+			}
 		}
 		ai_will_do = {
 			factor = 1
