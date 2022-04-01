@@ -131,13 +131,11 @@ country_event = {
 			any_owned_province = {
 				has_empty_adjacent_province = yes
 			}
-			capital_scope = {
-				any_province = {
-					has_port = yes
-					is_empty = yes
-					range = ROOT
-					region = PREV
-				}
+			any_province = {
+				has_port = yes
+				is_empty = yes
+				has_discovered = ROOT
+				range = ROOT
 			}
 		}
 		# OR = {
@@ -173,13 +171,46 @@ country_event = {
 			duration = 20
 			hidden = yes
 		}
+		## COT
+		random_owned_province = {
+			limit = {
+				any_empty_neighbor_province = {
+					has_port = yes
+					province_has_center_of_trade_of_level = 1
+				}
+			}
+			random_empty_neighbor_province = {
+				limit = {
+					has_port = yes
+					province_has_center_of_trade_of_level = 1
+				}
+				save_event_target_as = ai_help_colony
+			}
+		}
 		if = {
 			limit = {
-				any_owned_province = {
-					any_empty_neighbor_province = {
-						has_port = yes
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
+				limit = {
+					is_empty = yes
+					province_has_center_of_trade_of_level = 1
+					any_neighbor_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_colonial_nation_of = ROOT
+							}
+						}
 					}
 				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		## PORT
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
 			}
 			random_owned_province = {
 				limit = {
@@ -191,116 +222,70 @@ country_event = {
 					limit = {
 						has_port = yes
 					}
-					create_colony = 10
+					save_event_target_as = ai_help_colony
 				}
 			}
 		}
-		else_if = {
+		if = {
 			limit = {
-				any_owned_province = {
-					has_empty_adjacent_province = yes
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
+				limit = {
+					has_port = yes
+					is_empty = yes
+					any_neighbor_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_colonial_nation_of = ROOT
+							}
+						}
+					}
 				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		## NEIGHBORING PROVINCE
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
 			}
 			random_owned_province = {
 				limit = {
 					has_empty_adjacent_province = yes
 				}
 				random_empty_neighbor_province = {
-					create_colony = 10
+					save_event_target_as = ai_help_colony
 				}
 			}
 		}
-		else_if = {
+		## DISTANT PROVINCE
+		if = {
 			limit = {
-				capital_scope = {
-					any_province = {
-						has_port = yes
-						is_empty = yes
-						has_discovered = ROOT
-						province_has_center_of_trade_of_level = 1
-						range = ROOT
-						region = PREV
-					}
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
+				limit = {
+					has_port = yes
+					is_empty = yes
+					has_discovered = ROOT
+					range = ROOT
 				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		
+		if = {
+			limit = {
+				has_saved_event_target = ai_help_colony
 			}
 			capital_scope = {
-				random_province = {
-					limit = {
-						has_port = yes
-						is_empty = yes
-						has_discovered = ROOT
-						province_has_center_of_trade_of_level = 1
-						range = ROOT
-						region = PREV
-					}
-					create_colony = 10
+				event_target:ai_help_colony = {
+					create_colony = 20
 				}
 			}
 		}
-		else_if = {
-			limit = {
-				capital_scope = {
-					any_province = {
-						has_port = yes
-						is_empty = yes
-						has_discovered = ROOT
-						range = ROOT
-						region = PREV
-					}
-				}
-			}
-			capital_scope = {
-				random_province = {
-					limit = {
-						has_port = yes
-						is_empty = yes
-						has_discovered = ROOT
-						range = ROOT
-						region = PREV
-					}
-					create_colony = 10
-				}
-			}
-		}
-		# else_if = {
-		# 	limit = {
-		# 		any_province = {
-		# 			is_empty = yes
-		# 			range = ROOT
-		# 			has_discovered = ROOT
-		# 			OR = {
-		# 				has_port = yes
-		# 				any_neighbor_province = {
-		# 					OR = {
-		# 						owned_by = ROOT
-		# 						owner = {
-		# 							is_colonial_nation_of = ROOT
-		# 						}
-		# 					}
-		# 				}
-		# 			}
-		# 		}
-		# 	}
-		# 	random_province = {
-		# 		limit = {
-		# 			is_empty = yes
-		# 			range = ROOT
-		# 			has_discovered = ROOT
-		# 			OR = {
-		# 				has_port = yes
-		# 				any_neighbor_province = {
-		# 					OR = {
-		# 						owned_by = ROOT
-		# 						owner = {
-		# 							is_colonial_nation_of = ROOT
-		# 						}
-		# 					}
-		# 				}
-		# 			}
-		# 		}
-		# 		create_colony = 10
-		# 	}
-		# }
 	}
 
 	option = {

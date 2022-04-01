@@ -38,6 +38,80 @@
 # 	}
 # }
 
+to_subsidise_subject_colony =  {
+	category = economy
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			num_of_colonists = 1
+			NOT = { has_country_flag = to_subsidising_colonisation }
+			to_can_receive_colonial_subsidies = yes
+		}
+	}
+	is_allowed = {
+		FROM = {
+			custom_trigger_tooltip = {
+				tooltip = to_is_not_subsidising_subject_colony_tt
+				NOT = { has_country_flag = to_subsidising_colonisation }
+			}
+		}
+	}
+	on_accept = {
+		FROM = {
+			set_country_flag = to_subsidising_colonisation
+		}
+	}
+	ai_will_do = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		FROM = {
+			OR = {
+				tag = CM1
+				was_tag = CM1
+			}
+		}
+	}
+}
+
+to_cancel_subsidize_subject_colony =  {
+	category = economy
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			num_of_colonists = 1
+			has_country_flag = to_subsidising_colonisation
+			to_can_receive_colonial_subsidies = yes
+		}
+	}
+	is_allowed = {
+		FROM = {
+			custom_trigger_tooltip = {
+				tooltip = to_is_subsidising_subject_colony_tt
+				has_country_flag = to_subsidising_colonisation
+			}
+		}
+	}
+	on_accept = {
+		FROM = {
+			clr_country_flag = to_subsidising_colonisation
+		}
+	}
+	ai_will_do = {
+		NOT = {
+			AND = {
+				nhs_condition_all_ely = { KOMANDA = tag }
+				FROM = {
+					OR = {
+						tag = CM1
+						was_tag = CM1
+					}
+				}
+			}
+		}
+	}
+}
+
 cancel_nhs_protectorate =  {
 	category = influence
 	require_acceptance = no
