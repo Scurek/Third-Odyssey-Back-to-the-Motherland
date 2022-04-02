@@ -849,3 +849,81 @@ nhs_for_patriarch = {
 		add_adm_power = -75
 	}
 }
+
+to_add_new_patriarch_modifier_all_provinces = {
+	every_owned_province = {
+		to_handle_new_patriarch_modifier = yes
+	}
+}
+
+to_handle_new_patriarch_modifier = {
+	if = {
+		limit = {
+			owner = {
+				religion = elysian_orthodoxy
+				has_global_flag = nhs_elysian_o_greece
+			}
+			OR = {
+				culture_group = byzantine
+				culture_group = south_slavic
+			}
+			OR = {
+				religion = orthodox
+				religion = elysian_orthodoxy
+			}
+		}
+		if = {
+			limit = {
+				religion = orthodox
+			}
+			remove_province_modifier = nhs2_converts
+			add_province_modifier = {
+				name = nhs2_new_patriarch_greek
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = {
+				religion = elysian_orthodoxy
+			}
+			remove_province_modifier = nhs2_new_patriarch_greek
+			add_province_modifier = {
+				name = nhs2_converts
+				duration = -1
+			}
+		}
+	}
+	else = {
+		remove_province_modifier = nhs2_converts
+		remove_province_modifier = nhs2_new_patriarch_greek
+	}
+}
+
+to_add_traditional_patriarch_modifier_all_provinces = {
+	every_owned_province = {
+		to_handle_traditional_patriarch_modifier = yes
+	}
+}
+
+to_handle_traditional_patriarch_modifier = {
+	if = {
+		limit = {
+			owner = {
+				religion = elysian_orthodoxy
+				has_global_flag = nhs_elysian_o_greece_trad
+			}
+			religion = orthodox
+			OR = {
+				culture_group = byzantine
+				culture_group = south_slavic
+			}
+		}
+		add_province_modifier = {
+			name = nhs2_allowed_patriarch_greek
+			duration = -1
+		}
+	}
+	else = {
+		remove_province_modifier = nhs2_allowed_patriarch_greek
+	}
+}

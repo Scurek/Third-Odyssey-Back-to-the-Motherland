@@ -4529,21 +4529,132 @@ country_event = {
 	title = nhs2_orthodoxevents.14.t
 	desc = nhs2_orthodoxevents.14.d
 	picture = AWESOMECITY_eventPicture
+
+	goto = 151
 	
 	fire_only_once = yes
 
 	trigger = {
-		any_owned_province = {
-			nhs_is_ecumenical = yes
-		}
 		owns = 151
 		is_core = 151
 		religion = elysian_orthodoxy
 		is_at_war = no
+		any_owned_province = {
+			nhs_is_ecumenical = yes
+		}
 	}
 	
 	immediate = {
-		set_global_flag = nhs_elysian_o_greece_happened
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = ELG
+					ELG = {
+						capital_scope = {
+							culture_group = byzantine
+							OR = {
+								region = balkan_region
+								region = anatolia_region
+							}
+						}
+					}
+				}
+				ELG = {
+					capital_scope = {
+						save_event_target_as = trad_patriarch_seat
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = trad_patriarch_seat }
+					148 = {
+						country_or_subject_holds = ROOT
+						culture_group = byzantine
+					}
+				}
+				148 = {
+					save_event_target_as = trad_patriarch_seat
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = trad_patriarch_seat }
+					145 = {
+						country_or_subject_holds = ROOT
+						culture_group = byzantine
+					}
+				}
+				145 = {
+					save_event_target_as = trad_patriarch_seat
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = trad_patriarch_seat }
+					146 = {
+						country_or_subject_holds = ROOT
+						culture_group = byzantine
+					}
+				}
+				146 = {
+					save_event_target_as = trad_patriarch_seat
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = trad_patriarch_seat }
+				}
+				random_province = {
+					limit = {
+						area = morea_area
+						country_or_subject_holds = ROOT
+						is_island = no
+						culture_group = byzantine
+					}
+					save_event_target_as = trad_patriarch_seat
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = trad_patriarch_seat }
+				}
+				random_province = {
+					limit = {
+						country_or_subject_holds = ROOT
+						culture_group = byzantine
+						has_port = yes
+						NOT = { province_id = 151 }
+						NOT = { province_id = 142 }
+						NOT = { province_id = 4698 }
+					}
+					save_event_target_as = trad_patriarch_seat
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = trad_patriarch_seat }
+				}
+				random_province = {
+					limit = {
+						country_or_subject_holds = ROOT
+						culture_group = byzantine
+						NOT = { province_id = 151 }
+						NOT = { province_id = 142 }
+						NOT = { province_id = 4698 }
+					}
+					save_event_target_as = trad_patriarch_seat
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = trad_patriarch_seat }
+				}
+				151 = {
+					save_event_target_as = trad_patriarch_seat
+				}
+			}
+		}
 	}
 	
 	option = {		# Establish the new patriarchate of Constantinople
@@ -4555,36 +4666,28 @@ country_event = {
 			limit = {
 				NOT = { nhs_is_elysian_patriarchy = yes }
 			}
-			add_adm_power = -25
+			add_adm_power = -50
 		}
-		add_treasury = -100
 		add_prestige = 10
-		every_known_country = {
-			limit = {
-				religion = orthodox
-			}
-			add_opinion = {
-				who = ROOT
-				modifier = closed_down_the_patriarchate
-			}
-		}
-		custom_tooltip = nhs_new_p_tooltip
+		add_patriarch_authority = 0.10
 		151 = {
+			if = {
+				limit = {
+					NOT = { religion = elysian_orthodoxy }
+				}
+				change_religion = elysian_orthodoxy
+			}
 			add_permanent_province_modifier = {
 				name = nhs2_orthodox_patriarchate
 				duration = -1
 			}
 		}
-		custom_tooltip = nhs_new_patri_greek_tooltip
-		custom_tooltip = nhs_new_greek_conv_tooltip
-		
+
 		every_country = {
 			limit = {
+				religion = orthodox
 				OR = {
-					AND = {
-						culture_group = byzantine
-						NOT = { culture = turkish }
-					}
+					culture_group = byzantine
 					culture_group = south_slavic
 				}
 				OR = {
@@ -4595,97 +4698,36 @@ country_event = {
 					}
 					has_global_flag = nhs_fourth_reform
 				}
-				religion = orthodox
 				NOT = { has_country_flag = nhs_patriarch_question }
 			}
 			country_event = { id = nhs2_orthodoxevents.16 days = 1 }
 		}
-		hidden_effect = {
-			every_province = {
-				limit = {
-					OR = {
-						region = balkan_region
-						region = anatolia_region
-						region = crimea_region
-					}
-				}
-				add_province_triggered_modifier = nhs2_new_patriarch_greek_tm
-				add_province_triggered_modifier = nhs2_converts_tm
-			}
-		}
-	}
-	option = {		# This land falls under the authority of Elysian Ecumenical patriarchate 
-		name = nhs2_orthodoxevents.14.b
-		ai_chance = {
-			factor = 50
-		}
-		set_global_flag = nhs_elysian_o_greece
-		set_global_flag = nhs_elysian_o_greece_eep
-		if = {
-			limit = {
-				nhs_is_elysian_patriarchy = yes
-			}
-			add_adm_power = 50
-			add_years_of_income = 0.5
-		}
-		if = {
-			limit = {
-				NOT = { nhs_is_elysian_patriarchy = yes }
-			}
-			add_years_of_income = 0.25
-		}
-		add_patriarch_authority = 0.05
-		add_prestige = 5
-		every_known_country = {
+
+		custom_tooltip = nhs_dotted_line_tt
+
+		custom_tooltip = nhs_new_patri_greek_tooltip
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_new_greek_conv_tooltip
+
+		custom_tooltip = nhs_dotted_line_tt
+
+		every_country = {
 			limit = {
 				religion = orthodox
 			}
 			add_opinion = {
 				who = ROOT
-				modifier = closed_down_the_patriarchate
+				modifier = to_deposed_ecumenical
 			}
-		}
-		custom_tooltip = nhs_new_patri_greek_tooltip
-		custom_tooltip = nhs_new_greek_conv_tooltip
-		
-		every_country = {
-			limit = {
-				OR = {
-					AND = {
-						culture_group = byzantine
-						NOT = { culture = turkish }
-					}
-					culture_group = south_slavic
-				}
-				OR = {
-					NOT = { num_of_cities = 20 }
-					any_country = {
-						religion = elysian_orthodoxy
-						overlord_of	= ROOT
-					}
-					has_global_flag = nhs_fourth_reform
-				}
-				religion = orthodox
-				NOT = { has_country_flag = nhs_patriarch_question }
-			}
-			country_event = { id = nhs2_orthodoxevents.16 days = 1 }
 		}
 		hidden_effect = {
-			every_province = {
-				limit = {
-					OR = {
-						region = balkan_region
-						region = anatolia_region
-						region = crimea_region
-					}
-				}
-				add_province_triggered_modifier = nhs2_new_patriarch_greek_tm
-				add_province_triggered_modifier = nhs2_converts_tm
-			}
+			to_add_new_patriarch_modifier_all_provinces = yes
 		}
 	}
+
 	option = {		# Reastablish traditional Ecumenical patriarchate 
-		name = nhs2_orthodoxevents.14.c
+		name = nhs2_orthodoxevents.14.b
+		goto = trad_patriarch_seat
 		set_global_flag = nhs_elysian_o_greece_trad
 		ai_chance = {
 			factor = 20
@@ -4698,51 +4740,64 @@ country_event = {
 			limit = {
 				nhs_is_elysian_patriarchy = yes
 			}
-			add_prestige = -5
+			add_prestige = -10
+			add_adm_power = -50
 		}
 		add_patriarch_authority = -0.1
-		add_adm_power = 25
+
+		151 = {
+			if = {
+				limit = {
+					NOT = { religion = elysian_orthodoxy }
+				}
+				change_religion = elysian_orthodoxy
+			}
+			add_permanent_province_modifier = {
+				name = nhs2_orthodox_patriarchate
+				duration = -1
+			}
+		}
+		event_target:trad_patriarch_seat = {
+			if = {
+				limit = {
+					NOT = { religion = orthodox }
+				}
+				change_religion = orthodox
+			}
+			add_province_modifier = {
+				name = nhs2_traditional_patriarch_greek
+				duration = -1
+				desc = "ORTHODOX_PROVINCE_DESC"
+			}
+		}
+		hidden_effect = {
+			event_target:trad_patriarch_seat = {
+				add_province_triggered_modifier = nhs2_traditional_patriarch_greek_tm
+			}
+		}
+
+		custom_tooltip = nhs_reestablish_p_tooltip
+
+		custom_tooltip = nhs_dotted_line_tt
+
+		custom_tooltip = nhs_new_trad_greek_tooltip
+		hidden_effect = {
+			to_add_traditional_patriarch_modifier_all_provinces = yes
+		}
+
+		custom_tooltip = nhs_dotted_line_tt
+
 		every_known_country = {
 			limit = {
 				religion = orthodox
+				NOT = { culture_group = byzantine }
+				NOT = { culture_group = south_slavic }
 			}
 			add_opinion = {
 				who = ROOT
-				modifier = allows_the_patriarchate
+				modifier = to_deposed_ecumenical
 			}
 		}
-		every_owned_province = {
-			limit = {
-				AND = {
-					OR = {
-						culture = greek
-						region = balkan_region
-					}
-					continent = europe
-				}
-			}
-			add_unrest = -15
-		}
-		custom_tooltip = nhs_reestablish_p_tooltip
-		custom_tooltip = nhs_new_trad_greek_tooltip
-		custom_tooltip = nhs_new_greek_conv_tooltip
-		hidden_effect = {
-			every_province = {
-				limit = {
-					OR = {
-						region = balkan_region
-						region = anatolia_region
-						region = crimea_region
-					}
-				}
-				add_province_triggered_modifier = nhs2_allowed_patriarch_greek_tm
-				add_province_triggered_modifier = nhs2_converts_tm
-			}
-		}
-	}
-	
-	after = {
-		set_global_flag = nhs_greek_mod_new_system
 	}
 }
 
