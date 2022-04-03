@@ -1,16 +1,17 @@
-#Additional events for the Hellenic faith
-#Written by TheWerelizard
+#Written by TheWerelizard and Scurek =)
 
-namespace = nhs_hcd_hellenicflavor
+namespace = to_hellenic_events
 
 ###################################
 #Reformation of the Hellenic Faith#
 ###################################
+# 1
 
-country_event = { #Reformation of the Hellenic Faith
-	id = nhs_hcd_hellenicflavor.1
-	title = nhs_hcd_hellenicflavor1.t
-	desc = nhs_hcd_hellenicflavor1.d
+#Reformation of the Hellenic Faith
+country_event = { 
+	id = to_hellenic_events.1
+	title = to_hellenic_events.1.t
+	desc = to_hellenic_events.1.d
 	picture = BYZANTINE_EAGLE_eventPicture
 
 	is_triggered_only = yes
@@ -39,7 +40,7 @@ country_event = { #Reformation of the Hellenic Faith
 	}
 
 	option = { #Adopt primarily Zeus
-		name = nhs_hcd_hellenicflavor.1.a
+		name = to_hellenic_events.1.a
 
 		add_country_modifier = {
 			name = nhs_hcf_zeus_worship
@@ -65,7 +66,7 @@ country_event = { #Reformation of the Hellenic Faith
 	}
 
 	option = { #Worship Poseidon
-		name = nhs_hcd_hellenicflavor.1.b
+		name = to_hellenic_events.1.b
 
 		add_country_modifier = {
 			name = nhs_hcf_poseidon_worship
@@ -91,7 +92,7 @@ country_event = { #Reformation of the Hellenic Faith
 	}
 
 	option = { #Worship Apollo
-		name = nhs_hcd_hellenicflavor.1.c
+		name = to_hellenic_events.1.c
 
 		add_country_modifier = {
 			name = nhs_hcf_apollo_worship
@@ -117,7 +118,7 @@ country_event = { #Reformation of the Hellenic Faith
 	}
 
 	option = { #Keep to our traditions
-		name = nhs_hcd_hellenicflavor.1.d
+		name = to_hellenic_events.1.e
 
 		add_country_modifier = {
 			name = nhs_hcf_traditional_worship
@@ -144,16 +145,1136 @@ country_event = { #Reformation of the Hellenic Faith
 	}
 
 	option = { #Keep to our traditions
-		name = nhs_hcd_hellenicflavor.1.e
+		name = to_hellenic_events.1.f
+	}
+}
+
+########################
+#One Time Flavor Events#
+########################
+# 2-7
+
+# Ares/Poseidon Temple
+country_event = {
+	id = to_hellenic_events.2
+	title = to_hellenic_events.2.t
+	desc = to_hellenic_events.2.d
+	picture = AWESOMECITY_eventPicture
+	
+    trigger = {
+		is_year = 1501
+		religion = pantheon_worship
+		has_country_modifier = nhs_high_priests
+		owns = 953
+		NOT = { has_country_flag = nhs_enable_hellenic_temple_decision }
+		953 = {
+			religion = pantheon_worship
+			NOT = {
+				OR = {
+					has_province_modifier = nhs_ares_temple
+					has_province_modifier = nhs_poseidon_temple
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 60
+		modifier = {
+			factor = 0.25
+			OR = {
+				ruler_has_personality = architectural_visionary_personality
+				treasury = 300
+			}
+		}
+	}
+
+	option = {	# Ares
+		name = to_hellenic_events.2.a
+		ai_chance = {
+			factor = 50
+		}
+		if = {
+			limit = {
+				953 = {
+					NOT = { has_building = cathedral }
+				}
+			}
+			if = {
+				limit = {
+					953 = {
+						has_building = temple
+					}
+				}
+				add_treasury = -150
+			}
+			else = {
+				add_treasury = -250
+			}
+		}
+		add_army_tradition = 5
+		953 = {
+			if = {
+				limit = {
+					NOT = { has_building = cathedral }
+				}
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+				}
+				add_building = cathedral
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = nhs_ares_temple
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = nhs_ares_temple_tm
+			}
+		}
+	}
+	option = {	# Poseidon
+		name = to_hellenic_events.2.b
+		ai_chance = {
+			factor = 50
+		}
+		if = {
+			limit = {
+				953 = {
+					NOT = { has_building = cathedral }
+				}
+			}
+			if = {
+				limit = {
+					953 = {
+						has_building = temple
+					}
+				}
+				add_treasury = -150
+			}
+			else = {
+				add_treasury = -250
+			}
+		}
+		add_stability_or_adm_power = yes
+		add_navy_tradition = 5
+		953 = {
+			if = {
+				limit = {
+					NOT = { has_building = cathedral }
+				}
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+				}
+				add_building = cathedral
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = nhs_poseidon_temple
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = nhs_poseidon_temple_tm
+			}
+		}
+	}
+	# With Architect Trait:
+	option = {	# Ares
+		name = "to_hellenic_events.2.a"
+		ai_chance = {
+			factor = 50
+		}
+		trigger = {
+			ruler_has_personality = architectural_visionary_personality
+		}
+		highlight = yes
+		if = {
+			limit = {
+				953 = {
+					NOT = { has_building = cathedral }
+				}
+			}
+			if = {
+				limit = {
+					953 = {
+						has_building = temple
+					}
+				}
+				add_treasury = -15
+			}
+			else = {
+				add_treasury = -25
+			}
+		}
+		add_army_tradition = 5
+		add_prestige = 10
+		953 = {
+			if = {
+				limit = {
+					NOT = { has_building = cathedral }
+				}
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+				}
+				add_building = cathedral
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = nhs_ares_temple
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = nhs_ares_temple_tm
+			}
+		}
+	}
+	option = {	# Poseidon
+		name = "to_hellenic_events.2.b"
+		ai_chance = {
+			factor = 50
+		}
+		trigger = {
+			ruler_has_personality = architectural_visionary_personality
+		}
+		highlight = yes
+		if = {
+			limit = {
+				953 = {
+					NOT = { has_building = cathedral }
+				}
+			}
+			if = {
+				limit = {
+					953 = {
+						has_building = temple
+					}
+				}
+				add_treasury = -15
+			}
+			else = {
+				add_treasury = -25
+			}
+		}
+		add_stability_or_adm_power = yes
+		add_prestige = 10
+		add_navy_tradition = 5
+		953 = {
+			if = {
+				limit = {
+					NOT = { has_building = cathedral }
+				}
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+				}
+				add_building = cathedral
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = nhs_poseidon_temple
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = nhs_poseidon_temple_tm
+			}
+		}
+	}
+
+	option = {	# Can't afford it right now
+		name = "NHSRELIGIONEVENTSNAME2C"
+		ai_chance = {
+			factor = 0
+		}
+		custom_tooltip = nhs_enable_hellenic_temple_decision_tt
+		set_country_flag = nhs_enable_hellenic_temple_decision
+	}
+}
+
+# Establish High Priests
+country_event = {
+	id = to_hellenic_events.3
+	title = to_hellenic_events.3.t
+	desc = to_hellenic_events.3.d
+	picture = OLYMPIANS_eventPicture
+
+    trigger = {
+		is_year = 1475
+		OR = {
+			religion = pantheon_worship
+			religion = aztlan_worship
+		}
+		NOT = { has_country_modifier = nhs_high_priests }
+		nhs_condition_all_ely = { KOMANDA = tag }
+		any_owned_province = {
+			religion = ROOT
+			is_city = yes
+			OR = {
+				is_capital = yes
+				is_in_capital_area = yes
+				has_province_flag = nhs_hcd_first_pagan_minority_province
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					has_province_flag = nhs_hcd_first_pagan_minority_province
+					religion = ROOT
+				}
+				save_event_target_as = nhs_high_priesthood_target
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_high_priesthood_target }
+				}
+				random_owned_province = {
+					limit = {
+						is_capital = yes
+						religion = ROOT
+					}
+					save_event_target_as = nhs_high_priesthood_target
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_high_priesthood_target }
+				}
+				random_owned_province = {
+					limit = {
+						is_city = yes
+						is_in_capital_area = yes
+						religion = ROOT
+					}
+					save_event_target_as = nhs_high_priesthood_target
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 0.5
+			stability = 1
+		}
+		modifier = {
+			factor = 5
+			is_at_war = yes
+		}
+	}
+
+	option = {	
+		name = to_hellenic_events.3.a
+		goto = nhs_high_priesthood_target
+		trigger = {
+			nhs_condition_all_ely = { KOMANDA = tag }
+		}
+		ai_chance = { factor = 100 }
+		custom_tooltip = nhs_enable_heralds_dispatch_tt
+		custom_tooltip = nhs_new_line_tt
+		add_country_modifier = {
+			name = nhs_high_priests
+			duration = -1
+		}
+
+		if = {
+			limit = {
+				has_saved_event_target = nhs_high_priesthood_target
+				event_target:nhs_high_priesthood_target = {
+					owned_by = ROOT
+				}
+			}
+			event_target:nhs_high_priesthood_target = {
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = nhs_seat_of_high_priesthood_t
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs_seat_of_high_priesthood
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_province = {
+					religion = ROOT
+					is_capital = yes
+				}
+			}
+			capital_scope = {
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = nhs_seat_of_high_priesthood_t
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs_seat_of_high_priesthood
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_province = {
+					is_city = yes
+					religion = ROOT
+					OR = {
+						is_capital = yes
+						is_in_capital_area = yes
+						has_province_flag = nhs_hcd_first_pagan_minority_province
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					is_city = yes
+					religion = ROOT
+					OR = {
+						is_capital = yes
+						is_in_capital_area = yes
+						has_province_flag = nhs_hcd_first_pagan_minority_province
+					}
+				}
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = nhs_seat_of_high_priesthood_t
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs_seat_of_high_priesthood
+				}
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					is_city = yes
+				}
+				tooltip = {
+					add_permanent_province_modifier = {
+						name = nhs_seat_of_high_priesthood_t
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					add_province_triggered_modifier = nhs_seat_of_high_priesthood
+				}
+			}
+		}
+		if = {
+			limit = {
+				religion = pantheon_worship
+			}
+			custom_tooltip = to_enable_hellenic_reform_tt
+			custom_tooltip = to_enable_hellenic_festivals_tt
+		}
+	}
+}
+
+# Establish High Priests for others
+country_event = {
+	id = to_hellenic_events.4
+	title = to_hellenic_events.4.t
+	desc = to_hellenic_events.4.d
+	picture = OLYMPIANS_eventPicture
+
+    trigger = {
+		is_year = 1480
+		religion = pantheon_worship
+		NOT = {	nhs_condition_all_ely = { KOMANDA = tag } }
+		NOT = { has_country_modifier = nhs_high_priests }
+	}
+
+	mean_time_to_happen = {
+		months = 10
+	}
+
+	option = {	
+		name = to_hellenic_events.4.a
+		ai_chance = { factor = 100 }
+		add_dip_power = -25
+		add_country_modifier = {
+			name = nhs_high_priests
+			duration = -1
+		}
+		custom_tooltip = to_enable_hellenic_reform_tt
+		custom_tooltip = to_enable_hellenic_festivals_tt
+	}
+}
+
+# Expand the Pantheon of Gods
+country_event = {
+	id = to_hellenic_events.5
+	title = to_hellenic_events.5.t
+	desc = to_hellenic_events.5.d
+	picture = OLYMPIANS_eventPicture
+
+    trigger = {
+		is_year = 1490
+		religion = pantheon_worship
+		dip_power = 25
+		has_country_modifier = nhs_high_priests
+		# nhs_condition_all_ely = { KOMANDA = tag }
+		NOT = { nhs_check_all_spartan = { CONDITION = tag } }
+		NOT = { has_country_modifier = nhs_expanded_pantheon }
+		NOT = { has_country_modifier = nhs_consolidated_pantheon }
+		OR = {
+			any_neighbor_country = {
+				religion_group = pagan
+				NOT = { religion = pantheon_worship }
+			}
+			any_owned_province = {
+				religion_group = pagan
+				NOT = { religion = pantheon_worship }
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 0.50
+			stability = 1
+		}
+		modifier = {
+			factor = 0.50
+			stability = 2
+		}
+		modifier = {
+			factor = 0.50
+			stability = 3
+		}
+		modifier = {
+			factor = 0.50
+			is_at_war = no
+		}
+	}
+
+	option = {	# Expand the Pantheon
+		name = to_hellenic_events.5.a
+		ai_chance = {
+			factor = 75
+			modifier = {
+				factor = 10
+				nhs_check_all_spartan = { CONDITION = tag }
+			}
+		}
+		add_dip_power = -25
+		add_country_modifier = {
+			name = nhs_expanded_pantheon
+			duration = -1
+		}
+	}
+	option = {	# Consolidate our own Pantheon
+		name = to_hellenic_events.5.b
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 0.1
+				nhs_check_all_spartan = { CONDITION = tag }
+			}
+		}
+		add_dip_power = -25
+		add_country_modifier = {
+			name = nhs_consolidated_pantheon
+			duration = -1
+		}
+	}
+}
+
+# Hero event
+country_event = {
+	id = to_hellenic_events.6
+	title = to_hellenic_events.6.t
+	desc = to_hellenic_events.6.d
+	picture = ARMY_CHARGE_eventPicture
+
+    trigger = {
+		is_year = 1500
+		OR = {
+			religion = pantheon_worship
+			religion = aztlan_worship
+		}
+		OR = {
+			is_at_war = yes
+			had_recent_war = 2
+		}
+		NOT = { has_country_modifier = nhs_timer_heroes }
+	}
+
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 0.5
+			war_exhaustion = 5
+		}
+		modifier = {
+			factor = 0.5
+			war_exhaustion = 7.5
+		}
+		modifier = {
+			factor = 2
+			NOT = { stability = 0 }
+		}
+		modifier = {
+			factor = 2.0
+			has_wartaxes = yes
+		}
+		modifier = {
+			factor = 5
+			religion = aztlan_worship
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = nhs_timer_heroes
+				duration = 18250 # 50 years
+				hidden = yes
+			}
+			random_list = {
+				20 = { set_country_flag = hero_aeneas }
+				20 = { set_country_flag = hero_hercules }
+				20 = { set_country_flag = hero_achilles }
+				20 = { set_country_flag = hero_odysseus }
+				20 = { set_country_flag = hero_perseus }
+			}
+		}
+	}
+
+	option = {	
+		name = to_hellenic_events.6.a
+		add_war_exhaustion = -5
+		add_army_tradition = 5	
+		if = {
+			limit = {
+				has_country_flag = hero_aeneas
+			}
+			define_general = {
+				name = "Aeneas"
+				fire = 4
+				shock = 4
+				manuever = 4
+				siege = 2
+			}
+			clr_country_flag = hero_aeneas
+		}
+		if = {
+			limit = {
+				has_country_flag = hero_hercules
+			}
+			define_general = {
+				name = "Hercules"
+				fire = 4
+				shock = 6
+				manuever = 2
+				siege = 2
+			}
+			clr_country_flag = hero_hercules
+		}
+		if = {
+			limit = {
+				has_country_flag = hero_achilles
+			}
+			define_general = {
+				name = "Achilles"
+				fire = 6
+				shock = 2
+				manuever = 4
+				siege = 2
+			}
+			clr_country_flag = hero_achilles
+		}
+		if = {
+			limit = {
+				has_country_flag = hero_odysseus
+			}
+			define_general = {
+				name = "Odysseus"
+				fire = 5
+				shock = 2
+				manuever = 3
+				siege = 4
+			}
+			clr_country_flag = hero_odysseus
+		}
+		if = {
+			limit = {
+				has_country_flag = hero_perseus
+			}
+			define_general = {
+				name = "Perseus"
+				fire = 2
+				shock = 6
+				manuever = 3
+				siege = 3
+			}
+			clr_country_flag = hero_perseus
+		}
+		
+	}
+}
+
+# Deification of Emperors
+country_event = {
+	id = to_hellenic_events.7
+	title = to_hellenic_events.7.t
+	desc = to_hellenic_events.7.d
+	picture = OLYMPIANS_eventPicture
+
+    trigger = {
+		OR = {
+			religion = pantheon_worship
+			religion = aztlan_worship
+		}
+		NOT = { has_country_modifier = nhs_deification_of_emperors }
+		NOT = { has_country_modifier = nhs_nope_deification_of_emperors }
+		NOT = { has_ruler_modifier = nhs_deification_of_refused }
+		has_country_modifier = nhs_high_priests
+		government_rank = 3
+		government = monarchy
+	}
+
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 0.90
+			stability = 1
+		}
+		modifier = {
+			factor = 0.90
+			stability = 2
+		}
+		modifier = {
+			factor = 0.90
+			stability = 3
+		}
+		modifier = {
+			factor = 0.9
+			dip = 3
+		}
+		modifier = {
+			factor = 0.9
+			mil = 3
+		}
+		modifier = {
+			factor = 0.9
+			adm = 3
+		}
+		modifier = {
+			factor = 0.9
+			dip = 4
+		}
+		modifier = {
+			factor = 0.9
+			mil = 4
+		}
+		modifier = {
+			factor = 0.9
+			adm = 4
+		}
+		modifier = {
+			factor = 0.75
+			dip = 5
+		}
+		modifier = {
+			factor = 0.75
+			mil = 5
+		}
+		modifier = {
+			factor = 0.75
+			adm = 5
+		}
+		modifier = {
+			factor = 2
+			has_country_modifier = nhs_consolidated_pantheon
+		}
+		modifier = {
+			factor = 0.5
+			has_country_modifier = nhs_expanded_pantheon
+		}
+	}
+
+	option = {	
+		name = to_hellenic_events.7.a
+		add_years_of_income = -1
+		add_legitimacy = 10
+		add_dip_power = -50
+		add_country_modifier = {
+			name = nhs_deification_of_emperors
+			duration = -1
+		}	
+	}	
+	option = {	
+		name = to_hellenic_events.7.b  #We are not the gods
+		add_legitimacy = 5
+		add_prestige = 20
+		add_country_modifier = {
+			name = nhs_nope_deification_of_emperors
+			duration = -1
+		}	
+	}
+	
+	option = {
+		name = to_hellenic_events.7.c
+		add_prestige = 10
+		custom_tooltip = nhs2_deification
+		hidden_effect = {
+			add_ruler_modifier = {
+				name = nhs_deification_of_refused
+				hidden = yes
+			}
+		}
+	}
+}
+
+########################
+#Religion Spread Events#
+########################
+# 8-11
+
+# Religion spread - Pantheon
+country_event = {
+	id = to_hellenic_events.8
+	title = to_hellenic_events.8.t
+	desc = to_hellenic_events.8.d
+	picture = OLYMPIANS_eventPicture
+
+    trigger = {
+		religion = totemism
+		NOT = { tag = CAO }
+		OR = {
+			is_year = 1500
+			capital_scope = { religion = pantheon_worship }
+		}
+		OR = {
+			NOT = { num_of_cities = 4 }
+			num_of_religion = { religion = pantheon_worship value = 2 }
+		}
+		any_owned_province = {
+			religion = pantheon_worship
+		}
+		any_neighbor_country = {
+			OR = {
+				technology_group = exiled_greek
+				technology_group = modern_greek
+			}
+			religion = pantheon_worship
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.90
+			stability = 1
+		}
+		modifier = {
+			factor = 0.90
+			stability = 2
+		}
+		modifier = {
+			factor = 0.90
+			stability = 3
+		}
+		modifier = {
+			factor = 2
+			any_known_country = {
+				has_country_modifier = nhs_consolidated_pantheon
+			}
+		}
+		modifier = {
+			factor = 0.5
+			any_known_country = {
+				has_country_modifier = nhs_expanded_pantheon
+			}
+		}
+		modifier = {
+			factor = 10
+			has_country_flag = nhs_religion_spread_pantheon
+		}
+		modifier = {
+			factor = 0.00001
+			capital_scope = { religion = pantheon_worship }
+		}
+	}
+	
+	immediate = {
+		set_country_flag = nhs_religion_spread_pantheon
+	}
+
+	option = {	 # Accept
+		ai_chance = {
+			factor = 75
+		}
+		name = to_hellenic_events.8.a
+		add_legitimacy = -10
+		change_religion = pantheon_worship
+		set_global_flag = nhs_native_deity
+		if = {
+			limit = {
+				any_owned_province = {
+					religion = totemism
+				}
+			}
+			random_owned_province = {
+				limit = {
+					religion = totemism
+				}
+				change_religion = pantheon_worship
+			}
+		}
+	}
+	
+	option = {	
+		name = to_hellenic_events.8.b  #Decline
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 0
+				capital_scope = { religion = pantheon_worship }
+			}
+		}
+		add_legitimacy = 5
+		add_prestige = 10
+	}
+}
+
+# Missionaries native pantheon
+country_event = {
+	id = to_hellenic_events.9
+	title = to_hellenic_events.9.t
+	desc = to_hellenic_events.9.d
+	picture = OLYMPIANS_eventPicture
+
+    is_triggered_only = yes
+	
+	option = {	 # Accept
+		ai_chance = {
+			factor = 80
+			modifier = {
+				factor = 1.25
+				alliance_with = FROM
+			}
+			modifier = {
+				factor = 1.1
+				stability = 1
+			}
+			modifier = {
+				factor = 1.1
+				stability = 2
+			}
+			modifier = {
+				factor = 1.1
+				stability = 3
+			}
+			modifier = {
+				factor = 1.25
+				FROM = {
+					has_opinion = { who = ROOT value = 150 }
+				}
+			}
+			modifier = {
+				factor = 1.25
+				FROM = {
+					has_opinion = { who = ROOT value = 100 }
+				}
+			}
+			modifier = {
+				factor = 0.2
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = 0 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.3
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = -100 }
+					}
+				}
+			}
+			# modifier = {
+			# 	factor = 2
+			# 	technology_group = hellenised_american
+			# }
+			modifier = {
+				factor = 0.5
+				FROM = {
+					has_country_modifier = nhs_consolidated_pantheon
+				}
+			}
+			modifier = {
+				factor = 1.2
+				FROM = {
+					has_country_modifier = nhs_expanded_pantheon
+				}
+			}
+		}
+		name = to_hellenic_events.9.a
+		reverse_add_opinion = { who = FROM modifier = nhs_o_embraced_new_religion }
+		add_opinion = { who = FROM modifier = nhs_o_embraced_new_religion }
+		if = {
+			limit = {
+				any_owned_province = {
+					NOT = { religion = pantheon_worship }
+					is_capital = no
+				}
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { religion = pantheon_worship }
+					is_capital = no
+				}
+				change_religion = pantheon_worship
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_owned_province = {
+						NOT = { religion = pantheon_worship }
+						is_capital = no
+					}
+				}
+			}
+			capital_scope = {
+				change_religion = pantheon_worship
+			}
+		}
+		if = {
+			limit = {
+				NOT = { num_of_cities = 2 }
+			}
+			country_event = { id = to_hellenic_events.8 }
+		}
+		FROM = {
+			country_event = { id = to_hellenic_events.10 days = 30 }
+		}
+	}
+	
+	option = {	
+		name = to_hellenic_events.9.b  #Decline
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0.75
+				alliance_with = FROM
+			}
+			modifier = {
+				factor = 0.9
+				FROM = {
+					has_opinion = { who = ROOT value = 150 }
+				}
+			}
+			modifier = {
+				factor = 0.9
+				FROM = {
+					has_opinion = { who = ROOT value = 100 }
+				}
+			}
+			modifier = {
+				factor = 0.9
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = 100 }
+					}
+				}
+			}
+			modifier = {
+				factor = 1.2
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = 0 }
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = -100 }
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				NOT = { stability = 0 }
+			}	
+		}
+		add_legitimacy = 5
+		add_prestige = 10
+		FROM = {
+			country_event = { id = to_hellenic_events.11 days = 30 }
+			
+		}
+	}
+}
+
+# Missionaries get back + pantheon
+country_event = {
+	id = to_hellenic_events.10
+	title = to_hellenic_events.10.t
+	desc = to_hellenic_events.10.d
+	picture = OLYMPIANS_eventPicture
+
+    is_triggered_only = yes
+
+	option = {
+		name = "to_hellenic_events.10.a"
+		add_prestige = 10	
+	}
+}
+
+# Missionaries get back - pantheon
+country_event = {
+	id = to_hellenic_events.11
+	title = to_hellenic_events.11.t
+	desc = to_hellenic_events.11.d
+	picture = PANTHEON_eventPicture
+
+    is_triggered_only = yes
+
+	option = {
+		name = "to_hellenic_events.11.a"
+		add_prestige = -10
 	}
 }
 
 ################
 #No-dlc Deities#
 ################
+# 31
 
 country_event = { #Pick a new deity
-	id =  nhs_hcd_hellenicflavor.31
+	id =  to_hellenic_events.31
 	title = nhs_hcd_hellenicflavor31.t
 	desc = nhs_hcd_hellenicflavor31.d
 	picture = OLYMPIANS_eventPicture
@@ -507,7 +1628,7 @@ country_event = { #Pick a new deity
 	}
 
 	option = {  # Leonidas
-		name = nhs_hcd_hellenicflavor.31.leonidas
+		name = to_hellenic_events.31.leonidas
 		trigger = {
 			OR = {
 				tag = MSN
@@ -520,7 +1641,7 @@ country_event = { #Pick a new deity
 	}
 	
 	option = {  # Ketsalon
-		name = nhs_hcd_hellenicflavor.31.ketsalon
+		name = to_hellenic_events.31.ketsalon
 		trigger = {
 			OR = {
 				tag = MSN
@@ -535,10 +1656,11 @@ country_event = { #Pick a new deity
 #################
 #Festival Events#
 #################
+# 1XX, 1000
 
 # Festival event tombola
 country_event = {
-	id = nhs_hcd_hellenicflavor.1000
+	id = to_hellenic_events.1000
 	title = nhs2_hidden.t
 	desc = nhs2_hidden.d
 	picture = FEAST_eventPicture
@@ -561,9 +1683,9 @@ country_event = {
 
 # Hetairideia (Zeus)
 country_event = {
-	id = nhs_hcd_hellenicflavor.100
-	title = nhs_hcd_hellenicflavor.100.t
-	desc = nhs_hcd_hellenicflavor.100.d
+	id = to_hellenic_events.100
+	title = to_hellenic_events.100.t
+	desc = to_hellenic_events.100.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -582,7 +1704,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.100.a
+		name = to_hellenic_events.100.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = zeus
@@ -590,7 +1712,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.100.b
+		name = to_hellenic_events.100.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_zeus }
 			NOT = { has_personal_deity = nhs_hellenic_reformed_zeus }
@@ -610,7 +1732,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.100.c
+		name = to_hellenic_events.100.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -621,7 +1743,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -629,7 +1751,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -638,9 +1760,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.101
-	title = nhs_hcd_hellenicflavor.101.t
-	desc = nhs_hcd_hellenicflavor.101.d
+	id = to_hellenic_events.101
+	title = to_hellenic_events.101.t
+	desc = to_hellenic_events.101.d
 	picture = GOOD_WITH_MONARCH_eventPicture
 	
 	trigger = {
@@ -656,13 +1778,13 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.101.a
+		name = to_hellenic_events.101.a
 		change_dip = 1
 		to_hellenic_festival_option = yes
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.101.b
+		name = to_hellenic_events.101.b
 		change_mil = 1
 		to_hellenic_festival_option = yes
 	}
@@ -670,9 +1792,9 @@ country_event = {
 
 # Sacrifice to Ares
 country_event = {
-	id = nhs_hcd_hellenicflavor.102
-	title = nhs_hcd_hellenicflavor.102.t
-	desc = nhs_hcd_hellenicflavor.102.d
+	id = to_hellenic_events.102
+	title = to_hellenic_events.102.t
+	desc = to_hellenic_events.102.d
 	picture = LAND_MILITARY_eventPicture
 
 	is_triggered_only = yes
@@ -687,7 +1809,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.102.a
+		name = to_hellenic_events.102.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = ares
@@ -695,7 +1817,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.102.b
+		name = to_hellenic_events.102.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_ares }
 		}
@@ -706,7 +1828,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.102.c
+		name = to_hellenic_events.102.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -717,7 +1839,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -725,7 +1847,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -734,9 +1856,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.103
-	title = nhs_hcd_hellenicflavor.103.t
-	desc = nhs_hcd_hellenicflavor.103.d
+	id = to_hellenic_events.103
+	title = to_hellenic_events.103.t
+	desc = to_hellenic_events.103.d
 	picture = GOOD_WITH_MONARCH_eventPicture
 	
 	trigger = {
@@ -752,7 +1874,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.103.a
+		name = to_hellenic_events.103.a
 		change_mil = 1
 		to_hellenic_festival_option = yes
 	}
@@ -760,9 +1882,9 @@ country_event = {
 
 # Plynteria (Athena)
 country_event = {
-	id = nhs_hcd_hellenicflavor.104
-	title = nhs_hcd_hellenicflavor.104.t
-	desc = nhs_hcd_hellenicflavor.104.d
+	id = to_hellenic_events.104
+	title = to_hellenic_events.104.t
+	desc = to_hellenic_events.104.d
 	picture = CULTURE_eventPicture
 
 	is_triggered_only = yes
@@ -780,7 +1902,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.104.a
+		name = to_hellenic_events.104.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = athena
@@ -788,7 +1910,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.104.b
+		name = to_hellenic_events.104.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_athena }
 			NOT = { has_personal_deity = nhs_hellenic_reformed_athena }
@@ -808,7 +1930,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.104.c
+		name = to_hellenic_events.104.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -819,7 +1941,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -827,7 +1949,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -836,9 +1958,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.105
-	title = nhs_hcd_hellenicflavor.105.t
-	desc = nhs_hcd_hellenicflavor.105.d
+	id = to_hellenic_events.105
+	title = to_hellenic_events.105.t
+	desc = to_hellenic_events.105.d
 	picture = GOOD_WITH_MONARCH_eventPicture
 	
 	trigger = {
@@ -854,13 +1976,13 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.105.a
+		name = to_hellenic_events.105.a
 		change_adm = 1
 		to_hellenic_festival_option = yes
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.105.b
+		name = to_hellenic_events.105.b
 		change_mil = 1
 		to_hellenic_festival_option = yes
 	}
@@ -868,9 +1990,9 @@ country_event = {
 
 # Hermaea (Hermes)
 country_event = {
-	id = nhs_hcd_hellenicflavor.106
-	title = nhs_hcd_hellenicflavor.106.t
-	desc = nhs_hcd_hellenicflavor.106.d
+	id = to_hellenic_events.106
+	title = to_hellenic_events.106.t
+	desc = to_hellenic_events.106.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -888,7 +2010,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.106.a
+		name = to_hellenic_events.106.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = hermes
@@ -896,7 +2018,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.106.b
+		name = to_hellenic_events.106.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_hermes }
 			NOT = { has_personal_deity = nhs_hellenic_reformed_hermes }
@@ -916,7 +2038,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.106.c
+		name = to_hellenic_events.106.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -927,7 +2049,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -935,7 +2057,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -944,9 +2066,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.107
-	title = nhs_hcd_hellenicflavor.107.t
-	desc = nhs_hcd_hellenicflavor.107.d
+	id = to_hellenic_events.107
+	title = to_hellenic_events.107.t
+	desc = to_hellenic_events.107.d
 	picture = DEBATE_REPUBLICAN_eventPicture
 	
 	trigger = {
@@ -962,7 +2084,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.107.a
+		name = to_hellenic_events.107.a
 		change_adm = 1
 		to_hellenic_festival_option = yes
 	}
@@ -970,9 +2092,9 @@ country_event = {
 
 # Adonia (Aphrodite)
 country_event = {
-	id = nhs_hcd_hellenicflavor.108
-	title = nhs_hcd_hellenicflavor.108.t
-	desc = nhs_hcd_hellenicflavor.108.d
+	id = to_hellenic_events.108
+	title = to_hellenic_events.108.t
+	desc = to_hellenic_events.108.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -990,7 +2112,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.108.a
+		name = to_hellenic_events.108.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = aphrodite
@@ -998,7 +2120,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.108.b
+		name = to_hellenic_events.108.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_aphrodite }
 			NOT = { has_personal_deity = nhs_hellenic_reformed_aphrodite }
@@ -1018,7 +2140,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.108.c
+		name = to_hellenic_events.108.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -1029,7 +2151,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -1037,7 +2159,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -1046,9 +2168,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.109
-	title = nhs_hcd_hellenicflavor.109.t
-	desc = nhs_hcd_hellenicflavor.109.d
+	id = to_hellenic_events.109
+	title = to_hellenic_events.109.t
+	desc = to_hellenic_events.109.d
 	picture = GOOD_WITH_MONARCH_eventPicture
 	
 	trigger = {
@@ -1064,7 +2186,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.109.a
+		name = to_hellenic_events.109.a
 		change_dip = 1
 		to_hellenic_festival_option = yes
 	}
@@ -1072,9 +2194,9 @@ country_event = {
 
 # Sounion Magno (Poseidon)
 country_event = {
-	id = nhs_hcd_hellenicflavor.110
-	title = nhs_hcd_hellenicflavor.110.t
-	desc = nhs_hcd_hellenicflavor.110.d
+	id = to_hellenic_events.110
+	title = to_hellenic_events.110.t
+	desc = to_hellenic_events.110.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -1092,7 +2214,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.110.a
+		name = to_hellenic_events.110.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = poseidon
@@ -1100,7 +2222,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.110.b
+		name = to_hellenic_events.110.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_poseidon }
 			NOT = { has_personal_deity = nhs_hellenic_reformed_poseidon }
@@ -1120,7 +2242,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.110.c
+		name = to_hellenic_events.110.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -1131,7 +2253,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -1139,7 +2261,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -1148,9 +2270,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.111
-	title = nhs_hcd_hellenicflavor.111.t
-	desc = nhs_hcd_hellenicflavor.111.d
+	id = to_hellenic_events.111
+	title = to_hellenic_events.111.t
+	desc = to_hellenic_events.111.d
 	picture = GOOD_WITH_MONARCH_eventPicture
 	
 	trigger = {
@@ -1166,7 +2288,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.111.a
+		name = to_hellenic_events.111.a
 		change_dip = 1
 		to_hellenic_festival_option = yes
 	}
@@ -1174,9 +2296,9 @@ country_event = {
 
 # Daedala (Hera)
 country_event = {
-	id = nhs_hcd_hellenicflavor.112
-	title = nhs_hcd_hellenicflavor.112.t
-	desc = nhs_hcd_hellenicflavor.112.d
+	id = to_hellenic_events.112
+	title = to_hellenic_events.112.t
+	desc = to_hellenic_events.112.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -1194,7 +2316,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.112.a
+		name = to_hellenic_events.112.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = hera
@@ -1202,7 +2324,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.112.b
+		name = to_hellenic_events.112.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_hera }
 			NOT = { has_personal_deity = nhs_hellenic_reformed_hera }
@@ -1222,7 +2344,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.112.c
+		name = to_hellenic_events.112.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -1233,7 +2355,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -1241,7 +2363,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -1250,9 +2372,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.113
-	title = nhs_hcd_hellenicflavor.113.t
-	desc = nhs_hcd_hellenicflavor.113.d
+	id = to_hellenic_events.113
+	title = to_hellenic_events.113.t
+	desc = to_hellenic_events.113.d
 	picture = DIPLOMACY_eventPicture
 	
 	trigger = {
@@ -1268,13 +2390,13 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.113.a
+		name = to_hellenic_events.113.a
 		change_dip = 1
 		to_hellenic_festival_option = yes
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.113.b
+		name = to_hellenic_events.113.b
 		change_adm = 1
 		to_hellenic_festival_option = yes
 	}
@@ -1282,9 +2404,9 @@ country_event = {
 
 # Festivals on the Beaches (Amphitrite)
 country_event = {
-	id = nhs_hcd_hellenicflavor.114
-	title = nhs_hcd_hellenicflavor.114.t
-	desc = nhs_hcd_hellenicflavor.114.d
+	id = to_hellenic_events.114
+	title = to_hellenic_events.114.t
+	desc = to_hellenic_events.114.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -1299,7 +2421,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.114.a
+		name = to_hellenic_events.114.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = amphitrite
@@ -1307,7 +2429,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.114.b
+		name = to_hellenic_events.114.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_reformed_amphitrite }
 		}
@@ -1318,7 +2440,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.114.c
+		name = to_hellenic_events.114.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -1329,7 +2451,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -1337,7 +2459,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -1346,9 +2468,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.115
-	title = nhs_hcd_hellenicflavor.115.t
-	desc = nhs_hcd_hellenicflavor.115.d
+	id = to_hellenic_events.115
+	title = to_hellenic_events.115.t
+	desc = to_hellenic_events.115.d
 	picture = DIPLOMACY_eventPicture
 	
 	trigger = {
@@ -1364,13 +2486,13 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.115.a
+		name = to_hellenic_events.115.a
 		change_dip = 1
 		to_hellenic_festival_option = yes
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.115.b
+		name = to_hellenic_events.115.b
 		change_mil = 1
 		to_hellenic_festival_option = yes
 	}
@@ -1378,9 +2500,9 @@ country_event = {
 
 # Festival of the Father of Rivers (Oceanus)
 country_event = {
-	id = nhs_hcd_hellenicflavor.116
-	title = nhs_hcd_hellenicflavor.116.t
-	desc = nhs_hcd_hellenicflavor.116.d
+	id = to_hellenic_events.116
+	title = to_hellenic_events.116.t
+	desc = to_hellenic_events.116.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -1395,7 +2517,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.116.a
+		name = to_hellenic_events.116.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = oceanus
@@ -1403,7 +2525,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.116.b
+		name = to_hellenic_events.116.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_reformed_oceanus }
 		}
@@ -1414,7 +2536,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.116.c
+		name = to_hellenic_events.116.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -1425,7 +2547,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -1433,7 +2555,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -1442,9 +2564,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.117
-	title = nhs_hcd_hellenicflavor.117.t
-	desc = nhs_hcd_hellenicflavor.117.d
+	id = to_hellenic_events.117
+	title = to_hellenic_events.117.t
+	desc = to_hellenic_events.117.d
 	picture = DIPLOMACY_eventPicture
 	
 	trigger = {
@@ -1460,13 +2582,13 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.117.a
+		name = to_hellenic_events.117.a
 		change_dip = 1
 		to_hellenic_festival_option = yes
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.117.b
+		name = to_hellenic_events.117.b
 		change_adm = 1
 		to_hellenic_festival_option = yes
 	}
@@ -1474,9 +2596,9 @@ country_event = {
 
 # Sacrifice to The Sky Bearer (Atlas)
 country_event = {
-	id = nhs_hcd_hellenicflavor.118
-	title = nhs_hcd_hellenicflavor.118.t
-	desc = nhs_hcd_hellenicflavor.118.d
+	id = to_hellenic_events.118
+	title = to_hellenic_events.118.t
+	desc = to_hellenic_events.118.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -1491,7 +2613,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.118.a
+		name = to_hellenic_events.118.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = atlas
@@ -1499,7 +2621,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.118.b
+		name = to_hellenic_events.118.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_reformed_atlas }
 		}
@@ -1510,7 +2632,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.118.c
+		name = to_hellenic_events.118.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -1521,7 +2643,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -1529,7 +2651,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -1538,9 +2660,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.119
-	title = nhs_hcd_hellenicflavor.119.t
-	desc = nhs_hcd_hellenicflavor.119.d
+	id = to_hellenic_events.119
+	title = to_hellenic_events.119.t
+	desc = to_hellenic_events.119.d
 	picture = DIPLOMACY_eventPicture
 	
 	trigger = {
@@ -1556,7 +2678,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.119.a
+		name = to_hellenic_events.119.a
 		change_adm = 1
 		to_hellenic_festival_option = yes
 	}
@@ -1564,9 +2686,9 @@ country_event = {
 
 # Thargelia (Apollo)
 country_event = {
-	id = nhs_hcd_hellenicflavor.120
-	title = nhs_hcd_hellenicflavor.120.t
-	desc = nhs_hcd_hellenicflavor.120.d
+	id = to_hellenic_events.120
+	title = to_hellenic_events.120.t
+	desc = to_hellenic_events.120.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -1581,7 +2703,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.120.a
+		name = to_hellenic_events.120.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = apollo
@@ -1589,7 +2711,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.120.b
+		name = to_hellenic_events.120.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_reformed_apollo }
 		}
@@ -1600,7 +2722,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.120.c
+		name = to_hellenic_events.120.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -1611,7 +2733,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -1619,7 +2741,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -1628,9 +2750,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.121
-	title = nhs_hcd_hellenicflavor.121.t
-	desc = nhs_hcd_hellenicflavor.121.d
+	id = to_hellenic_events.121
+	title = to_hellenic_events.121.t
+	desc = to_hellenic_events.121.d
 	picture = DIPLOMACY_eventPicture
 	
 	trigger = {
@@ -1646,13 +2768,13 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.121.a
+		name = to_hellenic_events.121.a
 		change_adm = 1
 		to_hellenic_festival_option = yes
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.121.b
+		name = to_hellenic_events.121.b
 		change_mil = 1
 		to_hellenic_festival_option = yes
 	}
@@ -1660,9 +2782,9 @@ country_event = {
 
 # Laphria (Artemis)
 country_event = {
-	id = nhs_hcd_hellenicflavor.122
-	title = nhs_hcd_hellenicflavor.122.t
-	desc = nhs_hcd_hellenicflavor.122.d
+	id = to_hellenic_events.122
+	title = to_hellenic_events.122.t
+	desc = to_hellenic_events.122.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -1677,7 +2799,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.122.a
+		name = to_hellenic_events.122.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = artemis
@@ -1685,7 +2807,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.122.b
+		name = to_hellenic_events.122.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_reformed_artemis }
 		}
@@ -1696,7 +2818,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.122.c
+		name = to_hellenic_events.122.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -1707,7 +2829,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -1715,7 +2837,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -1724,9 +2846,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.123
-	title = nhs_hcd_hellenicflavor.123.t
-	desc = nhs_hcd_hellenicflavor.123.d
+	id = to_hellenic_events.123
+	title = to_hellenic_events.123.t
+	desc = to_hellenic_events.123.d
 	picture = DIPLOMACY_eventPicture
 	
 	trigger = {
@@ -1742,13 +2864,13 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.123.a
+		name = to_hellenic_events.123.a
 		change_mil = 1
 		to_hellenic_festival_option = yes
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.123.b
+		name = to_hellenic_events.123.b
 		change_dip = 1
 		to_hellenic_festival_option = yes
 	}
@@ -1756,9 +2878,9 @@ country_event = {
 
 # Mentor of Heroes (Chiron)
 country_event = {
-	id = nhs_hcd_hellenicflavor.124
-	title = nhs_hcd_hellenicflavor.124.t
-	desc = nhs_hcd_hellenicflavor.124.d
+	id = to_hellenic_events.124
+	title = to_hellenic_events.124.t
+	desc = to_hellenic_events.124.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -1773,7 +2895,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.124.a
+		name = to_hellenic_events.124.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = chiron
@@ -1781,7 +2903,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.124.b
+		name = to_hellenic_events.124.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_reformed_chiron }
 		}
@@ -1792,7 +2914,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.124.c
+		name = to_hellenic_events.124.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -1803,7 +2925,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -1811,7 +2933,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -1820,9 +2942,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.125
-	title = nhs_hcd_hellenicflavor.125.t
-	desc = nhs_hcd_hellenicflavor.125.d
+	id = to_hellenic_events.125
+	title = to_hellenic_events.125.t
+	desc = to_hellenic_events.125.d
 	picture = DIPLOMACY_eventPicture
 	
 	trigger = {
@@ -1838,19 +2960,19 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.125.a
+		name = to_hellenic_events.125.a
 		change_adm = 1
 		to_hellenic_festival_option = yes
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.125.b
+		name = to_hellenic_events.125.b
 		change_dip = 1
 		to_hellenic_festival_option = yes
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.125.c
+		name = to_hellenic_events.125.c
 		change_mil = 1
 		to_hellenic_festival_option = yes
 	}
@@ -1858,9 +2980,9 @@ country_event = {
 
 # Dionysia (Dionysia)
 country_event = {
-	id = nhs_hcd_hellenicflavor.126
-	title = nhs_hcd_hellenicflavor.126.t
-	desc = nhs_hcd_hellenicflavor.126.d
+	id = to_hellenic_events.126
+	title = to_hellenic_events.126.t
+	desc = to_hellenic_events.126.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -1875,7 +2997,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.126.a
+		name = to_hellenic_events.126.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = dionysus
@@ -1883,7 +3005,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.126.b
+		name = to_hellenic_events.126.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_reformed_dionysus }
 		}
@@ -1894,7 +3016,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.126.c
+		name = to_hellenic_events.126.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -1905,7 +3027,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -1913,7 +3035,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -1922,9 +3044,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.127
-	title = nhs_hcd_hellenicflavor.127.t
-	desc = nhs_hcd_hellenicflavor.127.d
+	id = to_hellenic_events.127
+	title = to_hellenic_events.127.t
+	desc = to_hellenic_events.127.d
 	picture = DIPLOMACY_eventPicture
 	
 	trigger = {
@@ -1940,7 +3062,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.127.a
+		name = to_hellenic_events.127.a
 		change_adm = 1
 		to_hellenic_festival_option = yes
 	}
@@ -1948,9 +3070,9 @@ country_event = {
 
 # Prayers to the Mother (Leto)
 country_event = {
-	id = nhs_hcd_hellenicflavor.128
-	title = nhs_hcd_hellenicflavor.128.t
-	desc = nhs_hcd_hellenicflavor.128.d
+	id = to_hellenic_events.128
+	title = to_hellenic_events.128.t
+	desc = to_hellenic_events.128.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -1965,7 +3087,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.128.a
+		name = to_hellenic_events.128.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = leto
@@ -1973,7 +3095,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.128.b
+		name = to_hellenic_events.128.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_reformed_leto }
 		}
@@ -1984,7 +3106,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.128.c
+		name = to_hellenic_events.128.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -1995,7 +3117,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -2003,7 +3125,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -2012,9 +3134,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.129
-	title = nhs_hcd_hellenicflavor.129.t
-	desc = nhs_hcd_hellenicflavor.129.d
+	id = to_hellenic_events.129
+	title = to_hellenic_events.129.t
+	desc = to_hellenic_events.129.d
 	picture = DIPLOMACY_eventPicture
 	
 	trigger = {
@@ -2030,7 +3152,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.129.a
+		name = to_hellenic_events.129.a
 		change_adm = 1
 		to_hellenic_festival_option = yes
 	}
@@ -2038,9 +3160,9 @@ country_event = {
 
 # Thesmophoria (Demeter)
 country_event = {
-	id = nhs_hcd_hellenicflavor.130
-	title = nhs_hcd_hellenicflavor.130.t
-	desc = nhs_hcd_hellenicflavor.130.d
+	id = to_hellenic_events.130
+	title = to_hellenic_events.130.t
+	desc = to_hellenic_events.130.d
 	picture = FEAST_eventPicture
 
 	is_triggered_only = yes
@@ -2055,7 +3177,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.130.a
+		name = to_hellenic_events.130.a
 		to_hellenic_festival_organize_cost = yes
 		to_hellenic_festival_organize = {
 			GOD = demeter
@@ -2063,7 +3185,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.130.b
+		name = to_hellenic_events.130.b
 		trigger = {
 			NOT = { has_personal_deity = nhs_hellenic_reformed_demeter }
 		}
@@ -2074,7 +3196,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.130.c
+		name = to_hellenic_events.130.c
 		highlight = yes
 		trigger = {
 			to_hellenic_festival_can_study = yes
@@ -2085,7 +3207,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.d
+		name = to_hellenic_events.1XX.d
 		trigger = { 
 			to_hellenic_festival_can_refuse_cynical = yes
 		}
@@ -2093,7 +3215,7 @@ country_event = {
 	}
 	
 	option = {
-		name = nhs_hcd_hellenicflavor.1XX.e
+		name = to_hellenic_events.1XX.e
 		trigger = {
 			to_hellenic_festival_can_refuse_impious = yes
 		}
@@ -2102,9 +3224,9 @@ country_event = {
 }
 
 country_event = {
-	id = nhs_hcd_hellenicflavor.131
-	title = nhs_hcd_hellenicflavor.131.t
-	desc = nhs_hcd_hellenicflavor.131.d
+	id = to_hellenic_events.131
+	title = to_hellenic_events.131.t
+	desc = to_hellenic_events.131.d
 	picture = DIPLOMACY_eventPicture
 	
 	trigger = {
@@ -2120,7 +3242,7 @@ country_event = {
 	}
 
 	option = {
-		name = nhs_hcd_hellenicflavor.131.a
+		name = to_hellenic_events.131.a
 		change_adm = 1
 		to_hellenic_festival_option = yes
 	}

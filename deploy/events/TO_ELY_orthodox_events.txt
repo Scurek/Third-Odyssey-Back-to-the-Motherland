@@ -7,6 +7,10 @@ namespace = nhs2_orthodoxevents
 # Northern America   -missisipy region -Great Plains
 # Central America
 
+##################
+#Patriarch Events#
+##################
+
 # Ecumenical patriarch with Spartans
 country_event = {
 	id = nhs2_orthodoxevents.1
@@ -513,8 +517,6 @@ country_event = {
 		custom_tooltip = set_patriarch_authority_later_tt
 	}
 }
-
-
 
 # Moving the ecumnical to New Constantinople
 country_event = {
@@ -3678,14 +3680,9 @@ country_event = {
 	}
 }
 
-
-
-
-
-
-
-# Church-Monarch Struggle
-
+#########################
+#Church-Monarch Struggle#
+#########################
 
 # Patriarchate demands land, Major site
 country_event = {
@@ -4522,7 +4519,10 @@ country_event = {
 	}
 }
 
-### Back to the Motherland
+########################
+#Back to the Motherland#
+########################
+
 # Fate of the Orthodox Patriarchate
 country_event = {
 	id = nhs2_orthodoxevents.14
@@ -5087,7 +5087,9 @@ country_event = {
 	}
 }
 
-## RANDOM EVENTS
+###############
+#Random Events#
+###############
 
 # Veneration of Saint Leo the Great
 country_event = {
@@ -6174,6 +6176,10 @@ country_event = {
 	}
 }
 
+#############
+#Autocephaly#
+#############
+
 # Request Autocephaly/Autonomy approved
 country_event = {
 	id = nhs2_orthodoxevents.29
@@ -6707,6 +6713,365 @@ country_event = {
 		}
 	}
 }
+
+######################
+#Religious Conversion#
+######################
+
+# Religion spread - Orthodox
+country_event = {	
+	id = nhs2_orthodoxevents.36
+	title = nhs2_orthodoxevents.36.t
+	desc = nhs2_orthodoxevents.36.d
+	picture = PANTHEON_eventPicture
+
+    trigger = {
+		is_year = 1470
+		religion = totemism
+		NOT = { tag = CAO }
+		OR = {
+			is_year = 1500
+			capital_scope = { religion = elysian_orthodoxy }
+		}
+		OR = {
+			NOT = { num_of_cities = 4 }
+			num_of_religion = { religion = elysian_orthodoxy value = 3 }
+		}
+		any_known_country = {
+			OR = {
+				technology_group = exiled_greek
+				technology_group = modern_greek
+			}
+			religion = elysian_orthodoxy
+		}
+		OR = {
+			# technology_group = hellenised_american
+			any_owned_province = {
+				religion = elysian_orthodoxy
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.90
+			stability = 1
+		}
+		modifier = {
+			factor = 0.90
+			stability = 2
+		}
+		modifier = {
+			factor = 0.90
+			stability = 3
+		}
+		modifier = {
+			factor = 10
+			has_country_flag = nhs_religion_spread_orthodox
+		}
+		modifier = {
+			factor = 0.00001
+			capital_scope = { religion = elysian_orthodoxy }
+		}
+	}
+	
+	immediate = {
+		set_country_flag = nhs_religion_spread_orthodox
+	}
+
+	option = {	 # Accept
+		name = "nhs2_orthodoxevents.36.a"
+		ai_chance = {
+			factor = 40
+			modifier = {
+				factor = 0.1
+				NOT = { stability = 1 }
+			}
+			modifier = {
+				factor = 10
+				capital_scope = { religion = elysian_orthodoxy }
+			}
+		}
+		add_stability = -2
+		add_legitimacy = -10
+		change_religion = elysian_orthodoxy
+		if = {
+			limit = {
+				any_owned_province = {
+					religion_group = pagan
+				}
+			}
+			random_owned_province = {
+				limit = {
+					religion_group = pagan
+				}
+				change_religion = elysian_orthodoxy
+			}
+		}
+	}
+	
+	option = {
+		name = "nhs2_orthodoxevents.36.b"  #Decline
+		ai_chance = {
+			factor = 60
+			modifier = {
+				factor = 0
+				capital_scope = { religion = elysian_orthodoxy }
+			}
+		}
+		random_owned_province = {
+			limit = {
+				religion = elysian_orthodoxy
+			}
+			add_unrest = 5
+		}
+		if = {
+			limit = {
+				capital_scope = {
+					religion = elysian_orthodoxy
+				}
+			}
+			capital_scope = {
+				change_religion = elysian_orthodoxy
+			}
+		}	
+		add_legitimacy = 5
+		add_prestige = 10	
+	}
+}
+
+# Missionaries native orthodox
+country_event = {
+	id = nhs2_orthodoxevents.37
+	title = nhs2_orthodoxevents.37.t
+	desc = nhs2_orthodoxevents.37.d
+	picture = PANTHEON_eventPicture
+
+    is_triggered_only = yes
+
+	option = {	 # Accept
+		ai_chance = {
+			factor = 80
+			modifier = {
+				factor = 1.1
+				alliance_with = FROM
+			}
+			modifier = {
+				factor = 1.1
+				stability = 1
+			}
+			modifier = {
+				factor = 1.1
+				stability = 2
+			}
+			modifier = {
+				factor = 1.1
+				stability = 3
+			}
+			modifier = {
+				factor = 1.1
+				FROM = {
+					has_opinion = { who = ROOT value = 150 }
+				}
+			}
+			modifier = {
+				factor = 1.1
+				FROM = {
+					has_opinion = { who = ROOT value = 100 }
+				}
+			}
+			modifier = {
+				factor = 0.1
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = 0 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = -100 }
+					}
+				}
+			}
+			# modifier = {
+			# 	factor = 1.2
+			# 	technology_group = hellenised_american
+			# }
+			modifier = {
+				factor = 0
+				any_known_country = {
+					has_country_flag = nhs_allows_to_enslave
+				}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = {
+					num_of_cities = 20
+				}
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					num_of_cities = 30
+				}
+			}
+		}
+		name = "nhs2_orthodoxevents.37.a"
+		add_legitimacy = -10
+		reverse_add_opinion = { who = FROM modifier = nhs_o_embraced_new_religion }
+		add_opinion = { who = FROM modifier = nhs_o_embraced_new_religion }
+		if = {
+			limit = {
+				any_owned_province = {
+					NOT = { religion = elysian_orthodoxy }
+					is_capital = no
+				}
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { religion = elysian_orthodoxy }
+					is_capital = no
+				}
+				change_religion = elysian_orthodoxy
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_owned_province = {
+						NOT = { religion = elysian_orthodoxy }
+						is_capital = no
+					}
+				}
+			}
+			capital_scope = {
+				change_religion = elysian_orthodoxy
+			}
+		}
+		every_owned_province = {
+			limit = {
+				religion = totemism
+			}
+			add_unrest = 2
+		}
+		FROM = {
+			country_event = { id = nhs2_orthodoxevents.38 days = 30 }
+		}
+	}
+	
+	option = {	
+		name = "nhs2_orthodoxevents.37.b"  #Decline
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0.8
+				alliance_with = FROM
+			}
+			modifier = {
+				factor = 0.9
+				FROM = {
+					has_opinion = { who = ROOT value = 150 }
+				}
+			}
+			modifier = {
+				factor = 0.9
+				FROM = {
+					has_opinion = { who = ROOT value = 100 }
+				}
+			}
+			modifier = {
+				factor = 0.9
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = 100 }
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = 0 }
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				FROM = {
+					NOT = {
+						has_opinion = { who = ROOT value = -100 }
+					}
+				}
+			}
+			modifier = {
+				factor = 3
+				NOT = { stability = 0 }
+			}
+			modifier = {
+				factor = 0.9
+				FROM = {
+					num_of_cities = 20
+				}
+			}
+			modifier = {
+				factor = 0.8
+				FROM = {
+					num_of_cities = 30
+				}
+			}
+		}
+		add_legitimacy = 5
+		add_prestige = 10
+		FROM = { 
+			country_event = { id = nhs2_orthodoxevents.39 days = 30 }
+		}
+	}
+}
+
+# Missionaries get back + orthodox
+country_event = {	
+	id = nhs2_orthodoxevents.38
+	title = nhs2_orthodoxevents.38.t
+	desc = nhs2_orthodoxevents.38.d
+	picture = PANTHEON_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = "nhs2_orthodoxevents.38.a"
+		add_prestige = 10
+		add_patriarch_authority = 0.05
+	}
+}
+
+# Missionaries get back - orthodox
+country_event = {
+	id = nhs2_orthodoxevents.39
+	title = nhs2_orthodoxevents.39.t
+	desc = nhs2_orthodoxevents.39.d
+	picture = PANTHEON_eventPicture
+
+    is_triggered_only = yes
+
+	option = {
+		name = "nhs2_orthodoxevents.39.a"
+		add_prestige = -10
+		add_patriarch_authority = -0.01
+	}
+}
+
+
+##############
+#Miscellaneus#
+##############
 
 #Conversion to Christianity
 country_event = {
