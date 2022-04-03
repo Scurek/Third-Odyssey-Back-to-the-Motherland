@@ -944,3 +944,218 @@ country_event = {
 		}
 	}
 }
+
+# CM1 survivors left on their own
+country_event = {
+	id = oth_ctm_events.3
+	title = oth_ctm_events.3.t
+	desc = oth_ctm_events.3.d
+	picture = BYZANTINE_EMPEROR_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		tag = CM1
+	}
+
+	immediate = {
+		set_country_flag = cm1_elysia_made_its_decision
+	}
+	
+	option = {	
+		name = oth_ctm_events.3.a
+		# if = {
+		# 	limit = {
+		# 		FROM = {
+		# 			OR = {
+		# 				religion = orthodox
+		# 				religion = elysian_orthodoxy
+		# 			}
+		# 		}
+		# 	}
+		# 	add_stability = -1
+		# 	add_prestige = -20
+		# }
+		add_stability = -1
+		add_treasury = 100
+		# Set flag for free colonies event
+		set_country_flag = nhs_hadevent_othersevents53
+	}
+}
+
+# Events that launch CM1 colonies
+country_event = {
+	id = oth_ctm_events.4
+	title = oth_ctm_events.4.t
+	desc = oth_ctm_events.4.d
+	picture = caribbean_arrival_eventPicture
+
+	goto = kretan_colony
+
+	fire_only_once = yes
+	
+	trigger = {
+		tag = CM1
+		NOT = { has_country_flag = cm1_had_spawned_colonies }
+		AND = {
+			has_country_flag = cm1_elysia_made_its_decision
+			is_subject = no
+		}
+		# Double check
+		NOT = { has_country_flag = cm1_had_spawned_colonies }
+	}
+
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	immediate = {
+		set_country_flag = cm1_had_spawned_colonies
+		hidden_effect = {
+			to_nhs_discover_carribean = { TAG = ROOT }
+			add_country_modifier = {
+				name = nhs_early_uprising_reduction
+				duration = 3650
+			}
+			to_cm1_spawn_carribean_colony = { EVENT_TARGET = kretan_colony }
+		}
+	}
+
+	option = {
+		name = oth_ctm_events.4.a
+		# add_base_tax = -1
+		# add_base_manpower = -2
+		if = {
+			limit = {
+				NOT = { num_of_colonists = 1 }
+			}
+			add_country_modifier = {
+				name = "nhs_new_world"
+				duration = -1
+			}
+		}
+		remove_country_modifier = nhs_constrained_resources 
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_europe_discovered_got }
+			}
+			add_country_modifier = {
+				name = nhs_constrained_resources_cm1
+				duration = -1
+			}
+		}
+		tooltip = {
+			add_country_modifier = {
+				name = nhs_early_uprising_reduction_tooltip
+				duration = 3650
+			}
+		}
+		random_province = {
+			limit = {
+				region = carribeans_region
+				any_neighbor_province = { 
+					owned_by = ROOT 
+				}
+				is_empty = yes
+			}
+			custom_tooltip = cm1_colonise_tt
+			hidden_effect = {
+				save_event_target_as = second_kretan_colony
+			}
+			change_culture = ROOT
+			change_religion = ROOT
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_saved_event_target = second_kretan_colony
+				}
+				capital_scope = {
+					event_target:second_kretan_colony = {
+						create_colony = 400
+						province_recalculate_estate_privileges_effect_natives = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = oth_ctm_events.5
+	title = oth_ctm_events.5.t
+	desc = oth_ctm_events.5.d
+	picture = caribbean_arrival_eventPicture
+
+	goto = kretan_colony
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		tag = CM1
+		# Double check
+		NOT = { has_country_flag = cm1_had_spawned_colonies }
+	}
+	
+	immediate = {
+		set_country_flag = cm1_had_spawned_colonies
+	}
+
+	option = {
+		name = oth_ctm_events.5.a
+		if = {
+			limit = {
+				NOT = { num_of_colonists = 1 }
+			}
+			add_country_modifier = {
+				name = "nhs_new_world"
+				duration = -1
+			}
+		}
+		remove_country_modifier = nhs_constrained_resources
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_europe_discovered_got }
+			}
+			add_country_modifier = {
+				name = nhs_constrained_resources_cm1
+				duration = -1
+			}
+		}
+		tooltip = {
+			add_country_modifier = {
+				name = nhs_early_uprising_reduction_tooltip
+				duration = 3650
+			}
+		}
+		random_province = {
+			limit = {
+				region = carribeans_region
+				any_neighbor_province = { 
+					owned_by = ROOT 
+				}
+				is_empty = yes
+			}
+			custom_tooltip = cm1_colonise_tt
+			hidden_effect = {
+				save_event_target_as = second_kretan_colony
+			}
+			change_culture = ROOT
+			change_religion = ROOT
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_saved_event_target = second_kretan_colony
+				}
+				capital_scope = {
+					event_target:second_kretan_colony = {
+						create_colony = 400
+						province_recalculate_estate_privileges_effect_natives = yes
+					}
+				}
+			}
+		}
+	}
+}
