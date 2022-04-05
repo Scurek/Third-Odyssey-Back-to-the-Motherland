@@ -878,95 +878,43 @@ country_decisions = {
 		major = yes
 		potential = {
 			tag = VIN
-			NOT = { capital = 994 }
+			OR = {
+				NOT = { capital = 994 }
+				NOT = { has_global_flag = vin_got_vinnos_dev }
+			}
 		}
 		allow = {
 			tag = VIN
 			is_subject = no
 			owns_core_province = 994
-			primary_culture = vinlandic
+			994 = {
+				is_city = yes
+			}
 		}
 		effect = {
-			add_stability = 1
-			add_country_modifier = {
-				name = "centralization_modifier"
-				duration = 7300
+			if = {
+				limit = {
+					NOT = { has_global_flag = vin_got_vinnos_dev }
+				}
+				add_stability = 1
+				add_country_modifier = {
+					name = "centralization_modifier"
+					duration = 7300
+				}
 			}
 			if = {
 				limit = {
-					capital_scope = {
-						trade_goods = norse_mead
-					}
+					NOT = { capital = 994 }
+					NOT = { has_global_flag = vin_got_vinnos_dev }
 				}
 				capital_scope = {
 					set_province_flag = nhs_vov_old_capital
 					add_base_tax = -1
-					add_base_production = -3
-					add_base_manpower = -1
-					nhs_load_previous_goods = yes
-				}
-				set_country_flag = vov_relocating_mead
-			}
-			else = {
-				capital_scope = {
-					set_province_flag = nhs_vov_old_capital
-					add_base_tax = -1
-				}
-				if = {
-					limit = {
-						any_owned_province = {
-							trade_goods = norse_mead
-						}
-					}
-					random_owned_province = {
-						limit = {
-							trade_goods = norse_mead
-						}
-						add_base_production = -3
-						add_base_manpower = -1
-						nhs_load_previous_goods = yes
-					}
-					set_country_flag = vov_relocating_mead
 				}
 			}
 			994 = {
 				move_capital_effect = yes
-				set_province_flag = nhs_vov_capital
 				if = {
-					limit = {
-						NOT = { has_global_flag = vin_got_vinnos_dev }
-						ROOT = {
-							OR = {
-								has_country_flag = vov_relocating_mead
-								any_owned_province = {
-									trade_goods = norse_mead
-								}
-							}
-							
-						}
-					}
-					add_base_tax = 4
-					add_base_production = 5
-					add_base_manpower = 2
-					change_trade_goods = norse_mead
-					set_global_flag = vin_got_vinnos_dev
-				}
-				else_if = {
-					limit = {
-						ROOT = {
-							OR = {
-								has_country_flag = vov_relocating_mead
-								any_owned_province = {
-									trade_goods = norse_mead
-								}
-							}
-						}
-					}
-					add_base_production = 3
-					add_base_manpower = 1
-					change_trade_goods = norse_mead
-				}
-				else_if = {
 					limit = {
 						NOT = { has_global_flag = vin_got_vinnos_dev }
 					}
@@ -974,41 +922,27 @@ country_decisions = {
 					add_base_production = 2
 					add_base_manpower = 1
 					set_global_flag = vin_got_vinnos_dev
-				}
-				ROOT = {
-					clr_country_flag = vov_relocating_mead
-				}
-				if = {
-					limit = {
-						NOT = { culture = ROOT }
-					}
-					change_culture = ROOT
-					hidden_effect = {
-						province_recalculate_estate_privileges_effect_natives = yes
-					}
-				}
-				if = {
-					limit = {
-						NOT = { religion = ROOT }
-					}
-					change_religion = ROOT
-				}
-				if = {
-					limit = {
-						owner = {
-							NOT = { has_country_modifier = nhs_vov_no_merchant }
+					if = {
+						limit = {
+							NOT = { culture = ROOT }
 						}
+						change_culture = ROOT	
 					}
-					nhs_set_center_of_trade_2 = yes
-				}
-			}
-			hidden_effect = {
-				every_province = {
-					limit = {
-						any_neighbor_province = { has_province_flag = nhs_vov_capital }				
+					if = {
+						limit = {
+							NOT = { religion = ROOT }
+						}
+						change_religion = ROOT
 					}
-					set_province_flag = nhs_vov_hearthland
-				}
+					if = {
+						limit = {
+							owner = {
+								NOT = { has_country_modifier = nhs_vov_no_merchant }
+							}
+						}
+						nhs_set_center_of_trade_2 = yes
+					}
+				}	
 			}
 		}
 		ai_will_do = {
