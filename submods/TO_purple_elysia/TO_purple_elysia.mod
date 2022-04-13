@@ -1,7 +1,5 @@
 version="1.0.0"
 name="Third Odyssey: Purple Elysia"
 supported_version="1.33.3.*"
-path="mod/Third-Odyssey-Back-to-the-Motherland/submods/purple_elysia"
-dependencies = {
-	name = "Third Odyssey DEV"
-}
+path="C:/Users/Uros/Documents/Paradox Interactive/Europa Universalis IV/mod/Third-Odyssey-Back-to-the-Motherland/submods/TO_purple_elysia"
+remote_file_id="2793875611"
