@@ -538,6 +538,8 @@ country_event = {
 	title = nhs2_countryevents.31.t
 	desc = nhs2_countryevents.31.d
 	picture = byz_COURT_eventPicture
+
+	goto = selected_country_capital
 	
 	fire_only_once = yes
 	
@@ -552,9 +554,12 @@ country_event = {
 		}
 		any_neighbor_country = {
 			native_culture_primary = yes
+			has_native_government = yes
 			is_at_war = no
 			has_opinion = { who = ROOT value = -50 }
 			is_subject = no
+			knows_country = ROOT
+			has_government_attribute = heir
 			NOT = { alliance_with = ROOT }
 		}
 	}
@@ -564,12 +569,18 @@ country_event = {
 			random_neighbor_country = {
 				limit = {
 					native_culture_primary = yes
+					has_native_government = yes
 					is_at_war = no
 					has_opinion = { who = ROOT value = -50 }
 					is_subject = no
+					knows_country = ROOT
+					has_government_attribute = heir
 					NOT = { alliance_with = ROOT }
 				}
 				save_event_target_as = selected_country
+				capital_scope = {
+					save_event_target_as = selected_country_capital
+				}
 			}
 		}
 	}
@@ -597,15 +608,15 @@ country_event = {
 		event_target:selected_country = {
 			create_alliance = ROOT
 			create_marriage = ROOT
-			if = {
-				limit = {
-					has_dlc = "Rights of Man"
-				}
-				define_consort = {
-					country_of_origin = FROM
-					culture = FROM
-					religion = FROM
-				}
+		}
+		if = {
+			limit = {
+				has_dlc = "Rights of Man"
+			}
+			define_consort = {
+				country_of_origin = event_target:selected_country
+				culture = event_target:selected_country
+				religion = event_target:selected_country
 			}
 		}
 	}
