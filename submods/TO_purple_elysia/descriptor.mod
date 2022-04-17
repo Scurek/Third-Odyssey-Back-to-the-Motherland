@@ -1,4 +1,9 @@
-version="1.0.0"
 name="Third Odyssey: Purple Elysia"
-supported_version="1.33.3.*"
+dependencies={
+	"Third Odyssey: Back to the Motherland"
+}
+tags={
+	"Graphics"
+}
 picture="thumbnail.png"
+supported_version="1.33.3"
