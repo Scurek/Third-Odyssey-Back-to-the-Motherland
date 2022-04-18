@@ -11,7 +11,7 @@ country_event = {
 		nhs_condition_all_ely = { KOMANDA = tag }
 		ai = yes
 		NOT = { num_of_colonies = 1 }
-		NOT = { num_of_cities = 20 }
+		NOT = { num_of_cities = 50 }
 		is_subject = no
 		num_of_colonists = 1
 		NOT = { has_country_modifier = nhs2_ai_colonising_timer }
@@ -30,35 +30,79 @@ country_event = {
 			duration = 20
 			hidden = yes
 		}
+		## Homelands
+		random_owned_province = {
+			limit = {
+				any_empty_neighbor_province = {
+					nhs_homelands_no_capital = yes
+				}
+			}
+			random_empty_neighbor_province = {
+				limit = {
+					nhs_homelands_no_capital = yes
+				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		## COT
 		if = {
 			limit = {
-				any_owned_province = {
-					any_empty_neighbor_province = {
-						nhs_homelands_no_capital = yes
-					}
-				}
+				NOT = { has_saved_event_target = ai_help_colony }
 			}
 			random_owned_province = {
 				limit = {
 					any_empty_neighbor_province = {
-						nhs_homelands_no_capital = yes
+						has_port = yes
+						province_has_center_of_trade_of_level = 1
 					}
 				}
 				random_empty_neighbor_province = {
 					limit = {
-						nhs_homelands_no_capital = yes
+						has_port = yes
+						province_has_center_of_trade_of_level = 1
 					}
-					create_colony = 100
+					save_event_target_as = ai_help_colony
 				}
 			}
 		}
-		else_if = {
+		if = {
 			limit = {
-				any_owned_province = {
-					any_empty_neighbor_province = {
-						has_port = yes
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
+				limit = {
+					is_empty = yes
+					province_has_center_of_trade_of_level = 1
+					any_neighbor_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_colonial_nation_of = ROOT
+							}
+						}
 					}
 				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
+				limit = {
+					is_empty = yes
+					province_has_center_of_trade_of_level = 1
+					has_port = yes
+					range = ROOT
+				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		## PORT
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
 			}
 			random_owned_province = {
 				limit = {
@@ -70,19 +114,75 @@ country_event = {
 					limit = {
 						has_port = yes
 					}
-					create_colony = 10
+					save_event_target_as = ai_help_colony
 				}
 			}
 		}
-		else = {
-			random_owned_province = {
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
 				limit = {
-					any_empty_neighbor_province = {
-						has_empty_adjacent_province = yes
+					has_port = yes
+					is_empty = yes
+					any_neighbor_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_colonial_nation_of = ROOT
+							}
+						}
 					}
 				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		## NEIGHBORING PROVINCE
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_owned_province = {
+				limit = {
+					has_empty_adjacent_province = yes
+				}
 				random_empty_neighbor_province = {
-					create_colony = 10
+					save_event_target_as = ai_help_colony
+				}
+			}
+		}
+		## DISTANT PROVINCE
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
+				limit = {
+					has_port = yes
+					is_empty = yes
+					has_discovered = ROOT
+					range = ROOT
+				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		
+		if = {
+			limit = {
+				has_saved_event_target = ai_help_colony
+			}
+			capital_scope = {
+				event_target:ai_help_colony = {
+					if = {
+						limit = {
+							nhs_homelands_no_capital = yes
+						}
+						create_colony = 75
+					}
+					else = {
+						create_colony = 20
+					}
 				}
 			}
 		}
@@ -106,13 +206,14 @@ country_event = {
 			tag = SHQ
 			tag = CM1
 			was_tag = CM1
+			nhs_check_all_elysian_expanded = { CONDITION = tag }
 		}
 		ai = yes
 		NOT = { num_of_colonies = 1 }
 		num_of_colonists = 1
 		NOT = { has_country_modifier = nhs2_ai_colonising_timer }
 		is_subject = no
-		NOT = { num_of_cities = 20 }
+		NOT = { num_of_cities = 50 }
 		# Wanted to extend the help to subject with a good balance, but apparently current_income_balance does ignore the subsidies. Fun.
 		# OR = {
 		# 	AND = {
@@ -203,6 +304,20 @@ country_event = {
 							}
 						}
 					}
+				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
+				limit = {
+					is_empty = yes
+					province_has_center_of_trade_of_level = 1
+					has_port = yes
+					range = ROOT
 				}
 				save_event_target_as = ai_help_colony
 			}
