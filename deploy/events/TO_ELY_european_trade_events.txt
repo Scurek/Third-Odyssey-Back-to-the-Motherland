@@ -87,18 +87,7 @@ country_event = {
 			exists = yes
 		}
 		any_owned_province = {
-			has_port = yes
-			culture_group = ROOT
-			OR = {
-				region = northeast_america_region
-				region = southeast_america_region
-				AND = {
-					region = canada_region
-					NOT = { 
-						province_group = nhs_provinces_around_lakes
-					}
-				}
-			}
+			nhs_eligible_for_enclave_with_canada = yes
 		}
 	}
 
@@ -194,18 +183,7 @@ country_event = {
 			}
 		}
 		any_owned_province = {
-			has_port = yes
-			culture_group = ROOT
-			OR = {
-				region = northeast_america_region
-				region = southeast_america_region
-				AND = {
-					region = canada_region
-					NOT = {
-						province_group = nhs_provinces_around_lakes
-					}
-				}
-			}
+			nhs_eligible_for_enclave_with_canada = yes
 		}
 	}
 
@@ -302,20 +280,7 @@ country_event = {
 		is_year = 1485
 		any_province = {
 			nhs_condition_all_ely = { KOMANDA = owned_by }
-			has_port = yes
-			owner = {
-				culture_group = PREV
-			}
-			OR = {
-				region = northeast_america_region
-				region = southeast_america_region
-				AND = {
-					region = canada_region
-					NOT = { 
-						province_group = nhs_provinces_around_lakes
-					}
-				}
-			}
+			nhs_eligible_for_enclave_with_canada = yes
 		}
 	}
 	
@@ -382,8 +347,6 @@ country_event = {
 	}
 }
 
-
-
 # Portuguese Explorers Arrive
 country_event = {
 	id = nhs2_european_trade_events.5
@@ -402,18 +365,7 @@ country_event = {
 			has_country_flag = nhs_portugese_secret
 		}
 		any_owned_province = {
-			has_port = yes
-			culture_group = ROOT
-			OR = {
-				region = northeast_america_region
-				region = southeast_america_region
-				AND = {
-					region = canada_region
-					NOT = {
-						province_group = nhs_provinces_around_lakes
-					}
-				}
-			}
+			nhs_eligible_for_enclave_with_canada = yes
 		}
 	}
 
@@ -1783,18 +1735,7 @@ country_event = {
 			}
 		}
 		any_owned_province = {
-			has_port = yes
-			culture_group = ROOT
-			OR = {
-				region = northeast_america_region
-				region = southeast_america_region
-				AND = {
-					region = canada_region
-					NOT = {
-						province_group = nhs_provinces_around_lakes
-					}
-				}
-			}
+			nhs_eligible_for_enclave_with_canada = yes
 		}
 	}
 
@@ -2146,13 +2087,24 @@ country_event = {
 								}
 							}
 						}
+						any_owned_province = {
+							nhs_eligible_for_enclave_with_canada = yes
+						}
 					}
 					AND = {
-						any_owned_province = {
-							OR = {
-								nhs_homelands = yes
-								has_albanian_majority_modifier = yes
+						950 = {
+							owned_by = ROOT
+							NOT = {
+								OR = {
+									has_province_modifier = nhs2_small_por_enclave
+									has_province_modifier = nhs2_por_enclave
+									has_province_modifier = nhs2_large_por_enclave
+									has_province_modifier = nhs2_european_enclave
+								}
 							}
+						}
+						any_owned_province = {
+							NOT = { province_id = 950 }
 							OR = {
 								has_province_modifier = nhs2_small_por_enclave
 								has_province_modifier = nhs2_por_enclave
@@ -2161,11 +2113,6 @@ country_event = {
 							}
 						}
 					}
-				}
-				any_owned_province = {
-					nhs_eligible_for_enclave_with_canada = yes
-					NOT = { nhs_homelands = yes }
-					NOT = { has_albanian_majority_modifier = yes }
 				}
 			}
 		}
@@ -2249,13 +2196,24 @@ country_event = {
 								}
 							}
 						}
+						any_owned_province = {
+							nhs_eligible_for_enclave_with_canada = yes
+						}
 					}
 					AND = {
-						any_owned_province = {
-							OR = {
-								nhs_homelands = yes
-								has_albanian_majority_modifier = yes
+						950 = {
+							owned_by = ROOT
+							NOT = {
+								OR = {
+									has_province_modifier = nhs2_small_por_enclave
+									has_province_modifier = nhs2_por_enclave
+									has_province_modifier = nhs2_large_por_enclave
+									has_province_modifier = nhs2_european_enclave
+								}
 							}
+						}
+						any_owned_province = {
+							NOT = { province_id = 950 }
 							OR = {
 								has_province_modifier = nhs2_small_por_enclave
 								has_province_modifier = nhs2_por_enclave
@@ -2264,11 +2222,6 @@ country_event = {
 							}
 						}
 					}
-				}
-				any_owned_province = {
-					nhs_eligible_for_enclave_with_canada = yes
-					NOT = { nhs_homelands = yes }
-					NOT = { has_albanian_majority_modifier = yes }
 				}
 			}
 			every_province = {
@@ -2287,51 +2240,27 @@ country_event = {
 			}
 			if = {
 				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave = yes
-						NOT = { nhs_homelands = yes }
-						NOT = { has_albanian_majority_modifier = yes }
-						culture_group = ROOT
-					}
+					has_country_flag = nhs_has_eu_enclave
 				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave = yes
-						NOT = { nhs_homelands = yes }
-						NOT = { has_albanian_majority_modifier = yes }
-						culture_group = ROOT
-					}
-					nhs_add_proper_enclave = yes
-				}
+				to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_european_enclave }
 			}
 			else_if = {
 				limit = {
-					any_owned_province = {
-						nhs_eligible_for_enclave_with_canada = yes
-						NOT = { nhs_homelands = yes }
-						NOT = { has_albanian_majority_modifier = yes }
-						culture_group = ROOT
-					}
+					has_country_flag = nhs_has_small_por_enclave
 				}
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave_with_canada = yes
-						NOT = { nhs_homelands = yes }
-						NOT = { has_albanian_majority_modifier = yes }
-						culture_group = ROOT
-					}
-					nhs_add_proper_enclave = yes
-				}
+				to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_small_por_enclave }
 			}
-			else = {
-				random_owned_province = {
-					limit = {
-						nhs_eligible_for_enclave_with_canada = yes
-						NOT = { nhs_homelands = yes }
-						NOT = { has_albanian_majority_modifier = yes }
-					}
-					nhs_add_proper_enclave = yes
+			else_if = {
+				limit = {
+					has_country_flag = nhs_has_por_enclave
 				}
+				to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_por_enclave }
+			}
+			else_if = {
+				limit = {
+					has_country_flag = nhs_has_large_por_enclave
+				}
+				to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_large_por_enclave }
 			}
 		}
 	}
