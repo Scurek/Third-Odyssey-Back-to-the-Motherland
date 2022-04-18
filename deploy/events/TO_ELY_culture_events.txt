@@ -15,7 +15,6 @@ country_event = {
 	
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
-		has_country_flag = nhs_settled_mission
 		is_year = 1500
 		primary_culture = greek
 		NOT = { has_global_flag = nhs_elysian_culture_change }
@@ -36,27 +35,24 @@ country_event = {
 				calc_true_if = {
 					amount = 10
 					all_owned_province = {
-						to_ely_province_can_integrate = yes
+						to_ely_can_convert_to_barbaroi = yes
 					}
 				}
 			}
 			AND = {
 				is_year = 1515
 				to_ely_has_integrating_privilege = yes
-				calc_true_if = {
-					amount = 10
-					all_owned_province = {
-						to_ely_province_can_integrate = yes
-					}
+				any_owned_province = {
+					to_ely_can_convert_to_barbaroi = yes
 				}
 			}
 			AND = {
 				is_year = 1505
 				to_ely_has_integrating_privilege = yes
 				calc_true_if = {
-					amount = 15
+					amount = 10
 					all_owned_province = {
-						to_ely_province_can_integrate = yes
+						to_ely_can_convert_to_barbaroi = yes
 					}
 				}
 			}
@@ -66,7 +62,7 @@ country_event = {
 				calc_true_if = {
 					amount = 20
 					all_owned_province = {
-						to_ely_province_can_integrate = yes
+						to_ely_can_convert_to_barbaroi = yes
 					}
 				}
 			}
@@ -191,7 +187,6 @@ country_event = {
 	
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
-		has_country_flag = nhs_settled_mission
 		primary_culture = greek
 		NOT = { has_global_flag = nhs_elysian_culture_change }
 		OR = {
@@ -203,11 +198,21 @@ country_event = {
 			technology_group = modern_greek
 		}
 		is_year = 1515
-		NOT = {
-			calc_true_if = {
-				amount = 10
-				all_owned_province = {
-					to_ely_province_can_integrate = yes
+		OR = {
+			NOT = {
+				any_owned_province = {
+					to_ely_can_convert_to_barbaroi = yes
+				}
+			}
+			AND = {
+				NOT = { to_ely_has_integrating_privilege = yes }
+				NOT = {
+					calc_true_if = {
+						amount = 10
+						all_owned_province = {
+							to_ely_can_convert_to_barbaroi = yes
+						}
+					}
 				}
 			}
 		}
@@ -331,13 +336,16 @@ country_event = {
 			AND = {
 				has_global_flag = nhs_first_barbaroi_integration
 				any_owned_province = {
-					to_ely_province_can_integrate = yes
+					OR = {
+						culture = elysameric
+						to_ely_can_convert_to_barbaroi = yes
+					}
 				}
 			}
 			calc_true_if = {
 				amount = 10
 				all_owned_province = {
-					to_ely_province_can_integrate = yes
+					to_ely_can_convert_to_barbaroi = yes
 				}
 			}
 		}
@@ -553,7 +561,7 @@ country_event = {
 		event_target:nhs_countryevents15_target = {
 			if = {
 				limit = {
-					native_culture = yes
+					nhs_culturally_native = yes
 				}
 				change_culture = elysameric
 			}
