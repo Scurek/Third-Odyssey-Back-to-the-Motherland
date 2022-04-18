@@ -262,9 +262,50 @@ country_event = {
 			}
 			custom_tooltip = nhs_enables_reform2_tt
 		}
+		if = {
+			limit = {
+				any_subject_country = {
+					OR = {
+						has_country_modifier = nhs_constrained_resources
+						has_country_modifier = nhs_constrained_resources_cm1
+					}
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			tooltip = {
+				every_subject_country = {
+					limit = {
+						has_country_modifier = nhs_constrained_resources
+					}
+					remove_country_modifier = nhs_constrained_resources
+				}
+				every_subject_country = {
+					limit = {
+						has_country_modifier = nhs_constrained_resources_cm1
+					}
+					remove_country_modifier = nhs_constrained_resources_cm1
+				}
+			}
+		}
 	}
 	
 	after = {
+		every_subject_country = {
+			limit = {
+				NOT = { tag = ROOT }
+				NOT = { has_country_flag = nhs_europe_discovered_got }
+				NOT = { has_country_flag = nhs_cant_think_of_a_name }
+				OR = {
+					technology_group = modern_greek
+					technology_group = modern_spartan
+					technology_group = exiled_spartan
+					technology_group = exiled_greek
+					technology_group = viking
+					technology_group = modern_vinlandic
+				}
+			}
+			country_event = { id = nhs2_mainlandevents.5 }
+		}
 		every_country = {
 			limit = {
 				capital_scope = {
@@ -329,7 +370,13 @@ country_event = {
 	picture = ELYSHIP_eventPicture
 	
 	trigger = {
-		had_global_flag = { flag = nhs_europe_discovered days = 30 }
+		OR = {
+			had_global_flag = { flag = nhs_europe_discovered days = 30 }
+			AND = {
+				has_global_flag = nhs_europe_discovered
+				nhs_is_subject_of_ely = yes
+			}
+		}
 		NOT = { has_country_flag = nhs_europe_discovered_got }
 		NOT = { has_country_flag = nhs_cant_think_of_a_name }
 		OR = {
