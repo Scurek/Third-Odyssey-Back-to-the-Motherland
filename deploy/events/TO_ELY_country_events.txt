@@ -1859,7 +1859,7 @@ country_event = {
 		has_country_flag = nhs_appalachian_pathways
 		NOT = { has_country_modifier = nhs_timer_pathways }
 		any_province = {
-			country_or_subject_holds = ROOT
+			country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT }
 			is_city = yes
 			nhs_appalachian_pathways_province = yes
 			NOT = { has_province_modifier = nhs_appalachian_pathways }
@@ -1908,36 +1908,65 @@ country_event = {
 	
 	immediate = {
 		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					is_city = yes
+					nhs_appalachian_pathways_province = yes
+					NOT = { has_province_modifier = nhs_appalachian_pathways }
+				}
+				save_event_target_as = nhs_appalachian_pathways_et
+			}
 			if = {
 				limit = {
-					any_owned_province = {
-						is_city = yes
-						nhs_appalachian_pathways_province = yes
-						NOT = { has_province_modifier = nhs_appalachian_pathways }
-					}
+					NOT = { has_saved_event_target = nhs_appalachian_pathways_et }
 				}
-				random_owned_province = {
+				random_province = {
 					limit = {
+						owner = {
+							is_subject_of = ROOT
+						}
+						is_city = yes
 						nhs_appalachian_pathways_province = yes
 						NOT = { has_province_modifier = nhs_appalachian_pathways }
 					}
 					save_event_target_as = nhs_appalachian_pathways_et
 				}
 			}
-			else_if = {
+			if = {
 				limit = {
-					any_province = {
-						owner = {
-							is_subject_of = ROOT
-						}
-						nhs_appalachian_pathways_province = yes
-						NOT = { has_province_modifier = nhs_appalachian_pathways }
-					}
+					NOT = { has_saved_event_target = nhs_appalachian_pathways_et }
 				}
 				random_province = {
 					limit = {
 						owner = {
-							is_subject_of = ROOT
+							alliance_with = ROOT
+						}
+						is_city = yes
+						nhs_appalachian_pathways_province = yes
+						NOT = { has_province_modifier = nhs_appalachian_pathways }
+					}
+					save_event_target_as = nhs_appalachian_pathways_et
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_appalachian_pathways_et }
+				}
+				random_province = {
+					limit = {
+						owner = {
+							is_subject = yes
+							overlord = {
+								OR = {
+									alliance_with = $TAG$
+									AND = {
+										is_subject = yes
+										overlord = {
+											alliance_with = $TAG$
+										}
+									}
+								}
+							}
 						}
 						is_city = yes
 						nhs_appalachian_pathways_province = yes
@@ -1992,19 +2021,16 @@ country_event = {
 			# add_base_tax = 1
 			add_base_production = 1
 		}
-		add_adm_power = 10
-		if = {
-			limit = {
-				any_neighbor_country = {
-					OR = {
-						technology_group = north_american
-						# technology_group = hellenised_american
-					}
-					has_opinion = { who = ROOT value = 100 }
-				}
-			}
-			add_dip_power = 10
-		}
+		# add_adm_power = 10
+		# if = {
+		# 	limit = {
+		# 		any_neighbor_country = {
+		# 			technology_group = north_american
+		# 			has_opinion = { who = ROOT value = 100 }
+		# 		}
+		# 	}
+		# 	add_dip_power = 10
+		# }
 
 		if = {
 			limit = {
