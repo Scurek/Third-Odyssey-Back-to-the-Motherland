@@ -11,6 +11,9 @@ else_if = {
 {%- endif %}
     limit = { has_province_flag = nat_original_culture_{{ culture }} }
     change_culture = {{ culture }}
+    [[CHANGE_PRIMARY_CULTURE]
+        change_original_culture = {{ culture }}
+    ]
 }
 {%- endfor %}
 ''')
