@@ -256,6 +256,16 @@ defined_text = {
 defined_text = {
 	name = GetTDResPopulation
 	random = no
+
+	text = {
+		localisation_key = to_nat_td_res_population_small_empty_tt
+		trigger = {
+			is_city = no
+			is_empty = yes
+			NOT = { native_size = 10 }
+		}
+	}
+
 	text = {
 		localisation_key = to_nat_td_res_status_change_tt
 		trigger = {
@@ -299,6 +309,27 @@ defined_text = {
 	# }
 
 	text = {
+		localisation_key = to_nat_td_res_population_free_colonies_large_tt
+		trigger = {
+			is_city = no
+			native_size = 20
+			owner = {
+				if = {
+					limit = {
+						is_colonial_nation = no
+					}
+					has_idea = free_colonies
+				}
+				else = {
+					overlord = {
+						has_idea = free_colonies
+					}
+				}
+			}
+		}
+	}
+
+	text = {
 		localisation_key = to_nat_td_res_population_large_tt
 		trigger = {
 			is_city = no
@@ -308,11 +339,62 @@ defined_text = {
 	}
 
 	text = {
-		localisation_key = to_nat_td_res_population_small_empty_tt
+		localisation_key = to_nat_td_res_population_inclusive_citizenship_tt
 		trigger = {
 			is_city = no
-			is_empty = yes
-			NOT = { native_size = 10 }
+			native_size = 1
+			owner = {
+				is_colonial_nation = no
+				OR = {
+					has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+					has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+					has_estate_privilege = to_vov_native_priv_benevolent_conquerors
+				}
+			}
+		}
+	}
+
+	text = {
+		localisation_key = to_nat_td_res_population_inclusive_citizenship_colony_tt
+		trigger = {
+			is_city = no
+			native_size = 1
+			owner = {
+				is_colonial_nation = yes
+				overlord = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+						has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+						has_estate_privilege = to_vov_native_priv_benevolent_conquerors
+					}
+				}
+			}
+		}
+	}
+
+	text = {
+		localisation_key = to_nat_td_res_population_free_colonies_small_tt
+		trigger = {
+			is_city = no
+			NOT = { native_size = 20 }
+			owner = {
+				is_colonial_nation = no
+				has_idea = free_colonies
+			}
+		}
+	}
+
+	text = {
+		localisation_key = to_nat_td_res_population_free_colonies_small_colony_tt
+		trigger = {
+			is_city = no
+			NOT = { native_size = 20 }
+			owner = {
+				is_colonial_nation = yes
+				overlord = {
+					has_idea = free_colonies
+				}
+			}
 		}
 	}
 
@@ -533,5 +615,23 @@ defined_text = {
 	
 	text = {
 		localisation_key = to_nat_tribal_development.2.tb
+	}
+}
+
+defined_text = {
+	random = no
+	name = GetIntegratingPrivilegeName
+	
+	text = {
+		localisation_key = to_vov_native_priv_benevolent_conquerors
+		trigger = {
+			owner = {
+				nhs_check_all_vinland = { CONDITION = tag }
+			}
+		}
+	}
+	
+	text = {
+		localisation_key = nhs_native_priv_inclusive_citizenship_mid
 	}
 }
