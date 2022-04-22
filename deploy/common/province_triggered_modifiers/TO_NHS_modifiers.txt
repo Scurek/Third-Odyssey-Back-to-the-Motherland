@@ -855,54 +855,73 @@ nhs2_traditional_patriarch_greek_tm = {
 
 nhs2_lantent_coal_tm = {
 	potential = {
-		NOT = { trade_goods = coal_2 }
-		OR = {
-			development = 20
-			owner = {
-				full_idea_group = innovativeness_ideas
+		if = {
+			limit = {
+				NOT = { trade_goods = coal_2 }
+			}
+			OR = {
+				development = 20
+				owner = {
+					full_idea_group = innovativeness_ideas
+				}
+			}
+			provincial_institution_progress = {
+				which = enlightenment
+				value = 100
+			}
+			owner = { has_institution = enlightenment }
+		}
+		else = {
+			NOT = {
+				AND = {
+					OR = {
+						development = 20
+						owner = {
+							full_idea_group = innovativeness_ideas
+						}
+					}
+					provincial_institution_progress = {
+						which = enlightenment
+						value = 100
+					}
+					owner = { has_institution = enlightenment }
+				}
 			}
 		}
-		provincial_institution_progress = {
-			which = enlightenment
-			value = 100
-		}
-		owner = { has_institution = enlightenment }
 	}
-	# viewer = {
-		# always = no
-	# }
 	trigger = {
-		OR = {
-			development = 20
-			owner = {
-				full_idea_group = innovativeness_ideas
-			}
-		}
-		provincial_institution_progress = {
-			which = enlightenment
-			value = 100
-		}
-		owner = { has_institution = enlightenment }
+		always = yes
 	}
 	
 	on_activation = {
 		hidden_effect = {
-			hidden_effect = {
+			if = {
+				limit = {
+					NOT = { trade_goods = coal_2 }
+				}
 				nhs_save_previous_goods = yes
+				remove_province_modifier = nhs2_lantent_coal
+				change_trade_goods = coal_2
 			}
-			remove_province_modifier = nhs2_lantent_coal
-			change_trade_goods = coal_2
+			else = {
+				nhs_load_previous_goods = yes
+				add_permanent_province_modifier = {
+					name = nhs2_lantent_coal
+					duration = -1
+				}
+			}
+			
 		}
 	}
-	on_deactivation = {
-		hidden_effect = {
-			nhs_load_previous_goods = yes
-			add_permanent_province_modifier = {
-				name = nhs2_lantent_coal
-				duration = -1
-			}
-		}
-	}
+	# on_deactivation = {
+	# 	hidden_effect = {
+	# 		nhs_load_previous_goods = yes
+	# 		add_permanent_province_modifier = {
+	# 			name = nhs2_lantent_coal
+	# 			duration = -1
+	# 		}
+	# 	}
+	# }
 	
 	picture = "nhs_coal_icon"
 	#trade_goods_size = 0.05
@@ -913,17 +932,19 @@ nhs2_lantent_coal_deactivate_tm = {
 	potential = {
 		trade_goods = coal_2
 		NOT = {
-			OR = {
-				development = 20
-				owner = {
-					full_idea_group = innovativeness_ideas
+			AND = {
+				OR = {
+					development = 20
+					owner = {
+						full_idea_group = innovativeness_ideas
+					}
 				}
+				provincial_institution_progress = {
+					which = enlightenment
+					value = 100
+				}
+				owner = { has_institution = enlightenment }
 			}
-			provincial_institution_progress = {
-				which = enlightenment
-				value = 100
-			}
-			owner = { has_institution = enlightenment }
 		}
 	}
 	# viewer = {
@@ -931,17 +952,19 @@ nhs2_lantent_coal_deactivate_tm = {
 	# }
 	trigger = {
 		NOT = {
-			OR = {
-				development = 20
-				owner = {
-					full_idea_group = innovativeness_ideas
+			AND = {
+				OR = {
+					development = 20
+					owner = {
+						full_idea_group = innovativeness_ideas
+					}
 				}
+				provincial_institution_progress = {
+					which = enlightenment
+					value = 100
+				}
+				owner = { has_institution = enlightenment }
 			}
-			provincial_institution_progress = {
-				which = enlightenment
-				value = 100
-			}
-			owner = { has_institution = enlightenment }
 		}
 	}
 	
