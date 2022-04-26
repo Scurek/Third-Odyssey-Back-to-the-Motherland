@@ -9301,3 +9301,88 @@ nhs_reset_elysian_sprites = {
 		}
 	# }
 }
+
+to_check_exarch_claims_check_all_provinces = {
+	every_owned_province = {
+		set_province_flag = nhs_eligible_for_exarch_claim@$EXARCH_TAG$
+		every_neighbor_province = {
+			set_province_flag = nhs_eligible_for_exarch_claim@$EXARCH_TAG$
+		}
+		every_neighbor_sea_zone = {
+			every_neighbor_province = {
+				set_province_flag = nhs_eligible_for_exarch_claim@$EXARCH_TAG$
+			}
+		}
+	}
+}
+
+to_check_exarch_claims_on_province_gained = {
+	if = {
+		limit = {
+			is_city = yes
+			owner = {
+				is_subject_of_type = elysian_subject
+			}
+		}
+		set_province_flag = nhs_eligible_for_exarch_claim@ROOT
+		every_neighbor_province = {
+			set_province_flag = nhs_eligible_for_exarch_claim@ROOT
+		}
+		every_neighbor_sea_zone = {
+			every_neighbor_province = {
+				set_province_flag = nhs_eligible_for_exarch_claim@ROOT
+			}
+		}
+	}
+}
+
+to_check_exarch_claims_on_province_lost = {
+	if = {
+		limit = {
+			is_city = yes
+			FROM = {
+				is_subject_of_type = elysian_subject
+			}
+		}
+		every_province = {
+			clr_province_flag = nhs_eligible_for_exarch_claim@FROM
+		}
+		FROM = {
+			to_check_exarch_claims_check_all_provinces = { EXARCH_TAG = FROM }
+		}
+	}
+}
+
+to_check_exarch_claims_on_become_subject = {
+	if = {
+		limit = {
+			is_subject_of_type = elysian_subject
+		}
+		every_province = {
+			clr_province_flag = nhs_eligible_for_exarch_claim@FROM
+		}
+		to_check_exarch_claims_check_all_provinces = { EXARCH_TAG = FROM }
+	}
+}
+
+to_fabricate_exarch_claim_effect = {
+	if = {
+		limit = {
+			$EXARCH_TAG$ = {
+				is_subject_of = ROOT
+				is_subject_of_type = elysian_subject
+			}
+			any_owned_province = {
+				has_province_flag = nhs_eligible_for_exarch_claim$EXARCH_TAG$
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_province_flag = nhs_eligible_for_exarch_claim$EXARCH_TAG$
+				NOT = { is_claim = $EXARCH_TAG$ }
+				NOT = { is_permanent_claim = $EXARCH_TAG$ }
+			}
+			add_claim = $EXARCH_TAG$
+		}
+	}
+}
