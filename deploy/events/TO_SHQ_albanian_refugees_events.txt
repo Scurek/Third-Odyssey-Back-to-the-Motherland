@@ -1557,37 +1557,11 @@ country_event = {
 		has_country_flag = nhs_senate_integrate_shqiperi
 		NOT = { has_global_flag = nhs_shqiperi_into_elysian }
 		NOT = { has_country_flag = nhs_rev }
-		OR = {
-			AND = {
-				exists = SHQ
-				SHQ = { vassal_of = ROOT }
+		NOT = {
+			any_province = {
+				has_province_modifier = nhs2_albanian_majority_tm
 				NOT = {
-					any_province = {
-						has_province_modifier = nhs2_albanian_majority_tm
-						NOT = {
-							owner = {
-								OR = {
-									tag = ROOT
-									tag = SHQ
-								}
-							}
-						}
-					}
-				}
-			}
-			AND = {
-				NOT = { exists = SHQ }
-				any_owned_province = {
-					has_province_modifier = nhs2_albanian_majority_tm
-					culture = shqiperi
-				}
-				NOT = {
-					any_province = {
-						has_province_modifier = nhs2_albanian_majority_tm
-						NOT = {
-							owned_by = ROOT
-						}
-					}
+					country_or_subject_holds = ROOT
 				}
 			}
 		}
@@ -1610,18 +1584,7 @@ country_event = {
 	option = {	# Ai only because it's dumb
 		name = "nhs2_albania.9.a"
 		trigger = { ai = yes }
-		if = {
-			limit = {
-				SHQ = { vassal_of = ROOT }
-			}
-			oth_albanian_integration_exists = yes
-		}
-		if = {
-			limit = {
-				NOT = { exists = SHQ }
-			}
-			oth_albanian_integration_not_exists = yes
-		}
+		oth_albanian_integration = yes
 	}
 	
 	option = {	# Currently not of interest
@@ -1638,62 +1601,98 @@ country_event = {
 	option = {	# Integrate (SHQ vassal)
 		name = "nhs2_albania.9.b"
 		trigger = {
-			SHQ = { vassal_of = ROOT }
+			exists = SHQ
+			SHQ = { is_subject_of = ROOT }
 			ai = no
 		}
 		add_prestige = -5
 		add_years_of_income = -0.3
 		if = {
 			limit = {
-				OR = {
-					has_country_flag = nhs_ingrate40
-					has_country_flag = nhs_ingrate60
-					has_country_flag = nhs_ingrate50
+				has_country_flag = nhs_ingrate60
+			}
+			oth_albanian_integration = yes
+		}
+		else_if = {
+			limit = {
+				has_country_flag = nhs_ingrate50
+			}
+			set_country_flag = nhs_ingrate60
+			random_list = {
+				90 = {
+					oth_albanian_integration = yes
+				}
+				10 = {
+					custom_tooltip = nhs_albanian_integration_fails_tt
 				}
 			}
-			oth_albanian_integration_exists = yes
 		}
-		if = {
+		else_if = {
+			limit = {
+				has_country_flag = nhs_ingrate40
+			}
+			set_country_flag = nhs_ingrate50
+			random_list = {
+				80 = {
+					oth_albanian_integration = yes
+				}
+				20 = {
+					custom_tooltip = nhs_albanian_integration_fails_tt
+				}
+			}
+		}
+		else_if = {
 			limit = {
 				has_country_flag = nhs_ingrate30
-				NOT = { has_country_flag = nhs_ingrate40 }
 			}
 			set_country_flag = nhs_ingrate40
-			random = {
-				chance = 90
-				oth_albanian_integration_exists = yes
+			random_list = {
+				70 = {
+					oth_albanian_integration = yes
+				}
+				30 = {
+					custom_tooltip = nhs_albanian_integration_fails_tt
+				}
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				has_country_flag = nhs_ingrate20
-				NOT = { has_country_flag = nhs_ingrate30 }
 			}
 			set_country_flag = nhs_ingrate30
-			random = {
-				chance = 80
-				oth_albanian_integration_exists = yes
+			random_list = {
+				60 = {
+					oth_albanian_integration = yes
+				}
+				40 = {
+					custom_tooltip = nhs_albanian_integration_fails_tt
+				}
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				has_country_flag = nhs_ingrate10
 				NOT = { has_country_flag = nhs_ingrate20 }
 			}
 			set_country_flag = nhs_ingrate20
-			random = {
-				chance = 70
-				oth_albanian_integration_exists = yes
+			random_list = {
+				50 = {
+					oth_albanian_integration = yes
+				}
+				50 = {
+					custom_tooltip = nhs_albanian_integration_fails_tt
+				}
 			}
 		}
-		if = {
-			limit = {
-				NOT = { has_country_flag = nhs_ingrate10 }
-			}
+		else = {
 			set_country_flag = nhs_ingrate10
-			random = {
-				chance = 60
-				oth_albanian_integration_exists = yes
+			random_list = {
+				40 = {
+					oth_albanian_integration = yes
+				}
+				60 = {
+					custom_tooltip = nhs_albanian_integration_fails_tt
+				}
 			}
 		}
 	}
@@ -1707,73 +1706,65 @@ country_event = {
 		add_years_of_income = -0.3
 		if = {
 			limit = {
-				has_country_flag = nhs_ingrate60
+				OR = {
+					has_country_flag = nhs_ingrate60
+					has_country_flag = nhs_ingrate50
+					has_country_flag = nhs_ingrate40
+				}
 			}
-			oth_albanian_integration_not_exists = yes
+			oth_albanian_integration = yes
 		}
-		if = {
-			limit = {
-				has_country_flag = nhs_ingrate50
-				NOT = { has_country_flag = nhs_ingrate60 }
-			}
-			set_country_flag = nhs_ingrate60
-			random = {
-				chance = 90
-				oth_albanian_integration_not_exists = yes
-			}
-		}
-		if = {
-			limit = {
-				has_country_flag = nhs_ingrate40
-				NOT = { has_country_flag = nhs_ingrate50 }
-			}
-			set_country_flag = nhs_ingrate50
-			random = {
-				chance = 80
-				oth_albanian_integration_not_exists = yes
-			}
-		}
-		if = {
+		else_if = {
 			limit = {
 				has_country_flag = nhs_ingrate30
-				NOT = { has_country_flag = nhs_ingrate40 }
 			}
 			set_country_flag = nhs_ingrate40
-			random = {
-				chance = 70
-				oth_albanian_integration_not_exists = yes
+			random_list = {
+				90 = {
+					oth_albanian_integration = yes
+				}
+				10 = {
+					custom_tooltip = nhs_albanian_integration_fails_tt
+				}
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				has_country_flag = nhs_ingrate20
-				NOT = { has_country_flag = nhs_ingrate30 }
 			}
 			set_country_flag = nhs_ingrate30
-			random = {
-				chance = 60
-				oth_albanian_integration_not_exists = yes
+			random_list = {
+				80 = {
+					oth_albanian_integration = yes
+				}
+				20 = {
+					custom_tooltip = nhs_albanian_integration_fails_tt
+				}
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				has_country_flag = nhs_ingrate10
-				NOT = { has_country_flag = nhs_ingrate20 }
 			}
 			set_country_flag = nhs_ingrate20
-			random = {
-				chance = 50
-				oth_albanian_integration_not_exists = yes
+			random_list = {
+				70 = {
+					oth_albanian_integration = yes
+				}
+				30 = {
+					custom_tooltip = nhs_albanian_integration_fails_tt
+				}
 			}
 		}
-		if = {
-			limit = {
-				NOT = { has_country_flag = nhs_ingrate10 }
-			}
+		else = {
 			set_country_flag = nhs_ingrate10
-			random = {
-				chance = 40
-				oth_albanian_integration_not_exists = yes
+			random_list = {
+				60 = {
+					oth_albanian_integration = yes
+				}
+				40 = {
+					custom_tooltip = nhs_albanian_integration_fails_tt
+				}
 			}
 		}
 	}

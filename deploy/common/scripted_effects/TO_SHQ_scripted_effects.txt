@@ -302,21 +302,45 @@ oth_albanian_movement = {
 	}
 }
 
-
-oth_albanian_integration_exists = {
-	SHQ = {
-		change_primary_culture = shqipproi
-		change_religion = ROOT
-		add_opinion = {
-			who = ROOT
-			modifier = nhs_forced_culture_change
+oth_albanian_integration = {
+	if = {
+		limit = {
+			exists = SHQ
 		}
-		every_owned_province = {
+		SHQ = {
+			change_primary_culture = shqipproi
+			change_religion = ROOT
+			# add_opinion = {
+			# 	who = ROOT
+			# 	modifier = nhs_forced_culture_change
+			# }
+		}
+		custom_tooltip = nhs_new_line_tt
+	}
+	else = {
+		hidden_effect = {
+			SHQ = {
+				change_primary_culture = shqipproi
+				change_religion = ROOT	
+			}
+		}
+	}
+	custom_tooltip = nhs_albanian_to_shqipproi_all_provinces_tt
+	custom_tooltip = nhs_update_albanian_majority_tt
+	if = {
+		limit = {
+			exists = SHQ
+		}
+		custom_tooltip = nhs_self_governance_tt
+	}
+	hidden_effect = {
+		every_province = {
 			limit = {
 				OR = {
 					has_province_modifier = nhs2_albanian_majority_tm
 					culture = shqiperi
 				}
+				NOT = { owned_by = SHQ }
 			}
 			change_culture = shqipproi
 			if = {
@@ -324,79 +348,20 @@ oth_albanian_integration_exists = {
 					has_province_modifier = nhs2_albanian_majority_tm
 				}
 				custom_tooltip = nhs_update_albanian_majority_tt
-				custom_tooltip = nhs_self_governance_tt
 				hidden_effect = {
 					remove_province_triggered_modifier = nhs2_albanian_majority_tm
 					add_province_triggered_modifier = nhs2_albanian_majority2_tm
 				}
 			}
+			to_nhs_handle_post_disaster_tolerance_modifier_albanians = { COUNTRY_SCOPE = owner }
 			hidden_effect = {
 				nhs_on_province_culture_converted_general = yes
 			}
 		}
 	}
-	every_province = {
-		limit = {
-			OR = {
-				has_province_modifier = nhs2_albanian_majority_tm
-				culture = shqiperi
-			}
-			NOT = { owned_by = SHQ }
-		}
-		change_culture = shqipproi
-		if = {
-			limit = {
-				has_province_modifier = nhs2_albanian_majority_tm
-			}
-			custom_tooltip = nhs_update_albanian_majority_tt
-			hidden_effect = {
-				remove_province_triggered_modifier = nhs2_albanian_majority_tm
-				add_province_triggered_modifier = nhs2_albanian_majority2_tm
-			}
-		}
-		to_nhs_handle_post_disaster_tolerance_modifier_albanians = { COUNTRY_SCOPE = owner }
-		hidden_effect = {
-			nhs_on_province_culture_converted_general = yes
-		}
-	}
 	set_global_flag = nhs_shqiperi_into_elysian
-	clr_country_flag = nhs_ingrate40
-	clr_country_flag = nhs_ingrate30
-	clr_country_flag = nhs_ingrate20
-	clr_country_flag = nhs_ingrate10
-}
-
-oth_albanian_integration_not_exists = {
-	every_province = {
-		limit = {
-			OR = {
-				has_province_modifier = nhs2_albanian_majority_tm
-				culture = shqiperi
-			}
-		}
-		change_culture = shqipproi
-		if = {
-			limit = {
-				has_province_modifier = nhs2_albanian_majority_tm
-			}
-			custom_tooltip = nhs_update_albanian_majority_tt
-			hidden_effect = {
-				remove_province_triggered_modifier = nhs2_albanian_majority_tm
-				add_province_triggered_modifier = nhs2_albanian_majority2_tm
-			}
-		}
-		to_nhs_handle_post_disaster_tolerance_modifier_albanians = { COUNTRY_SCOPE = owner }
-		hidden_effect = {
-			nhs_on_province_culture_converted_general = yes
-		}
-	}
-	hidden_effect = {
-		SHQ = {
-			change_primary_culture = shqipproi
-			change_religion = ROOT
-		}
-	}
-	set_global_flag = nhs_shqiperi_into_elysian
+	clr_country_flag = nhs_ingrate60
+	clr_country_flag = nhs_ingrate50
 	clr_country_flag = nhs_ingrate40
 	clr_country_flag = nhs_ingrate30
 	clr_country_flag = nhs_ingrate20
