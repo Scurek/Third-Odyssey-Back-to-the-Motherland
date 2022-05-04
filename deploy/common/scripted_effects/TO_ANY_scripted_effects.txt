@@ -541,3 +541,32 @@ to_monuments_later = {
 		custom_tooltip = nhs_new_line_tt
 	}
 }
+
+to_correct_colony_culture = {
+	if = {
+		limit = {
+			is_colonial_nation = yes
+			NOT = { has_country_flag = to_colony_culture_corrected }
+		}
+		set_country_flag = to_colony_culture_corrected
+		overlord = {
+			if = {
+				limit = {
+					NOT = { culture_group = elysian_group }
+				}
+				change_primary_culture = PREV
+			}
+			else = {
+				PREV = {
+					to_ely_country_culture_check = { 
+						FLAG_SCOPE = PREV
+						FLAG_SCOPE_BACKUP = yes
+					}
+				}
+			}
+			PREV = {
+				change_religion = PREV
+			}
+		}
+	}
+}

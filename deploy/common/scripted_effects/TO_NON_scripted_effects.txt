@@ -125,6 +125,69 @@ to_ongoing_fixes = {
 
 	if = {
 		limit = {
+			is_colonial_nation = yes
+			NOT = { has_country_flag = to_colony_culture_corrected }
+		}
+		set_country_flag = to_colony_culture_corrected
+		if = {
+			limit = {
+				native_culture_primary = yes
+				overlord = {
+					NOT = { primary_culture = PREV }
+					OR = {
+						NOT = { culture_group = elysian_group }
+						PREV = {
+							NOT = { culture_group = elysian_group }
+						}
+						PREV = {
+							NOT = { to_nhs_has_dynamic_elysian_primary_culture = yes }
+						}
+					}
+				}
+			}
+			overlord = {
+				if = {
+					limit = {
+						culture_group = elysian_group
+					}
+					PREV = {
+						to_ely_country_culture_check = { 
+							FLAG_SCOPE = PREV 
+							FLAG_SCOPE_BACKUP = yes
+						}
+					}
+				}
+				else = {
+					PREV = {
+						change_primary_culture = PREV
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					religion = animism
+					religion = shamanism
+					religion = totemism
+					religion = inti
+					religion = nahuatl
+					religion = mesoamerican_religion
+				}
+				overlord = {
+					NOT = { religion = PREV }
+				}
+			}
+			overlord = {
+				PREV = {
+					change_religion = PREV
+				}
+			}
+		}
+	}
+
+	if = {
+		limit = {
 			culture_group = elysian_group
 			any_owned_province = {
 				OR = {

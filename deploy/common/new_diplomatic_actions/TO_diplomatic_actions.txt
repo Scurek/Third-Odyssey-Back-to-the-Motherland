@@ -114,6 +114,108 @@ to_cancel_subsidize_subject_colony =  {
 	}
 }
 
+to_enforce_colony_religion =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		NOT = { has_dlc = "Common Sense" }
+		overlord_of = FROM
+		FROM = {
+			NOT = { religion = ROOT }
+			NOT = {
+				OR = {
+					is_subject_of_type = tributary_state
+					is_subject_of_type = daimyo_vassal
+					is_subject_of_type = to_confederation_subject
+					is_subject_of_type = nhs_imperial_associate
+					is_subject_of_type = nhs_protectorate
+				}
+			}
+		}
+	}
+	is_allowed = {
+		FROM = {
+			NOT = { religion = ROOT }
+			NOT = { liberty_desire = 50 }
+		}
+	}
+	on_accept = {
+		FROM = {
+			change_religion = ROOT
+			if = {
+				limit = {
+					religion_group = ROOT
+				}
+				add_liberty_desire = 50
+			}
+			else = {
+				add_liberty_desire = 100
+			}
+		}
+	}
+	ai_will_do = {
+		FROM = {
+			NOT = { liberty_desire = 1 }
+		}
+	}
+}
+
+to_enforce_colony_culture =  {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		overlord_of = FROM
+		FROM = {
+			NOT = { primary_culture = ROOT }
+			OR = {
+				NOT = { culture_group = elysian_group }
+				ROOT = {
+					NOT = { culture_group = elysian_group }
+				}
+				NOT = { to_nhs_has_dynamic_elysian_primary_culture = yes }
+			}
+			is_colonial_nation = yes
+		}
+	}
+	is_allowed = {
+		FROM = {
+			religion = ROOT
+			NOT = { primary_culture = ROOT }
+			NOT = { liberty_desire = 50 }
+		}
+	}
+	on_accept = {
+		FROM = {
+			if = {
+				limit = {
+					ROOT = {
+						culture_group = elysian_group
+					}
+				}
+				to_ely_country_culture_check = { 
+					FLAG_SCOPE = ROOT 
+					FLAG_SCOPE_BACKUP = yes
+				}
+				every_owned_province = {
+					limit = {
+						is_colony = no
+					}
+					to_ely_province_culture_check = {}
+				}
+			}
+			else = {
+				change_primary_culture = ROOT
+			}
+			add_liberty_desire = 25
+		}
+	}
+	ai_will_do = {
+		FROM = {
+			NOT = { liberty_desire = 25 }
+		}
+	}
+}
+
 cancel_nhs_protectorate =  {
 	category = influence
 	require_acceptance = no
