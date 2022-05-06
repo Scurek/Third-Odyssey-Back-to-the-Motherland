@@ -3821,6 +3821,107 @@ nhs_discover_treaty_provinces_ely = {
 
 nhs_set_por_colonial_capital = {
 	set_global_flag = nhs_treaty_of_lantanopolis
+	custom_tooltip = nhs_por_loses_claims_in_na_por_perspective_tt
+	custom_tooltip = nhs_lose_claims_in_sa_por_perspective_tt
+	hidden_effect = {
+		every_province = {
+			limit = {
+				continent = south_america
+				OR = {
+					is_claim = FROM
+					is_permanent_claim = FROM
+					any_country = {
+						is_subject_of = FROM
+						OR = {
+							is_claim = PREV
+							PREV = {
+								is_permanent_claim = PREV 
+							}
+						}
+					}
+				}
+			}
+			remove_claim = FROM
+		}
+		FROM = {
+			every_subject_country = {
+				every_province = {
+					limit = {
+						continent = south_america
+						OR = {
+							is_claim = PREV
+							is_permanent_claim = PREV 
+						}
+					}
+					remove_claim = PREV
+				}
+				every_subject_country = {
+					limit = {
+						any_province = {
+							continent = south_america
+							OR = {
+								is_claim = PREV
+								is_permanent_claim = PREV 
+							}
+						}
+					}
+					every_province = {
+						limit = {
+							continent = south_america
+							OR = {
+								is_claim = PREV
+								is_permanent_claim = PREV 
+							}
+						}
+						remove_claim = PREV
+					}
+				}
+			}
+		}
+		every_province = {
+			limit = {
+				continent = north_america
+				OR = {
+					is_claim = ROOT
+					is_permanent_claim = ROOT
+				}
+			}
+			remove_claim = ROOT
+		}
+		every_subject_country = {
+			every_province = {
+				limit = {
+					continent = north_america
+					OR = {
+						is_claim = PREV
+						is_permanent_claim = PREV 
+					}
+				}
+				remove_claim = PREV
+			}
+			every_subject_country = {
+				limit = {
+					any_province = {
+						continent = north_america
+						OR = {
+							is_claim = PREV
+							is_permanent_claim = PREV 
+						}
+					}
+				}
+				every_province = {
+					limit = {
+						continent = north_america
+						OR = {
+							is_claim = PREV
+							is_permanent_claim = PREV 
+						}
+					}
+					remove_claim = PREV
+				}
+			}
+		}
+	}
 	add_country_modifier = {
 		name = nhs2_treaty_of_lantanopolis_por
 		duration = -1
