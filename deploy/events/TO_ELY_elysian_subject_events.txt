@@ -105,7 +105,7 @@ country_event = {
 			AND = {
 				has_country_flag = nhs_ely_march_all
 				any_province = {
-					nhs_exarch_land = yes
+					nhs_exarch_land = { SCOPE = ROOT }
 					NOT = { has_construction = core }
 					NOT = { has_construction = missionary }
 					NOT = { has_province_flag = nhs_exarch_province_exemption }
@@ -129,7 +129,7 @@ country_event = {
 			AND = {
 				has_country_flag = nhs_ely_march_territory
 				any_province = {
-					nhs_exarch_land = yes
+					nhs_exarch_land = { SCOPE = ROOT }
 					NOT = { has_construction = core }
 					NOT = { has_construction = missionary }
 					NOT = { has_province_flag = nhs_exarch_province_exemption }
@@ -156,7 +156,7 @@ country_event = {
 			AND = {
 				has_country_flag = nhs_ely_march_no_core
 				any_province = {
-					nhs_exarch_land = yes
+					nhs_exarch_land = { SCOPE = ROOT }
 					NOT = { has_construction = core }
 					NOT = { has_construction = missionary }
 					NOT = { has_province_flag = nhs_exarch_province_exemption }
@@ -190,16 +190,13 @@ country_event = {
 			limit = {
 				has_country_flag = nhs_ely_march_all
 				any_province = {
-					nhs_exarch_land = yes
+					nhs_exarch_land = { SCOPE = ROOT }
 					NOT = { has_construction = core }
 					NOT = { has_construction = missionary }
 					NOT = { has_province_flag = nhs_exarch_province_exemption }
 					owner = {
 						OR = {
-							AND = {
-								overlord_of = ROOT
-								NOT = { is_state_core = PREV }
-							}
+							overlord_of = ROOT
 							AND = {
 								ROOT = {
 									NOT = { tag = ELG }
@@ -216,16 +213,13 @@ country_event = {
 			}
 			every_province = {
 				limit = {
-					nhs_exarch_land = yes
+					nhs_exarch_land = { SCOPE = ROOT }
 					NOT = { has_construction = core }
 					NOT = { has_construction = missionary }
 					NOT = { has_province_flag = nhs_exarch_province_exemption }
 					owner = {
 						OR = {
-							AND = {
-								overlord_of = ROOT
-								NOT = { is_state_core = PREV }
-							}
+							overlord_of = ROOT
 							AND = {
 								ROOT = {
 									NOT = { tag = ELG }
@@ -253,7 +247,7 @@ country_event = {
 			limit = {
 				has_country_flag = nhs_ely_march_territory
 				any_province = {
-					nhs_exarch_land = yes
+					nhs_exarch_land = { SCOPE = ROOT }
 					NOT = { has_construction = core }
 					NOT = { has_construction = missionary }
 					NOT = { has_province_flag = nhs_exarch_province_exemption }
@@ -279,7 +273,7 @@ country_event = {
 			}
 			every_province = {
 				limit = {
-					nhs_exarch_land = yes
+					nhs_exarch_land = { SCOPE = ROOT }
 					NOT = { has_construction = core }
 					NOT = { has_construction = missionary }
 					NOT = { has_province_flag = nhs_exarch_province_exemption }
@@ -316,7 +310,7 @@ country_event = {
 			limit = {
 				has_country_flag = nhs_ely_march_no_core
 				any_province = {
-					nhs_exarch_land = yes
+					nhs_exarch_land = { SCOPE = ROOT }
 					NOT = { has_construction = core }
 					NOT = { has_construction = missionary }
 					NOT = { has_province_flag = nhs_exarch_province_exemption }
@@ -344,7 +338,7 @@ country_event = {
 			}
 			every_province = {
 				limit = {
-					nhs_exarch_land = yes
+					nhs_exarch_land = { SCOPE = ROOT }
 					NOT = { has_construction = core }
 					NOT = { has_construction = missionary }
 					NOT = { has_province_flag = nhs_exarch_province_exemption }
@@ -402,6 +396,30 @@ country_event = {
 				}
 			}
 			add_core = ROOT
+		}
+		every_owned_province = {
+			limit = {
+				any_country = {
+					OR = {
+						AND = {
+							overlord_of = ROOT
+							is_territorial_core = PREV
+						}
+						AND = {
+							ROOT = {
+								NOT = { tag = ELG }
+							}
+							tag = ELG
+							is_subject = yes
+							is_territorial_core = PREV
+							overlord = {
+								overlord_of = ROOT
+							}
+						}
+					}
+				}
+			}
+			add_territorial_core = ROOT
 		}
 		if = {
 			limit = {

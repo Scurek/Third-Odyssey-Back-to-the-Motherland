@@ -1582,37 +1582,60 @@ nhs_assign_provinces_to_marches = {
 		subject_type = elysian_subject
 		subject = $TAG$
 	}
-	if = {
-		limit = {
-			any_province = {
-				nhs_$TAG$_province = yes
-				NOT = { has_province_flag = nhs_exarch_province_exemption }
-				NOT = { is_core = ROOT }
-				AND = {
-					owned_by = ROOT
-					owner = {
-						tag = ELG
-						is_subject_of = ROOT
-					}
-				}
-				NOT = { has_province_modifier = nhs2_supply_lines_tm }
-			}
-		}
-		every_province = {
+	hidden_effect = {
+		if = {
 			limit = {
-				nhs_$TAG$_province = yes
-				NOT = { has_province_flag = nhs_exarch_province_exemption }
-				NOT = { is_core = ROOT }
-				AND = {
-					owned_by = ROOT
-					owner = {
-						tag = ELG
-						is_subject_of = ROOT
+				any_province = {
+					nhs_$TAG$_province = yes
+					NOT = { has_province_flag = nhs_exarch_province_exemption }
+					NOT = { is_core = ROOT }
+					NOT = { is_territorial_core = ROOT }
+					NOT = { has_construction = core }
+					NOT = { has_construction = missionary }
+					OR = {
+						owned_by = ROOT
+						owner = {
+							tag = ELG
+							is_subject_of = ROOT
+						}
 					}
+					NOT = { has_province_modifier = nhs2_supply_lines_tm }
 				}
-				NOT = { has_province_modifier = nhs2_supply_lines_tm }
 			}
-			cede_province = $TAG$
+			every_province = {
+				limit = {
+					nhs_$TAG$_province = yes
+					NOT = { has_province_flag = nhs_exarch_province_exemption }
+					NOT = { is_core = ROOT }
+					NOT = { is_territorial_core = ROOT }
+					NOT = { has_construction = core }
+					NOT = { has_construction = missionary }
+					OR = {
+						owned_by = ROOT
+						owner = {
+							tag = ELG
+							is_subject_of = ROOT
+						}
+					}
+					NOT = { has_province_modifier = nhs2_supply_lines_tm }
+				}
+				cede_province = $TAG$
+				if = {
+					limit = {
+						is_core = ROOT
+					}
+					hidden_effect = {
+						remove_core = ROOT
+					}
+					add_core = ROOT
+				}
+				if = {
+					limit = {
+						is_territorial_core = ROOT
+					}
+					add_territorial_core = ROOT
+				}
+			}
 		}
 	}
 }
