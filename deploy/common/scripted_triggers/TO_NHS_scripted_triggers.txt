@@ -2000,3 +2000,189 @@ to_owns_exarch_claim = {
 		NOT = { is_permanent_claim = $EXARCH_TAG$ }
 	}
 }
+
+to_has_overlord_religion = {
+	owner = {
+		overlord = {
+			ROOT = {
+				PREV = {
+					religion = PREV
+				}
+			}	
+		}
+	}
+}
+
+to_province_is_or_accepts_religion_exarch = {
+	if = {
+		limit = {
+			owner = {
+				is_subject_of_type = elysian_subject
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = province_is_or_accepts_$religion$_exarch_tt
+			OR = {
+				AND = {
+					religion = $religion$
+					has_owner_religion = yes
+				}
+				AND = {
+					owner = { secondary_religion = $religion$ }
+					OR = {
+						religion = $religion$
+						has_owner_religion = yes
+					}
+				}
+				AND = {
+					religion = $religion$
+					to_has_overlord_religion = yes
+				}
+			}
+		}
+	}
+	else = {
+		custom_trigger_tooltip = {
+			tooltip = province_is_or_accepts_$religion$_tt
+			OR = {
+				AND = {
+					religion = $religion$
+					has_owner_religion = yes
+				}
+				AND = {
+					owner = { secondary_religion = $religion$ }
+					OR = {
+						religion = $religion$
+						has_owner_religion = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+to_province_is_or_accepts_religion_group_exarch = {
+	if = {
+		limit = {
+			owner = {
+				is_subject_of_type = elysian_subject
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = province_is_or_accepts_$religion_group$_exarch_tt
+			OR = {
+				AND = {
+					religion_group = $religion_group$
+					has_owner_religion = yes
+				}
+				AND = {
+					owner = { secondary_religion_group = { $religion_group$ = yes } }
+					OR = {
+						religion_group = $religion_group$
+						has_owner_religion = yes
+					}
+				}
+				AND = {
+					religion_group = $religion_group$
+					to_has_overlord_religion = yes
+				}
+			}
+		}
+	}
+	else = {
+		custom_trigger_tooltip = {
+			tooltip = province_is_or_accepts_$religion_group$_tt
+			OR = {
+				AND = {
+					religion_group = $religion_group$
+					has_owner_religion = yes
+				}
+				AND = {
+					owner = { secondary_religion_group = { $religion_group$ = yes } }
+					OR = {
+						religion_group = $religion_group$
+						has_owner_religion = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+to_province_is_or_accepts_culture_exarch = {
+	if = {
+		limit = {
+			owner = {
+				is_subject_of_type = elysian_subject
+			}
+		}
+		OR = {
+			has_owner_culture = yes
+			has_owner_accepted_culture = yes
+			custom_trigger_tooltip = {
+				tooltip = to_has_overlords_culture_tt
+				owner = {
+					overlord = {
+						ROOT = {
+							PREV = {
+								primary_culture = PREV
+							}
+						}
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_has_overlords_accepted_culture_tt
+				owner = {
+					overlord = {
+						ROOT = {
+							PREV = {
+								accepted_culture = PREV
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	else = {
+		OR = {
+			has_owner_culture = yes
+			has_owner_accepted_culture = yes
+		}
+	}
+}
+
+to_province_is_or_accepts_religion_both_orthodox_exarch = {
+	if = {
+		limit = {
+			owner = {
+				is_subject_of_type = elysian_subject
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = to_province_is_or_accepts_religion_both_orthodox_exarch_tt
+			OR = {
+				to_province_is_or_accepts_religion_exarch = {
+					religion = orthodox
+				}
+				to_province_is_or_accepts_religion_exarch = {
+					religion = elysian_orthodoxy
+				}
+			}
+		}
+	}
+	else = {
+		custom_trigger_tooltip = {
+			tooltip = to_province_is_or_accepts_religion_both_orthodox_tt
+			OR = {
+				province_is_or_accepts_religion = {
+					religion = orthodox
+				}
+				province_is_or_accepts_religion = {
+					religion = elysian_orthodoxy
+				}
+			}
+		}
+	}
+}
