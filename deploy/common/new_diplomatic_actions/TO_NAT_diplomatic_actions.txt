@@ -58,16 +58,43 @@ to_request_to_join_confederation = {
 		}
 	}
 	on_accept = {
-		FROM = {
-			create_subject = {
-				subject_type = to_confederation_subject
-				subject = ROOT
+		if = {
+			limit = {
+				ai = yes
+				OR = {
+					AND = {
+						primary_culture = FROM
+						FROM = {
+							OR = {
+								has_reform = to_native_reform_unite_culture
+								has_reform = to_native_reform_expansion
+							}
+						}
+					}
+					FROM = {
+						OR = {
+							has_reform = to_native_reform_central_administration
+							has_reform = to_native_reform_hooks_and_obligations
+						}
+					}
+				}
+			}
+			FROM = {
+				inherit = ROOT
 			}
 		}
-		add_trust = {
-			who = FROM
-			value = 20
-			mutual = yes
+		else = {
+			FROM = {
+				create_subject = {
+					subject_type = to_confederation_subject
+					subject = ROOT
+				}
+			}
+			add_trust = {
+				who = FROM
+				value = 20
+				mutual = yes
+			}
 		}
 	}
 	on_decline =
@@ -254,14 +281,35 @@ to_request_invite_to_federation = {
 		}
 	}
 	on_accept = {
-		create_subject = {
-			subject_type = to_confederation_subject
-			subject = FROM
+		if = {
+			limit = {
+				ai = yes
+				OR = {
+					AND = {
+						primary_culture = FROM
+						OR = {
+							has_reform = to_native_reform_unite_culture
+							has_reform = to_native_reform_expansion
+						}
+					}
+					OR = {
+						has_reform = to_native_reform_central_administration
+						has_reform = to_native_reform_hooks_and_obligations
+					}
+				}
+			}
+			inherit = FROM
 		}
-		add_trust = {
-			who = FROM
-			value = 20
-			mutual = yes
+		else = {
+			create_subject = {
+				subject_type = to_confederation_subject
+				subject = FROM
+			}
+			add_trust = {
+				who = FROM
+				value = 20
+				mutual = yes
+			}
 		}
 	}
 	on_decline =
