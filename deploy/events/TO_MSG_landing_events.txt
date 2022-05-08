@@ -33,24 +33,26 @@ country_event = {
 		months = 3
 	}
 
-	# option = {
-	# 	name = "msg_arrival_events.1.a"
-	# 	ai_chance = {
-	# 		factor = 80
-	# 		modifier = {
-	# 			factor = 0.01
-	# 			NOT = { treasury = -100 }
-	# 		}
-	# 	}
-	# 	custom_tooltip = nhs2_msg_supplies
-	# 	add_manpower = -10
-	# 	add_treasury = -150
-	# 	hidden_effect = {
-	# 		country_event = { id = msg_arrival_events.2 days = 15 }
-	# 	}
-	# 	set_global_flag = nhs_msg_given_help
-	# 	set_global_flag = nhs_msg_gone
-	# }
+	option = {
+		name = "msg_arrival_events.1.a"
+		ai_chance = {
+			factor = 80
+			modifier = {
+				factor = 0.01
+				NOT = { treasury = -100 }
+			}
+		}
+		custom_tooltip = nhs2_msg_supplies
+		add_manpower = -10
+		add_treasury = -150
+		add_country_modifier = {
+			name = nhs_assisting_the_expedition
+			duration = 18250
+		}
+		country_event = { id = msg_arrival_events.2 days = 15 }
+		set_global_flag = nhs_msg_given_help
+		set_global_flag = nhs_msg_gone
+	}
 	option = {
 		name = "msg_arrival_events.1.b" #Offer him your blessing (you cheap bastard)
 		ai_chance = {
@@ -66,33 +68,19 @@ country_event = {
 		}
 		# add_prestige = 5
 		set_global_flag = nhs_msg_gone
-		hidden_effect = {
-			country_event = { id = msg_arrival_events.2 days = 20 }
-		}
+		country_event = { id = msg_arrival_events.2 days = 20 }
 	}
-	# option = {
-	# 	name = "msg_arrival_events.1.c"
-	# 	ai_chance = {
-	# 		factor = 0
-	# 	}
-	# 	trigger = {
-	# 		NOT = { has_country_flag = nhs_msg_postponed1 }
-	# 	}
-	# 	if = {
-	# 		limit = {
-	# 			has_country_flag = nhs_msg_postponed1
-	# 		}
-	# 		set_country_flag = nhs_msg_postponed2
-	# 		clr_country_flag = nhs_msg_postponed1
-	# 	}
-	# 	else = {
-	# 		set_country_flag = nhs_msg_postponed1
-	# 	}
-	# 	custom_tooltip = nhs2_msg_delay
-	# 	hidden_effect = {
-	# 		country_event = { id = msg_arrival_events.1 days = 366 }
-	# 	}
-	# }
+	option = {
+		name = "msg_arrival_events.1.c"
+		ai_chance = {
+			factor = 0
+		}
+		trigger = {
+			NOT = { has_country_flag = nhs_msg_postponed1 }
+		}
+		set_country_flag = nhs_msg_postponed1
+		custom_tooltip = nhs2_msg_delay
+	}
 }
 
 
@@ -244,6 +232,10 @@ country_event = {
 					add_mil_power = 100
 					add_dip_power = 100
 					add_adm_power = 100
+					add_historical_friend = MS1
+					MS1 = {
+						add_historical_friend = MS1
+					}
 					reverse_add_opinion = {
 						who = ROOT
 						modifier = nhs_msg_given_help_opinion
@@ -577,13 +569,15 @@ country_event = {
 	}
 
 	immediate = {
-		# Change province cultures
-		
+		hidden_effect = {
+			save_event_target_as = previous_tag
+		}
 	}
 
 	option = {		# What will be, will be
 		name = "msg_arrival_events.11.a"
 		change_tag = MSN
+		to_restore_historal_friends_and_rivals = { PREVIOUS_TAG = event_target:previous_tag }
 		add_government_reform = spartan_kingdom
 		
 		remove_country_modifier = nhs_secrets_greekfire
@@ -881,55 +875,70 @@ country_event = {
 	}
 }
 
+# Lose Assisting the expedition if Sparta dies
 country_event = {
 	id = msg_arrival_events.21
-	title = nhs2_hidden.t
-	desc = nhs2_hidden.d
-	picture = COURT_eventPicture
+	title = msg_arrival_events.21.t
+	desc = msg_arrival_events.21.d
+	picture = WOUNDED_SOLDIERS_eventPicture
 
-	hidden = yes
+	fire_only_once = yes
 	
 	trigger = {
-		tag = MS1
-		NOT = { has_reform = spartan_army }
-	}
-	
-	mean_time_to_happen = {
-		days = 2
-	}
-	
-	immediate = {
-		add_government_reform = spartan_army
+		nhs_condition_all_ely = { KOMANDA = tag }
+		has_country_modifier = nhs_assisting_the_expedition
+		has_global_flag = nhs_msg_spartans_in_mesoamerica
+		NOT = { exists = MS1 }
+		NOT = { exists = MSN }
 	}
 	
 	option = {
-		name = nhs2_hidden.a
+		name = msg_arrival_events.21.a
+		remove_country_modifier = nhs_assisting_the_expedition
 	}
 }
 
+# Lose Assisting the expedition if at war with Sparta
 country_event = {
 	id = msg_arrival_events.22
-	title = nhs2_hidden.t
-	desc = nhs2_hidden.d
-	picture = COURT_eventPicture
+	title = msg_arrival_events.22.t
+	desc = msg_arrival_events.22.d
+	picture = BATTLE_eventPicture
 
-	hidden = yes
+	fire_only_once = yes
 	
 	trigger = {
-		tag = MSN
-		has_global_flag = msg_reforms_done
-		NOT = { has_reform = spartan_sovreignty }
+		nhs_condition_all_ely = { KOMANDA = tag }
+		has_country_modifier = nhs_assisting_the_expedition
+		OR = {
+			war_with = MS1
+			war_with = MSN
+		}
 	}
-	
-	mean_time_to_happen = {
-		days = 2
-	}
-	
+
 	immediate = {
-		add_government_reform = spartan_sovreignty
+		hidden_effect ={
+			if = {
+				limit = {
+					war_with = MS1
+				}
+				MS1 = {
+					save_event_target_as = existing_sparta
+				}
+			}
+			else_if = {
+				limit = {
+					war_with = MSN
+				}
+				MSN = {
+					save_event_target_as = existing_sparta
+				}
+			}
+		}
 	}
 	
 	option = {
-		name = nhs2_hidden.a
+		name = msg_arrival_events.22.a
+		remove_country_modifier = nhs_assisting_the_expedition
 	}
 }
