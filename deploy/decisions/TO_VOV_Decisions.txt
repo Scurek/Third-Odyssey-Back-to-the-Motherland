@@ -16,7 +16,6 @@ country_decisions = {
 				exists = VIN
 				exists = MK1
 				exists = HLL
-			
 			}
 		}
 		allow = {
@@ -32,42 +31,9 @@ country_decisions = {
 					exists = VIN
 				}
 				OR = {
-					AND = {
-						OR = {
-							alliance_with = MK1
-							MK1 = {
-								is_subject_of = ROOT
-							}
-						}
-						OR = {
-							MK1 = { has_opinion = { who = ROOT value = 100 } }
-							dip = 4
-						}
-					}
-					AND = {
-						OR = {
-							alliance_with = HLL
-							HLL = {
-								is_subject_of = ROOT
-							}
-						}
-						OR = {
-							HLL = { has_opinion = { who = ROOT value = 100 } }
-							dip = 4
-						}
-					}
-					AND = {
-						OR = {
-							alliance_with = VIN
-							VIN = {
-								is_subject_of = ROOT
-							}
-						}
-						OR = {
-							VIN = { has_opinion = { who = ROOT value = 100 } }
-							dip = 4
-						}
-					}
+					to_vov_can_start_trading_with_viking = { TAG = MK1 }
+					to_vov_can_start_trading_with_viking = { TAG = HLL }
+					to_vov_can_start_trading_with_viking = { TAG = VIN }
 				}
 			}
 			else_if = {
@@ -76,30 +42,8 @@ country_decisions = {
 					exists = VIN
 				}
 				OR = {
-					AND = {
-						OR = {
-							alliance_with = MK1
-							MK1 = {
-								is_subject_of = ROOT
-							}
-						}
-						OR = {
-							MK1 = { has_opinion = { who = ROOT value = 100 } }
-							dip = 4
-						}
-					}
-					AND = {
-						OR = {
-							alliance_with = VIN
-							VIN = {
-								is_subject_of = ROOT
-							}
-						}
-						OR = {
-							VIN = { has_opinion = { who = ROOT value = 100 } }
-							dip = 4
-						}
-					}
+					to_vov_can_start_trading_with_viking = { TAG = MK1 }
+					to_vov_can_start_trading_with_viking = { TAG = VIN }
 				}
 			}
 			else_if = {
@@ -108,30 +52,8 @@ country_decisions = {
 					exists = VIN
 				}
 				OR = {
-					AND = {
-						OR = {
-							alliance_with = HLL
-							HLL = {
-								is_subject_of = ROOT
-							}
-						}
-						OR = {
-							HLL = { has_opinion = { who = ROOT value = 100 } }
-							dip = 4
-						}
-					}
-					AND = {
-						OR = {
-							alliance_with = VIN
-							VIN = {
-								is_subject_of = ROOT
-							}
-						}
-						OR = {
-							VIN = { has_opinion = { who = ROOT value = 100 } }
-							dip = 4
-						}
-					}
+					to_vov_can_start_trading_with_viking = { TAG = HLL }
+					to_vov_can_start_trading_with_viking = { TAG = VIN }
 				}
 			}
 			else_if = {
@@ -140,82 +62,27 @@ country_decisions = {
 					exists = HLL
 				}
 				OR = {
-					AND = {
-						OR = {
-							alliance_with = MK1
-							MK1 = {
-								is_subject_of = ROOT
-							}
-						}
-						OR = {
-							MK1 = { has_opinion = { who = ROOT value = 100 } }
-							dip = 4
-						}
-					}
-					AND = {
-						OR = {
-							alliance_with = HLL
-							HLL = {
-								is_subject_of = ROOT
-							}
-						}
-						OR = {
-							HLL = { has_opinion = { who = ROOT value = 100 } }
-							dip = 4
-						}
-					}
+					to_vov_can_start_trading_with_viking = { TAG = MK1 }
+					to_vov_can_start_trading_with_viking = { TAG = HLL }
 				}
 			}
 			else_if = {
 				limit = {
 					exists = MK1
 				}
-				AND = {
-					OR = {
-						alliance_with = MK1
-						MK1 = {
-							is_subject_of = ROOT
-						}
-					}
-					OR = {
-						MK1 = { has_opinion = { who = ROOT value = 100 } }
-						dip = 4
-					}
-				}
+				to_vov_can_start_trading_with_viking = { TAG = MK1 }
 			}
 			else_if = {
 				limit = {
 					exists = HLL
 				}
-				AND = {
-					OR = {
-						alliance_with = HLL
-						HLL = {
-							is_subject_of = ROOT
-						}
-					}
-					OR = {
-						HLL = { has_opinion = { who = ROOT value = 100 } }
-						dip = 4
-					}
-				}
+				to_vov_can_start_trading_with_viking = { TAG = HLL }
 			}
 			else_if = {
 				limit = {
 					exists = VIN
 				}
-				AND = {
-					OR = {
-						alliance_with = VIN
-						VIN = {
-							is_subject_of = ROOT
-						}
-					}
-					OR = {
-						VIN = { has_opinion = { who = ROOT value = 100 } }
-						dip = 4
-					}
-				}
+				to_vov_can_start_trading_with_viking = { TAG = VIN }
 			}
 		}
 		effect = {
@@ -313,16 +180,20 @@ country_decisions = {
 					duration = 3650
 					hidden = yes
 				}
-				nhs_make_event_target_elysia = yes
-				event_target:existing_elysia = {
-					add_country_modifier = {
-						name = nhs_vov_recently_proposed_trade
-						duration = 3650
-						hidden = yes
-					}
+			}
+			nhs_trigger_event = { EVENT_ID = nhs_vov_coloniesevents.18 }
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_vov_if_they_accept_tt
+			tooltip = {
+				nhs_scripted_effect_with_parameter_for_existing_elysia = {
+					SCRIPTED_EFFECT = to_vov_trade_deal_add_friend_and_opinion
+					PARAMETER_NAME = TAG
+				}
+				add_country_modifier = {
+					name = nhs_vov_trade_deal
+					duration = -1
 				}
 			}
-			event_target:existing_elysia = { country_event = { id = nhs_vov_coloniesevents.18 days = 1 } }
 		}
 		ai_will_do = {
 			factor = 1
@@ -371,16 +242,15 @@ country_decisions = {
 			}
 		}
 		effect = {
-			nhs_make_event_target_elysia = yes
 			set_global_flag = nhs_vov_no_deal
 			remove_country_modifier = nhs_vov_trade_deal
 			add_country_modifier = {
 				name = nhs_broken_trade_deal
 				duration = 3650
 			}
-			event_target:existing_elysia = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.27 }
+			nhs_scripted_effect_with_parameter_for_existing_elysia = {
+				SCRIPTED_EFFECT = to_vov_break_trade_deal_vikings
+				PARAMETER_NAME = TAG
 			}
 		}
 		ai_will_do = {
@@ -431,7 +301,7 @@ country_decisions = {
 					dip = 4
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					trading_with_helluland = yes
 				}
@@ -444,7 +314,7 @@ country_decisions = {
 					dip = 4
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					trading_with_vinland = yes
 				}
@@ -460,67 +330,25 @@ country_decisions = {
 		}
 		effect = {
 			set_global_flag = nhs_vov_no_deal
-			add_stability = -1
-			add_prestige = -10
 			if = {
 				limit = {
 					NOT = { has_global_flag = nhs_vov_trade_reduced }
 				}
+				add_stability = -2
+				add_legitimacy = -10
+				add_prestige = -20
+			}
+			else = {
 				add_stability = -1
 				add_prestige = -10
-				add_legitimacy = -10
 			}
 			add_country_modifier = {
 				name = nhs_broken_trade_deal
 				duration = 3650
 			}
-			if = {
-				limit = {
-					has_country_modifier = nhs_vov_markland_deal
-				}
-				remove_country_modifier = nhs_vov_markland_deal
-				MK1 = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-			}
-			if = {
-				limit = {
-					has_country_modifier = nhs_vov_helluland_deal
-				}
-				remove_country_modifier = nhs_vov_helluland_deal
-				HLL = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-			}
-			if = {
-				limit = {
-					has_country_modifier = nhs_vov_vinland_deal
-				}
-				remove_country_modifier = nhs_vov_vinland_deal
-				VIN = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-			}
-			if = {
-				limit = {
-					has_country_modifier = nhs_vov_markland_deal_after
-				}
-				remove_country_modifier = nhs_vov_markland_deal_after
-				MK1 = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-			}
-			if = {
-				limit = {
-					has_country_modifier = nhs_vov_helluland_deal_after
-				}
-				remove_country_modifier = nhs_vov_helluland_deal_after
-				HLL = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-			}
-			if = {
-				limit = {
-					has_country_modifier = nhs_vov_vinland_deal_after
-				}
-				remove_country_modifier = nhs_vov_vinland_deal_after
-				VIN = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-			}
-			hidden_effect = {
-				every_country = {
-					country_event = { id = nhs_vov_coloniesevents.25 }
-				}
-			}
+			to_vov_remove_markland_trade_deal = { OFFENDER = yes }
+			to_vov_remove_helluland_trade_deal = { OFFENDER = yes }
+			to_vov_remove_vinland_trade_deal = { OFFENDER = yes }
 		}
 		ai_will_do = {
 			factor = 1
@@ -823,15 +651,6 @@ country_decisions = {
 			clr_country_flag = nhs_conquest_mrk
 			clr_country_flag = nhs_conquest_hll
 			hidden_effect = {
-				if = {
-					limit = {
-						has_country_modifier = nhs_vov_trade_deal
-						NOT = {
-							trading_with_vinland = yes
-						}
-					}
-					nhs_switch_to_vinland_trading = yes
-				}
 				every_country = {
 					clr_country_flag = nhs_conquest_tar_mrk
 				}

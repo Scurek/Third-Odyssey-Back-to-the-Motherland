@@ -445,8 +445,8 @@ country_event = {
 					}
 				}
 				HLL = {
-						country_event = { id = nhs_vov_coloniesevents.10 days = 10 }
-					}
+					country_event = { id = nhs_vov_coloniesevents.10 days = 10 }
+				}
 			}
 			if = {
 				limit = {
@@ -455,8 +455,8 @@ country_event = {
 					}
 				}
 				MK1 = {
-						country_event = { id = nhs_vov_coloniesevents.10 days = 10 }
-					}
+					country_event = { id = nhs_vov_coloniesevents.10 days = 10 }
+				}
 			}
 		}
 	}
@@ -690,6 +690,8 @@ country_event = {
 			duration = -1
 		}
 		create_alliance = MK1
+		to_vov_trade_deal_add_friend_and_opinion = { TAG = MK1 }
+		custom_tooltip = nhs_new_line_tt
 		MK1 = {
 			country_event = { id = nhs_vov_coloniesevents.12 }
 		}
@@ -713,6 +715,8 @@ country_event = {
 			duration = -1
 		}
 		create_alliance = HLL
+		to_vov_trade_deal_add_friend_and_opinion = { TAG = HLL }
+		custom_tooltip = nhs_new_line_tt
 		HLL = {
 			country_event = { id = nhs_vov_coloniesevents.12 }
 		}
@@ -754,32 +758,7 @@ country_event = {
 	
 	option = {
 		name = "nhs_vov_coloniesevents.12.a"
-		if = {
-			limit = {
-				NOT = { has_global_flag = nhs_first_trade_deal }
-			}
-			add_opinion = {
-				who = FROM
-				modifier = nhs_vov_trade1
-			}
-			reverse_add_opinion = {
-				who = FROM
-				modifier = nhs_vov_trade1
-			}
-		}
-		if = {
-			limit = {
-				has_global_flag = nhs_first_trade_deal
-			}
-			add_opinion = {
-				who = FROM
-				modifier = nhs_vov_trade2
-			}
-			reverse_add_opinion = {
-				who = FROM
-				modifier = nhs_vov_trade2
-			}
-		}
+		to_vov_trade_deal_add_friend_and_opinion = { TAG = FROM }
 		add_country_modifier = {
 			name = nhs_vov_trade_deal
 			duration = -1
@@ -1075,7 +1054,16 @@ country_event = {
 	
 	trigger = {
 		nhs_condition_all_ely = { KOMANDA = tag }
-	
+	}
+
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = nhs_vov_recently_proposed_trade
+				duration = 3650
+				hidden = yes
+			}
+		}
 	}
 	
 	option = {
@@ -1085,53 +1073,13 @@ country_event = {
 				tag = MK1
 			}
 		}
-		MK1 = {
-			country_event = { id = nhs_vov_coloniesevents.12 days = 1 }
-		}
 		set_global_flag = nhs_vov_markland_deal_f
 		clr_global_flag = nhs_vov_helluland_deal_f
 		clr_global_flag = nhs_vov_vinland_deal_f
 		clr_global_flag = nhs_vov_no_deal
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal
-			}
-			remove_country_modifier = nhs_vov_helluland_deal
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal
-			}
-			remove_country_modifier = nhs_vov_vinland_deal
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal_after
-			}
-			remove_country_modifier = nhs_vov_helluland_deal_after
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal_after
-			}
-			remove_country_modifier = nhs_vov_vinland_deal_after
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
+		to_vov_remove_helluland_trade_deal = { OFFENDER = yes }
+		to_vov_remove_vinland_trade_deal = { OFFENDER = yes }
+		to_vov_trade_deal_add_friend_and_opinion = { TAG = MK1 }
 		if = {
 			limit = {
 				NOT = { has_global_flag = nhs_vov_trade_reduced }
@@ -1141,14 +1089,14 @@ country_event = {
 				duration = -1
 			}
 		}
-		if = {
-			limit = {
-				has_global_flag = nhs_vov_trade_reduced
-			}
+		else = {
 			add_country_modifier = {
 				name = nhs_vov_markland_deal_after
 				duration = -1
 			}
+		}
+		MK1 = {
+			country_event = { id = nhs_vov_coloniesevents.12 }
 		}
 	}
 	
@@ -1159,53 +1107,13 @@ country_event = {
 				tag = HLL
 			}
 		}
-		HLL = {
-			country_event = { id = nhs_vov_coloniesevents.12 days = 1 }
-		}
 		clr_global_flag = nhs_vov_markland_deal_f
 		set_global_flag = nhs_vov_helluland_deal_f
 		clr_global_flag = nhs_vov_vinland_deal_f
 		clr_global_flag = nhs_vov_no_deal
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal
-			}
-			remove_country_modifier = nhs_vov_markland_deal
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal
-			}
-			remove_country_modifier = nhs_vov_vinland_deal
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal_after
-			}
-			remove_country_modifier = nhs_vov_markland_deal_after
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal_after
-			}
-			remove_country_modifier = nhs_vov_vinland_deal_after
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
+		to_vov_remove_markland_trade_deal = { OFFENDER = yes }
+		to_vov_remove_vinland_trade_deal = { OFFENDER = yes }
+		to_vov_trade_deal_add_friend_and_opinion = { TAG = HLL }
 		if = {
 			limit = {
 				NOT = { has_global_flag = nhs_vov_trade_reduced }
@@ -1215,14 +1123,14 @@ country_event = {
 				duration = -1
 			}
 		}
-		if = {
-			limit = {
-				has_global_flag = nhs_vov_trade_reduced
-			}
+		else = {
 			add_country_modifier = {
 				name = nhs_vov_helluland_deal_after
 				duration = -1
 			}
+		}
+		HLL = {
+			country_event = { id = nhs_vov_coloniesevents.12 }
 		}
 	}
 	
@@ -1233,53 +1141,13 @@ country_event = {
 				tag = VIN
 			}
 		}
-		VIN = {
-			country_event = { id = nhs_vov_coloniesevents.12 days = 1 }
-		}
 		clr_global_flag = nhs_vov_markland_deal_f
 		clr_global_flag = nhs_vov_helluland_deal_f
 		set_global_flag = nhs_vov_vinland_deal_f
 		clr_global_flag = nhs_vov_no_deal
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal
-			}
-			remove_country_modifier = nhs_vov_markland_deal
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal
-			}
-			remove_country_modifier = nhs_vov_helluland_deal
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal_after
-			}
-			remove_country_modifier = nhs_vov_markland_deal_after
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal_after
-			}
-			remove_country_modifier = nhs_vov_helluland_deal_after
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
+		to_vov_remove_markland_trade_deal = { OFFENDER = yes }
+		to_vov_remove_helluland_trade_deal = { OFFENDER = yes }
+		to_vov_trade_deal_add_friend_and_opinion = { TAG = VIN }
 		if = {
 			limit = {
 				NOT = { has_global_flag = nhs_vov_trade_reduced }
@@ -1289,14 +1157,14 @@ country_event = {
 				duration = -1
 			}
 		}
-		if = {
-			limit = {
-				has_global_flag = nhs_vov_trade_reduced
-			}
+		else = {
 			add_country_modifier = {
 				name = nhs_vov_vinland_deal_after
 				duration = -1
 			}
+		}
+		VIN = {
+			country_event = { id = nhs_vov_coloniesevents.12 }
 		}
 	}
 	option = {
@@ -1321,18 +1189,15 @@ country_event = {
 	option = { #Accept deal for exotic goods from Markland (more trade power in the north and more trade power in general; small boost to food production as well)
 		name = "nhs_vov_coloniesevents.19.a"
 		trigger = {
-			OR = {
-				alliance_with = MK1
-				MK1 = {
-					is_subject_of = ROOT
-				}
-			}
-			OR = {
-				MK1 = { has_opinion = { who = ROOT value = 100 } }
-				dip = 4
-			}
+			to_vov_can_start_trading_with_viking = { TAG = MK1 }
 		}
+		MK1 = {
+			country_event = { id = nhs_vov_coloniesevents.20 }
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_vov_if_they_accept_tt
 		tooltip = {
+			to_vov_trade_deal_add_friend_and_opinion = { TAG = MK1 }
 			if = {
 				limit = {
 					NOT = { has_global_flag = nhs_vov_trade_reduced }
@@ -1342,35 +1207,26 @@ country_event = {
 					duration = -1
 				}
 			}
-			if = {
-				limit = {
-					has_global_flag = nhs_vov_trade_reduced
-				}
+			else = {
 				add_country_modifier = {
 					name = nhs_vov_markland_deal_after
 					duration = -1
 				}
 			}
 		}
-		MK1 = {
-			country_event = { id = nhs_vov_coloniesevents.20 }
-		}
 	}
 	option = { #Accept deal for naval supplies from Helluland (more trade power in the north and cheaper boats; small boost to food produciton as well)
 		name = "nhs_vov_coloniesevents.19.b"
 		trigger = {
-			OR = {
-				alliance_with = HLL
-				HLL = {
-					is_subject_of = ROOT
-				}
-			}
-			OR = {
-				HLL = { has_opinion = { who = ROOT value = 100 }}
-				dip = 4
-			}
+			to_vov_can_start_trading_with_viking = { TAG = HLL }
 		}
+		HLL = {
+			country_event = { id = nhs_vov_coloniesevents.20 }
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_vov_if_they_accept_tt
 		tooltip = {
+			to_vov_trade_deal_add_friend_and_opinion = { TAG = HLL }
 			if = {
 				limit = {
 					NOT = { has_global_flag = nhs_vov_trade_reduced }
@@ -1380,35 +1236,26 @@ country_event = {
 					duration = -1
 				}
 			}
-			if = {
-				limit = {
-					has_global_flag = nhs_vov_trade_reduced
-				}
+			else = {
 				add_country_modifier = {
 					name = nhs_vov_helluland_deal_after
 					duration = -1
 				}
 			}
 		}
-		HLL = {
-			country_event = { id = nhs_vov_coloniesevents.20 }
-		}
 	}
 	option = { #Vinland
 		name = "nhs_vov_coloniesevents.19.c"
 		trigger = {
-			OR = {
-				alliance_with = VIN
-				VIN = {
-					is_subject_of = ROOT
-				}
-			}
-			OR = {
-				VIN = { has_opinion = { who = ROOT value = 100 } }
-				dip = 4
-			}
+			to_vov_can_start_trading_with_viking = { TAG = VIN }
 		}
+		VIN = {
+			country_event = { id = nhs_vov_coloniesevents.20 }
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_vov_if_they_accept_tt
 		tooltip = {
+			to_vov_trade_deal_add_friend_and_opinion = { TAG = VIN }
 			if = {
 				limit = {
 					NOT = { has_global_flag = nhs_vov_trade_reduced }
@@ -1418,18 +1265,12 @@ country_event = {
 					duration = -1
 				}
 			}
-			if = {
-				limit = {
-					has_global_flag = nhs_vov_trade_reduced
-				}
+			else = {
 				add_country_modifier = {
 					name = nhs_vov_vinland_deal_after
 					duration = -1
 				}
 			}
-		}
-		VIN = {
-			country_event = { id = nhs_vov_coloniesevents.20 }
 		}
 	}
 	option = {  #Make no deal with the northeners
@@ -1485,6 +1326,7 @@ country_event = {
 	option = {
 		name = "nhs_vov_coloniesevents.20.a"
 		clr_global_flag = nhs_vov_no_deal
+		to_vov_trade_deal_add_friend_and_opinion = { TAG = FROM }
 		add_country_modifier = {
 			name = nhs_vov_trade_deal
 			duration = -1
@@ -1524,66 +1366,9 @@ country_event = {
 		set_global_flag = nhs_vov_markland_deal_f
 		clr_global_flag = nhs_vov_helluland_deal_f
 		clr_global_flag = nhs_vov_vinland_deal_f
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal
-			}
-			remove_country_modifier = nhs_vov_vinland_deal
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal_after
-			}
-			remove_country_modifier = nhs_vov_vinland_deal_after
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal
-			}
-			remove_country_modifier = nhs_vov_markland_deal
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal
-			}
-			remove_country_modifier = nhs_vov_helluland_deal
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal_after
-			}
-			remove_country_modifier = nhs_vov_markland_deal_after
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal_after
-			}
-			remove_country_modifier = nhs_vov_helluland_deal_after
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
+		to_vov_remove_helluland_trade_deal = { OFFENDER = yes }
+		to_vov_remove_vinland_trade_deal = { OFFENDER = yes }
+		to_vov_trade_deal_add_friend_and_opinion = { TAG = MK1 }
 		if = {
 			limit = {
 				NOT = { has_global_flag = nhs_vov_trade_reduced }
@@ -1593,10 +1378,7 @@ country_event = {
 				duration = -1
 			}
 		}
-		if = {
-			limit = {
-				has_global_flag = nhs_vov_trade_reduced
-			}
+		else = {
 			add_country_modifier = {
 				name = nhs_vov_markland_deal_after
 				duration = -1
@@ -1614,66 +1396,9 @@ country_event = {
 		clr_global_flag = nhs_vov_markland_deal_f
 		set_global_flag = nhs_vov_helluland_deal_f
 		clr_global_flag = nhs_vov_vinland_deal_f
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal
-			}
-			remove_country_modifier = nhs_vov_vinland_deal
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal_after
-			}
-			remove_country_modifier = nhs_vov_vinland_deal_after
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal
-			}
-			remove_country_modifier = nhs_vov_markland_deal
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal
-			}
-			remove_country_modifier = nhs_vov_helluland_deal
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal_after
-			}
-			remove_country_modifier = nhs_vov_markland_deal_after
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal_after
-			}
-			remove_country_modifier = nhs_vov_helluland_deal_after
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
+		to_vov_remove_markland_trade_deal = { OFFENDER = yes }
+		to_vov_remove_vinland_trade_deal = { OFFENDER = yes }
+		to_vov_trade_deal_add_friend_and_opinion = { TAG = HLL }
 		if = {
 			limit = {
 				NOT = { has_global_flag = nhs_vov_trade_reduced }
@@ -1683,10 +1408,7 @@ country_event = {
 				duration = -1
 			}
 		}
-		if = {
-			limit = {
-				has_global_flag = nhs_vov_trade_reduced
-			}
+		else = {
 			add_country_modifier = {
 				name = nhs_vov_helluland_deal_after
 				duration = -1
@@ -1704,66 +1426,9 @@ country_event = {
 		clr_global_flag = nhs_vov_markland_deal_f
 		clr_global_flag = nhs_vov_helluland_deal_f
 		set_global_flag = nhs_vov_vinland_deal_f
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal
-			}
-			remove_country_modifier = nhs_vov_vinland_deal
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal_after
-			}
-			remove_country_modifier = nhs_vov_vinland_deal_after
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal
-			}
-			remove_country_modifier = nhs_vov_markland_deal
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal
-			}
-			remove_country_modifier = nhs_vov_helluland_deal
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal_after
-			}
-			remove_country_modifier = nhs_vov_markland_deal_after
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal_after
-			}
-			remove_country_modifier = nhs_vov_helluland_deal_after
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
+		to_vov_remove_markland_trade_deal = { OFFENDER = yes }
+		to_vov_remove_helluland_trade_deal = { OFFENDER = yes }
+		to_vov_trade_deal_add_friend_and_opinion = { TAG = VIN }
 		if = {
 			limit = {
 				NOT = { has_global_flag = nhs_vov_trade_reduced }
@@ -1773,10 +1438,7 @@ country_event = {
 				duration = -1
 			}
 		}
-		if = {
-			limit = {
-				has_global_flag = nhs_vov_trade_reduced
-			}
+		else = {
 			add_country_modifier = {
 				name = nhs_vov_vinland_deal_after
 				duration = -1
@@ -1852,66 +1514,9 @@ country_event = {
 			add_stability = -1
 			add_prestige = -10
 		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal
-			}
-			remove_country_modifier = nhs_vov_markland_deal
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal
-			}
-			remove_country_modifier = nhs_vov_helluland_deal
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal
-			}
-			remove_country_modifier = nhs_vov_vinland_deal
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal_after
-			}
-			remove_country_modifier = nhs_vov_markland_deal_after
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal_after
-			}
-			remove_country_modifier = nhs_vov_helluland_deal_after
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal_after
-			}
-			remove_country_modifier = nhs_vov_vinland_deal_after
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
+		to_vov_remove_markland_trade_deal = { OFFENDER = yes }
+		to_vov_remove_helluland_trade_deal = { OFFENDER = yes }
+		to_vov_remove_vinland_trade_deal = { OFFENDER = yes }
 	}
 }
 #Trade deal end, bounce
@@ -1930,9 +1535,12 @@ country_event = {
 	option = {
 		name = "nhs_vov_coloniesevents.25.a"
 		remove_country_modifier = nhs_vov_trade_deal
+		reverse_add_opinion = { who = FROM modifier = nhs_broken_trade }
+		remove_historical_friend = FROM
 		tooltip = {
-			add_opinion = { who = FROM modifier = nhs_broken_trade_big }
-			add_opinion = { who = FROM modifier = nhs_broken_trade }
+			FROM = {
+				remove_historical_friend = ROOT
+			}
 		}
 	}
 }
@@ -1954,19 +1562,21 @@ country_event = {
 	}
 	
 	immediate = {
-		set_global_flag = nhs_vov_no_deal
-		clr_global_flag = nhs_vov_helluland_deal_f
-		clr_global_flag = nhs_vov_markland_deal_f
-		clr_global_flag = nhs_vov_vinland_deal_f
-		nhs_make_event_target_elysia = yes
+		hidden_effect = {
+			set_global_flag = nhs_vov_no_deal
+			clr_global_flag = nhs_vov_helluland_deal_f
+			clr_global_flag = nhs_vov_markland_deal_f
+			clr_global_flag = nhs_vov_vinland_deal_f
+			nhs_make_event_target_elysia = yes
+		}
 	}
 	
 	option = {
 		name = "nhs_vov_coloniesevents.26.a"
 		remove_country_modifier = nhs_vov_trade_deal
-		event_target:existing_elysia = { 
-			add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-			country_event = { id = nhs_vov_coloniesevents.27 }
+		nhs_scripted_effect_with_parameter_for_existing_elysia = {
+			SCRIPTED_EFFECT = to_vov_break_trade_deal_vikings
+			PARAMETER_NAME = TAG
 		}
 	}
 }
@@ -1982,48 +1592,9 @@ country_event = {
 	
 	option = {
 		name = "nhs_vov_coloniesevents.27.a"
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal
-			}
-			remove_country_modifier = nhs_vov_markland_deal
-			MK1 = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal
-			}
-			remove_country_modifier = nhs_vov_helluland_deal
-			HLL = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal
-			}
-			remove_country_modifier = nhs_vov_vinland_deal
-			VIN = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal_after
-			}
-			remove_country_modifier = nhs_vov_markland_deal_after
-			MK1 = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal_after
-			}
-			remove_country_modifier = nhs_vov_helluland_deal_after
-			HLL = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal_after
-			}
-			remove_country_modifier = nhs_vov_vinland_deal_after
-			VIN = { add_opinion = { who = ROOT modifier = nhs_broken_trade } }
-		}
+		to_vov_remove_markland_trade_deal = { OFFENDER = no }
+		to_vov_remove_helluland_trade_deal = { OFFENDER = no }
+		to_vov_remove_vinland_trade_deal = { OFFENDER = no }
 	}
 }
 
@@ -2035,6 +1606,7 @@ country_event = {
 	picture = viking_pier_eventPicture
 	
 	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
 		is_year = 1580
 		OR = {
 			trading_with_helluland = yes
@@ -2094,18 +1666,17 @@ country_event = {
 	picture = ELYSIAN_HARBOUR_eventPicture
 	
 	trigger = {
-		OR = {
-			MK1 = { num_of_cities = 20 }
-			HLL = { num_of_cities = 20 }
-			VIN = { num_of_cities = 30 }
-			NHS = { num_of_cities = 40 }
-			nhs_num_of_cities_X = { STEVILO_MEST = 40 }
-		}
 		nhs_condition_all_ely = { KOMANDA = tag }
 		OR = {
 			trading_with_markland = yes
 			trading_with_helluland = yes
 			trading_with_vinland = yes
+		}
+		OR = {
+			num_of_cities = 40
+			MK1 = { num_of_cities = 30 }
+			HLL = { num_of_cities = 30 }
+			VIN = { num_of_cities = 30 }
 		}
 		NOT = { has_global_flag = nhs_vov_trade_reduced }
 	}
@@ -2785,12 +2356,6 @@ country_event = {
 				trading_with_vinland = yes
 			}
 		}
-		if = {
-			limit = {
-				has_global_flag = nhs_started_at_bookmark
-			}
-			remove_historical_friend = VIN
-		}
 		clr_global_flag = nhs_vov_markland_deal_f
 		clr_global_flag = nhs_vov_helluland_deal_f
 		clr_global_flag = nhs_vov_vinland_deal_f
@@ -2798,66 +2363,9 @@ country_event = {
 			name = nhs_broken_trade_deal
 			duration = 3650
 		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal
-			}
-			remove_country_modifier = nhs_vov_markland_deal
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal
-			}
-			remove_country_modifier = nhs_vov_helluland_deal
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal
-			}
-			remove_country_modifier = nhs_vov_vinland_deal
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal_after
-			}
-			remove_country_modifier = nhs_vov_markland_deal_after
-			MK1 = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal_after
-			}
-			remove_country_modifier = nhs_vov_helluland_deal_after
-			HLL = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_vinland_deal_after
-			}
-			remove_country_modifier = nhs_vov_vinland_deal_after
-			VIN = { 
-				add_opinion = { who = ROOT modifier = nhs_broken_trade } 
-				country_event = { id = nhs_vov_coloniesevents.25 }
-			}
-		}
+		to_vov_remove_markland_trade_deal = { OFFENDER = yes }
+		to_vov_remove_helluland_trade_deal = { OFFENDER = yes }
+		to_vov_remove_vinland_trade_deal = { OFFENDER = yes }
 	}
 	
 	option = { #Start Trade Deal
@@ -2877,18 +2385,7 @@ country_event = {
 		}
 		clr_global_flag = nhs_no_deal
 		clr_global_flag = nhs_vov_helluland_deal_f
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal
-			}
-			remove_country_modifier = nhs_vov_helluland_deal
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_helluland_deal_after
-			}
-			remove_country_modifier = nhs_vov_helluland_deal_after
-		}
+		to_vov_remove_helluland_trade_deal = { OFFENDER = yes }
 		set_global_flag = nhs_vov_markland_deal_f
 		if = {
 			limit = {
@@ -2899,10 +2396,7 @@ country_event = {
 				duration = -1
 			}
 		}
-		if = {
-			limit = {
-				has_global_flag = nhs_vov_trade_reduced
-			}
+		else = {
 			add_country_modifier = {
 				name = nhs_vov_markland_deal_after
 				duration = -1
@@ -2926,18 +2420,7 @@ country_event = {
 		}
 		clr_global_flag = nhs_no_deal
 		clr_global_flag = nhs_vov_markland_deal_f
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal
-			}
-			remove_country_modifier = nhs_vov_markland_deal
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_vov_markland_deal_after
-			}
-			remove_country_modifier = nhs_vov_markland_deal_after
-		}
+		to_vov_remove_markland_trade_deal = { OFFENDER = yes }
 		set_global_flag = nhs_vov_helluland_deal_f
 		if = {
 			limit = {
@@ -2948,10 +2431,7 @@ country_event = {
 				duration = -1
 			}
 		}
-		if = {
-			limit = {
-				has_global_flag = nhs_vov_trade_reduced
-			}
+		else = {
 			add_country_modifier = {
 				name = nhs_vov_helluland_deal_after
 				duration = -1
@@ -3003,16 +2483,12 @@ country_event = {
 				duration = -1
 			}
 		}
-		if = {
-			limit = {
-				has_global_flag = nhs_vov_trade_reduced
-			}
+		else = {
 			add_country_modifier = {
 				name = nhs_vov_vinland_deal
 				duration = -1
 			}
 		}
-		
 	}
 	option = { #Maintain no deal policy
 		name = "nhs_vov_coloniesevents.51.f"

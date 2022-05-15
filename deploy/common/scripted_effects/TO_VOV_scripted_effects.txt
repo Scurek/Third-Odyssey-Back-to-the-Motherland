@@ -245,3 +245,117 @@ to_nhs_set_up_independant_varangians_in_province = {
 		cede_province = VGD
 	}
 }
+
+to_vov_remove_viking_trade_deal = {
+	reverse_add_opinion = { who = $TAG$ modifier = nhs_broken_trade }
+	remove_historical_friend = $TAG$
+	$TAG$ = {
+		hidden_effect = {
+			remove_opinion = {
+				who = ROOT
+				modifier = nhs_vov_trade1
+			}
+			remove_opinion = {
+				who = ROOT
+				modifier = nhs_vov_trade2
+			}
+			reverse_remove_opinion = {
+				who = ROOT
+				modifier = nhs_vov_trade1
+			}
+			reverse_remove_opinion = {
+				who = ROOT
+				modifier = nhs_vov_trade2
+			}
+		}
+		tooltip = {
+			remove_historical_friend = ROOT
+		}
+		if = {
+			limit = {
+				always = $OFFENDER$
+			}
+			country_event = { id = nhs_vov_coloniesevents.25 }
+		}
+	}
+}
+
+to_vov_remove_markland_trade_deal = {
+	if = {
+		limit = {
+			OR = {
+				has_country_modifier = nhs_vov_markland_deal
+				has_country_modifier = nhs_vov_markland_deal_after
+			}
+		}
+		remove_country_modifier = nhs_vov_markland_deal
+		remove_country_modifier = nhs_vov_markland_deal_after
+		to_vov_remove_viking_trade_deal = { TAG = MK1 OFFENDER = $OFFENDER$ }
+		custom_tooltip = nhs_new_line_tt
+	}
+}
+
+to_vov_remove_helluland_trade_deal = {
+	if = {
+		limit = {
+			OR = {
+				has_country_modifier = nhs_vov_helluland_deal
+				has_country_modifier = nhs_vov_helluland_deal_after
+			}
+		}
+		remove_country_modifier = nhs_vov_helluland_deal
+		remove_country_modifier = nhs_vov_helluland_deal_after
+		to_vov_remove_viking_trade_deal = { TAG = HLL OFFENDER = $OFFENDER$ }
+		custom_tooltip = nhs_new_line_tt
+	}
+}
+
+to_vov_remove_vinland_trade_deal = {
+	if = {
+		limit = {
+			OR = {
+				has_country_modifier = nhs_vov_vinland_deal
+				has_country_modifier = nhs_vov_vinland_deal_after
+			}
+		}
+		remove_country_modifier = nhs_vov_vinland_deal
+		remove_country_modifier = nhs_vov_vinland_deal_after
+		to_vov_remove_viking_trade_deal = { TAG = VIN OFFENDER = $OFFENDER$ }
+		custom_tooltip = nhs_new_line_tt
+	}
+}
+
+to_vov_trade_deal_add_friend_and_opinion = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = nhs_first_trade_deal }
+		}
+		reverse_add_opinion = {
+			who = $TAG$
+			modifier = nhs_vov_trade1
+		}
+	}
+	else = {
+		reverse_add_opinion = {
+			who = $TAG$
+			modifier = nhs_vov_trade2
+		}
+	}
+	add_historical_friend = $TAG$
+	$TAG$ = {
+		tooltip = {
+			add_historical_friend = ROOT
+		}
+	}
+}
+
+to_vov_break_trade_deal_vikings = {
+	reverse_add_opinion = { who = $TAG$ modifier = nhs_broken_trade }
+	remove_historical_friend = $TAG$
+	$TAG$ = {
+		tooltip = {
+			remove_historical_friend = ROOT
+		}
+		country_event = { id = nhs_vov_coloniesevents.27 }
+	}
+}
