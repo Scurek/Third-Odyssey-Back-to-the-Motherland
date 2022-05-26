@@ -12,9 +12,10 @@ native_reformed_basic_reform = {
 		enables_aristocratic_idea_group = no
 		enables_natives_idea_group = yes
 	}
-	# modifiers = {
-	# 	tribal_development_growth = 0.15
-	# }
+	modifiers = {
+		reform_progress_growth = -1.0
+		monthly_reform_progress = 1
+	}
 	valid_for_nation_designer = no
 	nation_designer_cost = 0
 }
@@ -262,8 +263,9 @@ to_native_reform_consensus_government = {
 		native_assimilation = 1
 		global_unrest = -3
 		years_of_nationalism = -5
-		max_absolutism = -20
-		min_autonomy = 15
+		max_absolutism = -40
+		# min_autonomy = 15
+		reform_progress_growth = -0.5
 	}
 	effect = {
 		to_enables_or_switches_native_estates = { FROM_ESTATE = estate_nobles TO_ESTATE = estate_clans }
@@ -315,8 +317,9 @@ to_native_reform_law_of_peace = {
 		global_unrest = -3
 		years_of_nationalism = -5
 		diplomatic_reputation = 2
-		max_absolutism = -20
-		min_autonomy = 15
+		max_absolutism = -40
+		# min_autonomy = 15
+		reform_progress_growth = -0.5
 	}
 	effect = {
 		to_enables_or_switches_native_estates = { FROM_ESTATE = estate_nobles TO_ESTATE = estate_clans }
@@ -358,6 +361,7 @@ to_native_reform_grand_chiefdom = {
 	modifiers = {
 		stability_cost_modifier = -0.33
 		max_absolutism = 10
+		reform_progress_growth = -0.5
 	}
 
 	effect = {
@@ -418,6 +422,7 @@ to_native_reform_cahokian_dynasties = {
 		legitimacy = 0.5
 		candidate_random_bonus = 1
 		max_absolutism = 10
+		monthly_reform_progress_modifier = 0.25
 	}
 
 	effect = {
@@ -427,6 +432,7 @@ to_native_reform_cahokian_dynasties = {
 	custom_attributes = {
 		enables_aristocratic_idea_group = yes
 		to_nat_dynastic_elections = yes
+		# to_nat_reduce_no_legalism_penalty = yes
 	}
 }
 
@@ -566,13 +572,8 @@ to_native_reform_inward_focus = {
 			limit = {
 				ai = yes
 			}
-			OR = {
-				is_subject = yes
-				AND = {
-					NOT = { has_idea_group = expansion_ideas }
-					NOT = { to_nat_is_major_native_nation = yes }
-				}
-			}
+			NOT = { to_nat_can_take_unite_our_culture_reform = yes }
+			NOT = { to_nat_can_take_expansion_reform = yes }
 		}
 	}
 
@@ -593,13 +594,8 @@ to_native_reform_conquest = {
 			limit = {
 				ai = yes
 			}
-			OR = {
-				is_subject = yes
-				AND = {
-					NOT = { has_idea_group = expansion_ideas }
-					NOT = { to_nat_is_major_native_nation = yes }
-				}
-			}
+			NOT = { to_nat_can_take_unite_our_culture_reform = yes }
+			NOT = { to_nat_can_take_expansion_reform = yes }
 		}
 	}
 
@@ -616,12 +612,7 @@ to_native_reform_unite_culture = {
 	allow_normal_conversion = yes
 
 	trigger = {
-		OR = {
-			is_subject = no
-			is_subject_of_type = to_confederation_subject
-		}
-		to_nat_is_major_native_nation = yes
-		NOT = { has_idea_group = expansion_ideas }
+		to_nat_can_take_unite_our_culture_reform = yes
 	}
 
 	modifiers = {
@@ -631,8 +622,13 @@ to_native_reform_unite_culture = {
 	}
 
 	effect = {
-		to_nat_form_confederation_tag = yes
-		custom_tooltip = to_nat_unit_own_culture_confederation_tt
+		tooltip = {
+			to_nat_form_confederation_tag = yes
+		}
+		to_nat_integrate_neighbor_culture_in_confederation = yes
+		hidden_effect = {
+			to_nat_form_confederation_tag = yes
+		}
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = to_colonial_machanics_tt
 		custom_tooltip = to_nat_colonise_own_culture_tt
@@ -646,13 +642,13 @@ to_native_reform_unite_culture = {
 					duration = -1
 				}
 			}
-			every_subject_country = {
+			every_owned_province = {
 				limit = {
-					is_subject_of_type = to_confederation_subject
-					primary_culture = ROOT
+					to_nat_colonise_foreign_culture_province_trigger = yes
 				}
-				ROOT = {
-					inherit = PREV
+				add_province_modifier = { 
+					name = to_nat_colonise_foreign_modifier
+					duration = -1
 				}
 			}
 		}
@@ -672,6 +668,12 @@ to_native_reform_unite_culture = {
 				}
 				remove_province_modifier = to_nat_colonise_own_modifier
 			}
+			every_owned_province = {
+				limit = {
+					has_province_modifier = to_nat_colonise_foreign_modifier
+				}
+				remove_province_modifier = to_nat_colonise_foreign_modifier
+			}
 		}
 	}
 }
@@ -681,12 +683,12 @@ to_native_reform_expansion = {
 	allow_normal_conversion = yes
 
 	trigger = {
-		OR = {
-			is_subject = no
-			is_subject_of_type = to_confederation_subject
-		}
+		# OR = {
+		# 	is_subject = no
+		# 	is_subject_of_type = to_confederation_subject
+		# }
 		# to_nat_is_major_native_nation = yes
-		has_idea_group = expansion_ideas
+		to_nat_can_take_expansion_reform = yes
 	}
 
 	modifiers = {
@@ -697,13 +699,16 @@ to_native_reform_expansion = {
 	effect = {
 		custom_tooltip = to_nat_unlocking_expansion_ideas_tt
 		custom_tooltip = nhs_new_line_tt
-		to_nat_form_confederation_tag = yes
-		custom_tooltip = to_nat_unit_own_culture_confederation_tt
+		tooltip = {
+			to_nat_form_confederation_tag = yes
+		}
+		to_nat_integrate_neighbor_culture_in_confederation = yes
+		hidden_effect = {
+			to_nat_form_confederation_tag = yes
+		}
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = to_colonial_machanics_tt
 		custom_tooltip = to_nat_native_expansion_tt
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = to_nat_unlocks_exploration_ideas_tt
 		hidden_effect = {
 			every_owned_province = {
 				limit = {
@@ -1055,8 +1060,7 @@ to_native_reform_central_administration = {
 	allow_migration = no
 
 	effect = {
-		to_nat_form_confederation_tag = yes
-		to_nat_integrate_confederation = yes
+		centralize_confederation = yes
 		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {
@@ -1087,8 +1091,7 @@ to_native_reform_hooks_and_obligations = {
 	effect = {
 		custom_tooltip = to_nat_reduce_loyalty_cost_for_sieze_land_tt
 		custom_tooltip = nhs_new_line_tt
-		to_nat_form_confederation_tag = yes
-		to_nat_integrate_confederation = yes
+		centralize_confederation = yes
 		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {

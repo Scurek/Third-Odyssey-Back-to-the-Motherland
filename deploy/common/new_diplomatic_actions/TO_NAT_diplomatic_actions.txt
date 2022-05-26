@@ -58,32 +58,26 @@ to_request_to_join_confederation = {
 		}
 	}
 	on_accept = {
-		if = {
-			limit = {
-				ai = yes
-				OR = {
-					AND = {
-						primary_culture = FROM
-						FROM = {
-							OR = {
-								has_reform = to_native_reform_unite_culture
-								has_reform = to_native_reform_expansion
-							}
-						}
-					}
-					FROM = {
-						OR = {
-							has_reform = to_native_reform_central_administration
-							has_reform = to_native_reform_hooks_and_obligations
-						}
-					}
-				}
-			}
-			FROM = {
-				inherit = ROOT
-			}
-		}
-		else = {
+		# if = {
+		# 	limit = {
+		# 		ai = yes
+		# 		OR = {
+		# 			AND = {
+		# 				primary_culture = FROM
+		# 				FROM = {
+		# 					to_nat_has_any_cultural_unification_government_reform = yes
+		# 				}
+		# 			}
+		# 			FROM = {
+		# 				to_nat_has_any_tier_8_native_government_reform = yes
+		# 			}
+		# 		}
+		# 	}
+		# 	FROM = {
+		# 		inherit = ROOT
+		# 	}
+		# }
+		# else = {
 			FROM = {
 				create_subject = {
 					subject_type = to_confederation_subject
@@ -95,21 +89,13 @@ to_request_to_join_confederation = {
 				value = 20
 				mutual = yes
 			}
-		}
+		# }
 	}
 	on_decline =
 	{
 	}
 
 	ai_acceptance = { # This works similarly to variable_arithmetic_trigger, but does not support triggers generally. Instead, "limit" will be evaluated first and the rest ignored if it isn't passed.
-		# add_entry = {
-		# 	name = ALLIANCE
-		# 	limit = { alliance_with = FROM }
-		# 	export_to_variable = {
-        #         variable_name = ai_value
-        #         value = 20
-        #     }
-		# }
 		add_entry = {
 			name = RIVALRY
 			limit = {
@@ -122,18 +108,18 @@ to_request_to_join_confederation = {
 			}
 			export_to_variable = {
                 variable_name = ai_value
-                value = -50
+                value = -500
             }
 		}
 		# add_entry = {
-		# 	name = TRUST
-		# 	export_to_variable = {
-		# 		variable_name = ai_value
-		# 		value = trust
-		# 		who = FROM
+		# 	name = HAS_ALLIANCE
+		# 	limit = { 
+		# 		alliance_with = FROM
 		# 	}
-		# 	subtract_variable = { which = ai_value value = 45 }
-		# 	multiply_variable = { which = ai_value value = 2 }
+		# 	export_to_variable = {
+        #         variable_name = ai_value
+        #         value = 10
+        #     }
 		# }
 		add_entry = {
 			name = CULTURE_FOREIGN
@@ -142,18 +128,7 @@ to_request_to_join_confederation = {
 			}
 			export_to_variable = {
                 variable_name = ai_value
-                value = -20
-            }
-		}
-		add_entry = {
-			name = CULTURE_SAME_GROUP
-			limit = { 
-				NOT = { primary_culture = FROM }
-				culture_group = FROM
-			}
-			export_to_variable = {
-                variable_name = ai_value
-                value = 5
+                value = -10
             }
 		}
 		add_entry = {
@@ -163,9 +138,31 @@ to_request_to_join_confederation = {
 			}
 			export_to_variable = {
                 variable_name = ai_value
-                value = 20
+                value = 40
             }
 		}
+		add_entry = {
+			name = DIPLOMATIC_REPUTATION_CONF
+			limit = {
+				diplomatic_reputation = 1
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 10 }
+		}
+		# add_entry = {
+		# 	name = CULTURE_GROUP_SAME
+		# 	limit = { 
+		# 		culture_group = FROM
+		# 		NOT = { primary_culture = FROM }
+		# 	}
+		# 	export_to_variable = {
+        #         variable_name = ai_value
+        #         value = 10
+        #     }
+		# }
 		add_entry = {
 			name = OPINION
 			export_to_variable = {
@@ -175,49 +172,48 @@ to_request_to_join_confederation = {
 				with = ROOT
 			}
 			divide_variable = { which = ai_value value = 4 }
-			divide_variable = { which = ai_value value = 4 }
 		}
 		add_entry = {
 			name = DISTANCE
-			limit = {
-				border_distance = {
-					who = FROM
-					distance = 25
-				}
-			}
 			export_to_variable = {
 				variable_name = ai_value
 				value = border_distance
 				who = FROM
 				with = ROOT
 			}
-			subtract_variable = { which = ai_value value = 25 }
 			multiply_variable = { which = ai_value value = -1 }
-		}
-		add_entry = {
-			name = THREAT
-			limit = {
-				any_country = {
-					NOT = { tag = FROM }
-					ROOT = { is_threat = PREV }
-				}
-			}
-			export_to_variable = {
-				variable_name = ai_value
-				value = 75
-			}
 		}
 		add_entry = {
 			name = BASE_RELUCTANCE
 			export_to_variable = {
                 variable_name = ai_value
-                value = -50
+                value = -100
             }
 		}
 	}
 
 	ai_will_do = { # this is a trigger
-		always = yes
+		NOT = {
+			any_ally = {
+				NOT = { tag = FROM }
+				total_own_and_non_tributary_subject_development = FROM
+			}
+		}
+		any_country = {
+			NOT = { tag = FROM }
+			is_subject = no
+			ROOT = { is_threat = PREV }
+		}
+		if = {
+			limit = {
+				total_own_and_non_tributary_subject_development = 11
+				total_own_and_non_tributary_subject_development = FROM
+			}
+			to_will_consider_joining_confederation_development = {
+				LEADER = FROM
+				TARGET = ROOT
+			}
+		}
 	}
 }
 
@@ -281,26 +277,20 @@ to_request_invite_to_federation = {
 		}
 	}
 	on_accept = {
-		if = {
-			limit = {
-				ai = yes
-				OR = {
-					AND = {
-						primary_culture = FROM
-						OR = {
-							has_reform = to_native_reform_unite_culture
-							has_reform = to_native_reform_expansion
-						}
-					}
-					OR = {
-						has_reform = to_native_reform_central_administration
-						has_reform = to_native_reform_hooks_and_obligations
-					}
-				}
-			}
-			inherit = FROM
-		}
-		else = {
+		# if = {
+		# 	limit = {
+		# 		ai = yes
+		# 		OR = {
+		# 			AND = {
+		# 				primary_culture = FROM
+		# 				to_nat_has_any_cultural_unification_government_reform = yes
+		# 			}
+		# 			to_nat_has_any_tier_8_native_government_reform = yes
+		# 		}
+		# 	}
+		# 	inherit = FROM
+		# }
+		# else = {
 			create_subject = {
 				subject_type = to_confederation_subject
 				subject = FROM
@@ -310,21 +300,13 @@ to_request_invite_to_federation = {
 				value = 20
 				mutual = yes
 			}
-		}
+		# }
 	}
 	on_decline =
 	{
 	}
 
 	ai_acceptance = { # This works similarly to variable_arithmetic_trigger, but does not support triggers generally. Instead, "limit" will be evaluated first and the rest ignored if it isn't passed.
-		# add_entry = {
-		# 	name = ALLIANCE
-		# 	limit = { alliance_with = FROM }
-		# 	export_to_variable = {
-        #         variable_name = ai_value
-        #         value = 20
-        #     }
-		# }
 		add_entry = {
 			name = RIVALRY
 			limit = {
@@ -337,18 +319,18 @@ to_request_invite_to_federation = {
 			}
 			export_to_variable = {
                 variable_name = ai_value
-                value = -50
+                value = -500
             }
 		}
 		# add_entry = {
-		# 	name = TRUST
-		# 	export_to_variable = {
-		# 		variable_name = ai_value
-		# 		value = trust
-		# 		who = FROM
+		# 	name = HAS_ALLIANCE
+		# 	limit = { 
+		# 		alliance_with = FROM
 		# 	}
-		# 	subtract_variable = { which = ai_value value = 45 }
-		# 	multiply_variable = { which = ai_value value = 2 }
+		# 	export_to_variable = {
+        #         variable_name = ai_value
+        #         value = 10
+        #     }
 		# }
 		add_entry = {
 			name = CULTURE_FOREIGN
@@ -357,18 +339,7 @@ to_request_invite_to_federation = {
 			}
 			export_to_variable = {
                 variable_name = ai_value
-                value = -20
-            }
-		}
-		add_entry = {
-			name = CULTURE_SAME_GROUP
-			limit = { 
-				NOT = { primary_culture = FROM }
-				culture_group = FROM
-			}
-			export_to_variable = {
-                variable_name = ai_value
-                value = 5
+                value = -10
             }
 		}
 		add_entry = {
@@ -378,8 +349,30 @@ to_request_invite_to_federation = {
 			}
 			export_to_variable = {
                 variable_name = ai_value
-                value = 20
+                value = 40
             }
+		}
+		# add_entry = {
+		# 	name = CULTURE_GROUP_SAME
+		# 	limit = { 
+		# 		culture_group = FROM
+		# 		NOT = { primary_culture = FROM }
+		# 	}
+		# 	export_to_variable = {
+        #         variable_name = ai_value
+        #         value = 10
+        #     }
+		# }
+		add_entry = {
+			name = DIPLOMATIC_REPUTATION_CONF
+			limit = {
+				diplomatic_reputation = 1
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 10 }
 		}
 		add_entry = {
 			name = OPINION
@@ -393,19 +386,12 @@ to_request_invite_to_federation = {
 		}
 		add_entry = {
 			name = DISTANCE
-			limit = {
-				border_distance = {
-					who = FROM
-					distance = 25
-				}
-			}
 			export_to_variable = {
 				variable_name = ai_value
 				value = border_distance
 				who = FROM
 				with = ROOT
 			}
-			subtract_variable = { which = ai_value value = 25 }
 			multiply_variable = { which = ai_value value = -1 }
 		}
 		add_entry = {
@@ -413,31 +399,110 @@ to_request_invite_to_federation = {
 			limit = {
 				any_country = {
 					NOT = { tag = ROOT }
+					is_subject = no
 					FROM = { is_threat = PREV }
 				}
 			}
 			export_to_variable = {
 				variable_name = ai_value
-				value = 75
+				value = 50
 			}
 		}
 		add_entry = {
-			name = BASE_RELUCTANCE
+			name = CONF_RELATIVE_DEVELOPMENT
+			limit = {
+				FROM = {
+					total_own_and_non_tributary_subject_development = 11
+				}
+				NOT = {
+					to_will_consider_joining_confederation_development = {
+						LEADER = ROOT
+						TARGET = FROM
+					}
+				}
+			}
+			# export_to_variable = {
+            #     variable_name = ai_value
+            #     value = 0
+            # }
+			# export_to_variable = {
+			# 	variable_name = to_total_dev_with_subjects_FROM
+			# 	value = trigger_value:total_own_and_non_tributary_subject_development
+			# 	who = FROM
+			# }
+			# change_variable = {
+            #     variable_name = ai_value
+            #     which = to_total_dev_with_subjects_FROM
+            # }
+
+			export_to_variable = {
+                variable_name = ai_value
+                value = 0
+            }
+			export_to_variable = {
+				variable_name = to_total_dev_with_subjects_FROM
+				value = trigger_value:total_own_and_non_tributary_subject_development
+				who = FROM
+			}
+			export_to_variable = {
+				variable_name = to_total_dev_ROOT
+				value = trigger_value:total_development
+			}
+			export_to_variable = {
+				variable_name = to_subject_dev_ROOT
+				value = trigger_value:total_own_and_non_tributary_subject_development
+			}
+			subtract_variable = {
+				which = to_subject_dev_ROOT
+				which = to_total_dev_ROOT
+			}
+			divide_variable = {
+				which = to_subject_dev_ROOT
+				value = 4
+			}
+			change_variable = {
+				which = to_total_dev_ROOT
+				which = to_subject_dev_ROOT
+			}
+			multiply_variable = {
+				which = to_total_dev_ROOT
+				value = 1.25
+			}
+			divide_variable = {
+				which = to_total_dev_with_subjects_FROM
+				which = to_total_dev_ROOT
+			}
+			multiply_variable = {
+				which = to_total_dev_with_subjects_FROM
+				value = -40
+			}
+			change_variable = {
+                which = ai_value
+                which = to_total_dev_with_subjects_FROM
+            }
+		}
+		add_entry = {
+			name = STRONG_ALLIANCE
+			limit = {
+				FROM = {
+					any_ally = {
+						NOT = { tag = ROOT }
+						total_own_and_non_tributary_subject_development = ROOT
+					}
+				}
+			}
 			export_to_variable = {
                 variable_name = ai_value
                 value = -50
             }
 		}
-		# add_entry = {
-		# 	name = TEST
-		# 	limit = {
-		# 		FROM = { ai = no }
-		# 	}
-		# 	export_to_variable = {
-        #         variable_name = ai_value
-        #         value = 10000
-        #     }
-		# }
+		add_entry = {
+			name = BASE_RELUCTANCE
+			export_to_variable = {
+                variable_name = ai_value
+                value = -100
+            }
+		}
 	}
 
 	ai_will_do = { # this is a trigger
@@ -497,3 +562,86 @@ to_cancel_confederation =  {
 	}
 }
 
+to_unify_culture = {
+	category = influence
+	require_acceptance = no
+
+	is_visible = {
+		to_nat_has_any_cultural_unification_government_reform = yes
+		FROM = {
+			primary_culture = ROOT
+			to_nat_in_same_confederation = yes
+		}
+	}
+
+	is_allowed = {
+		if = {
+			limit = {
+				FROM = {
+					ai = yes
+				}
+			}
+			FROM = {
+				ai = no
+			}
+		}
+		FROM = {
+			to_nat_in_same_confederation = yes
+			primary_culture = ROOT
+			is_neighbor_of = ROOT
+		}
+	}
+	on_accept = {
+		set_country_flag = to_nat_inherited_confederation_member
+		inherit = FROM
+		to_nat_form_confederation_tag = yes
+	}
+	ai_will_do = {
+		always = yes
+	}
+}
+
+to_centralize_confederation = {
+	category = influence
+	require_acceptance = no
+
+	is_visible = {
+		to_nat_has_any_tier_8_native_government_reform = yes
+		overlord_of = FROM
+		FROM = {
+			is_subject_of_type = to_confederation_subject
+		}
+		NOT = {
+			AND = {
+				to_nat_has_any_cultural_unification_government_reform = yes
+				primary_culture = FROM
+			}
+		}
+	}
+
+	is_allowed = {
+		if = {
+			limit = {
+				FROM = {
+					ai = yes
+				}
+			}
+			FROM = {
+				ai = no
+			}
+		}
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = to_confederation_subject
+			is_neighbor_of = ROOT
+		}
+	}
+	on_accept = {
+		set_country_flag = to_nat_inherited_confederation_member
+		inherit = FROM
+		to_nat_form_confederation_tag = yes
+	}
+	ai_will_do = {
+		always = yes
+	}
+}

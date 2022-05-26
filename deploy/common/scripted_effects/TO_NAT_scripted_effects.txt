@@ -1558,10 +1558,7 @@ to_nat_pick_suitable_tribal_development_displacement_province = {
 			event_target:owner_of_the_province = {
 				NOT = { tag = PREV }
 			}
-			OR = {
-				has_reform = to_native_reform_unite_culture
-				has_reform = to_native_reform_grand_confederation
-			}
+			to_nat_has_any_cultural_unification_government_reform = yes
 			to_nat_displacement_same_culture_primary = { PROVINCE_SCOPE = $PROVINCE_SCOPE$ }
 			any_owned_province = {
 				to_nat_displacement_same_culture = { PROVINCE_SCOPE = $PROVINCE_SCOPE$ }
@@ -1645,10 +1642,7 @@ to_nat_pick_suitable_tribal_development_displacement_province = {
 				event_target:owner_of_the_province = {
 					NOT = { tag = PREV }
 				}
-				OR = {
-					has_reform = to_native_reform_unite_culture
-					has_reform = to_native_reform_grand_confederation
-				}
+				to_nat_has_any_cultural_unification_government_reform = yes
 				to_nat_displacement_same_culture_primary = { PROVINCE_SCOPE = $PROVINCE_SCOPE$ }
 				any_owned_province = {
 					to_nat_displacement_same_culture_group = { PROVINCE_SCOPE = $PROVINCE_SCOPE$ }
@@ -1733,10 +1727,7 @@ to_nat_pick_suitable_tribal_development_displacement_province = {
 				event_target:owner_of_the_province = {
 					NOT = { tag = PREV }
 				}
-				OR = {
-					has_reform = to_native_reform_unite_culture
-					has_reform = to_native_reform_grand_confederation
-				}
+				to_nat_has_any_cultural_unification_government_reform = yes
 				to_nat_displacement_same_culture_group = { PROVINCE_SCOPE = $PROVINCE_SCOPE$ }
 				any_owned_province = {
 					to_nat_displacement_same_culture = { PROVINCE_SCOPE = $PROVINCE_SCOPE$ }
@@ -1779,10 +1770,7 @@ to_nat_pick_suitable_tribal_development_displacement_province = {
 				event_target:owner_of_the_province = {
 					NOT = { tag = PREV }
 				}
-				OR = {
-					has_reform = to_native_reform_unite_culture
-					has_reform = to_native_reform_grand_confederation
-				}
+				to_nat_has_any_cultural_unification_government_reform = yes
 				to_nat_displacement_same_culture_group = { PROVINCE_SCOPE = $PROVINCE_SCOPE$ }
 				any_owned_province = {
 					to_nat_displacement_same_culture_group = { PROVINCE_SCOPE = $PROVINCE_SCOPE$ }
@@ -2643,6 +2631,34 @@ to_nat_handle_colonise_own_culture_modifier = {
 	}
 }
 
+to_nat_handle_colonise_foreign_culture_modifier = {
+	if = {
+		limit = {
+			owner = { has_reform = to_native_reform_unite_culture }
+			to_nat_colonise_foreign_culture_province_trigger = yes
+		}
+		add_province_modifier = { 
+			name = to_nat_colonise_foreign_modifier
+			duration = -1
+		}
+	}
+	else = {
+		remove_province_modifier = to_nat_colonise_foreign_modifier
+	}
+}
+
+to_nat_handle_colonise_own_culture_modifier_on_culture_change = {
+	if = {
+		limit = {
+			has_reform = to_native_reform_unite_culture
+		}
+		every_owned_province = {
+			to_nat_handle_colonise_own_culture_modifier = yes
+			to_nat_handle_colonise_foreign_culture_modifier = yes
+		}
+	}
+}
+
 to_nat_handle_native_expansion_modifier = {
 	if = {
 		limit = {
@@ -2728,16 +2744,57 @@ to_nat_handle_envoy_to_the_world = {
 	}
 }
 
+centralize_confederation = {
+	if = {
+		limit = {
+			has_subject_of_type = to_confederation_subject
+		}
+		tooltip = {
+			to_nat_form_confederation_tag = yes
+		}
+		to_nat_integrate_confederation = yes
+		hidden_effect = {
+			to_nat_form_confederation_tag = yes
+		}
+	}
+	custom_tooltip = to_nat_enable_centralize_federation_tt
+}
+
 to_nat_integrate_confederation = {
 	custom_tooltip = to_nat_integrate_confederation_tt
 	hidden_effect = {
-		every_subject_country = {
+		while = {
 			limit = {
-				is_subject_of_type = to_confederation_subject
+				any_neighbor_country = {
+					is_subject_of = ROOT
+					is_subject_of_type = to_confederation_subject
+				}
 			}
-			ROOT = {
-				inherit = PREV
+			every_neighbor_country = {
+				limit = {
+					is_subject_of = ROOT
+					is_subject_of_type = to_confederation_subject
+				}
+				ROOT = {
+					set_country_flag = to_nat_inherited_confederation_member
+					inherit = PREV
+				}
 			}
+		}
+	}
+}
+
+to_inherit_confederation_tag = {
+	hidden_effect = {
+		if = {
+			limit = {
+				$TAG$ = {
+					to_nat_in_same_confederation = yes
+					primary_culture = ROOT
+					is_neighbor_of = ROOT
+				}
+			}
+			inherit = $TAG$
 		}
 	}
 }
@@ -2749,44 +2806,66 @@ to_nat_form_confederation_tag = {
 		}
 		if = { 
 			limit = {
-				culture_group = muskogean
-				NOT = { exists = CRE }
+				to_will_become_federation_tag = { TAG = CRE }
 			}
+			# to_inherit_confederation_tag = { TAG = CRE }
 			change_tag = CRE
 			set_country_flag = to_nat_formed_confederation_tag
 		}
 		else_if = { 
-			limit = { primary_culture = dakota NOT = { exists = SIO } }
+			limit = { 
+				to_will_become_federation_tag = { TAG = SIO }
+			}
+			# to_inherit_confederation_tag = { TAG = SIO }
 			change_tag = SIO
 			set_country_flag = to_nat_formed_confederation_tag
 		}
 		else_if = { 
-			limit = { primary_culture = huron NOT = { exists = HUR } }
+			limit = { 
+				to_will_become_federation_tag = { TAG = TF0 }
+			}
+			# to_inherit_confederation_tag = { TAG = TF0 }
+			change_tag = TF0
+			set_country_flag = to_nat_formed_confederation_tag
+		}
+		else_if = { 
+			limit = { 
+				to_will_become_federation_tag = { TAG = HUR }
+			}
+			# to_inherit_confederation_tag = { TAG = HUR }
 			change_tag = HUR
 			set_country_flag = to_nat_formed_confederation_tag
 		}
 		else_if = { 
 			limit = { 
-				primary_culture = illini 
-				NOT = { exists = ILL }
-				NOT = { tag = CAO } 
+				to_will_become_federation_tag = { TAG = ILL }
 			}
+			# to_inherit_confederation_tag = { TAG = ILL }
 			change_tag = ILL
 			set_country_flag = to_nat_formed_confederation_tag
 		}
 		else_if = { 
-			limit = { primary_culture = iroquois NOT = { exists = IRO } }
+			limit = { 
+				to_will_become_federation_tag = { TAG = IRO }
+			}
+			# to_inherit_confederation_tag = { TAG = IRO }
 			change_tag = IRO
 			set_country_flag = to_nat_formed_confederation_tag
-		} 
-		# else_if = { 
-		# 	limit = { primary_culture = anishinabe NOT = { exists = POT } }
-		# 	change_tag = POT
-		#   set_country_flag = to_nat_formed_confederation_tag
-		# }
+		}
 		else_if = { 
-			limit = { primary_culture = shawnee NOT = { exists = SHA } }
+			limit = { 
+				to_will_become_federation_tag = { TAG = SHA }
+			}
+			# to_inherit_confederation_tag = { TAG = SHA }
 			change_tag = SHA
+			set_country_flag = to_nat_formed_confederation_tag
+		}
+		else_if = { 
+			limit = {
+				to_will_become_federation_tag = { TAG = WB0 }
+			}
+			# to_inherit_confederation_tag = { TAG = WB0 }
+			change_tag = WB0
 			set_country_flag = to_nat_formed_confederation_tag
 		}
 		if = {
@@ -2795,6 +2874,68 @@ to_nat_form_confederation_tag = {
 			}
 			set_government_rank_force = 2
 		}
+	}
+}
+
+to_nat_integrate_neighbor_culture_in_confederation = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = to_nat_has_integrated_neighbor_culture_in_confederation }
+		}
+		custom_tooltip = to_nat_unite_own_culture_confederation_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						is_subject = no
+						is_subject_of_type = to_confederation_subject
+					}
+				}
+				set_country_flag = to_nat_has_integrated_neighbor_culture_in_confederation
+				while = {
+					limit = {
+						any_neighbor_country = {
+							primary_culture = ROOT
+							to_nat_in_same_confederation = yes
+						}
+					}
+					every_neighbor_country = {
+						limit = {
+							primary_culture = ROOT
+							to_nat_in_same_confederation = yes
+						}
+						if = {
+							limit = {
+								overlord_of = ROOT
+							}
+							ROOT = {
+								grant_independence = yes
+							}
+							every_subject_country = {
+								grant_independence = yes
+								ROOT = {
+									create_subject = {
+										subject_type = to_confederation_subject
+										subject = PREV
+									}
+								}
+							}
+						}
+						every_core_province = { 
+							remove_core = PREV
+							add_core = ROOT
+						}
+						ROOT = {
+							set_country_flag = to_nat_inherited_confederation_member
+							inherit = PREV
+						}
+					}
+				}
+			}
+		}
+	}
+	else = {
+		custom_tooltip = to_nat_unite_own_culture_confederation_done_tt
 	}
 }
 

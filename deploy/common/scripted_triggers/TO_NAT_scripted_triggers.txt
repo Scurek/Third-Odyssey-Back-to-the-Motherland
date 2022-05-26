@@ -149,6 +149,13 @@ to_nat_has_any_tier_8_native_government_reform = {
 	}
 }
 
+to_nat_has_any_cultural_unification_government_reform = {
+	OR = {
+		has_reform = to_native_reform_unite_culture
+		has_reform = to_native_reform_expansion
+	}
+}
+
 to_nat_estates_enabled = {
 	OR = {
 		has_reform = native_reformed_basic_reform
@@ -161,6 +168,83 @@ to_nat_estates_enabled = {
 
 to_nat_can_have_estate = {
 	has_country_flag = to_nat_estate_enabled_$ESTATE$
+}
+
+to_nat_in_same_confederation = {
+	custom_trigger_tooltip = {
+		tooltip = to_nat_in_same_confederation_tt
+		OR = {
+			is_subject_of_type = to_confederation_subject
+			overlord_of = ROOT
+		}
+		OR = {
+			is_subject_of = ROOT
+			overlord_of = ROOT
+			AND = {
+				ROOT = {
+					is_subject_of_type = to_confederation_subject
+				}
+				is_subject = yes
+				overlord = {
+					overlord_of = ROOT
+				}
+			}
+		}
+	}
+	
+}
+
+to_confederation_tag_not_exists_or_neighboring_conf_member = {
+	OR = {
+		NOT = { exists = $TAG$ }
+		$TAG$ = {
+			to_nat_in_same_confederation = yes
+			primary_culture = ROOT
+			is_neighbor_of = ROOT
+		}
+	}
+}
+
+to_CRE_federation_trigger = {
+	culture_group = muskogean
+}
+
+to_SIO_federation_trigger = {
+	primary_culture = dakota
+}
+
+to_TF0_federation_trigger = {
+	primary_culture = anishinabe
+}
+
+to_HUR_federation_trigger = {
+	primary_culture = huron
+}
+
+to_ILL_federation_trigger = {
+	primary_culture = illini 
+	NOT = { tag = CAO }
+}
+
+to_IRO_federation_trigger = {
+	primary_culture = iroquois 
+}
+
+to_SHA_federation_trigger = {
+	primary_culture = shawnee 
+}
+
+to_WB0_federation_trigger = {
+	OR = {
+		primary_culture = mikmaq
+		primary_culture = maliseet
+		primary_culture = abenaki
+	} 
+}
+
+to_will_become_federation_tag = {
+	to_$TAG$_federation_trigger = yes
+	to_confederation_tag_not_exists_or_neighboring_conf_member = { TAG = $TAG$ }
 }
 
 to_nat_is_major_native_nation = {
@@ -182,17 +266,45 @@ to_nat_is_major_native_nation = {
 			}
 		}
 	}
+	# if = {
+	# 	limit = {
+	# 		is_subject = yes
+	# 		is_subject_of_type = to_confederation_subject
+	# 	}
+	# 	NOT = {
+	# 		overlord = {
+	# 			primary_culture = ROOT
+	# 		}
+	# 	}
+	# }
+}
+
+to_nat_can_take_unite_our_culture_reform = {
+	OR = {
+		is_subject = no
+		is_subject_of_type = to_confederation_subject
+	}
 	if = {
 		limit = {
-			is_subject = yes
 			is_subject_of_type = to_confederation_subject
 		}
-		NOT = {
-			overlord = {
-				primary_culture = ROOT
-			}
+		overlord = {
+			NOT = { primary_culture = ROOT }
 		}
 	}
+	OR = {
+		to_nat_is_major_native_nation = yes
+		any_subject_country = {
+			primary_culture = ROOT
+			to_nat_is_major_native_nation = yes
+		}
+	}
+	NOT = { has_idea_group = expansion_ideas }
+}
+
+to_nat_can_take_expansion_reform = {
+	is_subject = no
+	has_idea_group = expansion_ideas
 }
 
 to_nat_colonise_own_culture_province_trigger = {
@@ -200,6 +312,17 @@ to_nat_colonise_own_culture_province_trigger = {
 	is_city = no
 	native_size = 1
 	has_owner_culture = yes
+}
+
+to_nat_colonise_foreign_culture_province_trigger = {
+	is_empty = no
+	is_city = no
+	native_size = 1
+	NOT = {
+		owner = {
+			culture_group = PREV
+		}
+	}
 }
 
 to_nat_native_expansion_province_trigger = {
@@ -402,6 +525,46 @@ to_nat_tribal_native_culture_province = {
 # 		has_province_flag = to_nat_had_tribal_development
 # 	}
 # }
+
+to_will_consider_joining_confederation_development = {
+	variable_arithmetic_trigger = {
+		export_to_variable = {
+			variable_name = to_total_dev_with_subjects_$TARGET$
+			value = trigger_value:total_own_and_non_tributary_subject_development
+			who = $TARGET$
+		}
+		export_to_variable = {
+			variable_name = to_total_dev_$LEADER$
+			value = trigger_value:total_development
+			who = $LEADER$
+		}
+		export_to_variable = {
+			variable_name = to_subject_dev_$LEADER$
+			value = trigger_value:total_own_and_non_tributary_subject_development
+			who = $LEADER$
+		}
+		subtract_variable = {
+			which = to_subject_dev_$LEADER$
+			which = to_total_dev_$LEADER$
+		}
+		divide_variable = {
+			which = to_subject_dev_$LEADER$
+			value = 4
+		}
+		change_variable = {
+			which = to_total_dev_$LEADER$
+			which = to_subject_dev_$LEADER$
+		}
+		multiply_variable = {
+			which = to_total_dev_$LEADER$
+			value = 1.25
+		}
+		check_variable = {
+			which = to_total_dev_$LEADER$
+			which = to_total_dev_with_subjects_$TARGET$
+		}
+	}
+}
 
 to_nat_displacement_same_culture = {
 	OR = {
