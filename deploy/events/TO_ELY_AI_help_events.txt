@@ -14,9 +14,31 @@ country_event = {
 		is_subject = no
 		num_of_colonists = 1
 		NOT = { has_country_modifier = nhs2_ai_colonising_timer }
-		any_owned_province = {
-			has_empty_adjacent_province = yes
+		any_province = {
+			OR = {
+				any_neighbor_province = {
+					OR = {
+						owned_by = ROOT
+						owner = {
+							is_colonial_nation_of = ROOT
+						}
+					}
+				}
+				AND = {
+					has_port = yes
+					has_discovered = ROOT
+					range = ROOT
+					OR = {
+						region = mississippi_region
+						region = rio_grande_region
+						region = carribeans_region
+					}
+				}
+			}
 		}
+		# any_owned_province = {
+		# 	has_empty_adjacent_province = yes
+		# }
 	}
 
 	mean_time_to_happen = {
@@ -87,7 +109,7 @@ country_event = {
 				save_event_target_as = ai_help_colony
 			}
 		}
-		## PORT
+		## LOCK DOWN EAST COAST
 		if = {
 			limit = {
 				NOT = { has_saved_event_target = ai_help_colony }
@@ -95,8 +117,185 @@ country_event = {
 			random_owned_province = {
 				limit = {
 					any_empty_neighbor_province = {
+						OR = {
+							region = northeast_america_region
+							region = southeast_america_region
+						}
 						has_port = yes
 					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						OR = {
+							region = northeast_america_region
+							region = southeast_america_region
+						}
+						has_port = yes
+					}
+					save_event_target_as = ai_help_colony
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
+				limit = {
+					has_port = yes
+					is_empty = yes
+					has_discovered = ROOT
+					range = ROOT
+					OR = {
+						region = northeast_america_region
+						region = southeast_america_region
+					}
+				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		## LOCK DOWN MISSISSIPPI REGION
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_owned_province = {
+				limit = {
+					any_empty_neighbor_province = {
+						region = mississippi_region
+						has_port = yes
+					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						region = mississippi_region
+						has_port = yes
+					}
+					save_event_target_as = ai_help_colony
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
+				limit = {
+					has_port = yes
+					is_empty = yes
+					has_discovered = ROOT
+					range = ROOT
+					region = mississippi_region
+				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		## LOCK DOWN RIO GRANDE REGION
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_owned_province = {
+				limit = {
+					any_empty_neighbor_province = {
+						region = mississippi_region
+						has_port = yes
+					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						region = mississippi_region
+						has_port = yes
+					}
+					save_event_target_as = ai_help_colony
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
+				limit = {
+					has_port = yes
+					is_empty = yes
+					has_discovered = ROOT
+					range = ROOT
+					region = mississippi_region
+				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		## FINISH COLONISING EAST COAST
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_owned_province = {
+				limit = {
+					any_empty_neighbor_province = {
+						OR = {
+							region = northeast_america_region
+							region = southeast_america_region
+						}
+					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						OR = {
+							region = northeast_america_region
+							region = southeast_america_region
+						}
+					}
+					save_event_target_as = ai_help_colony
+				}
+			}
+		}
+		## FOCUS ON CARRIBEAN
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_owned_province = {
+				limit = {
+					any_empty_neighbor_province = {
+						region = carribeans_region
+						has_port = yes
+					}
+				}
+				random_empty_neighbor_province = {
+					limit = {
+						region = carribeans_region
+						has_port = yes
+					}
+					save_event_target_as = ai_help_colony
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_province = {
+				limit = {
+					has_port = yes
+					is_empty = yes
+					has_discovered = ROOT
+					range = ROOT
+					region = carribeans_region
+				}
+				save_event_target_as = ai_help_colony
+			}
+		}
+		# NEIGHBORING PROVINCES
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = ai_help_colony }
+			}
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					has_empty_adjacent_province = yes
 				}
 				random_empty_neighbor_province = {
 					limit = {
@@ -126,7 +325,6 @@ country_event = {
 				save_event_target_as = ai_help_colony
 			}
 		}
-		## NEIGHBORING PROVINCE
 		if = {
 			limit = {
 				NOT = { has_saved_event_target = ai_help_colony }
@@ -140,21 +338,40 @@ country_event = {
 				}
 			}
 		}
-		## DISTANT PROVINCE
 		if = {
 			limit = {
 				NOT = { has_saved_event_target = ai_help_colony }
 			}
 			random_province = {
 				limit = {
-					has_port = yes
 					is_empty = yes
-					has_discovered = ROOT
-					range = ROOT
+					any_neighbor_province = {
+						OR = {
+							owned_by = ROOT
+							owner = {
+								is_colonial_nation_of = ROOT
+							}
+						}
+					}
 				}
 				save_event_target_as = ai_help_colony
 			}
 		}
+		## DISTANT PROVINCE
+		# if = {
+		# 	limit = {
+		# 		NOT = { has_saved_event_target = ai_help_colony }
+		# 	}
+		# 	random_province = {
+		# 		limit = {
+		# 			has_port = yes
+		# 			is_empty = yes
+		# 			has_discovered = ROOT
+		# 			range = ROOT
+		# 		}
+		# 		save_event_target_as = ai_help_colony
+		# 	}
+		# }
 		
 		if = {
 			limit = {
@@ -251,7 +468,7 @@ country_event = {
 	}
 
 	mean_time_to_happen = {
-		months = 6
+		months = 1
 	}
 
 	immediate = {
