@@ -2191,48 +2191,106 @@ to_nat_reform_native_government = {
 
 
 to_assign_native_council = {
-	custom_tooltip = to_nat_to_assign_native_council_tt
-	hidden_effect = {
+	# custom_tooltip = to_nat_to_assign_native_council_tt
+	# hidden_effect = {
 		if = {
 			limit = {
-				culture_group = muskogean
+				has_country_flag = to_has_exiled_council_ruler_@ROOT
+				NOT = {
+					had_country_flag = {
+						flag = to_has_exiled_council_ruler_@ROOT
+						days = 3650
+					}
+				}
 			}
-			define_ruler = {
-				name = "Council of Cities"
-				regency = yes
-				adm = 3
-				dip = 3
-				mil = 3
-			}
-		}
-		else_if = {
-			limit = {
-				OR = {
-					has_reform = to_native_reform_stratified
-					has_reform = to_native_reform_law_of_peace
-				}	
-			}
-			define_ruler = {
-				name = "Council of Chiefs"
-				regency = yes
-				adm = 3
-				dip = 3
-				mil = 3
+			custom_tooltip = to_restore_exiled_council_ruler_tt
+			clr_country_flag = to_has_exiled_council_ruler_@ROOT
+			hidden_effect = {
+				set_ruler = to_exiled_council_ruler_@ROOT
 			}
 		}
 		else = {
-			define_ruler = {
-				name = "Council of Elders"
-				regency = yes
-				adm = 3
-				dip = 3
-				mil = 3
-			}
+			generate_council_ruler = yes
 		}
 		set_ruler_flag = to_nat_has_native_council
-		to_native_promote_load_mana = { MANA = adm }
-		to_native_promote_load_mana = { MANA = dip }
-		to_native_promote_load_mana = { MANA = mil }
+		# if = {
+		# 	limit = {
+		# 		culture_group = muskogean
+		# 	}
+		# 	define_ruler = {
+		# 		name = "Council of Cities"
+		# 		regency = yes
+		# 		adm = 3
+		# 		dip = 3
+		# 		mil = 3
+		# 	}
+		# }
+		# else_if = {
+		# 	limit = {
+		# 		OR = {
+		# 			has_reform = to_native_reform_stratified
+		# 			has_reform = to_native_reform_law_of_peace
+		# 		}	
+		# 	}
+		# 	define_ruler = {
+		# 		name = "Council of Chiefs"
+		# 		regency = yes
+		# 		adm = 3
+		# 		dip = 3
+		# 		mil = 3
+		# 	}
+		# }
+		# else = {
+		# 	define_ruler = {
+		# 		name = "Council of Elders"
+		# 		regency = yes
+		# 		adm = 3
+		# 		dip = 3
+		# 		mil = 3
+		# 	}
+		# }
+		# to_native_promote_load_mana = { MANA = adm }
+		# to_native_promote_load_mana = { MANA = dip }
+		# to_native_promote_load_mana = { MANA = mil }
+	# }
+}
+
+generate_council_ruler_with_skills = {
+	random_owned_province = {
+		limit = {
+			OR = {
+				has_owner_culture = yes
+				has_owner_accepted_culture = yes
+			}
+		}
+		save_event_target_as = to_nat_council_ruler_province
+	}
+	if = {
+		limit = {
+			has_saved_event_target = to_nat_council_ruler_province
+		}
+		custom_tooltip = to_nat_council_returns_to_power_tt
+		hidden_effect = {
+			define_ruler = {
+				religion = event_target:to_nat_council_ruler_province
+				culture = event_target:to_nat_council_ruler_province
+				adm = $ADM$
+				dip = $DIP$
+				mil = $MIL$
+			}
+		}
+	}
+	else = {
+		custom_tooltip = to_nat_council_returns_to_power_tt
+		hidden_effect = {
+			define_ruler = {
+				religion = ROOT
+				culture = ROOT
+				adm = $ADM$
+				dip = $DIP$
+				mil = $MIL$
+			}
+		}
 	}
 }
 
@@ -2309,47 +2367,58 @@ to_native_promote_load_mana = {
 }
 
 to_assign_native_council_fixed_stats = {
-	if = {
-		limit = {
-			culture_group = muskogean
-		}
-		define_ruler = {
-			name = "Council of Cities"
-			regency = yes
-			adm = $ADM$
-			dip = $DIP$
-			mil = $MIL$
-			force_republican_names = yes
-		}
-	}
-	else_if = {
-		limit = {
-			OR = {
-				has_reform = to_native_reform_stratified
-				has_reform = to_native_reform_law_of_peace
-			}	
-		}
-		define_ruler = {
-			name = "Council of Chiefs"
-			regency = yes
-			adm = $ADM$
-			dip = $DIP$
-			mil = $MIL$
-			force_republican_names = yes
-		}
-	}
-	else = {
-		define_ruler = {
-			name = "Council of Elders"
-			regency = yes
-			adm = $ADM$
-			dip = $DIP$
-			mil = $MIL$
-			force_republican_names = yes
-		}
-	}
+	# if = {
+	# 	limit = {
+	# 		culture_group = muskogean
+	# 	}
+	# 	define_ruler = {
+	# 		name = "Council of Cities"
+	# 		regency = yes
+	# 		adm = $ADM$
+	# 		dip = $DIP$
+	# 		mil = $MIL$
+	# 		force_republican_names = yes
+	# 	}
+	# }
+	# else_if = {
+	# 	limit = {
+	# 		OR = {
+	# 			has_reform = to_native_reform_stratified
+	# 			has_reform = to_native_reform_law_of_peace
+	# 		}	
+	# 	}
+	# 	define_ruler = {
+	# 		name = "Council of Chiefs"
+	# 		regency = yes
+	# 		adm = $ADM$
+	# 		dip = $DIP$
+	# 		mil = $MIL$
+	# 		force_republican_names = yes
+	# 	}
+	# }
+	# else = {
+	# 	define_ruler = {
+	# 		name = "Council of Elders"
+	# 		regency = yes
+	# 		adm = $ADM$
+	# 		dip = $DIP$
+	# 		mil = $MIL$
+	# 		force_republican_names = yes
+	# 	}
+	# }
+	# custom_tooltip = nhs_nat_set_council_$ADM$_$DIP$_$MIL$
 	set_ruler_flag = to_nat_has_native_council
+	custom_tooltip = to_nat_skills_reflect_council_tt
+	custom_tooltip = to_nat_set_ruler_adm_to_$ADM$_tt
+	custom_tooltip = to_nat_set_ruler_dip_to_$DIP$_tt
+	custom_tooltip = to_nat_set_ruler_mil_to_$MIL$_tt
 	hidden_effect = {
+		change_adm = -6
+		change_adm = 3
+		change_dip = -6
+		change_dip = 3
+		change_mil = -6
+		change_mil = 3
 		set_variable = {
 			which = to_native_council_adm
 			value = $ADM$
@@ -2362,6 +2431,9 @@ to_assign_native_council_fixed_stats = {
 			which = to_native_council_mil
 			value = $MIL$
 		}
+		to_native_promote_load_mana = { MANA = adm }
+		to_native_promote_load_mana = { MANA = dip }
+		to_native_promote_load_mana = { MANA = mil }
 	}
 }
 
@@ -2481,15 +2553,43 @@ to_native_council_election_save_mana = {
 }
 
 to_assign_war_chief = {
-	# This produces ~10 mana on average. I think.
-	define_ruler = {
-		change_adm = -1
-		max_random_adm = 4
-		change_dip = -1
-		max_random_dip = 3
-		change_mil = 5
-		min_age = 20
-		max_age = 40
+	if = {
+		limit = {
+			has_dlc = "Rights of Man"
+		}
+		# This produces ~10 mana on average. I think.
+		define_ruler = {
+			change_adm = -1
+			max_random_adm = 4
+			change_dip = -1
+			max_random_dip = 3
+			change_mil = 5
+			min_age = 20
+			max_age = 40
+		}
+		random_list = {
+			1 = {
+				add_ruler_personality = tactical_genius_personality
+			}
+			1 = {
+				add_ruler_personality = bold_fighter_personality
+			}
+			1 = {
+				add_ruler_personality = strict_personality
+			}
+			1 = {
+				add_ruler_personality = inspiring_leader_personality
+			}
+		}
+	}
+	else = {
+		define_ruler = {
+			max_random_adm = 4
+			max_random_dip = 3
+			change_mil = 5
+			min_age = 20
+			max_age = 40
+		}
 	}
 }
 
@@ -3859,5 +3959,1548 @@ to_nat_restore_original_culture_from_flag = {
 		[[CHANGE_ORIGINAL_CULTURE]
 			change_original_culture = huarpe
 		]
+	}
+}
+
+generate_council_ruler = {
+	if = {
+		limit = { check_variable = { which = to_native_council_adm value = 6 } }
+		if = {
+			limit = { check_variable = { which = to_native_council_dip value = 6 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 6 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 6 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 6 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 6 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 6 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 6 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 6 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 5 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 5 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 5 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 5 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 5 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 5 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 5 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 5 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 4 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 4 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 4 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 4 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 4 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 4 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 4 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 4 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 3 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 3 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 3 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 3 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 3 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 3 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 3 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 3 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 2 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 2 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 2 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 2 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 2 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 2 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 2 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 2 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 1 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 1 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 1 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 1 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 1 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 1 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 1 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 1 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 0 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 0 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 0 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 0 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 0 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 0 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 0 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 6 DIP = 0 MIL = 0 }
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { which = to_native_council_adm value = 5 } }
+		if = {
+			limit = { check_variable = { which = to_native_council_dip value = 6 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 6 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 6 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 6 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 6 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 6 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 6 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 6 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 5 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 5 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 5 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 5 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 5 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 5 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 5 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 5 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 4 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 4 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 4 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 4 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 4 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 4 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 4 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 4 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 3 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 3 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 3 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 3 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 3 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 3 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 3 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 3 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 2 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 2 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 2 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 2 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 2 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 2 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 2 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 2 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 1 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 1 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 1 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 1 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 1 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 1 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 1 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 1 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 0 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 0 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 0 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 0 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 0 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 0 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 0 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 5 DIP = 0 MIL = 0 }
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { which = to_native_council_adm value = 4 } }
+		if = {
+			limit = { check_variable = { which = to_native_council_dip value = 6 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 6 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 6 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 6 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 6 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 6 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 6 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 6 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 5 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 5 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 5 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 5 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 5 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 5 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 5 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 5 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 4 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 4 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 4 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 4 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 4 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 4 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 4 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 4 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 3 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 3 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 3 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 3 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 3 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 3 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 3 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 3 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 2 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 2 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 2 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 2 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 2 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 2 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 2 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 2 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 1 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 1 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 1 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 1 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 1 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 1 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 1 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 1 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 0 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 0 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 0 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 0 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 0 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 0 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 0 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 4 DIP = 0 MIL = 0 }
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { which = to_native_council_adm value = 3 } }
+		if = {
+			limit = { check_variable = { which = to_native_council_dip value = 6 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 6 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 6 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 6 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 6 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 6 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 6 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 6 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 5 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 5 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 5 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 5 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 5 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 5 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 5 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 5 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 4 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 4 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 4 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 4 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 4 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 4 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 4 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 4 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 3 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 3 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 3 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 3 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 3 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 3 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 3 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 3 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 2 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 2 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 2 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 2 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 2 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 2 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 2 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 2 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 1 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 1 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 1 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 1 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 1 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 1 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 1 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 1 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 0 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 0 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 0 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 0 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 0 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 0 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 0 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 3 DIP = 0 MIL = 0 }
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { which = to_native_council_adm value = 2 } }
+		if = {
+			limit = { check_variable = { which = to_native_council_dip value = 6 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 6 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 6 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 6 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 6 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 6 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 6 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 6 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 5 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 5 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 5 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 5 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 5 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 5 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 5 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 5 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 4 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 4 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 4 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 4 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 4 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 4 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 4 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 4 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 3 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 3 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 3 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 3 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 3 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 3 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 3 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 3 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 2 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 2 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 2 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 2 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 2 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 2 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 2 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 2 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 1 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 1 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 1 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 1 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 1 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 1 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 1 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 1 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 0 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 0 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 0 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 0 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 0 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 0 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 0 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 2 DIP = 0 MIL = 0 }
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { which = to_native_council_adm value = 1 } }
+		if = {
+			limit = { check_variable = { which = to_native_council_dip value = 6 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 6 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 6 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 6 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 6 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 6 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 6 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 6 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 5 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 5 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 5 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 5 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 5 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 5 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 5 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 5 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 4 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 4 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 4 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 4 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 4 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 4 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 4 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 4 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 3 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 3 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 3 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 3 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 3 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 3 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 3 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 3 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 2 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 2 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 2 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 2 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 2 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 2 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 2 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 2 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 1 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 1 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 1 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 1 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 1 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 1 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 1 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 1 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 0 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 0 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 0 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 0 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 0 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 0 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 0 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 1 DIP = 0 MIL = 0 }
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { which = to_native_council_adm value = 0 } }
+		if = {
+			limit = { check_variable = { which = to_native_council_dip value = 6 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 6 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 6 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 6 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 6 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 6 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 6 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 6 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 5 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 5 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 5 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 5 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 5 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 5 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 5 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 5 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 4 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 4 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 4 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 4 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 4 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 4 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 4 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 4 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 3 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 3 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 3 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 3 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 3 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 3 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 3 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 3 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 2 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 2 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 2 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 2 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 2 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 2 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 2 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 2 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 1 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 1 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 1 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 1 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 1 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 1 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 1 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 1 MIL = 0 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = to_native_council_dip value = 0 } }
+			if = {
+				limit = { check_variable = { which = to_native_council_mil value = 6 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 0 MIL = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 5 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 0 MIL = 5 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 4 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 0 MIL = 4 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 3 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 0 MIL = 3 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 2 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 0 MIL = 2 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 1 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 0 MIL = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { which = to_native_council_mil value = 0 } }
+				generate_council_ruler_with_skills = { ADM = 0 DIP = 0 MIL = 0 }
+			}
+		}
 	}
 }

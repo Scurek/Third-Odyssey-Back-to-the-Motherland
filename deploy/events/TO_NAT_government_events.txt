@@ -26,28 +26,35 @@ country_event = {
 		ai_chance = {
 			factor = 1
 		}
-		set_country_flag = appointed_war_chief
-		if = {
-			limit = {
-				has_country_flag = to_war_chief_exiled_@ROOT
-				NOT = {
-					had_country_flag = {
-						flag = to_war_chief_exiled_@ROOT
-						days = 3650
-					}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_ruler_flag = to_nat_has_native_council
+					NOT = { ruler_age = 50 }
+					# If not republic, might as well not exile then -1 stability happens
+					government = republic
 				}
+				# This is here because exiling a ruler causes on death election
+				set_country_flag = to_do_not_council_leader_death
+				exile_ruler_as = to_exiled_council_ruler_@ROOT
+				set_country_flag = to_has_exiled_council_ruler_@ROOT
+				clr_country_flag = to_do_not_council_leader_death
 			}
-			set_ruler = to_exiled_war_chief_@ROOT
-			clr_country_flag = to_war_chief_exiled_@ROOT
 		}
-		else = {
-			to_assign_war_chief = yes
-		}
+		set_country_flag = appointed_war_chief
+		to_assign_war_chief = yes
 		# This does not restore ruler stats, neither does it assign them properly upon being run the first time
 		# We can only hope AI makes the ruler into a general
-		# convert_ruler_to_general = yes
-		custom_tooltip = to_nat_warchief_becomes_general_tt
-		clr_country_flag = to_war_chief_exiled_@ROOT
+		# if = {
+		# 	limit = {
+		# 		is_female = yes
+		# 	}
+		# 	convert_female_ruler_to_general = yes
+		# }
+		# else = {
+		# 	convert_ruler_to_general = yes
+		# }
+		# custom_tooltip = to_nat_warchief_becomes_general_tt
 	}
 	
 	option = {
@@ -110,6 +117,7 @@ country_event = {
 		has_government_attribute = to_nat_has_war_chiefs
 		is_at_war = no
 		has_country_flag = appointed_war_chief
+		NOT = { has_ruler_flag = war_chief_rules_for_life }
 	}
 	
 	option = {
@@ -117,21 +125,6 @@ country_event = {
 		ai_chance = {
 			factor = 1
 		}
-		# This is to prevent a case where he dies while this event is open
-		if = {
-			limit = {
-				has_country_flag = appointed_war_chief
-				NOT = { ruler_age = 50 }
-				# If not republic, might as well not exile then -1 stability happens
-				government = republic
-			}
-			# This is here because exiling a ruler causes on death election
-			set_country_flag = to_do_not_trigger_warchief_death
-			exile_ruler_as = to_exiled_war_chief_@ROOT
-			set_country_flag = to_war_chief_exiled_@ROOT
-			clr_country_flag = to_do_not_trigger_warchief_death
-		}
-		clr_country_flag = appointed_war_chief
 		to_assign_native_council = yes
 	}
 	
@@ -142,6 +135,7 @@ country_event = {
 			has_reform = martial_society_reform
 		}
 		add_republican_tradition = -25
+		set_ruler_flag = war_chief_rules_for_life
 		ai_chance = {
 			factor = 0
 		}
@@ -188,19 +182,46 @@ country_event = {
 	is_triggered_only = yes
 		
 	trigger = {
-		OR = {
-			has_reform = to_native_reform_consensus_government
-			has_reform = to_native_reform_law_of_peace
-		}
-		has_reform = to_native_reform_elections
+		has_government_attribute = to_nat_has_council_elections
+		NOT = { has_ruler_flag = to_nat_has_special_ruler }
 		NOT = { has_country_flag = appointed_war_chief }
 	}
 	
 	option = {
 		name = to_nat_governments.5.a
-		add_scaled_republican_tradition = -7.5
+		if = {
+			limit = {
+				has_government_attribute = to_nat_reduce_election_cost_per_skill_lost
+				dip = 4
+				mil = 4
+			}
+			add_scaled_republican_tradition = -4
+		}
+		else_if = {
+			limit = {
+				has_government_attribute = to_nat_reduce_election_cost_per_skill_lost
+				OR = {
+					dip = 4
+					mil = 4
+				}
+			}
+			add_scaled_republican_tradition = -6
+		}
+		else = {
+			add_scaled_republican_tradition = -8
+		}
+		
 		ai_chance = {
-			factor = 1
+			factor = 10
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 75 }
+			}
+			modifier = {
+				factor = 3
+				NOT = { dip = 4 }
+				NOT = { mil = 4 }
+			}
 		}
 		to_native_council_election_assign_mana = {
 			PRIMARY = adm
@@ -211,9 +232,38 @@ country_event = {
 	
 	option = {
 		name = to_nat_governments.5.b
-		add_scaled_republican_tradition = -7.5
+		if = {
+			limit = {
+				has_government_attribute = to_nat_reduce_election_cost_per_skill_lost
+				adm = 4
+				mil = 4
+			}
+			add_scaled_republican_tradition = -4
+		}
+		else_if = {
+			limit = {
+				has_government_attribute = to_nat_reduce_election_cost_per_skill_lost
+				OR = {
+					adm = 4
+					mil = 4
+				}
+			}
+			add_scaled_republican_tradition = -6
+		}
+		else = {
+			add_scaled_republican_tradition = -8
+		}
 		ai_chance = {
-			factor = 1
+			factor = 10
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 75 }
+			}
+			modifier = {
+				factor = 3
+				NOT = { adm = 4 }
+				NOT = { mil = 4 }
+			}
 		}
 		to_native_council_election_assign_mana = {
 			PRIMARY = dip
@@ -224,9 +274,38 @@ country_event = {
 
 	option = {
 		name = to_nat_governments.5.c
-		add_scaled_republican_tradition = -7.5
+		if = {
+			limit = {
+				has_government_attribute = to_nat_reduce_election_cost_per_skill_lost
+				adm = 4
+				dip = 4
+			}
+			add_scaled_republican_tradition = -4
+		}
+		else_if = {
+			limit = {
+				has_government_attribute = to_nat_reduce_election_cost_per_skill_lost
+				OR = {
+					adm = 4
+					dip = 4
+				}
+			}
+			add_scaled_republican_tradition = -6
+		}
+		else = {
+			add_scaled_republican_tradition = -8
+		}
 		ai_chance = {
-			factor = 1
+			factor = 10
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 75 }
+			}
+			modifier = {
+				factor = 3
+				NOT = { adm = 4 }
+				NOT = { dip = 4 }
+			}
 		}
 		to_native_council_election_assign_mana = {
 			PRIMARY = mil
@@ -238,9 +317,9 @@ country_event = {
 	option = {
 		name = to_nat_governments.5.e
 		ai_chance = {
-			factor = 1
+			factor = 10
 		}
-		add_scaled_republican_tradition = 3.75
+		add_scaled_republican_tradition = 4
 		if = {
 			limit = {
 				adm = 4
@@ -848,7 +927,7 @@ country_event = {
 	option = {
 		name = to_nat_governments.8.a
 		ai_chance = {
-			factor = 0
+			factor = 50
 		}
 		if = {
 			limit = {
@@ -887,7 +966,7 @@ country_event = {
 	option = {
 		name = to_nat_governments.8.b
 		ai_chance = {
-			factor = 0
+			factor = 25
 		}
 		if = {
 			limit = {
@@ -921,7 +1000,7 @@ country_event = {
 	option = {
 		name = to_nat_governments.8.c
 		ai_chance = {
-			factor = 0
+			factor = 25
 		}
 		if = {
 			limit = {
@@ -976,11 +1055,9 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		OR = {
-			has_reform = to_native_reform_consensus_government
-			has_reform = to_native_reform_law_of_peace
-		}
+		has_government_attribute = to_nat_has_council_elections
 		has_reform = to_native_reform_centralise_power
+		NOT = { has_ruler_flag = to_nat_has_special_ruler }
 		NOT = { has_country_flag = appointed_war_chief }
 		OR = {
 			NOT = { has_country_flag = to_nat_centralised_council_election_open }
@@ -1096,6 +1173,10 @@ country_event = {
 		name = to_nat_governments.9.a
 		ai_chance = {
 			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 80 }
+			}
 		}
 		trigger = {
 			NOT = { has_ruler_flag = to_nat_has_native_council }
@@ -1117,6 +1198,10 @@ country_event = {
 		name = to_nat_governments.9.b
 		ai_chance = {
 			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 80 }
+			}
 		}
 		set_ruler = native_candidate_a_@ROOT
 		custom_tooltip = to_nat_candidate_a_tt
@@ -1125,6 +1210,10 @@ country_event = {
 		name = to_nat_governments.9.c
 		ai_chance = {
 			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 80 }
+			}
 		}
 		set_ruler = native_candidate_b_@ROOT
 		custom_tooltip = to_nat_candidate_b_tt
@@ -1133,6 +1222,10 @@ country_event = {
 		name = to_nat_governments.9.e
 		ai_chance = {
 			factor = 1
+			modifier = {
+				factor = 0
+				republican_tradition = 85
+			}
 		}
 		change_statists_vs_orangists = -0.20
 		if = {
@@ -1158,14 +1251,12 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		OR = {
-			has_reform = to_native_reform_consensus_government
-			has_reform = to_native_reform_law_of_peace
-		}
+		has_government_attribute = to_nat_has_council_elections
 		has_reform = to_native_reform_centralise_power
 		had_ruler_flag = { flag = to_nat_has_native_council days = 2190 }
 		is_orangists_in_power = yes
 		NOT = { has_country_flag = appointed_war_chief }
+		NOT = { has_ruler_flag = to_nat_has_special_ruler }
 		OR = {
 			NOT = { has_country_flag = to_nat_centralised_council_election_open }
 			had_country_flag = { flag = to_nat_centralised_council_election_open days = 365 }
@@ -1280,6 +1371,10 @@ country_event = {
 		name = to_nat_governments.9.b
 		ai_chance = {
 			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 80 }
+			}
 		}
 		set_ruler = native_candidate_a_@ROOT
 		custom_tooltip = to_nat_candidate_a_tt
@@ -1288,6 +1383,10 @@ country_event = {
 		name = to_nat_governments.9.c
 		ai_chance = {
 			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 80 }
+			}
 		}
 		set_ruler = native_candidate_b_@ROOT
 		custom_tooltip = to_nat_candidate_b_tt
@@ -1296,6 +1395,10 @@ country_event = {
 		name = to_nat_governments.9.e
 		ai_chance = {
 			factor = 1
+			modifier = {
+				factor = 0
+				republican_tradition = 85
+			}
 		}
 		change_statists_vs_orangists = -0.20
 		if = {
@@ -1321,10 +1424,7 @@ country_event = {
 	is_triggered_only = yes
 		
 	trigger = {
-		OR = {
-			has_reform = to_native_reform_consensus_government
-			has_reform = to_native_reform_law_of_peace
-		}
+		has_government_attribute = to_nat_has_council_elections
 		has_reform = to_native_reform_centralise_power
 		NOT = { has_country_flag = appointed_war_chief }
 	}
@@ -1474,6 +1574,10 @@ country_event = {
 		name = to_nat_governments.10.a
 		ai_chance = {
 			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 75 }
+			}
 		}
 		set_ruler = native_candidate_a_@ROOT
 		custom_tooltip = to_nat_candidate_a_tt
@@ -1482,6 +1586,10 @@ country_event = {
 		name = to_nat_governments.10.b
 		ai_chance = {
 			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 75 }
+			}
 		}
 		set_ruler = native_candidate_b_@ROOT
 		custom_tooltip = to_nat_candidate_b_tt
@@ -1490,6 +1598,10 @@ country_event = {
 		name = to_nat_governments.10.c
 		ai_chance = {
 			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 75 }
+			}
 		}
 		set_ruler = native_candidate_c_@ROOT
 		custom_tooltip = to_nat_candidate_c_tt
@@ -1498,6 +1610,10 @@ country_event = {
 		name = to_nat_governments.10.e
 		ai_chance = {
 			factor = 1
+			modifier = {
+				factor = 0
+				republican_tradition = 85
+			}
 		}
 		change_statists_vs_orangists = -0.20
 		if = {
@@ -1590,7 +1706,7 @@ country_event = {
 	option = {
 		name = to_nat_governments.8.a
 		ai_chance = {
-			factor = 0
+			factor = 1
 		}
 		if = {
 			limit = {
@@ -1629,7 +1745,7 @@ country_event = {
 	option = {
 		name = to_nat_governments.8.b
 		ai_chance = {
-			factor = 0
+			factor = 1
 		}
 		if = {
 			limit = {
@@ -1663,7 +1779,7 @@ country_event = {
 	option = {
 		name = to_nat_governments.8.c
 		ai_chance = {
-			factor = 0
+			factor = 1
 		}
 		if = {
 			limit = {
@@ -1696,35 +1812,35 @@ country_event = {
 	}
 }
 
-# Election upon death for Council. Should only happen with special rulers and it just sets the council, thus the event is hidden.
+# Election upon death for Council.
 country_event = {
 	id = to_nat_governments.12
-	title = to_nat_governments.12.t
-	desc = to_nat_governments.12.d
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = ELECTION_REPUBLICAN_eventPicture
 
 	is_triggered_only = yes
 	hidden = yes
 		
 	trigger = {
-		OR = {
-			has_reform = to_native_reform_consensus_government
-			has_reform = to_native_reform_law_of_peace
-		}
+		has_government_attribute = to_nat_has_council_elections
 		NOT = { has_reform = to_native_reform_centralise_power }
 		NOT = { has_country_flag = appointed_war_chief }
+		NOT = { has_country_flag = to_do_not_council_leader_death }
 	}
 
 	immediate = {
-		to_assign_native_council_fixed_stats = {
-			ADM = 3
-			DIP = 3
-			MIL = 3
-		}
+		# to_assign_native_council_fixed_stats = {
+		# 	ADM = 3
+		# 	DIP = 3
+		# 	MIL = 3
+		# }
+		generate_council_ruler = yes
+		set_ruler_flag = to_nat_has_native_council
 	}
 	
 	option = {
-		name = to_nat_governments.12.a
+		name = nhs2_hidden.a
 	}
 }
 

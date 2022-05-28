@@ -248,7 +248,8 @@ to_native_reform_consensus_government = {
 	valid_for_nation_designer = yes
 	nation_designer_cost = 20
 	republic = yes
-	has_term_election = no
+	has_term_election = yes
+	duration = 8
 	# If this is enabled then War Chiefs can't be defined as generals, even via events
 	# on the other hand council is a "regency" so it can't be a general anyway
 	# rulers_can_be_generals = no
@@ -269,6 +270,7 @@ to_native_reform_consensus_government = {
 	}
 	effect = {
 		to_enables_or_switches_native_estates = { FROM_ESTATE = estate_nobles TO_ESTATE = estate_clans }
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {
 				NOT = { has_ruler_flag = to_nat_has_native_council }
@@ -280,16 +282,22 @@ to_native_reform_consensus_government = {
 				DIP = 3
 				MIL = 3
 			}
+			custom_tooltip = nhs_new_line_tt
 		}
 		hidden_effect = {
-            hidden_effect = {
-                add_republican_tradition = -100
-                add_republican_tradition = 80
-            }
+			add_republican_tradition = -100
+			add_republican_tradition = 80
+			if = {
+				limit = {
+					has_reform = to_native_reform_elections
+				}
+				add_government_reform = to_native_reform_elections_with_council
+			}
         }
 	}
 
 	custom_attributes = {
+		to_nat_has_council_elections = yes
 		to_nat_has_war_chiefs = yes
 		# election_on_death = yes
 	}
@@ -323,6 +331,7 @@ to_native_reform_law_of_peace = {
 	}
 	effect = {
 		to_enables_or_switches_native_estates = { FROM_ESTATE = estate_nobles TO_ESTATE = estate_clans }
+		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {
 				NOT = { has_ruler_flag = to_nat_has_native_council }
@@ -334,16 +343,22 @@ to_native_reform_law_of_peace = {
 				DIP = 3
 				MIL = 3
 			}
+			custom_tooltip = nhs_new_line_tt
 		}
 		hidden_effect = {
-			hidden_effect = {
-                add_republican_tradition = -100
-                add_republican_tradition = 80
-            }
+			add_republican_tradition = -100
+			add_republican_tradition = 80
+			if = {
+				limit = {
+					has_reform = to_native_reform_elections
+				}
+				add_government_reform = to_native_reform_elections_with_council
+			}
         }
 	}
 
 	custom_attributes = {
+		to_nat_has_council_elections = yes
 		to_nat_has_war_chiefs = yes
 		# election_on_death = yes
 	}
@@ -371,9 +386,13 @@ to_native_reform_grand_chiefdom = {
 				which = to_nat_chiefdom_dinasty_counter
 				value = 1
 			}
-			hidden_effect = {
-				add_republican_tradition = -100
-				add_republican_tradition = 80
+			add_republican_tradition = -100
+			add_republican_tradition = 80
+			if = {
+				limit = {
+					has_reform = to_native_reform_elections_with_council
+				}
+				add_government_reform = to_native_reform_elections
 			}
 		}
 		if = {
@@ -503,6 +522,7 @@ to_native_reform_codified_power = {
 		legitimacy = 1
 		monthly_heir_claim_increase = 0.5
 		republican_tradition = 0.5
+		devotion = 2
 		horde_unity = 2
 	}
 	effect = {
@@ -748,6 +768,11 @@ to_native_reform_elections = {
 	icon = "ballot_box"
 	allow_normal_conversion = yes
 
+	potential = {
+		NOT = { has_reform = to_native_reform_consensus_government }
+		NOT = { has_reform = to_native_reform_law_of_peace }
+	}
+
 	trigger = {
 		OR = {
 			has_reform = to_native_reform_consensus_government
@@ -757,10 +782,37 @@ to_native_reform_elections = {
 	}
 
 	has_term_election = yes
-	duration = 8
+	duration = 4
 
 	modifiers = {
 		advisor_pool = 1
+	}
+}
+
+to_native_reform_elections_with_council = {
+	icon = "ballot_box"
+	allow_normal_conversion = yes
+
+	potential = {
+		OR = {
+			has_reform = to_native_reform_consensus_government
+			has_reform = to_native_reform_law_of_peace
+		}
+	}
+
+	trigger = {
+		OR = {
+			has_reform = to_native_reform_consensus_government
+			has_reform = to_native_reform_law_of_peace
+			has_reform = to_native_reform_grand_chiefdom
+		}
+	}
+
+	has_term_election = yes
+
+	modifiers = {
+		advisor_pool = 1
+		election_cycle = -4
 	}
 
 	effect = {
@@ -772,6 +824,7 @@ to_native_reform_elections = {
 				}
 				NOT = { has_ruler_flag = to_nat_has_native_council }
 				NOT = { has_country_flag = appointed_war_chief }
+				NOT = { has_ruler_flag = to_nat_has_special_ruler }
 			}
 			to_assign_native_council_fixed_stats = {
 				ADM = 3
@@ -780,6 +833,10 @@ to_native_reform_elections = {
 			}
 		}
 		# custom_tooltip = to_nat_council_elections_tt
+	}
+
+	custom_attributes = {
+		to_nat_reduce_election_cost_per_skill_lost = yes
 	}
 }
 
