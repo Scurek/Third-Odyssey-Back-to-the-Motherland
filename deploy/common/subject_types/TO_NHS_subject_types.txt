@@ -46,7 +46,7 @@ elysian_subject =
 	can_be_annexed = no
 	has_power_projection = no
 	gets_help_with_rebels = yes
-	can_have_subjects_of_other_types = yes
+	can_have_subjects_of_other_types = no
 	takes_diplo_slot = no
 	can_release_in_peace = no
 	can_transfer_in_peace = no
@@ -2461,6 +2461,7 @@ nhs_protectorate = {
 	diplomacy_overlord_sprite = GFX_diplomacy_leadprotectorates # The one that the overlord sees
 	diplomacy_subject_sprite = GFX_diplomacy_inprotectorate	# The one that the subject sees
 	
+	cities_required_for_bonuses = 50
 	# Properties:
 	can_fight_independence_war = yes
 	is_voluntary = no									# Whether they can leave the relationship whenever they want
@@ -2475,29 +2476,30 @@ nhs_protectorate = {
 	has_colonial_parent = no							# Regulates most rules that should hold only for colonies
 	overlord_can_attack = yes
 	overlord_can_be_subject = no
-	can_have_subjects_of_other_types = no
+	can_have_subjects_of_other_types = yes
 	can_be_annexed = no
 	takes_diplo_slot = no
 	has_power_projection = yes
 	can_release_in_peace = yes
 	uses_military_focus = no
-	overlord_protects_external = no						# Whether overlord always gets called (declinable) against countries without the same overlord. When this is 'no' overlord will only join if the defender would have been blocked (by its subject type) from attacking the attacker.
-	counts_for_borders = no							# Whether distance between borders counts this subject type as part of its overlord's borders.
+	overlord_protects_external = yes						# Whether overlord always gets called (declinable) against countries without the same overlord. When this is 'no' overlord will only join if the defender would have been blocked (by its subject type) from attacking the attacker.
+	counts_for_borders = yes							# Whether distance between borders counts this subject type as part of its overlord's borders.
 	overlord_enforce_peace_attacking = no				# Whether the overlord can enforce peace on the subject's enemy even when the subject is the attacker
 	can_use_claims = yes								# Whether the overlord can use the subject's claims and cores for declaring war
 	gives_daimyo_bonuses = no
 	gets_help_with_rebels = yes							# Only for AI. Bidirectional.
-	share_rebel_popup = yes								# Whether the Overlord gets popups about Subject's rebels and sees them in Stability View.
+	share_rebel_popup = no								# Whether the Overlord gets popups about Subject's rebels and sees them in Stability View.
 	separatists_become_subjects = no					# Whether separatist rebels enforcing demands will become subjects of the overlord.
 	allows_taking_land_without_independence = yes
 	can_transfer_in_peace = no							# Whether this subject type can be made into a vassal with the "Transfer Subject" Age Ability.
 	can_set_mil_focus = no
 	can_send_missionary_to_subject = yes				# Requires Cradle of Civilization
 	can_union_break = no								# Only works together with has_overlords_ruler
-	
+	does_overlord_size_count_for_warscore_cost = no
+
 	extend_trading_range = yes
 
-	max_government_rank = 0								# 0 means no limit
+	max_government_rank = 2								# 0 means no limit
 	trust_on_start = 0									# Overlord and subject will each get this much extra trust with each other at game start
 
 	base_liberty_desire = -25.0
@@ -2519,7 +2521,7 @@ nhs_protectorate = {
 		other_overlord = all
 	}
 	can_ally = {
-		
+		same_overlord = nhs_protectorate
 	}
 	can_marry = {
 		same_overlord = nhs_protectorate
@@ -2571,56 +2573,72 @@ nhs_protectorate = {
 	modifier_subject = clear # Use this to clear after copy_from.
 	modifier_overlord = clear
 
+	modifier_overlord = {
+		modifier = to_large_protectorate
+		trigger = {
+			num_of_cities = 50
+		}
+	}
+
 	modifier_subject = {
 		modifier = nhs_protectorate_adm_mod
 		trigger = {
-			ROOT = {
-				NOT = { adm_tech = FROM }
+			custom_trigger_tooltip = {
+				tooltip = nhs_protectorate_adm_mod_tt
+				ROOT = {
+					NOT = { adm_tech = FROM }
+				}
 			}
 		}
 	}
 	modifier_subject = {
 		modifier = nhs_protectorate_dip_mod
 		trigger = {
-			ROOT = {
-				NOT = { dip_tech = FROM }
+			custom_trigger_tooltip = {
+				tooltip = nhs_protectorate_dip_mod_tt
+				ROOT = {
+					NOT = { dip_tech = FROM }
+				}
 			}
 		}
 	}
 	modifier_subject = {
 		modifier = nhs_protectorate_mil_mod
 		trigger = {
-			ROOT = {
-				NOT = { mil_tech = FROM }
+			custom_trigger_tooltip = {
+				tooltip = nhs_protectorate_mil_mod_tt
+				ROOT = {
+					NOT = { mil_tech = FROM }
+				}
 			}
 		}
 	}
 
-	modifier_subject = {
-		modifier = constantinople_never_again_subject
-		trigger = {
-			overlord = {
-				has_idea = constantinople_never_again
-			}
-		}
-	}
+	# modifier_subject = {
+	# 	modifier = constantinople_never_again_subject
+	# 	trigger = {
+	# 		overlord = {
+	# 			has_idea = constantinople_never_again
+	# 		}
+	# 	}
+	# }
 	
-	modifier_subject = {
-		modifier = to_colonial_subsidies_subject
-		trigger = {
-			has_country_flag = to_subsidising_colonisation
-			NOT = { has_country_modifier = nhs_constrained_resources }
-			# num_of_colonists = 1
-		}
-	}
-	modifier_overlord = {
-		modifier = to_colonial_subsidies_overlord
-		trigger = {
-			has_country_flag = to_subsidising_colonisation
-			NOT = { has_country_modifier = nhs_constrained_resources }
-			# num_of_colonists = 1
-		}
-	}
+	# modifier_subject = {
+	# 	modifier = to_colonial_subsidies_subject
+	# 	trigger = {
+	# 		has_country_flag = to_subsidising_colonisation
+	# 		NOT = { has_country_modifier = nhs_constrained_resources }
+	# 		# num_of_colonists = 1
+	# 	}
+	# }
+	# modifier_overlord = {
+	# 	modifier = to_colonial_subsidies_overlord
+	# 	trigger = {
+	# 		has_country_flag = to_subsidising_colonisation
+	# 		NOT = { has_country_modifier = nhs_constrained_resources }
+	# 		# num_of_colonists = 1
+	# 	}
+	# }
 
 	overlord_opinion_modifier = is_iprotectorate
 	subject_opinion_modifier = is_iprotectorate
