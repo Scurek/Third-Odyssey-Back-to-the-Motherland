@@ -459,10 +459,7 @@ country_event = {
 		}
 
 		event_target:nhs_hcd_target_province = {
-			spawn_rebels = {
-				type = particularist_rebels
-				size = 1
-			}
+			to_nhs_spawn_pre_disaster_hellenic_rebels = { SIZE = 1 }
 			add_province_modifier = {
 				name = nhs_hcd_Pagan_taxes
 				duration = 3650
@@ -1623,10 +1620,7 @@ country_event = {
 				ai = no
 			}
 			capital_scope = {
-				spawn_rebels = {
-					type = particularist_rebels
-					size = 1
-				}
+				to_nhs_spawn_pre_disaster_hellenic_rebels = { SIZE = 1 }
 			}
 		}
 		else = {
@@ -1670,7 +1664,7 @@ country_event = {
 
 # Orthodox violence
 country_event = {
-	id = nhs_hellenicconversion.29 
+	id = nhs_hellenicconversion.29
 	title = nhs_hellenicconversion29.t
 	desc = nhs_hellenicconversion29.d
 	picture = VILLAGE_RAIDED_eventPicture
@@ -2062,10 +2056,7 @@ country_event = {
 			# 	name = nhs_hcd_Pagan_minority
 			# 	duration = -1
 			# }
-			spawn_rebels = {
-				type = particularist_rebels
-				size = 2
-			}
+			to_nhs_spawn_pre_disaster_hellenic_rebels = { SIZE = 2 }
 		}
 		custom_tooltip = nhs_new_line_tt
 		to_nhs_hellenic_disaster_anger_hellenic_huge = yes
@@ -2556,10 +2547,7 @@ country_event = {
 			loyalty = 5
 		}
 		event_target:nhs_hcd_new_assemblies_target_province = {
-			spawn_rebels = {
-				type = particularist_rebels
-				size = 1
-			}
+			to_nhs_spawn_pre_disaster_hellenic_rebels = { SIZE = 1 }
 		}
 		custom_tooltip = nhs_new_line_tt
 		to_nhs_hellenic_disaster_anger_hellenic_minor = yes
@@ -2759,10 +2747,7 @@ country_event = {
 
 		add_patriarch_authority = 0.1
 		event_target:nhs_hcd_assemblies_target_province = {
-			spawn_rebels = {
-				type = particularist_rebels
-				size = 1
-			}
+			to_nhs_spawn_pre_disaster_hellenic_rebels = { SIZE = 1 }
 		}
 		custom_tooltip = nhs_new_line_tt
 		to_nhs_hellenic_disaster_anger_hellenic_minor = yes
@@ -3331,6 +3316,18 @@ country_event = {
 		# custom_tooltip = nhs_hellenicconversion.6.tt
 		# custom_tooltip = to_nhs_hellenic_disaster_ends_tt
 		change_religion = pantheon_worship
+		if = {
+			limit = {
+				has_spawned_rebels = orthodox_rebels
+			}
+			disband_rebels = orthodox_rebels
+		}
+		if = {
+			limit = {
+				has_spawned_rebels = pantheon_worship_rebels
+			}
+			disband_rebels = pantheon_worship_rebels
+		}
 		nhs_set_clergy_loyalty_to_50 = yes
 		to_nhs_remove_all_clergy_privileges = yes
 		to_nhs_remove_pre_hellenic_disaster_country_modifiers = yes
@@ -3417,6 +3414,18 @@ country_event = {
 		name = nhs_hellenicconversion.6.b
 		ai_chance = {
 			factor = 60
+		}
+		if = {
+			limit = {
+				has_spawned_rebels = orthodox_rebels
+			}
+			disband_rebels = orthodox_rebels
+		}
+		if = {
+			limit = {
+				has_spawned_rebels = pantheon_worship_rebels
+			}
+			disband_rebels = pantheon_worship_rebels
 		}
 		if = {
 			limit = {
@@ -3508,6 +3517,7 @@ country_event = {
 				change_religion = pantheon_worship
 			}
 		}
+
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = nhs_tolerated_minority_hellenic_in_the_future_tt
 		set_country_flag = nhs_enable_tolerated_minority
@@ -3607,6 +3617,18 @@ country_event = {
 				heir_religion = pantheon_worship
 			}
 			set_heir_religion = orthodox
+		}
+		if = {
+			limit = {
+				has_spawned_rebels = orthodox_rebels
+			}
+			disband_rebels = orthodox_rebels
+		}
+		if = {
+			limit = {
+				has_spawned_rebels = pantheon_worship_rebels
+			}
+			disband_rebels = pantheon_worship_rebels
 		}
 		# custom_tooltip = to_nhs_hellenic_disaster_ends_tt
 		add_patriarch_authority = 0.25
@@ -3749,13 +3771,32 @@ country_event = {
 		to_nhs_remove_pre_hellenic_disaster_country_modifiers = yes
 		to_nhs_spawn_inquisition_revolt = { EVENT_TARGET = nhs_hcd_target_province }
 		set_country_flag = nhs_enable_semi_tolerated_minority
-		every_owned_province = {
+		if = {
 			limit = {
-				has_province_modifier = nhs_hcd_Pagan_minority
+				any_owned_province = {
+					OR = {
+						has_province_modifier = nhs_hcd_Pagan_minority
+						has_rebel_faction = pantheon_worship_rebels
+					}
+				}
 			}
-			remove_province_modifier = nhs_hcd_Pagan_minority
-			change_religion = pantheon_worship
+			every_owned_province = {
+				limit = {
+					OR = {
+						has_province_modifier = nhs_hcd_Pagan_minority
+						has_rebel_faction = pantheon_worship_rebels
+					} 
+				}
+				change_religion = pantheon_worship
+				if = {
+					limit = {
+						has_province_modifier = nhs_hcd_Pagan_minority
+					}
+					remove_province_modifier = nhs_hcd_Pagan_minority 
+				}
+			}
 		}
+		custom_tooltip = nhs_new_line_tt
 		hidden_effect = {
 			to_nhs_handle_post_disaster_tolerance_modifier_all_provinces = yes
 		}

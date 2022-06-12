@@ -323,22 +323,51 @@ country_event = {
 		if = {
 			limit = {
 				any_owned_province = {
-					has_province_modifier = nhs_hcd_Pagan_minority
+					OR = {
+						has_province_modifier = nhs_hcd_Pagan_minority
+						has_rebel_faction = pantheon_worship_rebels
+					}
 				}
 			}
 			every_owned_province = {
 				limit = {
-					has_province_modifier = nhs_hcd_Pagan_minority 
+					OR = {
+						has_province_modifier = nhs_hcd_Pagan_minority
+						has_rebel_faction = pantheon_worship_rebels
+					} 
 				}
 				change_religion = pantheon_worship
-				remove_province_modifier = nhs_hcd_Pagan_minority 
+				if = {
+					limit = {
+						has_province_modifier = nhs_hcd_Pagan_minority
+					}
+					remove_province_modifier = nhs_hcd_Pagan_minority 
+				}
 			}
 		}
-		else = {
-			custom_tooltip = nhs_new_line_tt
-		}
+		custom_tooltip = nhs_new_line_tt
 		to_nhs_exempt_all_non_greek_provinces_from_hellenic_disaster = yes
 		to_nhs_remove_pre_hellenic_disaster_anti_hellenic_province_modifiers = yes
+		hidden_effect = {
+			if = {
+				limit = {
+					to_nhs_hellenic_disaster_attitude_friendly = {
+						ATTITUDE_VARIABLE = HellenicUprising
+					}
+					has_spawned_rebels = pantheon_worship_rebels
+				}
+				disband_rebels = pantheon_worship_rebels
+			}
+			if = {
+				limit = {
+					to_nhs_hellenic_disaster_attitude_friendly = {
+						ATTITUDE_VARIABLE = OrthodoxUprising
+					}
+					has_spawned_rebels = orthodox_rebels
+				}
+				disband_rebels = orthodox_rebels
+			}
+		}
 	}
 
 	option = { 
@@ -346,6 +375,12 @@ country_event = {
 		name = nhs_hcd_hellenicrevolt.1.b
 		ai_chance = { factor = 0 }
 		set_country_flag = nhs_hcd_supported_zealots
+		if = {
+			limit = {
+				has_spawned_rebels = orthodox_rebels
+			}
+			disband_rebels = orthodox_rebels
+		}
 		if = {
 			limit = {
 				ruler_religion = pantheon_worship
@@ -412,20 +447,29 @@ country_event = {
 		if = {
 			limit = {
 				any_owned_province = {
-					has_province_modifier = nhs_hcd_Pagan_minority
+					OR = {
+						has_province_modifier = nhs_hcd_Pagan_minority
+						has_rebel_faction = pantheon_worship_rebels
+					}
 				}
 			}
 			every_owned_province = {
 				limit = {
-					has_province_modifier = nhs_hcd_Pagan_minority 
+					OR = {
+						has_province_modifier = nhs_hcd_Pagan_minority
+						has_rebel_faction = pantheon_worship_rebels
+					} 
 				}
 				change_religion = pantheon_worship
-				remove_province_modifier = nhs_hcd_Pagan_minority 
+				if = {
+					limit = {
+						has_province_modifier = nhs_hcd_Pagan_minority
+					}
+					remove_province_modifier = nhs_hcd_Pagan_minority 
+				}
 			}
 		}
-		else = {
-			custom_tooltip = nhs_new_line_tt
-		}
+		custom_tooltip = nhs_new_line_tt
 		to_nhs_exempt_all_non_greek_provinces_from_hellenic_disaster = yes
 		to_nhs_remove_pre_hellenic_disaster_hellenic_province_modifiers = yes
 	}
@@ -437,6 +481,14 @@ country_event = {
 		set_country_flag = nhs_hcd_converted_to_hellenic
 		tooltip = {
 			change_religion = pantheon_worship
+		}
+		if = {
+			limit = {
+				has_spawned_rebels = pantheon_worship_rebels
+			}
+			disband_rebels = pantheon_worship_rebels
+		}
+		tooltip = {
 			nhs_set_clergy_loyalty_to_50 = yes
 			to_nhs_remove_all_clergy_privileges = yes
 			add_country_modifier = {
@@ -531,9 +583,7 @@ country_event = {
 				remove_province_modifier = nhs_hcd_Pagan_minority 
 			}
 		}
-		else = {
-			custom_tooltip = nhs_new_line_tt
-		}
+		custom_tooltip = nhs_new_line_tt
 		to_nhs_exempt_all_non_greek_provinces_from_hellenic_disaster = yes
 		to_nhs_remove_pre_hellenic_disaster_anti_hellenic_province_modifiers = yes
 	}
