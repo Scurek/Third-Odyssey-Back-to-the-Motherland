@@ -172,13 +172,16 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 				}
 			}
 			else = {
-				num_of_owned_provinces_with = {
-					value = 4
-					OR = {
-						has_building = fort_15th
-						has_building = fort_16th
-						has_building = fort_17th
-						has_building = fort_18th
+				OR = {
+					mil_tech = 11
+					num_of_owned_provinces_with = {
+						value = 4
+						OR = {
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
 					}
 				}
 			}
@@ -1438,42 +1441,84 @@ nhs_right_start = {
 		trigger = { 
 			# monthly_income = 50
 			is_bankrupt = no
-			NOT = { inflation = 10 }
-			NOT = { num_of_loans = 1 }
-			NOT = { corruption = 0.1 }
+			if = {
+				limit = {
+					ai = no
+				}
+				NOT = { inflation = 10 }
+				NOT = { num_of_loans = 1 }
+				NOT = { corruption = 0.1 }
+			}
 			custom_trigger_tooltip = {
 				tooltip = nhs_high_income_mission_gold_province_tt
 				any_owned_province = {
 					to_ely_high_income_mission_is_gold_province = yes
 				}
 			}
-			OR = {
-				custom_trigger_tooltip = {
-					tooltip = to_has_national_bank_idea_tt
-					has_idea = national_bank
+			if = {
+				limit = {
+					ai = no
 				}
-				# NOT = { has_estate = estate_burghers }
-				NOT = {
-					estate_influence = {
-						estate = estate_burghers
-						influence = 30
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = to_has_national_bank_idea_tt
+						has_idea = national_bank
 					}
-				}
-				AND = {
-					estate_loyalty = {
-						estate = estate_burghers
-						loyalty = 50
-					}
+					# NOT = { has_estate = estate_burghers }
 					NOT = {
 						estate_influence = {
 							estate = estate_burghers
-							influence = 50
+							influence = 30
 						}
 					}
+					AND = {
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 50
+						}
+						NOT = {
+							estate_influence = {
+								estate = estate_burghers
+								influence = 50
+							}
+						}
+					}
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 70
+					}
 				}
-				estate_loyalty = {
-					estate = estate_burghers
-					loyalty = 70
+			}
+			else = {
+				OR = {
+					adm_tech = 12
+					custom_trigger_tooltip = {
+						tooltip = to_has_national_bank_idea_tt
+						has_idea = national_bank
+					}
+					# NOT = { has_estate = estate_burghers }
+					NOT = {
+						estate_influence = {
+							estate = estate_burghers
+							influence = 30
+						}
+					}
+					AND = {
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 50
+						}
+						NOT = {
+							estate_influence = {
+								estate = estate_burghers
+								influence = 50
+							}
+						}
+					}
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 70
+					}
 				}
 			}
 		}
