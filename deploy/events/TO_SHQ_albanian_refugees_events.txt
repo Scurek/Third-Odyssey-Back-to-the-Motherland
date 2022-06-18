@@ -1441,7 +1441,7 @@ country_event = {
 # 	}
 # }
 
-# Auto-settle provinces (replaces decision)
+# Auto-settle provinces
 country_event = {
 	id = nhs2_albania.8
 	title = nhs2_albania.8.t
@@ -1485,26 +1485,44 @@ country_event = {
 		# 		}
 		# 	}
 		# }
-		# From 'allow'
-		any_owned_province = {
-			any_empty_neighbor_province = {
-				NOT = { nhs_homelands = yes }
-				continent = north_america
-				OR = {
-					any_neighbor_province = {
+		if = {
+			limit = {
+				exists = SHQ
+				SHQ = { to_nhs_has_shq_colonial_restrictions = yes }
+			}
+			SHQ = {
+				any_owned_province = {
+					any_empty_neighbor_province = {
+						NOT = { nhs_homelands = yes }
 						continent = north_america
-						culture = shqiperi
-					}
-					AND = {
-						has_port = yes
-						NOT = {
-							any_neighbor_province = {
-								nhs_na_sail_lakes_rivers = yes
+					}	
+				}
+			}
+		}
+		else = {
+			any_owned_province = {
+				any_empty_neighbor_province = {
+					NOT = { nhs_homelands = yes }
+					continent = north_america
+					OR = {
+						any_neighbor_province = {
+							OR = {
+								culture = shqiperi
+								culture = shqipproi
+								owned_by = SHQ
+							}
+						}
+						AND = {
+							has_port = yes
+							NOT = {
+								any_neighbor_province = {
+									nhs_na_sail_lakes_rivers = yes
+								}
 							}
 						}
 					}
-				}
-			}	
+				}	
+			}
 		}
 	}
 
@@ -1512,27 +1530,48 @@ country_event = {
 		months = 3
 	}
 
-	# 'Effect' -> immediate
 	immediate = {
 		hidden_effect = {
-			random_province = {
+			if = {
 				limit = {
-					is_empty = yes
-					has_port = yes
-					NOT = {
-						any_neighbor_province = {
-							nhs_na_sail_lakes_rivers = yes
-						}
-					}
-					any_neighbor_province = {
+					exists = SHQ
+				}
+				random_province = {
+					limit = {
+						is_empty = yes
+						has_port = yes
 						continent = north_america
-						OR = {
-							culture = shqiperi
+						NOT = {
+							any_neighbor_province = {
+								nhs_na_sail_lakes_rivers = yes
+							}
+						}
+						any_neighbor_province = {
 							owned_by = SHQ
 						}
 					}
+					save_event_target_as = nhs_albanian_settling_target
 				}
-				save_event_target_as = nhs_albanian_settling_target
+				if = {
+					limit = {
+						NOT = { has_saved_event_target = nhs_albanian_settling_target }
+					}
+					random_province = {
+						limit = {
+							is_empty = yes
+							continent = north_america
+							NOT = {
+								any_neighbor_province = {
+									nhs_na_sail_lakes_rivers = yes
+								}
+							}
+							any_neighbor_province = {
+								owned_by = SHQ
+							}
+						}
+						save_event_target_as = nhs_albanian_settling_target
+					}
+				}
 			}
 			if = {
 				limit = {
@@ -1541,10 +1580,44 @@ country_event = {
 				random_province = {
 					limit = {
 						is_empty = yes
+						has_port = yes
+						continent = north_america
+						NOT = {
+							any_neighbor_province = {
+								nhs_na_sail_lakes_rivers = yes
+							}
+						}
 						any_neighbor_province = {
-							continent = north_america
+							OR = {
+								owned_by = ROOT
+								owned_by = SHQ
+							}
 							OR = {
 								culture = shqiperi
+								culture = shqipproi
+								owned_by = SHQ
+							}
+						}
+					}
+					save_event_target_as = nhs_albanian_settling_target
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = nhs_albanian_settling_target }
+				}
+				random_province = {
+					limit = {
+						is_empty = yes
+						continent = north_america
+						any_neighbor_province = {
+							OR = {
+								owned_by = ROOT
+								owned_by = SHQ
+							}
+							OR = {
+								culture = shqiperi
+								culture = shqipproi
 								owned_by = SHQ
 							}
 						}
@@ -1560,13 +1633,13 @@ country_event = {
 					limit = {
 						is_empty = yes
 						has_port = yes
+						continent = north_america
 						NOT = {
 							any_neighbor_province = {
 								nhs_na_sail_lakes_rivers = yes
 							}
 						}
 						any_neighbor_province = {
-							continent = north_america
 							OR = {
 								owned_by = ROOT
 								owned_by = SHQ
