@@ -560,12 +560,13 @@ country_event = {
 
 	major = yes
 	major_trigger = { 
-		knows_country = ROOT 
+		knows_country = ROOT
+		NOT = { exists = MSN }
 	}
 	
 	trigger = {
 		tag = MS1
-		OR = {	
+		OR = {
 			num_of_cities = 15
 			is_year = 1540
 		}
@@ -583,196 +584,203 @@ country_event = {
 
 	option = {		# What will be, will be
 		name = "msg_arrival_events.11.a"
-		change_tag = MSN
-		to_restore_historal_friends_and_rivals = { PREVIOUS_TAG = event_target:previous_tag }
-		add_government_reform = spartan_kingdom
-		
-		remove_country_modifier = nhs_secrets_greekfire
-		remove_country_modifier = nhs_greekfire_update
-		remove_country_modifier = nhs_noble_cataphracts
 		if = {
 			limit = {
-				has_country_modifier = msg_cultural_minority
+				exists = MSN
 			}
-			remove_country_modifier = msg_cultural_minority
-		}
-		tooltip = {
-			swap_non_generic_missions = yes
-		}
-		custom_tooltip = nhs_new_line_tt
-		change_primary_culture = apogonoi
-		add_accepted_culture = pipiltin
-		add_accepted_culture = pochteca
-		add_accepted_culture = macehualtin
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = msg_enable_estates_tt
-		custom_tooltip = nhs_new_line_tt
-		country_event = {
-			id = msg_reforms.1
-			# days = 1
-		}
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					has_province_flag = nhs_msg_original_capital
-				}
-				change_culture = apogonoi
-				hidden_effect = {
-					nhs_on_province_culture_converted_general = yes
-				}
-				# nhs_assign_names_ely = yes
-			}
-			every_owned_province = {
-				limit = {
-					has_province_flag = nhs_msg_original_heartland
-					NOT = { has_province_flag = nhs_msg_original_capital }
-				}
-				change_culture = pipiltin
-				hidden_effect = {
-					nhs_on_province_culture_converted_general = yes
-				}
-				# nhs_assign_names_ely = yes
-			}
-			every_owned_province = {
-				limit = {
-					NOT = {
-						has_province_flag = nhs_msg_original_heartland
-						has_province_flag = nhs_msg_original_capital
-					}
-					OR = {
-						culture = elysian
-						culture = greek
-					}
-					OR = {
-						has_port = yes
-						province_has_center_of_trade_of_level = 1
-					}
-				}
-				random_list = {
-					70 = { change_culture = pochteca }
-					30 = { change_culture = macehualtin }
-				}
-				hidden_effect = {
-					nhs_on_province_culture_converted_general = yes
-				}
-				# nhs_assign_names_ely = yes
-			}
-
-			every_owned_province = {
-				limit = {
-					NOT = {
-						has_province_flag = nhs_msg_original_heartland
-						has_province_flag = nhs_msg_original_capital
-					}
-					OR = {
-						culture_group = central_american
-						culture_group = otomanguean
-						culture_group = maya
-						culture_group = aridoamerican
-					}
-					NOT = { has_province_flag = nhs2_nope_culture_change }
-					OR = {
-						has_port = yes
-						province_has_center_of_trade_of_level = 1
-					}
-				}
-				random_list = {
-					35 = { 
-						change_culture = pochteca 
-						# nhs_assign_names_ely = yes
-					}
-					15 = {
-						change_culture = macehualtin
-						# nhs_assign_names_ely = yes
-					}
-					50 = { set_province_flag = nhs2_nope_culture_change }
-				}
-				hidden_effect = {
-					nhs_on_province_culture_converted_general = yes
-				}
-			}
-			every_owned_province = {
-				limit = {
-					NOT = {
-						has_province_flag = nhs_msg_original_heartland
-						has_province_flag = nhs_msg_original_capital
-					}
-					OR = {
-						culture = elysian
-						culture = greek
-					}
-					has_port = no
-					NOT = { province_has_center_of_trade_of_level = 1 }
-				}
-				random_list = {
-					10 = { change_culture = pochteca }
-					90 = { change_culture = macehualtin }
-				}
-				hidden_effect = {
-					nhs_on_province_culture_converted_general = yes
-				}
-				# nhs_assign_names_ely = yes
-			}
-
-			every_owned_province = {
-				limit = {
-					NOT = {
-						has_province_flag = nhs_msg_original_heartland
-						has_province_flag = nhs_msg_original_capital
-					}
-					NOT = { has_province_flag = nhs2_nope_culture_change }
-					OR = {
-						culture_group = central_american
-						culture_group = otomanguean
-						culture_group = maya
-						culture_group = aridoamerican
-					}
-					has_port = no
-					NOT = { province_has_center_of_trade_of_level = 1 }
-				}
-				random_list = {
-					50 = { 
-						change_culture = macehualtin
-						# nhs_assign_names_ely = yes
-					}
-					50 = { set_province_flag = nhs2_nope_culture_change }
-				}
-				hidden_effect = {
-					nhs_on_province_culture_converted_general = yes
-				}
-			}
-			set_ruler_culture = apogonoi
-			set_heir_culture = apogonoi
-			if = {
-				limit = {
-					OR = {
-						consort_culture = elysian
-						consort_culture = greek
-					}
-				}
-				set_consort_culture = apogonoi
-			}
-		}
-	}
-	
-	after = {
-		swap_non_generic_missions = yes
-		if = {
-			limit = {
-				any_country = {
-					exists = yes
-					ai = yes
-				}
-			}
-			random_country = {
-				limit = {
-					ai = yes
-				}
-				country_event = { id = msg_arrival_events.23 days = 1 }
+			MSN = {
+				inherit = ROOT
 			}
 		}
 		else = {
-			country_event = { id = msg_arrival_events.23 days = 2 }
+			change_tag = MSN
+			to_restore_historal_friends_and_rivals = { PREVIOUS_TAG = event_target:previous_tag }
+			add_government_reform = spartan_kingdom
+			
+			remove_country_modifier = nhs_secrets_greekfire
+			remove_country_modifier = nhs_greekfire_update
+			remove_country_modifier = nhs_noble_cataphracts
+			if = {
+				limit = {
+					has_country_modifier = msg_cultural_minority
+				}
+				remove_country_modifier = msg_cultural_minority
+			}
+			tooltip = {
+				swap_non_generic_missions = yes
+			}
+			custom_tooltip = nhs_new_line_tt
+			change_primary_culture = apogonoi
+			add_accepted_culture = pipiltin
+			add_accepted_culture = pochteca
+			add_accepted_culture = macehualtin
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = msg_enable_estates_tt
+			custom_tooltip = nhs_new_line_tt
+			country_event = {
+				id = msg_reforms.1
+				# days = 1
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						has_province_flag = nhs_msg_original_capital
+					}
+					change_culture = apogonoi
+					hidden_effect = {
+						nhs_on_province_culture_converted_general = yes
+					}
+					# nhs_assign_names_ely = yes
+				}
+				every_owned_province = {
+					limit = {
+						has_province_flag = nhs_msg_original_heartland
+						NOT = { has_province_flag = nhs_msg_original_capital }
+					}
+					change_culture = pipiltin
+					hidden_effect = {
+						nhs_on_province_culture_converted_general = yes
+					}
+					# nhs_assign_names_ely = yes
+				}
+				every_owned_province = {
+					limit = {
+						NOT = {
+							has_province_flag = nhs_msg_original_heartland
+							has_province_flag = nhs_msg_original_capital
+						}
+						OR = {
+							culture = elysian
+							culture = greek
+						}
+						OR = {
+							has_port = yes
+							province_has_center_of_trade_of_level = 1
+						}
+					}
+					random_list = {
+						70 = { change_culture = pochteca }
+						30 = { change_culture = macehualtin }
+					}
+					hidden_effect = {
+						nhs_on_province_culture_converted_general = yes
+					}
+					# nhs_assign_names_ely = yes
+				}
+	
+				every_owned_province = {
+					limit = {
+						NOT = {
+							has_province_flag = nhs_msg_original_heartland
+							has_province_flag = nhs_msg_original_capital
+						}
+						OR = {
+							culture_group = central_american
+							culture_group = otomanguean
+							culture_group = maya
+							culture_group = aridoamerican
+						}
+						NOT = { has_province_flag = nhs2_nope_culture_change }
+						OR = {
+							has_port = yes
+							province_has_center_of_trade_of_level = 1
+						}
+					}
+					random_list = {
+						35 = { 
+							change_culture = pochteca 
+							# nhs_assign_names_ely = yes
+						}
+						15 = {
+							change_culture = macehualtin
+							# nhs_assign_names_ely = yes
+						}
+						50 = { set_province_flag = nhs2_nope_culture_change }
+					}
+					hidden_effect = {
+						nhs_on_province_culture_converted_general = yes
+					}
+				}
+				every_owned_province = {
+					limit = {
+						NOT = {
+							has_province_flag = nhs_msg_original_heartland
+							has_province_flag = nhs_msg_original_capital
+						}
+						OR = {
+							culture = elysian
+							culture = greek
+						}
+						has_port = no
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					random_list = {
+						10 = { change_culture = pochteca }
+						90 = { change_culture = macehualtin }
+					}
+					hidden_effect = {
+						nhs_on_province_culture_converted_general = yes
+					}
+					# nhs_assign_names_ely = yes
+				}
+	
+				every_owned_province = {
+					limit = {
+						NOT = {
+							has_province_flag = nhs_msg_original_heartland
+							has_province_flag = nhs_msg_original_capital
+						}
+						NOT = { has_province_flag = nhs2_nope_culture_change }
+						OR = {
+							culture_group = central_american
+							culture_group = otomanguean
+							culture_group = maya
+							culture_group = aridoamerican
+						}
+						has_port = no
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					random_list = {
+						50 = { 
+							change_culture = macehualtin
+							# nhs_assign_names_ely = yes
+						}
+						50 = { set_province_flag = nhs2_nope_culture_change }
+					}
+					hidden_effect = {
+						nhs_on_province_culture_converted_general = yes
+					}
+				}
+				set_ruler_culture = apogonoi
+				set_heir_culture = apogonoi
+				if = {
+					limit = {
+						OR = {
+							consort_culture = elysian
+							consort_culture = greek
+						}
+					}
+					set_consort_culture = apogonoi
+				}
+				swap_non_generic_missions = yes
+				if = {
+					limit = {
+						any_country = {
+							exists = yes
+							ai = yes
+						}
+					}
+					random_country = {
+						limit = {
+							ai = yes
+						}
+						country_event = { id = msg_arrival_events.23 days = 1 }
+					}
+				}
+				else = {
+					country_event = { id = msg_arrival_events.23 days = 2 }
+				}
+			}
 		}
 	}
 }
