@@ -495,6 +495,84 @@ to_round_up_variable = {
 	}
 }
 
+to_save_historal_friends_and_rivals = {
+	hidden_effect = {
+		every_country = {
+			limit = {
+				historical_friend_with = ROOT
+			}
+			set_country_flag = to_historical_friend_with_ROOT
+			remove_historical_friend = ROOT
+		}
+		every_country = {
+			limit = {
+				ROOT = {
+					historical_friend_with = PREV
+				}
+			}
+			set_country_flag = to_ROOT_historical_friend_with_TAG
+			ROOT = {
+				remove_historical_friend = PREV
+			}
+		}
+		every_country = {
+			limit = {
+				historical_rival_with = ROOT
+			}
+			set_country_flag = to_historical_rival_with_ROOT
+			remove_historical_rival = ROOT
+		}
+		every_country = {
+			limit = {
+				ROOT = {
+					historical_rival_with = PREV
+				}
+			}
+			set_country_flag = to_ROOT_historical_rival_with_TAG
+			ROOT = {
+				remove_historical_rival = PREV
+			}
+		}
+	}
+}
+
+to_load_historal_friends_and_rivals = {
+	hidden_effect = {
+		every_country = {
+			limit = {
+				has_country_flag = to_historical_friend_with_ROOT
+			}
+			clr_country_flag = to_historical_friend_with_ROOT
+			add_historical_friend = ROOT
+		}
+		every_country = {
+			limit = {
+				has_country_flag = to_ROOT_historical_friend_with_TAG
+			}
+			clr_country_flag = to_ROOT_historical_friend_with_TAG
+			ROOT = {
+				add_historical_friend = PREV
+			}
+		}
+		every_country = {
+			limit = {
+				has_country_flag = to_historical_rival_with_ROOT
+			}
+			clr_country_flag = to_historical_rival_with_ROOT
+			add_historical_rival = ROOT
+		}
+		every_country = {
+			limit = {
+				has_country_flag = to_ROOT_historical_rival_with_TAG
+			}
+			clr_country_flag = to_ROOT_historical_rival_with_TAG
+			ROOT = {
+				add_historical_rival = PREV
+			}
+		}
+	}
+}
+
 to_restore_historal_friends_and_rivals = {
 	hidden_effect = {
 		every_country = {
@@ -502,6 +580,9 @@ to_restore_historal_friends_and_rivals = {
 				$PREVIOUS_TAG$ = {
 					historical_friend_with = PREV
 				}
+			}
+			$PREVIOUS_TAG$ = {
+				remove_historical_friend = PREV
 			}
 			ROOT = {
 				add_historical_friend = PREV
@@ -515,6 +596,11 @@ to_restore_historal_friends_and_rivals = {
 					}
 				}
 			}
+			$PREVIOUS_TAG$ = {
+				PREV = {
+					remove_historical_friend = PREV
+				}
+			}
 			add_historical_friend = ROOT
 		}
 		every_country = {
@@ -522,6 +608,9 @@ to_restore_historal_friends_and_rivals = {
 				$PREVIOUS_TAG$ = {
 					historical_rival_with = PREV
 				}
+			}
+			$PREVIOUS_TAG$ = {
+				remove_historical_rival = PREV
 			}
 			ROOT = {
 				add_historical_rival = PREV
@@ -533,6 +622,11 @@ to_restore_historal_friends_and_rivals = {
 					PREV = {
 						historical_rival_with = PREV
 					}
+				}
+			}
+			$PREVIOUS_TAG$ = {
+				PREV = {
+					remove_historical_rival = PREV
 				}
 			}
 			add_historical_rival = ROOT
