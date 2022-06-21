@@ -960,56 +960,56 @@ country_event = {
 
     trigger = {
 		religion = totemism
-		NOT = { tag = CAO }
-		OR = {
-			is_year = 1500
-			capital_scope = { religion = pantheon_worship }
-		}
+		NOT = { has_ruler_flag = to_declined_pantheon_worship }
+		num_of_religion = { religion = pantheon_worship value = 0.1 }
 		OR = {
 			NOT = { num_of_cities = 4 }
-			num_of_religion = { religion = pantheon_worship value = 2 }
+			dominant_religion = pantheon_worship
+			num_of_religion = { religion = pantheon_worship value = 0.33 }
 		}
-		any_owned_province = {
+		any_known_country = {
 			religion = pantheon_worship
 		}
-		any_neighbor_country = {
-			OR = {
-				technology_group = exiled_greek
-				technology_group = modern_greek
-			}
-			religion = pantheon_worship
-		}
+		# any_neighbor_country = {
+		# 	OR = {
+		# 		technology_group = exiled_greek
+		# 		technology_group = modern_greek
+		# 	}
+		# 	religion = pantheon_worship
+		# }
 	}
 
 	mean_time_to_happen = {
-		months = 240
-		modifier = {
-			factor = 0.90
-			stability = 1
-		}
-		modifier = {
-			factor = 0.90
-			stability = 2
-		}
-		modifier = {
-			factor = 0.90
-			stability = 3
-		}
+		months = 180
+		# modifier = {
+		# 	factor = 2
+		# 	any_known_country = {
+		# 		has_country_modifier = nhs_consolidated_pantheon
+		# 	}
+		# }
+		# modifier = {
+		# 	factor = 0.5
+		# 	any_known_country = {
+		# 		has_country_modifier = nhs_expanded_pantheon
+		# 	}
+		# }
+		# modifier = {
+		# 	factor = 10
+		# 	has_country_flag = nhs_religion_spread_pantheon
+		# }
 		modifier = {
 			factor = 2
-			any_known_country = {
-				has_country_modifier = nhs_consolidated_pantheon
-			}
+			has_idea_group = religious_ideas
 		}
 		modifier = {
-			factor = 0.5
-			any_known_country = {
-				has_country_modifier = nhs_expanded_pantheon
-			}
+			factor = 0.3
+			dominant_religion = pantheon_worship
 		}
 		modifier = {
-			factor = 10
-			has_country_flag = nhs_religion_spread_pantheon
+			factor = 0.00001
+			all_owned_province = {
+				religion = pantheon_worship
+			}
 		}
 		modifier = {
 			factor = 0.00001
@@ -1024,12 +1024,41 @@ country_event = {
 	option = {	 # Accept
 		ai_chance = {
 			factor = 75
+			modifier = {
+				factor = 0.35
+				NOT = {
+					num_of_religion = { religion = pantheon_worship value = 0.35 }
+				}
+			}
+			modifier = {
+				factor = 0.35
+				NOT = {
+					num_of_religion = { religion = pantheon_worship value = 0.20 }
+				}
+			}
+			modifier = {
+				factor = 0
+				ruler_has_personality = zealot_personality
+			}
 		}
 		name = to_hellenic_events.8.a
 		add_legitimacy = -10
 		change_religion = pantheon_worship
-		set_global_flag = nhs_native_deity
 		if = {
+			limit = {
+				capital_scope = {
+					religion = totemism
+				}
+			}
+			capital_scope = {
+				change_religion = pantheon_worship
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
+			}
+		}
+		else_if = {
 			limit = {
 				any_owned_province = {
 					religion = totemism
@@ -1040,6 +1069,10 @@ country_event = {
 					religion = totemism
 				}
 				change_religion = pantheon_worship
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
 			}
 		}
 	}
@@ -1050,11 +1083,33 @@ country_event = {
 			factor = 25
 			modifier = {
 				factor = 0
-				capital_scope = { religion = pantheon_worship }
+				NOT = { ruler_has_personality = zealot_personality }
+				OR = {
+					capital_scope = { religion = pantheon_worship }
+					all_owned_province = {
+						religion = pantheon_worship
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { ruler_has_personality = zealot_personality }
+				dominant_religion = pantheon_worship
 			}
 		}
 		add_legitimacy = 5
 		add_prestige = 10
+		if = {
+			limit = {
+				has_regency = no
+			}
+			set_ruler_flag = to_declined_pantheon_worship
+			custom_tooltip = to_totemism_declined_conversion_tt
+		}
+		else = {
+			set_heir_flag = to_declined_pantheon_worship
+			custom_tooltip = to_totemism_declined_conversion_heir_tt
+		}
 	}
 }
 
@@ -1066,6 +1121,11 @@ country_event = {
 	picture = OLYMPIANS_eventPicture
 
     is_triggered_only = yes
+
+	trigger = {
+		religion = totemism
+		num_of_religion = { religion = totemism value = 1 }
+	}
 	
 	option = {	 # Accept
 		ai_chance = {
@@ -1137,13 +1197,13 @@ country_event = {
 		if = {
 			limit = {
 				any_owned_province = {
-					NOT = { religion = pantheon_worship }
+					religion = totemism
 					is_capital = no
 				}
 			}
 			random_owned_province = {
 				limit = {
-					NOT = { religion = pantheon_worship }
+					religion = totemism
 					is_capital = no
 				}
 				change_religion = pantheon_worship
@@ -1153,22 +1213,40 @@ country_event = {
 				}
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
-				NOT = {
-					any_owned_province = {
-						NOT = { religion = pantheon_worship }
-						is_capital = no
-					}
+				capital_scope = {
+					religion = totemism
 				}
 			}
 			capital_scope = {
 				change_religion = pantheon_worship
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
 			}
+			country_event = { id = to_hellenic_events.8 }
 		}
 		if = {
 			limit = {
-				NOT = { num_of_cities = 2 }
+				OR = {
+					NOT = { num_of_cities = 2 }
+					capital_scope = {
+						religion = pantheon_worship
+					}
+					AND = {
+						capital_scope = {
+							religion = totemism
+						}
+						NOT = {
+							any_owned_province = {
+								religion = totemism
+								is_capital = no
+							}
+						}
+					}
+				}
 			}
 			country_event = { id = to_hellenic_events.8 }
 		}
@@ -1230,7 +1308,6 @@ country_event = {
 		add_prestige = 10
 		FROM = {
 			country_event = { id = to_hellenic_events.11 days = 30 }
-			
 		}
 	}
 }

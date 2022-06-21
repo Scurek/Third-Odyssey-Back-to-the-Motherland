@@ -1743,8 +1743,173 @@ country_event = {
 			has_global_flag = msg_aztlan_zeus_deity
 		}
 		change_personal_deity = Zeus_2
+	}	
+}
+
+# Religion spread - Aztlan
+country_event = {
+	id = msg_religionevents.63
+	title = msg_religionevents.63.t
+	desc = msg_religionevents.63.d
+	picture = Pacal_eventPicture
+
+    trigger = {
+		OR = {
+			religion = totemism
+			religion = nahuatl
+			religion = mesoamerican_religion
+		}
+		NOT = { has_ruler_flag = to_declined_aztlan_worship }
+		num_of_religion = { religion = aztlan_worship value = 0.1 }
+		OR = {
+			NOT = { num_of_cities = 4 }
+			dominant_religion = aztlan_worship
+			num_of_religion = { religion = aztlan_worship value = 0.33 }
+		}
+		any_known_country = {
+			religion = aztlan_worship
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 180
+		# modifier = {
+		# 	factor = 10
+		# 	has_country_flag = nhs_religion_spread_aztlan_worship
+		# }
+		modifier = {
+			factor = 2
+			has_idea_group = religious_ideas
+		}
+		modifier = {
+			factor = 0.3
+			dominant_religion = aztlan_worship
+		}
+		modifier = {
+			factor = 0.5
+			OR = {
+				religion = nahuatl
+				religion = mesoamerican_religion
+			}
+		}
+		modifier = {
+			factor = 0.00001
+			all_owned_province = {
+				religion = aztlan_worship
+			}
+		}
+		modifier = {
+			factor = 0.00001
+			capital_scope = { religion = aztlan_worship }
+		}
 	}
 	
+	immediate = {
+		set_country_flag = nhs_religion_spread_aztlan_worship
+	}
+
+	option = {	 # Accept
+		ai_chance = {
+			factor = 75
+			modifier = {
+				factor = 0.35
+				NOT = {
+					num_of_religion = { religion = aztlan_worship value = 0.35 }
+				}
+			}
+			modifier = {
+				factor = 0.35
+				NOT = {
+					num_of_religion = { religion = aztlan_worship value = 0.20 }
+				}
+			}
+			modifier = {
+				factor = 0
+				ruler_has_personality = zealot_personality
+			}
+		}
+		name = msg_religionevents.63.a
+		add_legitimacy = -10
+		change_religion = aztlan_worship
+		if = {
+			limit = {
+				capital_scope = {
+					OR = {
+						religion = totemism
+						religion = nahuatl
+						religion = mesoamerican_religion
+					}
+				}
+			}
+			capital_scope = {
+				change_religion = aztlan_worship
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_province = {
+					OR = {
+						religion = totemism
+						religion = nahuatl
+						religion = mesoamerican_religion
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						religion = totemism
+						religion = nahuatl
+						religion = mesoamerican_religion
+					}
+				}
+				change_religion = aztlan_worship
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	option = {	
+		name = msg_religionevents.63.b  #Decline
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 0
+				NOT = { ruler_has_personality = zealot_personality }
+				OR = {
+					capital_scope = { religion = aztlan_worship }
+					all_owned_province = {
+						religion = aztlan_worship
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { ruler_has_personality = zealot_personality }
+				dominant_religion = aztlan_worship
+			}
+		}
+		add_legitimacy = 5
+		add_prestige = 10
+		if = {
+			limit = {
+				has_regency = no
+			}
+			set_ruler_flag = to_declined_aztlan_worship
+			custom_tooltip = to_totemism_declined_conversion_tt
+		}
+		else = {
+			set_heir_flag = to_declined_aztlan_worship
+			custom_tooltip = to_totemism_declined_conversion_heir_tt
+		}
+	}
 }
 
 # Missionaries native aztlan
@@ -1755,6 +1920,21 @@ country_event = {
 	picture = Pacal_eventPicture
 
     is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			religion = totemism
+			religion = nahuatl
+			religion = mesoamerican_religion
+		}
+		any_owned_province = {
+			OR = {
+				religion = totemism
+				religion = nahuatl
+				religion = mesoamerican_religion
+			}
+		}
+	}
 	
 	option = {	 # Accept
 		ai_chance = {
@@ -1823,13 +2003,21 @@ country_event = {
 		if = {
 			limit = {
 				any_owned_province = {
-					NOT = { religion = aztlan_worship }
+					OR = {
+						religion = totemism
+						religion = nahuatl
+						religion = mesoamerican_religion
+					}
 					is_capital = no
 				}
 			}
 			random_owned_province = {
 				limit = {
-					NOT = { religion = aztlan_worship }
+					OR = {
+						religion = totemism
+						religion = nahuatl
+						religion = mesoamerican_religion
+					}
 					is_capital = no
 				}
 				change_religion = aztlan_worship
@@ -1839,24 +2027,53 @@ country_event = {
 				}
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
-				NOT = {
-					any_owned_province = {
-						NOT = { religion = aztlan_worship }
-						is_capital = no
+				capital_scope = {
+					OR = {
+						religion = totemism
+						religion = nahuatl
+						religion = mesoamerican_religion
 					}
 				}
 			}
 			capital_scope = {
 				change_religion = aztlan_worship
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
 			}
 		}
 		if = {
 			limit = {
-				NOT = { num_of_cities = 2 }
+				OR = {
+					NOT = { num_of_cities = 2 }
+					capital_scope = {
+						religion = aztlan_worship
+					}
+					AND = {
+						capital_scope = {
+							OR = {
+								religion = totemism
+								religion = nahuatl
+								religion = mesoamerican_religion
+							}
+						}
+						NOT = {
+							any_owned_province = {
+								OR = {
+									religion = totemism
+									religion = nahuatl
+									religion = mesoamerican_religion
+								}
+								is_capital = no
+							}
+						}
+					}
+				}
 			}
-			country_event = { id = to_hellenic_events.8 }
+			country_event = { id = msg_religionevents.63 }
 		}
 		FROM = {
 			country_event = { id = msg_religionevents.61 days = 30 }

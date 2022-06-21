@@ -4078,13 +4078,17 @@ country_event = {
 			tooltip = { add_patriarch_authority = -0.1 }
 			nhs_anti_patriarch = yes
 			hidden_effect = { add_patriarch_authority = -0.1 }
+			custom_tooltip = nhs_new_line_tt
 			if = {
 				limit = {
 					has_regency = no
 				}
 				set_ruler_flag = nhs_denied_patriarch_land
-				custom_tooltip = nhs_new_line_tt
 				custom_tooltip = nhs_disabled_patriarch_land_events_tt
+			}
+			else = {
+				set_heir_flag = nhs_denied_patriarch_land
+				custom_tooltip = nhs_disabled_patriarch_land_events_heir_tt
 			}
 		}
 	}
@@ -4400,13 +4404,17 @@ country_event = {
 			tooltip = { add_patriarch_authority = -0.1 }
 			nhs_anti_patriarch = yes
 			hidden_effect = { add_patriarch_authority = -0.1 }
+			custom_tooltip = nhs_new_line_tt
 			if = {
 				limit = {
 					has_regency = no
 				}
 				set_ruler_flag = nhs_denied_patriarch_land
-				custom_tooltip = nhs_new_line_tt
 				custom_tooltip = nhs_disabled_patriarch_land_events_tt
+			}
+			else = {
+				set_heir_flag = nhs_denied_patriarch_land
+				custom_tooltip = nhs_disabled_patriarch_land_events_heir_tt
 			}
 		}
 	}
@@ -7160,52 +7168,41 @@ country_event = {
 	picture = PANTHEON_eventPicture
 
     trigger = {
-		is_year = 1470
 		religion = totemism
-		NOT = { tag = CAO }
-		OR = {
-			is_year = 1500
-			capital_scope = { religion = elysian_orthodoxy }
-		}
+		NOT = { has_ruler_flag = to_declined_elysian_orthodoxy }
+		num_of_religion = { religion = elysian_orthodoxy value = 0.1 }
 		OR = {
 			NOT = { num_of_cities = 4 }
-			num_of_religion = { religion = elysian_orthodoxy value = 3 }
+			dominant_religion = elysian_orthodoxy
+			num_of_religion = { religion = elysian_orthodoxy value = 0.33 }
 		}
 		any_known_country = {
-			OR = {
-				technology_group = exiled_greek
-				technology_group = modern_greek
-			}
 			religion = elysian_orthodoxy
-		}
-		OR = {
-			# technology_group = hellenised_american
-			any_owned_province = {
-				religion = elysian_orthodoxy
-			}
 		}
 	}
 
 	mean_time_to_happen = {
-		months = 240
+		months = 180
+		# modifier = {
+		# 	factor = 10
+		# 	has_country_flag = nhs_religion_spread_orthodox
+		# }
 		modifier = {
-			factor = 0.90
-			stability = 1
+			factor = 2
+			has_idea_group = religious_ideas
 		}
 		modifier = {
-			factor = 0.90
-			stability = 2
+			factor = 0.3
+			dominant_religion = elysian_orthodoxy
 		}
 		modifier = {
-			factor = 0.90
-			stability = 3
+			factor = 0.0001
+			all_owned_province = {
+				religion = elysian_orthodoxy
+			}
 		}
 		modifier = {
-			factor = 10
-			has_country_flag = nhs_religion_spread_orthodox
-		}
-		modifier = {
-			factor = 0.00001
+			factor = 0.0001
 			capital_scope = { religion = elysian_orthodoxy }
 		}
 	}
@@ -7219,28 +7216,52 @@ country_event = {
 		ai_chance = {
 			factor = 40
 			modifier = {
-				factor = 0.1
-				NOT = { stability = 1 }
+				factor = 0.5
+				NOT = { stability = 0 }
 			}
 			modifier = {
-				factor = 10
-				capital_scope = { religion = elysian_orthodoxy }
+				factor = 0.6
+				NOT = {
+					num_of_religion = { religion = elysian_orthodoxy value = 0.2 }
+				}
+			}
+			modifier = {
+				factor = 0
+				ruler_has_personality = zealot_personality
 			}
 		}
-		add_stability = -2
+		add_stability = -1
 		add_legitimacy = -10
 		change_religion = elysian_orthodoxy
 		if = {
 			limit = {
+				capital_scope = {
+					religion = totemism
+				}
+			}
+			capital_scope = {
+				change_religion = elysian_orthodoxy
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
+			}
+		}
+		else_if = {
+			limit = {
 				any_owned_province = {
-					religion_group = pagan
+					religion = totemism
 				}
 			}
 			random_owned_province = {
 				limit = {
-					religion_group = pagan
+					religion = totemism
 				}
 				change_religion = elysian_orthodoxy
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
 			}
 		}
 	}
@@ -7251,27 +7272,39 @@ country_event = {
 			factor = 60
 			modifier = {
 				factor = 0
-				capital_scope = { religion = elysian_orthodoxy }
+				NOT = { ruler_has_personality = zealot_personality }
+				OR = {
+					capital_scope = { religion = elysian_orthodoxy }
+					all_owned_province = {
+						religion = elysian_orthodoxy
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { ruler_has_personality = zealot_personality }
+				dominant_religion = elysian_orthodoxy
 			}
 		}
 		random_owned_province = {
 			limit = {
 				religion = elysian_orthodoxy
 			}
-			add_unrest = 5
-		}
-		if = {
-			limit = {
-				capital_scope = {
-					religion = elysian_orthodoxy
-				}
-			}
-			capital_scope = {
-				change_religion = elysian_orthodoxy
-			}
+			add_unrest = 10
 		}	
 		add_legitimacy = 5
 		add_prestige = 10	
+		if = {
+			limit = {
+				has_regency = no
+			}
+			set_ruler_flag = to_declined_elysian_orthodoxy
+			custom_tooltip = to_totemism_declined_conversion_tt
+		}
+		else = {
+			set_heir_flag = to_declined_elysian_orthodoxy
+			custom_tooltip = to_totemism_declined_conversion_heir_tt
+		}
 	}
 }
 
@@ -7283,6 +7316,11 @@ country_event = {
 	picture = PANTHEON_eventPicture
 
     is_triggered_only = yes
+
+	trigger = {
+		religion = totemism
+		num_of_religion = { religion = totemism value = 1 }
+	}
 
 	option = {	 # Accept
 		ai_chance = {
@@ -7361,13 +7399,13 @@ country_event = {
 		if = {
 			limit = {
 				any_owned_province = {
-					NOT = { religion = elysian_orthodoxy }
+					religion = totemism
 					is_capital = no
 				}
 			}
 			random_owned_province = {
 				limit = {
-					NOT = { religion = elysian_orthodoxy }
+					religion = totemism
 					is_capital = no
 				}
 				change_religion = elysian_orthodoxy
@@ -7377,24 +7415,41 @@ country_event = {
 				}
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
-				NOT = {
-					any_owned_province = {
-						NOT = { religion = elysian_orthodoxy }
-						is_capital = no
-					}
+				capital_scope = {
+					religion = totemism
 				}
 			}
 			capital_scope = {
 				change_religion = elysian_orthodoxy
+				add_permanent_province_modifier = {
+					name = "religious_zeal_at_conv"
+					duration = 7300
+				}
 			}
 		}
-		every_owned_province = {
+		if = {
 			limit = {
-				religion = totemism
+				OR = {
+					NOT = { num_of_cities = 2 }
+					capital_scope = {
+						religion = elysian_orthodoxy
+					}
+					AND = {
+						capital_scope = {
+							religion = totemism
+						}
+						NOT = {
+							any_owned_province = {
+								religion = totemism
+								is_capital = no
+							}
+						}
+					}
+				}
 			}
-			add_unrest = 2
+			country_event = { id = nhs2_orthodoxevents.36 }
 		}
 		FROM = {
 			country_event = { id = nhs2_orthodoxevents.38 days = 30 }
@@ -7482,7 +7537,7 @@ country_event = {
 	option = {
 		name = "nhs2_orthodoxevents.38.a"
 		add_prestige = 10
-		add_patriarch_authority = 0.05
+		add_patriarch_authority = 0.025
 	}
 }
 
