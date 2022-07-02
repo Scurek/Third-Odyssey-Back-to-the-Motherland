@@ -108,7 +108,7 @@ to_increase_assimilation_progress = {
 	}
 	set_variable = {
 		which = to_assimilation_base
-		value = 0.1
+		value = 3
 	}
 	change_variable = {
 		which = to_assimilation_flat_increase
@@ -127,7 +127,7 @@ to_increase_assimilation_progress = {
 		PREV = {
 			change_variable = {
 				which = to_assimilation_neighboring_provinces
-				value = 0.01
+				value = 0.15
 			}
 		}
 	}
@@ -135,9 +135,94 @@ to_increase_assimilation_progress = {
 		which = to_assimilation_flat_increase
 		which = to_assimilation_neighboring_provinces
 	}
+	divide_variable = {
+		which = to_assimilation_flat_increase
+		value = 12
+	}
+	clr_province_flag = to_tribal_assimilation_settlers_enabled
 	clr_province_flag = to_tribal_assimilation_service_enabled
 	clr_province_flag = to_tribal_assimilation_officials_enabled
 	clr_province_flag = to_tribal_assimilation_citizenship_enabled
+	set_variable = {
+		which = to_assimilation_development
+		value = 0
+	}
+	if = {
+		limit = {
+			to_has_tribal_integration = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					is_variable_equal = {
+						which = to_nat_local_tribal_development
+						value = 0
+					}
+				}
+			}
+			set_variable = {
+				which = to_assimilation_development
+				which = to_nat_local_tribal_development
+			}
+			multiply_variable = {
+				which = to_assimilation_development
+				value = -0.025
+			}
+		}
+	}
+	else = {
+		export_to_variable = {
+			variable_name = to_assimilation_development
+			value = trigger_value:development
+		}
+		multiply_variable = {
+			which = to_assimilation_development
+			value = -0.025
+		}
+	}
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					which = to_assimilation_development
+					value = -0.5
+				}
+			}
+		}
+		set_variable = {
+			which = to_assimilation_development
+			value = -0.5
+		}
+	}
+	change_variable = {
+		which = to_assimilation_modifier
+		which = to_assimilation_development
+	}
+	if = {
+		limit = {
+			owner = {
+				OR = {
+					has_country_modifier = nhs_handicap_settlers
+					AND = {
+						is_subject = yes
+						overlord = {
+							has_country_modifier = nhs_handicap_settlers
+						}
+						OR = {
+							is_colonial_nation = yes
+							technology_group = exiled_greek
+							technology_group = modern_greek
+						}
+					}
+				}
+			}
+		}
+		change_variable = {
+			which = to_assimilation_modifier
+			value = -0.25
+		}
+		set_province_flag = to_tribal_assimilation_settlers_enabled
+	}
 	if = {
 		limit = {
 			owner = {
@@ -188,7 +273,7 @@ to_increase_assimilation_progress = {
 			set_province_flag = to_tribal_assimilation_citizenship_enabled
 		}
 	}
-	# Culture conversion cost (divided by 2)
+	# Culture conversion cost
 	export_to_variable = {
 		which = to_culture_conversion_cost
 		value = modifier:culture_conversion_cost
@@ -202,10 +287,14 @@ to_increase_assimilation_progress = {
 		which = to_culture_conversion_cost
 		which = to_local_culture_conversion_cost
 	}
-	divide_variable = {
+	multiply_variable = {
 		which = to_culture_conversion_cost
-		value = -2
+		value = -1
 	}
+	# divide_variable = {
+	# 	which = to_culture_conversion_cost
+	# 	value = -2
+	# }
 	# Native Assimilation (divided by 4)
 	export_to_variable = {
 		which = to_native_assimilation
@@ -228,6 +317,20 @@ to_increase_assimilation_progress = {
 	set_variable = {
 		which = to_assimilation_increase
 		which = to_assimilation_flat_increase
+	}
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					which = to_assimilation_modifier
+					value = -0.90
+				}
+			}
+		}
+		set_variable = {
+			which = to_assimilation_modifier
+			value = -0.90
+		}
 	}
 	multiply_variable = {
 		which = to_assimilation_increase
@@ -296,14 +399,14 @@ to_increase_assimilation_progress = {
 			which = to_assimilation_increase_yearly
 			value = 12
 		}
-		multiply_variable = {
-			which = to_assimilation_neighboring_provinces
-			value = 12
-		}
-		multiply_variable = {
-			which = to_assimilation_base
-			value = 12
-		}
+		# multiply_variable = {
+		# 	which = to_assimilation_neighboring_provinces
+		# 	value = 12
+		# }
+		# multiply_variable = {
+		# 	which = to_assimilation_base
+		# 	value = 12
+		# }
 		change_variable = {
 			which = to_assimilation_modifier
 			value = -1
@@ -318,6 +421,10 @@ to_increase_assimilation_progress = {
 		}
 		multiply_variable = {
 			which = to_native_assimilation
+			value = 100
+		}
+		multiply_variable = {
+			which = to_assimilation_development
 			value = 100
 		}
 		to_set_assimilation_modifier = yes
@@ -360,6 +467,7 @@ to_remove_assimilation_variables = {
 	remove_province_modifier = to_culture_assimilation
 	remove_province_modifier = to_culture_assimilation_inactive
 	to_remove_assimilation_modifiers = yes
+	clr_province_flag = to_tribal_assimilation_settlers_enabled
 	clr_province_flag = to_tribal_assimilation_service_enabled
 	clr_province_flag = to_tribal_assimilation_officials_enabled
 	clr_province_flag = to_tribal_assimilation_citizenship_enabled
@@ -410,6 +518,10 @@ to_remove_assimilation_variables = {
 	}
 	set_variable = {
 		which = to_assimilation_base
+		value = 0
+	}
+	set_variable = {
+		which = to_assimilation_development
 		value = 0
 	}
 }
