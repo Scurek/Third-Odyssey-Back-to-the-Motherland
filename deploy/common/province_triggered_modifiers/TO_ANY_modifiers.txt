@@ -71,3 +71,54 @@ to_yearly_event_pulse = {
 	}
 
 }
+
+to_dynamic_cot_tm = {
+	picture = "local_build_time"
+
+	potential = {
+		is_city = yes
+		has_province_modifier = to_dynamic_cot
+		if = {
+			limit = {
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+			base_production = 6
+			development = 15
+			OR = {
+				has_building = marketplace
+				has_building = trade_depot
+				has_building = stock_exchange
+			}
+		}
+	}
+
+	trigger = {
+		if = {
+			limit = {
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+			base_production = 6
+			development = 15
+			OR = {
+				has_building = marketplace
+				has_building = trade_depot
+				has_building = stock_exchange
+			}
+		}
+		else = {
+			province_has_center_of_trade_of_level = 1
+		}
+	}
+
+	on_activation = {
+		hidden_effect = {
+			remove_province_triggered_modifier = to_dynamic_cot_tm
+		}
+		if = {
+			limit = {
+				NOT = { province_has_center_of_trade_of_level = 1 }
+			}
+			province_event = { id = to_dynamic_cot.1 }
+		}
+	}
+}
