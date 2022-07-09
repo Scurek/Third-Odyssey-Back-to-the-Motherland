@@ -16,6 +16,43 @@ to_set_empty_assimilation_progress = {
 	}
 }
 
+to_culture_assimilation_on_culture_change = {
+	if = {
+		limit = {
+			NOT = {
+				is_variable_equal = {
+					which = to_assimilation_progress
+					value = 0
+				}
+			}
+			OR = {
+				NOT = { nhs_culturally_native = yes }
+				culture = elysameric
+				culture = skraeling
+			}
+		}
+		to_remove_assimilation_variables = yes
+	}
+}
+
+to_culture_assimilation_on_owner_change = {
+	if = {
+		limit = {
+			to_has_culture_assimilation_potential = yes
+			FROM = { NOT = { tag = --- } }
+		}
+		if = {
+			limit = {
+				NOT = { owner = { culture_group = FROM } }
+			}
+			to_remove_assimilation_variables = yes
+		}
+		else = {
+			to_start_culture_assimilation = yes
+		}
+	}
+}
+
 to_start_culture_assimilation = {
 	if = {
 		limit = {
