@@ -7488,92 +7488,6 @@ remove_shipyards_in_province = {
 	}
 }
 
-nhs_settled_mission_effect = {
-	to_add_government_reform_short_tooltip = { REFORM = senatorial_empire }
-	if = {
-		limit = {
-			has_dlc = "Common Sense"
-		}
-		every_owned_province = {
-			limit = {
-				nhs_homelands = yes
-				OR = {
-					has_owner_culture = yes
-					has_owner_accepted_culture = yes
-				}
-			}
-			custom_tooltip = nhs_set_seat_in_paliament_province_tt
-			hidden_effect = {
-				set_seat_in_parliament = yes
-			}
-		}
-	}
-	custom_tooltip = nhs_new_line_tt
-	remove_country_modifier = newnhs_chose_supplies
-	if = {
-		limit = {
-			has_country_flag = nhs_start_with_three
-		}
-		remove_country_modifier = nhs_handicap_settlers
-		add_country_modifier = {
-			name = nhs_settler_heritage_three
-			duration = -1
-		}
-	}
-	else_if = {
-		limit = {
-			has_country_flag = nhs_start_with_two
-		}
-		custom_tooltip = nhs_settler_heritage_0_2_tt
-		custom_tooltip = nhs_new_line_tt
-		hidden_effect = {
-			remove_country_modifier = nhs_handicap_settlers
-			add_country_modifier = {
-				name = nhs_settler_heritage_two
-				duration = -1
-			}
-		}
-	}
-	else = {
-		custom_tooltip = nhs_settler_heritage_0_1_tt
-		custom_tooltip = nhs_new_line_tt
-		#add_country_modifier = {
-		#	name = nhs_settler_heritage
-		#	duration = 21900
-		#}
-		hidden_effect = {
-			remove_country_modifier = nhs_handicap_settlers
-			add_country_modifier = {
-				name = nhs_settler_heritage
-				duration = -1
-			}
-		}
-	}
-	if = {
-		limit = {
-			exists = CM1
-			CM1 = {
-				is_subject_of = ROOT
-			}
-		}
-		country_event = { id = nhs2_countryevents.47 days = 10 }
-		custom_tooltip = nhs_new_line_tt
-	}
-	if = {
-		limit = {
-			owns = 953
-		}
-		953 = {
-			nhs_set_center_of_trade_2 = yes
-		}
-	}
-	else = {
-		capital_scope = {
-			nhs_set_center_of_trade_2 = yes
-		}
-	}
-}
-
 to_ely_province_culture_check = {
 	if = {
 		limit = {
@@ -8174,7 +8088,7 @@ nhs_handle_fort_manpower = {
 	if = {
 		limit = {
 			owner = {
-				has_country_flag = nhs_completed_nhs_build_army_mission
+				mission_completed = nhs_build_army_mission
 			}
 		}
 		if = {
@@ -8237,7 +8151,7 @@ nhs_fort_manpower_add_modifier = {
 	if = {
 		limit = {
 			owner = {
-				has_country_flag = nhs_completed_nhs_build_army_mission
+				mission_completed = nhs_build_army_mission
 			}
 		}
 		custom_tooltip = nhs_fort_manpower_modifier_$FORT_LEVEL$_tt
@@ -9458,7 +9372,7 @@ to_nhs_handle_lots_of_people_modifiers = {
 nhs_inward_focus_mission_effect = {
 	if = {
 		limit = {
-			NOT = { has_country_flag = nhs_completed_nhs_hegemony_mission }
+			NOT = { mission_completed = nhs_hegemony_mission }
 		}
 		custom_tooltip = nhs_inwards_lock
 		custom_tooltip = nhs_replace_ambition_inward_tt
@@ -9472,7 +9386,7 @@ nhs_inward_focus_mission_effect = {
 	}
 	else_if = {
 		limit = {
-			has_country_flag = nhs_completed_outward_focus
+			mission_completed = nhs_outward_focus
 		}
 		custom_tooltip = nhs_locks_heir_of_justinian
 		add_country_modifier = {
@@ -9482,7 +9396,7 @@ nhs_inward_focus_mission_effect = {
 	}
 	else_if = {
 		limit = {
-			has_country_flag = nhs_completed_nhs_heir_of_justinian
+			mission_completed = nhs_heir_of_justinian
 		}
 		custom_tooltip = nhs_locks_outward_focus
 		custom_tooltip = nhs_replace_ambition_inward_tt
@@ -9595,7 +9509,6 @@ nhs_inward_focus_mission_effect = {
 			}
 		}
 	}
-	set_country_flag = nhs_completed_inward_focus
 	hidden_effect = {
 		every_province = {
 			limit = {
@@ -9618,10 +9531,10 @@ to_nhs_handle_inwards_path_province_modifiers_all_provinces = {
 	if = {
 		limit = {
 			OR = {
-				has_country_flag = nhs_completed_promised_land
-				has_country_flag = nhs_completed_the_city_of_cities
-				has_country_flag = nhs_completed_development_of_the_true_homeland
-				has_country_flag = nhs_completed_inward_focus
+				mission_completed = nhs_the_promised_land
+				mission_completed = nhs_the_city_of_cities
+				mission_completed = nhs_development_of_the_true_homeland
+				mission_completed = nhs_inward_focus
 			}
 		}
 		every_province = {
@@ -9648,16 +9561,16 @@ to_nhs_handle_inwards_path_province_modifiers = {
 			}
 			owner = {
 				OR = {
-					has_country_flag = nhs_completed_promised_land
+					mission_completed = nhs_the_promised_land
 					AND = {
 						is_subject = yes
 						overlord = {
 							OR = {
-								has_country_flag = nhs_completed_promised_land
+								mission_completed = nhs_the_promised_land
 								AND = {
 									is_subject = yes
 									overlord = {
-										has_country_flag = nhs_completed_promised_land
+										mission_completed = nhs_the_promised_land
 									}
 								}
 							}
@@ -9676,16 +9589,16 @@ to_nhs_handle_inwards_path_province_modifiers = {
 			continent = north_america
 			owner = {
 				OR = {
-					has_country_flag = nhs_completed_development_of_the_true_homeland
+					mission_completed = nhs_development_of_the_true_homeland
 					AND = {
 						is_subject = yes
 						overlord = {
 							OR = {
-								has_country_flag = nhs_completed_development_of_the_true_homeland
+								mission_completed = nhs_development_of_the_true_homeland
 								AND = {
 									is_subject = yes
 									overlord = {
-										has_country_flag = nhs_completed_development_of_the_true_homeland
+										mission_completed = nhs_development_of_the_true_homeland
 									}
 								}
 							}
@@ -9704,16 +9617,16 @@ to_nhs_handle_inwards_path_province_modifiers = {
 			continent = north_america
 			owner = {
 				OR = {
-					has_country_flag = nhs_completed_the_city_of_cities
+					mission_completed = nhs_the_city_of_cities
 					AND = {
 						is_subject = yes
 						overlord = {
 							OR = {
-								has_country_flag = nhs_completed_the_city_of_cities
+								mission_completed = nhs_the_city_of_cities
 								AND = {
 									is_subject = yes
 									overlord = {
-										has_country_flag = nhs_completed_the_city_of_cities
+										mission_completed = nhs_the_city_of_cities
 									}
 								}
 							}
@@ -9732,16 +9645,16 @@ to_nhs_handle_inwards_path_province_modifiers = {
 			continent = north_america
 			owner = {
 				OR = {
-					has_country_flag = nhs_completed_inward_focus
+					mission_completed = nhs_inward_focus
 					AND = {
 						is_subject = yes
 						overlord = {
 							OR = {
-								has_country_flag = nhs_completed_inward_focus
+								mission_completed = nhs_inward_focus
 								AND = {
 									is_subject = yes
 									overlord = {
-										has_country_flag = nhs_completed_inward_focus
+										mission_completed = nhs_inward_focus
 									}
 								}
 							}
