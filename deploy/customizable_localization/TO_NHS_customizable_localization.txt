@@ -713,16 +713,42 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetElysiansRomans
+	name = GetRomeElysia
 	random = no
 	text = {
-		localisation_key = to_nhs_romans
+		localisation_key = to_nhs_rome
 		trigger = {
-			tag = NHS
+			OR = {
+				exists = ELY
+				AND = {
+					NOT = { exists = NHS }
+					has_global_flag = nhs_romanoi_to_elysian
+				}
+			}
 		}
 	}
 	text = {
+		localisation_key = ELY
+	}
+}
+
+defined_text = {
+	name = GetElysiansRomans
+	random = no
+	text = {
 		localisation_key = to_nhs_elysians
+		trigger = {
+			OR = {
+				exists = ELY
+				AND = {
+					NOT = { exists = NHS }
+					has_global_flag = nhs_romanoi_to_elysian
+				}
+			}
+		}
+	}
+	text = {
+		localisation_key = to_nhs_romans
 	}
 }
 
@@ -730,13 +756,19 @@ defined_text = {
 	name = GetElysianRoman
 	random = no
 	text = {
-		localisation_key = to_nhs_roman
+		localisation_key = to_nhs_elysian
 		trigger = {
-			tag = NHS
+			OR = {
+				exists = ELY
+				AND = {
+					NOT = { exists = NHS }
+					has_global_flag = nhs_romanoi_to_elysian
+				}
+			}
 		}
 	}
 	text = {
-		localisation_key = to_nhs_elysian
+		localisation_key = to_nhs_roman
 	}
 }
 
@@ -827,6 +859,18 @@ defined_text = {
 					has_country_flag = nhs_eleutheroi_appeared_country
 				}
 				nhs_eleutheroi_province = yes
+			}
+		}
+	}
+	text = {
+		localisation_key = romanoi
+		trigger = {
+			event_target:nhs_countryevents25_target = {
+				OR = {
+					region = northeast_america_region
+					region = southeast_america_region
+				}
+				to_nhs_eligible_for_romanoi_culture = yes
 			}
 		}
 	}
@@ -929,6 +973,16 @@ defined_text = {
 				has_country_flag = nhs_eleutheroi_appeared_country
 			}
 			nhs_eleutheroi_province = yes
+		}
+	}
+	text = {
+		localisation_key = romanoi
+		trigger = {
+			OR = {
+				region = northeast_america_region
+				region = southeast_america_region
+			}
+			to_nhs_eligible_for_romanoi_culture = yes
 		}
 	}
 	text = {
@@ -1443,46 +1497,6 @@ defined_text = {
 	random = no
 
 	text = {
-		localisation_key = NHS
-		trigger = {
-			OR = {
-				exists = NHS
-				AND = {
-					NOT = { is_year = 1447 }
-					NOT = {
-						OR = {
-							exists = NHS
-							exists = ELY
-							exists = ELR
-							exists = ERR
-							exists = ERF
-						}
-					}
-				}
-			}
-		}
-	}
-	text = {
-		localisation_key = ELY
-		trigger = {
-			OR = {
-				exists = ELY
-				AND = {
-					is_year = 1447
-					NOT = {
-						OR = {
-							exists = NHS
-							exists = ELY
-							exists = ELR
-							exists = ERR
-							exists = ERF
-						}
-					}
-				}
-			}
-		}
-	}
-	text = {
 		localisation_key = ELR
 		trigger = {
 			exists = ELR
@@ -1499,6 +1513,22 @@ defined_text = {
 		trigger = {
 			exists = ERF
 		}
+	}
+
+	text = {
+		localisation_key = ELY
+		trigger = {
+			OR = {
+				exists = ELY
+				AND = {
+					NOT = { exists = NHS }
+					has_global_flag = nhs_romanoi_to_elysian
+				}
+			}
+		}
+	}
+	text = {
+		localisation_key = NHS
 	}
 }
 

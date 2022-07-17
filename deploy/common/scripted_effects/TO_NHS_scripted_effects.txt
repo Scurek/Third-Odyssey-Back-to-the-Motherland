@@ -7711,9 +7711,9 @@ to_ely_province_culture_check = {
 				limit = {
 					NOT = { culture = elysian }
 				}
-				change_culture = elysian
+				to_nhs_change_culture_to_romanoi_or_elysian = yes
 				[[CHANGE_ORIGINAL_CULTURE]
-				change_original_culture = elysian
+				to_nhs_change_original_culture_to_romanoi_or_elysian = yes
 				]
 			}
 		}
@@ -7744,6 +7744,38 @@ to_ely_province_culture_check = {
 				}
 			}
 		}
+	}
+}
+
+to_nhs_change_culture_to_romanoi_or_elysian = {
+	if = {
+		limit = {
+			to_nhs_eligible_for_romanoi_culture = yes
+		}
+		if = {
+			limit = {
+				NOT = { culture = romanoi }
+			}
+			change_culture = romanoi
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { culture = elysian }
+		}
+		change_culture = elysian
+	}
+}
+
+to_nhs_change_original_culture_to_romanoi_or_elysian = {
+	if = {
+		limit = {
+			to_nhs_eligible_for_romanoi_culture = yes
+		}
+		change_original_culture = romanoi
+	}
+	else = {
+		change_original_culture = elysian
 	}
 }
 
@@ -7826,7 +7858,7 @@ to_nhs_assign_correct_elysian_culture = {
 				region = southeast_america_region
 			}
 		}
-		change_culture = elysian
+		to_nhs_change_culture_to_romanoi_or_elysian = yes
 	}
 	# else_if = {
 	# 	limit = {
@@ -8018,8 +8050,17 @@ to_ely_country_culture_check = {
 		if = {
 			limit = {
 				NOT = { primary_culture = elysian }
+				NOT = { primary_culture = romanoi }
 			}
-			change_primary_culture = elysian
+			if = {
+				limit = {
+					NOT = { has_global_flag = nhs_romanoi_to_elysian }
+				}
+				change_primary_culture = romanoi
+			}
+			else = {
+				change_primary_culture = elysian
+			}			
 		}
 	}
 	else_if = {
@@ -8045,8 +8086,17 @@ to_ely_country_culture_check = {
 		if = {
 			limit = {
 				NOT = { primary_culture = elysian }
+				NOT = { primary_culture = romanoi }
 			}
-			change_primary_culture = elysian
+			if = {
+				limit = {
+					NOT = { has_global_flag = nhs_romanoi_to_elysian }
+				}
+				change_primary_culture = romanoi
+			}
+			else = {
+				change_primary_culture = elysian
+			}			
 		}
 	}
 }
