@@ -675,3 +675,252 @@ country_event = {
 		}
 	}
 }
+
+# The following two events add correct tier for different variants of the Cahokia monument. Why do we need two events beside on action they are triggered from you ask? Well for some reason the command to build the monument doesn't work unless it's in a place where ROOT and FROM is a country. So we need two country events...
+country_event = {
+	id = nhs_mission_events.16
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = Tenochtitlan_Expanded_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+
+	trigger = {
+		OR = {
+			AND = {
+				917 = {
+					owner = {
+						religion_group = pagan
+						mission_completed = nhs_control_andronika_mission
+					}
+					NOT = { has_province_flag = to_cahokia_monument_roman_pagan }
+				}
+			}
+			AND = {
+				917 = {
+					owner = {
+						NOT = { religion_group = pagan }
+						mission_completed = nhs_control_andronika_mission
+					}
+					NOT = { has_province_flag = to_cahokia_monument_roman_non_pagan }
+				}
+			}
+			AND = {
+				917 = {
+					NOT = {
+						owner = {
+							mission_completed = nhs_control_andronika_mission
+						}
+					}
+					OR = {
+						has_province_flag = to_cahokia_monument_roman_non_pagan
+						has_province_flag = to_cahokia_monument_roman_pagan
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		country_event = { id = nhs_mission_events.19 }
+	}
+
+	option = {
+		name = nhs2_hidden.a
+	}
+}
+
+# See the comment above the event above
+country_event = {
+	id = nhs_mission_events.19
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = Tenochtitlan_Expanded_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+
+	trigger = {
+		OR = {
+			AND = {
+				917 = {
+					owner = {
+						religion_group = pagan
+						mission_completed = nhs_control_andronika_mission
+					}
+					NOT = { has_province_flag = to_cahokia_monument_roman_pagan }
+				}
+			}
+			AND = {
+				917 = {
+					owner = {
+						NOT = { religion_group = pagan }
+						mission_completed = nhs_control_andronika_mission
+					}
+					NOT = { has_province_flag = to_cahokia_monument_roman_non_pagan }
+				}
+			}
+			AND = {
+				917 = {
+					NOT = {
+						owner = {
+							mission_completed = nhs_control_andronika_mission
+						}
+					}
+					OR = {
+						has_province_flag = to_cahokia_monument_roman_non_pagan
+						has_province_flag = to_cahokia_monument_roman_pagan
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		917 = {
+			if = {
+				limit = {
+					owner = {
+						religion_group = pagan
+						mission_completed = nhs_control_andronika_mission
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_province_flag = to_cahokia_monument_roman_pagan }
+					}
+					clr_province_flag = to_cahokia_monument_roman_non_pagan
+					set_province_flag = to_cahokia_monument_roman_pagan
+					to_switch_cahokia_monument = {
+						CORRECT_MONUMENT = cahokia_roman_pagan
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					owner = {
+						NOT = { religion_group = pagan }
+						mission_completed = nhs_control_andronika_mission
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_province_flag = to_cahokia_monument_roman_non_pagan }
+					}
+					set_province_flag = to_cahokia_monument_roman_non_pagan
+					clr_province_flag = to_cahokia_monument_roman_pagan
+					to_switch_cahokia_monument = {
+						CORRECT_MONUMENT = cahokia_roman_non_pagan
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_province_flag = to_cahokia_monument_roman_non_pagan
+						has_province_flag = to_cahokia_monument_roman_pagan
+					}
+					NOT = {
+						owner = {
+							mission_completed = nhs_control_andronika_mission
+						}
+					}
+				}
+				clr_province_flag = to_cahokia_monument_roman_non_pagan
+				clr_province_flag = to_cahokia_monument_roman_pagan
+				to_switch_cahokia_monument = {
+					CORRECT_MONUMENT = cahokia
+				}
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_hidden.a
+		
+	}
+}
+
+# The following two events add correct tier for different variants of the Cahokia monument. Why do we need two events beside on action they are triggered from you ask? Well for some reason the command to build the monument doesn't work unless it's in a place where ROOT and FROM is a country. So we need two country events...
+country_event = {
+	id = nhs_mission_events.20
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = Tenochtitlan_Expanded_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+
+	trigger = {
+		917 = {
+			has_province_flag = to_cahokian_rebuild_pending
+		}
+	}
+	
+	immediate = {
+		country_event = { id = nhs_mission_events.21 }
+	}
+
+	option = {
+		name = nhs2_hidden.a
+	}
+}
+
+# See the comment above the event above
+country_event = {
+	id = nhs_mission_events.21
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = Tenochtitlan_Expanded_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+
+	trigger = {
+		917 = {
+			has_province_flag = to_cahokian_rebuild_pending
+		}
+	}
+	
+	immediate = {
+		917 = {
+			if = {
+				limit = {
+					has_great_project = {
+						type = cahokia_roman_pagan
+					}
+					has_province_flag = to_cahokia_monument_roman_pagan
+				}
+				to_restore_cahokia_monument_tier = { CORRECT_MONUMENT = cahokia_roman_pagan }
+			}
+			else_if = {
+				limit = {
+					has_great_project = {
+						type = cahokia_roman_non_pagan
+					}
+					has_province_flag = to_cahokia_monument_roman_non_pagan
+				}
+				to_restore_cahokia_monument_tier = { CORRECT_MONUMENT = cahokia_roman_non_pagan }
+			}
+			else_if = {
+				limit = {
+					has_great_project = {
+						type = cahokia
+					}
+					NOT = {
+						OR = {
+							has_province_flag = to_cahokia_monument_roman_non_pagan
+							has_province_flag = to_cahokia_monument_roman_pagan
+						}
+					}
+				}
+				to_restore_cahokia_monument_tier = { CORRECT_MONUMENT = cahokia }
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_hidden.a
+	}
+}
