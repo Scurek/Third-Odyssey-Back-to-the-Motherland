@@ -90,7 +90,21 @@ to_assimilation_progress_routine = {
 				to_has_culture_assimilation_potential = yes
 			}
 		}
-		country_event = { id = to_cultural_assimilation.1 }
+		save_event_target_as = to_culture_assimilation_owner
+		every_owned_province = {
+			limit = {
+				to_has_culture_assimilation_potential = yes
+			}
+			if = {
+				limit = {
+					to_culture_assimilation_increasing = yes
+				}
+				to_increase_assimilation_progress = { OWNER_TARGET = to_culture_assimilation_owner }
+			}
+			else = {
+				to_assimilation_inactive_setup = yes
+			}
+		}
 	}
 }
 
@@ -117,25 +131,63 @@ to_assimilation_inactive_setup = {
 			limit = {
 				NOT = { has_province_modifier = to_tribal_integration_inactive }
 			}
+			to_remove_inactive_modifiers = yes
+			add_province_modifier = {
+				name = to_tribal_integration_inactive
+				duration = -1
+			}
 		}
-		add_province_modifier = {
-			name = to_tribal_integration_inactive
-			duration = -1
-		}	
+	}
+	else_if = {
+		limit = {
+			culture = elysameric
+			owner = {
+				culture_group = byzantine
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_province_modifier = to_culture_assimilation_roman_inactive }
+			}
+			to_remove_inactive_modifiers = yes
+			add_province_modifier = {
+				name = to_culture_assimilation_roman_inactive
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			culture = skraeling
+			owner = {
+				culture_group = norse_g
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_province_modifier = to_culture_assimilation_norse_inactive }
+			}
+			to_remove_inactive_modifiers = yes
+			add_province_modifier = {
+				name = to_culture_assimilation_norse_inactive
+				duration = -1
+			}
+		}
 	}
 	else_if = {
 		limit = {
 			NOT = { has_province_modifier = to_culture_assimilation_inactive }
 		}
+		to_remove_inactive_modifiers = yes
 		add_province_modifier = {
 			name = to_culture_assimilation_inactive
 			duration = -1
-		}	
+		}
 	}
 }
 
 to_increase_assimilation_progress = {
-	remove_province_modifier = to_culture_assimilation_inactive
+	to_remove_inactive_modifiers = yes
 	set_variable = {
 		which = to_assimilation_flat_increase
 		value = 0
@@ -471,23 +523,89 @@ to_increase_assimilation_progress = {
 
 to_assimilate_province_culture = {
 	to_remove_assimilation_variables = yes
+	to_nat_assimilate_local_tribal_development = yes
 	if = {
 		limit = {
 			owner = {
 				culture_group = byzantine
 			}
+			OR = {
+				NOT = { culture_group = byzantine }
+				culture = elysameric
+			}
 		}
 		if = {
 			limit = {
-				culture = elysameric
+				OR = {
+					culture = elysameric
+					NOT = { to_nat_tribal_native_culture_province = yes }
+				}
 			}
-			to_nhs_assign_correct_elysian_culture = yes
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = to_disabled_assimilation_notifications
+					}
+				}
+				to_nhs_assign_correct_elysian_culture = yes
+				nhs_on_province_culture_converted_general = yes
+			}
+			if = {
+				limit = {
+					owner = {
+						NOT = { has_country_flag = to_disabled_assimilation_notifications }
+					}
+				}
+				province_event = { id = nhs2_cultureevents.102 }
+			}
 		}
 		if = {
 			limit = {
 				NOT = { culture = elysameric }
+				to_nat_tribal_native_culture_province = yes
 			}
-			province_event = { id = nhs2_cultureevents.102 }
+			# if = {
+			# 	limit = {
+			# 		owner = {
+			# 			has_country_flag = to_culture_assimilation_completion_alerts
+			# 		}
+			# 	}
+			# }
+			# province_event = { id = nhs2_cultureevents.102 }
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = nhs_barbaroi_integration
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = to_disabled_assimilation_notifications
+						}
+					}
+					change_culture = elysameric
+					clr_province_flag = nhs_culture_changed_to_symmachoi
+					set_province_flag = nhs_culture_changed_to_symmachoi
+					nhs_on_province_culture_converted_general = yes
+				}
+				if = {
+					limit = {
+						owner = {
+							NOT = { has_country_flag = to_disabled_assimilation_notifications }
+						}
+					}
+					province_event = { id = nhs2_cultureevents.102 }
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						NOT = { has_country_flag = nhs_barbaroi_integration }
+					}
+				}
+				province_event = { id = nhs2_cultureevents.201 }
+			}
 		}
 	}
 	if = {
@@ -495,18 +613,60 @@ to_assimilate_province_culture = {
 			owner = {
 				culture_group = norse_g
 			}
+			OR = {
+				NOT = { culture_group = norse_g }
+				culture = skraeling
+			}
 		}
 		if = {
 			limit = {
-				culture = skraeling
+				OR = {
+					culture = skraeling
+					NOT = { to_nat_tribal_native_culture_province = yes }
+				}
 			}
-			to_nhs_assign_correct_vinlandic_culture = yes
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = to_disabled_assimilation_notifications
+					}
+				}
+				to_nhs_assign_correct_vinlandic_culture = yes
+				nhs_on_province_culture_converted_general = yes
+			}
+			if = {
+				limit = {
+					owner = {
+						NOT = { has_country_flag = to_disabled_assimilation_notifications }
+					}
+				}
+				province_event = { id = nhs_vov_culture.3 }
+			}
 		}
 		if = {
 			limit = {
 				NOT = { culture = skraeling }
+				to_nat_tribal_native_culture_province = yes
 			}
-			province_event = { id = nhs_vov_culture.2 }
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = to_disabled_assimilation_notifications
+					}
+				}
+				change_culture = skraeling
+				clr_province_flag = nhs_culture_changed_to_skraeling
+				set_province_flag = nhs_culture_changed_to_skraeling
+				nhs_on_province_culture_converted_general = yes
+			}
+			if = {
+				limit = {
+					owner = {
+						NOT = { has_country_flag = to_disabled_assimilation_notifications }
+					}
+				}
+				province_event = { id = nhs_vov_culture.2 }
+			}
 		}
 	}
 	if = {
@@ -515,16 +675,22 @@ to_assimilate_province_culture = {
 				NOT = { culture_group = byzantine }
 				NOT = { culture_group = norse_g }
 			}
+			NOT = { culture_group = event_target:$OWNER_TARGET$ }
 		}
 		change_culture = event_target:$OWNER_TARGET$
-		to_nat_assimilate_local_tribal_development = yes
 		nhs_on_province_culture_converted_general = yes
 	}
 }
 
-to_remove_assimilation_variables = {
-	remove_province_modifier = to_culture_assimilation
+to_remove_inactive_modifiers = {
 	remove_province_modifier = to_culture_assimilation_inactive
+	remove_province_modifier = to_tribal_integration_inactive
+	remove_province_modifier = to_culture_assimilation_roman_inactive
+	remove_province_modifier = to_culture_assimilation_norse_inactive
+}
+
+to_remove_assimilation_variables = {
+	to_remove_inactive_modifiers = yes
 	to_remove_assimilation_modifiers = yes
 	clr_province_flag = to_tribal_assimilation_settlers_enabled
 	clr_province_flag = to_tribal_assimilation_service_enabled

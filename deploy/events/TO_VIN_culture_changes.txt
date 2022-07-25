@@ -66,130 +66,42 @@ country_event = {
 }
 
 #Native american to Skraeling
-country_event = {
+province_event = {
 	id = nhs_vov_culture.2
 	title = nhs_vov_culture.2.t
 	desc = nhs_vov_culture.2.d
 	picture = norse_district_eventPicture
 	
-	trigger = {
-		culture_group = norse_g
-		NOT = { primary_culture = norse }
-		any_owned_province = {
-			to_vov_can_convert_to_skraeling = yes
-		}
-	}
+	is_triggered_only = yes
 
-	immediate = {
-		hidden_effect = {
-			random_owned_province = {
-				limit = {
-					to_vov_can_convert_to_skraeling = yes
-				}
-				save_event_target_as = nhs_vov_culture2_target
-			}
-		}
-	}
-
-	mean_time_to_happen = {
-		months = 90
-		modifier = {
-			factor = 1.5
-			has_estate = estate_all_natives
-			NOT = {
-				estate_loyalty = {
-					estate = estate_all_natives
-					loyalty = 30
-				}
-			}
-		}
-		modifier = {
-			factor = 1.5
-			has_estate = estate_all_natives
-			NOT = {
-				estate_loyalty = {
-					estate = estate_all_natives
-					loyalty = 20
-				}
-			}
-		}
-		modifier = {
-			factor = 1.5
-			has_estate = estate_all_natives
-			NOT = {
-				estate_loyalty = {
-					estate = estate_all_natives
-					loyalty = 10
-				}
-			}
-		}
-		modifier = {
-			factor = 1.5
-			has_estate = estate_all_natives
-			NOT = {
-				estate_loyalty = {
-					estate = estate_all_natives
-					loyalty = 1
-				}
-			}
-		}
-		modifier = {
-			factor = 0.5
-			has_estate_privilege = to_vov_native_priv_benevolent_conquerors
-		}
-		modifier = {
-			factor = 0.5
-			has_estate_privilege = to_vov_native_priv_open_ranks
-		}
-		modifier = {
-			factor = 0.9
-			stability = 1
-		}
-		modifier = {
-			factor = 0.9
-			stability = 2
-		}
-		modifier = {
-			factor = 0.9
-			stability = 3
-		}
-		modifier = {
-			factor = 0.5
-			num_of_owned_provinces_with = {
-				value = 10
-				to_vov_can_convert_to_skraeling = yes
-			}
-		}
-		modifier = {
-			factor = 0.5
-			num_of_owned_provinces_with = {
-				value = 15
-				to_vov_can_convert_to_skraeling = yes
-			}
-		}
-	}
+	goto = ROOT
 
 	option = {		# Great news
 		name = "nhs_vov_culture.2.a"
-		goto = nhs_vov_culture2_target
-		event_target:nhs_vov_culture2_target = {
-			if = {
-				limit = {
-					native_culture = yes
-					NOT = { culture = skraeling }
-				}
-				change_culture = skraeling
+		if = {
+			limit = {
+				native_culture = yes
+				NOT = { culture = skraeling }
 			}
+			change_culture = skraeling
 		}
-		event_target:nhs_vov_culture2_target = {
-			to_nat_assimilate_local_tribal_development = yes
-		}
+		to_nat_assimilate_local_tribal_development = yes
 		hidden_effect = {
-			event_target:nhs_vov_culture2_target = {
-				clr_province_flag = nhs_culture_changed_to_skraeling
-				set_province_flag = nhs_culture_changed_to_skraeling
-				hidden_effect = {
-					nhs_on_province_culture_converted_general = yes
+			clr_province_flag = nhs_culture_changed_to_skraeling
+			set_province_flag = nhs_culture_changed_to_skraeling
+			nhs_on_province_culture_converted_general = yes
+		}
+		if = {
+			limit = {
+				owner = {
+					NOT = { has_country_flag = to_assimilation_notifications_potential }
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_enable_assimilation_notifications_toggle_tt
+			hidden_effect = {
+				owner = {
+					set_country_flag = to_assimilation_notifications_potential
 				}
 			}
 		}
@@ -197,312 +109,155 @@ country_event = {
 }
 
 #Native to other culture depending on region
-country_event = {
+province_event = {
 	id = nhs_vov_culture.3
 	title = nhs_vov_culture.3.t
 	desc = nhs_vov_culture.3.d
 	picture = norse_district_eventPicture
 
 	is_triggered_only = yes
-	
-	trigger = {
-		culture_group = norse_g
-		NOT = { primary_culture = norse }
-		NOT = { primary_culture = skraeling }
-		to_vov_has_integrating_privilege = yes
-		any_owned_province = {
-			to_vov_can_convert_to_local_norse = yes
-		}
-	}
 
-	# mean_time_to_happen = {
-	# 	months = 90
-	# 	modifier = {
-	# 		factor = 1.5
-	# 		has_estate = estate_all_natives
-	# 		NOT = {
-	# 			estate_loyalty = {
-	# 				estate = estate_all_natives
-	# 				loyalty = 30
-	# 			}
-	# 		}
-	# 	}
-	# 	modifier = {
-	# 		factor = 1.5
-	# 		has_estate = estate_all_natives
-	# 		NOT = {
-	# 			estate_loyalty = {
-	# 				estate = estate_all_natives
-	# 				loyalty = 20
-	# 			}
-	# 		}
-	# 	}
-	# 	modifier = {
-	# 		factor = 1.5
-	# 		has_estate = estate_all_natives
-	# 		NOT = {
-	# 			estate_loyalty = {
-	# 				estate = estate_all_natives
-	# 				loyalty = 10
-	# 			}
-	# 		}
-	# 	}
-	# 	modifier = {
-	# 		factor = 1.5
-	# 		has_estate = estate_all_natives
-	# 		NOT = {
-	# 			estate_loyalty = {
-	# 				estate = estate_all_natives
-	# 				loyalty = 1
-	# 			}
-	# 		}
-	# 	}
-	# 	modifier = {
-	# 		factor = 0.9
-	# 		stability = 1
-	# 	}
-	# 	modifier = {
-	# 		factor = 0.9
-	# 		stability = 2
-	# 	}
-	# 	modifier = {
-	# 		factor = 0.9
-	# 		stability = 3
-	# 	}
-	# 	modifier = {
-	# 		factor = 0.5
-	# 		num_of_owned_provinces_with = {
-	# 			value = 10
-	# 			to_vov_can_convert_to_local_norse = yes
-	# 		}
-	# 	}
-	# 	modifier = {
-	# 		factor = 0.5
-	# 		num_of_owned_provinces_with = {
-	# 			value = 15
-	# 			to_vov_can_convert_to_local_norse = yes
-	# 		}
-	# 	}
-	# }
-
-	immediate = {
-		hidden_effect = {
-			random_owned_province = {
-				limit = {
-					to_vov_can_convert_to_local_norse = yes
-				}
-				save_event_target_as = nhs_vov_culture_3_target
-			}
-		}
-	}
+	goto = ROOT
 
 	after = {
 		hidden_effect = {
-			event_target:nhs_vov_culture_3_target = {
-				clr_province_flag = nhs_culture_changed_to_skraeling
-				hidden_effect = {
-					nhs_on_province_culture_converted_general = yes
-				}
-			}
+			clr_province_flag = nhs_culture_changed_to_skraeling
+			nhs_on_province_culture_converted_general = yes
 		}
 	}
 
-
 	option = {		# Vinlandic
 		name = "nhs_vov_culture.3.a"
-		goto = nhs_vov_culture_3_target
 		trigger = {
-			event_target:nhs_vov_culture_3_target = {
-				NOT = {
+			NOT = {
+				OR = {
 					region = great_lakes_region
 					region = northeast_america_region
 					region = cascadia_region
 					region = great_plains_region
 					region = california_region
-					OR = {
-						region = central_america_region
-						region = mexico_region
-					}
+					region = central_america_region
+					region = mexico_region
 					region = carribeans_region
 					continent = south_america
 				}
 			}
 		}
-		event_target:nhs_vov_culture_3_target = {
-			if = {
-				limit = {
-					NOT = { culture = vinlandic }
-				}
-				change_culture = vinlandic
+		if = {
+			limit = {
+				NOT = { culture = vinlandic }
 			}
+			change_culture = vinlandic
 		}
-		event_target:nhs_vov_culture_3_target = {
-			to_nat_assimilate_local_tribal_development = yes
-		}
+		to_nat_assimilate_local_tribal_development = yes
 	}
 	option = {
 		name = "nhs_vov_culture.3.b"
-		goto = nhs_vov_culture_3_target
 		trigger = {
-			event_target:nhs_vov_culture_3_target = {
-				region = great_lakes_region
+			region = great_lakes_region
+		}
+		if = {
+			limit = {
+				NOT = { culture = vatnmadr }
 			}
+			change_culture = vatnmadr
 		}
-		event_target:nhs_vov_culture_3_target = {
-			if = {
-				limit = {
-					NOT = { culture = vatnmadr }
-				}
-				change_culture = vatnmadr
-			}
-		}
-		event_target:nhs_vov_culture_3_target = {
-			to_nat_assimilate_local_tribal_development = yes
-		}
+		to_nat_assimilate_local_tribal_development = yes
 	}
 	option = {
 		name = "nhs_vov_culture.3.c"
-		goto = nhs_vov_culture_3_target
 		trigger = {
-			event_target:nhs_vov_culture_3_target = {
-				region = northeast_america_region
+			region = northeast_america_region
+		}
+		if = {
+			limit = {
+				NOT = { culture = varangian_n }
 			}
+			change_culture = varangian_n
 		}
-		event_target:nhs_vov_culture_3_target = {
-			if = {
-				limit = {
-					NOT = { culture = varangian_n }
-				}
-				change_culture = varangian_n
-			}
-		}
-		event_target:nhs_vov_culture_3_target = {
-			to_nat_assimilate_local_tribal_development = yes
-		}
+		to_nat_assimilate_local_tribal_development = yes
 	}
 	option = {
 		name = "nhs_vov_culture.3.e"
-		goto = nhs_vov_culture_3_target
 		trigger = {
-			event_target:nhs_vov_culture_3_target = {
-				region = cascadia_region
+			region = cascadia_region
+		}
+		if = {
+			limit = {
+				NOT = { culture = west_vinlandic }
 			}
+			change_culture = west_vinlandic
 		}
-		event_target:nhs_vov_culture_3_target = {
-			if = {
-				limit = {
-					NOT = { culture = west_vinlandic }
-				}
-				change_culture = west_vinlandic
-			}
-		}
-		event_target:nhs_vov_culture_3_target = {
-			to_nat_assimilate_local_tribal_development = yes
-		}
+		to_nat_assimilate_local_tribal_development = yes
 	}
 	option = {
 		name = "nhs_vov_culture.3.f"
-		goto = nhs_vov_culture_3_target
 		trigger = {
-			event_target:nhs_vov_culture_3_target = {
-				region = great_plains_region
+			region = great_plains_region
+		}
+		if = {
+			limit = {
+				NOT = { culture = vollrmadr }
 			}
+			change_culture = vollrmadr
 		}
-		event_target:nhs_vov_culture_3_target = {
-			if = {
-				limit = {
-					NOT = { culture = vollrmadr }
-				}
-				change_culture = vollrmadr
-			}
-		}
-		event_target:nhs_vov_culture_3_target = {
-			to_nat_assimilate_local_tribal_development = yes
-		}
+		to_nat_assimilate_local_tribal_development = yes
 	}
 	option = {
 		name = "nhs_vov_culture.3.g"
-		goto = nhs_vov_culture_3_target
 		trigger = {
-			event_target:nhs_vov_culture_3_target = {
-				region = california_region
+			region = california_region
+		}
+		if = {
+			limit = {
+				NOT = { culture = rusnidr }
 			}
+			change_culture = rusnidr
 		}
-		event_target:nhs_vov_culture_3_target = {
-			if = {
-				limit = {
-					NOT = { culture = rusnidr }
-				}
-				change_culture = rusnidr
-			}
-		}
-		event_target:nhs_vov_culture_3_target = {
-			to_nat_assimilate_local_tribal_development = yes
-		}
+		to_nat_assimilate_local_tribal_development = yes
 	}
 
 	option = {
 		name = "nhs_vov_culture.3.i"
-		goto = nhs_vov_culture_3_target
 		trigger = {
-			event_target:nhs_vov_culture_3_target = {
-				OR = {
-					region = central_america_region
-					region = mexico_region
-				}
+			OR = {
+				region = central_america_region
+				region = mexico_region
 			}
 		}
-		event_target:nhs_vov_culture_3_target = {
-			if = {
-				limit = {
-					NOT = { culture = arimadr }
-				}
-				change_culture = arimadr
+		if = {
+			limit = {
+				NOT = { culture = arimadr }
 			}
+			change_culture = arimadr
 		}
-		event_target:nhs_vov_culture_3_target = {
-			to_nat_assimilate_local_tribal_development = yes
-		}
+		to_nat_assimilate_local_tribal_development = yes
 	}
 	option = {
 		name = "nhs_vov_culture.3.j"
-		goto = nhs_vov_culture_3_target
 		trigger = {
-			event_target:nhs_vov_culture_3_target = {
-				region = carribeans_region
+			region = carribeans_region
+		}
+		if = {
+			limit = {
+				NOT = { culture = islander }
 			}
+			change_culture = islander
 		}
-		event_target:nhs_vov_culture_3_target = {
-			if = {
-				limit = {
-					NOT = { culture = islander }
-				}
-				change_culture = islander
-			}
-		}
-		event_target:nhs_vov_culture_3_target = {
-			to_nat_assimilate_local_tribal_development = yes
-		}
+		to_nat_assimilate_local_tribal_development = yes
 	}
 	option = {
 		name = "nhs_vov_culture.3.k"
-		goto = nhs_vov_culture_3_target
 		trigger = {
-			event_target:nhs_vov_culture_3_target = {
-				continent = south_america
+			continent = south_america
+		}
+		if = {
+			limit = {
+				NOT = { culture = south_vinlandic }
 			}
+			change_culture = south_vinlandic
 		}
-		event_target:nhs_vov_culture_3_target = {
-			if = {
-				limit = {
-					NOT = { culture = south_vinlandic }
-				}
-				change_culture = south_vinlandic
-			}
-		}
-		event_target:nhs_vov_culture_3_target = {
-			to_nat_assimilate_local_tribal_development = yes
-		}
+		to_nat_assimilate_local_tribal_development = yes
 	}
 }
 
