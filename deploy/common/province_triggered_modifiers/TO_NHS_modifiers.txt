@@ -152,10 +152,69 @@ nhs_gibraltar_mod = {
 	local_hostile_attrition = 5
 	#Province scope
 	on_activation = {
-	
+		owner = {
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							is_subject = yes
+							NOT = {
+								overlord = {
+									226 = {
+										has_trade_modifier = {
+											who = PREV
+											key = CONTROLS_THE_ROCK
+										}
+									}
+								}
+							}
+							
+						}
+						AND = {
+							is_subject = no
+							NOT = {
+								226 = {
+									has_trade_modifier = {
+										who = PREV
+										key = CONTROLS_THE_ROCK
+									}
+								}
+							}
+						}
+					}
+				}
+				226 = {
+					add_trade_modifier = {
+						who = ROOT
+						duration = -1
+						power = 30
+						key = CONTROLS_THE_ROCK
+					}
+				}
+			}
+		}
 	}
 	on_deactivation = {
-		
+		owner = {
+			random_country = {
+				limit = {
+					NOT = { overlord_of = PREV }
+					NOT = { tag = PREV }
+					226 = {
+						has_trade_modifier = {
+							who = PREV
+							key = CONTROLS_THE_ROCK
+						}
+					}
+				}
+				226 = {
+					remove_trade_modifier = {
+						who = PREV
+						key = CONTROLS_THE_ROCK
+					}
+				}
+			}
+		}
 	}
 }
 

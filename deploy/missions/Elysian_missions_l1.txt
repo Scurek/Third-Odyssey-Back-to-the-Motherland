@@ -281,10 +281,80 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 		}
 	}
 
-	nhs_control_andronika_mission = {
-		icon = mission_se_along_the_river
+	nhs_beyond_the_apalesians = {
+		icon = mission_che_the_cave_country
 		required_missions = { nhs_unite_home_region_mission }
 		position = 5
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						to_elysian_highway_north_province = yes
+						to_elysian_highway_south_province = yes
+					}
+					NOT = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+				}
+				AND = {
+					nhs_appalachian_pathways_province = yes
+					NOT = { has_province_modifier = nhs_appalachian_pathways }
+				}
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = to_finished_appalachian_pathways_tt
+				has_global_flag = nhs_appalachian_pathways_finished
+			}
+			calc_true_if = {
+				amount = 20
+				custom_trigger_tooltip = {
+					tooltip = to_andronika_great_lakes_country_or_subject_or_subject_of_subject_holds_tt
+					all_province = {
+						OR = {
+							region = mississippi_region
+							region = great_lakes_region
+						}
+						country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT }
+					}
+				}
+			}
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = to_owns_elysian_highway_north_tt
+					2551 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					2555 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					948 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					2525 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					2526 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					940 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					4921 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					2520 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					4904 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+				}
+				custom_trigger_tooltip = {
+					tooltip = to_owns_elysian_highway_south_tt
+					935 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					2527 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					2531 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					4883 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					918 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					939 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					4887 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					2520 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					4904 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+				}
+			}
+		}
+
+		effect = {
+			add_prestige = 50
+		}
+	}
+
+	nhs_control_andronika_mission = {
+		icon = mission_se_along_the_river
+		required_missions = { nhs_beyond_the_apalesians }
+		position = 6
 		provinces_to_highlight = {
 			province_id = 917
 			NOT = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
@@ -294,9 +364,20 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 				country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT }
 			}
 			calc_true_if = {
-				amount = 40
+				amount = 4
 				custom_trigger_tooltip = {
 					tooltip = to_andronika_cot_country_or_subject_or_subject_of_subject_holds_tt
+					all_province = {
+						province_has_center_of_trade_of_level = 1
+						province_group = to_mississippi_trade_node
+						country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT }
+					}
+				}
+			}
+			calc_true_if = {
+				amount = 40
+				custom_trigger_tooltip = {
+					tooltip = to_andronika_country_or_subject_or_subject_of_subject_holds_tt
 					all_province = {
 						province_group = to_mississippi_trade_node
 						country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT }
@@ -962,6 +1043,7 @@ nhs_right_mid_start = {
 			}
 		}
 		trigger = {
+			mission_completed = nhs_modernise_mission
 			owns = 953
 			custom_trigger_tooltip = {
 				tooltip = to_at_least_90_trade_power_in_bay_of_elysia_tt
@@ -1026,8 +1108,7 @@ nhs_right_mid_start = {
 		icon = mission_african_gold
 		required_missions = { nhs_gateway_to_elysium_mission }
 		position = 5
-		trigger = {
-			mission_completed = nhs_modernise_mission
+		trigger = {	
 			owns = 953
 			if = {
 				limit = {
@@ -1315,8 +1396,11 @@ nhs_left_start = {
 
 	nhs_hegemony_mission = {
 		icon = mission_empire
-		position = 6
-		required_missions = { nhs_control_andronika_mission }
+		position = 5
+		required_missions = {
+			nhs_unite_home_region_mission
+			# nhs_control_andronika_mission
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -1990,8 +2074,11 @@ nhs_right_mid = {
 	nhs_industrial_revolution_mission = {
 		#icon = mission_rb_build_furnaces
 		icon = mission_rb_prospect_for_coal
-		position = 6
-		required_missions = { nhs_gateway_to_elysium_mission }
+		position = 5
+		required_missions = { 
+			nhs_wonders_of_elysium
+			# nhs_gateway_to_elysium_mission 
+		}
 		trigger = {
 			owns = 953
 			has_institution = enlightenment
@@ -2666,80 +2753,170 @@ nhs_centre_end = {
 			#Potential Exarchates Also get claims
 			custom_tooltip = nhs_potential_exarchate_claims_tt
 			add_permanent_claim = 226
-			hudavendigar_area = {
+		}
+	}
+
+	nhs_ancestral_lands = {
+		required_missions = {
+			nhs_back_to_the_motherland
+		}
+		#icon = mission_conquer_50_development
+		icon = take_constantinople
+		position = 7
+		provinces_to_highlight = {
+			#OR = {
+			#	area = macedonia_area
+			#	area = northern_greece_area
+			#	area = morea_area
+			#	area = western_aegean_area
+			#	area = thrace_area
+			#	area = bulgaria_area
+			#}
+			has_discovered = ROOT
+			culture = greek
+			continent = europe
+			NOT = {
+				owner = {
+					OR = {
+						tag = ROOT
+						is_subject_of = ROOT
+						primary_culture = greek
+						primary_culture = pontic_greek
+						primary_culture = goths
+					}
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = nhs_invasion_over }
+				}
+				owns_or_vassal_of = 151
+				#custom_trigger_tooltip = {
+				#	tooltip = nhs_has_flag_invasion_second_part_begins_tt
+				#	has_country_flag = nhs_invasion_second_part_begins
+				#}
+				#custom_trigger_tooltip = {
+				#	tooltip = nhs_at_least_one_province_in_greece
+				#	OR = {
+				#		any_owned_province = {
+				#			AND = {
+				#				continent = europe
+				#				nhs_greek_areas = yes
+				#			}
+				#		}
+				#		any_country = {
+				#			AND = {
+				#				is_subject_of = ROOT
+				#				any_owned_province = {
+				#					AND = {
+				#						continent = europe
+				#						culture = greek
+				#					}
+				#				}
+				#			}
+				#		}
+				#	}
+				#}
+				custom_trigger_tooltip = {
+					tooltip = nhs_at_owns_all_greek_provinces_tt
+					NOT = {
+						any_province = {
+							culture = greek
+							continent = europe
+							NOT = {
+								owner = {
+									OR = {
+										tag = ROOT
+										is_subject_of = ROOT
+										primary_culture = greek
+										primary_culture = pontic_greek
+										primary_culture = goths
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = nhs_invasion_over }
+				}
+				add_prestige = 50
+				add_legitimacy = 50
+				add_army_tradition = 50
+				add_country_modifier = {
+					name = "nhs2_invasion_succeseful"
+					duration = -1
+				}
+				if = {
+					limit = {
+						any_province = {
+							has_province_modifier = nhs2_supply_lines_tm
+						}
+					}
+					custom_tooltip = nhs_remove_supply_lines_tt
+					random_province = {
+						limit = {
+							has_province_modifier = nhs2_supply_lines_tm
+						}
+						nhs_set_center_of_trade_2 = yes
+						hidden_effect = {
+							remove_province_triggered_modifier = nhs2_supply_lines_tm
+						}
+					}
+					hidden_effect = {
+						clear_global_event_target = nhs_supply_lines_province
+					}
+				}
+				
+				if = {
+					limit = {
+						any_province = {
+							has_province_modifier = nhs2_base_of_operations_tm
+						}
+					}
+					custom_tooltip = nhs_remove_base_of_operations_tt
+					hidden_effect = {
+						every_province = {
+							limit = {
+								has_province_modifier = nhs2_base_of_operations_tm
+							}
+							remove_province_triggered_modifier = nhs2_base_of_operations_tm
+						}
+						clear_global_event_target = nhs_base_of_operations_province
+					}
+					hidden_effect = {
+						clear_global_event_target = nhs_base_of_operations_province
+					}
+				}
+				set_country_flag = nhs_invasion_over
+				clr_country_flag = nhs_bo_sparta
+				clr_country_flag = nhs_bo_rhodes
+				clr_country_flag = nhs_bo_macedonia
+				clr_country_flag = nhs_bo_athens
+				clr_country_flag = nhs_bo
+				clr_country_flag = nhs_got_bo_buff
+				clr_country_flag = nhs_invasion_begins
+				clr_country_flag = nhs_invasion_second_part_begins
+				clr_country_flag = nhs_invasion_second_part
+				clr_country_flag = nhs_supply_lines
+				clr_country_flag = nhs_supply_lines_secured
+			}
+			custom_tooltip = nhs_potential_exarchate_claims_tt
+			balkan_region = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
-			aydin_area = {
+			anatolia_region = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			karaman_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			rum_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			kastamonu_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			erzurum_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			dulkadir_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			cukurova_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			ankara_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			aegean_archipelago_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			germiyan_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -2751,82 +2928,26 @@ nhs_centre_end = {
 					}
 					has_global_flag = nhs_elg_got_anatolia
 				}
-				hudavendigar_area = {
+				anatolia_region = {
 					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						NOT = { is_core = ROOT }
 					}
-					add_permanent_claim = ELG
+					add_permanent_claim = ROOT
 				}
-				aydin_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+			if = {
+				limit = {
+					exists = ELG
+					ELG = {
+						is_subject_of = ROOT
 					}
-					add_permanent_claim = ELG
+					has_global_flag = nhs_elg_got_balkans
 				}
-				karaman_area = {
+				balkan_region = {
 					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						NOT = { is_core = ROOT }
 					}
-					add_permanent_claim = ELG
-				}
-				rum_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				kastamonu_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				erzurum_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				dulkadir_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				cukurova_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				ankara_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				aegean_archipelago_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-				germiyan_area = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
+					add_permanent_claim = ROOT
 				}
 			}
 		}
@@ -2834,9 +2955,7 @@ nhs_centre_end = {
 	
 	nhs_heir_of_justinian = {
 		required_missions = {
-			# nhs_back_to_the_motherland
 			nhs_ancestral_lands
-			nhs_hercules_gates
 		}
 		icon = nhs_mission_pf_soldier
 		position = 8
@@ -3697,257 +3816,71 @@ nhs_left_mid_end = {
 	}
 	has_country_shield = yes
 
-	nhs_ancestral_lands = {
+	nhs_hercules_gates = {
 		required_missions = {
 			nhs_back_to_the_motherland
 		}
-		#icon = mission_conquer_50_development
-		icon = take_constantinople
+		icon = mission_rb_take_gibraltar
 		position = 7
 		provinces_to_highlight = {
-			#OR = {
-			#	area = macedonia_area
-			#	area = northern_greece_area
-			#	area = morea_area
-			#	area = western_aegean_area
-			#	area = thrace_area
-			#	area = bulgaria_area
-			#}
+			province_id = 226
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			has_discovered = ROOT
-			culture = greek
-			continent = europe
-			NOT = {
-				owner = {
-					OR = {
-						tag = ROOT
-						is_subject_of = ROOT
-						primary_culture = greek
-						primary_culture = pontic_greek
-						primary_culture = goths
-					}
-				}
-			}
 		}
 		trigger = {
-			if = {
-				limit = {
-					NOT = { has_country_flag = nhs_invasion_over }
-				}
-				owns_or_vassal_of = 151
-				#custom_trigger_tooltip = {
-				#	tooltip = nhs_has_flag_invasion_second_part_begins_tt
-				#	has_country_flag = nhs_invasion_second_part_begins
-				#}
-				#custom_trigger_tooltip = {
-				#	tooltip = nhs_at_least_one_province_in_greece
-				#	OR = {
-				#		any_owned_province = {
-				#			AND = {
-				#				continent = europe
-				#				nhs_greek_areas = yes
-				#			}
-				#		}
-				#		any_country = {
-				#			AND = {
-				#				is_subject_of = ROOT
-				#				any_owned_province = {
-				#					AND = {
-				#						continent = europe
-				#						culture = greek
-				#					}
-				#				}
-				#			}
-				#		}
-				#	}
-				#}
-				custom_trigger_tooltip = {
-					tooltip = nhs_at_owns_all_greek_provinces_tt
-					NOT = {
-						any_province = {
-							culture = greek
-							continent = europe
-							NOT = {
-								owner = {
-									OR = {
-										tag = ROOT
-										is_subject_of = ROOT
-										primary_culture = greek
-										primary_culture = pontic_greek
-										primary_culture = goths
-									}
-								}
-							}
-						}
+			owns_or_non_sovereign_subject_of = 226
+			custom_trigger_tooltip = {
+				tooltip = nhs_at_least_50_trade_power_in_sevilla_tt
+				1293 = { #Sevilla
+					trade_share = {
+						country = ROOT
+						share = 33
 					}
 				}
 			}
 		}
 		effect = {
+			custom_tooltip = nhs_gibraltar_exemption_tt
+			hidden_effect = {
+				226 = {
+					set_province_flag = nhs_exarch_province_exemption
+				}
+			}
 			if = {
 				limit = {
-					NOT = { has_country_flag = nhs_invasion_over }
+					226 = {
+						owner = {
+							is_subject_of = ROOT
+						}
+					}
 				}
-				add_prestige = 50
-				add_legitimacy = 50
-				add_army_tradition = 50
-				add_country_modifier = {
-					name = "nhs2_invasion_succeseful"
+				226 = {
+					cede_province = ROOT
+					add_core = ROOT
+				}
+			}
+		
+			226 = {
+				nhs_set_center_of_trade_1 = yes
+				custom_tooltip = nhs_new_line_tt
+				tooltip = {
+					add_province_modifier = {
+						name = nhs_gibraltar_mod_t
+						duration = -1
+					}
+				}
+			}
+			hidden_effect = {
+				226 = {
+					add_province_triggered_modifier = nhs_gibraltar_mod
+				}
+			}
+			226 = {
+				add_trade_modifier = {
+					who = ROOT
 					duration = -1
-				}
-				if = {
-					limit = {
-						any_province = {
-							has_province_modifier = nhs2_supply_lines_tm
-						}
-					}
-					custom_tooltip = nhs_remove_supply_lines_tt
-					random_province = {
-						limit = {
-							has_province_modifier = nhs2_supply_lines_tm
-						}
-						nhs_set_center_of_trade_2 = yes
-						hidden_effect = {
-							remove_province_triggered_modifier = nhs2_supply_lines_tm
-						}
-					}
-					hidden_effect = {
-						clear_global_event_target = nhs_supply_lines_province
-					}
-				}
-				
-				if = {
-					limit = {
-						any_province = {
-							has_province_modifier = nhs2_base_of_operations_tm
-						}
-					}
-					custom_tooltip = nhs_remove_base_of_operations_tt
-					hidden_effect = {
-						every_province = {
-							limit = {
-								has_province_modifier = nhs2_base_of_operations_tm
-							}
-							remove_province_triggered_modifier = nhs2_base_of_operations_tm
-						}
-						clear_global_event_target = nhs_base_of_operations_province
-					}
-					hidden_effect = {
-						clear_global_event_target = nhs_base_of_operations_province
-					}
-				}
-				set_country_flag = nhs_invasion_over
-				clr_country_flag = nhs_bo_sparta
-				clr_country_flag = nhs_bo_rhodes
-				clr_country_flag = nhs_bo_macedonia
-				clr_country_flag = nhs_bo_athens
-				clr_country_flag = nhs_bo
-				clr_country_flag = nhs_got_bo_buff
-				clr_country_flag = nhs_invasion_begins
-				clr_country_flag = nhs_invasion_second_part_begins
-				clr_country_flag = nhs_invasion_second_part
-				clr_country_flag = nhs_supply_lines
-				clr_country_flag = nhs_supply_lines_secured
-			}
-			custom_tooltip = nhs_potential_exarchate_claims_tt
-			balkan_region = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			if = {
-				limit = {
-					exists = ELG
-					ELG = {
-						is_subject_of = ROOT
-					}
-					has_global_flag = nhs_elg_got_balkans
-				}
-				balkan_region = {
-					limit = {
-						NOT = { is_core = ELG }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = ELG
-				}
-			}
-			aleppo_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			syria_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			palestine_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			syrian_desert_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			trans_jordan_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			if = {
-				limit = {
-					exists = EEO
-					EEO = {
-						is_subject_of = ROOT
-					}
-				}
-				aleppo_area = {
-					limit = {
-						NOT = { is_core = EEO }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = EEO
-				}
-				syria_area = {
-					limit = {
-						NOT = { is_core = EEO }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = EEO
-				}
-				palestine_area = {
-					limit = {
-						NOT = { is_core = EEO }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = EEO
-				}
-				syrian_desert_area = {
-					limit = {
-						NOT = { is_core = EEO }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = EEO
-				}
-				trans_jordan_area = {
-					limit = {
-						NOT = { is_core = EEO }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = EEO
+					power = 30
+					key = CONTROLS_THE_ROCK
 				}
 			}
 		}
@@ -4403,8 +4336,6 @@ nhs_right_end = {
 	
 	nhs_outward_focus = {
 		required_missions = {
-			#nhs_push_them_back
-			# nhs_hercules_gates
 			nhs_center_of_commerce_mission
 		}
 		icon = mission_invade_island
@@ -4865,152 +4796,17 @@ nhs_right_mid_end = {
 	}
 	has_country_shield = yes
 
-	nhs_hercules_gates = {
+	nhs_reconquer_anatolia = {
 		required_missions = {
 			nhs_back_to_the_motherland
 		}
-		icon = mission_rb_take_gibraltar
+		icon = anatolian_frontier
 		position = 7
-		provinces_to_highlight = {
-			province_id = 226
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-			has_discovered = ROOT
-		}
 		trigger = {
-			owns_or_non_sovereign_subject_of = 226
-			custom_trigger_tooltip = {
-				tooltip = nhs_at_least_50_trade_power_in_sevilla_tt
-				1293 = { #Sevilla
-					trade_share = {
-						country = ROOT
-						share = 33
-					}
-				}
-			}
+			always = yes
 		}
 		effect = {
-			custom_tooltip = nhs_gibraltar_exemption_tt
-			hidden_effect = {
-				226 = {
-					set_province_flag = nhs_exarch_province_exemption
-				}
-			}
-			if = {
-				limit = {
-					226 = {
-						owner = {
-							is_subject_of = ROOT
-						}
-					}
-				}
-				226 = {
-					cede_province = ROOT
-					add_core = ROOT
-				}
-			}
-		
-			226 = {
-				nhs_set_center_of_trade_1 = yes
-				custom_tooltip = nhs_new_line_tt
-				tooltip = {
-					add_province_modifier = {
-						name = nhs_gibraltar_mod_t
-						duration = -1
-					}
-				}
-			}
-			hidden_effect = {
-				226 = {
-					add_province_triggered_modifier = nhs_gibraltar_mod
-				}
-			}
-			226 = {
-				add_trade_modifier = {
-					who = ROOT
-					duration = -1
-					power = 20
-					key = ELYSIAN_MERCHANTS
-				}
-			}
-			custom_tooltip = nhs_potential_exarchate_claims_tt
-			delta_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			bahari_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			vostani_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			cyrenaica_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			gulf_of_arabia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			if = {
-				limit = {
-					exists = EEE
-					EEE = {
-						is_subject_of = ROOT
-					}
-				}
-				delta_area = {
-					limit = {
-						NOT = { is_core = EEE }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = EEE
-				}
-				bahari_area = {
-					limit = {
-						NOT = { is_core = EEE }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = EEE
-				}
-				vostani_area = {
-					limit = {
-						NOT = { is_core = EEE }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = EEE
-				}
-				cyrenaica_area = {
-					limit = {
-						NOT = { is_core = EEE }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = EEE
-				}
-				gulf_of_arabia_area = {
-					limit = {
-						NOT = { is_core = EEE }
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					add_permanent_claim = EEE
-				}
-			}
+
 		}
 	}
 	
@@ -5341,7 +5137,6 @@ nhs_right_mid_end = {
 	nhs_indian_ambition = {
 		required_missions = {
 			nhs_canal_mission
-			#nhs_hercules_gates
 		}
 		#icon = mission_rb_take_indian_coast
 		icon = mission_indian_empire
