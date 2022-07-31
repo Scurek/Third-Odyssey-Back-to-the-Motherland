@@ -54,7 +54,7 @@ for index, image in enumerate(images):
 fractions = [0]
 
 for i in range(0, width - 4):
-    shape = ((2, 28), (2 + i, height))
+    shape = ((2, int(height * 0.875)), (2 + i, height))
     color = interpolate(yellow, green, i / width)
     fraction = int((i + 1) / (width - 3) * 100)
     fractions.append(fraction)
