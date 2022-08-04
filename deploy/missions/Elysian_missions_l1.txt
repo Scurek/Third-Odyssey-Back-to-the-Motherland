@@ -289,8 +289,8 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			OR = {
 				AND = {
 					OR = {
-						to_elysian_highway_north_province = yes
-						to_elysian_highway_south_province = yes
+						to_elysian_highway_east_province_trigger = { TRIGGER = province_id }
+						to_elysian_highway_south_province_trigger = { TRIGGER = province_id }
 					}
 					NOT = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
 				}
@@ -320,34 +320,508 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			}
 			OR = {
 				custom_trigger_tooltip = {
-					tooltip = to_owns_elysian_highway_north_tt
-					2551 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					2555 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					948 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					2525 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					2526 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					940 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					4921 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					2520 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					4904 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					tooltip = to_owns_elysian_highway_east_tt
+					to_owns_elysian_highway_east = yes
 				}
 				custom_trigger_tooltip = {
 					tooltip = to_owns_elysian_highway_south_tt
-					935 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					2527 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					2531 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					4883 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					918 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					939 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					4887 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					2514 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
-					900 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					to_owns_elysian_highway_south = yes
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_directly_controls_elysian_highway_province_tt
+				if = {
+					limit = {
+						to_owns_elysian_highway_east = yes
+						to_owns_elysian_highway_south = yes
+					}
+					any_province = {
+						country_or_subject_holds = ROOT
+						NOT = { construction_progress = 0 }
+						OR = {
+							to_elysian_highway_east_province_trigger = { TRIGGER = province_id }
+							to_elysian_highway_south_province_trigger = { TRIGGER = province_id }
+						}
+					}
+				}
+				else_if = {
+					limit = { 
+						to_owns_elysian_highway_east = yes 
+					}
+					any_province = {
+						country_or_subject_holds = ROOT
+						NOT = { construction_progress = 0 }
+						to_elysian_highway_east_province_trigger = { TRIGGER = province_id }
+					}
+				}
+				else_if = {
+					limit = { 
+						to_owns_elysian_highway_south = yes 
+					}
+					any_province = {
+						country_or_subject_holds = ROOT
+						NOT = { construction_progress = 0 }
+						to_elysian_highway_south_province_trigger = { TRIGGER = province_id }
+					}
+				}
+				else = {
+					any_province = {
+						country_or_subject_holds = ROOT
+						NOT = { construction_progress = 0 }
+						OR = {
+							to_elysian_highway_east_province_trigger = { TRIGGER = province_id }
+							to_elysian_highway_south_province_trigger = { TRIGGER = province_id }
+						}
+					}
 				}
 			}
 		}
 
 		effect = {
-			add_prestige = 50
+			if = {
+				limit = {
+					to_owns_elysian_highway_east = yes
+					to_owns_elysian_highway_south = yes
+				}
+				custom_tooltip = to_owns_eastsouth_highway_segment_tt
+				custom_tooltip = to_elysian_highway_east_add_modifiers_tt
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = to_elysian_highway_south_add_modifiers_tt
+				custom_tooltip = nhs_dotted_line_tt
+				if = {
+					limit = {
+						owns_or_subject_of = 4904
+						4904 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					4904 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 2520
+						2520 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					2520 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 4921
+						4921 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					4921 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 4887
+						4887 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					4887 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 940
+						940 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					940 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 939
+						939 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					939 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 2526
+						2526 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					2526 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 918
+						918 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					918 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 2525
+						2525 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					2525 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 4883
+						4883 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					4883 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 948
+						948 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					948 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 2531
+						2531 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					2531 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				# else_if = {
+				# 	limit = {
+				# 		owns_or_subject_of = 2555
+				# 		2555 = {
+				# 			NOT = { construction_progress = 0 }
+				# 		}
+				# 	}
+				# 	2555 = {
+				# 		to_enable_elysian_highway_project = yes
+				# 	}
+				# }
+				# else_if = {
+				# 	limit = {
+				# 		owns_or_subject_of = 2527
+				# 		2527 = {
+				# 			NOT = { construction_progress = 0 }
+				# 		}
+				# 	}
+				# 	2527 = {
+				# 		to_enable_elysian_highway_project = yes
+				# 	}
+				# }
+				# else_if = {
+				# 	limit = {
+				# 		owns_or_subject_of = 2551
+				# 		2551 = {
+				# 			NOT = { construction_progress = 0 }
+				# 		}
+				# 	}
+				# 	2551 = {
+				# 		to_enable_elysian_highway_project = yes
+				# 	}
+				# }
+				# else_if = {
+				# 	limit = {
+				# 		owns_or_subject_of = 935
+				# 		935 = {
+				# 			NOT = { construction_progress = 0 }
+				# 		}
+				# 	}
+				# 	935 = {
+				# 		to_enable_elysian_highway_project = yes
+				# 	}
+				# }
+				else = {
+					custom_tooltip = to_enables_elysian_highways_project_unspecified_province_tt
+				}
+			}
+			else_if = {
+				limit = {
+					to_owns_elysian_highway_east = yes
+				}
+				custom_tooltip = to_elysian_highway_east_add_modifiers_tt
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = to_if_owns_other_highway_segment_tt
+				hidden_effect = {
+					every_province = {
+						limit = {
+							to_elysian_highway_east_province_trigger = { TRIGGER = province_id }
+						}
+						add_permanent_province_modifier = {
+							name = nhs_elysian_highways
+							duration = -1
+						}
+					}
+				}
+				custom_tooltip = nhs_dotted_line_tt
+				if = {
+					limit = {
+						owns_or_subject_of = 4904
+						4904 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					4904 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 2520
+						2520 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					2520 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 4921
+						4921 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					4921 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 940
+						940 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					940 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 2526
+						2526 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					2526 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 2525
+						2525 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					2525 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 948
+						948 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					948 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				# else_if = {
+				# 	limit = {
+				# 		owns_or_subject_of = 2555
+				# 		2555 = {
+				# 			NOT = { construction_progress = 0 }
+				# 		}
+				# 	}
+				# 	2555 = {
+				# 		to_enable_elysian_highway_project = yes
+				# 	}
+				# }
+				# else_if = {
+				# 	limit = {
+				# 		owns_or_subject_of = 2551
+				# 		2551 = {
+				# 			NOT = { construction_progress = 0 }
+				# 		}
+				# 	}
+				# 	2551 = {
+				# 		to_enable_elysian_highway_project = yes
+				# 	}
+				# }
+				else = {
+					custom_tooltip = to_enables_elysian_highways_project_unspecified_province_tt
+				}
+			}
+			else_if = {
+				limit = {
+					to_owns_elysian_highway_south = yes
+				}
+				custom_tooltip = to_elysian_highway_south_add_modifiers_tt
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = to_if_owns_other_highway_segment_tt
+				hidden_effect = {
+					every_province = {
+						limit = {
+							to_elysian_highway_south_province_trigger = { TRIGGER = province_id }
+						}
+						add_permanent_province_modifier = {
+							name = nhs_elysian_highways
+							duration = -1
+						}
+					}
+				}
+				if = {
+					limit = {
+						owns_or_subject_of = 4904
+						4904 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					4904 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 2520
+						2520 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					2520 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 4887
+						4887 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					4887 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 939
+						939 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					939 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 918
+						918 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					918 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 4883
+						4883 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					4883 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				else_if = {
+					limit = {
+						owns_or_subject_of = 2531
+						2531 = {
+							NOT = { construction_progress = 0 }
+						}
+					}
+					2531 = {
+						to_enable_elysian_highway_project = yes
+					}
+				}
+				# else_if = {
+				# 	limit = {
+				# 		owns_or_subject_of = 2527
+				# 		2527 = {
+				# 			NOT = { construction_progress = 0 }
+				# 		}
+				# 	}
+				# 	2527 = {
+				# 		to_enable_elysian_highway_project = yes
+				# 	}
+				# }
+				# else_if = {
+				# 	limit = {
+				# 		owns_or_subject_of = 935
+				# 		935 = {
+				# 			NOT = { construction_progress = 0 }
+				# 		}
+				# 	}
+				# 	935 = {
+				# 		to_enable_elysian_highway_project = yes
+				# 	}
+				# }
+				else = {
+					custom_tooltip = to_enables_elysian_highways_project_unspecified_province_tt
+				}
+			}
+			else = {
+				custom_tooltip = to_if_owns_east_highway_segment_tt
+				custom_tooltip = to_elysian_highway_east_add_modifiers_tt
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = to_if_owns_south_highway_segment_tt
+				custom_tooltip = to_elysian_highway_south_add_modifiers_tt
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = to_if_owns_eastsouth_highway_segment_tt
+				custom_tooltip = nhs_dotted_line_tt
+				custom_tooltip = to_enables_elysian_highways_project_unspecified_province_tt
+			}
 		}
 	}
 
@@ -395,6 +869,8 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			}
 		}
 		effect = {
+			custom_tooltip = to_nhs_cahokia_monument_ally_tt
+			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = to_nhs_enable_cahokia_monument_tt
 			if = {
 				limit = {
@@ -405,8 +881,6 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			else = {
 				custom_tooltip = to_nhs_cahokia_monument_benefits_non_pagan_tt
 			}
-			custom_tooltip = nhs_new_line_tt
-			custom_tooltip = to_nhs_cahokia_monument_ally_tt
 		}
 	}
 }

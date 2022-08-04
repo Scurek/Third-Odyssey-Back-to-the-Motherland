@@ -3990,8 +3990,9 @@ to_elysian_highways_project = {
 	type = canal
 
 	build_trigger = {
-		hidden_trigger = {
-			has_province_flag = to_elysian_highways_project_province
+		has_province_flag = to_elysian_highways_project_province
+		FROM = {
+			nhs_eligible_for_elysian_monument = yes
 		}
 	}
 
@@ -4002,9 +4003,15 @@ to_elysian_highways_project = {
 	}
 
 	can_use_modifiers_trigger = {
+		FROM = {
+			nhs_eligible_for_elysian_monument = yes
+		}
 	}
 
 	can_upgrade_trigger = {
+		FROM = {
+			nhs_eligible_for_elysian_monument = yes
+		}
 	}
 
 	keep_trigger = {
@@ -4040,9 +4047,9 @@ to_elysian_highways_project = {
 		area_modifier = {
 		}
 		country_modifiers = {
-			monthly_splendor = 2
 		}
 		on_upgraded = {
+			
 		}
 	}
 
@@ -4058,8 +4065,27 @@ to_elysian_highways_project = {
 		area_modifier = {
 		}
 		country_modifiers = {
+			monthly_splendor = 1
 		}
 		on_upgraded = {
+			hidden_effect = {
+				set_global_flag = to_elysian_highways_project_tier_2
+				every_province = {
+					limit = {
+						NOT = { has_province_modifier = nhs_elysian_highways }
+						NOT = { has_province_modifier = nhs_elysian_highways_inactive }
+						OR = {
+							to_elysian_highway_east_province_trigger = { TRIGGER = province_id }
+							to_elysian_highway_south_province_trigger = { TRIGGER = province_id }
+						}
+					}
+					add_permanent_province_modifier = {
+						name = nhs_elysian_highways_inactive
+						duration = -1
+					}
+				}
+			}
+			to_subject_monument_mod_transfer = yes
 		}
 	}
 
@@ -4075,9 +4101,11 @@ to_elysian_highways_project = {
 		area_modifier = {
 		}
 		country_modifiers = {
-			monthly_splendor = 3
+			burghers_loyalty_modifier = 0.05
+			monthly_splendor = 2
 		}
 		on_upgraded = {
+			to_subject_monument_mod_transfer = yes
 		}
 	}
 }
