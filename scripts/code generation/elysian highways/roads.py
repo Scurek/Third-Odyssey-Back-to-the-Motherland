@@ -5,7 +5,7 @@ roads = [
         "has_add_modifiers": True,
         "has_ownership_check": True,
         "provinces": [
-            # {"id": 2551},
+            {"id": 2551},
             # {"id": 2555},
             {"id": 948},
             {"id": 2525},
