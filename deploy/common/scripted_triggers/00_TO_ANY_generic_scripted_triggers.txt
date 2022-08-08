@@ -24,111 +24,6 @@ nhs_exiles_tech = {
 
 # -- ELYSIAN --
 
-# Check if CONDITION matches any Elysian nation
-# Use: nhs_check_all_elysian = { CONDITION = tag }
-# TODO: This is duplicate of `nhs_is_elysia_not_seen`
-nhs_check_all_elysian = {
-	OR = {
-		$CONDITION$ = ELY  # Elysian Empire
-		$CONDITION$ = NHS  # Elysia
-		$CONDITION$ = ELR  # Elysian Noble Republic
-		$CONDITION$ = ERR  # Revolutionary Elysia
-		$CONDITION$ = ERF  # First Elysian Republic
-	}
-}
-
-# Check if CONDITION matches any Elysian nation, including Creta Minor and culture primaries
-# Use: nhs_check_all_elysian_expanded = { CONDITION = tag }
-nhs_check_all_elysian_expanded = {
-	OR = {
-		nhs_check_all_elysian = { CONDITION = $CONDITION$ }
-		$CONDITION$ = CM1  # Creta Minor
-		# $CONDITION$ = ELF  # Elysian settlers
-		$CONDITION$ = ELA  # Elysian Federation
-		$CONDITION$ = KYK  # Kykladia
-		$CONDITION$ = SKY  # Scythia
-		$CONDITION$ = BOR  # Borealia
-		$CONDITION$ = HBR  # Hyperborealia
-		$CONDITION$ = HSP  # Hesperidia
-		$CONDITION$ = LA1  # Lakonia
-		$CONDITION$ = VAE  # Varangia
-		$CONDITION$ = HBN  # Hybernica
-		AND = {
-			OR = {
-				nhs_post_fragmentation_culturally_elysian = yes
-				AND = {
-					primary_culture = greek
-					NOT = { has_global_flag = nhs_romaic_culture_change }
-					technology_group = exiled_greek
-				}
-			}
-			OR = {
-				is_colonial_nation = yes
-				is_former_colonial_nation = yes
-			}
-		}
-	}
-}
-
-# Check if TRIGGER = CONDITION matches any Elysian nation, including Creta Minor and culture primaries
-# Use: nhs_check_all_elysian_expanded_existing_with_double_condition = { TRIGGER = culture_group CONDITION = byzantine }
-nhs_check_all_elysian_expanded_existing_with_double_condition = {
-	OR = {
-		AND = {
-			nhs_check_all_elysian = { CONDITION = exists }
-			nhs_condition_all_ely_scoped_with_and = { KOMANDA = $TRIGGER$ KOMANDA2 = $CONDITION$ }
-		}
-		AND = {
-			exists = CM1
-			CM1 = {
-				$TRIGGER$ = $CONDITION$
-			}
-		}
-		AND = {
-			exists = ELA
-			ELA = {
-				$TRIGGER$ = $CONDITION$
-			}
-		}
-		AND = {
-			exists = SKY
-			SKY = {
-				$TRIGGER$ = $CONDITION$
-			}
-		}
-		AND = {
-			exists = BOR
-			BOR = {
-				$TRIGGER$ = $CONDITION$
-			}
-		}
-		AND = {
-			exists = HBR
-			HBR = {
-				$TRIGGER$ = $CONDITION$
-			}
-		}
-		AND = {
-			exists = HSP
-			HSP = {
-				$TRIGGER$ = $CONDITION$
-			}
-		}
-		AND = {
-			exists = LA1
-			LA1 = {
-				$TRIGGER$ = $CONDITION$
-			}
-		}
-		AND = {
-			exists = VAE
-			VAE = {
-				$TRIGGER$ = $CONDITION$
-			}
-		}
-	}
-}
-
 # Check if the culture is 'functionally Elysian'
 # Use: nhs_culturally_elysian = yes
 nhs_post_fragmentation_culturally_elysian = {
@@ -285,7 +180,7 @@ nhs_culturally_albanian = {
 # Use: nhs_check_all_exiles = { CONDITION = tag }
 nhs_check_all_exiles = {
 	OR = {
-		nhs_check_all_elysian_expanded = { CONDITION = $CONDITION$ }
+		nhs_check_all_elysian_tags_expanded = { CONDITION = $CONDITION$ }
 		nhs_check_all_norse = { CONDITION = $CONDITION$ }
 		nhs_check_all_spartan = { CONDITION = $CONDITION$ }
 		# Include minor exiles

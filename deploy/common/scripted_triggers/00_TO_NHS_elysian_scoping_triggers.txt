@@ -1,101 +1,99 @@
-nhs_is_elysia = {
-	custom_trigger_tooltip = {
-		tooltip = nhs_is_elysia_tt
-		OR = {
-			tag = NHS
-			tag = ELY
-			tag = ERF
-			tag = ELR
-			tag = ERR
+
+# Check if CONDITION matches any Elysian nation
+# Use: nhs_check_all_elysian_tags = { CONDITION = tag }
+nhs_check_all_elysian_tags = {
+	OR = {
+		$CONDITION$ = ELY  # Elysian Empire
+		$CONDITION$ = NHS  # Elysia
+		$CONDITION$ = ELR  # Elysian Noble Republic
+		$CONDITION$ = ERR  # Revolutionary Elysia
+		$CONDITION$ = ERF  # First Elysian Republic
+	}
+}
+
+# Check if CONDITION matches any Elysian nation, including Creta Minor and culture primaries
+# Use: nhs_check_all_elysian_tags_expanded = { CONDITION = tag }
+nhs_check_all_elysian_tags_expanded = {
+	OR = {
+		nhs_check_all_elysian_tags = { CONDITION = $CONDITION$ }
+		$CONDITION$ = CM1  # Creta Minor
+		# $CONDITION$ = ELF  # Elysian settlers
+		$CONDITION$ = ELA  # Elysian Federation
+		$CONDITION$ = KYK  # Kykladia
+		$CONDITION$ = SKY  # Scythia
+		$CONDITION$ = BOR  # Borealia
+		$CONDITION$ = HBR  # Hyperborealia
+		$CONDITION$ = HSP  # Hesperidia
+		$CONDITION$ = LA1  # Lakonia
+		$CONDITION$ = VAE  # Varangia
+		$CONDITION$ = HBN  # Hybernica
+		AND = {
+			OR = {
+				nhs_post_fragmentation_culturally_elysian = yes
+				AND = {
+					primary_culture = greek
+					NOT = { has_global_flag = nhs_romaic_culture_change }
+					technology_group = exiled_greek
+				}
+			}
+			OR = {
+				is_colonial_nation = yes
+				is_former_colonial_nation = yes
+			}
 		}
 	}
 }
 
-#		if = {
-#			limit = {
-#				exists = NHS
-#			}
-#			OR = {
-#				tag = NHS
-#				tag = ELY
-#				tag = ERF
-#				tag = ELR
-#			}
-#		}
-#		else = {
-#			OR = {
-#				tag = ERR
-#				tag = ELY
-#				tag = ERF
-#				tag = ELR
-#			}
-#		}
-
-# TODO: This is duplicate of `nhs_check_all_elysian`
-nhs_is_elysia_not_seen = {
-	OR = {
-		tag = NHS
-		tag = ELY
-		tag = ERF
-		tag = ELR
-		tag = ERR
-	}
-}
-
-nhs_condition_all_ely = {
-	OR = {
-		$KOMANDA$ = ELY
-		$KOMANDA$ = NHS
-		$KOMANDA$ = ELR
-		$KOMANDA$ = ERR
-		$KOMANDA$ = ERF
-	}
-}
-
-nhs_condition_all_ely_with_if = {
+nhs_check_all_elysian_tags_with_if = {
 	if = {
 		limit = {
 			exists = ELY
 		}
-		$KOMANDA$ = ELY
+		$CONDITION$ = ELY
 	}
 	else_if = {
 		limit = {
 			exists = NHS
 		}
-		$KOMANDA$ = NHS
+		$CONDITION$ = NHS
 	}
 	else_if = {
 		limit = {
 			exists = ELR
 		}
-		$KOMANDA$ = ELR
+		$CONDITION$ = ELR
 	}
 	else_if = {
 		limit = {
 			exists = ERR
 		}
-		$KOMANDA$ = ERR
+		$CONDITION$ = ERR
 	}
 	else_if = {
 		limit = {
 			exists = ERF
 		}
-		$KOMANDA$ = ERF
+		$CONDITION$ = ERF
+	}
+	else_if = {
+		limit = {
+			has_global_flag = nhs_romaic_to_elysian
+		}
+		$CONDITION$ = ELY
 	}
 	else = {
-		$KOMANDA$ = ELY
+		$CONDITION$ = NHS
 	}
 }
 
-nhs_condition_all_ely_with_if_army_size = {
+nhs_check_all_elysian_tags_army_size = {
 	if = {
 		limit = {
 			exists = ELY
 		}
 		army_strength = {
 			who = ELY
-			value = 0.75
+			value = $VALUE$
 		}
 	}
 	else_if = {
@@ -104,7 +102,7 @@ nhs_condition_all_ely_with_if_army_size = {
 		}
 		army_strength = {
 			who = NHS
-			value = 0.75
+			value = $VALUE$
 		}
 	}
 	else_if = {
@@ -113,7 +111,7 @@ nhs_condition_all_ely_with_if_army_size = {
 		}
 		army_strength = {
 			who = ELR
-			value = 0.75
+			value = $VALUE$
 		}
 	}
 	else_if = {
@@ -122,7 +120,7 @@ nhs_condition_all_ely_with_if_army_size = {
 		}
 		army_strength = {
 			who = ERR
-			value = 0.75
+			value = $VALUE$
 		}
 	}
 	else_if = {
@@ -131,53 +129,62 @@ nhs_condition_all_ely_with_if_army_size = {
 		}
 		army_strength = {
 			who = ERF
-			value = 0.75
+			value = $VALUE$
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = nhs_romaic_to_elysian
+		}
+		army_strength = {
+			who = ELY
+			value = $VALUE$
 		}
 	}
 	else = {
 		army_strength = {
-			who = ELY
-			value = 0.75
+			who = NHS
+			value = $VALUE$
 		}
 	}
 }
 
-nhs_condition_all_ely_scoped_with_and = {
+nhs_check_all_elysian_tags_existing_with_double_condition = {
 	OR = {
 		AND = {
 			exists = ELY
 			ELY = {
-				$KOMANDA$ = $KOMANDA2$
+				$CONDITION_LEFT$ = $CONDITION_RIGHT$
 			}
 		}
 		AND = {
 			exists = NHS
 			NHS = {
-				$KOMANDA$ = $KOMANDA2$
+				$CONDITION_LEFT$ = $CONDITION_RIGHT$
 			}
 		}
 		AND = {
 			exists = ELR
 			ELR = {
-				$KOMANDA$ = $KOMANDA2$
+				$CONDITION_LEFT$ = $CONDITION_RIGHT$
 			}
 		}
 		AND = {
 			exists = ERR
 			ERR = {
-				$KOMANDA$ = $KOMANDA2$
+				$CONDITION_LEFT$ = $CONDITION_RIGHT$
 			}
 		}
 		AND = {
 			exists = ERF
 			ERF = {
-				$KOMANDA$ = $KOMANDA2$
+				$CONDITION_LEFT$ = $CONDITION_RIGHT$
 			}
 		}
 	}
 }
 
-nhs_elysia_or_subject = {
+nhs_is_elysian_tag_or_subject = {
 	OR = {
 		AND = {
 			exists = NHS
@@ -247,50 +254,14 @@ nhs_elysia_or_subject = {
 	}
 }
 
-nhs_is_subject_of_ely = {
-	is_subject = yes
-	OR = {
-		is_subject_of = ELY
-		is_subject_of = NHS	
-		is_subject_of = ELR
-		is_subject_of = ERR
-		is_subject_of = ERF
-	}
-}
-
-nhs_knows_country_ely = {
-	OR = {
-		AND = {
-			knows_country = ELY
-			exists = ELY
-		}
-		AND = {
-			knows_country = NHS
-			exists = NHS
-		}
-		AND = {
-			knows_country = ELR
-			exists = ELR
-		}
-		AND = {
-			knows_country = ERR
-			exists = ERR
-		}
-		AND = {
-			knows_country = ERF
-			exists = ERF
-		}
-	}
-}
-
-nhs_has_spy_network_ely = {
+nhs_has_spy_network_in_elysian_tag = {
 	if = {
 		limit = {
 			exists = ELY
 		}
 		has_spy_network_in = {
 			who = ELY
-			value = $VELIKOST$
+			value = $VALUE$
 		}
 	}
 	else_if = {
@@ -299,7 +270,7 @@ nhs_has_spy_network_ely = {
 		}
 		has_spy_network_in = {
 			who = NHS
-			value = $VELIKOST$
+			value = $VALUE$
 		}
 	}
 	else_if = {
@@ -308,7 +279,7 @@ nhs_has_spy_network_ely = {
 		}
 		has_spy_network_in = {
 			who = ELR
-			value = $VELIKOST$
+			value = $VALUE$
 		}
 	}
 	else_if = {
@@ -317,7 +288,7 @@ nhs_has_spy_network_ely = {
 		}
 		has_spy_network_in = {
 			who = ERR
-			value = $VELIKOST$
+			value = $VALUE$
 		}
 	}
 	else_if = {
@@ -326,7 +297,22 @@ nhs_has_spy_network_ely = {
 		}
 		has_spy_network_in = {
 			who = ERF
-			value = $VELIKOST$
+			value = $VALUE$
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = nhs_romaic_to_elysian
+		}
+		has_spy_network_in = {
+			who = ELY
+			value = $VALUE$
+		}
+	}
+	else = {
+		has_spy_network_in = {
+			who = NHS
+			value = $VALUE$
 		}
 	}
 }
@@ -383,86 +369,6 @@ nhs_msg_claim_elysian_throne_trigger_ely = {
 			}
 			NOT = { exists = ELY }
 			NOT = { exists = NHS }
-		}
-	}
-}
-
-nhs_guaranteed_by_ely = {
-	OR = {
-		guaranteed_by = ELY
-		guaranteed_by = NHS	
-		guaranteed_by = ELR
-		guaranteed_by = ERR
-		guaranteed_by = ERF
-	}
-}
-
-elysia_is_hellenic = {
-	OR = {
-		AND = {
-			exists = NHS
-			NHS = {
-				religion = pantheon_worship
-			}
-		}
-		AND = {
-			exists = ELY
-			ELY = {
-				religion = pantheon_worship
-			}
-		}
-		AND = {
-			exists = ELR
-			ELR = {
-				religion = pantheon_worship
-			}
-		}
-		AND = {
-			exists = ERR
-			ERR = {
-				religion = pantheon_worship
-			}
-		}
-		AND = {
-			exists = ERF
-			ERF = {
-				religion = pantheon_worship
-			}
-		}
-	}
-}
-
-elysia_is_orthodox = {
-	OR = {
-		AND = {
-			exists = NHS
-			NHS = {
-				religion = orthodox
-			}
-		}
-		AND = {
-			exists = ELY
-			ELY = {
-				religion = orthodox
-			}
-		}
-		AND = {
-			exists = ELR
-			ELR = {
-				religion = orthodox
-			}
-		}
-		AND = {
-			exists = ERR
-			ERR = {
-				religion = orthodox
-			}
-		}
-		AND = {
-			exists = ERF
-			ERF = {
-				religion = orthodox
-			}
 		}
 	}
 }
@@ -626,77 +532,89 @@ trading_with_vinland = {
 	}
 }
 
-# usage example: nhs_ely_has_opinion_X = { MNENJE = -50 }
-nhs_ely_has_opinion_X = {
+# usage example: nhs_check_all_elysian_tags_has_opinion_X = { VALUE = -50 }
+nhs_check_all_elysian_tags_has_opinion_X = {
 	if = {
 		limit = {
 			exists = ELY
 		}
-		has_opinion = { who = ELY value = $MNENJE$ }
+		has_opinion = { who = ELY value = $VALUE$ }
 	}
 	else_if = {
 		limit = {
 			exists = NHS
 		}
-		has_opinion = { who = NHS value = $MNENJE$ }
+		has_opinion = { who = NHS value = $VALUE$ }
 	}
 	else_if = {
 		limit = {
 			exists = ELR
 		}
-		has_opinion = { who = ELR value = $MNENJE$ }
+		has_opinion = { who = ELR value = $VALUE$ }
 	}
 	else_if = {
 		limit = {
 			exists = ERR
 		}
-		has_opinion = { who = ERR value = $MNENJE$ }
+		has_opinion = { who = ERR value = $VALUE$ }
 	}
 	else_if = {
 		limit = {
 			exists = ERF
 		}
-		has_opinion = { who = ERF value = $MNENJE$ }
+		has_opinion = { who = ERF value = $VALUE$ }
+	}
+	else_if = {
+		limit = {
+			has_global_flag = nhs_romaic_to_elysian
+		}
+		has_opinion = { who = ELY value = $VALUE$ }
 	}
 	else = {
-		has_opinion = { who = ELY value = $MNENJE$ }
+		has_opinion = { who = NHS value = $VALUE$ }
 	}
 }
 
-# usage example: nhs_ely_has_opinion_of_TAG = { MNENJE = -50 }
-nhs_ely_has_opinion_of_TAG = {
+# usage example: nhs_check_all_elysian_tags_has_opinion_of_TAG = { TAG = VIN VALUE = -50 }
+nhs_check_all_elysian_tags_has_opinion_of_TAG = {
 	if = {
 		limit = {
 			exists = ELY
 		}
-		ELY = { has_opinion = { who = $TAG$ value = $MNENJE$ } }
+		ELY = { has_opinion = { who = $TAG$ value = $VALUE$ } }
 	}
 	else_if = {
 		limit = {
 			exists = NHS
 		}
-		NHS = { has_opinion = { who = $TAG$ value = $MNENJE$ } }
+		NHS = { has_opinion = { who = $TAG$ value = $VALUE$ } }
 	}
 	else_if = {
 		limit = {
 			exists = ELR
 		}
-		ELR = { has_opinion = { who = $TAG$ value = $MNENJE$ } }
+		ELR = { has_opinion = { who = $TAG$ value = $VALUE$ } }
 	}
 	else_if = {
 		limit = {
 			exists = ERR
 		}
-		ERR = { has_opinion = { who = $TAG$ value = $MNENJE$ } }
+		ERR = { has_opinion = { who = $TAG$ value = $VALUE$ } }
 	}
 	else_if = {
 		limit = {
 			exists = ERF
 		}
-		ERF = { has_opinion = { who = $TAG$ value = $MNENJE$ } }
+		ERF = { has_opinion = { who = $TAG$ value = $VALUE$ } }
+	}
+	else_if = {
+		limit = {
+			has_global_flag = nhs_romaic_to_elysian
+		}
+		ELY = { has_opinion = { who = $TAG$ value = $VALUE$ } }
 	}
 	else = {
-		NHS = { has_opinion = { who = $TAG$ value = $MNENJE$ } }
+		NHS = { has_opinion = { who = $TAG$ value = $VALUE$ } }
 	}
 }
 
@@ -748,6 +666,23 @@ nhs_ely_seek_to_establish_trade_deal_vikings_allow = {
 		alliance_with = ERF
 		OR = {
 			ERF = { has_opinion = { who = ROOT value = 100 } }
+			dip = 4
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = nhs_romaic_to_elysian
+		}
+		alliance_with = ELY
+		OR = {
+			ELY = { has_opinion = { who = ROOT value = 100 } }
+			dip = 4
+		}
+	}
+	else = {
+		alliance_with = NHS
+		OR = {
+			NHS = { has_opinion = { who = ROOT value = 100 } }
 			dip = 4
 		}
 	}
@@ -815,6 +750,29 @@ nhs_ely_vin_break_trade_deal_vikings_allow = {
 		OR = {
 			NOT = {
 				ERF = { has_opinion = { who = ROOT value = 50 } }
+			}
+			dip = 4
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = nhs_romaic_to_elysian
+		}
+		NOT = { is_subject_of = ELY }
+		NOT = { alliance_with = ELY }
+		OR = {
+			NOT = {
+				ELY = { has_opinion = { who = ROOT value = 50 } }
+			}
+			dip = 4
+		}
+	}
+	else = {
+		NOT = { is_subject_of = NHS }
+		NOT = { alliance_with = NHS }
+		OR = {
+			NOT = {
+				NHS = { has_opinion = { who = ROOT value = 50 } }
 			}
 			dip = 4
 		}
