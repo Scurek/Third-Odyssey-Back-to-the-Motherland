@@ -63,6 +63,15 @@ country_event = {
 		custom_tooltip = nhs_reformed_heracles_tooltip
 		custom_tooltip = nhs_hephasteus_tooltip
 		custom_tooltip = nhs_reformed_hephasteus_tooltip
+
+		if = {
+			limit = {
+				to_has_hellenic_personal_deity = yes
+			}
+			custom_tooltip = nhs_new_line_tt
+			set_country_flag = to_allow_deity_reselection
+			country_event = { id = to_hellenic_events.31 }
+		}
 	}
 
 	option = { #Worship Poseidon
@@ -89,6 +98,15 @@ country_event = {
 		custom_tooltip = nhs_reformed_orion_tooltip
 		custom_tooltip = nhs_triton_tooltip
 		custom_tooltip = nhs_reformed_triton_tooltip
+
+		if = {
+			limit = {
+				to_has_hellenic_personal_deity = yes
+			}
+			custom_tooltip = nhs_new_line_tt
+			set_country_flag = to_allow_deity_reselection
+			country_event = { id = to_hellenic_events.31 }
+		}
 	}
 
 	option = { #Worship Apollo
@@ -115,6 +133,15 @@ country_event = {
 		custom_tooltip = nhs_reformed_chiron_tooltip
 		custom_tooltip = nhs_perseus_tooltip
 		custom_tooltip = nhs_reformed_perseus_tooltip
+
+		if = {
+			limit = {
+				to_has_hellenic_personal_deity = yes
+			}
+			custom_tooltip = nhs_new_line_tt
+			set_country_flag = to_allow_deity_reselection
+			country_event = { id = to_hellenic_events.31 }
+		}
 	}
 
 	option = { #Keep to our traditions
@@ -1343,43 +1370,45 @@ country_event = {
 country_event = { #Pick a new deity
 	id =  to_hellenic_events.31
 	title = nhs_hcd_hellenicflavor31.t
-	desc = nhs_hcd_hellenicflavor31.d
+	desc = {
+		desc = nhs_hcd_hellenicflavor31.da
+		trigger = {
+			NOT = { has_country_flag = to_allow_deity_reselection }
+		}
+	}
+	desc = {
+		desc = nhs_hcd_hellenicflavor31.db
+		trigger = {
+			has_country_flag = to_allow_deity_reselection
+			has_country_modifier = nhs_hcf_zeus_worship
+		}
+	}
+	desc = {
+		desc = nhs_hcd_hellenicflavor31.dc
+		trigger = {
+			has_country_flag = to_allow_deity_reselection
+			has_country_modifier = nhs_hcf_poseidon_worship
+		}
+	}
+	desc = {
+		desc = nhs_hcd_hellenicflavor31.dd
+		trigger = {
+			has_country_flag = to_allow_deity_reselection
+			has_country_modifier = nhs_hcf_apollo_worship
+		}
+	}
 	picture = OLYMPIANS_eventPicture
 
 	trigger = {
 		religion = pantheon_worship
 		has_regency = no
-		NOT = { has_dlc = "Wealth of Nations" }
-		NOT = { has_personal_deity = nhs_hellenic_zeus }
-		NOT = { has_personal_deity = nhs_hellenic_hera }
-		NOT = { has_personal_deity = nhs_hellenic_poseidon }
-		NOT = { has_personal_deity = nhs_hellenic_athena }
-		NOT = { has_personal_deity = nhs_hellenic_ares }
-		NOT = { has_personal_deity = nhs_hellenic_hermes }
-		NOT = { has_personal_deity = nhs_hellenic_aphrodite} 
-		NOT = { has_personal_deity = nhs_hellenic_reformed_poseidon }
-		NOT = { has_personal_deity = nhs_hellenic_reformed_amphitrite }
-		NOT = { has_personal_deity = nhs_hellenic_reformed_oceanus }
-		NOT = { has_personal_deity = nhs_hellenic_reformed_atlas }
-		NOT = { has_personal_deity = nhs_hellenic_reformed_aphrodite }
-		NOT = { has_personal_deity = nhs_hellenic_reformed_orion }
-		NOT = { has_personal_deity = nhs_hellenic_reformed_triton }
-		NOT = { has_personal_deity = nhs_hellenic_reformed_zeus }
-		NOT = { has_personal_deity = nhs_hellenic_reformed_hera }
-		NOT = { has_personal_deity = nhs_hellenic_reformed_demeter }
-		NOT = { has_personal_deity = nhs_hellenic_reformed_hermes }
-		NOT = { has_personal_deity = nhs_hellenic_reformed_athena } 
-		NOT = { has_personal_deity = nhs_hellenic_reformed_heracles } 
-		NOT = { has_personal_deity = nhs_hellenic_reformed_hephasteus } 
-		NOT = { has_personal_deity = nhs_hellenic_reformed_apollo } 
-		NOT = { has_personal_deity = nhs_hellenic_reformed_artemis } 
-		NOT = { has_personal_deity = nhs_hellenic_reformed_dionysus  } 
-		NOT = { has_personal_deity = nhs_hellenic_reformed_leto } 
-		NOT = { has_personal_deity = nhs_hellenic_reformed_orpheus } 
-		NOT = { has_personal_deity = nhs_hellenic_reformed_chiron } 
-		NOT = { has_personal_deity = nhs_hellenic_reformed_perseus } 
-		NOT = { has_personal_deity = Leonidas_2 } 
-		NOT = { has_personal_deity = Ketsalon_2 } 
+		OR = {
+			has_country_flag = to_allow_deity_reselection
+			AND = {
+				NOT = { has_dlc = "Wealth of Nations" }
+				NOT = { to_has_hellenic_personal_deity = yes }
+			}
+		}
 	}
 
 	immediate = {
@@ -1388,6 +1417,7 @@ country_event = { #Pick a new deity
 
 	after = {
 		clr_country_flag = to_choosing_deity
+		clr_country_flag = to_allow_deity_reselection
 	}
 
 	option = { #Zeus (unreformed)
