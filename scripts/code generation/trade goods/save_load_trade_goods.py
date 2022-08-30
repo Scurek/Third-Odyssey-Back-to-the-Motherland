@@ -1,50 +1,12 @@
 from jinja2 import Template, Environment
+from trade_goods import trade_goods
 
 output_save = "output_save.txt"
 output_load = "output_load.txt"
 
-trade_goods = [
-    "grain",
-    "wine",
-    "wool",
-    "cloth",
-    "fish",
-    "fur",
-    "salt",
-    "naval_supplies",
-    "copper",
-    "gold",
-    "iron",
-    "slaves",
-    "ivory",
-    "tea",
-    "chinaware",
-    "spices",
-    "coffee",
-    "cotton",
-    "sugar",
-    "tobacco",
-    "cocoa",
-    "silk",
-    "elysian_silk",
-    "skoros_silk",
-    "tropical_wood",
-    "dyes",
-    "norse_mead",
-    "livestock",
-    "incense",
-    "glass",
-    "gems",
-    "paper",
-    "coal",
-    "cloves",
-    "unknown",
-    "coal_2",
-    "nothing"
-]
 
 clr_flags = Template('''{%- for trade_good in trade_goods %}
-    clr_province_flag = nhs_had_{{ trade_good }}_tg
+    clr_province_flag = nhs_had_{{ trade_good["name"] }}_tg
 {%- endfor %}
 ''')
 
@@ -53,7 +15,7 @@ save = Template('''{%- for trade_good in trade_goods %}
     if = {
 {%- else %}
     else_if = {
-{%- endif %} limit = { trade_goods = {{ trade_good }} } set_province_flag = nhs_had_{{ trade_good }}_tg }
+{%- endif %} limit = { trade_goods = {{ trade_good["name"] }} } set_province_flag = nhs_had_{{ trade_good["name"] }}_tg }
 {%- endfor %}
 ''')
 
@@ -62,7 +24,7 @@ load = Template('''{%- for trade_good in trade_goods %}
     if = {
 {%- else %}
     else_if = {
-{%- endif %} limit = { has_province_flag = nhs_had_{{ trade_good }}_tg } change_trade_goods = {{ trade_good }} }
+{%- endif %} limit = { has_province_flag = nhs_had_{{ trade_good["name"] }}_tg } change_trade_goods = {{ trade_good["name"] }} }
 {%- endfor %}
 ''')
 

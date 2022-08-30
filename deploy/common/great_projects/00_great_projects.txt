@@ -24,18 +24,46 @@ kiel_canal = {
 
 	#can we build it?
 	build_trigger = {
+		hidden_trigger = {
+			NOT = {
+				has_great_project = {
+					type = kiel_canal_outward_boost
+					tier = 3
+				}
+			}
+		}
 		FROM = {
 			owns_or_vassal_of = 1775
 			owns_or_vassal_of = 4141
-			is_subject = no			
+			is_subject = no
 			adm_tech = 22
+			hidden_trigger = {
+				NOT = { mission_completed = nhs_outward_focus }
+			}
 		}
 	}
 	
 	#what to do when it's built
 	on_built = {
 		add_canal = kiel_canal
-		owner = { add_prestige = 30 }
+		if = {
+			limit = {
+				owner = {
+					is_subject = yes
+				}
+			}
+			FROM = {
+				overlord = {
+					add_prestige = 30
+				}
+			}
+		}
+		else = {
+			owner = { 
+				add_prestige = 30
+			}
+		}
+		to_nhs_exarch_monument_mod_transfer = yes
 	}
 	
 	#what to do when it's destroyed
@@ -83,6 +111,7 @@ kiel_canal = {
 
 		#what effects happen when this tier is achieved
 		on_upgraded = {
+			to_nhs_exarch_monument_mod_transfer = yes
 		}
 	}
 
@@ -113,6 +142,7 @@ kiel_canal = {
 
 		#what effects happen when this tier is achieved
 		on_upgraded = {
+			to_nhs_exarch_monument_mod_transfer = yes
 		}
 	}
 
@@ -143,6 +173,7 @@ kiel_canal = {
 
 		#what effects happen when this tier is achieved
 		on_upgraded = {
+			to_nhs_exarch_monument_mod_transfer = yes
 		}
 	}
 
@@ -173,6 +204,26 @@ kiel_canal = {
 
 		#what effects happen when this tier is achieved
 		on_upgraded = {
+			tooltip = {
+				if = {
+					limit = {
+						owner = {
+							is_subject = yes
+						}
+					}
+					FROM = {
+						overlord = {
+							add_prestige = 30
+						}
+					}
+				}
+				else = {
+					owner = { 
+						add_prestige = 30
+					}
+				}
+			}
+			to_nhs_exarch_monument_mod_transfer = yes
 		}
 	}
 }
@@ -203,25 +254,21 @@ suez_canal = {
 
 	#can we build it?
 	build_trigger = {
+		hidden_trigger = {
+			NOT = {
+				has_great_project = {
+					type = suez_canal_outward_boost
+					tier = 3
+				}
+			}
+		}
 		FROM = {
 			owns_or_vassal_of = 4316
 			owns_or_vassal_of = 2315
 			is_subject = no
-			if = {
-				limit = {
-					mission_completed = nhs_outward_focus
-				}
-				OR = {
-					adm_tech = 22
-					AND = {
-						mission_completed = nhs_outward_focus
-						adm_tech = 15
-						dip_tech = 15
-					}
-				}
-			}
-			else = {
-				adm_tech = 22
+			adm_tech = 22
+			hidden_trigger = {
+				NOT = { mission_completed = nhs_outward_focus }
 			}
 		}
 	}
@@ -229,7 +276,51 @@ suez_canal = {
 	#what to do when it's built
 	on_built = {
 		add_canal = suez_canal
-		owner = { add_prestige = 40 }
+		if = {
+			limit = {
+				owner = {
+					is_subject = yes
+				}
+			}
+			owner = {
+				add_prestige = 40
+			}
+		}
+		else = {
+			owner = { add_prestige = 40 }
+		}
+		if = {
+			limit = {
+				OR = {
+					owner = {
+						culture_group = byzantine
+					}
+					AND = {
+						owner = {
+							is_subject = yes
+						}
+						overlord = {
+							culture_group = byzantine
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_province_flag = to_red_sea_renamed_to_greek }
+				}
+				1328 = { change_province_name = "Erythraian Gulf" }
+            	1329 = { change_province_name = "Erythraian Sea" }
+				set_province_flag = to_red_sea_renamed_to_greek
+			}
+			else = {
+				tooltip = {
+					1328 = { change_province_name = "Erythraian Gulf" }
+					1329 = { change_province_name = "Erythraian Sea" }
+				}
+			}
+		}
+		to_nhs_exarch_monument_mod_transfer = yes
 	}
 	
 	#what to do when it's destroyed
@@ -277,6 +368,28 @@ suez_canal = {
 
 		#what effects happen when this tier is achieved
 		on_upgraded = {
+			tooltip = {
+				if = {
+					limit = {
+						OR = {
+							owner = {
+								culture_group = byzantine
+							}
+							AND = {
+								owner = {
+									is_subject = yes
+								}
+								overlord = {
+									culture_group = byzantine
+								}
+							}
+						}
+					}
+					1328 = { change_province_name = "Erythraian Gulf" }
+					1329 = { change_province_name = "Erythraian Sea" }
+				}
+			}
+			to_nhs_exarch_monument_mod_transfer = yes
 		}
 	}
 
@@ -307,6 +420,28 @@ suez_canal = {
 
 		#what effects happen when this tier is achieved
 		on_upgraded = {
+			tooltip = {
+				if = {
+					limit = {
+						OR = {
+							owner = {
+								culture_group = byzantine
+							}
+							AND = {
+								owner = {
+									is_subject = yes
+								}
+								overlord = {
+									culture_group = byzantine
+								}
+							}
+						}
+					}
+					1328 = { change_province_name = "Erythraian Gulf" }
+					1329 = { change_province_name = "Erythraian Sea" }
+				}
+			}
+			to_nhs_exarch_monument_mod_transfer = yes
 		}
 	}
 
@@ -337,6 +472,28 @@ suez_canal = {
 
 		#what effects happen when this tier is achieved
 		on_upgraded = {
+			tooltip = {
+				if = {
+					limit = {
+						OR = {
+							owner = {
+								culture_group = byzantine
+							}
+							AND = {
+								owner = {
+									is_subject = yes
+								}
+								overlord = {
+									culture_group = byzantine
+								}
+							}
+						}
+					}
+					1328 = { change_province_name = "Erythraian Gulf" }
+					1329 = { change_province_name = "Erythraian Sea" }
+				}
+			}
+			to_nhs_exarch_monument_mod_transfer = yes
 		}
 	}
 
@@ -367,28 +524,47 @@ suez_canal = {
 
 		#what effects happen when this tier is achieved
 		on_upgraded = {
-			# if = {
-			# 	limit = {
-			# 		owner = {
-			# 			is_subject_of = ROOT
-			# 		}
-			# 	}
-			# 	if = {
-			# 		limit = {
-			# 			nhs_check_all_elysian_tags = { CONDITION = tag }
-			# 		}
-			# 		4316 = {
-			# 			custom_tooltip = nhs_suez_canal_exemption_tt
-			# 		}
-			# 		2315 = {
-			# 			custom_tooltip = nhs_suez_canal_exemption_tt
-			# 		}
-			# 		set_province_flag = nhs_exarch_province_exemption
-			# 	}
-				
-			# 	cede_province = ROOT
-			# 	add_core = ROOT
-			# }
+			tooltip = {
+				if = {
+					limit = {
+						owner = {
+							is_subject = yes
+						}
+					}
+					owner = {
+						overlord = {
+							add_prestige = 40
+						}
+					}
+				}
+				else = {
+					owner = { 
+						add_prestige = 40 
+					}
+				}
+			}
+			tooltip = {
+				if = {
+					limit = {
+						OR = {
+							owner = {
+								culture_group = byzantine
+							}
+							AND = {
+								owner = {
+									is_subject = yes
+								}
+								overlord = {
+									culture_group = byzantine
+								}
+							}
+						}
+					}
+					1328 = { change_province_name = "Erythraian Gulf" }
+					1329 = { change_province_name = "Erythraian Sea" }
+				}
+			}
+			to_nhs_exarch_monument_mod_transfer = yes
 		}
 	}
 }
@@ -419,29 +595,20 @@ panama_canal = {
 
 	#can we build it?
 	build_trigger = {
+		hidden_trigger = {
+			NOT = {
+				has_great_project = {
+					type = panama_canal_outward_boost
+					tier = 3
+				}
+			}
+		}
 		FROM = {
 			owns_or_vassal_of = 835
 			is_subject = no
-			if = {
-				limit = {
-					mission_completed = nhs_outward_focus
-				}
-				OR = {
-					adm_tech = 22
-					AND = {
-						custom_trigger_tooltip = {
-							tooltip = nhs_completed_panama_canal_missions_tt
-							mission_completed = nhs_canal_mission
-							mission_completed = nhs_at_every_continent
-						}
-						adm_tech = 18
-						dip_tech = 18
-						mil_tech = 18
-					}
-				}
-			}
-			else = {
-				adm_tech = 22
+			adm_tech = 22
+			hidden_trigger = {
+				NOT = { mission_completed = nhs_outward_focus }
 			}
 		}
 	}
@@ -449,7 +616,23 @@ panama_canal = {
 	#what to do when it's built
 	on_built = {
 		add_canal = panama_canal
-		owner = { add_prestige = 50 }
+		if = {
+			limit = {
+				owner = {
+					is_subject = yes
+				}
+			}
+			owner = {
+				overlord = {
+					add_prestige = 50
+				}
+			}
+		}
+		else = {
+			owner = { 
+				add_prestige = 50
+			}
+		}
 	}
 	
 	#what to do when it's destroyed
@@ -587,6 +770,25 @@ panama_canal = {
 
 		#what effects happen when this tier is achieved
 		on_upgraded = {
+			tooltip = {
+				if = {
+					limit = {
+						owner = {
+							is_subject = yes
+						}
+					}
+					owner = {
+						overlord = {
+							add_prestige = 50
+						}
+					}
+				}
+				else = {
+					owner = { 
+						add_prestige = 50
+					}
+				}
+			}
 		}
 	}
 }
