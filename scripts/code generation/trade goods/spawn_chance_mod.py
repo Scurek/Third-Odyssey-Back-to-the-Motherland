@@ -97,7 +97,7 @@ for group in groups:
 
 main_event_loc = Template(" {{ main_event_tag }}.t:0 \"Trade Goods Management\""
                           "\n"
-                          " {{ main_event_tag }}.d:0 \""
+                          " {{ main_event_tag }}.d:0 \"£background_square£\\n"
                           "{%- for group in groups %}"
                           "{% if loop.index is not divisibleby 2 %}"
                           "£{{ group['name'] }}_banner£"
@@ -240,6 +240,7 @@ country_event = {
 	{%- endfor %}
 	option = {
 		name = {{ main_event_tag }}.g
+		clr_country_flag = to_trade_good_manager_open
 	}
 }
 {%- for group in groups %}
@@ -307,11 +308,11 @@ template_interface_circles = Template('''{%- for trade_good in trade_goods %}
 {%- if 'no_circle_icon' is not in trade_good %}
     spriteType = {
         name = "GFX_circle_{{ trade_good["name"] }}"
-        texturefile = "gfx//interface//trade_good_spawn_modification_ui//circle_{{ trade_good["name"] }}.dds"
+        texturefile = "gfx//interface//trade_good_spawn_chance//circle_{{ trade_good["name"] }}.dds"
     }
     spriteType = {
         name = "GFX_circle_{{ trade_good["name"] }}_selected"
-        texturefile = "gfx//interface//trade_good_spawn_modification_ui//circle_{{ trade_good["name"] }}_selected.dds"
+        texturefile = "gfx//interface//trade_good_spawn_chance//circle_{{ trade_good["name"] }}_selected.dds"
     }
 {%- endif %}
 {%- endfor %}
