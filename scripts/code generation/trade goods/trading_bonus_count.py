@@ -1,35 +1,138 @@
+import math
+import os
 from jinja2 import Template
 from trade_goods import trade_goods
+import string
 
-output = "trading_bonus_count.txt"
+output = "o_trading_bonus_count.txt"
+output_loc = "o_trading_bonus_count_loc.txt"
+output_cl = "o_trading_bonus_count_cl.txt"
 
-AMOUNT = 20
+AMOUNT = 15
+MIN_DIST = 3
+MARGIN_LEFT = 3
 
-template = Template('''if = {
-    limit = {
-        has_dlc = "Rule Britannia"
-    }
-    calc_true_if = {
+trade_goods_sorted = []
+for trade_good in trade_goods:
+    if "no_bonus" in trade_good or trade_good['name'] == 'coal_2':
+        continue
+    if "loc" not in trade_goods:
+        trade_good["loc"] = trade_good['name'].replace("_", " ")
+        trade_good["loc"] = string.capwords(trade_good["loc"])
+        trade_goods_sorted.append(trade_good)
+    if "count_offset" in trade_good:
+        offset = trade_good['count_offset']
+        trade_good['margin_left'] = ""
+        while offset > 0:
+            if offset >= 4:
+                offset -= 4
+                trade_good['margin_left'] += " "
+            else:
+                offset -= 1
+                trade_good['margin_left'] += "£1px£"
+
+
+trade_goods_sorted.sort(key=lambda x: x['loc'])
+
+trade_goods_first_column = trade_goods_sorted[0:int(math.ceil(len(trade_goods_sorted) / 2))]
+trade_goods_second_column = trade_goods_sorted[int(math.ceil(len(trade_goods_sorted) / 2)):]
+
+max_length = 0
+for trade_good in trade_goods_first_column:
+    if len(trade_good['loc']) > max_length:
+        max_length = len(trade_good['loc'])
+
+for trade_good in trade_goods_first_column:
+    trade_good['margin_right'] = max_length - len(trade_good['loc']) + MIN_DIST
+
+template = Template('''    calc_true_if = {
         amount = {{ AMOUNT }}
-        {% for trade_good in trade_goods %}
-        {% if "no_bonus" not in trade_good and trade_good["name"] != "coal_2" -%}
+        
+        custom_trigger_tooltip = {
+            tooltip = to_trading_bonuses_display_tt
+            {% for trade_good in trade_goods %}
+            {%- if trade_good['name'] != 'coal' %}
             trading_bonus = { trade_goods = {{ trade_good["name"] }} value = yes }
-        {%- endif %}
-        {%- endfor %}
-    }
+            {%- endif %}
+            {%- endfor %}
+            OR = {
+                trading_bonus = { trade_goods = coal value = yes }
+                trading_bonus = { trade_goods = coal_2 value = yes }
+            }
+        }
+    }''')
+
+template_loc = Template("to_trading_bonuses_display_tt:0 \""
+                        "§YTrading Bonuses§! among the following goods:\\n"
+                        "{% for i in range(trade_goods_first_column | length) %}"
+                        "{% for _ in range(MARGIN_LEFT) %}"
+                        " "
+                        "{% endfor %}"
+                        "[Root.GetTradingIn_{{ trade_goods_first_column[i]['name'] }}]"
+                        "{{ trade_goods_first_column[i]['loc'] }}"
+                        "{% if i < (trade_goods_second_column | length) %}"
+                        "{% for _ in range(trade_goods_first_column[i]['margin_right']) %}"
+                        " "
+                        "{% endfor %}"
+                        "{% if 'margin_left' is in trade_goods_second_column[i] %}"
+                        "{{ trade_goods_second_column[i]['margin_left'] }}"
+                        "{% endif %}"
+                        "[Root.GetTradingIn_{{ trade_goods_second_column[i]['name'] }}]"
+                        "{{ trade_goods_second_column[i]['loc'] }}"
+                        "{% if not loop.last %}"
+                        "\\n"
+                        "{% endif %}"
+                        "{% endif %}"
+                        "{% endfor %}"
+                        "\""
+                        )
+
+template_cl = Template('''{%- for trade_good in trade_goods %}
+{%- if trade_good['name'] != 'coal' %}
+defined_text = {
+	name = GetTradingIn_{{ trade_good['name'] }}
+	random = no
+	text = {
+		localisation_key = to_nat_y_icon_tt
+		trigger = {
+			trading_bonus = { trade_goods = {{ trade_good["name"] }} value = yes }
+		}
+	}
+	text = {
+		localisation_key = to_nat_x_icon_tt
+	}
 }
-else = {
-    calc_true_if = {
-        amount = {{ AMOUNT }}
-        {% for trade_good in trade_goods %}
-        {% if "no_bonus" not in trade_good and trade_good["name"] != "coal" -%}
-            trading_bonus = { trade_goods = {{ trade_good["name"] }} value = yes }
-        {%- endif -%}
-        {%- endfor %}
-    }
-}
-''')
+{%- endif %}
+{%- endfor %}
+defined_text = {
+	name = GetTradingIn_coal
+	random = no
+	text = {
+		localisation_key = to_nat_y_icon_tt
+		trigger = {
+		    OR = {
+		        trading_bonus = { trade_goods = coal value = yes }
+		        trading_bonus = { trade_goods = coal_2 value = yes }
+		    }
+		}
+	}
+	text = {
+		localisation_key = to_nat_x_icon_tt
+	}
+}'''
+                       )
 
 f = open(output, "w")
-f.write(template.render(trade_goods=trade_goods, AMOUNT=AMOUNT))
+f.write(template.render(trade_goods=trade_goods_sorted, AMOUNT=AMOUNT))
+f.close()
+
+f = open(output_loc, "w", encoding="utf-8")
+f.write(template_loc.render(trade_goods_first_column=trade_goods_first_column,
+                            trade_goods_second_column=trade_goods_second_column,
+                            MARGIN_LEFT=MARGIN_LEFT))
+f.close()
+
+f = open(output_cl, "w", encoding="utf-8")
+f.write(f"# Code generated by {os.path.basename(__file__)}")
+f.write(template_cl.render(trade_goods=trade_goods_sorted))
 f.close()
