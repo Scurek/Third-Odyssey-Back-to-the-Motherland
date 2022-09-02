@@ -3486,8 +3486,8 @@ nhs_centre_end = {
 					OR = {
 						mission_completed = nhs_the_city_of_cities
 						mission_completed = nhs_expanding_north
-						mission_completed = nhs_canal_mission
-						mission_completed = nhs_at_every_continent
+						mission_completed = nhs_across_eirenic
+						mission_completed = nhs_around_africa
 					}
 				}	
 			}
@@ -3803,8 +3803,8 @@ nhs_left_end = {
 					}
 					OR = {
 						mission_completed = nhs_spqe
-						mission_completed = nhs_canal_mission
-						mission_completed = nhs_at_every_continent
+						mission_completed = nhs_across_eirenic
+						mission_completed = nhs_around_africa
 					}
 				}
 			}
@@ -3827,129 +3827,13 @@ nhs_left_end = {
 		position = 10
 		trigger = {
 			mission_completed = nhs_center_of_commerce_mission
-			owns = 953
-			if = {
-				limit = {
-					OR = {
-						religion = pantheon_worship
-						religion = aztlan_worship
-					}
-				}
-				if = {
-					limit = {
-						any_owned_province = {
-							has_great_project = {
-								type = nhs_temple_of_marble_emperors_v1
-							}
-						}
-					}
-					any_owned_province = {
-						has_great_project = {
-							type = nhs_temple_of_marble_emperors_v1
-							tier = 3
-						}
-					}
-				}
-				else_if = {
-					limit = {
-						any_owned_province = {
-							has_great_project = {
-								type = nhs_temple_of_marble_emperors_v2
-							}
-						}
-					}
-					any_owned_province = {
-						has_great_project = {
-							type = nhs_temple_of_marble_emperors_v2
-							tier = 3
-						}
-					}
-				}
-				else_if = {
-					limit = {
-						any_owned_province = {
-							has_great_project = {
-								type = nhs_temple_of_marble_emperors_v3
-							}
-						}
-					}
-					any_owned_province = {
-						has_great_project = {
-							type = nhs_temple_of_marble_emperors_v3
-							tier = 3
-						}
-					}
-				}
-				else = {
-					any_owned_province = {
-						has_great_project = {
-							type = nhs_temple_of_marble_emperors_v1
-							tier = 3
-						}
-					}
+			953 = {
+				owned_by = ROOT
+				development = 35
+				to_has_great_project_at_least_at_tier_2 = {
+					TYPE = nhs_hippodrome
 				}
 			}
-			else_if = {
-				limit = {
-					religion_group = christian
-				}
-				if = {
-					limit = {
-						any_owned_province = {
-							has_great_project = {
-								type = nhs_hagia_theotoke_v1
-							}
-						}
-					}
-					any_owned_province = {
-						has_great_project = {
-							type = nhs_hagia_theotoke_v1
-							tier = 3
-						}
-					}
-				}
-				else_if = {
-					limit = {
-						any_owned_province = {
-							has_great_project = {
-								type = nhs_hagia_theotoke_v2
-							}
-						}
-					}
-					any_owned_province = {
-						has_great_project = {
-							type = nhs_hagia_theotoke_v2
-							tier = 3
-						}
-					}
-				}
-				else_if = {
-					limit = {
-						any_owned_province = {
-							has_great_project = {
-								type = nhs_hagia_theotoke_v3
-							}
-						}
-					}
-					any_owned_province = {
-						has_great_project = {
-							type = nhs_hagia_theotoke_v3
-							tier = 3
-						}
-					}
-				}
-				else = {
-					any_owned_province = {
-						has_great_project = {
-							type = nhs_hagia_theotoke_v1
-							tier = 3
-						}
-					}
-				}
-			}
-			# any_owned_province = {
-			# 	has_province_modifier = nhs_gilded_keep_tm
-			# }
 			950 = {
 				# has_province_modifier = nhs_carthaginian_design_harbour_tm
 				has_province_modifier = nhs_seagate_guardians_tm
@@ -3957,40 +3841,43 @@ nhs_left_end = {
 					TYPE = nhs_cothon
 				}
 			}
-			953 = {
-				to_has_great_project_at_least_at_tier_2 = {
-					TYPE = nhs_hippodrome
-				}
-			}
 			2554 = {
 				to_has_great_project_at_least_at_tier_2 = {
 					TYPE = nhs_alexandrian_library
 				}
 			}
+			development_in_provinces = {
+				value = 150
+				area = chesapeake_area
+			}
 		}
 		effect = {
-			custom_tooltip = nhs_improve_ambition_inward_1_tt
-			hidden_effect = {
-				if = {
-					limit = {
-						has_country_modifier = nhs_organised_expansion_inwars_1
-					}
-					remove_country_modifier = nhs_organised_expansion_inwars_1
-					add_country_modifier = {
-						name = nhs_organised_expansion_inwars_2
-						duration = -1
+			if = {
+				limit = {
+					OR = {
+						religion = pantheon_worship
+						religion = aztlan_worship
 					}
 				}
-				else = {
-					remove_country_modifier = nhs_organised_expansion_inwars_1_with_outward
-					add_country_modifier = {
-						name = nhs_organised_expansion_inwars_2_with_outward
-						duration = -1
-					}
+				country_event = { id = nhs_mission_events.2 }
+			}
+			if = {
+				limit = {
+					religion_group = christian
+				}
+				country_event = { id = nhs_mission_events.1 }
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_improve_ambition_inward_1_tt
+			custom_tooltip = nhs_new_line_tt
+			hidden_effect = {
+				remove_country_modifier = nhs_organised_expansion_inwars_1
+				add_country_modifier = {
+					name = nhs_organised_expansion_inwars_2
+					duration = -1
 				}
 			}
 			custom_tooltip = nhs_inward_focus_province_mod_2_tt
-
 			hidden_effect = {
 				every_province = {
 					limit = {
@@ -4011,13 +3898,7 @@ nhs_left_end = {
 						duration = -1
 					}
 				}
-				
 			}
-			
-			953 = {
-				nhs_set_center_of_trade_3 = yes
-			}
-			
 		}
 	}
 
@@ -4029,7 +3910,6 @@ nhs_left_end = {
 		# icon = prosperity_for_all
 		position = 11
 		trigger = {
-			owns = 953
 			if = {
 				limit = {
 					has_country_flag = nhs_high_tier_building_counter
@@ -4071,24 +3951,14 @@ nhs_left_end = {
 		}
 		effect = {
 			custom_tooltip = nhs_remove_exiled_modifier_tt
+			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = nhs_improve_ambition_inward_2_tt
+			custom_tooltip = nhs_new_line_tt
 			hidden_effect = {
-				if = {
-					limit = {
-						has_country_modifier = nhs_organised_expansion_inwars_2
-					}
-					remove_country_modifier = nhs_organised_expansion_inwars_2
-					add_country_modifier = {
-						name = nhs_organised_expansion_inwars_3
-						duration = -1
-					}
-				}
-				else = {
-					remove_country_modifier = nhs_organised_expansion_inwars_2_with_outward
-					add_country_modifier = {
-						name = nhs_organised_expansion_inwars_3_with_outward
-						duration = -1
-					}
+				remove_country_modifier = nhs_organised_expansion_inwars_2
+				add_country_modifier = {
+					name = nhs_organised_expansion_inwars_3
+					duration = -1
 				}
 			}
 			custom_tooltip = nhs_inward_focus_province_mod_3_tt
@@ -4125,15 +3995,15 @@ nhs_left_end = {
 		icon = Eflag
 		position = 12
 		trigger = {
-			owns = 953
-			# custom_trigger_tooltip = {
-			# 	tooltip = nhs_owns_at_least_90_of_NA_tt
 			num_of_provinces_owned_or_owned_by_subjects_with = {
-					value = 470
-					continent = north_america
-					is_city = yes
-				}
-			# }
+				value = 470
+				continent = north_america
+				is_city = yes
+			}
+			development_in_provinces = {
+				value = 7000
+				continent = north_america
+			}
 		}
 		provinces_to_highlight = {
 			continent = north_america
@@ -4143,7 +4013,10 @@ nhs_left_end = {
 			has_discovered = ROOT
 		}
 		effect = {
+			custom_tooltip = to_enable_integration_of_all_cultures_in_new_world_tt
+			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = nhs_upgrade_nhs2_state_bonus
+			custom_tooltip = nhs_new_line_tt
 			hidden_effect = {
 				remove_country_modifier = nhs2_state_bonus
 				add_country_modifier = {
@@ -4152,107 +4025,115 @@ nhs_left_end = {
 				}
 			}
 			custom_tooltip = nhs_the_promised_land_tt
+			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = nhs_sa_claims_tt
-			custom_tooltip = nhs_improve_two_centers_tt
+			if = {
+				limit = {
+					NOT = { has_dlc = "Dharma" }
+				}
+				custom_tooltip = nhs_improve_two_centers_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							any_owned_province = {
+								continent = north_america
+								province_has_center_of_trade_of_level = 2
+								NOT = { province_has_center_of_trade_of_level = 3 }
+							}
+						}
+						nhs_set_center_of_trade_3 = yes
+					}
+					else_if = {
+						limit = {
+							any_owned_province = {
+								continent = north_america
+								province_has_center_of_trade_of_level = 1
+								NOT = { province_has_center_of_trade_of_level = 3 }
+							}
+						}
+						nhs_set_center_of_trade_3 = yes
+					}
+					else_if = {
+						limit = {
+							any_province = {
+								continent = north_america
+								owner = {
+									is_subject_of = ROOT
+								}
+								province_has_center_of_trade_of_level = 2
+								NOT = { province_has_center_of_trade_of_level = 3 }
+							}
+						}
+						nhs_set_center_of_trade_3 = yes
+					}
+					else_if = {
+						limit = {
+							any_province = {
+								continent = north_america
+								owner = {
+									is_subject_of = ROOT
+								}
+								province_has_center_of_trade_of_level = 1
+								NOT = { province_has_center_of_trade_of_level = 3 }
+							}
+						}
+						nhs_set_center_of_trade_3 = yes
+					}
+					else = {
+						add_treasury = 750
+					}
+					if = {
+						limit = {
+							any_owned_province = {
+								continent = north_america
+								province_has_center_of_trade_of_level = 2
+								NOT = { province_has_center_of_trade_of_level = 3 }
+							}
+						}
+						nhs_set_center_of_trade_3 = yes
+					}
+					else_if = {
+						limit = {
+							any_owned_province = {
+								continent = north_america
+								province_has_center_of_trade_of_level = 1
+								NOT = { province_has_center_of_trade_of_level = 3 }
+							}
+						}
+						nhs_set_center_of_trade_3 = yes
+					}
+					else_if = {
+						limit = {
+							any_province = {
+								continent = north_america
+								owner = {
+									is_subject_of = ROOT
+								}
+								province_has_center_of_trade_of_level = 2
+								NOT = { province_has_center_of_trade_of_level = 3 }
+							}
+						}
+						nhs_set_center_of_trade_3 = yes
+					}
+					else_if = {
+						limit = {
+							any_province = {
+								continent = north_america
+								owner = {
+									is_subject_of = ROOT
+								}
+								province_has_center_of_trade_of_level = 1
+								NOT = { province_has_center_of_trade_of_level = 3 }
+							}
+						}
+						nhs_set_center_of_trade_3 = yes
+					}
+					else = {
+						add_treasury = 750
+					}
+				}
+			}
 			hidden_effect = {
-				if = {
-					limit = {
-						any_owned_province = {
-							continent = north_america
-							province_has_center_of_trade_of_level = 2
-							NOT = { province_has_center_of_trade_of_level = 3 }
-						}
-					}
-					nhs_set_center_of_trade_3 = yes
-				}
-				else_if = {
-					limit = {
-						any_owned_province = {
-							continent = north_america
-							province_has_center_of_trade_of_level = 1
-							NOT = { province_has_center_of_trade_of_level = 3 }
-						}
-					}
-					nhs_set_center_of_trade_3 = yes
-				}
-				else_if = {
-					limit = {
-						any_province = {
-							continent = north_america
-							owner = {
-								is_subject_of = ROOT
-							}
-							province_has_center_of_trade_of_level = 2
-							NOT = { province_has_center_of_trade_of_level = 3 }
-						}
-					}
-					nhs_set_center_of_trade_3 = yes
-				}
-				else_if = {
-					limit = {
-						any_province = {
-							continent = north_america
-							owner = {
-								is_subject_of = ROOT
-							}
-							province_has_center_of_trade_of_level = 1
-							NOT = { province_has_center_of_trade_of_level = 3 }
-						}
-					}
-					nhs_set_center_of_trade_3 = yes
-				}
-				else = {
-					add_treasury = 750
-				}
-				if = {
-					limit = {
-						any_owned_province = {
-							continent = north_america
-							province_has_center_of_trade_of_level = 2
-							NOT = { province_has_center_of_trade_of_level = 3 }
-						}
-					}
-					nhs_set_center_of_trade_3 = yes
-				}
-				else_if = {
-					limit = {
-						any_owned_province = {
-							continent = north_america
-							province_has_center_of_trade_of_level = 1
-							NOT = { province_has_center_of_trade_of_level = 3 }
-						}
-					}
-					nhs_set_center_of_trade_3 = yes
-				}
-				else_if = {
-					limit = {
-						any_province = {
-							continent = north_america
-							owner = {
-								is_subject_of = ROOT
-							}
-							province_has_center_of_trade_of_level = 2
-							NOT = { province_has_center_of_trade_of_level = 3 }
-						}
-					}
-					nhs_set_center_of_trade_3 = yes
-				}
-				else_if = {
-					limit = {
-						any_province = {
-							continent = north_america
-							owner = {
-								is_subject_of = ROOT
-							}
-							province_has_center_of_trade_of_level = 1
-							NOT = { province_has_center_of_trade_of_level = 3 }
-						}
-					}
-					nhs_set_center_of_trade_3 = yes
-				}
-				else = {
-					add_treasury = 750
-				}
 				every_province = {
 					limit = {
 						continent = south_america
@@ -4272,7 +4153,6 @@ nhs_left_end = {
 					if = {
 						limit = {
 							NOT = { is_core = ROOT }
-							NOT = { country_or_non_sovereign_subject_holds = ROOT }
 						}
 						add_permanent_claim = ROOT
 					}
