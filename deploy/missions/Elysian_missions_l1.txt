@@ -1594,7 +1594,7 @@ nhs_right_mid_start = {
 			}
 			OR = {
 				custom_trigger_tooltip = {
-					tooltip = to_at_least_75_trade_income_tt
+					tooltip = to_at_least_100_trade_income_tt
 					variable_arithmetic_trigger = {
 						export_to_variable = {
 							value = trigger_value:trade_income_percentage
@@ -1610,7 +1610,7 @@ nhs_right_mid_start = {
 						}
 						check_variable = {
 							which = trade_income
-							value = 75
+							value = 100
 						}
 					}
 				}
@@ -3070,10 +3070,10 @@ nhs_centre_start = {
 			}
 		}
 		effect = {
-			add_adm_power = 100
-			add_dip_power = 100
-			add_mil_power = 100
-			custom_tooltip = nhs_new_line_tt
+			# add_adm_power = 100
+			# add_dip_power = 100
+			# add_mil_power = 100
+			# custom_tooltip = nhs_new_line_tt
 			country_event = { 
 				id = nhs2_army_reforms.2 
 				tooltip = to_nhs_second_army_reform_from_mission_tt 
@@ -4001,7 +4001,7 @@ nhs_left_end = {
 				is_city = yes
 			}
 			development_in_provinces = {
-				value = 7000
+				value = 5000
 				continent = north_america
 			}
 		}
@@ -5256,12 +5256,192 @@ nhs_right_mid_end = {
 		icon = mission_establish_high_seas_navy
 		position = 10
 		provinces_to_highlight = {
-			
+			ROOT = {
+				NOT = { mission_completed = nhs_across_eirenic }
+			}
+			OR = {
+				AND = {
+					OR = {
+						province_id = 835
+						province_id = 2660
+						AND = {
+							continent = north_america
+							sea_zone = {
+								OR = {
+									region = north_east_pacific_region
+									region = pacific_south_america_region
+								}
+							}
+							OR = {
+								province_has_center_of_trade_of_level = 1
+								has_province_modifier = to_dynamic_cot
+							}
+						}
+					}
+					NOT = {
+						ROOT = {
+							OR = {
+								835 = {
+									country_or_subject_holds = ROOT
+									development = 16
+									OR = {
+										has_building = marketplace
+										has_building = trade_depot
+										has_building = stock_exchange
+									}
+								}
+								any_owned_province = {
+									continent = north_america
+									OR = {
+										province_id = 2660
+										sea_zone = {
+											OR = {
+												region = north_east_pacific_region
+												region = pacific_south_america_region
+											}
+										}
+									}
+									province_has_center_of_trade_of_level = 1
+									development = 16
+									OR = {
+										has_building = marketplace
+										has_building = trade_depot
+										has_building = stock_exchange
+									}
+									is_in_capital_area = yes
+								}
+							}
+						}
+					}
+				}
+				AND = {
+					region = oceanea_region
+					province_has_center_of_trade_of_level = 1
+					NOT = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					NOT = {
+						ROOT = {
+							calc_true_if = {
+								amount = 2
+								all_province = {
+									region = oceanea_region
+									province_has_center_of_trade_of_level = 1
+									country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT }
+								}
+							}
+						}
+					}
+				}
+				AND = {
+					trade_company_region = trade_company_philippines
+					province_has_center_of_trade_of_level = 1
+					NOT = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					NOT = {
+						ROOT = {
+							calc_true_if = {
+								amount = 5
+								all_province = {
+									trade_company_region = trade_company_philippines
+									province_has_center_of_trade_of_level = 1
+									country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT }
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		trigger = {
+			OR = {
+				835 = {
+					country_or_subject_holds = ROOT
+					development = 16
+					custom_trigger_tooltip = {
+						tooltip = to_has_marketplace_or_upgrades_tt
+						OR = {
+							has_building = marketplace
+							has_building = trade_depot
+							has_building = stock_exchange
+						}
+					}
+				}
+				any_owned_province = {
+					custom_trigger_tooltip = {
+						tooltip = to_province_on_the_west_cost_of_north_america_tt
+						continent = north_america
+						OR = {
+							province_id = 2660
+							sea_zone = {
+								OR = {
+									region = north_east_pacific_region
+									region = pacific_south_america_region
+								}
+							}
+						}
+					}
+					province_has_center_of_trade_of_level = 1
+					development = 16
+					custom_trigger_tooltip = {
+						tooltip = to_has_marketplace_or_upgrades_tt
+						OR = {
+							has_building = marketplace
+							has_building = trade_depot
+							has_building = stock_exchange
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = to_is_in_capital_area_tt
+						is_in_capital_area = yes
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_controls_polynesia_node_tt
+				1997 = {
+					trade_share = {
+						country = ROOT
+						share = 80
+					}
+				}
+				calc_true_if = {
+					amount = 2
+					all_province = {
+						region = oceanea_region
+						province_has_center_of_trade_of_level = 1
+						country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT }
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_controls_philippines_tt
+				1397 = {
+					trade_share = {
+						country = ROOT
+						share = 80
+					}
+				}
+				calc_true_if = {
+					amount = 5
+					all_province = {
+						trade_company_region = trade_company_philippines
+						province_has_center_of_trade_of_level = 1
+						country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT }
+					}
+				}
+			}
+			# num_of_provinces_owned_or_owned_by_subjects_with = {
+			# 	value = 25
+			# 	OR = {
+			# 		trade_company_region = trade_company_philippines
+			# 		region = oceanea_region
+			# 	}
+			# }
 		}
 		effect = {
-			# custom_tooltip = nhs_improve_naval_primacy2
+			custom_tooltip = to_can_annex_protectorates_in_polynesia_and_philippines_tt
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_expand_concessions_cb_to_east_asia_tt
+			custom_tooltip = nhs_new_line_tt
+			to_advance_world_empire_reward_tier = yes
 		}
 	}
 
