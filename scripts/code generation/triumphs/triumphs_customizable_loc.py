@@ -30,14 +30,14 @@ defined_text = {
 	name = Get_{{ region.region }}_TriumphStatus
 	random = no
 	text = {
-		localisation_key = to_nat_y_icon_tt
+		localisation_key = to_y_icon_tt
 		trigger = {
 			to_has_completed_triumph = { REGION = {{ region.region }} }
 		}
 	}
 
 	text = {
-		localisation_key = to_nat_x_icon_tt
+		localisation_key = to_x_icon_tt
 	}
 }
 

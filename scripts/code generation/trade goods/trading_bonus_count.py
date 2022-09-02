@@ -93,13 +93,13 @@ defined_text = {
 	name = GetTradingIn_{{ trade_good['name'] }}
 	random = no
 	text = {
-		localisation_key = to_nat_y_icon_tt
+		localisation_key = to_y_icon_tt
 		trigger = {
 			trading_bonus = { trade_goods = {{ trade_good["name"] }} value = yes }
 		}
 	}
 	text = {
-		localisation_key = to_nat_x_icon_tt
+		localisation_key = to_x_icon_tt
 	}
 }
 {%- endif %}
@@ -108,7 +108,7 @@ defined_text = {
 	name = GetTradingIn_coal
 	random = no
 	text = {
-		localisation_key = to_nat_y_icon_tt
+		localisation_key = to_y_icon_tt
 		trigger = {
 		    OR = {
 		        trading_bonus = { trade_goods = coal value = yes }
@@ -117,7 +117,7 @@ defined_text = {
 		}
 	}
 	text = {
-		localisation_key = to_nat_x_icon_tt
+		localisation_key = to_x_icon_tt
 	}
 }'''
                        )

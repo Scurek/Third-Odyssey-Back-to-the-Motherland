@@ -59,13 +59,13 @@ defined_text = {
 	name = OwnsOrAllyOwns_{{ province["id"] }}
 	random = no
 	text = {
-		localisation_key = to_nat_y_icon_tt
+		localisation_key = to_y_icon_tt
 		trigger = {
 			{{ province["id"] }} = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
 		}
 	}
 	text = {
-		localisation_key = to_nat_x_icon_tt
+		localisation_key = to_x_icon_tt
 	}
 }
 {%- endif %}
