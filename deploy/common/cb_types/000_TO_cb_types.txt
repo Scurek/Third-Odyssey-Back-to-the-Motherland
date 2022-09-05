@@ -198,63 +198,63 @@ cb_nhs_spartan_pu = {
 	war_goal = take_capital_throne
 }
 
-cb_north_american_hegemony = {
+cb_american_hegemony = {
 	valid_for_subject = no
 
 	prerequisites = {
-		nhs_check_all_elysian_tags = { CONDITION = tag }
 		mission_completed = nhs_inward_focus
-		NOT = { mission_completed = nhs_the_promised_land }
-		NOT = { nhs_is_revolution_target = yes }
 		FROM = {
 			NOT = { is_subject_of = ROOT }
-			# NOT = { alliance_with = ROOT }
-			OR = {
-				ROOT = {
-					mission_completed = nhs_expanding_south
+			if = {
+				limit = {
+					ROOT = {
+						mission_completed = nhs_the_promised_land
+					}
 				}
-				nhs_check_all_vinland = { CONDITION = tag }
-				AND = {
+				any_owned_province = {
+					OR = {
+						continent = north_america
+						continent = south_america
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						mission_completed = nhs_expanding_south
+					}
+				}
+				any_owned_province = {
+					continent = north_america
+				}
+			}
+			else_if = {
+				limit = {
 					ROOT = {
 						mission_completed = nhs_expanding_north
 					}
-					OR = {
-						nhs_check_all_spartan = { CONDITION = tag }
-						capital_scope = {
-							province_group = mesoamerica_pgroup
-						}
+				}
+				OR = {
+					nhs_check_all_vinland = { CONDITION = tag }
+					nhs_check_all_spartan = { CONDITION = tag }
+					capital_scope = {
+						province_group = mesoamerica_pgroup
 					}
 				}
-			}
-			any_owned_province = {
-				continent = north_america
-			}
-		}
-	}
-	
-	war_goal = nhs_wargoal_north_american_hegemony
-}
-
-cb_north_american_hegemony_expanded = {
-	valid_for_subject = no
-
-	prerequisites = {
-		nhs_check_all_elysian_tags = { CONDITION = tag }
-		mission_completed = nhs_the_promised_land
-		NOT = { nhs_is_revolution_target = yes }
-		FROM = {
-			NOT = { is_subject_of = ROOT }
-			# NOT = { alliance_with = ROOT }
-			any_owned_province = {
-				OR = {
+				any_owned_province = {
 					continent = north_america
-					continent = south_america
+				}
+			}
+			else = {
+				nhs_check_all_vinland = { CONDITION = tag }
+				any_owned_province = {
+					continent = north_america
 				}
 			}
 		}
 	}
 	
-	war_goal = nhs_wargoal_north_american_hegemony_expanded
+	war_goal = nhs_wargoal_american_hegemony
 }
 
 cb_nhs_imperial_reconquest = {
@@ -344,13 +344,11 @@ cb_nhs_overseas_expansion = {
 	valid_for_subject = no
 
 	prerequisites = {
-		nhs_check_all_elysian_tags = { CONDITION = tag }
 		is_free_or_tributary_trigger = yes
 		mission_completed = nhs_outward_focus
 		FROM = {
 			is_great_power = no
 			#primitives = no
-			is_free_or_tributary_trigger = yes
 			OR = {
 				technology_group = indian
 				technology_group = east_african
@@ -364,6 +362,111 @@ cb_nhs_overseas_expansion = {
 	}
 	
 	war_goal = nhs_overseas_expansion
+}
+
+cb_nhs_overseas_concessions = {
+	valid_for_subject = no
+
+	prerequisites = {
+		is_free_or_tributary_trigger = yes
+		mission_completed = nhs_outward_focus
+		FROM = {
+			OR = {
+				technology_group = western
+				technology_group = eastern
+				technology_group = ottoman
+				technology_group = muslim
+			}
+			if = {
+				limit = {
+					ROOT = {
+						mission_completed = nhs_across_eirenic
+						mission_completed = nhs_around_africa
+					}
+				}
+				any_owned_province = {
+					OR = {
+						superregion = southern_africa_superregion
+						region = oceanea_region
+						trade_company_region = trade_company_philippines
+						superregion = east_indies_superregion
+						superregion = china_superregion
+						superregion = far_east_superregion
+						superregion = oceania_superregion
+						superregion = india_superregion
+					}
+					OR = {
+						has_port = yes
+						any_neighbor_province = {
+							country_or_subject_holds = ROOT
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						mission_completed = nhs_across_eirenic
+					}
+				}
+				any_owned_province = {
+					OR = {
+						superregion = southern_africa_superregion
+						region = oceanea_region
+						trade_company_region = trade_company_philippines
+						superregion = east_indies_superregion
+						superregion = china_superregion
+						superregion = far_east_superregion
+						superregion = oceania_superregion
+					}
+					OR = {
+						has_port = yes
+						any_neighbor_province = {
+							country_or_subject_holds = ROOT
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						mission_completed = nhs_around_africa
+					}
+				}
+				any_owned_province = {
+					OR = {
+						superregion = southern_africa_superregion
+						region = oceanea_region
+						trade_company_region = trade_company_philippines
+						superregion = india_superregion
+					}
+					OR = {
+						has_port = yes
+						any_neighbor_province = {
+							country_or_subject_holds = ROOT
+						}
+					}
+				}
+			}
+			else = {
+				any_owned_province = {
+					OR = {
+						superregion = southern_africa_superregion
+						region = oceanea_region
+						trade_company_region = trade_company_philippines
+					}
+					OR = {
+						has_port = yes
+						any_neighbor_province = {
+							country_or_subject_holds = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	war_goal = nhs_overseas_concessions
 }
 
 # cb_spartan_conquest = {

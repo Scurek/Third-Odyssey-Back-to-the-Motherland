@@ -422,62 +422,7 @@ war_goal_nhs_pu_restore_dinasty = {
 	war_name = THRONE_WAR_NAME	
 }
 
-nhs_wargoal_north_american_hegemony = {
-	type = superiority
-	
-	attacker = {
-		badboy_factor = 1
-		prestige_factor = 1
-		peace_cost_factor = 0.5
-		
-		allowed_provinces = {
-			continent = north_america
-		}
-		
-		peace_options = {
-			po_demand_provinces
-			po_revoke_cores
-			po_change_religion
-			po_become_vassal
-			po_annul_treaties
-			# po_humiliate
-			po_trade_power
-			po_steer_trade
-			po_humiliate_rival
-		}
-		
-		prov_desc = ALL_NA_PROVINCES
-	}
-	
-	defender = {
-		badboy_factor = 0.5
-		prestige_factor = 1.5
-		peace_cost_factor = 0.5
-		
-		allowed_provinces = {
-			OR = {
-				is_claim = FROM
-				is_core = FROM
-			}
-		}
-		
-		peace_options = {
-			po_gold
-			po_humiliate
-			po_humiliate_rival
-			po_demand_provinces
-			po_return_cores
-			po_release_annexed
-			po_release_vassals
-		}
-		
-		prov_desc = ALL_CORES_AND_CLAIMS
-	}
-	
-	war_name = NA_HEGEMONY
-}
-
-nhs_wargoal_north_american_hegemony_expanded = {
+nhs_wargoal_american_hegemony = {
 	type = superiority
 	
 	attacker = {
@@ -488,7 +433,12 @@ nhs_wargoal_north_american_hegemony_expanded = {
 		allowed_provinces = {
 			OR = {
 				continent = north_america
-				continent = south_america
+				AND = {
+					ROOT = {
+						mission_completed = nhs_the_promised_land
+					}
+					continent = south_america
+				}
 			}
 		}
 		
@@ -504,7 +454,7 @@ nhs_wargoal_north_american_hegemony_expanded = {
 			po_humiliate_rival
 		}
 		
-		prov_desc = ALL_ALL_PROVINCES
+		prov_desc = ALL_AMERICAN_HEGEMONY_PROVINCES
 	}
 	
 	defender = {
@@ -694,7 +644,7 @@ nhs_overseas_expansion = {
 	war_name = NHS_OVERSEAS_EXPANSION_WAR_NAME
 }
 
-nhs_overseas_concession_africa = {
+nhs_overseas_concessions = {
 	type = take_province
 
 	attacker = {
@@ -703,59 +653,51 @@ nhs_overseas_concession_africa = {
 		peace_cost_factor = 0.5
 		
 		allowed_provinces = {
-			owner = {
-				# OR = {
-				# 	is_colonial_nation = yes
-				# 	is_former_colonial_nation = yes
-					# AND = {
-					# 	PREV = {
-					# 		continent = asia
-					# 	}
-					# 	capital_scope = {
-					# 		continent = asia
-					# 	}
-					# }
-					# AND = {
-					# 	PREV = {
-					# 		continent = africa
-					# 	}
-					# 	capital_scope = {
-					# 		continent = africa
-					# 	}
-					# }
-					# AND = {
-					# 	PREV = {
-					# 		continent = oceania
-					# 	}
-					# 	capital_scope = {
-					# 		continent = oceania
-					# 	}
-					# }
-				# }
-				OR = {
-					technology_group = western
-					technology_group = eastern
-					technology_group = ottoman
-					technology_group = muslim
-				}
-				OR = {
-					is_neighbor_of = ROOT
-
-				}
-			}
+			# OR = {
+			# 	continent = asia
+			# 	continent = africa
+			# 	continent = oceania
+			# }
 			OR = {
-				continent = asia
-				continent = africa
-				continent = oceania
+				superregion = southern_africa_superregion
+				region = oceanea_region
+				trade_company_region = trade_company_philippines
+				AND = {
+					ROOT = {
+						mission_completed = nhs_across_eirenic
+					}
+					OR = {
+						superregion = east_indies_superregion
+						superregion = china_superregion
+						superregion = far_east_superregion
+						superregion = oceania_superregion
+					}
+				}
+				AND = {
+					ROOT = {
+						mission_completed = nhs_around_africa
+					}
+					superregion = india_superregion
+				}
+			}	
+			OR = {
+				owner = {
+					war_with = ROOT
+				}
+				OR = {
+					has_port = yes
+					any_neighbor_province = {
+						country_or_subject_holds = ROOT
+					}
+				}
 			}
 		}
 		
 		peace_options = {
-			po_gold
 			po_demand_provinces
 		}
 		
-		prov_desc = NHS_OVERSEAS_EXPANSION_PROVINCE
+		prov_desc = NHS_OVERSEAS_CONCESSIONS_PROVINCE
 	}
 
 	defender = {
