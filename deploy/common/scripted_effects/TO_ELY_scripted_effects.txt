@@ -9952,6 +9952,164 @@ to_advance_world_empire_reward_tier = {
 	}
 }
 
+to_handle_elysian_penal_colony_modifier = {
+	if = {
+		limit = {
+			colonial_region = colonial_australia
+			owner = {
+				OR = {
+					has_country_flag = to_completed_penal_colony_in_australia
+					AND = {
+						is_colonial_nation = yes
+						overlord = {
+							has_country_flag = to_completed_penal_colony_in_australia
+						}
+					}
+				}
+			}
+		}
+		add_province_modifier = {
+			name = to_elysian_penal_colony
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			has_province_modifier = to_elysian_penal_colony
+		}
+		remove_province_modifier = to_elysian_penal_colony
+	}
+}
+
+to_japanese_boost_check_owned_provinces = {
+	if = {
+		limit = {
+			has_global_flag = to_opened_japanese_ports
+			culture_group = japanese_g
+		}
+		every_owned_province = {
+			limit = {
+				region = japan_region
+			}
+			if = {
+				limit = {
+					nhs_check_all_elysian_tags_existing_with_double_condition = {
+						CONDITION_LEFT = religion 
+						CONDITION_RIGHT = PREV
+					}
+				}
+				remove_province_modifier = to_japanese_production_boost
+				add_province_modifier = {
+					name = to_japanese_production_boost_improved
+					duration = -1
+				}
+			}
+			else = {
+				remove_province_modifier = to_japanese_production_boost_improved
+				add_province_modifier = {
+					name = to_japanese_production_boost
+					duration = -1
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			NOT = { culture_group = japanese_g }
+			any_owned_province = {
+				OR = {
+					has_province_modifier = to_japanese_production_boost
+					has_province_modifier = to_japanese_production_boost_improved
+				}
+			}
+		}
+		every_owned_province = {
+			remove_province_modifier = to_japanese_production_boost
+			remove_province_modifier = to_japanese_production_boost_improved
+		}
+	}
+}
+
+to_japanese_boost_check = {
+	if = {
+		limit = {
+			is_empty = no
+			has_global_flag = to_opened_japanese_ports
+			region = japan_region
+			owner = {
+				culture_group = japanese_g
+			}
+		}
+		if = {
+			limit = {
+				nhs_check_all_elysian_tags_existing_with_double_condition = {
+					CONDITION_LEFT = religion 
+					CONDITION_RIGHT = PREV
+				}
+			}
+			remove_province_modifier = to_japanese_production_boost
+			add_province_modifier = {
+				name = to_japanese_production_boost_improved
+				duration = -1
+			}
+		}
+		else = {
+			remove_province_modifier = to_japanese_production_boost_improved
+			add_province_modifier = {
+				name = to_japanese_production_boost
+				duration = -1
+			}
+		}
+	}
+}
+
+to_upgrade_japanese_boosts = {
+	every_province = {
+		limit = {
+			region = japan_region
+			owner = {
+				culture_group = japanese_g
+			}
+			nhs_check_all_elysian_tags_existing_with_double_condition = {
+				CONDITION_LEFT = religion 
+				CONDITION_RIGHT = PREV
+			}
+		}
+		remove_province_modifier = to_japanese_production_boost
+		if = {
+			limit = {
+				owner = {
+					culture_group = japanese_g
+				}
+			}
+			add_province_modifier = {
+				name = to_japanese_production_boost_improved
+				duration = -1
+			}
+		}
+	}
+}
+
+to_downgrade_japanese_boosts = {
+	every_province = {
+		limit = {
+			has_province_modifier = to_japanese_production_boost_improved
+		}
+		remove_province_modifier = to_japanese_production_boost_improved
+		if = {
+			limit = {
+				owner = {
+					culture_group = japanese_g
+				}
+			}
+			add_province_modifier = {
+				name = to_japanese_production_boost
+				duration = -1
+			}
+		}
+	}
+}
+
 to_change_triumph_province_counter = {
 	$SCOPE$ = {
 		change_variable = {

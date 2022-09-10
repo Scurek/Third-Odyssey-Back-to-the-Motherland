@@ -2787,3 +2787,127 @@ to_has_increased_trade_good_spawn_chance = {
 	mission_completed = nhs_outward_focus
 	has_country_flag = to_increased_spawn_chance_$TRADE_GOOD$
 }
+
+to_can_build_major_trade_company_investment = {
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					owner = {
+						has_country_flag = to_enable_second_major_tci_the_moluccas
+					}
+					trade_company_region = trade_company_moluccas
+				}
+				AND = {
+					owner = {
+						has_country_flag = to_enable_second_major_tci_malacca
+					}
+					trade_company_region = trade_company_indonesia
+				}
+				AND = {
+					owner = {
+						has_country_flag = to_enable_second_major_tci_nippon
+					}
+					trade_company_region = trade_company_nippon
+				}
+			}
+		}
+		NOT = {
+			calc_true_if = {
+				amount = 2
+				num_investments_in_trade_company_region = { 
+					investment = officers_mess
+					value = 1
+				}
+				num_investments_in_trade_company_region = { 
+					investment = admiralty
+					value = 1
+				}
+				num_investments_in_trade_company_region = { 
+					investment = property_appraiser
+					value = 1
+				}
+				num_investments_in_trade_company_region = { 
+					investment = townships
+					value = 1
+				}
+				num_investments_in_trade_company_region = { 
+					investment = governor_general_mansion
+					value = 1
+				}
+			}
+		}
+	}
+	else = {
+		NOT = {
+			num_investments_in_trade_company_region = { 
+				investment = officers_mess
+				value = 1
+			}
+		}
+		NOT = {
+			num_investments_in_trade_company_region = { 
+				investment = admiralty
+				value = 1
+			}
+		}
+		NOT = {
+			num_investments_in_trade_company_region = { 
+				investment = property_appraiser
+				value = 1
+			}
+		}
+		NOT = {
+			num_investments_in_trade_company_region = { 
+				investment = townships
+				value = 1
+			}
+		}
+		NOT = {
+			num_investments_in_trade_company_region = { 
+				investment = governor_general_mansion
+				value = 1
+			}
+		}
+	}
+}
+
+to_has_opened_trade_center_in_province = {
+	OR = {
+		country_or_subject_holds = ROOT
+		AND = {
+			is_blockaded = yes
+			sea_zone = {
+				OR = {
+					heavy_ships_in_province = ROOT
+					light_ships_in_province = ROOT
+					galleys_in_province = ROOT
+					transports_in_province = ROOT
+				}
+			}
+		}
+		owner = {
+			ROOT = {
+				has_won_war_against = {
+					who = PREV
+					max_years_since = 20
+				}
+			}
+			# OR = {
+			# 	has_opinion_modifier = {
+			# 		who = ROOT
+			# 		modifier = transfers_trade_power
+			# 	}
+			# 	AND = {
+			# 		NOT = { has_dlc = "Wealth of Nations" }
+			# 		ROOT = {
+			# 			has_won_war_against = {
+			# 				who = PREV
+			# 				max_years_since = 30
+			# 			}
+			# 		}
+			# 	}
+			# }
+		}
+	}
+}
