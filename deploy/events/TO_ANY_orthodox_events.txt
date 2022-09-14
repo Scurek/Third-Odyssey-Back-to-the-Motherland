@@ -5887,10 +5887,7 @@ country_event = {
 		}
 		modifier = {
 			factor = 0.25
-			OR = {
-				estate_influence = { estate = estate_nhs_nobles influence = 70 }
-				estate_influence = { estate = estate_nobles influence = 70 }
-			}
+			nhs_nobles_estate_influence = { influence = 70 }
 		}
 	}
 	
@@ -5901,44 +5898,17 @@ country_event = {
 					religion = elysian_orthodoxy
 					NOT = { is_capital = yes }
 				}
-				set_province_flag = nhs2_orthodoxevents103_flag
 				save_event_target_as = nhs2_orthodoxevents103_target
 			}
 		}
 	}
 	
 	option = {
+		goto = nhs2_orthodoxevents103_target
 		name = "nhs2_orthodoxevents.103.a"
 		tooltip = { add_patriarch_authority = 0.05 }
-		random_owned_province = {
-			limit = {
-				has_province_flag = nhs2_orthodoxevents103_flag
-			}
-			if = {
-				limit = {
-					has_estate = estate_church
-				}
-				add_unrest = 2
-			}
-			if = {
-				limit = {
-					OR = {
-						has_estate = estate_nhs_nobles
-						has_estate = estate_nobles
-					}
-				}
-				add_unrest = 15
-			}
-			if = {
-				limit = {
-					NOT = {
-						has_estate = estate_nhs_nobles
-						has_estate = estate_nobles
-						has_estate = estate_church
-					}
-				}
-				add_unrest = 10
-			}
+		event_target:nhs2_orthodoxevents103_target = {
+			add_unrest = 10
 		}
 		add_estate_loyalty = {
 			estate = estate_church
@@ -5950,23 +5920,8 @@ country_event = {
 			influence = 5
 			duration = 5475
 		}
-		if = {
-			limit = {
-				has_estate = estate_nhs_nobles
-			}
-			add_estate_loyalty = {
-				estate = estate_nhs_nobles
-				loyalty = -10
-			}
-		}
-		if = {
-			limit = {
-				has_estate = estate_nobles
-			}
-			add_estate_loyalty = {
-				estate = estate_nobles
-				loyalty = -10
-			}
+		nhs_add_noble_estate_loyalty = {
+			loyalty = -10
 		}
 		nhs_for_patriarch = yes
 		hidden_effect = { add_patriarch_authority = 0.05 }
@@ -5985,23 +5940,8 @@ country_event = {
 			influence = -10
 			duration = 5475
 		}
-		if = {
-			limit = {
-				has_estate = estate_nhs_nobles
-			}
-			add_estate_loyalty = {
-				estate = estate_nhs_nobles
-				loyalty = 10
-			}
-		}
-		if = {
-			limit = {
-				has_estate = estate_nobles
-			}
-			add_estate_loyalty = {
-				estate = estate_nobles
-				loyalty = 10
-			}
+		nhs_add_noble_estate_loyalty = {
+			loyalty = 10
 		}
 		nhs_anti_patriarch = yes
 		hidden_effect = { add_patriarch_authority = -0.05 }
@@ -6181,11 +6121,10 @@ country_event = {
 		any_owned_province = {
 			religion = elysian_orthodoxy
 			culture_group = ROOT
+			is_city = yes
+			is_state = yes
 		}
-		OR = {
-			has_estate = estate_nhs_nobles
-			has_estate = estate_nobles
-		}
+		nhs_has_nobles_estate = yes
 	}
 	
 	immediate = {
@@ -6194,22 +6133,16 @@ country_event = {
 				limit = {
 					religion = elysian_orthodoxy
 					culture_group = ROOT
-					OR = {
-						has_estate = estate_nhs_nobles
-						has_estate = estate_nobles
-						owner = {
-							NOT = { has_estate = estate_nhs_nobles }
-							NOT = { has_estate = estate_nobles }
-						}
-					}
+					is_city = yes
+					is_state = yes
 				}
-				set_province_flag = nhs2_orthodoxevents107_flag
 				save_event_target_as = nhs2_orthodoxevents107_target
 			}
 		}
 	}
 	
 	option = {
+		goto = nhs2_orthodoxevents107_target
 		name = "nhs2_orthodoxevents.107.a"
 		tooltip = { add_patriarch_authority = 0.05 }
 		add_estate_loyalty = {
@@ -6229,10 +6162,7 @@ country_event = {
 	option = {
 		name = "nhs2_orthodoxevents.107.b"
 		tooltip = { add_patriarch_authority = -0.05 }
-		random_owned_province = {
-			limit = {
-				has_province_flag = nhs2_orthodoxevents107_flag
-			}
+		event_target:nhs2_orthodoxevents107_target = {
 			add_base_tax = 1
 		}
 		nhs_anti_patriarch = yes

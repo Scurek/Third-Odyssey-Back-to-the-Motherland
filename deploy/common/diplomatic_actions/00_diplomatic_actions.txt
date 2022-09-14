@@ -85,203 +85,60 @@
 # ask_for_tributary_state_action
 # knowledge_sharing
 
-allianceaction = {
-	condition = {
-		tooltip = NHS_CANNOT_ALLY_YET
-		potential = {
-			exists = HLL
-			exists = MK1
-			AND = {
-				nhs_check_all_elysian_tags = { CONDITION = tag }
-				FROM = {
-					OR = {
-						tag = HLL
-						tag = MK1
-					}
-				}
-			}
-			AND = {
-				OR = {
-					tag = HLL
-					tag = MK1
-				}
-				FROM = {
-					nhs_check_all_elysian_tags = { CONDITION = tag }
-				}
-			}
-			NOT = { has_global_flag = nhs_meeting }
-			NOT = { is_year = 1460 }
-		}
-		allow = {
-			always = no
-		}
-	}
-	condition = {
-		tooltip = NHS_ONLY_ONE_VIKING_ALLY
-		potential = {
-			FROM = {
-				OR = {
-					tag = HLL
-					tag = MK1
-				}
-			}
-			ROOT = {
-				nhs_check_all_elysian_tags = { CONDITION = tag }
-				OR = {
-					alliance_with = MK1
-					alliance_with = HLL
-				}
-			}
-		}
-		allow = {
-			always = no
-		}
-	}
-	condition = {
-		tooltip = NHS_ONLY_TRADING_VIKING_ALLY
-		potential = {
-			FROM = {
-				OR = {
-					tag = HLL
-					tag = MK1
-				}
-			}
-			ROOT = {
-				nhs_check_all_elysian_tags = { CONDITION = tag }
-				OR = {
-					AND = {
-						FROM = { tag = HLL }
-						trading_with_markland = yes
-					}
-					AND = {
-						FROM = { tag = MK1 }
-						trading_with_helluland = yes
-					}
-				}
-			}
-		}
-		allow = {
-			always = no
-		}
-	}
-	condition = {
-		tooltip = NHS_ONLY_TRADING_VIKING_ALLY_V
-		potential = {
-			FROM = {
-				nhs_check_all_elysian_tags = { CONDITION = tag }
-			}
-			ROOT = {
-				OR = {
-					AND = {
-						tag = HLL
-						trading_with_markland = yes
-					}
-					AND = {
-						tag = MK1
-						trading_with_helluland = yes
-					}
-				}
-			}
-		}
-		allow = {
-			always = no
-		}
-	}
-	condition = {
-		tooltip = NHS_ONLY_ONE_VIKING_ALLY_V
-		potential = {
-			FROM = {
-				nhs_check_all_elysian_tags = { CONDITION = tag }
-			}
-			ROOT = {
-				OR = {
-					tag = MK1
-					tag = HLL
-				}
-				nhs_check_all_elysian_tags = { CONDITION = alliance_with }
-			}
-		}
-		allow = {
-			always = no
-		}
-	}
-	
-	condition = {
-	#	tooltip = NHS_NO_MORE_PORT_UNION
-		potential = {
-			nhs_allow_dip_actions_ely_pot = yes
-		}
-		allow = {
-			nhs_allow_dip_actions_ely_allow = yes
-		}
-	}
-	
-	condition = {
-	#	tooltip = NHS_NO_MORE_PORT_UNION
-		potential = {
-			nhs_allow_dip_actions_eu_pot = yes
-		}
-		allow = {
-			nhs_allow_dip_actions_eu_allow = yes
-		}
-	}
-
-	condition = {
-		potential = {
-			has_native_government = yes
-			NOT = { dip_tech = 3 }
-		}
-		allow = {
-			OR = {
-				dip_tech = 3
-				custom_trigger_tooltip = {
-					tooltip = to_neighbors_country_tt
-					NOT = {
-						border_distance = {
-							who = FROM
-							distance = 1
-						}
-					}
-				}
-				custom_trigger_tooltip = {
-					tooltip = to_neighbors_allied_country_tt
-					FROM = {
-						any_neighbor_country = {
-							alliance_with = ROOT
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-threaten_war = {
-	condition = {
-		tooltip = NHS_COLONIES
-		potential = {
-			FROM = {
-				OR = {
-					tag = HLL
-					tag = MK1
-				}
-				NOT = { has_global_flag = nhs_vov_war_brewing }
-			}
-			ROOT = {
-				OR = {
-					tag = HLL
-					tag = MK1
-				}
-				NOT = { has_global_flag = nhs_vov_war_brewing }
-			}
-		}
-		allow = {
-			always = no
-		}
-	}
-}
-
+#Cut because the Grand Crusade war doesn't really have any place in the current content, but it could be very useful for the future.
+#Also modders should have the chance to just uncomment it all so they can experience the great 30 Years War like Crusade.
 declarewar = {
+	#	condition = {
+	#		tooltip = GRAND_CRUSADE_NO_OTHER_WAR
+	#		potential = { }
+	#		allow = {
+	#			NOT = {
+	#				is_in_war = {
+	#					attacker_leader = ROOT
+	#					casus_belli = cb_grand_crusade
+	#				}
+	#			}
+	#		}
+	#	}
+	#	effect = {
+	#		if = {
+	#			limit = {
+	#				has_global_flag = grand_crusades_enabled
+	#				has_country_flag = grand_crusader_war_monger_flag
+	#				is_in_war = {
+	#					attacker_leader = ROOT
+	#					casus_belli = cb_grand_crusade
+	#				}
+	#			}
+	#			FROM = {
+	#				save_global_event_target_as = grand_crusade_target
+	#			}
+	#		}
+	#	}
+	effect = {
+		if = {
+			limit = { 
+				has_country_flag = nor_norwegian_independence_modifier
+				FROM = { tag = DAN }
+			}
+			add_country_modifier = {
+				name = nor_norwegian_independence_war_mod
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = teu_joined_the_hre
+				is_part_of_hre = yes
+				FROM = { is_part_of_hre = yes }
+			}
+			clr_country_flag = teu_joined_the_hre
+			country_event = {
+				id = flavor_teu.33
+				days = 10
+			}
+		}
+	}
 	condition = {
 		tooltip = 100_YEAR_PEACE
 		potential = {
@@ -494,31 +351,217 @@ declarewar = {
 	}
 }
 
-
-warningaction = {
+allianceaction = {
 	condition = {
+		tooltip = PIRATE_DENIED_ALLIANCE
 		potential = {
-			ROOT = {
-				any_neighbor_country = {
-					tag = BYZ
-				}
-			}
-			FROM = {
-				OR = {
-					NOT = { tag = BYZ }
-					is_year = 1448
-				}
-			}
+			has_government_attribute = cannot_ally_non_pirates
 		}
 		allow = {
+			OR = {
+				NOT = { has_government_attribute = cannot_ally_non_pirates }
+				FROM = { has_government_attribute = is_pirate_republic_reform }
+			}
+		}
+	}
+	condition = {
+		tooltip = FROM_PIRATE_DENIED_ALLIANCE
+		potential = {
 			FROM = {
-				OR = {
-					NOT = { tag = BYZ }
-					is_year = 1448
+				has_government_attribute = cannot_ally_non_pirates
+			}
+			NOT = { has_government_attribute = is_pirate_republic_reform }
+		}
+		allow = {
+			OR = {
+				has_government_attribute = is_pirate_republic_reform
+				NOT = { FROM = { has_government_attribute = cannot_ally_non_pirates } }
+			}
+		}
+	}
+	condition = {
+		tooltip = REPUBLIC_DENIED_ALLIANCE
+		potential = {
+			has_government_attribute = cannot_ally_non_republics
+		}
+		allow = {
+			OR = {
+				NOT = { has_government_attribute = cannot_ally_non_republics }
+				FROM = { government = republic }
+			}
+		}
+	}
+	condition = {
+		tooltip = FROM_REPUBLIC_DENIED_ALLIANCE
+		potential = {
+			FROM = {
+				has_government_attribute = cannot_ally_non_republics
+			}
+			NOT = { government = republic }
+		}
+		allow = {
+			OR = {
+				government = republic
+				NOT = { FROM = { has_government_attribute = cannot_ally_non_republics } }
+			}
+		}
+	}
+	condition = {
+		tooltip = REV_REPUBLIC_DENIED_ALLIANCE
+		potential = {
+			has_government_attribute = cannot_ally_non_republics_or_non_rev
+		}
+		allow = {
+			OR = {
+				NOT = { has_government_attribute = cannot_ally_non_republics_or_non_rev }
+				FROM = { 
+					OR = {
+						government = republic 
+						is_revolutionary = yes
+					}
 				}
 			}
 		}
 	}
+	condition = {
+		tooltip = FROM_REV_REPUBLIC_DENIED_ALLIANCE
+		potential = {
+			FROM = {
+				has_government_attribute = cannot_ally_non_republics_or_non_rev
+			}
+			NOT = { government = republic }
+			is_revolutionary = no
+		}
+		allow = {
+			OR = {
+				OR = {
+					government = republic 
+					is_revolutionary = yes
+				}
+				NOT = { FROM = { has_government_attribute = cannot_ally_non_republics_or_non_rev } }
+			}
+		}
+	}
+	condition = {
+		tooltip = NHS_CANNOT_ALLY_YET
+		potential = {
+			exists = HLL
+			exists = MK1
+			AND = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+				FROM = {
+					OR = {
+						tag = HLL
+						tag = MK1
+					}
+				}
+			}
+			AND = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+				FROM = {
+					nhs_check_all_elysian_tags = { CONDITION = tag }
+				}
+			}
+			NOT = { has_global_flag = nhs_meeting }
+			NOT = { is_year = 1460 }
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = NHS_ONLY_ONE_VIKING_ALLY
+		potential = {
+			FROM = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+			}
+			ROOT = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+				OR = {
+					alliance_with = MK1
+					alliance_with = HLL
+				}
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = NHS_ONLY_TRADING_VIKING_ALLY
+		potential = {
+			FROM = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+			}
+			ROOT = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+				OR = {
+					AND = {
+						FROM = { tag = HLL }
+						trading_with_markland = yes
+					}
+					AND = {
+						FROM = { tag = MK1 }
+						trading_with_helluland = yes
+					}
+				}
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = NHS_ONLY_TRADING_VIKING_ALLY_V
+		potential = {
+			FROM = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+			}
+			ROOT = {
+				OR = {
+					AND = {
+						tag = HLL
+						trading_with_markland = yes
+					}
+					AND = {
+						tag = MK1
+						trading_with_helluland = yes
+					}
+				}
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = NHS_ONLY_ONE_VIKING_ALLY_V
+		potential = {
+			FROM = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+			}
+			ROOT = {
+				OR = {
+					tag = MK1
+					tag = HLL
+				}
+				nhs_check_all_elysian_tags = { CONDITION = alliance_with }
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	
 	condition = {
 	#	tooltip = NHS_NO_MORE_PORT_UNION
 		potential = {
@@ -539,6 +582,55 @@ warningaction = {
 		}
 	}
 
+	condition = {
+		potential = {
+			has_native_government = yes
+			NOT = { dip_tech = 3 }
+		}
+		allow = {
+			OR = {
+				dip_tech = 3
+				custom_trigger_tooltip = {
+					tooltip = to_neighbors_country_tt
+					NOT = {
+						border_distance = {
+							who = FROM
+							distance = 1
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = to_neighbors_allied_country_tt
+					FROM = {
+						any_neighbor_country = {
+							alliance_with = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+enforce_peace = {
+	#do this before the peace is enforced, or there is no war enemy country
+	pre_effect = {
+		if = {
+			limit = {
+				has_country_modifier = liv_protector_of_the_catholics
+				FROM = {
+					any_war_enemy_country = {
+						religion = catholic
+						is_in_war = {
+							defender_leader = THIS
+							attacker_leader = FROM
+						}
+					}
+				}
+			}
+			add_papal_influence = 25
+		}
+	}
 	condition = {
 		potential = {
 			has_government_attribute = msg_cannot_use_guarantees_and_warning_and_enforce_peace
@@ -832,6 +924,15 @@ integrationaction = {
 			}
 		}
 	}
+	condition = {
+		tooltip = PUINTEGRATIONIMPOSSIBLE
+		potential = {
+			has_government_attribute = cannot_integrate_personal_unions
+		}
+		allow = {
+			NOT = { has_government_attribute = cannot_integrate_personal_unions }
+		}
+	}
 	#condition = {
 	#	tooltip = INTEGRATEINVALID
 	#	potential = {
@@ -920,6 +1021,15 @@ abandon_union_action = {
 			}
 		}
 	}
+	condition = {
+		tooltip = PUABANDONINGIMPOSSIBLE
+		potential = {
+			has_government_attribute = cannot_abandon_personal_unions
+		}
+		allow = {
+			NOT = { has_government_attribute = cannot_abandon_personal_unions }
+		}
+	}
 }
 
 form_coalition = {
@@ -963,21 +1073,165 @@ form_coalition = {
 	}
 }
 
-#fabricate_claim = {
-#	condition = {
-#		tooltip = NHS_NOTNATIVE
-#		potential = {
-#			OR = {
-#				government = native_council
-#				government = native_council2
-#			}
-#		}
-#		allow = {
-#			NOT = { government = native_council }
-#			NOT = { government = native_council2 }
-#		}
-#	}
-#}
+request_to_join_trade_league = {
+	condition = {
+		tooltip = NOT_RELEVANT_TRADE_REGION_FROM
+		potential = {
+		}
+		allow = {
+			home_trade_node = {
+				trade_share = {
+					country = from
+					share = 1
+				}
+			}
+		}
+	}
+}
+
+invite_to_trade_league = {
+	condition = {
+		tooltip = NOT_RELEVANT_TRADE_REGION
+		potential = {
+		}
+		allow = {
+			from = {
+				home_trade_node = {
+					trade_share = {
+						country = root
+						share = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+tributary_state_action = {
+	condition = {
+		potential = {
+			ai = yes
+		}
+		allow = {
+			OR = {
+				NOT = { ROOT = { capital_scope = { superregion = china_superregion } } }
+				AND = {
+					ROOT = { capital_scope = { superregion = china_superregion } }
+					NOT = { FROM = { capital_scope = { superregion = china_superregion } } }
+				}
+			}
+			OR = {
+				NOT = { ROOT = { capital_scope = { region = japan_region } } }
+				AND = {
+					ROOT = { capital_scope = { region = japan_region } }
+					NOT = { FROM = { capital_scope = { region = japan_region } } }
+				}
+			}
+		}
+	}
+}
+ask_for_tributary_state_action = {
+	condition = {
+		potential = {
+			ai = yes
+		}
+		allow = {
+			OR = {
+				NOT = { FROM = { capital_scope = { superregion = china_superregion } } }
+				AND = {
+					FROM = { capital_scope = { superregion = china_superregion } }
+					NOT = { ROOT = { capital_scope = { superregion = china_superregion } } }
+				}
+			}
+			OR = {
+				NOT = { FROM = { capital_scope = { region = japan_region } } }
+				AND = {
+					FROM = { capital_scope = { region = japan_region } }
+					NOT = { ROOT = { capital_scope = { region = japan_region } } }
+				}
+			}
+		}
+	}
+}
+
+threaten_war = {
+	condition = {
+		tooltip = NHS_COLONIES
+		potential = {
+			FROM = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+				NOT = { has_global_flag = nhs_vov_war_brewing }
+			}
+			ROOT = {
+				OR = {
+					tag = HLL
+					tag = MK1
+				}
+				NOT = { has_global_flag = nhs_vov_war_brewing }
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+}
+
+warningaction = {
+	condition = {
+		potential = {
+			ROOT = {
+				any_neighbor_country = {
+					tag = BYZ
+				}
+			}
+			FROM = {
+				OR = {
+					NOT = { tag = BYZ }
+					is_year = 1448
+				}
+			}
+		}
+		allow = {
+			FROM = {
+				OR = {
+					NOT = { tag = BYZ }
+					is_year = 1448
+				}
+			}
+		}
+	}
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_ely_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_ely_allow = yes
+		}
+	}
+	
+	condition = {
+	#	tooltip = NHS_NO_MORE_PORT_UNION
+		potential = {
+			nhs_allow_dip_actions_eu_pot = yes
+		}
+		allow = {
+			nhs_allow_dip_actions_eu_allow = yes
+		}
+	}
+
+	condition = {
+		potential = {
+			has_government_attribute = msg_cannot_use_guarantees_and_warning_and_enforce_peace
+		}
+		allow = {
+			msg_can_use_guarantees_and_favors_trigger_with_tooltip = yes
+		}
+	}
+}
 
 guaranteeaction = {
 	condition = {
@@ -1168,51 +1422,6 @@ giftaction = {
 	}
 }
 
-request_to_join_trade_league = {
-	condition = {
-		tooltip = NOT_RELEVANT_TRADE_REGION_FROM
-		potential = {
-		}
-		allow = {
-			home_trade_node = {
-				trade_share = {
-					country = from
-					share = 1
-				}
-			}
-		}
-	}
-}
-
-invite_to_trade_league = {
-	condition = {
-		tooltip = NOT_RELEVANT_TRADE_REGION
-		potential = {
-		}
-		allow = {
-			from = {
-				home_trade_node = {
-					trade_share = {
-						country = root
-						share = 1
-					}
-				}
-			}
-		}
-	}
-}
-
-enforce_peace = {
-	condition = {
-		potential = {
-			has_government_attribute = msg_cannot_use_guarantees_and_warning_and_enforce_peace
-		}
-		allow = {
-			msg_can_use_guarantees_and_favors_trigger_with_tooltip = yes
-		}
-	}
-}
-
 sell_ships_action = {
 	condition = {
 		potential = {
@@ -1220,53 +1429,6 @@ sell_ships_action = {
 		}
 		allow = {
 			NOT = { has_country_modifier = byz_flight }
-		}
-	}
-}
-
-tributary_state_action = {
-	condition = {
-		potential = {
-			ai = yes
-		}
-		allow = {
-			OR = {
-				NOT = { ROOT = { capital_scope = { superregion = china_superregion } } }
-				AND = {
-					ROOT = { capital_scope = { superregion = china_superregion } }
-					NOT = { FROM = { capital_scope = { superregion = china_superregion } } }
-				}
-			}
-			OR = {
-				NOT = { ROOT = { capital_scope = { region = japan_region } } }
-				AND = {
-					ROOT = { capital_scope = { region = japan_region } }
-					NOT = { FROM = { capital_scope = { region = japan_region } } }
-				}
-			}
-		}
-	}
-}
-ask_for_tributary_state_action = {
-	condition = {
-		potential = {
-			ai = yes
-		}
-		allow = {
-			OR = {
-				NOT = { FROM = { capital_scope = { superregion = china_superregion } } }
-				AND = {
-					FROM = { capital_scope = { superregion = china_superregion } }
-					NOT = { ROOT = { capital_scope = { superregion = china_superregion } } }
-				}
-			}
-			OR = {
-				NOT = { FROM = { capital_scope = { region = japan_region } } }
-				AND = {
-					FROM = { capital_scope = { region = japan_region } }
-					NOT = { ROOT = { capital_scope = { region = japan_region } } }
-				}
-			}
 		}
 	}
 }

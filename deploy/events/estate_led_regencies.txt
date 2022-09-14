@@ -13,6 +13,17 @@ country_event = { #Estate in power surpassed by another
 	picture = DEBATE_REPUBLICAN_eventPicture
 	
 	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			NOT = { has_country_flag = had_estate_surpass_in_power }
+			had_country_flag = {
+				flag = had_estate_surpass_in_power
+				days = 365
+			}
+		}
+		is_lesser_in_union = no
+	}
 	
 	immediate = {
 		hidden_effect = {
@@ -48,16 +59,6 @@ country_event = { #Estate in power surpassed by another
 					}
 				}
 				set_country_flag = noble_coup
-			}
-		}
-	}
-
-	trigger = {
-		OR = {
-			NOT = { has_country_flag = had_estate_surpass_in_power }
-			had_country_flag = {
-				flag = had_estate_surpass_in_power
-				days = 365
 			}
 		}
 	}
@@ -272,7 +273,7 @@ country_event = { #Estate in power wants to add a privilege
 						}
 					}
 					AND = {
-						nhs_has_noble_estate_led_regency = yes
+						nhs_has_noble_estate_led_regency = {}
 						nhs_num_of_noble_estate_privileges = {
 							value = 2
 						}
@@ -319,7 +320,7 @@ country_event = { #Estate in power wants to add a privilege
 						}
 					}
 					AND = {
-						nhs_has_noble_estate_led_regency = yes
+						nhs_has_noble_estate_led_regency = {}
 						nhs_num_of_noble_estate_privileges = {
 							value = 2
 						}
@@ -364,7 +365,7 @@ country_event = { #Estate in power wants to add a privilege
 						}
 					}
 					AND = {
-						nhs_has_noble_estate_led_regency = yes
+						nhs_has_noble_estate_led_regency = {}
 						nhs_num_of_noble_estate_privileges = {
 							value = 2
 						}
@@ -401,7 +402,7 @@ country_event = { #Estate in power wants to add a privilege
 		}
 		else_if = {
 			limit = {
-				nhs_has_noble_estate_led_regency = yes
+				nhs_has_noble_estate_led_regency = {}
 			}
 			nhs_add_noble_estate_loyalty_modifier = {
 				loyalty = -10
@@ -484,6 +485,7 @@ country_event = { #Estate in power attacks rivals
 			add_estate_influence_modifier = {
 				estate = estate_church
 				influence = 10
+				duration = 7300
 			}
 			add_estate_loyalty_modifier = {
 				estate = estate_burghers
@@ -510,7 +512,7 @@ country_event = { #Estate in power attacks rivals
 		}
 		else_if = {
 			limit = {
-				nhs_has_noble_estate_led_regency = yes
+				nhs_has_noble_estate_led_regency = {}
 			}
 			nhs_add_noble_estate_influence_modifier = {
 				influence = 10
@@ -580,7 +582,7 @@ country_event = { #Estate in power attacks rivals
 		}
 		else_if = {
 			limit = {
-				nhs_has_noble_estate_led_regency = yes
+				nhs_has_noble_estate_led_regency = {}
 			}
 			nhs_add_noble_estate_influence_modifier = {
 				influence = -20
@@ -601,7 +603,7 @@ country_event = { #Nobles offer the crown
 	
 	trigger = {
 		has_heir = yes
-		nhs_had_noble_estate_led_regency = {
+		nhs_has_noble_estate_led_regency = {
 			duration = 2
 		}
 		nhs_nobles_estate_influence = {
@@ -764,9 +766,11 @@ country_event = { #Estate's leader is a loyalist
 	title = estate_regency_events.7.t
 	desc = estate_regency_events.7.d
 	picture = CONQUEST_eventPicture
-	
 	is_triggered_only = yes
-	
+	trigger = { 
+		has_regency = yes 
+		NOT = { has_ruler_modifier = loyalist_leader_mod }
+	}
 	mean_time_to_happen = {
 		days = 1
 	}
@@ -787,7 +791,6 @@ country_event = { #Assassination/Coup attempt
 	desc = estate_regency_events.8.d
 	picture = ASSASSINATION_eventPicture
 	
-	is_triggered_only = yes
 	
 	trigger = {
 		has_heir = yes
@@ -795,7 +798,6 @@ country_event = { #Assassination/Coup attempt
 			AND = {
 				has_estate_led_regency = {
 					estate = estate_burghers
-					duration = 2
 				}
 				estate_influence = {
 					estate = estate_burghers
@@ -804,14 +806,13 @@ country_event = { #Assassination/Coup attempt
 				NOT = {
 					estate_loyalty = {
 						estate = estate_burghers
-						loyalty = 10
+						loyalty = 40
 					}
 				}
 			}
 			AND = {
-				has_estate_led_regency = {
+				has_estate_led_regency = { 
 					estate = estate_church
-					duration = 2
 				}
 				estate_influence = {
 					estate = estate_church
@@ -820,28 +821,28 @@ country_event = { #Assassination/Coup attempt
 				NOT = {
 					estate_loyalty = {
 						estate = estate_church
-						loyalty = 10
+						loyalty = 40
 					}
 				}
 			}
 			AND = {
-				nhs_had_noble_estate_led_regency = {
-					duration = 2
-				}
+				nhs_has_noble_estate_led_regency = {}
 				nhs_nobles_estate_influence = {
-					influence = 50
+					influence = 40
 				}
 				NOT = {
 					nhs_nobles_estate_loyalty = {
-						loyalty = 10
+						loyalty = 40
 					}
 				}
 			}
 		}
+		NOT = { has_country_flag = coup_attempt_starts } 
+		NOT = { has_country_modifier = recent_coup_modifier }
 	}
 	
 	mean_time_to_happen = {
-		days = 1
+		days = 120
 	}
 	
 	option = {
@@ -853,9 +854,27 @@ country_event = { #Assassination/Coup attempt
 			95 = {
 				custom_tooltip = "coup_attempt_starts_tooltip"
 				set_country_flag = coup_attempt_starts
-				set_country_flag = estate_vs_heir
+				if = { 
+					limit = { 
+						nhs_has_noble_estate_led_regency = {} 
+					}
+					set_country_flag = noble_coup
+				}
+				else_if = {
+					limit = { 
+						has_estate_led_regency = { estate = estate_burghers } 
+					}
+					set_country_flag = burgher_coup 
+				}
+				else_if = {
+					limit = { 
+						has_estate_led_regency = { estate = estate_church } 
+					}
+					set_country_flag = church_coup 
+				}
 			}
 		}
+		add_legitimacy = -50 
 	}
 }
 
@@ -903,107 +922,106 @@ country_event = { #Estate Leader is a Great Influence
 	}
 }
 
-country_event = { #Coup attempt against consort
-	id = estate_regency_events.10
-	title = estate_regency_events.10.t
-	desc = estate_regency_events.10.d
-	picture = SPY_eventPicture
+# country_event = { #Coup attempt against consort
+# 	id = estate_regency_events.10
+# 	title = estate_regency_events.10.t
+# 	desc = estate_regency_events.10.d
+# 	picture = SPY_eventPicture
+#	
 	
-	is_triggered_only = yes
+# 	trigger = {
+# 		has_consort_regency = yes
+# 		OR = {
+# 			AND = {
+# 				estate_influence = {
+# 					estate = estate_burghers
+# 					influence = 70
+# 				}
+# 				NOT = {
+# 					estate_loyalty = {
+# 						estate = estate_burghers
+# 						loyalty = 40
+# 					}
+# 				}
+# 			}
+# 			AND = {
+# 				estate_influence = {
+# 					estate = estate_church
+# 					influence = 70
+# 				}
+# 				NOT = {
+# 					estate_loyalty = {
+# 						estate = estate_church
+# 						loyalty = 40
+# 					}
+# 				}
+# 			}
+# 			AND = {
+# 				nhs_nobles_estate_influence = {
+# 					influence = 70
+# 				}
+# 				NOT = {
+# 					nhs_nobles_estate_loyalty = {
+# 						loyalty = 40
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
 	
-	trigger = {
-		has_consort_regency = yes
-		OR = {
-			AND = {
-				estate_influence = {
-					estate = estate_burghers
-					influence = 70
-				}
-				NOT = {
-					estate_loyalty = {
-						estate = estate_burghers
-						loyalty = 10
-					}
-				}
-			}
-			AND = {
-				estate_influence = {
-					estate = estate_church
-					influence = 70
-				}
-				NOT = {
-					estate_loyalty = {
-						estate = estate_church
-						loyalty = 10
-					}
-				}
-			}
-			AND = {
-				nhs_nobles_estate_influence = {
-					influence = 70
-				}
-				NOT = {
-					nhs_nobles_estate_loyalty = {
-						loyalty = 10
-					}
-				}
-			}
-		}
-	}
+# 	immediate = {
+# 		if = {
+# 			limit = {
+# 				estate_influence = {
+# 					estate = estate_burghers
+# 					influence = 70
+# 				}
+# 				NOT = {
+# 					estate_loyalty = {
+# 						estate = estate_burghers
+# 						loyalty = 40
+# 					}
+# 				}
+# 			}
+# 			set_country_flag = burgher_coup
+# 		}
+# 		else_if = {
+# 			limit = {
+# 				estate_influence = {
+# 					estate = estate_church
+# 					influence = 70
+# 				}
+# 				NOT = {
+# 					estate_loyalty = {
+# 						estate = estate_church
+# 						loyalty = 40
+# 					}
+# 				}
+# 			}
+# 			set_country_flag = church_coup
+# 		}
+# 		else_if = {
+# 			limit = {
+# 				nhs_nobles_estate_influence = {
+# 					influence = 70
+# 				}
+# 				NOT = {
+# 					nhs_nobles_estate_loyalty = {
+# 						loyalty = 40
+# 					}
+# 				}
+# 			}
+# 			set_country_flag = noble_coup
+# 		}
+# 	}
 	
-	immediate = {
-		if = {
-			limit = {
-				estate_influence = {
-					estate = estate_burghers
-					influence = 70
-				}
-				NOT = {
-					estate_loyalty = {
-						estate = estate_burghers
-						loyalty = 10
-					}
-				}
-			}
-			set_country_flag = burgher_coup
-		}
-		else_if = {
-			limit = {
-				estate_influence = {
-					estate = estate_church
-					influence = 70
-				}
-				NOT = {
-					estate_loyalty = {
-						estate = estate_church
-						loyalty = 10
-					}
-				}
-			}
-			set_country_flag = church_coup
-		}
-		else_if = {
-			limit = {
-				nhs_nobles_estate_influence = {
-					influence = 70
-				}
-				NOT = {
-					nhs_nobles_estate_loyalty = {
-						loyalty = 10
-					}
-				}
-			}
-			set_country_flag = noble_coup
-		}
-	}
+# 	mean_time_to_happen = {
+# 		days = 120
+# 	}
 	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	option = {
-		name = estate_regency_events.10.a #Estate revolts
-		custom_tooltip = "coup_attempt_starts_tooltip"
-		set_country_flag = coup_attempt_starts
-	}
-}
+# 	option = {
+# 		name = estate_regency_events.10.a #Estate revolts
+# 		custom_tooltip = "coup_attempt_starts_tooltip"
+# 		set_country_flag = coup_attempt_starts
+# 	}
+# }

@@ -115,6 +115,7 @@ feudalism = {
 					technology_group = north_american
 					technology_group = south_american
 					technology_group = sub_saharan
+					technology_group = aboriginal_tech
 				}
 			}
 			AND = {
@@ -139,6 +140,125 @@ feudalism = {
 
 	embracement_speed = {
 		modifier = {
+			factor = 1.6
+			scale = yes
+			custom_trigger_tooltip = {
+				tooltip = FRIENDLY_NEIGHBOR_OR_COAST_PROVINCE_HAS_EMBRACED
+				any_friendly_coast_border_province = {
+					feudalism = 100
+					# owner = {
+					# 	msg_is_not_sparta_with_closed_trade = yes
+					# }
+				}
+			}
+		}
+		modifier = {
+			factor = 0.8
+			scale = yes
+			potential = {
+				NOT = {
+					any_friendly_coast_border_province = {
+						feudalism = 100
+						# owner = {
+						# 	msg_is_not_sparta_with_closed_trade = yes
+						# }
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NEIGHBOR_NOT_OWNED_IS_FEUDAL
+				any_neighbor_province = {
+					NOT = { owned_by = ROOT }
+					feudalism = 100
+					# owner = {
+					# 	msg_is_not_sparta_with_closed_trade = yes
+					# }
+				}
+			}
+		}
+
+		modifier = {
+			factor = 0.15
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = { nhs_has_nobles_estate = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = FEUDALISM_AND_NOBLES
+				any_neighbor_province = {
+					feudalism = 100
+				}
+				owner = {
+					nhs_has_nobles_estate = yes
+					nhs_nobles_estate_loyalty = {
+						loyalty = 40
+					}
+					nhs_nobles_estate_territory = {
+						territory = 30
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 5
+			scale = yes
+			potential = {
+				owner = {
+					is_colonial_nation = yes
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = PORT_OR_CAPITAL_IN_COLONY_FEUDAL
+				OR = {
+					has_port = yes
+					is_capital = yes
+				}
+				owner = {
+					is_colonial_nation = yes
+					overlord = { has_institution = feudalism }
+				}
+			}
+		}
+		modifier = {
+			factor = 0.1
+			scale = yes
+			potential = {
+				owner = { is_colonial_nation = no }
+			}
+			custom_trigger_tooltip = {
+				tooltip = CAPITAL_IN_OLD_WORLD_FEUDAL
+			
+				is_capital = yes
+				NOT = { continent = north_america }
+				NOT = { continent = south_america }
+				NOT = { continent = new_world }
+				NOT = { region = australia_region }
+				owner = {
+					NOT = { government = tribal }
+					NOT = { has_native_government = yes }
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			scale = yes
+			potential = {
+				owner = {
+					has_institution = feudalism
+				}
+			}
+			
+			custom_trigger_tooltip = {
+				tooltip = tooltip_feudalism_embraced
+				is_owned_by_trade_company = no
+				owner = {
+					has_institution = feudalism
+				}
+			}
+		 }
+		 ## Third Odyssey
+		 modifier = {
 			factor = 0.6
 			scale = yes
 			force_potential = yes	# Hide the this modifier when potential is false
@@ -267,126 +387,7 @@ feudalism = {
 				}
 			}
 		}
-
 		modifier = {
-			factor = 1.6
-			scale = yes
-			custom_trigger_tooltip = {
-				tooltip = FRIENDLY_NEIGHBOR_OR_COAST_PROVINCE_HAS_EMBRACED
-				any_friendly_coast_border_province = {
-					feudalism = 100
-					# owner = {
-					# 	msg_is_not_sparta_with_closed_trade = yes
-					# }
-				}
-			}
-		}
-		modifier = {
-			factor = 0.8
-			scale = yes
-			potential = {
-				NOT = {
-					any_friendly_coast_border_province = {
-						feudalism = 100
-						# owner = {
-						# 	msg_is_not_sparta_with_closed_trade = yes
-						# }
-					}
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = NEIGHBOR_NOT_OWNED_IS_FEUDAL
-				any_neighbor_province = {
-					NOT = { owned_by = ROOT }
-					feudalism = 100
-					# owner = {
-					# 	msg_is_not_sparta_with_closed_trade = yes
-					# }
-				}
-			}
-		}
-
-		modifier = {
-			factor = 0.15
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = { nhs_has_nobles_estate = yes }
-			}
-			custom_trigger_tooltip = {
-				tooltip = FEUDALISM_AND_NOBLES
-				any_neighbor_province = {
-					feudalism = 100
-				}
-				owner = {
-					nhs_has_nobles_estate = yes
-					nhs_nobles_estate_loyalty = {
-						loyalty = 40
-					}
-					nhs_nobles_estate_territory = {
-						territory = 30
-					}
-				}
-			}
-		}
-		modifier = {
-			factor = 5
-			scale = yes
-			potential = {
-				owner = {
-					is_colonial_nation = yes
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = PORT_OR_CAPITAL_IN_COLONY_FEUDAL
-				OR = {
-					has_port = yes
-					is_capital = yes
-				}
-				owner = {
-					is_colonial_nation = yes
-					overlord = { has_institution = feudalism }
-				}
-			}
-		}
-		modifier = {
-			factor = 0.1
-			scale = yes
-			potential = {
-				owner = { is_colonial_nation = no }
-			}
-			custom_trigger_tooltip = {
-				tooltip = CAPITAL_IN_OLD_WORLD_FEUDAL
-			
-				is_capital = yes
-				NOT = { continent = north_america }
-				NOT = { continent = south_america }
-				NOT = { continent = new_world }
-				owner = {
-					NOT = { government = tribal }
-					NOT = { has_native_government = yes }
-				}
-			}
-		}
-		modifier = {
-			factor = 2
-			scale = yes
-			potential = {
-				owner = {
-					has_institution = feudalism
-				}
-			}
-			
-			custom_trigger_tooltip = {
-				tooltip = tooltip_feudalism_embraced
-				is_owned_by_trade_company = no
-				owner = {
-					has_institution = feudalism
-				}
-			}
-		 }
-		 ## Third Odyssey
-		 modifier = {
 			factor = 5
 			potential = {
 				owner = {
@@ -640,6 +641,7 @@ renaissance = {
 	
 	can_start = {
 		is_year = 1450
+		is_institution_enabled = feudalism
 		region = italy_region
 		is_state = yes
 		NOT = { province_id = 126 }
@@ -667,6 +669,141 @@ renaissance = {
 
 	
 	embracement_speed = {
+		modifier = {
+			scale = yes
+			factor = 0.6
+			custom_trigger_tooltip = {
+				tooltip = tooltip_any_friendly_coast_border_province_has_embraced_renaissance
+				any_friendly_coast_border_province = {
+					renaissance = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 0.3
+			scale = yes
+			potential = {
+				NOT = {
+					any_friendly_coast_border_province = {
+						renaissance = 100
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_any_neighbor_has_embraced_renaissance
+				any_neighbor_province = {
+					NOT = { owned_by = ROOT }
+					renaissance = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 1
+			potential = {
+				region = italy_region
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_italian_capital
+				is_capital = yes
+				region = italy_region
+				culture_group = latin
+			}
+			
+			
+		}
+		modifier = {
+			factor = 0.05
+			scale = yes
+			potential = {
+				continent = europe
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_development_10
+				continent = europe
+				development = 10
+			}
+		}
+		modifier = {
+			factor = 0.05
+			scale = yes
+			potential = {
+				continent = europe
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_development_20
+				development = 20
+				continent = europe
+			}
+		}
+		modifier = {
+			factor = 0.1
+			scale = yes
+			potential = {
+				continent = europe
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_development_5_post_1500
+				continent = europe
+				is_year = 1500
+				development = 5
+			}
+		}
+		modifier = {
+			factor = 0.5
+			scale = yes
+			potential = {
+				OR = {
+					area = flanders_area
+					area = tuscany_area
+					area = venetia_area
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_flanders_tuscany_venetia
+				OR = {
+					area = flanders_area
+					area = tuscany_area
+					area = venetia_area
+				}
+			}
+		}
+		modifier = {
+			factor = 5
+			scale = yes
+			potential = {
+				owner = {
+					is_colonial_nation = yes
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_colonial_overlord_renaissance
+				OR = {
+					has_port = yes
+					is_capital = yes
+				}
+				owner = {
+					is_colonial_nation = yes
+					overlord = { has_institution = renaissance }
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			scale = yes
+			potential = {
+				owner = {
+					has_institution = renaissance
+				}
+			}
+			
+			custom_trigger_tooltip = {
+				tooltip = tooltip_renaissance_embraced
+				is_owned_by_trade_company = no
+				owner = {
+					has_institution = renaissance
+				}
+			}
+		}
 		modifier = {
 			factor = 0.6
 			scale = yes
@@ -816,173 +953,6 @@ renaissance = {
 				}
 			}
 		}
-		modifier = {
-			scale = yes
-			factor = 0.6
-			custom_trigger_tooltip = {
-				tooltip = tooltip_any_friendly_coast_border_province_has_embraced_renaissance
-				any_friendly_coast_border_province = {
-					renaissance = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 0.3
-			scale = yes
-			potential = {
-				NOT = {
-					any_friendly_coast_border_province = {
-						renaissance = 100
-					}
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = tooltip_any_neighbor_has_embraced_renaissance
-				any_neighbor_province = {
-					NOT = { owned_by = ROOT }
-					renaissance = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 1
-			potential = {
-				region = italy_region
-			}
-			custom_trigger_tooltip = {
-				tooltip = tooltip_italian_capital
-				is_capital = yes
-				region = italy_region
-				culture_group = latin
-			}
-			
-			
-		}
-		modifier = {
-			factor = 0.05
-			scale = yes
-			potential = {
-				continent = europe
-			}
-			custom_trigger_tooltip = {
-				tooltip = tooltip_development_10
-				continent = europe
-				development = 10
-			}
-		}
-		modifier = {
-			factor = 0.05
-			scale = yes
-			potential = {
-				continent = europe
-			}
-			custom_trigger_tooltip = {
-				tooltip = tooltip_development_20
-				development = 20
-				continent = europe
-			}
-		}
-		modifier = {
-			factor = 0.1
-			scale = yes
-			potential = {
-				continent = europe
-			}
-			custom_trigger_tooltip = {
-				tooltip = tooltip_development_5_post_1500
-				continent = europe
-				is_year = 1500
-				development = 5
-			}
-		}
-		modifier = {
-			factor = 0.5
-			scale = yes
-			potential = {
-				OR = {
-					area = flanders_area
-					area = tuscany_area
-					area = venetia_area
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = tooltip_flanders_tuscany_venetia
-				OR = {
-					area = flanders_area
-					area = tuscany_area
-					area = venetia_area
-				}
-			}
-		}
-		modifier = {
-			factor = 5
-			scale = yes
-			potential = {
-				owner = {
-					is_colonial_nation = yes
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = tooltip_colonial_overlord_renaissance
-				OR = {
-					has_port = yes
-					is_capital = yes
-				}
-				owner = {
-					is_colonial_nation = yes
-					overlord = { has_institution = renaissance }
-				}
-			}
-		}
-		modifier = {
-			factor = 2
-			scale = yes
-			potential = {
-				owner = {
-					has_institution = renaissance
-				}
-			}
-			
-			custom_trigger_tooltip = {
-				tooltip = tooltip_renaissance_embraced
-				is_owned_by_trade_company = no
-				owner = {
-					has_institution = renaissance
-				}
-			}
-		}
-		modifier = {
-			factor = 20  #3 per month
-			potential = {
-				# owner = {
-				# 	OR = {
-				# 		technology_group = viking
-				# 	}
-				# }
-				OR = {
-					owner = { NOT = { has_institution = renaissance } }
-					any_neighbor_province = {
-						is_capital = yes
-						owned_by = ROOT
-					}
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = NHS_MODERNISATION_TT
-				# owner = {
-				# 	OR = {
-				# 		technology_group = viking
-				# 	}
-				# }
-				OR = {
-					owner = { NOT = { has_institution = renaissance } }
-					any_neighbor_province = {
-						is_capital = yes
-						owned_by = ROOT
-					}
-				}
-			}
-		}
 	}
 
 	ai_will_do = { #Cost of embracing institution must be lower than this factor * last month's regular income, and higher if loans are needed. (Or it has a more than long term goal...)
@@ -1102,7 +1072,7 @@ new_world_i = {
 			is_year = 1800
 		}
 	}
-
+	
 	can_start = {
 		if = {
 			limit = {
@@ -1182,43 +1152,6 @@ new_world_i = {
 					}
 				}
 			}
-
-			# owner = {
-			# 	has_idea = quest_for_the_new_world 
-			# 	capital_scope = { continent = europe }
-			# }
-			# owner = {
-			# 	has_idea = quest_for_the_new_world 
-			# 	capital_scope = { continent = europe }
-			# 	#at least one province colonised or colonising, or have a subject colony
-			# 	OR = {
-			# 		any_owned_province = {
-			# 			OR = {
-			# 				continent = north_america
-			# 				continent = south_america
-			# 			}
-			# 		}
-			# 		any_subject_country = {
-			# 			OR = {
-			# 				is_subject_of_type = colony
-			# 				is_subject_of_type = crown_colony
-			# 				is_subject_of_type = private_enterprise
-			# 				is_subject_of_type = self_governing_colony
-			# 			}
-			# 			capital_scope = {
-			# 				OR = {
-			# 					continent = north_america
-			# 					continent = south_america
-			# 				}
-			# 			}
-			# 		}
-			# 	}
-			# 	OR = {
-			# 		north_america = { has_discovered = PREV }
-			# 		south_america = { has_discovered = PREV }
-			# 		new_world = { has_discovered = PREV }
-			# 	}
-			# }
 		}
 	}
 	start_chance = 33		#in 100 for when a province can_start
@@ -1238,6 +1171,113 @@ new_world_i = {
 
 	
 	embracement_speed = {
+		modifier = {
+			factor = 1.2
+			scale = yes
+			custom_trigger_tooltip = {
+				tooltip = tooltip_any_friendly_coast_border_province_has_embraced_colonialism
+				any_friendly_coast_border_province = {
+					new_world_i = 100
+				}
+			}
+			
+		}
+		
+		modifier = {
+			factor = 0.5
+			scale = yes
+			potential = {
+				has_port = yes
+				NOT = {
+					any_friendly_coast_border_province = {
+						new_world_i = 100
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_neighbor_port_province_new_world
+				has_port = yes
+				any_neighbor_province = {
+					new_world_i = 100
+				}
+			}
+		}
+		
+		#Port provinces in countries with colonial subjects
+		modifier = {
+			factor = 10
+			potential = {
+				OR = {
+					has_port = yes
+					is_capital = yes
+				}
+				owner = {
+					capital_scope = {
+						NOT = { continent = north_america }
+						NOT = { continent = south_america }
+						NOT = { continent = new_world }
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_has_colonial_subject_in_new_world
+				OR = {
+					has_port = yes
+					is_capital = yes
+				}
+				owner = {
+					colony = 1
+					any_subject_country = {
+						is_colonial_nation = yes
+						OR = {
+							capital_scope = { continent = north_america }
+							capital_scope = { continent = south_america }
+							capital_scope = { continent = new_world }
+						}
+					}
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 5
+			scale = yes
+			potential = {
+				owner = {
+					is_colonial_nation = yes
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_colonial_overlord_new_world_i
+				OR = {
+					has_port = yes
+					is_capital = yes
+				}
+				owner = {
+					is_colonial_nation = yes
+					overlord = { has_institution = new_world_i }
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			scale = yes
+			potential = {
+				owner = {
+					has_institution = new_world_i
+				}
+			}
+			
+			custom_trigger_tooltip = {
+				tooltip = tooltip_new_world_i_embraced
+				is_owned_by_trade_company = no
+				owner = {
+					has_institution = new_world_i
+				}
+			}
+		}
+
+		# Third Odyssey
 		modifier = {
 			factor = 0.6
 			scale = yes
@@ -1363,112 +1403,6 @@ new_world_i = {
 				any_province = {
 					to_european_trading_port = yes
 					new_world_i = 100
-				}
-			}
-		}
-
-		modifier = {
-			factor = 1.2
-			scale = yes
-			custom_trigger_tooltip = {
-				tooltip = tooltip_any_friendly_coast_border_province_has_embraced_colonialism
-				any_friendly_coast_border_province = {
-					new_world_i = 100
-				}
-			}
-			
-		}
-		
-		modifier = {
-			factor = 0.5
-			scale = yes
-			potential = {
-				has_port = yes
-				NOT = {
-					any_friendly_coast_border_province = {
-						new_world_i = 100
-					}
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = tooltip_neighbor_port_province_new_world
-				has_port = yes
-				any_neighbor_province = {
-					new_world_i = 100
-				}
-			}
-		}
-		
-		#Port provinces in countries with colonial subjects
-		modifier = {
-			factor = 10
-			potential = {
-				OR = {
-					has_port = yes
-					is_capital = yes
-				}
-				owner = {
-					capital_scope = {
-						NOT = { continent = north_america }
-						NOT = { continent = south_america }
-						NOT = { continent = new_world }
-					}
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = tooltip_has_colonial_subject_in_new_world
-				OR = {
-					has_port = yes
-					is_capital = yes
-				}
-				owner = {
-					colony = 1
-					any_subject_country = {
-						is_colonial_nation = yes
-						OR = {
-							capital_scope = { continent = north_america }
-							capital_scope = { continent = south_america }
-							capital_scope = { continent = new_world }
-						}
-					}
-				}
-			}
-		}
-		
-		modifier = {
-			factor = 5
-			scale = yes
-			potential = {
-				owner = {
-					is_colonial_nation = yes
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = tooltip_colonial_overlord_new_world_i
-				OR = {
-					has_port = yes
-					is_capital = yes
-				}
-				owner = {
-					is_colonial_nation = yes
-					overlord = { has_institution = new_world_i }
-				}
-			}
-		}
-		modifier = {
-			factor = 2
-			scale = yes
-			potential = {
-				owner = {
-					has_institution = new_world_i
-				}
-			}
-			
-			custom_trigger_tooltip = {
-				tooltip = tooltip_new_world_i_embraced
-				is_owned_by_trade_company = no
-				owner = {
-					has_institution = new_world_i
 				}
 			}
 		}
@@ -1642,6 +1576,7 @@ printing_press = {
 	
 	can_start = {
 		is_year = 1550
+		is_institution_enabled = new_world_i
 		is_in_capital_area = yes
 		is_island = no
 		is_state = yes
@@ -1670,135 +1605,7 @@ printing_press = {
 
 	
 	embracement_speed = {
-		modifier = {
-			factor = 0.6
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					has_country_modifier = nhs2_elysian_free_trade
-				}
-				has_port = yes
-				sea_zone = {
-					OR = {
-						region = american_east_coast_region
-						region = caribbean_sea_region
-					}
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = NHS_FREE_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					printing_press = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_small_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = SMALL_PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_small_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					printing_press = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					printing_press = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_large_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = LARGE_PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_large_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					printing_press = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_european_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = EUROPEAN_ENCLAVE
-				has_province_modifier = nhs2_european_enclave
-				any_province = {
-					to_european_trading_port = yes
-					printing_press = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 0.6
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					to_has_free_trade = yes
-				}
-				has_port = yes
-				province_has_center_of_trade_of_level = 1
-				to_east_coast_province = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = TO_FREE_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					printing_press = 100
-				}
-			}
-		}
-
-		modifier = {
-			factor = 0.2
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					to_has_restricted_trade = yes
-				}
-				has_port = yes
-				province_has_center_of_trade_of_level = 1
-				to_east_coast_province = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = TO_RESTRICTED_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					printing_press = 100
-				}
-			}
-		}
-
+	
 		modifier = {
 			factor = 0.6
 			scale = yes
@@ -1996,6 +1803,136 @@ printing_press = {
 				}
 			}
 		}
+
+		# Third Odyssey
+		modifier = {
+			factor = 0.6
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					has_country_modifier = nhs2_elysian_free_trade
+				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NHS_FREE_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					printing_press = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_small_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = SMALL_PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_small_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					printing_press = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					printing_press = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_large_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = LARGE_PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_large_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					printing_press = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_european_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = EUROPEAN_ENCLAVE
+				has_province_modifier = nhs2_european_enclave
+				any_province = {
+					to_european_trading_port = yes
+					printing_press = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 0.6
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					to_has_free_trade = yes
+				}
+				has_port = yes
+				province_has_center_of_trade_of_level = 1
+				to_east_coast_province = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = TO_FREE_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					printing_press = 100
+				}
+			}
+		}
+
+		modifier = {
+			factor = 0.2
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					to_has_restricted_trade = yes
+				}
+				has_port = yes
+				province_has_center_of_trade_of_level = 1
+				to_east_coast_province = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = TO_RESTRICTED_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					printing_press = 100
+				}
+			}
+		}
 	}
 	
 	ai_will_do = { #Cost of embracing institution must be lower than this factor * last month's regular income, and higher if loans are needed. (Or it has a more than long term goal...)
@@ -2112,6 +2049,7 @@ global_trade = {
 	
 	can_start = {
 		is_year = 1600
+		is_institution_enabled = printing_press
 		is_island = no
 		highest_value_trade_node = yes
 		OR = {
@@ -2143,135 +2081,7 @@ global_trade = {
 
 	
 	embracement_speed = {
-		modifier = {
-			factor = 0.6
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					has_country_modifier = nhs2_elysian_free_trade
-				}
-				has_port = yes
-				sea_zone = {
-					OR = {
-						region = american_east_coast_region
-						region = caribbean_sea_region
-					}
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = NHS_FREE_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					global_trade = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_small_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = SMALL_PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_small_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					global_trade = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					global_trade = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_large_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = LARGE_PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_large_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					global_trade = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_european_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = EUROPEAN_ENCLAVE
-				has_province_modifier = nhs2_european_enclave
-				any_province = {
-					to_european_trading_port = yes
-					global_trade = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 0.5
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					to_has_free_trade = yes
-				}
-				has_port = yes
-				province_has_center_of_trade_of_level = 1
-				to_east_coast_province = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = TO_FREE_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					global_trade = 100
-				}
-			}
-		}
-
-		modifier = {
-			factor = 0.25
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					to_has_restricted_trade = yes
-				}
-				has_port = yes
-				province_has_center_of_trade_of_level = 1
-				to_east_coast_province = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = TO_RESTRICTED_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					global_trade = 100
-				}
-			}
-		}
-
+	
 		modifier = {
 			factor = 0.4 #Not scaled
 			province_trade_power = 15
@@ -2429,6 +2239,136 @@ global_trade = {
 				}
 			}
 		}
+
+		# Third Odyssey
+		modifier = {
+			factor = 0.6
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					has_country_modifier = nhs2_elysian_free_trade
+				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NHS_FREE_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					global_trade = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_small_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = SMALL_PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_small_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					global_trade = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					global_trade = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_large_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = LARGE_PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_large_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					global_trade = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_european_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = EUROPEAN_ENCLAVE
+				has_province_modifier = nhs2_european_enclave
+				any_province = {
+					to_european_trading_port = yes
+					global_trade = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					to_has_free_trade = yes
+				}
+				has_port = yes
+				province_has_center_of_trade_of_level = 1
+				to_east_coast_province = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = TO_FREE_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					global_trade = 100
+				}
+			}
+		}
+
+		modifier = {
+			factor = 0.25
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					to_has_restricted_trade = yes
+				}
+				has_port = yes
+				province_has_center_of_trade_of_level = 1
+				to_east_coast_province = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = TO_RESTRICTED_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					global_trade = 100
+				}
+			}
+		}
 	}
 	
 	ai_will_do = { #Cost of embracing institution must be lower than this factor * last month's regular income, and higher if loans are needed. (Or it has a more than long term goal...)
@@ -2545,6 +2485,7 @@ manufactories = {
 	
 	can_start = {
 		is_year = 1650
+		is_institution_enabled = global_trade
 		is_in_capital_area = yes
 		is_island = no
 		is_state = yes
@@ -2581,134 +2522,6 @@ manufactories = {
 
 	
 	embracement_speed = {
-		modifier = {
-			factor = 0.6
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					has_country_modifier = nhs2_elysian_free_trade
-				}
-				has_port = yes
-				sea_zone = {
-					OR = {
-						region = american_east_coast_region
-						region = caribbean_sea_region
-					}
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = NHS_FREE_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					manufactories = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_small_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = SMALL_PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_small_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					manufactories = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					manufactories = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_large_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = LARGE_PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_large_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					manufactories = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_european_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = EUROPEAN_ENCLAVE
-				has_province_modifier = nhs2_european_enclave
-				any_province = {
-					to_european_trading_port = yes
-					manufactories = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 0.5
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					to_has_free_trade = yes
-				}
-				has_port = yes
-				province_has_center_of_trade_of_level = 1
-				to_east_coast_province = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = TO_FREE_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					manufactories = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 0.15
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					to_has_restricted_trade = yes
-				}
-				has_port = yes
-				province_has_center_of_trade_of_level = 1
-				to_east_coast_province = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = TO_RESTRICTED_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					manufactories = 100
-				}
-			}
-		}
-
 		modifier = {
 			factor = 0.5
 			scale = yes
@@ -3068,6 +2881,135 @@ manufactories = {
 				}
 			}
 		}
+
+		# Third Odyssey
+		modifier = {
+			factor = 0.6
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					has_country_modifier = nhs2_elysian_free_trade
+				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NHS_FREE_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					manufactories = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_small_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = SMALL_PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_small_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					manufactories = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					manufactories = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_large_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = LARGE_PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_large_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					manufactories = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_european_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = EUROPEAN_ENCLAVE
+				has_province_modifier = nhs2_european_enclave
+				any_province = {
+					to_european_trading_port = yes
+					manufactories = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					to_has_free_trade = yes
+				}
+				has_port = yes
+				province_has_center_of_trade_of_level = 1
+				to_east_coast_province = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = TO_FREE_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					manufactories = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 0.15
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					to_has_restricted_trade = yes
+				}
+				has_port = yes
+				province_has_center_of_trade_of_level = 1
+				to_east_coast_province = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = TO_RESTRICTED_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					manufactories = 100
+				}
+			}
+		}
 	}
 	
 	ai_will_do = { #Cost of embracing institution must be lower than this factor * last month's regular income, and higher if loans are needed. (Or it has a more than long term goal...)
@@ -3164,6 +3106,7 @@ enlightenment = {
 	
 	can_start = {
 		is_year = 1700
+		is_institution_enabled = manufactories
 		is_in_capital_area = yes
 		is_island = no
 		is_state = yes
@@ -3199,134 +3142,6 @@ enlightenment = {
 
 	
 	embracement_speed = {
-		modifier = {
-			factor = 0.6
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					has_country_modifier = nhs2_elysian_free_trade
-				}
-				has_port = yes
-				sea_zone = {
-					OR = {
-						region = american_east_coast_region
-						region = caribbean_sea_region
-					}
-				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = NHS_FREE_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					enlightenment = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_small_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = SMALL_PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_small_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					enlightenment = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					enlightenment = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_large_por_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = LARGE_PORTUGESE_ENCLAVE
-				has_province_modifier = nhs2_large_por_enclave
-				any_province = {
-					owned_by = POR
-					has_port = yes
-					enlightenment = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 10
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				has_province_modifier = nhs2_european_enclave
-			}
-			custom_trigger_tooltip = {
-				tooltip = EUROPEAN_ENCLAVE
-				has_province_modifier = nhs2_european_enclave
-				any_province = {
-					to_european_trading_port = yes
-					enlightenment = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 0.4
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					to_has_free_trade = yes
-				}
-				has_port = yes
-				province_has_center_of_trade_of_level = 1
-				to_east_coast_province = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = TO_FREE_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					enlightenment = 100
-				}
-			}
-		}
-		modifier = {
-			factor = 0.2
-			scale = yes
-			force_potential = yes	# Hide the this modifier when potential is false
-			potential = {
-				owner = {
-					to_has_restricted_trade = yes
-				}
-				has_port = yes
-				province_has_center_of_trade_of_level = 1
-				to_east_coast_province = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = TO_RESTRICTED_TRADE
-				any_province = {
-					to_european_trading_port = yes
-					enlightenment = 100
-				}
-			}
-		}
-
 		modifier = {
 			factor = 0.4
 			scale = yes
@@ -3575,6 +3390,135 @@ enlightenment = {
 				is_owned_by_trade_company = no
 				owner = {
 					has_institution = enlightenment
+				}
+			}
+		}
+
+		# Third Odyssey
+		modifier = {
+			factor = 0.6
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					has_country_modifier = nhs2_elysian_free_trade
+				}
+				has_port = yes
+				sea_zone = {
+					OR = {
+						region = american_east_coast_region
+						region = caribbean_sea_region
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NHS_FREE_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					enlightenment = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_small_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = SMALL_PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_small_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					enlightenment = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					enlightenment = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_large_por_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = LARGE_PORTUGESE_ENCLAVE
+				has_province_modifier = nhs2_large_por_enclave
+				any_province = {
+					owned_by = POR
+					has_port = yes
+					enlightenment = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				has_province_modifier = nhs2_european_enclave
+			}
+			custom_trigger_tooltip = {
+				tooltip = EUROPEAN_ENCLAVE
+				has_province_modifier = nhs2_european_enclave
+				any_province = {
+					to_european_trading_port = yes
+					enlightenment = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 0.4
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					to_has_free_trade = yes
+				}
+				has_port = yes
+				province_has_center_of_trade_of_level = 1
+				to_east_coast_province = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = TO_FREE_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					enlightenment = 100
+				}
+			}
+		}
+		modifier = {
+			factor = 0.2
+			scale = yes
+			force_potential = yes	# Hide the this modifier when potential is false
+			potential = {
+				owner = {
+					to_has_restricted_trade = yes
+				}
+				has_port = yes
+				province_has_center_of_trade_of_level = 1
+				to_east_coast_province = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = TO_RESTRICTED_TRADE
+				any_province = {
+					to_european_trading_port = yes
+					enlightenment = 100
 				}
 			}
 		}
@@ -4327,7 +4271,7 @@ industrialization = {
 				}
 			}
 		}
-		# Enclaves
+		# Third Odyssey
 		modifier = {
 			factor = 0.6
 			scale = yes
