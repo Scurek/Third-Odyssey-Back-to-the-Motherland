@@ -3506,11 +3506,13 @@ nhs_centre_end = {
 		}
 	}
 	
-	nhs_spqe = {
+	nhs_the_eagle_rises = {
 		required_missions = {
 			nhs_heir_of_justinian
 		}
-		icon = mission_rb_mediterranean_authority
+		# icon = mission_rb_mediterranean_authority
+		icon = give_him_back_his_legions
+
 		position = 9
 		provinces_to_highlight = {
 			
@@ -3529,44 +3531,73 @@ nhs_centre_end = {
 			# 	siege = 2
 			# 	name = "Belisarius"
 			# }
-			custom_tooltip = nhs_expand_imperial_reconquest_cb_tt
+			custom_tooltip = nhs_improves_imperial_reconquest_cb_tt
 			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = nhs_second_shift_into_roman_tt
 			hidden_effect = { swap_free_idea_group = yes }
-			151 = { nhs_set_center_of_trade_2 = yes }
-			118 = { nhs_set_center_of_trade_2 = yes }
-			226 = { nhs_set_center_of_trade_2 = yes }
-			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					NOT = { has_dlc = "Dharma" }
+				}
+				custom_tooltip = nhs_new_line_tt
+				151 = { nhs_set_center_of_trade_3 = yes }
+			}
 		}
 	}
 
 	nhs_basileus_basileon = {
+		# icon = encroach_on_the_germans
+		# icon = give_him_back_his_legions
+		icon = mission_european_politics
+
 		required_missions = {
-			nhs_spqe
+			nhs_the_eagle_rises
 		}
 		position = 10
 		provinces_to_highlight = {
 			
 		}
 		trigger = {
-			owns_or_non_sovereign_subject_of = 151
+			mission_completed = nhs_hercules_gates
 			owns_or_non_sovereign_subject_of = 226
-			to_completed_X_triumphs = { X = 7 }
+			to_completed_X_triumphs = { X = 6 }
 		}
 
 		effect = {
-
+			custom_tooltip = nhs_improves_imperial_reconquest_cb_tt
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_second_shift_into_roman_tt
+			if = {
+				limit = {
+					NOT = { has_dlc = "Dharma" }
+				}
+				custom_tooltip = nhs_new_line_tt
+				226 = { nhs_set_center_of_trade_3 = yes }
+				118 = { nhs_set_center_of_trade_3 = yes }
+			}
 		}
 	}
-	
+}
+
+nhs_final_red_mission_roman = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		NOT = { tag = ELY }
+	}
+	has_country_shield = yes
+
 	nhs_rome_restored = {
 		required_missions = {
 			#nhs_the_old_gods
-			#nhs_pentarchy
+			#nhs_restore_the_pentarchy
 			nhs_basileus_basileon
 		}
-		icon = ROMflag
-		position = 11
+		# icon = ROMflag
+		icon = a_real_roman_empire_purple
+		position = 12
 		provinces_to_highlight = {
 			
 		}
@@ -3577,8 +3608,53 @@ nhs_centre_end = {
 		}
 		
 		effect = {
+			custom_tooltip = nhs_enables_improved_imperialism_cb_tt
+			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = nhs_third_shift_into_roman_tt
-			hidden_effect = { swap_free_idea_group = yes }
+			hidden_effect = { 
+				swap_free_idea_group = yes
+				complete_mission = nhs_elysia_ascendant
+			}
+		}
+	}
+}
+
+nhs_final_red_mission_elysian = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		tag = ELY
+	}
+	has_country_shield = yes
+
+	nhs_elysia_ascendant = {
+		required_missions = {
+			#nhs_the_old_gods
+			#nhs_restore_the_pentarchy
+			nhs_basileus_basileon
+		}
+		# icon = ROMflag
+		icon = a_real_roman_empire
+		position = 12
+		provinces_to_highlight = {
+			
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 151
+			owns_or_non_sovereign_subject_of = 226
+			to_completed_X_triumphs = { X = 11 }
+		}
+		
+		effect = {
+			custom_tooltip = nhs_enables_improved_imperialism_cb_tt
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_third_shift_into_roman_tt
+			hidden_effect = { 
+				swap_free_idea_group = yes 
+				complete_mission = nhs_rome_restored
+			}
 		}
 	}
 }
@@ -3632,7 +3708,7 @@ nhs_left_end = {
 						}
 					}
 					OR = {
-						mission_completed = nhs_spqe
+						mission_completed = nhs_the_eagle_rises
 						mission_completed = nhs_across_eirenic
 						mission_completed = nhs_around_africa
 					}
@@ -3822,7 +3898,8 @@ nhs_left_end = {
 			nhs_development_of_the_true_homeland
 			nhs_expanding_south
 		}
-		icon = Eflag
+		# icon = Eflag
+		icon = austria_prospers
 		position = 12
 		trigger = {
 			num_of_provinces_owned_or_owned_by_subjects_with = {
@@ -3992,7 +4069,7 @@ nhs_left_end = {
 	}
 }
 
-nhs_left_mid_end = {
+nhs_left_mid_mid = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -4070,11 +4147,22 @@ nhs_left_mid_end = {
 			}
 		}
 	}
+}
+
+nhs_left_mid_religion_orthodox = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		NOT = { religion_group = pagan }
+	}
+	has_country_shield = yes
 	
-	nhs_pentarchy = {
+	nhs_restore_the_pentarchy = {
 		required_missions = {
 			nhs_heir_of_justinian
-			#nhs_spqe
+			#nhs_the_eagle_rises
 		}
 		icon = mission_pf_cross
 		position = 9
@@ -4153,7 +4241,7 @@ nhs_left_mid_end = {
 		}
 		
 		effect = {
-			custom_tooltip = nhs_pentarchy_converting_tt
+			custom_tooltip = nhs_restore_the_pentarchy_converting_tt
 			custom_tooltip = nhs_convert_rome_rc_tt
 			hidden_effect = {
 				118 = {
@@ -4163,7 +4251,8 @@ nhs_left_mid_end = {
 				every_country = {
 					limit = {
 						religion_group = christian
-						NOT = { total_development = 200 }
+						NOT = { religion = elysian_orthodoxy }
+						NOT = { total_development = 500 }
 						NOT = { tag = PAP }
 						is_subject = no
 					}
@@ -4172,6 +4261,186 @@ nhs_left_mid_end = {
 			}
 		}
 	}
+}
+
+nhs_left_mid_religion_pagan = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		religion_group = pagan
+	}
+	has_country_shield = yes
+
+	nhs_the_old_gods = {
+		required_missions = {
+			nhs_heir_of_justinian
+			#nhs_the_eagle_rises
+		}
+		icon = mission_rb_control_state_religion
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				continent = europe
+				region = maghreb_region
+				region = egypt_region
+				superregion = near_east_superregion
+			}
+			NOT = { province_id = 2474 }
+			NOT = { area = lower_nubia_area }
+			NOT = { province_id = 2448 }
+			NOT = { region = arabia_region }
+			is_sea = no
+			has_discovered = ROOT
+		}
+		trigger = {
+			OR = {
+				religion = pantheon_worship
+				religion = aztlan_worship
+			}
+			owns_or_non_sovereign_subject_of = 118
+			if = {
+				limit = {
+					OR = {
+						owns = 118
+						has_dlc = "Cradle of Civilization"
+					}
+					118 = { religion = elysian_orthodoxy }
+				}
+			}
+			owns_or_non_sovereign_subject_of = 146
+			if = {
+				limit = {
+					OR = {
+						owns = 146
+						has_dlc = "Cradle of Civilization"
+					}
+					146 = { religion = elysian_orthodoxy }
+				}
+			}
+			owns_or_non_sovereign_subject_of = 147
+			if = {
+				limit = {
+					OR = {
+						owns = 147
+						has_dlc = "Cradle of Civilization"
+					}
+					147 = { religion = elysian_orthodoxy }
+				}
+			}
+			# custom_trigger_tooltip = {
+			# 	tooltip = nhs_50_temples_mission_tt
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 50
+					religion = ROOT
+					OR = {
+						has_building = temple
+						has_building = cathedral
+					}
+					OR = {
+						continent = europe
+						region = maghreb_region
+						region = egypt_region
+						superregion = near_east_superregion
+					}
+					# NOT = { province_id = 2474 }
+					# NOT = { area = lower_nubia_area }
+					# NOT = { province_id = 2448 }
+					# NOT = { region = arabia_region }
+				}
+			# }
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						religion = pantheon_worship
+						religion = aztlan_worship
+					}
+				}
+				custom_tooltip = nhs_50_temples_mission_effect_tt
+			}
+			else = {
+				custom_tooltip = nhs_50_temples_mission_effect_non_hellenic_tt
+			}
+			hidden_effect = {
+				118 = {
+					remove_province_triggered_modifier = religious_center
+					if = {
+						limit = {
+							religion = pantheon_worship
+						}
+						add_province_triggered_modifier = religious_center_pantheon
+						
+					}
+					else_if = {
+						limit = {
+							religion = aztlan_worship
+						}
+						add_province_triggered_modifier = religious_center_aztlan
+					}
+					remove_province_triggered_modifier = non_catholic_rome
+					add_province_triggered_modifier = non_catholic_rome_with_hellenics
+				}
+				147 = {
+					if = {
+						limit = {
+							religion = pantheon_worship
+						}
+						add_province_triggered_modifier = religious_center_pantheon
+					}
+					else_if = {
+						limit = {
+							religion = aztlan_worship
+						}
+						add_province_triggered_modifier = religious_center_aztlan
+					}
+				}
+				146 = {
+					if = {
+						limit = {
+							religion = pantheon_worship
+						}
+						add_province_triggered_modifier = religious_center_pantheon
+					}
+					else_if = {
+						limit = {
+							religion = aztlan_worship
+						}
+						add_province_triggered_modifier = religious_center_aztlan
+					}
+				}
+				every_province = {
+					limit = {
+						OR = {
+							continent = europe
+							region = maghreb_region
+							region = egypt_region
+							superregion = near_east_superregion
+							is_sea = no
+						}
+						NOT = { province_id = 2474 }
+						NOT = { area = lower_nubia_area }
+						NOT = { province_id = 2448 }
+						NOT = { region = arabia_region }
+					}
+					add_province_triggered_modifier = nhs_old_gods_bonus
+				}
+			}
+		}
+	}
+}
+
+nhs_left_mid_end = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+	}
+	has_country_shield = yes
 	
 	nhs_expanding_north = {
 		required_missions = {
@@ -4559,7 +4828,7 @@ nhs_right_end = {
 					OR = {
 						mission_completed = nhs_the_city_of_cities
 						mission_completed = nhs_expanding_north
-						mission_completed = nhs_spqe
+						mission_completed = nhs_the_eagle_rises
 					}
 				}
 			}
@@ -4922,161 +5191,206 @@ nhs_right_mid_end = {
 
 		}
 	}
-	
-	nhs_the_old_gods = {
+
+	nhs_neither_holy_nor_roman = {
 		required_missions = {
 			nhs_heir_of_justinian
-			#nhs_spqe
 		}
-		icon = mission_rb_control_state_religion
+		icon = encroach_on_the_germans
 		position = 9
-		provinces_to_highlight = {
-			OR = {
-				continent = europe
-				region = maghreb_region
-				region = egypt_region
-				superregion = near_east_superregion
-			}
-			NOT = { province_id = 2474 }
-			NOT = { area = lower_nubia_area }
-			NOT = { province_id = 2448 }
-			NOT = { region = arabia_region }
-			is_sea = no
-			has_discovered = ROOT
-		}
 		trigger = {
 			OR = {
-				religion = pantheon_worship
-				religion = aztlan_worship
-			}
-			owns_or_non_sovereign_subject_of = 118
-			if = {
-				limit = {
-					OR = {
-						owns = 118
-						has_dlc = "Cradle of Civilization"
+				NOT = { hre_size = 1 }
+				AND = {
+					is_emperor = yes
+					NOT = { num_of_foreign_hre_provinces = 1 }
+				}
+				AND = {
+					religion_group = christian
+					hre_size = 10
+					government = monarchy
+					has_regency = no
+					if = {
+						limit = {
+							has_dlc = "Emperor"
+						}
+						NOT = { hre_reform_passed = emperor_erbkaisertum }
 					}
-					118 = { religion = elysian_orthodoxy }
+					else = {
+						NOT = { hre_reform_passed = erbkaisertum }
+					}
+					custom_trigger_tooltip = {
+						tooltip = to_subjugated_all_electors_tt
+						NOT = {
+							all_elector = {
+								NOT = { is_subject_of = ROOT }
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = to_occupies_imperial_capital_tt
+						if = {
+							limit = {
+								hre_size = 1
+							}
+							emperor = {
+								capital_scope = {
+									controller = {
+										OR = {
+											tag = ROOT
+											is_subject_of = ROOT
+											is_in_war = {
+												attacker_leader = ROOT
+												attackers = THIS
+											}
+											is_in_war = {
+												defender_leader = ROOT
+												defenders = THIS
+											}
+										}
+									}
+								}
+							}
+						}
+						else = {
+							always = no
+						}
+					}
+					if = {
+						limit = {
+							any_province = {
+								has_province_modifier = perpetual_diet
+							}
+						}
+						custom_trigger_tooltip = {
+							tooltip = to_occupies_imperial_diet_tt
+							event_target:to_perpetual_diet_target = {
+								OR = {
+									controller = {
+										OR = {
+											tag = ROOT
+											is_subject_of = ROOT
+											is_in_war = {
+												attacker_leader = ROOT
+												attackers = THIS
+											}
+											is_in_war = {
+												defender_leader = ROOT
+												defenders = THIS
+											}
+										}
+									}
+									country_or_subject_holds = ROOT
+								}
+							}
+						}
+					}
 				}
 			}
-			owns_or_non_sovereign_subject_of = 146
-			if = {
-				limit = {
-					OR = {
-						owns = 146
-						has_dlc = "Cradle of Civilization"
-					}
-					146 = { religion = elysian_orthodoxy }
-				}
-			}
-			owns_or_non_sovereign_subject_of = 147
-			if = {
-				limit = {
-					OR = {
-						owns = 147
-						has_dlc = "Cradle of Civilization"
-					}
-					147 = { religion = elysian_orthodoxy }
-				}
-			}
-			# custom_trigger_tooltip = {
-			# 	tooltip = nhs_50_temples_mission_tt
-			num_of_provinces_owned_or_owned_by_subjects_with = {
-					value = 50
-					religion = ROOT
-					OR = {
-						has_building = temple
-						has_building = cathedral
-					}
-					OR = {
-						continent = europe
-						region = maghreb_region
-						region = egypt_region
-						superregion = near_east_superregion
-					}
-					# NOT = { province_id = 2474 }
-					# NOT = { area = lower_nubia_area }
-					# NOT = { province_id = 2448 }
-					# NOT = { region = arabia_region }
-				}
+			# if = {
+			# 	limit = {
+			# 		exists = BYZ
+			# 	}
+			# 	OR = {
+			# 		NOT = { exists = BYZ }
+			# 		BYZ = {
+			# 			is_subject_of = ROOT
+			# 		}
+			# 	}
 			# }
 		}
-		
 		effect = {
-			if = {
-				limit = {
-					OR = {
-						religion = pantheon_worship
-						religion = aztlan_worship
-					}
+			custom_tooltip = to_if_hre_does_not_exist_tt
+			tooltip = {
+				add_country_modifier = {
+					name = to_destroyed_hre
+					duration = -1
 				}
-				custom_tooltip = nhs_50_temples_mission_effect_tt
 			}
-			else = {
-				custom_tooltip = nhs_50_temples_mission_effect_non_hellenic_tt
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_if_hre_does_exist_tt
+			tooltip = {
+				if = {
+					limit = {
+						NOT = { is_emperor = yes }
+					}
+					set_emperor = yes
+				}
+				set_hre_religion = ROOT
+				set_hre_religion_locked = yes
+				hre_inheritable = yes
+				add_imperial_influence = 100
+				# Paradox apparently broke revoke_reform effect, oh well...
+				# if = {
+				# 	limit = {
+				# 		has_dlc = "Emperor"
+				# 	}
+				# 	custom_tooltip = to_remove_hre_decentralization_reforms_tt
+				# }
 			}
 			hidden_effect = {
-				118 = {
-					remove_province_triggered_modifier = religious_center
-					if = {
-						limit = {
-							religion = pantheon_worship
-						}
-						add_province_triggered_modifier = religious_center_pantheon
-						
-					}
-					else_if = {
-						limit = {
-							religion = aztlan_worship
-						}
-						add_province_triggered_modifier = religious_center_aztlan
-					}
-					remove_province_triggered_modifier = non_catholic_rome
-					add_province_triggered_modifier = non_catholic_rome_with_hellenics
-				}
-				147 = {
-					if = {
-						limit = {
-							religion = pantheon_worship
-						}
-						add_province_triggered_modifier = religious_center_pantheon
-					}
-					else_if = {
-						limit = {
-							religion = aztlan_worship
-						}
-						add_province_triggered_modifier = religious_center_aztlan
-					}
-				}
-				146 = {
-					if = {
-						limit = {
-							religion = pantheon_worship
-						}
-						add_province_triggered_modifier = religious_center_pantheon
-					}
-					else_if = {
-						limit = {
-							religion = aztlan_worship
-						}
-						add_province_triggered_modifier = religious_center_aztlan
-					}
-				}
-				every_province = {
+				if = {
 					limit = {
-						OR = {
-							continent = europe
-							region = maghreb_region
-							region = egypt_region
-							superregion = near_east_superregion
-							is_sea = no
-						}
-						NOT = { province_id = 2474 }
-						NOT = { area = lower_nubia_area }
-						NOT = { province_id = 2448 }
-						NOT = { region = arabia_region }
+						NOT = { hre_size = 1 }
 					}
-					add_province_triggered_modifier = nhs_old_gods_bonus
+					add_country_modifier = {
+						name = to_destroyed_hre
+						duration = -1
+					}
+				}
+				else = {
+					if = {
+						limit = {
+							NOT = { is_emperor = yes }
+						}
+						set_emperor = yes
+					}
+					set_hre_religion = ROOT
+					set_hre_religion_locked = yes
+					hre_inheritable = yes
+					add_imperial_influence = 100
+					# Paradox apparently broke revoke_reform effect, oh well...
+					# if = {
+					# 	limit = {
+					# 		has_dlc = "Emperor"
+					# 	}
+					# 	if = {
+					# 		limit = {
+					# 			hre_reform_passed = emperor_reichstag_collegia
+					# 		}
+					# 		revoke_reform = emperor_reichstag_collegia
+					# 	}
+					# 	if = {
+					# 		limit = {
+					# 			hre_reform_passed = emperor_expand_gemeiner_pfennig
+					# 		}
+					# 		revoke_reform = emperor_expand_gemeiner_pfennig
+					# 	}
+					# 	if = {
+					# 		limit = {
+					# 			hre_reform_passed = emperor_rechenschaft
+					# 		}
+					# 		revoke_reform = emperor_rechenschaft
+					# 	}
+					# 	if = {
+					# 		limit = {
+					# 			hre_reform_passed = emperor_geteilte_macht
+					# 		}
+					# 		revoke_reform = emperor_geteilte_macht
+					# 	}
+					# 	if = {
+					# 		limit = {
+					# 			hre_reform_passed = emperor_reichskrieg
+					# 		}
+					# 		revoke_reform = emperor_reichskrieg
+					# 	}
+					# 	if = {
+					# 		limit = {
+					# 			hre_reform_passed = emperor_hofgericht
+					# 		}
+					# 		revoke_reform = emperor_hofgericht
+					# 	}
+					# }
 				}
 			}
 		}
