@@ -1,6 +1,44 @@
 # Start effect, level is indicated using LEVEL = replace
 # Example: to_cultureshock_start = { LEVEL = vbad }
 # Levels are vbad, bad, medium, light, vlight.
+to_cultureshock_on_province_owner_change = {
+	if = {
+		limit = {
+			OR = {
+				region = anatolia_region
+				region = balkan_region
+			}
+			owner = {
+				nhs_is_elysian_tag_or_subject = yes
+			}
+			NOT = {
+				has_country_flag = to_integrated_greeks
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_country_flag = has_cultureshock_vbad
+						has_country_flag = has_cultureshock_bad
+						has_country_flag = has_cultureshock_medium
+						has_country_flag = has_cultureshock_light
+						has_country_flag = has_cultureshock_vlight
+					}
+				}
+			}
+			to_add_current_cultureshock = yes
+		}
+		else = {
+			country_event = {
+				id = nhs2_shock_events.1
+				days = 30
+				random = 15
+			}
+		}
+	}
+}
+
 to_cultureshock_start = {
 	every_owned_province = {
 		limit = {
@@ -20,56 +58,31 @@ to_add_current_cultureshock = {
 		limit = {
 			has_country_flag = has_cultureshock_vbad
 		}
-		every_owned_province = {
-			limit = {
-				to_eligible_for_cultureshock = yes
-			}
-			add_province_modifier = to_cultureshock_vbad
-		}
+		add_province_modifier = to_cultureshock_vbad
 	}
 	else_if = {
 		limit = {
 			has_country_flag = has_cultureshock_bad
 		}
-		every_owned_province = {
-			limit = {
-				to_eligible_for_cultureshock = yes
-			}
-			add_province_modifier = to_cultureshock_bad
-		}
+		add_province_modifier = to_cultureshock_bad
 	}
 	else_if = {
 		limit = {
 			has_country_flag = has_cultureshock_medium
 		}
-		every_owned_province = {
-			limit = {
-				to_eligible_for_cultureshock = yes
-			}
-			add_province_modifier = to_cultureshock_medium
-		}
+		add_province_modifier = to_cultureshock_medium
 	}
 	else_if = {
 		limit = {
 			has_country_flag = has_cultureshock_light
 		}
-		every_owned_province = {
-			limit = {
-				to_eligible_for_cultureshock = yes
-			}
-			add_province_modifier = to_cultureshock_light
-		}
+		add_province_modifier = to_cultureshock_light
 	}
 	else_if = {
 		limit = {
 			has_country_flag = has_cultureshock_vlight
 		}
-		every_owned_province = {
-			limit = {
-				to_eligible_for_cultureshock = yes
-			}
-			add_province_modifier = to_cultureshock_vlight
-		}
+		add_province_modifier = to_cultureshock_vlight
 	}
 }
 
