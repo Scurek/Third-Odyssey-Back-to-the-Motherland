@@ -1166,7 +1166,7 @@ nhs_display_rel_center = {
 	}
 }
 
-nhs_assign_provinces_to_marches = {
+to_assign_provinces_to_exarch = {
 	if = {
 		limit = {
 			any_owned_province = {
@@ -1645,6 +1645,65 @@ nhs_assign_provinces_to_marches = {
 						is_territorial_core = ROOT
 					}
 					add_territorial_core = ROOT
+				}
+			}
+		}
+	}
+}
+
+to_initialize_exarch = {
+	to_assign_provinces_to_exarch = { TAG = $EXARCH_TAG$ }
+	hidden_effect = {
+		$EXARCH_TAG$ = {
+			nhs_change_government = { GOV = monarchy }
+			nhs_add_gov_reform = { REF = autocracy_reform }
+			change_religion = ROOT
+			nhs_set_unit_type = yes
+			swap_free_idea_group = yes
+			
+			if = {
+				limit = {
+					capital_scope = { culture_group = $CULTURE_GROUP$ }
+				}
+				change_primary_culture = CAPITAL
+			}
+			else = {
+				change_primary_culture = $PRIMARY_CULTURE$
+			}
+			every_owned_province = {
+				limit = { culture_group = PREV }
+				add_nationalism = -10
+			}
+			clr_country_flag = nhs_ely_march_all
+			clr_country_flag = nhs_ely_march_territory
+			clr_country_flag = nhs_ely_march_no
+			set_country_flag = nhs_ely_march_no_core
+			add_legitimacy = 100
+			add_legitimacy = -50
+			if = {
+				limit = {
+					NOT = { prestige = 15 }
+				}
+				add_prestige = 20
+			}
+			if = {
+				limit = {
+					NOT = { treasury = 100 }
+				}
+				add_treasury = 150
+			}
+			if = {
+				limit = {
+					NOT = { manpower = 3 }
+				}
+				add_manpower = 5
+			}
+			capital_scope = {
+				area = {
+					limit = {
+						owned_by = $EXARCH_TAG$
+					}
+					add_core = $EXARCH_TAG$
 				}
 			}
 		}

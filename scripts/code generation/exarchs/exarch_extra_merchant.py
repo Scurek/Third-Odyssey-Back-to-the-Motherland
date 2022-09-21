@@ -1,16 +1,16 @@
-from jinja2 import Template, Environment
-from exarch_tags import tags
+from jinja2 import Template
+from exarchs import exarchs
 
-output_file = "exarch_extra_merchant_output.txt"
+output_file = "o_exarch_extra_merchant_output.txt"
 
 template = Template('''OR = {
-{%- for tag in tags %}
+{%- for exarch in exarchs %}
     AND = {
-        tag = {{ tag }}
+        tag = {{ exarch['tag'] }}
         NOT = {
             any_province = {
-                nhs_{{ tag }}_province = yes
-                NOT = { owned_by = {{ tag }} }
+                nhs_{{ exarch['tag'] }}_province = yes
+                NOT = { owned_by = {{ exarch['tag'] }} }
             }
         }
     }
@@ -19,5 +19,5 @@ template = Template('''OR = {
 ''')
 
 f = open(output_file, "w")
-f.write(template.render(tags=tags))
+f.write(template.render(exarchs=exarchs))
 f.close()
