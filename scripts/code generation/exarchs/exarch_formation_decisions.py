@@ -87,7 +87,7 @@ decisions_template = Template('''{% for exarch in exarchs %}
 		effect = {
 			custom_tooltip = nhs_exarchate_starting_tt
 			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = nhs_exarchate_less_nationalism_tt
+			custom_tooltip = to_exarchate_modifiers_tt
 			custom_tooltip = nhs_exarch_bonus_merchant_tt
 			custom_tooltip = nhs_new_line_tt
 			

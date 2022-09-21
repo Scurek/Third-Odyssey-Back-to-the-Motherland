@@ -1903,3 +1903,131 @@ country_event = {
 		name = nhs2_hidden.a
 	}
 }
+
+# Moving your capital back to Constantinople
+country_event = {
+	id = nhs_mission_events.22
+	title = nhs_mission_events.22.t
+	desc = nhs_mission_events.22.d
+	picture = ELYSIAN_HARBOUR_eventPicture
+	
+	is_triggered_only = yes
+
+	option = {
+		name = nhs_mission_events.22.a
+		trigger = {
+			owns_or_subject_of = 151
+			is_at_war = no
+		}
+		if = {
+			limit = {
+				owns_or_subject_of = 151
+				is_at_war = no
+			}
+			set_country_flag = to_moved_capital_to_constantinople
+			if = {
+				limit = {
+					NOT = { owns = 151 }
+				}
+				151 = {
+					cede_province = ROOT
+				}
+			}
+			if = {
+				limit = {
+					NOT = { capital = 151 }
+				}
+				set_capital = 151
+			}
+			if = {
+				limit = {
+					exists = ELG
+					ELG = {
+						is_subject_of = ROOT
+					}
+				}
+				inherit = ELG
+			}
+			if = {
+				limit = {
+					NOT = { exists = ED0 }
+					NOT = { exists = ED1 }
+					NOT = { has_country_flag = to_enable_establish_elysian_despotate_decision }
+				}
+				custom_tooltip = nhs_new_line_tt
+				if = {
+					limit = {
+						any_owned_province = {
+							continent = north_america
+							has_port = yes
+						}
+					}
+					country_event = { id = nhs_mission_events.23 }
+				}
+				else = {
+					custom_tooltip = to_enable_establish_elysian_despotate_decision_tt
+					set_country_flag = to_enable_establish_elysian_despotate_decision
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_free_annexation_of_exarchs_tt
+		}
+		else = {
+			custom_tooltip = to_enable_move_your_capital_to_constantinople_decision_tt
+		}
+	}
+
+	option = {
+		name = nhs_mission_events.22.b
+		custom_tooltip = to_enable_move_your_capital_to_constantinople_decision_tt
+	}
+
+	after = {
+		set_country_flag = to_enable_move_your_capital_to_constantinople_decision
+	}
+}
+
+# Establish the Despotate of Makria Elysia?
+country_event = {
+	id = nhs_mission_events.23
+	title = nhs_mission_events.23.t
+	desc = nhs_mission_events.23.d
+	picture = BYZANTINE_EMPEROR_eventPicture
+	
+	is_triggered_only = yes
+
+	option = {
+		name = nhs_mission_events.22.a
+		if = {
+			limit = {
+				NOT = {
+					capital_scope = {
+						continent = north_america
+					}
+				}
+				is_at_war = no
+			}
+			if = {
+				limit = {
+					has_global_flag = nhs_romaic_to_elysian
+				}
+				to_initialize_elysian_governor = { GOVERNOR_TAG = ED1 }
+			}
+			else = {
+				to_initialize_elysian_governor = { GOVERNOR_TAG = ED0 }
+			}
+		}
+		else = {
+			custom_tooltip = to_enable_establish_elysian_despotate_decision_tt
+		}
+	}
+
+	option = {
+		name = nhs_mission_events.22.b
+		custom_tooltip = to_enable_establish_elysian_despotate_decision_tt
+	}
+
+	after = {
+		set_country_flag = to_enable_establish_elysian_despotate_decision
+	}
+}

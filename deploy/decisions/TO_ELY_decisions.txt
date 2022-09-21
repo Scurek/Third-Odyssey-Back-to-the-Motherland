@@ -5710,4 +5710,102 @@ country_decisions = {
 			}
 		}
 	}
+
+	to_move_your_capital_to_constantinople = {
+		potential = {
+			has_country_flag = to_enable_move_your_capital_to_constantinople_decision
+			OR = {
+				NOT = { has_country_flag = to_moved_capital_to_constantinople }
+				NOT = { capital = 151 }
+			}
+		}
+
+		provinces_to_highlight = {
+			province_id = 151
+		}
+
+		allow = {
+			is_at_war = no
+			owns_or_subject_of = 151
+		}
+
+		effect = {
+			set_country_flag = to_moved_capital_to_constantinople
+			if = {
+				limit = {
+					NOT = { owns = 151 }
+				}
+				151 = {
+					cede_province = ROOT
+				}
+			}
+			if = {
+				limit = {
+					NOT = { capital = 151 }
+				}
+				set_capital = 151
+			}
+			if = {
+				limit = {
+					exists = ELG
+					ELG = {
+						is_subject_of = ROOT
+					}
+				}
+				inherit = ELG
+			}
+			if = {
+				limit = {
+					NOT = { exists = ED0 }
+					NOT = { exists = ED1 }
+					NOT = { has_country_flag = to_enable_establish_elysian_despotate_decision }
+				}
+				custom_tooltip = nhs_new_line_tt
+				if = {
+					limit = {
+						any_owned_province = {
+							continent = north_america
+							has_port = yes
+						}
+					}
+					country_event = { id = nhs_mission_events.23 }
+				}
+				else = {
+					custom_tooltip = to_enable_establish_elysian_despotate_decision_tt
+					set_country_flag = to_enable_establish_elysian_despotate_decision
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_free_annexation_of_exarchs_tt
+		}
+	}
+
+	to_enable_establish_elysian_despotate = {
+		potential = {
+			has_country_flag = to_enable_establish_elysian_despotate_decision
+			NOT = { exists = ED0 }
+			NOT = { exists = ED1 }
+		}
+
+		allow = {
+			is_at_war = no
+			capital = 151
+			any_owned_province = {
+				continent = north_america
+				has_port = yes
+			}
+		}
+
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = nhs_romaic_to_elysian
+				}
+				to_initialize_elysian_governor = { GOVERNOR_TAG = ED1 }
+			}
+			else = {
+				to_initialize_elysian_governor = { GOVERNOR_TAG = ED0 }
+			}
+		}
+	}
 }

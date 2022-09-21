@@ -306,57 +306,6 @@ nhs_limit_expansion_on =  {
 	}
 }
 
-# nhs_limit_expansion_CTM_on =  {
-	# category = influence
-	# require_acceptance = no
-	# is_visible = {
-		# nhs_check_all_elysian_tags = { CONDITION = tag }
-		# overlord_of = FROM
-		# FROM = {
-			
-		# }
-	# }
-	# is_allowed = {
-		# FROM = {
-			# num_of_colonists = 1
-		# }
-	# }
-	# on_accept = {
-		# FROM = {
-			# set_country_flag = nhs_restricted_expansion_s
-		# }
-	# }
-	# ai_will_do = {
-		# always = no
-	# }
-# }
-
-# nhs_limit_expansion_SHQ_on =  {
-	# category = influence
-	# require_acceptance = no
-	# is_visible = {
-		# nhs_check_all_elysian_tags = { CONDITION = tag }
-		# overlord_of = FROM
-		# FROM = {
-			# tag = SHQ
-			# NOT = { has_country_flag = nhs_restricted_expansion_s }
-		# }
-	# }
-	# is_allowed = {
-		# FROM = {
-			# num_of_colonists = 1
-		# }
-	# }
-	# on_accept = {
-		# FROM = {
-			# set_country_flag = nhs_restricted_expansion_s
-		# }
-	# }
-	# ai_will_do = {
-		# always = no
-	# }
-# }
-
 nhs_limit_expansion_off =  {
 	category = influence
 	require_acceptance = no
@@ -642,19 +591,40 @@ nhs_annex_exarchate = {
 		FROM = {
 			is_at_war = no
 		}
-		adm_power = 150
-		dip_power = 150
+		OR = {
+			AND = {
+				adm_power = 150
+				dip_power = 150
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_has_moved_capital_back_to_europe_tt
+				mission_completed = nhs_basileus_basileon
+				capital = 151
+			}
+		}
+		
 	}
 	on_accept = {
 		inherit = FROM
-		add_adm_power = -150
-		add_dip_power = -150
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						mission_completed = nhs_basileus_basileon
+						capital = 151
+					}
+				}
+			}
+			add_adm_power = -150
+			add_dip_power = -150
+		}
 		every_province = {
 			limit = {
 				is_core = FROM
 			}
 			remove_core = FROM
 		}
+		set_country_flag = to_annexed_exarch@FROM
 	}
 	ai_will_do = {
 		always = no
@@ -691,6 +661,7 @@ nhs_annex_constantinia =  {
 			add_unrest = 15
 			add_local_autonomy = 30
 		}
+		set_country_flag = to_annexed_exarch@FROM
 	}
 	ai_will_do = {
 		always = no
