@@ -1775,7 +1775,7 @@ nhs_right_mid_start = {
 			}
 		}
 		trigger = {
-			mission_completed = nhs_modernise_mission
+			mission_completed = nhs_a_new_age_mission
 			owns = 953
 			custom_trigger_tooltip = {
 				tooltip = to_at_least_90_trade_power_in_bay_of_elysia_tt
@@ -3283,7 +3283,7 @@ nhs_centre_start = {
 		}
 	}
 	
-	nhs_modernise_mission = {
+	nhs_a_new_age_mission = {
 		required_missions = {
 			nhs_great_voyage_mission
 		}
@@ -3328,6 +3328,8 @@ nhs_centre_start = {
 			# add_dip_power = 100
 			# add_mil_power = 100
 			# custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_unlock_invasion_decision_tt
+			custom_tooltip = nhs_new_line_tt
 			country_event = { 
 				id = nhs2_army_reforms.2 
 				tooltip = to_nhs_second_army_reform_from_mission_tt 
@@ -3402,7 +3404,7 @@ nhs_centre_start = {
 	nhs_assemble_an_invasion_force = {
 		# icon = mission_assemble_an_army
 		icon = neapolitan_govenance
-		required_missions = { nhs_modernise_mission }
+		required_missions = { nhs_a_new_age_mission }
 		position = 5
 		trigger = {
 			custom_trigger_tooltip = {
@@ -3418,8 +3420,8 @@ nhs_centre_start = {
 			}
 		}
 		effect = {
-			custom_tooltip = nhs_enable_invasion_decision_tt
-			custom_tooltip = nhs_new_line_tt
+			# custom_tooltip = nhs_enable_invasion_decision_tt
+			# custom_tooltip = nhs_new_line_tt
 			add_country_modifier = {
 				name = "nhs_assemble_in_invasion_force"
 				duration = -1
@@ -3957,6 +3959,13 @@ nhs_left_end = {
 		position = 9
 		trigger = {
 			mission_completed = nhs_form_colonial_institution_2_mission
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = to_abandoned_roman_heritage_tt
+					has_country_flag = nhs_abandoned_greece
+				}
+				mission_completed = nhs_back_to_the_motherland
+			}
 			if = {
 				limit = {
 					NOT = { mission_completed = nhs_hegemony_mission }
@@ -4001,7 +4010,126 @@ nhs_left_end = {
 			}
 		}
 		effect = {
-			nhs_inward_focus_mission_effect = yes
+			if = {
+				limit = {
+					NOT = { mission_completed = nhs_hegemony_mission }
+				}
+				custom_tooltip = nhs_inwards_lock
+			}
+			else_if = {
+				limit = {
+					mission_completed = nhs_outward_focus
+				}
+				custom_tooltip = nhs_locks_heir_of_justinian
+			}
+			else_if = {
+				limit = {
+					mission_completed = nhs_heir_of_justinian
+				}
+				custom_tooltip = nhs_locks_outward_focus
+			}
+			custom_tooltip = nhs_replace_ambition_inward_tt
+			hidden_effect = {
+				remove_country_modifier = nhs_organised_expansion_2
+				add_country_modifier = {
+					name = nhs_organised_expansion_inwars_1
+					duration = -1
+				}
+			}
+		
+			custom_tooltip = nhs_unlocks_vinland_sub_dec_tt
+			custom_tooltip = unlock_NA_cb_on_norse_tt
+			custom_tooltip = nhs_new_line_tt
+		
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_inward_focus_province_mod_1_tt
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					953 = {
+						trade_goods = grain
+					}
+				}
+				custom_tooltip = nhs_change_elysia_to_cloth_tt
+				hidden_effect = {
+					953 = {
+						change_trade_goods = cloth
+					}
+				}
+			}
+			custom_tooltip = nhs_add_capital_area_improvement_tt
+			# custom_tooltip = nhs_add_grassland_improvement_tt
+			# custom_tooltip = nhs_new_line_tt
+			# custom_tooltip = nhs_add_coastline_improvement_tt
+			# custom_tooltip = nhs_new_line_tt
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							province_id = 953
+							province_id = 2550
+							province_id = 952
+						}
+					}
+					add_permanent_province_modifier = {
+						name = nhs2_improve_grassland
+						duration = -1
+					}
+				}
+				every_owned_province = {
+					limit = {
+						OR = {
+							province_id = 2554
+							province_id = 957
+						}
+					}
+					add_permanent_province_modifier = {
+						name = nhs2_improve_coastline
+						duration = -1
+					}
+				}
+				if = {
+					limit = {
+						950 = {
+							has_province_modifier = nhs2_drain_ivos_swamps
+						}
+					}
+					custom_tooltip = nhs_upgrade_swamp_drain_tt
+					hidden_effect = {
+						950 = {
+							remove_province_modifier = nhs2_drain_ivos_swamps
+							add_permanent_province_modifier = {
+								name = nhs2_drain_ivos_swamps2
+								duration = -1
+							}
+						}
+					}
+				}
+				else = {
+					950 = {
+						add_permanent_province_modifier = {
+							name = nhs2_drain_ivos_swamps2
+							duration = -1
+						}
+					}
+				}
+			}
+			hidden_effect = {
+				every_province = {
+					limit = {
+						continent = north_america
+						is_wasteland = no
+						owner = {
+							nhs_is_elysian_tag_or_subject = yes
+						}
+					}
+					add_province_modifier = {
+						name = nhs_inward_focus_province_mod_1
+						duration = -1
+					}
+				}
+				nhs_initiate_hightier_building_counter = yes
+			}
 		}
 	}
 	
@@ -5071,6 +5199,14 @@ nhs_right_end = {
 		icon = mission_invade_island
 		position = 9
 		trigger = {
+			mission_completed = nhs_form_colonial_institution_2_mission
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = to_abandoned_roman_heritage_tt
+					has_country_flag = nhs_abandoned_greece
+				}
+				mission_completed = nhs_back_to_the_motherland
+			}
 			if = {
 				limit = {
 					NOT = { mission_completed = nhs_hegemony_mission }
@@ -5108,7 +5244,6 @@ nhs_right_end = {
 					}
 				}
 			}
-			mission_completed = nhs_form_colonial_institution_2_mission
 			num_of_light_ship = 50
 			num_of_heavy_ship = 25
 		}
