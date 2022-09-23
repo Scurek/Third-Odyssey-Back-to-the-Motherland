@@ -716,9 +716,14 @@ nhs_annex_colony =  {
 		OR = {
 			technology_group = exiled_greek
 			technology_group = exiled_spartan
-			# technology_group = hellenised_american
 			technology_group = viking
+			has_government_attribute = to_free_annexation_of_colonial_nations
 		}
+		# OR = {
+		# 	nhs_check_all_elysian_tags = { CONDITION = tag }
+		# 	nhs_check_all_vinland = { CONDITION = tag }
+		# 	has_government_attribute = to_free_annexation_of_colonial_nations
+		# }
 		FROM = {
 			is_subject_of = ROOT
 			OR = {
@@ -728,41 +733,106 @@ nhs_annex_colony =  {
 				is_subject_of_type = self_governing_colony
 			}
 		}
-		capital_scope = {
-			OR = {
-				continent = north_america
-				continent = south_america
-			}
-		}
-		FROM = {
-			any_owned_province = {
-				any_neighbor_province = {
-					is_in_capital_area = yes
-					owned_by = ROOT
-				}
-			}
-		}
+		# capital_scope = {
+		# 	OR = {
+		# 		continent = north_america
+		# 		continent = south_america
+		# 	}
+		# }
+		# FROM = {
+		# 	any_owned_province = {
+		# 		any_neighbor_province = {
+		# 			is_in_capital_area = yes
+		# 			owned_by = ROOT
+		# 		}
+		# 	}
+		# }
 	}
 	is_allowed = {
 		is_at_war = no
 		FROM = {
 			is_at_war = no
-			any_neighbor_country = {
-				tag = ROOT
+			# any_neighbor_country = {
+			# 	tag = ROOT
+			# }
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = to_capital_on_the_same_continent_as_root_tt
+					same_continent = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = to_owns_a_province_in_capital_area
+					any_owned_province = {
+						any_neighbor_province = {
+							is_in_capital_area = yes
+							owned_by = ROOT
+						}
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							nhs_check_all_elysian_tags = { CONDITION = tag }
+						}
+					}
+					AND = {
+						custom_trigger_tooltip = {
+							tooltip = to_capital_on_south_america_tt
+							capital_scope = {
+								continent = south_america
+							}
+						}
+						custom_trigger_tooltip = {
+							tooltip = to_root_has_enacted_direct_control_from_capital_decision_tt
+							ROOT = {
+								has_country_flag = to_direct_control_from_capital
+							}
+						}
+					}
+				}
 			}
 		}
-		adm_power = 150
-		dip_power = 150
+		if = {
+			limit = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+				OR = {
+					has_country_modifier = nhs_constrained_resources
+					has_country_modifier = nhs_organised_expansion
+					has_country_modifier = nhs_organised_expansion_2
+				}
+			}
+			mission_completed = to_colonial_ambitions_mission
+		}
+		else_if = {
+			limit = {
+				nhs_check_all_vinland = { CONDITION = tag }
+				OR = {
+					has_country_modifier = nhs_vov_population
+					has_country_modifier = nhs_vov_organized_expansion
+				}
+			}
+			has_country_modifier = nhs_vov_organized_expansion
+		}
+		if = {
+			limit = {
+				NOT = { mission_completed = to_the_promised_land_mission }
+				NOT = { has_government_attribute = to_free_annexation_of_colonial_nations }
+			}
+			adm_power = 150
+			dip_power = 150
+		}
 	}
 	on_accept = {
 		inherit = FROM
 		add_adm_power = -150
 		add_dip_power = -150
-		every_province = {
-			limit = {
-				is_core = FROM
+		hidden_effect = {
+			every_province = {
+				limit = {
+					is_core = FROM
+				}
+				remove_core = FROM
 			}
-			remove_core = FROM
 		}
 	}
 	ai_will_do = {
