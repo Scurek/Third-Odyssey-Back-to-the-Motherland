@@ -3724,8 +3724,6 @@ nhs_centre_end = {
 			
 		}
 		trigger = {
-			owns_or_non_sovereign_subject_of = 151
-			owns_or_non_sovereign_subject_of = 226
 			is_at_war = no
 			to_completed_X_triumphs = { X = 3 }
 		}
@@ -3766,9 +3764,9 @@ nhs_centre_end = {
 		}
 		trigger = {
 			mission_completed = to_gates_of_herakles_mission
-			owns_or_subject_of = 151
-			owns_or_subject_of = 226
 			is_at_war = no
+			owns_or_subject_of = 151
+			owns_or_subject_of = 118
 			to_completed_X_triumphs = { X = 6 }
 		}
 
@@ -3833,10 +3831,24 @@ nhs_final_red_mission_roman = {
 			
 		}
 		trigger = {
-			owns_or_non_sovereign_subject_of = 151
-			owns_or_non_sovereign_subject_of = 226
+			if = {
+				limit = {
+					NOT = { religion_group = pagan }
+				}
+				mission_completed = to_restore_the_pentarchy_mission
+			}
+			else_if = {
+				limit = {
+					OR = {
+						religion = pantheon_worship
+						religion = aztlan_worship
+					}
+				}
+				mission_completed = to_the_old_gods_mission
+			}
+			mission_completed = to_neither_holy_nor_roman_mission
 			is_at_war = no
-			to_completed_X_triumphs = { X = 11 }
+			to_completed_all_triumphs = yes
 		}
 		
 		effect = {
@@ -3874,9 +3886,7 @@ nhs_final_red_mission_elysian = {
 			
 		}
 		trigger = {
-			owns_or_non_sovereign_subject_of = 151
-			owns_or_non_sovereign_subject_of = 226
-			to_completed_X_triumphs = { X = 11 }
+			to_completed_all_triumphs = yes
 		}
 		
 		effect = {
@@ -5554,7 +5564,7 @@ nhs_right_mid_end = {
 		}
 	}
 
-	to_nhs_neither_holy_nor_roman_mission = {
+	to_neither_holy_nor_roman_mission = {
 		required_missions = {
 			to_heir_of_justinian_mission
 		}
@@ -5676,7 +5686,10 @@ nhs_right_mid_end = {
 					limit = {
 						NOT = { is_emperor = yes }
 					}
-					set_emperor = yes
+					custom_tooltip = to_set_emperor_tt
+					hidden_effect = {
+						set_emperor = yes
+					}
 				}
 				set_hre_religion = ROOT
 				set_hre_religion_locked = yes
