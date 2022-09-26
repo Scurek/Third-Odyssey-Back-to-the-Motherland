@@ -161,7 +161,7 @@ to_pt_colonial_treaty_{{ treaty["region"] }} = {
 	    {%- if "cost_reduction_with" in treaty %}
 	    NOT = { {{ treaty["cost_reduction_with"] }} }
 	    {%- endif %}
-		{% if "additional_provinces" in treaty %}
+		{%- if "additional_provinces" in treaty %}
 		OR = {
 		    {{ treaty["region"] }} = {
 				to_country_or_subject_or_subject_of_subject_holds = { TAG = ROOT }
@@ -172,11 +172,11 @@ to_pt_colonial_treaty_{{ treaty["region"] }} = {
             }
             {%- endfor %}
 		}
-		{% else %}
+		{%- else %}
 		{{ treaty["region"] }} = {
             to_country_or_subject_or_subject_of_subject_holds = { TAG = ROOT }
         }
-        {% endif %}
+        {%- endif %}
 		FROM = {
 			OR = {
 				NOT = { has_country_flag = to_cannot_colonise_{{ treaty["region"] }} }
@@ -195,19 +195,19 @@ to_pt_colonial_treaty_{{ treaty["region"] }} = {
 			num_of_colonists = 1
 			NOT = {
 				capital_scope = {
-				    {% if "cost_reduction_with" in treaty -%}
+				    {%- if "additional_provinces" in treaty %}
                     OR = {
                         colonial_region = {{ treaty["region"] }}
                         {%- for province in treaty["additional_provinces"] %}
                         province_id = {{ province }}
                         {%- endfor %}
                     }
-                    {% else %}
+                    {%- else %}
                     colonial_region = {{ treaty["region"] }}
-                    {% endif %}
+                    {%- endif %}
 				}
 			}
-			{% if "additional_provinces" in treaty %}
+			{%- if "additional_provinces" in treaty %}
             OR = {
                 {{ treaty["region"] }} = {
                     is_empty = yes
@@ -254,7 +254,7 @@ to_pt_colonial_treaty_{{ treaty["region"] }} = {
                 }
                 {%- endfor %}
             }
-            {% else %}
+            {%- else %}
             {{ treaty["region"] }} = {
 				is_empty = yes
 				range = FROM
@@ -276,7 +276,7 @@ to_pt_colonial_treaty_{{ treaty["region"] }} = {
 					}
 				}
 			}
-            {% endif %}
+            {%- endif %}
 		}
 	}
 	is_allowed = {
@@ -288,16 +288,16 @@ to_pt_colonial_treaty_{{ treaty["region"] }} = {
 		}
 		every_province = {
 			limit = {
-                {% if "additional_provinces" in treaty %}
+                {%- if "additional_provinces" in treaty %}
                 OR = {
                     colonial_region = {{ treaty["region"] }}
                     {%- for province in treaty["additional_provinces"] %}
                     province_id = {{ province }}
                     {%- endfor %}
                 }
-                {% else %}
+                {%- else %}
                 colonial_region = {{ treaty["region"] }}
-                {% endif %}
+                {%- endif %}
 				to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
 				is_colony = yes
 			}
@@ -347,7 +347,7 @@ to_pt_colonial_treaty_{{ treaty["region"] }}_cheaper = {
 	    
 		{{ treaty["base_trigger"] }}
 		{{ treaty["cost_reduction_with"] }}
-		{% if "additional_provinces" in treaty %}
+		{%- if "additional_provinces" in treaty %}
 		OR = {
 		    {{ treaty["region"] }} = {
 				to_country_or_subject_or_subject_of_subject_holds = { TAG = ROOT }
@@ -358,11 +358,11 @@ to_pt_colonial_treaty_{{ treaty["region"] }}_cheaper = {
             }
             {%- endfor %}
 		}
-		{% else %}
+		{%- else %}
 		{{ treaty["region"] }} = {
             to_country_or_subject_or_subject_of_subject_holds = { TAG = ROOT }
         }
-        {% endif %}
+        {%- endif %}
 		FROM = {
 			OR = {
 				NOT = { has_country_flag = to_cannot_colonise_{{ treaty["region"] }} }
@@ -381,19 +381,19 @@ to_pt_colonial_treaty_{{ treaty["region"] }}_cheaper = {
 			num_of_colonists = 1
 			NOT = {
 				capital_scope = {
-				    {% if "cost_reduction_with" in treaty -%}
+				    {%- if "additional_provinces" in treaty %}
                     OR = {
                         colonial_region = {{ treaty["region"] }}
                         {%- for province in treaty["additional_provinces"] %}
                         province_id = {{ province }}
                         {%- endfor %}
                     }
-                    {% else %}
+                    {%- else %}
                     colonial_region = {{ treaty["region"] }}
-                    {% endif %}
+                    {%- endif %}
 				}
 			}
-			{% if "additional_provinces" in treaty %}
+			{%- if "additional_provinces" in treaty %}
             OR = {
                 {{ treaty["region"] }} = {
                     is_empty = yes
@@ -440,7 +440,7 @@ to_pt_colonial_treaty_{{ treaty["region"] }}_cheaper = {
                 }
                 {%- endfor %}
             }
-            {% else %}
+            {%- else %}
             {{ treaty["region"] }} = {
 				is_empty = yes
 				range = FROM
@@ -462,7 +462,7 @@ to_pt_colonial_treaty_{{ treaty["region"] }}_cheaper = {
 					}
 				}
 			}
-            {% endif %}
+            {%- endif %}
 		}
 	}
 	is_allowed = {
@@ -474,16 +474,16 @@ to_pt_colonial_treaty_{{ treaty["region"] }}_cheaper = {
 		}
 		every_province = {
 			limit = {
-                {% if "additional_provinces" in treaty %}
+                {%- if "additional_provinces" in treaty %}
                 OR = {
                     colonial_region = {{ treaty["region"] }}
                     {%- for province in treaty["additional_provinces"] %}
                     province_id = {{ province }}
                     {%- endfor %}
                 }
-                {% else %}
+                {%- else %}
                 colonial_region = {{ treaty["region"] }}
-                {% endif %}
+                {%- endif %}
 				to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
 				is_colony = yes
 			}
@@ -505,7 +505,16 @@ template_scripted_functions = jinja_env.from_string(
     '''{%- for treaty in colonial_treaties %}    condition = {
 		tooltip = "TO_COLONIAL_TREATY"
 		potential = {
-			colonial_region = {{ treaty['region'] }}
+		    {%- if "additional_provinces" in treaty %}
+            OR = {
+                colonial_region = {{ treaty['region'] }}
+                {%- for province in treaty["additional_provinces"] %}
+                province_id = {{ province }}
+                {%- endfor %}
+            }
+            {%- else %}
+            colonial_region = {{ treaty['region'] }}
+            {%- endif %}
 			FROM = {
 			    to_has_or_overlord_has_claim_colonial_region_peace_treaty = {
 			        COLONIAL_REGION = {{ treaty['region'] }}
