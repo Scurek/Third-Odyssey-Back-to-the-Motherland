@@ -530,8 +530,9 @@ template_scripted_functions = jinja_env.from_string(
 template_loc = jinja_env.from_string(
     "{% for treaty in colonial_treaties %}"
     " to_pt_colonial_treaty_{{ treaty['region'] }}_desc:0 \""
-    "Prevents [From.GetName] and its Subjects from colonizing in §Y{{ treaty['full_name'] }}§! for the next §Y20§! "
-    "years. All their unfinished colonies in the region will be §Rabandoned§!.\"\n"
+    "Prevents §Y[From.GetName]§! and its Subjects from colonizing in "
+    "§Y{{ treaty['full_name'] }}§! for the next §Y20§! years. "
+    "All their unfinished colonies in the region will be §Rabandoned§!.\"\n"
     " CB_ALLOWED_to_pt_colonial_treaty_{{ treaty['region'] }}:0 \"Claim {{ treaty['name'] }}\"\n"
     " PEACE_to_pt_colonial_treaty_{{ treaty['region'] }}:0 \"§YClaim {{ treaty['name'] }}§!\"\n"
     "{% if 'cost_reduction_with' in treaty %}"
