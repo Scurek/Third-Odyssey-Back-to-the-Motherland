@@ -594,3 +594,114 @@ is_in_north_america_superregions = {
 		superregion = carribean_superregion
 	}
 }
+
+to_native_tech = {
+	OR = {
+		technology_group = north_american
+		technology_group = mesoamerican
+		technology_group = south_american
+		technology_group = andean
+	}
+}
+
+to_can_use_pt_colonial_treaties_elysium = {
+	OR = {
+		cb_on_primitives = yes
+		mission_completed = to_our_place_in_the_sun_mission
+		has_country_modifier = nhs_vov_organized_expansion
+	}
+	OR = {
+		mission_completed = to_looking_inwards_mission
+		FROM = {
+			OR = {
+				NOT = {
+					capital_scope = {
+						continent = north_america
+					}
+				}
+				is_former_colonial_nation = yes
+			}
+			# NOT = { nhs_exiles_tech = yes }
+			# NOT = { to_native_tech = yes }
+		}
+	}
+}
+
+to_can_use_pt_colonial_treaties_arkadia = {
+	OR = {
+		cb_on_primitives = yes
+		mission_completed = to_our_place_in_the_sun_mission
+		has_country_modifier = nhs_vov_organized_expansion
+	}
+	FROM = {
+		OR = {
+			NOT = {
+				capital_scope = {
+					continent = south_america
+				}
+			}
+			is_former_colonial_nation = yes
+		}
+		# NOT = { nhs_exiles_tech = yes }
+		# NOT = { to_native_tech = yes }
+	}
+}
+
+to_can_use_pt_colonial_treaties_australia = {
+	OR = {
+		cb_on_primitives = yes
+		mission_completed = to_across_eirenic_mission
+	}
+	FROM = {
+		OR = {
+			NOT = {
+				capital_scope = {
+					continent = oceania
+				}
+			}
+			is_former_colonial_nation = yes
+		}
+		# NOT = { nhs_exiles_tech = yes }
+		# NOT = { to_native_tech = yes }
+	}
+}
+
+to_cheaper_use_pt_colonial_treaties = {
+	mission_completed = to_looking_inwards_mission
+}
+
+to_has_claim_colonial_region_peace_treaty = {
+	has_country_flag = to_cannot_colonise_$COLONIAL_REGION$
+	NOT = {
+		had_country_flag = {
+			flag = to_cannot_colonise_$COLONIAL_REGION$
+			days = 7300
+		}
+	}
+}
+
+to_has_or_overlord_has_claim_colonial_region_peace_treaty = {
+	OR = {
+		to_has_claim_colonial_region_peace_treaty = { 
+			COLONIAL_REGION = $COLONIAL_REGION$
+		}
+		AND = {
+			is_subject = yes
+			overlord = {
+				OR = {
+					to_has_claim_colonial_region_peace_treaty = { 
+						COLONIAL_REGION = $COLONIAL_REGION$
+					}
+					AND = {
+						is_subject = yes
+						overlord = {
+							to_has_claim_colonial_region_peace_treaty = { 
+								COLONIAL_REGION = $COLONIAL_REGION$
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
