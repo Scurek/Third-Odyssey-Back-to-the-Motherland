@@ -1408,3 +1408,449 @@ to_release_as_protectorate = {
 		always = no
 	}
 }
+
+to_establish_protectorate = {
+	category = influence
+	require_acceptance = yes
+	is_visible = {
+		mission_completed = to_a_world_empire_mission
+		FROM = {
+			is_subject = no
+			OR = {
+				technology_group = indian
+				technology_group = east_african
+				technology_group = central_african
+				technology_group = chinese
+				technology_group = sub_saharan
+			}
+		}
+	}
+	is_allowed = {
+		FROM = {
+			is_at_war = no
+			has_opinion = { who = ROOT value = 50 }
+			OR = {
+				technology_group = indian
+				technology_group = east_african
+				technology_group = central_african
+				technology_group = chinese
+				technology_group = sub_saharan
+			}
+			capital_scope = {
+				trade_range = ROOT
+			}
+		}
+	}
+	on_accept = {
+		create_subject = {
+			subject_type = nhs_protectorate
+			subject = FROM
+		}
+	}
+
+	ai_acceptance = { # This works similarly to variable_arithmetic_trigger, but does not support triggers generally. Instead, "limit" will be evaluated first and the rest ignored if it isn't passed.
+		add_entry = {
+			name = TO_VASSALIZATION_ACCEPTANCE
+			export_to_variable = {
+				variable_name = ai_value
+				value = modifier:accept_vassalization_reasons
+			}
+
+		}
+		add_entry = {
+			name = TO_RELATIVE_ECONOMIC_BASE
+			limit = {
+				to_relative_economic_base_above = { VALUE = 30 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 30
+			}
+		}
+		add_entry = {
+			name = TO_RELATIVE_ECONOMIC_BASE
+			limit = {
+				NOT = { to_relative_economic_base_above = { VALUE = 30 } }
+			}
+			# Adapted from https://eu4.paradoxwikis.com/Vassal#cite_note-1
+			export_to_variable = {
+				variable_name = ai_value
+				value = 0
+			}
+			export_to_variable = {
+				variable_name = own_development
+				value = trigger_value:total_own_and_non_tributary_subject_development
+			}
+			change_variable = {
+				which = own_development
+				value = 10
+			}
+			divide_variable = {
+				which = own_development
+				value = 2
+			}
+			export_to_variable = {
+				variable_name = their_development
+				value = trigger_value:total_own_and_non_tributary_subject_development
+				who = FROM
+			}
+			change_variable = {
+				which = their_development
+				value = 10
+			}
+			divide_variable = {
+				which = their_development
+				value = 2
+			}
+
+			change_variable = {
+				which = own_development
+				value = 1
+			}
+			multiply_variable = {
+				which = their_development
+				which = their_development
+			}
+			divide_variable = {
+				which = their_development
+				value = 2
+			}
+			change_variable = {
+				which = their_development
+				value = 1
+			}
+
+			change_variable = {
+				which = ai_value
+				which = own_development
+			}
+
+			divide_variable = {
+				which = ai_value
+				which = their_development
+			}
+			multiply_variable = {
+				which = ai_value
+				value = 30
+			}
+			subtract_variable = {
+				which = ai_value
+				value = 90
+			}
+		}
+
+		add_entry = {
+			name = TO_HOSTILE_ATTITUDE
+			limit = {
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_hostile
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -1000
+			}
+		}
+		add_entry = {
+			name = TO_RIVALRY_ATTITUDE
+			limit = {
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_rivalry
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -1000
+			}
+		}
+		add_entry = {
+			name = TO_ALLY_ATTITUDE
+			limit = {
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_allied
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = TO_FRIENDLY_ATTITUDE
+			limit = {
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_friendly
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = TO_THREATENED_ATTITUDE
+			limit = {
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_threatened
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = TO_OUTRAGED_ATTITUDE
+			limit = {
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_outraged
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -1000
+			}
+		}
+		add_entry = {
+			name = TO_DEFENSIVE_ATTITUDE
+			limit = {
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_defensive
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -1000
+			}
+		}
+		add_entry = {
+			name = TO_DOMINEERING_ATTITUDE
+			limit = {
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_domineering
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -1000
+			}
+		}
+
+		add_entry = {
+			name = TO_HAS_ROYAL_MARRIAGE
+			limit = {
+				marriage_with = FROM
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 10
+			}
+		}
+
+		add_entry = {
+			name = TO_TRUST
+			limit = {
+				OR = {
+					has_dlc = "Leviathan"
+					has_dlc = "The Cossacks"
+				}
+				FROM = {
+					trust = { who = ROOT value = 50 }
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = {
+				which = ai_value
+				value = 50
+			}
+			divide_variable = {
+				which = ai_value
+				value = 5
+			}
+		}
+		add_entry = {
+			name = TO_TRUST
+			limit = {
+				OR = {
+					has_dlc = "Leviathan"
+					has_dlc = "The Cossacks"
+				}
+				FROM = {
+					trust = { who = ROOT value = 30 }
+					NOT = { trust = { who = ROOT value = 50 } }
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = {
+				which = ai_value
+				value = 50
+			}
+			multiply_variable = {
+				which = ai_value
+				value = 2
+			}
+		}
+		add_entry = {
+			name = TO_TRUST
+			limit = {
+				OR = {
+					has_dlc = "Leviathan"
+					has_dlc = "The Cossacks"
+				}
+				FROM = {
+					NOT = { trust = { who = ROOT value = 30 } }
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -2000
+			}
+		}
+
+		add_entry = {
+			name = TO_DIPLOMATIC_REPUTATION
+			export_to_variable = {
+				variable_name = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 3 }
+		}
+
+		add_entry = {
+			name = TO_GOVERNMENT_RANK
+			limit = {
+				OR = {
+					AND = {
+						government_rank = 3
+						NOT = { FROM = { government_rank = 3 } }
+					}
+					AND = {
+						government_rank = 2
+						NOT = { FROM = { government_rank = 2 } }
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = trigger_value:government_rank
+			}
+			export_to_variable = {
+				variable_name = gov_rank_from
+				value = trigger_value:government_rank
+				who = FROM
+			}
+			subtract_variable = {
+				which = ai_value
+				which = gov_rank_from
+			}
+			multiply_variable = { which = ai_value value = 10 }
+		}
+
+		add_entry = {
+			name = TO_GOVERNMENT_RANK
+			limit = {
+				OR = {
+					AND = {
+						FROM = { government_rank = 3 }
+						NOT = { government_rank = 3 }
+					}
+					AND = {
+						FROM = { government_rank = 2 }
+						NOT = { government_rank = 2 }
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = trigger_value:government_rank
+			}
+			export_to_variable = {
+				variable_name = gov_rank_from
+				value = trigger_value:government_rank
+				who = FROM
+			}
+			subtract_variable = {
+				which = ai_value
+				which = gov_rank_from
+			}
+			multiply_variable = { which = ai_value value = 30 }
+		}
+
+		add_entry = {
+			name = TO_TOO_MUCH_DEV
+			limit = {
+				FROM = {
+					total_own_and_non_tributary_subject_development = 200
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -1000
+			}
+		}
+
+		add_entry = {
+			name = TO_OWN_THEIR_CORES
+			limit = {
+				FROM = {
+					any_core_province = {
+						country_or_subject_holds = ROOT
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -1000
+			}
+		}
+
+		add_entry = {
+			name = TO_OPINION
+			export_to_variable = {
+				variable_name = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = 8 }
+		}
+	}
+
+	ai_will_do = {
+		always = no
+	}
+}
