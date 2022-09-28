@@ -1074,15 +1074,13 @@ to_native_estate_spawn_disaster_rebels = {
 }
 
 to_inherit_overlords_councils_privileges = {
+	# Due to some incredible pdx spaghetti code I'm not able to use else and else_if to set estate privileges here. Pain.
 	if = {
 		limit = {
-			ai = yes
-			is_subject = yes
 			has_estate = estate_all_natives
-			overlord = {
-				has_estate = estate_all_natives
-			}
+			to_has_overlords_council_privileges = yes
 		}
+		set_country_flag = to_bypass_councils_formation_event_active_check
 		if = {
 			limit = {
 				NOT = {
@@ -1124,13 +1122,18 @@ to_inherit_overlords_councils_privileges = {
 				}
 				set_estate_privilege = to_vov_native_priv_benevolent_conquerors
 			}
-			else_if = {
+			if = {
 				limit = {
+					NOT = { nhs_check_all_vinland = { CONDITION = tag } }
 					has_country_flag = native_council_enabled_mid
 				}
 				set_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
 			}
-			else = {
+			if = {
+				limit = {
+					NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+					NOT = { has_country_flag = native_council_enabled_mid }
+				}
 				set_estate_privilege = nhs_native_priv_inclusive_citizenship_early
 			}
 		}
@@ -1179,7 +1182,10 @@ to_inherit_overlords_councils_privileges = {
 				}
 				set_estate_privilege = to_vov_native_priv_skraeling_thingas
 			}
-			else = {
+			if = {
+				limit = {
+					NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+				}
 				set_estate_privilege = nhs_native_priv_local_councils_empowered
 			}
 		}
@@ -1205,7 +1211,10 @@ to_inherit_overlords_councils_privileges = {
 				}
 				set_estate_privilege = to_vov_native_priv_raiding_hosts
 			}
-			else = {
+			if = {
+				limit = {
+					NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+				}
 				set_estate_privilege = nhs_native_priv_citizenship_for_service
 			}
 		}
@@ -1253,7 +1262,10 @@ to_inherit_overlords_councils_privileges = {
 				}
 				set_estate_privilege = to_vov_native_priv_open_ranks
 			}
-			else = {
+			if = {
+				limit = {
+					NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+				}
 				set_estate_privilege = nhs_native_priv_encourage_barbaroi_officials
 			}
 		}
@@ -1292,7 +1304,10 @@ to_inherit_overlords_councils_privileges = {
 				}
 				set_estate_privilege = nhs_native_priv_pax_romana_mid
 			}
-			else = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = native_council_enabled_mid }
+				}
 				set_estate_privilege = nhs_native_priv_pax_romana_early
 			}
 		}
@@ -1331,7 +1346,10 @@ to_inherit_overlords_councils_privileges = {
 				}
 				set_estate_privilege = nhs_native_priv_divide_et_impera_mid
 			}
-			else = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = native_council_enabled_mid }
+				}
 				set_estate_privilege = nhs_native_priv_divide_et_impera_early
 			}
 		}
@@ -1352,6 +1370,8 @@ to_inherit_overlords_councils_privileges = {
 			}
 			set_estate_privilege = nhs_native_priv_designate_development_zones
 		}
+
+		clr_country_flag = to_bypass_councils_formation_event_active_check
 	}
 }
 
