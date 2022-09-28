@@ -138,7 +138,7 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 							type = all
 							# country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT }
 							OR = {
-								has_influencing_fort = yes	
+								has_influencing_fort = yes
 								any_neighbor_province = {
 									has_influencing_fort = yes
 									country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT }
@@ -190,10 +190,10 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 				cost_multiplier = 0.25
 			}
 			custom_tooltip = nhs_new_line_tt
-			add_country_modifier = {
-				name = nhs_cheaper_fortifications
-				duration = 9125
-			}
+			# add_country_modifier = {
+			# 	name = nhs_cheaper_fortifications
+			# 	duration = 9125
+			# }
 			# if = {
 			# 	limit = {
 			# 		has_dlc = "Mandate of Heaven"
@@ -203,7 +203,8 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			# 		add_prosperity = 100
 			# 	}
 			# }
-			# custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_para_bellum_cheaper_forts_tt
+			custom_tooltip = nhs_new_line_tt
 			northeast_america_region = {
 				add_permanent_claim = ROOT
 			}
@@ -212,6 +213,65 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 			}
 			custom_tooltip = nhs_new_line_tt
 			to_ely_true_nation_mission_trigger_reduce = yes
+
+			hidden_effect = {
+				while = {
+					limit = {
+						elysian_fortification_pgroup = {
+							owned_by = ROOT
+							has_influencing_fort = yes
+							NOT = { has_province_modifier = to_para_bellum_modifier_tm }
+						}
+						NOT = {
+							calc_true_if = {
+								amount = 5
+								all_province = {
+									has_province_modifier = to_para_bellum_modifier_tm
+								}
+							}
+						}
+					}
+					if = {
+						limit = {
+							elysian_fortification_pgroup = {
+								owned_by = ROOT
+								has_influencing_fort = yes
+								NOT = { has_province_modifier = to_para_bellum_modifier_tm }
+								NOT = {
+									any_neighbor_province = {
+										has_province_modifier = to_para_bellum_modifier_tm
+									}
+								}
+							}
+						}
+						random_owned_province = {
+							limit = {
+								province_group = elysian_fortification_pgroup
+								owned_by = ROOT
+								has_influencing_fort = yes
+								NOT = { has_province_modifier = to_para_bellum_modifier_tm }
+								NOT = {
+									any_neighbor_province = {
+										has_province_modifier = to_para_bellum_modifier_tm
+									}
+								}
+							}
+							add_province_triggered_modifier = to_para_bellum_modifier_tm
+						}
+					}
+					else = {
+						random_owned_province = {
+							limit = {
+								province_group = elysian_fortification_pgroup
+								owned_by = ROOT
+								has_influencing_fort = yes
+								NOT = { has_province_modifier = to_para_bellum_modifier_tm }
+							}
+							add_province_triggered_modifier = to_para_bellum_modifier_tm
+						}
+					}
+				}
+			}
 		}
 	}
 

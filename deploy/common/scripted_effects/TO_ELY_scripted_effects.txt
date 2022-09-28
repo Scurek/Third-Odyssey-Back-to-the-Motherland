@@ -10070,3 +10070,84 @@ to_downgrade_japanese_boosts = {
 		}
 	}
 }
+
+to_handle_para_bellum_modifier = {
+	if = {
+		limit = {
+			province_group = elysian_fortification_pgroup
+		}
+		if = {
+			limit = {
+				has_influencing_fort = yes
+				owner = {
+					mission_completed = to_para_bellum_mission
+				}
+				NOT = { has_province_modifier = to_para_bellum_modifier_tm }
+				NOT = {
+					calc_true_if = {
+						amount = 5
+						all_province = {
+							has_province_modifier = to_para_bellum_modifier_tm
+						}
+					}
+				}
+			}
+			add_province_triggered_modifier = to_para_bellum_modifier_tm
+		}
+		else_if = {
+			limit = {
+				has_province_modifier = to_para_bellum_modifier_tm
+				OR = {
+					has_influencing_fort = no
+					NOT = {
+						owner = {
+							mission_completed = to_para_bellum_mission
+						}
+					}
+				}
+			}
+			remove_province_triggered_modifier = to_para_bellum_modifier_tm
+		}
+	}
+}
+
+to_handle_para_bellum_modifier_fort_build = {
+	if = {
+		limit = {
+			province_group = elysian_fortification_pgroup
+			NOT = {
+				calc_true_if = {
+					amount = 5
+					all_province = {
+						has_province_modifier = to_para_bellum_modifier_tm
+					}
+				}
+			}
+		}
+		custom_tooltip = to_add_para_bellum_province_modifier_tt
+		hidden_effect = {
+			# Apparently can't directly add or remove province triggered modifiers in on_build/on_destroyed effects. Fun.
+			province_event = { id = nhs_mission_events.24 }
+		}
+	}
+}
+
+to_handle_para_bellum_modifier_on_fort_destroyed = {
+	if = {
+		limit = {
+			has_province_modifier = to_para_bellum_modifier_tm
+		}
+		if = {
+			limit = {
+				nhs_check_all_elysian_tags = { CONDITION = exists }
+			}
+			custom_tooltip = to_remove_para_bellum_modifier_moving_tt
+		}
+		else = {
+			custom_tooltip = to_remove_para_bellum_modifier_tt
+		}
+		hidden_effect = {
+			province_event = { id = nhs_mission_events.25 }
+		}
+	}
+}

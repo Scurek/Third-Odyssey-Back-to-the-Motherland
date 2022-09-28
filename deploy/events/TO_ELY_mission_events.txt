@@ -2031,3 +2031,95 @@ country_event = {
 		set_country_flag = to_enable_establish_elysian_despotate_decision
 	}
 }
+
+# The following 2 events handle Para Bellum modifier, since you apparently can't directly add or remove it in on_build/on_destroyed effects. Fun.
+province_event = {
+	id = nhs_mission_events.24
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = BYZANTINE_EMPEROR_eventPicture
+	
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		add_province_triggered_modifier = to_para_bellum_modifier_tm
+	}
+
+	option = {
+		name = nhs2_hidden.a
+	}
+}
+
+# See above
+province_event = {
+	id = nhs_mission_events.25
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = BYZANTINE_EMPEROR_eventPicture
+	
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		remove_province_triggered_modifier = to_para_bellum_modifier_tm
+		if = {
+			limit = {
+				elysian_fortification_pgroup = {
+					owner = {
+						mission_completed = to_para_bellum_mission
+					}
+					has_influencing_fort = yes
+					NOT = { has_province_modifier = to_para_bellum_modifier_tm }
+					NOT = {
+						any_neighbor_province = {
+							has_province_modifier = to_para_bellum_modifier_tm
+						}
+					}
+				}
+			}
+			random_province = {
+				limit = {
+					province_group = elysian_fortification_pgroup
+					owner = {
+						mission_completed = to_para_bellum_mission
+					}
+					has_influencing_fort = yes
+					NOT = { has_province_modifier = to_para_bellum_modifier_tm }
+					NOT = {
+						any_neighbor_province = {
+							has_province_modifier = to_para_bellum_modifier_tm
+						}
+					}
+				}
+				add_province_triggered_modifier = to_para_bellum_modifier_tm
+			}
+		}
+		else_if = {
+			limit = {
+				elysian_fortification_pgroup = {
+					owner = {
+						mission_completed = to_para_bellum_mission
+					}
+					has_influencing_fort = yes
+					NOT = { has_province_modifier = to_para_bellum_modifier_tm }
+				}
+			}
+			random_province = {
+				limit = {
+					province_group = elysian_fortification_pgroup
+					owner = {
+						mission_completed = to_para_bellum_mission
+					}
+					has_influencing_fort = yes
+					NOT = { has_province_modifier = to_para_bellum_modifier_tm }
+				}
+				add_province_triggered_modifier = to_para_bellum_modifier_tm
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_hidden.a
+	}
+}
