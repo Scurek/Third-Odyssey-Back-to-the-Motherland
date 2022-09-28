@@ -144,7 +144,7 @@ nhs_native_privilege_seize_land = {
 	benefits = {
 	}
 	ai_will_do = {
-		factor = 1
+		factor = 1000
 		modifier = {
 			factor = 0
 			to_estate_will_revolt = { ESTATE = estate_all_natives }
@@ -193,6 +193,23 @@ nhs_native_priv_inclusive_citizenship_early = {
 		has_country_flag = native_council_enabled_early
 		NOT = { has_country_flag = native_council_enabled_mid }
 		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+					has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+					has_estate_privilege = to_vov_native_priv_benevolent_conquerors
+				}
+			}
+		}
 	}
 	can_select = {
 		has_estate_privilege = nhs_native_priv_ancestral_land
@@ -239,6 +256,43 @@ nhs_native_priv_inclusive_citizenship_early = {
 		custom_tooltip = nhs_native_priv_inclusive_citizenship_tooltip
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = nhs_native_priv_cultural_sufferance_early_effect_tooltip
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+							has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+							has_estate_privilege = to_vov_native_priv_benevolent_conquerors
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate_privilege = estate_church_one_faith_one_culture
+					}
+					remove_estate_privilege = estate_church_one_faith_one_culture
+				}
+				if = {
+					limit = {
+						nhs_check_all_vinland = { CONDITION = tag }
+					}
+					set_estate_privilege = to_vov_native_priv_benevolent_conquerors
+				}
+				else_if = {
+					limit = {
+						has_country_flag = native_council_enabled_mid
+					}
+					set_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+				}
+			}
+		}
 	}
 	on_granted_province = {
 		if = {
@@ -364,6 +418,23 @@ nhs_native_priv_inclusive_citizenship_mid = {
 		}
 		has_country_flag = native_council_enabled_mid
 		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+					has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+					has_estate_privilege = to_vov_native_priv_benevolent_conquerors
+				}
+			}
+		}
 	}
 	can_select = {
 		has_estate_privilege = nhs_native_priv_ancestral_land
@@ -411,7 +482,44 @@ nhs_native_priv_inclusive_citizenship_mid = {
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = nhs_native_priv_inclusive_citizenship_tooltip
 		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = nhs_native_priv_cultural_sufferance_mid_effect_tooltip		
+		custom_tooltip = nhs_native_priv_cultural_sufferance_mid_effect_tooltip
+		
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+							has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+							has_estate_privilege = to_vov_native_priv_benevolent_conquerors
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate_privilege = estate_church_one_faith_one_culture
+					}
+					remove_estate_privilege = estate_church_one_faith_one_culture
+				}
+				if = {
+					limit = {
+						nhs_check_all_vinland = { CONDITION = tag }
+					}
+					set_estate_privilege = to_vov_native_priv_benevolent_conquerors
+				}
+				else_if = {
+					limit = {
+						has_country_flag = native_council_enabled_mid
+					}
+					set_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+				}
+			}
+		}
 	}
 	on_granted_province = {
 		if = {
@@ -495,6 +603,21 @@ nhs_native_priv_ancestral_land = {
 	loyalty = 0.15
 	influence = 0.25
 
+	is_valid = {
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				has_estate_privilege = nhs_native_priv_ancestral_land
+			}
+		}
+	}
+
 	can_select = {
 		### to_num_of_privileges_check_estate_all_natives = yes
 		if = {
@@ -536,6 +659,19 @@ nhs_native_priv_ancestral_land = {
 	}
 	on_granted = {
 		custom_tooltip = nhs_native_priv_ancestral_land_effect_tooltip
+	
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = {
+						has_estate_privilege = nhs_native_priv_ancestral_land
+					}
+				}
+				set_estate_privilege = nhs_native_priv_ancestral_land
+			}
+		}
 	}
 	on_revoked = {
 		custom_tooltip = nhs_native_priv_ancestral_land_revoke_tooltip
@@ -590,6 +726,22 @@ nhs_native_priv_local_councils_empowered = {
 
 	is_valid = {
 		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_local_councils_empowered
+					has_estate_privilege = to_vov_native_priv_skraeling_thingas
+				}
+			}
+		}
 	}
 	can_select = {
 		### to_num_of_privileges_check_estate_all_natives = yes
@@ -632,6 +784,30 @@ nhs_native_priv_local_councils_empowered = {
 	}
 	on_granted = {
 		custom_tooltip = nhs_native_priv_local_councils_empowered_effect_tooltip
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_local_councils_empowered
+							has_estate_privilege = to_vov_native_priv_skraeling_thingas
+						}
+					}
+				}
+				if = {
+					limit = {
+						nhs_check_all_vinland = { CONDITION = tag }
+					}
+					set_estate_privilege = to_vov_native_priv_skraeling_thingas
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_local_councils_empowered
+				}
+			}
+		}
 	}
 	on_granted_province = {
 		if = {
@@ -694,6 +870,19 @@ nhs_native_priv_increase_tribute = {
 			}
 			NOT = { has_estate_privilege = nhs_native_priv_designate_development_zones }
 		}
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				has_estate_privilege = nhs_native_priv_increase_tribute
+			}
+		}
 	}
 	can_select = {
 		### to_num_of_privileges_check_estate_all_natives = yes
@@ -745,6 +934,25 @@ nhs_native_priv_increase_tribute = {
 		custom_tooltip = nhs_native_priv_always_revoke_tt
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = nhs_native_priv_increase_tribute_effect_tooltip
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = {
+						has_estate_privilege = nhs_native_priv_increase_tribute
+					}
+				}
+				if = {
+					limit = {
+						has_estate_privilege = nhs_native_priv_designate_development_zones
+					}
+					remove_estate_privilege = nhs_native_priv_designate_development_zones
+				}
+				set_estate_privilege = nhs_native_priv_increase_tribute
+			}
+		}
 	}
 	on_granted_province = {
 		if = {
@@ -847,6 +1055,22 @@ nhs_native_priv_citizenship_for_service = {
 	is_valid = {
 		has_country_flag = native_council_enabled_mid
 		NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_citizenship_for_service
+					has_estate_privilege = to_vov_native_priv_raiding_hosts
+				}
+			}
+		}
 	}
 	can_select = {
 		### to_num_of_privileges_check_estate_all_natives = yes
@@ -892,6 +1116,30 @@ nhs_native_priv_citizenship_for_service = {
 		# custom_tooltip = nhs_native_priv_citizenship_for_service_effect_tooltip
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = nhs_slightly_increases_barbaroi_integration_tt
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_citizenship_for_service
+							has_estate_privilege = to_vov_native_priv_raiding_hosts
+						}
+					}
+				}
+				if = {
+					limit = {
+						nhs_check_all_vinland = { CONDITION = tag }
+					}
+					set_estate_privilege = to_vov_native_priv_raiding_hosts
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_citizenship_for_service
+				}
+			}
+		}
 	}
 	on_revoked = {
 		# custom_tooltip = nhs_native_priv_citizenship_for_service_revoke_tooltip
@@ -933,6 +1181,22 @@ nhs_native_priv_pax_romana_early = {
 				has_estate_privilege = nhs_native_priv_pax_romana_early
 			}
 			NOT = { nhs_has_native_priv_divide_et_impera = yes }
+		}
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_pax_romana_early
+					has_estate_privilege = nhs_native_priv_pax_romana_mid
+				}
+			}
 		}
 	}
 	can_revoke = {
@@ -991,6 +1255,43 @@ nhs_native_priv_pax_romana_early = {
 				NOT = { has_country_flag = enacted_nhs_native_priv_pax_romana }
 			}
 			set_country_flag = enacted_nhs_native_priv_pax_romana
+		}
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_pax_romana_early
+							has_estate_privilege = nhs_native_priv_pax_romana_mid
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate_privilege = nhs_native_priv_divide_et_impera_early
+					}
+					remove_estate_privilege = nhs_native_priv_divide_et_impera_early
+				}
+				if = {
+					limit = {
+						has_estate_privilege = nhs_native_priv_divide_et_impera_mid
+					}
+					remove_estate_privilege = nhs_native_priv_divide_et_impera_mid
+				}
+				if = {
+					limit = {
+						has_country_flag = native_council_enabled_mid
+					}
+					set_estate_privilege = nhs_native_priv_pax_romana_mid
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_pax_romana_early
+				}
+			}
 		}
 	}
 	on_granted_province = {
@@ -1062,6 +1363,22 @@ nhs_native_priv_pax_romana_mid = {
 			}
 			NOT = { nhs_has_native_priv_divide_et_impera = yes }
 		}
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_pax_romana_early
+					has_estate_privilege = nhs_native_priv_pax_romana_mid
+				}
+			}
+		}
 	}
 	can_revoke = {
 		custom_trigger_tooltip = {
@@ -1119,6 +1436,43 @@ nhs_native_priv_pax_romana_mid = {
 				NOT = { has_country_flag = enacted_nhs_native_priv_pax_romana }
 			}
 			set_country_flag = enacted_nhs_native_priv_pax_romana
+		}
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_pax_romana_early
+							has_estate_privilege = nhs_native_priv_pax_romana_mid
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate_privilege = nhs_native_priv_divide_et_impera_early
+					}
+					remove_estate_privilege = nhs_native_priv_divide_et_impera_early
+				}
+				if = {
+					limit = {
+						has_estate_privilege = nhs_native_priv_divide_et_impera_mid
+					}
+					remove_estate_privilege = nhs_native_priv_divide_et_impera_mid
+				}
+				if = {
+					limit = {
+						has_country_flag = native_council_enabled_mid
+					}
+					set_estate_privilege = nhs_native_priv_pax_romana_mid
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_pax_romana_early
+				}
+			}
 		}
 	}
 	on_granted_province = {
@@ -1228,6 +1582,22 @@ nhs_native_priv_encourage_barbaroi_officials = {
 			}
 			NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
 		}
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_encourage_barbaroi_officials
+					has_estate_privilege = to_vov_native_priv_open_ranks
+				}
+			}
+		}
 	}
 	can_select = {
 		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
@@ -1275,6 +1645,36 @@ nhs_native_priv_encourage_barbaroi_officials = {
 				has_country_flag = native_council_enabled_mid
 			}
 			custom_tooltip = nhs_increases_barbaroi_integration_tt
+		}
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_encourage_barbaroi_officials
+							has_estate_privilege = to_vov_native_priv_open_ranks
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate_privilege = estate_church_one_faith_one_culture
+					}
+					remove_estate_privilege = estate_church_one_faith_one_culture
+				}
+				if = {
+					limit = {
+						nhs_check_all_vinland = { CONDITION = tag }
+					}
+					set_estate_privilege = to_vov_native_priv_open_ranks
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_encourage_barbaroi_officials
+				}
+			}
 		}
 	}
 	on_granted_province = {
@@ -1352,6 +1752,19 @@ nhs_native_priv_designate_development_zones = {
 			}
 			NOT = { has_estate_privilege = nhs_native_priv_increase_tribute }
 		}
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				has_estate_privilege = nhs_native_priv_designate_development_zones
+			}
+		}
 	}
 	can_select = {
 		### to_num_of_privileges_check_estate_all_natives = yes
@@ -1395,6 +1808,24 @@ nhs_native_priv_designate_development_zones = {
 	}
 	on_granted = {
 		custom_tooltip = nhs_native_priv_designate_development_zones_effect_tooltip
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+					NOT = { has_estate_privilege = nhs_native_priv_designate_development_zones }
+				}
+				if = {
+					limit = {
+						has_estate_privilege = nhs_native_priv_increase_tribute
+					}
+					remove_estate_privilege = nhs_native_priv_increase_tribute
+				}
+				set_estate_privilege = nhs_native_priv_designate_development_zones
+			}
+		}
 	}
 	on_granted_province = {
 		if = {
@@ -1458,6 +1889,22 @@ nhs_native_priv_divide_et_impera_early = {
 			}
 			NOT = { nhs_has_native_priv_pax_romana = yes }
 		}
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_divide_et_impera_early
+					has_estate_privilege = nhs_native_priv_divide_et_impera_mid
+				}
+			}
+		}
 	}
 	can_select = {
 		### to_num_of_privileges_check_estate_all_natives = yes
@@ -1515,6 +1962,43 @@ nhs_native_priv_divide_et_impera_early = {
 				NOT = { has_country_flag = enacted_nhs_native_priv_divide_et_impera }
 			}
 			set_country_flag = enacted_nhs_native_priv_divide_et_impera
+		}
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_divide_et_impera_early
+							has_estate_privilege = nhs_native_priv_divide_et_impera_mid
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate_privilege = nhs_native_priv_pax_romana_early
+					}
+					remove_estate_privilege = nhs_native_priv_pax_romana_early
+				}
+				if = {
+					limit = {
+						has_estate_privilege = nhs_native_priv_pax_romana_mid
+					}
+					remove_estate_privilege = nhs_native_priv_pax_romana_mid
+				}
+				if = {
+					limit = {
+						has_country_flag = native_council_enabled_mid
+					}
+					set_estate_privilege = nhs_native_priv_divide_et_impera_mid
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_divide_et_impera_early
+				}
+			}
 		}
 	}
 	on_granted_province = {
@@ -1586,6 +2070,22 @@ nhs_native_priv_divide_et_impera_mid = {
 			}
 			NOT = { nhs_has_native_priv_pax_romana = yes }
 		}
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_divide_et_impera_early
+					has_estate_privilege = nhs_native_priv_divide_et_impera_mid
+				}
+			}
+		}
 	}
 	can_select = {
 		### to_num_of_privileges_check_estate_all_natives = yes
@@ -1644,6 +2144,43 @@ nhs_native_priv_divide_et_impera_mid = {
 				NOT = { has_country_flag = enacted_nhs_native_priv_divide_et_impera }
 			}
 			set_country_flag = enacted_nhs_native_priv_divide_et_impera
+		}
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_divide_et_impera_early
+							has_estate_privilege = nhs_native_priv_divide_et_impera_mid
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate_privilege = nhs_native_priv_pax_romana_early
+					}
+					remove_estate_privilege = nhs_native_priv_pax_romana_early
+				}
+				if = {
+					limit = {
+						has_estate_privilege = nhs_native_priv_pax_romana_mid
+					}
+					remove_estate_privilege = nhs_native_priv_pax_romana_mid
+				}
+				if = {
+					limit = {
+						has_country_flag = native_council_enabled_mid
+					}
+					set_estate_privilege = nhs_native_priv_divide_et_impera_mid
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_divide_et_impera_early
+				}
+			}
 		}
 	}
 	on_granted_province = {
@@ -1752,6 +2289,22 @@ to_vov_native_priv_skraeling_thingas = {
 	
 	is_valid = {
 		nhs_check_all_vinland = { CONDITION = tag }
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_local_councils_empowered
+					has_estate_privilege = to_vov_native_priv_skraeling_thingas
+				}
+			}
+		}
 	}
 	can_select = {
 		### to_num_of_privileges_check_estate_all_natives = yes
@@ -1794,6 +2347,30 @@ to_vov_native_priv_skraeling_thingas = {
 	}
 	on_granted = {
 		custom_tooltip = to_vov_native_priv_skraeling_thingas_effect_tooltip
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_local_councils_empowered
+							has_estate_privilege = to_vov_native_priv_skraeling_thingas
+						}
+					}
+				}
+				if = {
+					limit = {
+						nhs_check_all_vinland = { CONDITION = tag }
+					}
+					set_estate_privilege = to_vov_native_priv_skraeling_thingas
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_local_councils_empowered
+				}
+			}
+		}
 	}
 	on_granted_province = {
 		if = {
@@ -1840,6 +2417,22 @@ to_vov_native_priv_raiding_hosts = {
 
 	is_valid = {
 		nhs_check_all_vinland = { CONDITION = tag }
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_citizenship_for_service
+					has_estate_privilege = to_vov_native_priv_raiding_hosts
+				}
+			}
+		}
 	}
 	can_select = {
 		### to_num_of_privileges_check_estate_all_natives = yes
@@ -1882,6 +2475,30 @@ to_vov_native_priv_raiding_hosts = {
 	}
 	on_granted = {
 		custom_tooltip = to_vov_native_priv_raiding_hosts_effect_tooltip
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_citizenship_for_service
+							has_estate_privilege = to_vov_native_priv_raiding_hosts
+						}
+					}
+				}
+				if = {
+					limit = {
+						nhs_check_all_vinland = { CONDITION = tag }
+					}
+					set_estate_privilege = to_vov_native_priv_raiding_hosts
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_citizenship_for_service
+				}
+			}
+		}
 	}
 	on_granted_province = {
 		if = {
@@ -1937,6 +2554,23 @@ to_vov_native_priv_benevolent_conquerors = {
 			}
 			NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
 		}
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+					has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+					has_estate_privilege = to_vov_native_priv_benevolent_conquerors
+				}
+			}
+		}
 	}
 	can_select = {
 		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
@@ -1990,6 +2624,43 @@ to_vov_native_priv_benevolent_conquerors = {
 		hidden_effect = {
 			set_country_flag = vov_no_raiding_ideas
 			swap_free_idea_group = yes
+		}
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+							has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+							has_estate_privilege = to_vov_native_priv_benevolent_conquerors
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate_privilege = estate_church_one_faith_one_culture
+					}
+					remove_estate_privilege = estate_church_one_faith_one_culture
+				}
+				if = {
+					limit = {
+						nhs_check_all_vinland = { CONDITION = tag }
+					}
+					set_estate_privilege = to_vov_native_priv_benevolent_conquerors
+				}
+				else_if = {
+					limit = {
+						has_country_flag = native_council_enabled_mid
+					}
+					set_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+				}
+			}
 		}
 	}
 	on_granted_province = {
@@ -2083,6 +2754,19 @@ to_vov_native_priv_freedom_of_worship = {
 			NOT = { has_estate_privilege = estate_church_enforced_one_faith }
 		}
 		religion = norse_pagan_reformed
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				has_estate_privilege = to_vov_native_priv_freedom_of_worship
+			}
+		}
 	}
 	can_select = {
 		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
@@ -2131,6 +2815,30 @@ to_vov_native_priv_freedom_of_worship = {
 	}
 	on_granted = {
 		custom_tooltip = to_vov_native_priv_freedom_of_worship_tooltip
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					nhs_check_all_vinland = { CONDITION = tag }
+					NOT = { has_estate_privilege = to_vov_native_priv_freedom_of_worship }
+				}
+				if = {
+					limit = {
+						has_estate_privilege = estate_church_one_faith_one_culture
+					}
+					remove_estate_privilege = estate_church_one_faith_one_culture
+				}
+				if = {
+					limit = {
+						has_estate_privilege = estate_church_enforced_one_faith
+					}
+					remove_estate_privilege = estate_church_enforced_one_faith
+				}
+				set_estate_privilege = to_vov_native_priv_freedom_of_worship
+			}
+		}
 	}
 	on_granted_province = {
 		if = {
@@ -2208,11 +2916,27 @@ to_vov_native_priv_open_ranks = {
 	is_valid = {
 		if = {
 			limit = {
-				has_estate_privilege = to_vov_native_priv_freedom_of_worship
+				has_estate_privilege = to_vov_native_priv_open_ranks
 			}
 			NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
 		}
 		nhs_check_all_vinland = { CONDITION = tag }
+
+		if = {
+			limit = {
+				ai = yes
+				is_subject = yes
+				overlord = {
+					has_estate = estate_all_natives
+				}
+			}
+			overlord = {
+				OR = {
+					has_estate_privilege = nhs_native_priv_encourage_barbaroi_officials
+					has_estate_privilege = to_vov_native_priv_open_ranks
+				}
+			}
+		}
 	}
 	can_select = {
 		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
@@ -2256,6 +2980,36 @@ to_vov_native_priv_open_ranks = {
 	}
 	on_granted = {
 		custom_tooltip = nhs_increases_skraeling_integration_tt
+
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_estate = estate_all_natives
+					NOT = {
+						OR = {
+							has_estate_privilege = nhs_native_priv_encourage_barbaroi_officials
+							has_estate_privilege = to_vov_native_priv_open_ranks
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate_privilege = estate_church_one_faith_one_culture
+					}
+					remove_estate_privilege = estate_church_one_faith_one_culture
+				}
+				if = {
+					limit = {
+						nhs_check_all_vinland = { CONDITION = tag }
+					}
+					set_estate_privilege = to_vov_native_priv_open_ranks
+				}
+				else = {
+					set_estate_privilege = nhs_native_priv_encourage_barbaroi_officials
+				}
+			}
+		}
 	}
 	on_granted_province = {
 	}

@@ -39,6 +39,9 @@ to_nhs_setup_council_land = {
 		nhs_change_any_native_estate_land_share = {
 			SHARE = -100
 		}
+		hidden_effect = {
+			to_inherit_overlords_councils_privileges = yes
+		}
 	}
 }
 
@@ -1066,6 +1069,288 @@ to_native_estate_spawn_disaster_rebels = {
 		set_variable = {
 			which = to_size_of_narive_revolt
 			value = 0
+		}
+	}
+}
+
+to_inherit_overlords_councils_privileges = {
+	if = {
+		limit = {
+			ai = yes
+			is_subject = yes
+			has_estate = estate_all_natives
+			overlord = {
+				has_estate = estate_all_natives
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_estate_privilege = nhs_native_priv_ancestral_land
+				}
+				overlord = {
+					has_estate_privilege = nhs_native_priv_ancestral_land
+				}
+			}
+			set_estate_privilege = nhs_native_priv_ancestral_land
+		}
+
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+						has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+						has_estate_privilege = to_vov_native_priv_benevolent_conquerors
+					}
+				}
+				overlord = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+						has_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+						has_estate_privilege = to_vov_native_priv_benevolent_conquerors
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_estate_privilege = estate_church_one_faith_one_culture
+				}
+				remove_estate_privilege = estate_church_one_faith_one_culture
+			}
+			if = {
+				limit = {
+					nhs_check_all_vinland = { CONDITION = tag }
+				}
+				set_estate_privilege = to_vov_native_priv_benevolent_conquerors
+			}
+			else_if = {
+				limit = {
+					has_country_flag = native_council_enabled_mid
+				}
+				set_estate_privilege = nhs_native_priv_inclusive_citizenship_mid
+			}
+			else = {
+				set_estate_privilege = nhs_native_priv_inclusive_citizenship_early
+			}
+		}
+
+		if = {
+			limit = {
+				nhs_check_all_vinland = { CONDITION = tag }
+				NOT = { has_estate_privilege = to_vov_native_priv_freedom_of_worship }
+				overlord = {
+					has_estate_privilege = to_vov_native_priv_freedom_of_worship
+				}
+			}
+			if = {
+				limit = {
+					has_estate_privilege = estate_church_one_faith_one_culture
+				}
+				remove_estate_privilege = estate_church_one_faith_one_culture
+			}
+			if = {
+				limit = {
+					has_estate_privilege = estate_church_enforced_one_faith
+				}
+				remove_estate_privilege = estate_church_enforced_one_faith
+			}
+			set_estate_privilege = to_vov_native_priv_freedom_of_worship
+		}
+
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_local_councils_empowered
+						has_estate_privilege = to_vov_native_priv_skraeling_thingas
+					}
+				}
+				overlord = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_local_councils_empowered
+						has_estate_privilege = to_vov_native_priv_skraeling_thingas
+					}
+				}
+			}
+			if = {
+				limit = {
+					nhs_check_all_vinland = { CONDITION = tag }
+				}
+				set_estate_privilege = to_vov_native_priv_skraeling_thingas
+			}
+			else = {
+				set_estate_privilege = nhs_native_priv_local_councils_empowered
+			}
+		}
+
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_citizenship_for_service
+						has_estate_privilege = to_vov_native_priv_raiding_hosts
+					}
+				}
+				overlord = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_citizenship_for_service
+						has_estate_privilege = to_vov_native_priv_raiding_hosts
+					}
+				}
+			}
+			if = {
+				limit = {
+					nhs_check_all_vinland = { CONDITION = tag }
+				}
+				set_estate_privilege = to_vov_native_priv_raiding_hosts
+			}
+			else = {
+				set_estate_privilege = nhs_native_priv_citizenship_for_service
+			}
+		}
+
+		if = {
+			limit = {
+				NOT = { has_estate_privilege = nhs_native_priv_increase_tribute }
+				overlord = {
+					has_estate_privilege = nhs_native_priv_increase_tribute
+				}
+			}
+			if = {
+				limit = {
+					has_estate_privilege = nhs_native_priv_designate_development_zones
+				}
+				remove_estate_privilege = nhs_native_priv_designate_development_zones
+			}
+			set_estate_privilege = nhs_native_priv_increase_tribute
+		}
+
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_encourage_barbaroi_officials
+						has_estate_privilege = to_vov_native_priv_open_ranks
+					}
+				}
+				overlord = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_encourage_barbaroi_officials
+						has_estate_privilege = to_vov_native_priv_open_ranks
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_estate_privilege = estate_church_one_faith_one_culture
+				}
+				remove_estate_privilege = estate_church_one_faith_one_culture
+			}
+			if = {
+				limit = {
+					nhs_check_all_vinland = { CONDITION = tag }
+				}
+				set_estate_privilege = to_vov_native_priv_open_ranks
+			}
+			else = {
+				set_estate_privilege = nhs_native_priv_encourage_barbaroi_officials
+			}
+		}
+
+		if = {
+			limit = {
+				NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+				NOT = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_pax_romana_early
+						has_estate_privilege = nhs_native_priv_pax_romana_mid
+					}
+				}
+				overlord = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_pax_romana_early
+						has_estate_privilege = nhs_native_priv_pax_romana_mid
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_estate_privilege = nhs_native_priv_divide_et_impera_early
+				}
+				remove_estate_privilege = nhs_native_priv_divide_et_impera_early
+			}
+			if = {
+				limit = {
+					has_estate_privilege = nhs_native_priv_divide_et_impera_mid
+				}
+				remove_estate_privilege = nhs_native_priv_divide_et_impera_mid
+			}
+			if = {
+				limit = {
+					has_country_flag = native_council_enabled_mid
+				}
+				set_estate_privilege = nhs_native_priv_pax_romana_mid
+			}
+			else = {
+				set_estate_privilege = nhs_native_priv_pax_romana_early
+			}
+		}
+
+		if = {
+			limit = {
+				NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+				NOT = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_divide_et_impera_early
+						has_estate_privilege = nhs_native_priv_divide_et_impera_mid
+					}
+				}
+				overlord = {
+					OR = {
+						has_estate_privilege = nhs_native_priv_divide_et_impera_early
+						has_estate_privilege = nhs_native_priv_divide_et_impera_mid
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_estate_privilege = nhs_native_priv_pax_romana_early
+				}
+				remove_estate_privilege = nhs_native_priv_pax_romana_early
+			}
+			if = {
+				limit = {
+					has_estate_privilege = nhs_native_priv_pax_romana_mid
+				}
+				remove_estate_privilege = nhs_native_priv_pax_romana_mid
+			}
+			if = {
+				limit = {
+					has_country_flag = native_council_enabled_mid
+				}
+				set_estate_privilege = nhs_native_priv_divide_et_impera_mid
+			}
+			else = {
+				set_estate_privilege = nhs_native_priv_divide_et_impera_early
+			}
+		}
+
+		if = {
+			limit = {
+				NOT = { nhs_check_all_vinland = { CONDITION = tag } }
+				NOT = { has_estate_privilege = nhs_native_priv_designate_development_zones }
+				overlord = {
+					has_estate_privilege = nhs_native_priv_designate_development_zones
+				}
+			}
+			if = {
+				limit = {
+					has_estate_privilege = nhs_native_priv_increase_tribute
+				}
+				remove_estate_privilege = nhs_native_priv_increase_tribute
+			}
+			set_estate_privilege = nhs_native_priv_designate_development_zones
 		}
 	}
 }
