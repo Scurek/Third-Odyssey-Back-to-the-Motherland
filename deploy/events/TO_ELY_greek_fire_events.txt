@@ -1081,3 +1081,117 @@ country_event = {
 		}
 	}
 }
+
+# Holy Hand Granade
+country_event = {
+	id = nhs2_greek_fire.16
+	title = nhs2_greek_fire.16.t
+	desc = nhs2_greek_fire.16.d
+	picture = TO_HOLY_HAND_GRANADE_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		has_country_modifier = nhs_greekfire_update
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		NOT = { nhs_has_fire_depleting_modifier = yes }
+		NOT = { has_country_flag = nhs2_had_greek_fire }
+		religion_group = christian
+		any_war_enemy_country = {
+			any_province = {
+				unit_in_battle = yes
+				units_in_province = ROOT
+				num_of_units_in_province = {
+					who = PREV
+					amount = 20
+				}
+				OR = {
+					artillery_in_province = ROOT
+					artillery_in_province = PREV
+				}
+				# For some reason this doesn't work
+				# NOT = {
+				# 	any_country = {
+				# 		NOT = { war_with = ROOT }
+				# 		PREV = {
+				# 			units_in_province = PREV
+				# 		}
+				# 	}
+				# }
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_war_enemy_country = {
+				limit = {
+					any_province = {
+						unit_in_battle = yes
+						units_in_province = ROOT
+						num_of_units_in_province = {
+							who = PREV
+							amount = 20
+						}
+						OR = {
+							artillery_in_province = ROOT
+							artillery_in_province = PREV
+						}
+						# NOT = {
+						# 	any_country = {
+						# 		NOT = { war_with = ROOT }
+						# 		PREV = {
+						# 			units_in_province = PREV
+						# 		}
+						# 	}
+						# }
+					}
+				}
+				save_event_target_as = to_holy_hand_granade_target
+				random_province = {
+					limit = {
+						unit_in_battle = yes
+						units_in_province = ROOT
+						num_of_units_in_province = {
+							who = PREV
+							amount = 20
+						}
+						OR = {
+							artillery_in_province = ROOT
+							artillery_in_province = PREV
+						}
+						# NOT = {
+						# 	any_country = {
+						# 		NOT = { war_with = ROOT }
+						# 		PREV = {
+						# 			units_in_province = PREV
+						# 		}
+						# 	}
+						# }
+					}
+					save_event_target_as = to_holy_hand_granade_target_province
+					kill_units = {
+						who = PREV
+						amount = 10
+					}
+				}
+			}
+		}
+	}
+
+	option = {		# Accept the changes
+		name = nhs2_greek_fire.16.a
+		add_prestige = 5
+		event_target:to_holy_hand_granade_target = {
+			add_country_modifier = {
+				name = to_holy_hand_granaded
+				duration = 1825
+			}
+		}
+		custom_tooltip = to_holy_hand_granade_tt
+	}
+}
