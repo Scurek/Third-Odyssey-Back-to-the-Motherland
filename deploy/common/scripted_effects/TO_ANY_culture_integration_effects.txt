@@ -142,9 +142,8 @@ to_assimilation_progress_routine = {
 						SPECIFIC_PROGRESS_INCREASE = to_assimilation_progress_assimilation
 					}
 				}
-				if = {
+				else_if = {
 					limit = {
-						NOT = { to_has_culture_assimilation = yes }
 						to_has_european_culture_integration = yes
 					}
 					to_increase_assimilation_progress_general = { 
@@ -152,10 +151,8 @@ to_assimilation_progress_routine = {
 						SPECIFIC_PROGRESS_INCREASE = to_assimilation_progress_culture_integration
 					}
 				}
-				if = {
+				else_if = {
 					limit = {
-						NOT = { to_has_culture_assimilation = yes }
-						NOT = { to_has_european_culture_integration = yes }
 						to_has_tribal_integration = yes
 					}
 					to_increase_assimilation_progress_general = { 
@@ -167,6 +164,7 @@ to_assimilation_progress_routine = {
 			else = {
 				to_assimilation_inactive_setup = yes
 			}
+			to_trigger_assimilation_events = yes
 		}
 	}
 }
@@ -338,6 +336,7 @@ to_increase_assimilation_progress_general = {
 		to_assimilate_province_culture = { OWNER_TARGET = $OWNER_TARGET$ }
 	}
 	else = {
+		set_province_flag = to_assimilation_progressing
 		# Display only
 		set_variable = {
 			which = to_assimilation_remaining_months
@@ -400,7 +399,6 @@ to_increase_assimilation_progress_general = {
 		}
 		to_set_assimilation_modifier = yes
 	}
-	set_province_flag = to_assimilation_progressing
 }
 
 to_assimilation_progress_assimilation = {
@@ -928,10 +926,10 @@ to_assimilate_province_culture = {
 							NOT = { has_country_flag = to_disabled_assimilation_notifications }
 						}
 					}
-					province_event = { id = nhs2_cultureevents.102 }
+					set_province_flag = to_trigger_nhs2_cultureevents_103
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					owner = {
 						to_enabled_mesoamerican_assimilation = yes
@@ -953,10 +951,10 @@ to_assimilate_province_culture = {
 							NOT = { has_country_flag = to_disabled_assimilation_notifications }
 						}
 					}
-					province_event = { id = nhs2_cultureevents.24 }
+					set_province_flag = to_trigger_nhs2_cultureevents_24
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					owner = {
 						to_enabled_spartan_assimilation = yes
@@ -978,10 +976,10 @@ to_assimilate_province_culture = {
 							NOT = { has_country_flag = to_disabled_assimilation_notifications }
 						}
 					}
-					province_event = { id = nhs2_cultureevents.25 }
+					set_province_flag = to_trigger_nhs2_cultureevents_25
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					owner = {
 						to_enabled_norse_assimilation = yes
@@ -1003,36 +1001,11 @@ to_assimilate_province_culture = {
 							NOT = { has_country_flag = to_disabled_assimilation_notifications }
 						}
 					}
-					province_event = { id = nhs2_cultureevents.26 }
+					set_province_flag = to_trigger_nhs2_cultureevents_26
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
-					NOT = { culture = elysameric }
-					NOT = {
-						AND = {
-							owner = {
-								to_enabled_mesoamerican_assimilation = yes
-							}
-							to_mesoamerican_assimilation_province = yes
-						}
-					}
-					NOT = {
-						AND = {
-							owner = {
-								to_enabled_spartan_assimilation = yes
-							}
-							to_spartan_assimilation_province = yes
-						}
-					}
-					NOT = {
-						AND = {
-							owner = {
-								to_enabled_spartan_assimilation = yes
-							}
-							to_spartan_assimilation_province = yes
-						}
-					}
 					to_nat_tribal_native_culture_province = yes
 				}
 				if = {
@@ -1059,7 +1032,7 @@ to_assimilate_province_culture = {
 								NOT = { has_country_flag = to_disabled_assimilation_notifications }
 							}
 						}
-						province_event = { id = nhs2_cultureevents.102 }
+						set_province_flag = to_trigger_nhs2_cultureevents_102
 					}
 				}
 				if = {
@@ -1068,43 +1041,15 @@ to_assimilate_province_culture = {
 							NOT = { has_country_flag = nhs_barbaroi_integration }
 						}
 					}
-					province_event = { id = nhs2_cultureevents.201 }
+					set_province_flag = to_trigger_nhs2_cultureevents_201
 				}
 			}
-			if = {
-				limit = {
-					NOT = { culture = elysameric }
-					NOT = {
-						AND = {
-							owner = {
-								to_enabled_mesoamerican_assimilation = yes
-							}
-							to_mesoamerican_assimilation_province = yes
-						}
-					}
-					NOT = {
-						AND = {
-							owner = {
-								to_enabled_spartan_assimilation = yes
-							}
-							to_spartan_assimilation_province = yes
-						}
-					}
-					NOT = {
-						AND = {
-							owner = {
-								to_enabled_spartan_assimilation = yes
-							}
-							to_spartan_assimilation_province = yes
-						}
-					}
-					NOT = { to_nat_tribal_native_culture_province = yes }
-				}
+			else = {
 				to_nhs_assign_correct_elysian_culture = yes
 				nhs_on_province_culture_converted_general = yes
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				owner = {
 					culture_group = norse_g
@@ -1116,10 +1061,7 @@ to_assimilate_province_culture = {
 			}
 			if = {
 				limit = {
-					OR = {
-						culture = skraeling
-						NOT = { to_nat_tribal_native_culture_province = yes }
-					}
+					culture = skraeling
 				}
 				if = {
 					limit = {
@@ -1137,12 +1079,11 @@ to_assimilate_province_culture = {
 							NOT = { has_country_flag = to_disabled_assimilation_notifications }
 						}
 					}
-					province_event = { id = nhs_vov_culture.3 }
+					set_province_flag = to_trigger_nhs_vov_culture_3
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
-					NOT = { culture = skraeling }
 					to_nat_tribal_native_culture_province = yes
 				}
 				if = {
@@ -1163,11 +1104,15 @@ to_assimilate_province_culture = {
 							NOT = { has_country_flag = to_disabled_assimilation_notifications }
 						}
 					}
-					province_event = { id = nhs_vov_culture.2 }
+					set_province_flag = to_trigger_nhs_vov_culture_2
 				}
 			}
+			else = {
+				to_nhs_assign_correct_vinlandic_culture = yes
+				nhs_on_province_culture_converted_general = yes
+			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				owner = {
 					NOT = { culture_group = byzantine }
@@ -1185,21 +1130,78 @@ to_assimilate_province_culture = {
 			nhs_on_province_culture_converted_general = yes
 		}
 	}
-	if = {
+	else_if = {
 		limit = {
-			NOT = { to_has_culture_assimilation = yes }
 			to_has_european_culture_integration = yes
 		}
 		set_province_flag = to_culture_integrated_flag
 		to_add_appropriate_culture_integration_modifier = yes
 	}
-	if = {
+	else_if = {
 		limit = {
-			NOT = { to_has_culture_assimilation = yes }
-			NOT = { to_has_european_culture_integration = yes }
 			to_has_tribal_integration = yes
 		}
 		to_nat_assimilate_local_tribal_development = yes
+	}
+}
+
+to_trigger_assimilation_events = {
+	# So why this? Becuase our overlords at the small indea dev company have so far been unable or unwilling to fix a bug where you cannot trigger an event in the else_if or else of a scripted effect
+	if = {
+		limit = {
+			has_province_flag = to_trigger_nhs2_cultureevents_103
+		}
+		clr_province_flag = to_trigger_nhs2_cultureevents_103
+		province_event = { id = nhs2_cultureevents.103 }
+	}
+	if = {
+		limit = {
+			has_province_flag = to_trigger_nhs2_cultureevents_24
+		}
+		clr_province_flag = to_trigger_nhs2_cultureevents_24
+		province_event = { id = nhs2_cultureevents.24 }
+	}
+	if = {
+		limit = {
+			has_province_flag = to_trigger_nhs2_cultureevents_25
+		}
+		clr_province_flag = to_trigger_nhs2_cultureevents_25
+		province_event = { id = nhs2_cultureevents.25 }
+	}
+	if = {
+		limit = {
+			has_province_flag = to_trigger_nhs2_cultureevents_26
+		}
+		clr_province_flag = to_trigger_nhs2_cultureevents_26
+		province_event = { id = nhs2_cultureevents.26 }
+	}
+	if = {
+		limit = {
+			has_province_flag = to_trigger_nhs2_cultureevents_102
+		}
+		clr_province_flag = to_trigger_nhs2_cultureevents_102
+		province_event = { id = nhs2_cultureevents.102 }
+	}
+	if = {
+		limit = {
+			has_province_flag = to_trigger_nhs2_cultureevents_201
+		}
+		clr_province_flag = to_trigger_nhs2_cultureevents_201
+		province_event = { id = nhs2_cultureevents.201 }
+	}
+	if = {
+		limit = {
+			has_province_flag = to_trigger_nhs_vov_culture_3
+		}
+		clr_province_flag = to_trigger_nhs_vov_culture_3
+		province_event = { id = nhs_vov_culture.3 }
+	}
+	if = {
+		limit = {
+			has_province_flag = to_trigger_nhs_vov_culture_2
+		}
+		clr_province_flag = to_trigger_nhs_vov_culture_2
+		province_event = { id = nhs_vov_culture.2 }
 	}
 }
 
