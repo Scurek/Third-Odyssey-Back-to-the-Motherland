@@ -30,7 +30,10 @@ modifiers = [{'name': 'to_culture_assimilation',
               'desc': '[Root.GetSymmachoiAssimilationDesc]'},
              {'name': 'to_culture_assimilation_norse',
               'title': 'Skraeling Assimilation',
-              'desc': '[Root.GetSkraelingAssimilationDesc]'}
+              'desc': '[Root.GetSkraelingAssimilationDesc]'},
+             {'name': 'to_culture_integration',
+              'title': 'Cultural Integration',
+              'desc': '[Root.GetCultureIntegrationDesc]'}
              ]
 
 images = [Image.open(f'{modifier["name"]}.dds') for modifier in modifiers]

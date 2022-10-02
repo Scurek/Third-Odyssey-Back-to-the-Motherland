@@ -1,55 +1,53 @@
-nhs_mesoamerican_integration_province = {
+to_mesoamerican_assimilation_province = {
 	mesoamerican_native_culture = yes
 	NOT = { culture_group = spartakian_group }
 	NOT = { has_province_modifier = to_nat_tribal_development }
 	NOT = { has_province_modifier = to_nat_had_tribal_development }
 }
 
-nhs_spartan_integration_province = {
+to_spartan_assimilation_province = {
 	culture_group = spartakian_group
 }
 
-nhs_norse_integration_province = {
+to_norse_assimilation_province = {
 	culture_group = norse_g
 }
 
-to_has_culture_assimilation_potential = {
-	is_empty = no
-	is_city = yes
-	owner = {
-		NOT = { has_native_government = yes }
+to_enabled_new_world_integration = {
+	culture_group = byzantine
+	mission_completed = to_the_promised_land_mission
+}
+
+to_enabled_mesoamerican_assimilation = {
+	culture_group = byzantine
+	has_country_flag = to_mesoamerican_assimilation
+}
+
+to_enabled_spartan_assimilation = {
+	culture_group = byzantine
+	has_country_flag = to_spartan_assimilation
+}
+
+to_enabled_norse_assimilation = {
+	culture_group = byzantine
+	has_country_flag = to_norse_assimilation
+}
+
+to_enabled_european_culture_integration = {
+	mission_completed = to_the_eagle_rises_mission
+	AND = {
+		is_subject = yes
+		overlord = {
+			mission_completed = to_the_eagle_rises_mission
+		}
 	}
-	NOT = { has_province_flag = nhs_got_core_culture_change_delay }
+}
+
+to_has_culture_assimilation = {
 	OR = {
-		has_province_modifier = to_nat_tribal_development
 		AND = {
 			owner = {
-				has_estate = estate_all_natives
-			}
-			nhs_culturally_native = yes
-			has_province_modifier = to_nat_had_tribal_development
-		}
-		AND = {
-			owner = {
-				has_country_flag = nhs_mesoamerican_integration
-			}
-			nhs_mesoamerican_integration_province = yes
-		}
-		AND = {
-			owner = {
-				has_country_flag = nhs_mesoamerican_integration
-			}
-			nhs_spartan_integration_province = yes
-		}
-		AND = {
-			owner = {
-				has_country_flag = nhs_mesoamerican_integration
-			}
-			nhs_norse_integration_province = yes
-		}
-		AND = {
-			owner = {
-				mission_completed = to_the_promised_land_mission
+				to_enabled_new_world_integration = yes
 			}
 			NOT = { culture_group = ROOT }
 			OR = {
@@ -57,49 +55,134 @@ to_has_culture_assimilation_potential = {
 				continent = south_america
 			}
 		}
-	}
-	OR = {
-		has_province_modifier = to_nat_tribal_development
-		NOT = { culture = elysameric }
-		owner = { 
-			culture_group = norse_g 
-			has_estate = estate_all_natives
+		AND = {
+			owner = {
+				to_enabled_mesoamerican_assimilation = yes
+			}
+			to_mesoamerican_assimilation_province = yes
 		}
-		owner = {
+		AND = {
+			owner = {
+				to_enabled_spartan_assimilation = yes
+			}
+			to_spartan_assimilation_province = yes
+		}
+		AND = {
+			owner = {
+				to_enabled_norse_assimilation = yes
+			}
+			to_norse_assimilation_province = yes
+		}
+		AND = {
+			NOT = { culture = skraeling }
+			NOT = { culture = elysameric }
+			owner = {
+				has_estate = estate_all_natives
+				NOT = { has_native_government = yes }
+			}
+			to_nat_tribal_native_culture_province = yes
+		}
+		AND = {
+			culture = elysameric
 			OR = {
-				to_ely_has_integrating_privilege = yes
-				AND = {
-					is_colonial_nation = yes
-					overlord = {
-						OR = {
-							to_ely_has_integrating_privilege = yes
-							to_vov_has_integrating_privilege = yes
+				owner = { 
+					culture_group = norse_g 
+					has_estate = estate_all_natives
+				}
+				owner = {
+					OR = {
+						to_ely_has_integrating_privilege = yes
+						AND = {
+							is_colonial_nation = yes
+							overlord = {
+								OR = {
+									to_ely_has_integrating_privilege = yes
+									to_vov_has_integrating_privilege = yes
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		AND = {
+			culture = skraeling
+			OR = {
+				owner = { 
+					culture_group = byzantine 
+					has_estate = estate_all_natives
+				}
+				owner = {
+					OR = {
+						to_vov_has_integrating_privilege = yes
+						AND = {
+							is_colonial_nation = yes
+							overlord = {
+								OR = {
+									to_ely_has_integrating_privilege = yes
+									to_vov_has_integrating_privilege = yes
+								}
+							}
 						}
 					}
 				}
 			}
 		}
 	}
+}
+
+to_has_tribal_integration = {
+	has_province_modifier = to_nat_tribal_development
 	OR = {
-		has_province_modifier = to_nat_tribal_development
-		NOT = { culture = skraeling }
-		owner = { 
-			culture_group = byzantine 
-			has_estate = estate_all_natives
-		}
+		NOT = { nhs_culturally_native = yes }
 		owner = {
-			OR = {
-				to_vov_has_integrating_privilege = yes
-				AND = {
-					is_colonial_nation = yes
-					overlord = {
-						OR = {
-							to_ely_has_integrating_privilege = yes
-							to_vov_has_integrating_privilege = yes
-						}
-					}
-				}
-			}
+			culture_group = PREV
+		}
+	}
+}
+
+to_has_european_culture_integration = {
+	owner = {
+		to_enabled_european_culture_integration = yes
+	}
+	NOT = { to_has_culture_integrated = yes }
+	OR = {
+		culture_group = germanic
+		culture_group = scandinavian
+		culture_group = british
+		culture_group = gaelic
+		culture_group = latin
+		culture_group = iberian
+		culture_group = french
+		culture_group = finno_ugric
+		culture_group = south_slavic
+		culture_group = west_slavic
+		culture_group = carpathian
+		culture_group = east_slavic
+		culture_group = baltic
+		culture_group = caucasian
+	}
+}
+
+to_has_culture_assimilation_potential = {
+	is_empty = no
+	is_city = yes
+	NOT = { has_province_flag = nhs_got_core_culture_change_delay }
+	OR = {
+		to_has_european_culture_integration = yes
+		to_has_culture_assimilation = yes
+		to_has_tribal_integration = yes
+	}
+}
+
+
+to_is_culture_assimilation_increasing = {
+	OR = {
+		to_culture_assimilation_increasing = yes
+		AND = {
+			to_culture_integration_increasing = yes
+			NOT = { to_has_culture_assimilation = yes }
+			to_has_european_culture_integration = yes
 		}
 	}
 }
@@ -115,12 +198,17 @@ to_culture_assimilation_increasing = {
 	NOT = { nationalism = 1 }
 }
 
-to_has_tribal_integration = {
-	has_province_modifier = to_nat_tribal_development
-	OR = {
-		NOT = { nhs_culturally_native = yes }
-		owner = {
-			culture_group = PREV
-		}
+to_culture_integration_increasing = {
+	owner = {
+		is_core = PREV
 	}
+	OR = {
+		has_owner_religion = yes
+		tolerance_to_this = 0
+	}
+	NOT = { nationalism = 10 }
+}
+
+to_has_culture_integrated = {
+	has_province_flag = to_culture_integrated_flag
 }
