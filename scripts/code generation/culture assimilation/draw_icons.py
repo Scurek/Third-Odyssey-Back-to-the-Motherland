@@ -69,19 +69,19 @@ for i in range(0, width - 4):
 
 cond = 'check_variable={which=to_assimilation_progress value=%s}'
 body = 'if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_%s}} ' \
-       'to_remove_assimilation_modifiers=yes add_province_modifier={' \
+       'to_remove_culture_adaptation_modifiers=yes add_province_modifier={' \
        'name=$MODIFIER_BASE_NAME$_%s duration=-1} }'
 form = 'if={limit={%s}%s}else={%s}' % (cond, '%s', '%s')
 
-with open('o_to_remove_assimilation_modifiers.txt', 'w') as f:
-    f.write('to_remove_assimilation_modifiers = {\n')
+with open('o_to_remove_culture_adaptation_modifiers.txt', 'w') as f:
+    f.write('to_remove_culture_adaptation_modifiers = {\n')
     for index, image in enumerate(images):
         for i in fractions:
             f.write(f'\tremove_province_modifier = {modifiers[index]["name"]}_{i}\n')
     f.write('}')
 
-with open('o_to_set_correct_assimilation_modifier.txt', 'w') as f:
-    f.write('to_set_correct_assimilation_modifier = { \n' + btree([i for i in fractions], form,
+with open('o_to_set_correct_culture_adaptation_modifier.txt', 'w') as f:
+    f.write('to_set_correct_culture_adaptation_modifier = { \n' + btree([i for i in fractions], form,
                                                                   body) + '}')
 
 with open('o_localisation.txt', 'w') as f:
