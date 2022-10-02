@@ -18,22 +18,120 @@ country_decisions = {
 
 		allow = {
 			# num_of_cities = 20
-			stability = 2
-			religious_unity = 0.95
-			NOT = { has_any_disaster = yes }
-			OR = {
-				full_idea_group = religious_ideas
-				num_of_owned_provinces_with = {
-					value = 30
-					OR = {
-						has_building = temple
-						has_building = cathedral
+			if = {
+				limit = {
+					is_subject = yes
+					overlord = {
+						religion = pantheon_worship
+					}
+				}
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = to_overlord_reformed_hellenic_religion_tt
+						overlord = {
+							OR = {
+								to_hellenic_zeus_pantheon = yes
+								to_hellenic_poseidon_pantheon = yes
+								to_hellenic_apollo_pantheon = yes
+								has_country_modifier = nhs_hcf_traditional_worship
+							}
+						}
+					}
+					AND = {
+						stability = 2
+						religious_unity = 0.95
+						NOT = { has_any_disaster = yes }
+						OR = {
+							full_idea_group = religious_ideas
+							num_of_owned_provinces_with = {
+								value = 30
+								OR = {
+									has_building = temple
+									has_building = cathedral
+								}
+							}
+						}
+					}
+				}
+			}
+			else = {
+				stability = 2
+				religious_unity = 0.95
+				NOT = { has_any_disaster = yes }
+				OR = {
+					full_idea_group = religious_ideas
+					num_of_owned_provinces_with = {
+						value = 30
+						OR = {
+							has_building = temple
+							has_building = cathedral
+						}
 					}
 				}
 			}
 		}
 
 		effect = {
+			if = {
+				limit = {
+					is_subject = yes
+					overlord = {
+						religion = pantheon_worship
+					}
+				}
+				custom_tooltip = to_only_overlord_pantheon_warning_tt
+				if = {
+					limit = {
+						overlord = {
+							to_hellenic_zeus_pantheon = yes
+						}
+					}
+					custom_tooltip = to_overlord_chose_zeus_pantheon
+				}
+				else_if = {
+					limit = {
+						overlord = {
+							to_hellenic_poseidon_pantheon = yes
+						}
+					}
+					custom_tooltip = to_overlord_chose_poseidon_pantheon
+				}
+				if = {
+					limit = {
+						overlord = {
+							to_hellenic_apollo_pantheon = yes
+						}
+					}
+					custom_tooltip = to_overlord_chose_apollo_pantheon
+				}
+				if = {
+					limit = {
+						overlord = {
+							has_country_modifier = nhs_hcf_traditional_worship
+						}
+					}
+					custom_tooltip = to_overlord_chose_traditional_pantheon
+				}
+				if = {
+					limit = {
+						stability = 2
+						religious_unity = 0.95
+						NOT = { has_any_disaster = yes }
+						OR = {
+							full_idea_group = religious_ideas
+							num_of_owned_provinces_with = {
+								value = 30
+								OR = {
+									has_building = temple
+									has_building = cathedral
+								}
+							}
+						}
+					}
+					set_country_flag = to_meets_reform_hellenic_faith_req
+				}
+				custom_tooltip = nhs_new_line_tt
+			}
 			country_event = { id = to_hellenic_events.1 }
 		}
 	}
