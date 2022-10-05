@@ -19,6 +19,12 @@ country_event = {
 
 	trigger = {
 		colony = 1
+		OR = {
+			technology_group = western
+			technology_group = eastern
+			technology_group = muslim
+			technology_group = ottoman
+		}
 		NOT = { has_global_flag = triangle_happened }
 		any_subject_country = {
 			is_colonial_nation = yes
@@ -59,7 +65,44 @@ country_event = {
 country_event = {
 	id = prices.2
 	title = prices.2.t
-	desc = prices.2.d
+	desc = {
+		desc = prices.2.d
+		trigger = {
+			OR = {
+				capital_scope = { continent = europe }
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 100
+					continent = europe
+				}
+				NOT = {
+					OR = {
+						has_country_modifier = nhs2_elysian_isolationism
+						has_country_modifier = vov_isolationism
+						has_country_modifier = msg_isolationism
+					}
+				}
+			}
+		}
+	}
+	desc = {
+		desc = prices.2.db.to
+		trigger = {
+			NOT = {
+				OR = {
+					capital_scope = { continent = europe }
+					num_of_provinces_owned_or_owned_by_subjects_with = {
+						value = 100
+						continent = europe
+					}
+				}
+			}
+			OR = {
+				has_country_modifier = nhs2_elysian_isolationism
+				has_country_modifier = vov_isolationism
+				has_country_modifier = msg_isolationism
+			}
+		}
+	}
 	picture = TRADE_GOODS_PLANTATION_GOODS_IN_WAREHOUSE_eventPicture
 
 	fire_only_once = yes
@@ -67,7 +110,37 @@ country_event = {
 	major = yes
 
 	trigger = {
-		capital_scope = { continent = europe }
+		is_subject = no
+		OR = {
+			capital_scope = { continent = europe }
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 100
+				continent = europe
+			}
+			OR = {
+				total_own_and_non_tributary_subject_development = 3000
+				AND = {
+					capital_scope = {
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+					}
+					has_port = yes
+					has_institution = global_trade
+					NOT = {
+						OR = {
+							has_country_modifier = nhs2_elysian_isolationism
+							has_country_modifier = vov_isolationism
+							has_country_modifier = msg_isolationism
+						}
+					}
+					europe = {
+						has_discovered = ROOT
+					}
+				}
+			}
+		}
 		OR = {
 			1371 = {	# Canton
 				trade_share = {
@@ -163,45 +236,45 @@ country_event = {
 	}
 }
 
-#Lots of Protestants, less demand for fish
-country_event = {
-	id = prices.4
-	title = prices.4.t
-	desc = prices.4.d
-	picture = TRADE_GOODS_FURS_FISH_AND_SALT_eventPicture
+# #Lots of Protestants, less demand for fish
+# country_event = {
+# 	id = prices.4
+# 	title = prices.4.t
+# 	desc = prices.4.d
+# 	picture = TRADE_GOODS_FURS_FISH_AND_SALT_eventPicture
 
-	fire_only_once = yes
+# 	fire_only_once = yes
 	
-	major = yes
+# 	major = yes
 
-	trigger = {
-		religion = catholic
-		is_religion_enabled = protestant
-		is_papal_controller = yes
+# 	trigger = {
+# 		religion = catholic
+# 		is_religion_enabled = protestant
+# 		is_papal_controller = yes
 		
-		calc_true_if = {
-			all_country = {
-				religion = protestant
-			}
-			amount = 5
-		}
-		NOT = { has_global_flag = protestant_fish_happened }
-	}
+# 		calc_true_if = {
+# 			all_country = {
+# 				religion = protestant
+# 			}
+# 			amount = 5
+# 		}
+# 		NOT = { has_global_flag = protestant_fish_happened }
+# 	}
 	
-	mean_time_to_happen = {
-		months = 1
-	}
+# 	mean_time_to_happen = {
+# 		months = 1
+# 	}
 	
-	option = {
-		name = prices.4.a
-		change_price = {
-			trade_goods = fish
-			key = PROTESTANT_DONT_EAT_FISH
-			value = -0.1
-			duration = -1
-		}
-	}
-}
+# 	option = {
+# 		name = prices.4.a
+# 		change_price = {
+# 			trade_goods = fish
+# 			key = PROTESTANT_DONT_EAT_FISH
+# 			value = -0.1
+# 			duration = -1
+# 		}
+# 	}
+# }
 
 
 
@@ -209,7 +282,40 @@ country_event = {
 country_event = {
 	id = prices.5
 	title = prices.5.t
-	desc = prices.5.d
+	desc = {
+		desc = prices.5.d
+		trigger = {
+			OR = {
+				capital_scope = { continent = europe }
+				AND = {
+					NOT = { nhs_exiles_tech = yes }
+					NOT = {
+						capital_scope = {
+							OR = {
+								continent = north_america
+								continent = south_america
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	desc = {
+		desc = prices.5.db.to
+		trigger = {
+			NOT = { capital_scope = { continent = europe } }
+			OR = {
+				nhs_exiles_tech = yes
+				capital_scope = {
+					OR = {
+						continent = north_america
+						continent = south_america
+					}
+				}
+			}
+		}
+	}
 	picture = TRADE_GOODS_PLANTATION_GOODS_IN_WAREHOUSE_eventPicture
 
 	fire_only_once = yes
@@ -220,10 +326,36 @@ country_event = {
 		OR = {
 			capital_scope = { continent = europe }
 			AND = {
-				any_owned_province = {
-					continent =  europe
+				is_subject = no
+				OR = {
+					capital_scope = {
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+					}
+					any_owned_province = {
+						continent = europe
+					}
 				}
-				dip_tech = 20
+				has_port = yes
+				has_institution = global_trade
+				europe = {
+					has_discovered = ROOT
+				}
+				if = {
+					limit = {
+						OR = {
+							has_country_modifier = nhs2_elysian_isolationism
+							has_country_modifier = vov_isolationism
+							has_country_modifier = msg_isolationism
+						}
+					}
+					num_of_provinces_owned_or_owned_by_subjects_with = {
+						value = 100
+						continent = europe
+					}
+				}
 			}
 		}
 		NOT = { has_global_flag = coffee_boom_happened }
@@ -232,9 +364,13 @@ country_event = {
 				region = malaya_region
 				trade_goods = coffee
 			}
-			any_subject_country = {
-				is_colonial_nation = yes
-				coffee = 4
+			# any_subject_country = {
+			# 	is_colonial_nation = yes
+			# 	coffee = 4
+			# }
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 4
+				trade_goods = coffee
 			}
 		}
 	}
@@ -269,12 +405,11 @@ country_event = {
 	major = yes
 
 	trigger = {
-		is_great_power = yes
-		capital_scope = { continent = europe }
-		any_owned_province = {
-			trade_goods = wool
+		num_of_provinces_owned_or_owned_by_subjects_with = {
+			value = 6
 			continent = europe
-		} 
+			trade_goods = wool
+		}
 		OR = {
 			504 = { #Indus
 				trade_share = {
@@ -318,16 +453,35 @@ country_event = {
 		ai_chance = {
 			factor = 50
 			modifier = {
-				factor = 1.5
-				wool = 6
+				factor = 0.25
+				NOT = { ruler_has_personality = entrepreneur_personality }
+				NOT = {
+					num_of_provinces_owned_or_owned_by_subjects_with = {
+						value = 1
+						trade_goods = cotton
+					}
+				}
 			}
 			modifier = {
 				factor = 1.5
-				cotton = 12
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 6
+					trade_goods = cotton
+				}
 			}
 			modifier = {
 				factor = 1.5
-				cotton = 18
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 12
+					trade_goods = cotton
+				}
+			}
+			modifier = {
+				factor = 1.5
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 18
+					trade_goods = cotton
+				}
 			}
 		}
 		change_price = {
@@ -336,12 +490,12 @@ country_event = {
 			value = -0.10
 			duration = -1
 		}
-		change_price = {
-			trade_goods = cotton
-			key = COTTON_IMPORTS
-			value = 0.20
-			duration = -1
-		}
+		# change_price = {
+		# 	trade_goods = cotton
+		# 	key = COTTON_IMPORTS
+		# 	value = 0.20
+		# 	duration = -1
+		# }
 		add_mercantilism = -2
 	}
 	option = {
@@ -349,19 +503,37 @@ country_event = {
 		ai_chance = {
 			factor = 50
 			modifier = {
-				factor = 1.5
-				wool = 6
+				factor = 0
+				ruler_has_personality = entrepreneur_personality
 			}
 			modifier = {
 				factor = 1.5
-				wool = 12
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 8
+					trade_goods = wool
+				}
 			}
 			modifier = {
 				factor = 1.5
-				wool = 18
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 12
+					trade_goods = wool
+				}
 			}
 		}
 		set_country_flag = cotton_imports
+		change_price = {
+			trade_goods = wool
+			key = COTTON_IMPORTS_BANNED
+			value = 0.20
+			duration = -1
+		}
+		change_price = {
+			trade_goods = cotton
+			key = COTTON_IMPORTS_BANNED
+			value = -0.10
+			duration = -1
+		}
 		504 = { #Indus
 			add_trade_modifier = {
 				who = root
@@ -412,31 +584,26 @@ country_event = {
 
 	trigger = {
 		OR = {
-			capital_scope = { continent = europe }
 			AND = {
-				any_owned_province = { continent = europe }
-				dip_tech = 20
-			}
-		}
-		OR = {
-			any_subject_country = {
-				is_colonial_nation = yes
-				any_owned_province = {
-					trade_goods = sugar
+				capital_scope = { continent = europe }
+				OR = {
+					NOT = { nhs_exiles_tech = yes }
+					has_institution = global_trade
 				}
 			}
-			any_owned_province = {
-				trade_goods = sugar
-				continent = new_world
+			AND = {
+				capital_scope = {
+					OR = {
+						continent = north_america
+						continent = south_america
+					}
+				}
+				has_port = yes
 			}
-			any_owned_province = {
-				trade_goods = sugar
-				continent = north_america
-			}
-			any_owned_province = {
-				trade_goods = sugar
-				continent = south_america
-			}
+		}
+		num_of_provinces_owned_or_owned_by_subjects_with = {
+			value = 2
+			trade_goods = sugar
 		}
 		OR = {
 			1371 = {	# Canton
@@ -451,8 +618,27 @@ country_event = {
 					share = 10
 				}
 			}
-			any_owned_province = {
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 2
 				trade_goods = tea
+			}
+			AND = {
+				1376 = {
+					trade_share = {
+						country = ROOT
+						share = 10
+					}
+				}
+				japan_region = {
+					trade_goods = tea
+					owner = {
+						OR = {
+							NOT = { has_dlc = "Mandate of Heaven" }
+							NOT = { religion = shinto }
+							NOT = { isolationism = 3 }
+						}
+					}
+				}
 			}
 		}
 		NOT = { has_global_flag = tea_and_sugar_happened }
@@ -468,7 +654,7 @@ country_event = {
 		change_price = {
 			trade_goods = tea
 			key = TEA_AND_SUGAR
-			value = 0.25
+			value = 0.50
 			duration = -1
 		}
 		change_price = {
@@ -496,7 +682,7 @@ country_event = {
 	major = yes
 
 	trigger = {
-		has_idea = quest_for_the_new_world
+		# has_idea = quest_for_the_new_world
 		num_of_ports = 4
 		NOT = {
 			capital_scope = {
@@ -509,7 +695,10 @@ country_event = {
 			}
 		}
 		has_discovered = 1460 # Cape of Good Hope
-		technology_group = western
+		OR = {
+			technology_group = western
+			nhs_exiles_tech = yes
+		}
 		any_active_trade_node = {
 			has_merchant = PREV
 			OR = {
@@ -774,10 +963,10 @@ country_event = {
 		mil_tech = 21
 		NOT = { has_global_flag = regulated_uniforms_happened }
 	}
+
 	mean_time_to_happen = {
 		months = 1
 	}
-	
 	
 	option = {
 		name = prices.14.a
@@ -823,6 +1012,7 @@ country_event = {
 		capital_scope = { NOT = { continent = north_america } }
 		capital_scope = { NOT = { continent = new_world } }
 	}
+
 	mean_time_to_happen = {
 		months = 1
 	}
@@ -832,7 +1022,6 @@ country_event = {
 			set_global_flag = great_fisheries_happened
 		}
 	}
-	
 	
 	option = {
 		name = prices.15.a
@@ -864,7 +1053,34 @@ country_event = {
 country_event = {
 	id = prices.16
 	title = prices.16.t
-	desc = prices.16.d
+	desc = {
+		desc = prices.16.d
+		trigger = {
+			capital_scope = { continent = europe }
+		}
+	}
+	desc = {
+		desc = prices.16.db.to
+		trigger = {
+			NOT = { capital_scope = { continent = europe } }
+			AND = {
+				NOT = { has_country_modifier = nhs2_elysian_isolationism }
+				NOT = { has_country_modifier = vov_isolationism }
+				NOT = { has_country_modifier = msg_isolationism }
+			}
+		}
+	}
+	desc = {
+		desc = prices.16.dc.to
+		trigger = {
+			NOT = { capital_scope = { continent = europe } }
+			OR = {
+				has_country_modifier = nhs2_elysian_isolationism
+				has_country_modifier = vov_isolationism
+				has_country_modifier = msg_isolationism
+			}
+		}
+	}
 	picture = TRADEGOODS_eventPicture
 
 	fire_only_once = yes
@@ -872,8 +1088,39 @@ country_event = {
 	major = yes
 
 	trigger = {
-		capital_scope = { continent = europe }
 		dip_tech = 22
+		OR = {
+			capital_scope = { continent = europe }
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 100
+				continent = europe
+			}
+			AND = {
+				capital_scope = {
+					OR = {
+						continent = north_america
+						continent = south_america
+					}
+				}
+				has_port = yes
+				has_institution = global_trade
+				europe = {
+					has_discovered = ROOT
+				}
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								NOT = { has_country_modifier = nhs2_elysian_isolationism }
+								NOT = { has_country_modifier = vov_isolationism }
+								NOT = { has_country_modifier = msg_isolationism }
+							}
+						}
+					}
+					total_own_and_non_tributary_subject_development = 3000
+				}
+			}
+		}
 		OR = {
 			504 = { #Indus
 				trade_share = {
@@ -903,10 +1150,10 @@ country_event = {
 		NOT = { has_country_flag = cotton_imports }	#Shouldn't trigger for someone that already disallowed Cotton imports
 		NOT = { has_global_flag = calicoes_happened }
 	}
+
 	mean_time_to_happen = {
-		months = 1
+		months = 3
 	}
-	
 	
 	option = {
 		name = prices.16.a
@@ -932,15 +1179,14 @@ country_event = {
 	major = yes
 
 	trigger = {
-		capital_scope = { continent = europe }
 		owns = 61
 		NOT = { has_global_flag = depleted_beaver_happened }
 		is_year = 1570
 	}
+
 	mean_time_to_happen = {
 		months = 3
 	}
-	
 	
 	option = {
 		name = prices.17.a
@@ -967,24 +1213,43 @@ country_event = {
 	trigger = {
 		OR = {
 			capital_scope = { continent = europe }
-			is_colonial_nation = yes
-		}
-		OR = {
-			any_owned_province = {
-				trade_goods = fur
-				continent = north_america
+			AND = {
+				capital_scope = {
+					OR = {
+						continent = north_america
+						continent = south_america
+					}
+				}
+				is_subject = no
+				has_port = yes
+				OR = {
+					total_own_and_non_tributary_subject_development = 2000
+					AND = {
+						NOT = { has_country_modifier = nhs2_elysian_isolationism }
+						NOT = { has_country_modifier = vov_isolationism }
+						NOT = { has_country_modifier = msg_isolationism }
+						has_institution = global_trade
+						europe = {
+							has_discovered = ROOT
+						}
+					}
+				}
 			}
-			any_owned_province = {
-				trade_goods = fur
+		}
+		num_of_provinces_owned_or_owned_by_subjects_with = {
+			value = 2
+			trade_goods = fur
+			OR = {
+				continent = north_america
 				continent = new_world
 			}
 		}
 		NOT = { has_global_flag = felt_hats_happened }
 	}
+
 	mean_time_to_happen = {
 		months = 3
 	}
-	
 	
 	option = {
 		name = prices.18.a
@@ -1013,10 +1278,10 @@ country_event = {
 		num_of_ports = 3
 		NOT = { has_global_flag = permanent_navies_happened }
 	}
+
 	mean_time_to_happen = {
-		months = 1
+		months = 3
 	}
-	
 	
 	option = {
 		name = prices.19.a
@@ -1057,10 +1322,10 @@ country_event = {
 		copper = 1
 		NOT = { has_global_flag = bronze_cannons_happened }
 	}
+
 	mean_time_to_happen = {
-		months = 1
+		months = 3
 	}
-	
 	
 	option = {
 		name = prices.20.a
@@ -1092,10 +1357,10 @@ country_event = {
 		}
 		NOT = { has_global_flag = japanese_tea_happened }
 	}
+
 	mean_time_to_happen = {
 		months = 1
 	}
-	
 	
 	option = {
 		name = prices.21.a
@@ -1127,16 +1392,47 @@ country_event = {
 
 	trigger = {
 		is_year = 1600
-		capital_scope = { continent = europe }
-		religion_group = christian
-		spices = 3
+		capital_scope = { 
+			OR = {
+				continent = europe
+				continent = north_america
+				continent = south_america
+			}
+		}
+		num_of_provinces_owned_or_owned_by_subjects_with = {
+			value = 3
+			OR = {
+				trade_goods = spices
+				trade_goods = cloves
+			}
+			OR = {
+				superregion = india_superregion
+				superregion = east_indies_superregion
+				continent = oceania
+			}
+		}
 		any_known_country = {
-			capital_scope = { continent = europe }
-			religion_group = christian
-			spices = 3
+			OR = {
+				continent = europe
+				continent = north_america
+				continent = south_america
+			}
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 3
+				OR = {
+					trade_goods = spices
+					trade_goods = cloves
+				}
+				OR = {
+					superregion = india_superregion
+					superregion = east_indies_superregion
+					continent = oceania
+				}
+			}
 		}
 		NOT = { has_global_flag = decline_of_spices_happened }
 	}
+
 	mean_time_to_happen = {
 		months = 60
 	}
@@ -1168,14 +1464,11 @@ country_event = {
 	major = yes
 
 	trigger = {
-		OR = {
-			capital_scope = { continent = europe }
-			AND = {
-				any_owned_province = { continent = europe }
-				dip_tech = 25
-			}
+		total_own_and_non_tributary_subject_development = 300
+		num_of_provinces_owned_or_owned_by_subjects_with = {
+			value = 5
+			trade_goods = sugar
 		}
-		sugar = 5
 		dip_tech = 20
 		OR = {
 			trading_part = {
@@ -1193,10 +1486,10 @@ country_event = {
 		}
 		NOT = { has_global_flag = popularization_of_sugar_happened }
 	}
+
 	mean_time_to_happen = {
-		months = 1
+		months = 3
 	}
-	
 	
 	option = {
 		name = prices.23.a
@@ -1213,6 +1506,41 @@ country_event = {
 country_event = {
 	id = prices.24
 	title = prices.24.t
+	desc = {
+		desc = prices.24.d
+		trigger = {
+			OR = {
+				NOT = {
+					OR = {
+						has_country_modifier = nhs2_elysian_isolationism
+						has_country_modifier = vov_isolationism
+						has_country_modifier = msg_isolationism
+					}
+				}
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 100
+					continent = europe
+				}
+			}
+		}
+	}
+	desc = {
+		desc = prices.24.db.to
+		trigger = {
+			OR = {
+				has_country_modifier = nhs2_elysian_isolationism
+				has_country_modifier = vov_isolationism
+				has_country_modifier = msg_isolationism
+			}
+			NOT = {
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 100
+					continent = europe
+				}
+			}
+		}
+	}
+
 	desc = prices.24.d
 	picture = TRADEGOODS_eventPicture
 
@@ -1221,12 +1549,40 @@ country_event = {
 	major = yes
 
 	trigger = {
-		capital_scope = { continent = europe }
 		dip_tech = 18
 		OR = {
 			current_age = age_of_absolutism #Not before this
 			current_age = age_of_revolutions
 		}
+		OR = {
+			capital_scope = { continent = europe }
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 100
+				continent = europe
+			}
+			AND = {
+				capital_scope = {
+					OR = {
+						continent = north_america
+						continent = south_america
+					}
+				}
+				OR = {
+					total_own_and_non_tributary_subject_development = 2500
+					AND = {
+						has_port = yes
+						has_institution = global_trade
+						NOT = { has_country_modifier = nhs2_elysian_isolationism }
+						NOT = { has_country_modifier = vov_isolationism }
+						NOT = { has_country_modifier = msg_isolationism }
+						europe = {
+							has_discovered = ROOT
+						}
+					}
+				}
+			}
+		}
+
 		OR = {
 			504 = { #Indus
 				trade_share = {
@@ -1267,21 +1623,15 @@ country_event = {
 		}
 		NOT = { has_global_flag = popular_silk_happened }
 	}
+
 	mean_time_to_happen = {
-		months = 1
+		months = 3
 	}
-	
 	
 	option = {
 		name = prices.24.a
 		change_price = {
 			trade_goods = silk
-			key = POPULAR_SILK_FABRICS
-			value = 0.25
-			duration = -1
-		}
-		change_price = {
-			trade_goods = elysian_silk
 			key = POPULAR_SILK_FABRICS
 			value = 0.25
 			duration = -1
@@ -1301,16 +1651,20 @@ country_event = {
 	major = yes
 
 	trigger = {
-		capital_scope = { continent = europe }
+		NOT = {
+			capital_scope = {
+				continent = asia
+			}
+		}
 		owns = 2047 #Tirhut
 		owns = 2063 #Central Doabd
 		bengal_region = { type = all owned_by = ROOT }
 		bihar_area = { type = all owned_by = ROOT }
 	}
+
 	mean_time_to_happen = {
 		months = 60
 	}
-	
 	
 	option = {
 		name = prices.25.a
@@ -1359,8 +1713,18 @@ country_event = {
 	major = yes
 
 	trigger = {
-		capital_scope = { continent = europe }
 		dip_tech = 12
+		OR = {
+			capital_scope = { continent = europe }
+			AND = {
+				capital_scope = {
+					NOT = { continent = asia }
+				}
+				dip_tech = 14
+			}
+			dip_tech = 18
+		}
+		
 		OR = {
 			current_age = age_of_reformation #Not before this
 			current_age = age_of_absolutism
@@ -1400,10 +1764,10 @@ country_event = {
 		}
 		NOT = { has_global_flag = veneering_happened }
 	}
+
 	mean_time_to_happen = {
 		months = 60
 	}
-	
 	
 	option = {
 		name = prices.26.a
@@ -1429,13 +1793,15 @@ country_event = {
 
 	trigger = {
 		is_year = 1750
-		capital_scope = { region = indo_china_region }
+		indo_china_region = {
+			owned_by = ROOT
+		}
 		NOT = { has_global_flag = ivory_shortage_happened }
 	}
+
 	mean_time_to_happen = {
-		months = 1
+		months = 3
 	}
-	
 	
 	option = {
 		name = prices.27.a
@@ -1463,10 +1829,10 @@ country_event = {
 		mil_tech = 18
 		NOT = { has_global_flag = iron_working_happened }
 	}
+
 	mean_time_to_happen = {
-		months = 1
+		months = 3
 	}
-	
 	
 	option = {
 		name = prices.28.a
@@ -1489,7 +1855,48 @@ country_event = {
 country_event = {
 	id = prices.29
 	title = prices.29.t
-	desc = prices.29.d
+	desc = {
+		desc = prices.29.d
+		trigger = {
+			OR = {
+				AND = {
+					capital_scope = { continent = europe }
+					NOT = { nhs_exiles_tech = yes }
+				}
+				NOT = {
+					OR = {
+						has_country_modifier = nhs2_elysian_isolationism
+						has_country_modifier = vov_isolationism
+						has_country_modifier = msg_isolationism
+					}
+				}
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 100
+					continent = europe
+				}
+			}
+		}
+	}
+	desc = {
+		desc = prices.29.db.to
+		trigger = {
+			OR = {
+				NOT = { capital_scope = { continent = europe } }
+				nhs_exiles_tech = yes
+			}
+			OR = {
+				has_country_modifier = nhs2_elysian_isolationism
+				has_country_modifier = vov_isolationism
+				has_country_modifier = msg_isolationism
+			}
+			NOT = {
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 100
+					continent = europe
+				}
+			}
+		}
+	}
 	picture = TRADE_GOODS_PLANTATION_GOODS_IN_WAREHOUSE_eventPicture
 
 	fire_only_once = yes
@@ -1498,21 +1905,29 @@ country_event = {
 
 	trigger = {
 		dip_tech = 16
-		colony = 1
-		any_subject_country = {
-			is_colonial_nation = yes
+		num_of_provinces_owned_or_owned_by_subjects_with = {
+			value = 7
+			trade_goods = cocoa
 			OR = {
-				capital_scope = { continent = north_america }
-				capital_scope = { continent = south_america }
-				capital_scope = { continent = new_world }
+				continent = north_america
+				continent = south_america
+				continent = new_world
 			}
-			cocoa = 7
-			sugar = 1
+		}
+		num_of_provinces_owned_or_owned_by_subjects_with = {
+			value = 1
+			trade_goods = sugar
+			OR = {
+				continent = north_america
+				continent = south_america
+				continent = new_world
+			}
 		}
 		NOT = { has_global_flag = hot_chocolate_happened }
 	}
+
 	mean_time_to_happen = {
-		months = 1
+		months = 6
 	}
 	
 	
@@ -1531,7 +1946,28 @@ country_event = {
 country_event = {
 	id = prices.30
 	title = prices.30.t
-	desc = prices.30.d
+	desc = {
+		desc = prices.30.d
+		trigger = {
+			NOT = {
+				OR = {
+					has_country_modifier = nhs2_elysian_isolationism
+					has_country_modifier = vov_isolationism
+					has_country_modifier = msg_isolationism
+				}
+			}
+		}
+	}
+	desc = {
+		desc = prices.30.db.to
+		trigger = {
+			OR = {
+				has_country_modifier = nhs2_elysian_isolationism
+				has_country_modifier = vov_isolationism
+				has_country_modifier = msg_isolationism
+			}
+		}
+	}
 	picture = TRADE_GOODS_PLANTATION_GOODS_IN_WAREHOUSE_eventPicture
 
 	fire_only_once = yes
@@ -1540,20 +1976,54 @@ country_event = {
 
 	trigger = {
 		dip_tech = 16
-		colony = 1
-		NOT = { has_global_flag = popularization_of_tobacco_happened }
-		any_subject_country = {
-			is_colonial_nation = yes
-			OR = {
-				capital_scope = { continent = north_america }
-				capital_scope = { continent = south_america }
-				capital_scope = { continent = new_world }
+		OR = {
+			NOT = {
+				to_native_tech = yes
 			}
-			tobacco = 4
+			dip_tech = 20
+		}
+		NOT = { has_global_flag = popularization_of_tobacco_happened }
+		
+		num_of_provinces_owned_or_owned_by_subjects_with = {
+			value = 4
+			trade_goods = tobacco
+			OR = {
+				continent = north_america
+				continent = south_america
+				continent = new_world
+			}
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					has_country_modifier = nhs2_elysian_isolationism
+					has_country_modifier = vov_isolationism
+					has_country_modifier = msg_isolationism
+				}
+			}
+			total_own_and_non_tributary_subject_development = 2000
+		}
+		else = {
+			OR = {
+				NOT = {
+					capital_scope = {
+						OR = {
+							continent = north_america
+							continent = south_america
+							continent = new_world
+						}
+					}
+				}
+				AND = {
+					has_institution = global_trade
+					has_port = yes
+				}
+			}
 		}
 	}
 	mean_time_to_happen = {
-		months = 1
+		months = 6
 	}
 	
 	
@@ -1583,9 +2053,10 @@ country_event = {
 	trigger = {
 		NOT = { has_global_flag = mocha_killed }
 		NOT = { owns = 387 } #Mocha
-		coffee = 2
 		has_discovered = 387
-		any_owned_province = {
+
+		num_of_provinces_owned_or_owned_by_subjects_with = {
+			value = 2
 			has_building = plantations
 			trade_goods = coffee
 			NOT = { continent = africa }
@@ -1966,11 +2437,29 @@ country_event = {
 				capital_scope = { continent = asia }
 				any_owned_province = { NOT = { continent = asia } }
 			}
+			AND = {
+				capital_scope = {
+					OR = {
+						continent = north_america
+						continent = south_america
+						continent = new_world
+					}
+				}
+				any_owned_province = {
+					NOT = {
+						OR = {
+							continent = north_america
+							continent = south_america
+							continent = new_world
+						}
+					} 
+				}
+			}
 		}
 	}
 	
 	mean_time_to_happen = {
-		months = 1
+		months = 3
 	}
 	
 	option = {
@@ -2074,7 +2563,18 @@ country_event = {
 country_event = {
 	id = prices.37
 	title = prices.37.t
-	desc = prices.37.d
+	desc = {
+		desc = prices.37.d
+		trigger = {
+			NOT = { nhs_check_all_elysian_tags = { CONDITION = exists } }
+		}
+	}
+	desc = {
+		desc = prices.37.db.to
+		trigger = {
+			nhs_check_all_elysian_tags = { CONDITION = exists }
+		}
+	}
 	picture = EXPLORERS_eventPicture
 
 	fire_only_once = yes
@@ -2096,6 +2596,26 @@ country_event = {
 			}
 		}
 		OR = {
+			any_known_country = {
+				nhs_exiles_tech = yes
+				has_port = yes
+				OR = {
+					continent = north_america
+					continent = south_america
+					continent = new_world
+				}
+				OR = {
+					trade_goods = grain
+					trade_goods = livestock
+				}
+				NOT = {
+					OR = {
+						has_country_modifier = nhs2_elysian_isolationism
+						has_country_modifier = vov_isolationism
+						has_country_modifier = msg_isolationism
+					}
+				}
+			}
 			any_owned_province = {
 				OR = {
 					continent = north_america
@@ -2124,7 +2644,7 @@ country_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 1
+		months = 6
 	}
 	
 	option = {
@@ -2235,13 +2755,37 @@ country_event = {
 	trigger = {
 		NOT = { has_global_flag = brazilian_gems_happened }
 		NOT = { current_age = age_of_discovery }
+		OR = {
+			NOT = {
+				capital_scope = {
+					OR = {
+						continent = north_america
+						continent = south_america
+						continent = new_world
+					}
+				}
+			}
+			AND = {
+				has_institution = global_trade
+				NOT = {
+					OR = {
+						has_country_modifier = nhs2_elysian_isolationism
+						has_country_modifier = vov_isolationism
+						has_country_modifier = msg_isolationism
+					}
+				}
+			}
+			total_own_and_non_tributary_subject_development = 2250
+		}
 		primitives = no
-		any_owned_province = {
+		is_subject = no
+		num_of_provinces_owned_or_owned_by_subjects_with = {
+			value = 1
 			trade_goods = gems
 			OR = {
-				continent = new_world
 				continent = north_america
 				continent = south_america
+				continent = new_world
 			}
 		}
 		calc_true_if = {
@@ -2653,7 +3197,10 @@ country_event = {
 		has_country_flag = coke_blast_furnaces_flag #Set by Industrialization Events.
 		has_institution = enlightenment
 		any_owned_province = {
-			trade_goods = coal
+			OR = {
+				trade_goods = coal
+				trade_goods = coal_2
+			}
 			has_building = furnace
 		}
 		coal = 10
@@ -2663,7 +3210,10 @@ country_event = {
 		hidden_effect = {
 			random_owned_province = {
 				limit = {
-					trade_goods = coal
+					OR = {
+						trade_goods = coal
+						trade_goods = coal_2
+					}
 					has_building = furnace
 				}
 				save_event_target_as = coal_province
@@ -2671,13 +3221,19 @@ country_event = {
 			if = {
 				limit = {
 					any_owned_province = {
-						trade_goods = coal
+						OR = {
+							trade_goods = coal
+							trade_goods = coal_2
+						}
 						NOT = { has_building = furnace }
 					}
 				}
 				random_owned_province = {
 					limit = {
-						trade_goods = coal
+						OR = {
+							trade_goods = coal
+							trade_goods = coal_2
+						}
 						NOT = { has_building = furnace }
 					}
 					save_event_target_as = potential_furnace
@@ -2710,11 +3266,32 @@ country_event = {
 				add_base_production = 6
 			}
 		}
-		change_price = {
-			trade_goods = coal
-			key = IMPROVED_COAL_MINING
-			value = -0.30
-			duration = -1
+		if = {
+			limit = {
+				has_dlc = "Rule Britannia"
+			}
+			change_price = {
+				trade_goods = coal
+				key = IMPROVED_COAL_MINING
+				value = -0.30
+				duration = -1
+			}
+		}
+		else = {
+			change_price = {
+				trade_goods = coal_2
+				key = IMPROVED_COAL_MINING
+				value = -0.30
+				duration = -1
+			}
+			hidden_effect = {
+				change_price = {
+					trade_goods = coal
+					key = IMPROVED_COAL_MINING
+					value = -0.30
+					duration = -1
+				}
+			}
 		}
 	}
 }
