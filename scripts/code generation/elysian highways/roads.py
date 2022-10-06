@@ -1,9 +1,10 @@
 roads = [
     {
-        "name": "east",
+        "name": "north_apaleisian",
         "has_mission_trigger": True,
         "has_add_modifiers": True,
         "has_ownership_check": True,
+        "no_decision": True,
         "provinces": [
             {"id": 2551},
             # {"id": 2555},
@@ -17,10 +18,11 @@ roads = [
         ]
     },
     {
-        "name": "south",
+        "name": "south_apaleisian",
         "has_mission_trigger": True,
         "has_add_modifiers": True,
         "has_ownership_check": True,
+        "no_decision": True,
         "provinces": [
             # {"id": 935},
             # {"id": 2527},
@@ -36,14 +38,28 @@ roads = [
         ]
     },
     {
-        "name": "coastal",
+        "name": "south",
+        "tier": 1,
+        "cost": 500,
+        "requires_build": [
+            917
+        ],
         "provinces": [
-            # {"id": 918},
             {"id": 2528},
             {"id": 2529},
             {"id": 4884},
             {"id": 921},
             {"id": 893},
+        ]
+    },
+    {
+        "name": "coastal",
+        "tier": 2,
+        "cost": 1500,
+        "requires_build": [
+            4887, 918, 2528, 2529, 4884
+        ],
+        "provinces": [
             {"id": 2530},
             {"id": 922},
             {"id": 923},
@@ -60,13 +76,18 @@ roads = [
             {"id": 950},
             {"id": 952},
             {"id": 2550},
-            {"id": 953},
+            # {"id": 953},
         ]
     },
     {
         "name": "vinlandic",
+        "tier": 2,
+        "cost": 1000,
+        "requires_build": [
+            953
+        ],
         "provinces": [
-            {"id": 953, "duplicate": True},
+            # {"id": 953, "duplicate": True},
             {"id": 2554},
             {"id": 956},
             {"id": 2639},
@@ -81,8 +102,13 @@ roads = [
     },
     {
         "name": "north",
+        "tier": 1,
+        "cost": 800,
+        "requires_build": [
+            917
+        ],
         "provinces": [
-            {"id": 917},
+            # {"id": 917},
             {"id": 915},
             {"id": 4903},
             {"id": 913},
@@ -95,6 +121,11 @@ roads = [
     },
     {
         "name": "west",
+        "tier": 3,
+        "cost": 2500,
+        "requires_build": [
+            4887, 918, 2528
+        ],
         "provinces": [
             {"id": 895},
             {"id": 894},
@@ -123,8 +154,13 @@ roads = [
     },
     {
         "name": "atlas",
+        "tier": 3,
+        "cost": 2500,
+        "requires_build": [
+            917
+        ],
         "provinces": [
-            {"id": 917, "duplicate": True},
+            # {"id": 917, "duplicate": True},
             {"id": 4906},
             {"id": 902},
             {"id": 898},

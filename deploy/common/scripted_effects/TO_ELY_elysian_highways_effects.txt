@@ -1,15 +1,31 @@
 to_elysian_highways_progress_routine = {
 	if = {
 		limit = {
-			has_global_flag = to_elysian_highways_project_tier_2
+			has_global_flag = to_elysian_highways_north_apaleisian_enabled
 		}
-		to_elysian_highway_east_effect = {
+		to_elysian_highway_north_apaleisian_effect = {
 			PROVINCE_TRIGGER = always
 			PROVINCE_EFFECT = to_elysian_highways_progress_routine_province
 		}
-		to_elysian_highway_south_effect = {
+	}
+	if = {
+		limit = {
+			has_global_flag = to_elysian_highways_south_apaleisian_enabled
+		}
+		to_elysian_highway_south_apaleisian_effect = {
 			PROVINCE_TRIGGER = always
 			PROVINCE_EFFECT = to_elysian_highways_progress_routine_province
+		}
+	}
+	if = {
+		limit = {
+			has_global_flag = to_elysian_highways_project_tier_1
+		}
+		953 = {
+			to_elysian_highways_progress_routine_province = yes
+		}
+		917 = {
+			to_elysian_highways_progress_routine_province = yes
 		}
 	}
 	if = {
@@ -95,7 +111,8 @@ to_elysian_highways_progress_routine_province = {
 	}
 	else_if = {
 		limit = {
-			NOT = { has_province_modifier = nhs_elysian_highways }
+			NOT = { to_has_elysian_highway_modifier = yes }
+			NOT = { has_province_modifier = to_elysian_highway_progress_cd }
 		}
 		to_remove_elysian_highways_modifiers = yes
 		clr_province_flag = to_elysian_highways_progressing
@@ -127,6 +144,11 @@ to_elysian_highways_inactive_setup = {
 to_increase_elysian_highways_progress = {
 	remove_province_modifier = nhs_elysian_highways_inactive
 	set_province_flag = to_elysian_highways_progressing
+	add_province_modifier = {
+		name = to_elysian_highway_progress_cd
+		duration = 5
+		hidden = yes
+	}
 	set_variable = {
 		which = to_elysian_highways_flat_increase
 		value = 0
@@ -150,65 +172,70 @@ to_increase_elysian_highways_progress = {
 	}
 	if = {
 		limit = {
-			to_elysian_highway_east_province_trigger = { TRIGGER = province_id }
+			NOT = { to_elysian_highway_standalone_province = yes }
 		}
-		to_elysian_highway_east_effect = {
-			PROVINCE_TRIGGER = to_elysian_highways_increasing
-			PROVINCE_EFFECT = to_increase_highway_serial_penalty
+		if = {
+			limit = {
+				to_elysian_highway_north_apaleisian_province_trigger = { TRIGGER = province_id }
+			}
+			to_elysian_highway_north_apaleisian_effect = {
+				PROVINCE_TRIGGER = to_elysian_highways_increasing
+				PROVINCE_EFFECT = to_increase_highway_serial_penalty
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			to_elysian_highway_south_province_trigger = { TRIGGER = province_id }
+		else_if = {
+			limit = {
+				to_elysian_highway_south_apaleisian_province_trigger = { TRIGGER = province_id }
+			}
+			to_elysian_highway_south_apaleisian_effect = {
+				PROVINCE_TRIGGER = to_elysian_highways_increasing
+				PROVINCE_EFFECT = to_increase_highway_serial_penalty
+			}
 		}
-		to_elysian_highway_south_effect = {
-			PROVINCE_TRIGGER = to_elysian_highways_increasing
-			PROVINCE_EFFECT = to_increase_highway_serial_penalty
+		else_if = {
+			limit = {
+				to_elysian_highway_vinlandic_province_trigger = { TRIGGER = province_id }
+			}
+			to_elysian_highway_vinlandic_effect = {
+				PROVINCE_TRIGGER = to_elysian_highways_increasing
+				PROVINCE_EFFECT = to_increase_highway_serial_penalty
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			to_elysian_highway_vinlandic_province_trigger = { TRIGGER = province_id }
+		else_if = {
+			limit = {
+				to_elysian_highway_coastal_province_trigger = { TRIGGER = province_id }
+			}
+			to_elysian_highway_coastal_effect = {
+				PROVINCE_TRIGGER = to_elysian_highways_increasing
+				PROVINCE_EFFECT = to_increase_highway_serial_penalty
+			}
 		}
-		to_elysian_highway_vinlandic_effect = {
-			PROVINCE_TRIGGER = to_elysian_highways_increasing
-			PROVINCE_EFFECT = to_increase_highway_serial_penalty
+		else_if = {
+			limit = {
+				to_elysian_highway_north_province_trigger = { TRIGGER = province_id }
+			}
+			to_elysian_highway_north_effect = {
+				PROVINCE_TRIGGER = to_elysian_highways_increasing
+				PROVINCE_EFFECT = to_increase_highway_serial_penalty
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			to_elysian_highway_coastal_province_trigger = { TRIGGER = province_id }
+		else_if = {
+			limit = {
+				to_elysian_highway_west_province_trigger = { TRIGGER = province_id }
+			}
+			to_elysian_highway_west_effect = {
+				PROVINCE_TRIGGER = to_elysian_highways_increasing
+				PROVINCE_EFFECT = to_increase_highway_serial_penalty
+			}
 		}
-		to_elysian_highway_coastal_effect = {
-			PROVINCE_TRIGGER = to_elysian_highways_increasing
-			PROVINCE_EFFECT = to_increase_highway_serial_penalty
-		}
-	}
-	else_if = {
-		limit = {
-			to_elysian_highway_north_province_trigger = { TRIGGER = province_id }
-		}
-		to_elysian_highway_north_effect = {
-			PROVINCE_TRIGGER = to_elysian_highways_increasing
-			PROVINCE_EFFECT = to_increase_highway_serial_penalty
-		}
-	}
-	else_if = {
-		limit = {
-			to_elysian_highway_west_province_trigger = { TRIGGER = province_id }
-		}
-		to_elysian_highway_west_effect = {
-			PROVINCE_TRIGGER = to_elysian_highways_increasing
-			PROVINCE_EFFECT = to_increase_highway_serial_penalty
-		}
-	}
-	else_if = {
-		limit = {
-			to_elysian_highway_atlas_province_trigger = { TRIGGER = province_id }
-		}
-		to_elysian_highway_atlas_effect = {
-			PROVINCE_TRIGGER = to_elysian_highways_increasing
-			PROVINCE_EFFECT = to_increase_highway_serial_penalty
+		else_if = {
+			limit = {
+				to_elysian_highway_atlas_province_trigger = { TRIGGER = province_id }
+			}
+			to_elysian_highway_atlas_effect = {
+				PROVINCE_TRIGGER = to_elysian_highways_increasing
+				PROVINCE_EFFECT = to_increase_highway_serial_penalty
+			}
 		}
 	}
 	set_variable = {
@@ -390,9 +417,29 @@ to_increase_highway_serial_penalty = {
 to_complete_elysian_highway = {
 	to_remove_elysian_highway_variables = yes
 	remove_province_modifier = nhs_elysian_highways_inactive
-	add_permanent_province_modifier = {
-		name = nhs_elysian_highways
-		duration = -1
+	if = {
+		limit = {
+			has_global_flag = to_elysian_highways_project_tier_3
+		}
+		add_permanent_province_modifier = {
+			name = nhs_elysian_highways_3
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = to_elysian_highways_project_tier_2
+		}
+		add_permanent_province_modifier = {
+			name = nhs_elysian_highways_2
+			duration = -1
+		}
+	}
+	else = {
+		add_permanent_province_modifier = {
+			name = nhs_elysian_highways
+			duration = -1
+		}
 	}
 }
 
@@ -458,7 +505,7 @@ to_remove_elysian_highway_variables = {
 }
 
 to_remove_elysian_highways_modifiers = {
-	# Code generated by elysian_highways.py
+	# Code generated by elysian highways/elysian_highways.py
 	remove_province_modifier = nhs_elysian_highways_inprogress_0
 	remove_province_modifier = nhs_elysian_highways_inprogress_1
 	remove_province_modifier = nhs_elysian_highways_inprogress_3
@@ -523,12 +570,14 @@ to_remove_elysian_highways_modifiers = {
 }
 
 to_set_correct_elysian_highways_modifier = {
-	# Code generated by elysian_highways.py
+	# Code generated by elysian highways/elysian_highways.py
 	if={limit={check_variable={which=to_elysian_highway_progress value=49}}if={limit={check_variable={which=to_elysian_highway_progress value=73}}if={limit={check_variable={which=to_elysian_highway_progress value=86}}if={limit={check_variable={which=to_elysian_highway_progress value=93}}if={limit={check_variable={which=to_elysian_highway_progress value=96}}if={limit={check_variable={which=to_elysian_highway_progress value=98}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_98}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_98 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_96}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_96 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=95}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_95}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_95 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_93}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_93 duration=-1} }}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=90}}if={limit={check_variable={which=to_elysian_highway_progress value=91}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_91}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_91 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_90}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_90 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=88}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_88}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_88 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_86}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_86 duration=-1} }}}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=80}}if={limit={check_variable={which=to_elysian_highway_progress value=83}}if={limit={check_variable={which=to_elysian_highway_progress value=85}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_85}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_85 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_83}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_83 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=81}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_81}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_81 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_80}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_80 duration=-1} }}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=77}}if={limit={check_variable={which=to_elysian_highway_progress value=78}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_78}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_78 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_77}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_77 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=75}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_75}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_75 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_73}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_73 duration=-1} }}}}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=60}}if={limit={check_variable={which=to_elysian_highway_progress value=67}}if={limit={check_variable={which=to_elysian_highway_progress value=70}}if={limit={check_variable={which=to_elysian_highway_progress value=72}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_72}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_72 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_70}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_70 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=68}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_68}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_68 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_67}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_67 duration=-1} }}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=63}}if={limit={check_variable={which=to_elysian_highway_progress value=65}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_65}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_65 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_63}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_63 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=62}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_62}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_62 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_60}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_60 duration=-1} }}}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=54}}if={limit={check_variable={which=to_elysian_highway_progress value=57}}if={limit={check_variable={which=to_elysian_highway_progress value=59}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_59}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_59 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_57}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_57 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=55}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_55}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_55 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_54}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_54 duration=-1} }}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=50}}if={limit={check_variable={which=to_elysian_highway_progress value=52}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_52}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_52 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_50}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_50 duration=-1} }}}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_49}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_49 duration=-1} }}}}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=24}}if={limit={check_variable={which=to_elysian_highway_progress value=36}}if={limit={check_variable={which=to_elysian_highway_progress value=42}}if={limit={check_variable={which=to_elysian_highway_progress value=45}}if={limit={check_variable={which=to_elysian_highway_progress value=47}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_47}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_47 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_45}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_45 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=44}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_44}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_44 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_42}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_42 duration=-1} }}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=39}}if={limit={check_variable={which=to_elysian_highway_progress value=40}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_40}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_40 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_39}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_39 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=37}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_37}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_37 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_36}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_36 duration=-1} }}}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=29}}if={limit={check_variable={which=to_elysian_highway_progress value=32}}if={limit={check_variable={which=to_elysian_highway_progress value=34}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_34}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_34 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_32}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_32 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=31}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_31}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_31 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_29}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_29 duration=-1} }}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=26}}if={limit={check_variable={which=to_elysian_highway_progress value=27}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_27}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_27 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_26}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_26 duration=-1} }}}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_24}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_24 duration=-1} }}}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=11}}if={limit={check_variable={which=to_elysian_highway_progress value=18}}if={limit={check_variable={which=to_elysian_highway_progress value=21}}if={limit={check_variable={which=to_elysian_highway_progress value=22}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_22}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_22 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_21}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_21 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=19}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_19}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_19 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_18}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_18 duration=-1} }}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=14}}if={limit={check_variable={which=to_elysian_highway_progress value=16}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_16}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_16 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_14}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_14 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=13}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_13}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_13 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_11}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_11 duration=-1} }}}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=4}}if={limit={check_variable={which=to_elysian_highway_progress value=8}}if={limit={check_variable={which=to_elysian_highway_progress value=9}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_9}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_9 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_8}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_8 duration=-1} }}}else={if={limit={check_variable={which=to_elysian_highway_progress value=6}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_6}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_6 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_4}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_4 duration=-1} }}}}else={if={limit={check_variable={which=to_elysian_highway_progress value=1}}if={limit={check_variable={which=to_elysian_highway_progress value=3}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_3}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_3 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_1}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_1 duration=-1} }}}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_0}} to_remove_elysian_highways_modifiers=yes add_permanent_province_modifier={name=$MODIFIER_BASE_NAME$_0 duration=-1} }}}}}}
 }
 
-to_elysian_highway_east_effect = {
-    # Code generated by elysian_highways_road_check.py
+
+
+to_elysian_highway_north_apaleisian_effect = {
+    # Code generated by elysian highways/elysian_highways_road_check.py
     if = {
         limit = { 2551 = { $PROVINCE_TRIGGER$ = yes } }
         2551 = { $PROVINCE_EFFECT$ = yes }
@@ -563,8 +612,8 @@ to_elysian_highway_east_effect = {
     }
 }
 
-to_elysian_highway_south_effect = {
-    # Code generated by elysian_highways_road_check.py
+to_elysian_highway_south_apaleisian_effect = {
+    # Code generated by elysian highways/elysian_highways_road_check.py
     if = {
         limit = { 2531 = { $PROVINCE_TRIGGER$ = yes } }
         2531 = { $PROVINCE_EFFECT$ = yes }
@@ -595,8 +644,8 @@ to_elysian_highway_south_effect = {
     }
 }
 
-to_elysian_highway_coastal_effect = {
-    # Code generated by elysian_highways_road_check.py
+to_elysian_highway_south_effect = {
+    # Code generated by elysian highways/elysian_highways_road_check.py
     if = {
         limit = { 2528 = { $PROVINCE_TRIGGER$ = yes } }
         2528 = { $PROVINCE_EFFECT$ = yes }
@@ -617,6 +666,10 @@ to_elysian_highway_coastal_effect = {
         limit = { 893 = { $PROVINCE_TRIGGER$ = yes } }
         893 = { $PROVINCE_EFFECT$ = yes }
     }
+}
+
+to_elysian_highway_coastal_effect = {
+    # Code generated by elysian highways/elysian_highways_road_check.py
     if = {
         limit = { 2530 = { $PROVINCE_TRIGGER$ = yes } }
         2530 = { $PROVINCE_EFFECT$ = yes }
@@ -681,18 +734,10 @@ to_elysian_highway_coastal_effect = {
         limit = { 2550 = { $PROVINCE_TRIGGER$ = yes } }
         2550 = { $PROVINCE_EFFECT$ = yes }
     }
-    if = {
-        limit = { 953 = { $PROVINCE_TRIGGER$ = yes } }
-        953 = { $PROVINCE_EFFECT$ = yes }
-    }
 }
 
 to_elysian_highway_vinlandic_effect = {
-    # Code generated by elysian_highways_road_check.py
-    if = {
-        limit = { 953 = { $PROVINCE_TRIGGER$ = yes } }
-        953 = { $PROVINCE_EFFECT$ = yes }
-    }
+    # Code generated by elysian highways/elysian_highways_road_check.py
     if = {
         limit = { 2554 = { $PROVINCE_TRIGGER$ = yes } }
         2554 = { $PROVINCE_EFFECT$ = yes }
@@ -736,11 +781,7 @@ to_elysian_highway_vinlandic_effect = {
 }
 
 to_elysian_highway_north_effect = {
-    # Code generated by elysian_highways_road_check.py
-    if = {
-        limit = { 917 = { $PROVINCE_TRIGGER$ = yes } }
-        917 = { $PROVINCE_EFFECT$ = yes }
-    }
+    # Code generated by elysian highways/elysian_highways_road_check.py
     if = {
         limit = { 915 = { $PROVINCE_TRIGGER$ = yes } }
         915 = { $PROVINCE_EFFECT$ = yes }
@@ -776,7 +817,7 @@ to_elysian_highway_north_effect = {
 }
 
 to_elysian_highway_west_effect = {
-    # Code generated by elysian_highways_road_check.py
+    # Code generated by elysian highways/elysian_highways_road_check.py
     if = {
         limit = { 895 = { $PROVINCE_TRIGGER$ = yes } }
         895 = { $PROVINCE_EFFECT$ = yes }
@@ -872,11 +913,7 @@ to_elysian_highway_west_effect = {
 }
 
 to_elysian_highway_atlas_effect = {
-    # Code generated by elysian_highways_road_check.py
-    if = {
-        limit = { 917 = { $PROVINCE_TRIGGER$ = yes } }
-        917 = { $PROVINCE_EFFECT$ = yes }
-    }
+    # Code generated by elysian highways/elysian_highways_road_check.py
     if = {
         limit = { 4906 = { $PROVINCE_TRIGGER$ = yes } }
         4906 = { $PROVINCE_EFFECT$ = yes }
