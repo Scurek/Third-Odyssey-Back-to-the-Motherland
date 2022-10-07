@@ -42,7 +42,7 @@ roads = [
         "tier": 1,
         "cost": 500,
         "requires_build": [
-            917
+            4887, 918
         ],
         "provinces": [
             {"id": 2528},

@@ -146,7 +146,21 @@ template_decisions = Template('''{%- for road in roads %}
 		}
 
 		provinces_to_highlight = {
+		    {%- if "requires_build" in road %}
+		    OR = {
+		        to_elysian_highway_{{ road["name"] }}_province_trigger = { TRIGGER = province_id }
+		        AND = {
+		            OR = {
+		                {%- for province in road["requires_build"] %}
+		                province_id = {{ province }}
+		                {%- endfor %}
+		            }
+		            NOT = { to_has_elysian_highway_modifier = yes }
+		        }
+		    }
+			{%- else %}
 			to_elysian_highway_{{ road["name"] }}_province_trigger = { TRIGGER = province_id }
+			{%- endif %}
 		}
 
 		allow = {
