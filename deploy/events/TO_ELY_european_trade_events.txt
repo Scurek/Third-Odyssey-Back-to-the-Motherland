@@ -1455,7 +1455,54 @@ country_event = {
 			}
 		}
 		add_trust = { who = event_target:nhs_portugal_tar value = 100 }
+		custom_tooltip = to_breaking_por_deal_costs_stability_tt
 		custom_tooltip = nhs_new_line_tt
+		set_global_flag = to_portugal_hates_colonizers
+		if = {
+			limit = {
+				any_country = {
+					alliance_with = event_target:nhs_portugal_tar
+					num_of_colonists = 1
+					NOT = { has_country_modifier = nhs2_ely_por_trade }
+					is_subject = no
+				}
+			}
+			custom_tooltip = to_por_starts_hating_colonizers_break_alliances_tt
+			every_country = {
+				limit = {
+					alliance_with = event_target:nhs_portugal_tar
+					num_of_colonists = 1
+					NOT = { has_country_modifier = nhs2_ely_por_trade }
+					is_subject = no
+				}
+				custom_tooltip = to_break_alliance_with_por_tt
+				hidden_effect = {
+					break_alliance = event_target:nhs_portugal_tar
+				}
+			}
+			custom_tooltip = to_por_starts_hating_colonizers_lower_opinion_tt
+		}
+		else = {
+			custom_tooltip = to_por_starts_hating_colonizers_tt
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					num_of_colonists = 1
+					NOT = { has_country_modifier = nhs2_ely_por_trade }
+					is_subject = no
+				}
+				add_opinion = {
+					who = event_target:nhs_portugal_tar
+					modifier = to_por_hates_colonizers
+				}
+				reverse_add_opinion = {
+					who = event_target:nhs_portugal_tar
+					modifier = to_por_hates_colonizers
+				}
+			}
+		}
+		custom_tooltip = nhs_dotted_line_tt
 		custom_tooltip = nhs_institution_spread_enclave_increased_tt
 		tooltip = {
 			random_owned_province = {
@@ -1538,7 +1585,7 @@ country_event = {
 			duration = -1
 		}
 		nhs_break_por_deal = {}
-		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_dotted_line_tt
 		tooltip = {
 			random_owned_province = {
 				limit = {
@@ -1721,6 +1768,148 @@ country_event = {
 		# set_global_flag = nhs_no_more_deals
 		nhs_increase_skoros_silk_price = yes
 		nhs_break_por_deal = { REMOVE_ENCLAVES = yes }
+	}
+}
+
+# This is kind of inneficient, but I fail to see how a responsive system could be made in a different way until pdx provides an appropriate set of on actions. Also pdx has like 13 similar events so might as well make one...
+country_event = {
+	id = nhs2_european_trade_events.20
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = BATTLE_eventPicture
+
+	hidden = yes
+
+	trigger = {
+		has_global_flag = to_portugal_hates_colonizers
+		NOT = { has_country_modifier = nhs2_ely_por_trade }
+		is_subject = no
+		OR = {
+			AND = {
+				num_of_colonists = 1
+				any_known_country = {
+					has_country_flag = nhs_portugese_secret
+					has_country_modifier = nhs2_por_ely_trade
+					OR = {
+						NOT = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = to_por_hates_colonizers
+							}
+						}
+						NOT = {
+							reverse_has_opinion_modifier = {
+								who = ROOT
+								modifier = to_por_hates_colonizers
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				NOT = { num_of_colonists = 1 }
+				any_known_country = {
+					has_country_flag = nhs_portugese_secret
+					has_country_modifier = nhs2_por_ely_trade
+					OR = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = to_por_hates_colonizers
+						}
+						reverse_has_opinion_modifier = {
+							who = ROOT
+							modifier = to_por_hates_colonizers
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				num_of_colonists = 1
+			}
+			random_known_country = {
+				limit = {
+					has_country_flag = nhs_portugese_secret
+					has_country_modifier = nhs2_por_ely_trade
+					OR = {
+						NOT = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = to_por_hates_colonizers
+							}
+						}
+						NOT = {
+							reverse_has_opinion_modifier = {
+								who = ROOT
+								modifier = to_por_hates_colonizers
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = to_por_hates_colonizers
+							}
+						}
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = to_por_hates_colonizers
+					}
+				}
+				if = {
+					limit = {
+						NOT = {
+							reverse_has_opinion_modifier = {
+								who = ROOT
+								modifier = to_por_hates_colonizers
+							}
+						}
+					}
+					reverse_add_opinion = {
+						who = ROOT
+						modifier = to_por_hates_colonizers
+					}
+				}
+			}
+		}
+		else = {
+			random_known_country = {
+				limit = {
+					has_country_flag = nhs_portugese_secret
+					has_country_modifier = nhs2_por_ely_trade
+					OR = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = to_por_hates_colonizers
+						}
+						reverse_has_opinion_modifier = {
+							who = ROOT
+							modifier = to_por_hates_colonizers
+						}
+					}
+				}
+				remove_opinion = {
+					who = ROOT
+					modifier = to_por_hates_colonizers
+				}
+				reverse_remove_opinion = {
+					who = ROOT
+					modifier = to_por_hates_colonizers
+				}
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_hidden.a
 	}
 }
 
@@ -2054,6 +2243,31 @@ country_event = {
 		# 		remove_province_modifier = nhs2_large_por_enclave
 		# 	}
 		# }
+	}
+}
+
+# Fall of Elysia
+country_event = {
+	id = nhs2_european_trade_events.21
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = BAD_WITH_MONARCH_eventPicture
+
+	hidden = yes
+	
+	trigger = {
+		has_country_modifier = nhs2_por_ely_trade
+		NOT = { nhs_check_all_elysian_tags = { CONDITION = exists } }
+		NOT = {
+			any_country = {
+				has_country_modifier = nhs2_ely_por_trade
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_european_trade_events.13.a"
+		nhs_break_por_deal = {}
 	}
 }
 
