@@ -2489,7 +2489,7 @@ country_event = {
 	id = nhs2_mainlandevents.27
 	title = nhs2_mainlandevents.27.t
 	desc = nhs2_mainlandevents.27.d
-	picture = palailogos_eventPicture
+	picture = UNIVERSITY_eventPicture
 	
 	is_triggered_only = yes
 	
@@ -2572,5 +2572,355 @@ country_event = {
 		}
 		dismantle_hre = yes
 		add_adm_power = 250
+	}
+}
+
+# Conquest of Rome (Christian)
+country_event = {
+	id = nhs2_mainlandevents.36
+	title = nhs2_mainlandevents.36.t
+	desc = nhs2_mainlandevents.36.d
+	picture = ST_PETERS_CHURCH_eventPicture
+	
+	fire_only_once = yes
+
+	trigger = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		religion_group = christian
+		NOT = { religion = catholic }
+		owns_or_subject_of = 118
+	}
+
+	immediate = {
+		# This is to block the event where Papacy appears somewhere else
+		set_global_flag = to_conquest_of_rome_event_active
+	}
+
+	after = {
+		clr_global_flag = to_conquest_of_rome_event_active
+	}
+	
+	option = {
+		name = nhs2_mainlandevents.36.a
+		ai_chance = {
+			factor = 0
+		}
+		add_splendor = 50
+		add_prestige_or_monarch_power = { amount = 10 }
+		custom_tooltip = nhs_new_line_tt
+		define_advisor = {
+			type = inquisitor
+			skill = 4
+			cost_multiplier = 0.1
+		}
+		custom_tooltip = nhs_new_line_tt
+		add_country_modifier = {
+			name = to_executed_pope
+			duration = 18250
+		}
+		custom_tooltip = to_every_papal_non_ally_catholic
+		custom_tooltip = to_executed_pope_papal_non_ally_catholic_effect_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					religion = catholic
+					NOT = { has_country_modifier = the_statue_in_restraint_of_appeals }
+					NOT = { alliance_with = ROOT }
+				}
+				add_papal_influence = -100
+				add_aggressive_expansion = {
+					who = ROOT
+					value = 20
+					apply_calc = no
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = to_executed_pope_om
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_every_non_papal_or_ally_catholic
+		custom_tooltip = to_executed_pope_non_papal_or_ally_catholic_effect_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					religion = catholic
+					OR = {
+						has_country_modifier = the_statue_in_restraint_of_appeals
+						alliance_with = ROOT
+					}
+				}
+				add_papal_influence = -100
+				add_opinion = {
+					who = ROOT
+					modifier = to_executed_pope_minor_om
+				}
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_mainlandevents.36.b
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				has_dlc = "Mandate of Heaven"
+			}
+			add_splendor = 50
+		}
+		else = {
+			add_stability_or_adm_power = yes
+		}
+		add_prestige_or_monarch_power = { amount = 20 }
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_every_papal_non_ally_catholic
+		custom_tooltip = to_conquered_rome_papal_non_ally_catholic_effect_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					religion = catholic
+					NOT = { has_country_modifier = the_statue_in_restraint_of_appeals }
+					NOT = { alliance_with = ROOT }
+				}
+				add_aggressive_expansion = {
+					who = ROOT
+					value = 20
+					apply_calc = no
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = to_conquered_rome_om
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_every_non_papal_or_ally_catholic
+		custom_tooltip = to_conquered_rome_non_papal_or_ally_catholic_effect_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					religion = catholic
+					OR = {
+						has_country_modifier = the_statue_in_restraint_of_appeals
+						alliance_with = ROOT
+					}
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = to_conquered_rome_minor_om
+				}
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_mainlandevents.36.c
+		ai_chance = {
+			factor = 0
+		}
+		custom_tooltip = to_reconquer_rome_warning_tt
+		custom_tooltip = nhs_new_line_tt
+		add_prestige = -10
+		custom_tooltip = to_every_catholic
+		custom_tooltip = to_returned_rome_effect_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					religion = catholic
+					NOT = { has_country_modifier = the_statue_in_restraint_of_appeals }
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = to_returned_rome_om
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		118 = {
+			if = {
+				limit = {
+					NOT = { is_core = PAP }
+				}
+				add_core = PAP
+			}
+			if = {
+				limit = {
+					is_core = ROOT
+				}
+				remove_core = ROOT
+			}
+			if = {
+				limit = {
+					any_subject_country = {
+						is_core = PREV
+					}
+				}
+				every_subject_country = {
+					limit = {
+						is_core = PREV
+					}
+					remove_core = PREV
+				}
+			}
+			cede_province = PAP
+		}
+		set_country_flag = to_second_conquest_of_rome_enabled
+	}
+}
+
+# Second Conquest of Rome (Christian)
+country_event = {
+	id = nhs2_mainlandevents.37
+	title = nhs2_mainlandevents.37.t
+	desc = nhs2_mainlandevents.37.d
+	picture = ST_PETERS_CHURCH_eventPicture
+	
+	fire_only_once = yes
+
+	trigger = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		has_country_flag = to_second_conquest_of_rome_enabled
+		religion_group = christian
+		NOT = { religion = catholic }
+		owns_or_subject_of = 118
+	}
+
+	immediate = {
+		clr_country_flag = to_second_conquest_of_rome_enabled
+	}
+	
+	option = {
+		name = nhs2_mainlandevents.37.a
+		ai_chance = {
+			factor = 0
+		}
+		add_splendor = 50
+		add_prestige_or_monarch_power = { amount = 10 }
+		custom_tooltip = nhs_new_line_tt
+		define_advisor = {
+			type = inquisitor
+			skill = 4
+			cost_multiplier = 0.1
+		}
+		custom_tooltip = nhs_new_line_tt
+		add_country_modifier = {
+			name = to_executed_pope
+			duration = 18250
+		}
+		custom_tooltip = to_every_papal_non_ally_catholic
+		custom_tooltip = to_executed_pope_papal_non_ally_catholic_severe_effect_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					religion = catholic
+					NOT = { has_country_modifier = the_statue_in_restraint_of_appeals }
+					NOT = { alliance_with = ROOT }
+				}
+				add_papal_influence = -100
+				add_aggressive_expansion = {
+					who = ROOT
+					value = 40
+					apply_calc = no
+				}
+				add_trust = {
+					who = ROOT
+					value = -30
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = to_executed_pope_severe_om
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_every_non_papal_or_ally_catholic
+		custom_tooltip = to_executed_pope_non_papal_or_ally_catholic_severe_effect_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					religion = catholic
+					OR = {
+						has_country_modifier = the_statue_in_restraint_of_appeals
+						alliance_with = ROOT
+					}
+				}
+				add_papal_influence = -100
+				add_trust = {
+					who = ROOT
+					value = -20
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = to_executed_pope_minor_severe_om
+				}
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_mainlandevents.37.b
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				has_dlc = "Mandate of Heaven"
+			}
+			add_splendor = 50
+		}
+		else = {
+			add_stability_or_adm_power = yes
+		}
+		add_prestige_or_monarch_power = { amount = 20 }
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_every_papal_non_ally_catholic
+		custom_tooltip = to_conquered_rome_papal_non_ally_catholic_severe_effect_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					religion = catholic
+					NOT = { has_country_modifier = the_statue_in_restraint_of_appeals }
+					NOT = { alliance_with = ROOT }
+				}
+				add_aggressive_expansion = {
+					who = ROOT
+					value = 40
+					apply_calc = no
+				}
+				add_trust = {
+					who = ROOT
+					value = -30
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = to_conquered_rome_severe_om
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_every_non_papal_or_ally_catholic
+		custom_tooltip = to_conquered_rome_non_papal_or_ally_catholic_severe_effect_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					religion = catholic
+					OR = {
+						has_country_modifier = the_statue_in_restraint_of_appeals
+						alliance_with = ROOT
+					}
+				}
+				add_trust = {
+					who = ROOT
+					value = -20
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = to_conquered_rome_minor_severe_om
+				}
+			}
+		}
 	}
 }
