@@ -9671,152 +9671,28 @@ to_nhs_despotate_monument_mod_transfer = {
 	}
 }
 
-to_destroy_cahokian_monument = {
-	destroy_great_project = {
-		type = cahokia
-	}
-	destroy_great_project = {
-		type = cahokia_roman_pagan
-	}
-	destroy_great_project = {
-		type = cahokia_roman_non_pagan
-	}
-}
-
-to_switch_cahokia_monument = {
+to_requires_control_andronika_mission_for_despotate_monument_mod_transfer = {
 	if = {
 		limit = {
-			to_has_cahokia_monument_at_TIER = { TIER = 3 }
+			owner = {
+				mission_completed = to_basileus_basileon_mission
+				NOT = { mission_completed = to_control_andronika_mission }
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+			}
 		}
-		set_province_flag = to_cahokia_tier_3
+		custom_tooltip = to_requires_control_andronika_mission_for_despotate_monument_mod_transfer_tt
 	}
 	else_if = {
 		limit = {
-			to_has_cahokia_monument_at_TIER = { TIER = 2 }
-		}
-		set_province_flag = to_cahokia_tier_2
-	}
-	else_if = {
-		limit = {
-			to_has_cahokia_monument_at_TIER = { TIER = 1 }
-		}
-		set_province_flag = to_cahokia_tier_1
-	}
-	to_destroy_cahokian_monument = yes
-	
-	if = {
-		limit = {
-			has_construction = great_project
-		}
-		if = {
-			limit = {
-				construction_progress = 0.1
-			}
-			if = {
-				limit = {
-					has_province_flag = to_cahokia_tier_2
-				}
-				owner = {
-					add_treasury = 2000
-				}
-			}
-			else_if = {
-				limit = {
-					has_province_flag = to_cahokia_tier_1
-				}
-				owner = {
-					add_treasury = 1000
-				}
-			}
-			else = {
-				owner = {
-					add_treasury = 500
+			owner = {
+				is_subject_of_type = to_elysian_governor
+				nhs_check_all_elysian_tags = { CONDITION = is_subject_of }
+				overlord = {
+					NOT = { mission_completed = to_control_andronika_mission }
 				}
 			}
 		}
-		cancel_construction = yes
-	}
-	if = {
-		limit = {
-			construction_progress = 0
-		}
-		set_province_flag = to_cahokian_rebuild_pending
-	}
-	if = {
-		limit = {
-			NOT = { construction_progress = 0 }
-		}
-		add_great_project = {
-			type = $CORRECT_MONUMENT$
-			instant = yes
-		}
-		set_province_flag = to_cahokian_rebuild_pending
-		to_restore_cahokia_monument_tier = { CORRECT_MONUMENT = $CORRECT_MONUMENT$ }
-	}
-}
-
-to_restore_cahokia_monument = {
-	owner = {
-		country_event = { id = nhs_mission_events.20 days = 1 }
-	}
-}
-
-to_restore_cahokia_monument_tier = {
-	if = {
-		limit = {
-			has_province_flag = to_cahokian_rebuild_pending
-		}
-		clr_province_flag = to_cahokian_rebuild_pending
-		if = {
-			limit = {
-				has_province_flag = to_cahokia_tier_3
-			}
-			add_great_project_tier = {
-				type = $CORRECT_MONUMENT$
-				tier = 3
-			}
-			clr_province_flag = to_cahokia_tier_3
-		}
-		if = {
-			limit = {
-				has_province_flag = to_cahokia_tier_2
-			}
-			add_great_project_tier = {
-				type = $CORRECT_MONUMENT$
-				tier = 2
-			}
-			clr_province_flag = to_cahokia_tier_2
-		}
-		if = {
-			limit = {
-				has_province_flag = to_cahokia_tier_1
-			}
-			add_great_project_tier = {
-				type = $CORRECT_MONUMENT$
-				tier = 1
-			}
-			clr_province_flag = to_cahokia_tier_1
-		}
-	}
-}
-
-to_configure_cahokia_monument = {
-	if = {
-		limit = {
-			province_id = 917
-		}
-		owner = { country_event = { id = nhs_mission_events.16 } }
-	}
-}
-
-to_configure_cahokia_monument_country = {
-	if = {
-		limit = {
-			any_owned_province = {
-				province_id = 917
-			}
-		}
-		country_event = { id = nhs_mission_events.16 }
+		custom_tooltip = to_requires_control_andronika_mission_for_despotate_monument_mod_transfer_overlord_tt
 	}
 }
 

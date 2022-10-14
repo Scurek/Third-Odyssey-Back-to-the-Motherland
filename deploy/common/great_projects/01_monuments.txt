@@ -11701,11 +11701,6 @@ cahokia = {
 	type = monument
 
 	build_trigger = {
-		hidden_trigger = {
-			NOT = {
-				FROM = { mission_completed = to_control_andronika_mission }
-			}
-		}
 		if = {
 			limit = {
 				nhs_check_all_elysian_tags = { CONDITION = exists }
@@ -11718,8 +11713,23 @@ cahokia = {
 					culture_group = illini
 					has_owner_culture = yes
 				}
-				FROM = {
-					mission_completed = to_control_andronika_mission
+				if = {
+					limit = {
+						owner = {
+							is_subject_of_type = to_elysian_governor
+							nhs_check_all_elysian_tags = { CONDITION = is_subject_of }
+						}
+					}
+					owner = {
+						overlord = {
+							mission_completed = to_control_andronika_mission
+						}
+					}
+				}
+				else = {
+					FROM = {
+						mission_completed = to_control_andronika_mission
+					}
 				}
 			}
 		}
@@ -11737,7 +11747,6 @@ cahokia = {
 	}
 
 	on_built = {
-		to_restore_cahokia_monument = yes
 	}
 
 	on_destroyed = {
@@ -11756,8 +11765,23 @@ cahokia = {
 					culture_group = illini
 					has_owner_culture = yes
 				}
-				FROM = {
-					mission_completed = to_control_andronika_mission
+				if = {
+					limit = {
+						owner = {
+							is_subject_of_type = to_elysian_governor
+							nhs_check_all_elysian_tags = { CONDITION = is_subject_of }
+						}
+					}
+					owner = {
+						overlord = {
+							mission_completed = to_control_andronika_mission
+						}
+					}
+				}
+				else = {
+					FROM = {
+						mission_completed = to_control_andronika_mission
+					}
 				}
 			}
 		}
@@ -11775,7 +11799,6 @@ cahokia = {
 	}
 
 	can_upgrade_trigger = {
-		to_does_not_have_cahokia_upgrade_pending = yes
 		if = {
 			limit = {
 				nhs_check_all_elysian_tags = { CONDITION = exists }
@@ -11788,8 +11811,23 @@ cahokia = {
 					culture_group = illini
 					has_owner_culture = yes
 				}
-				FROM = {
-					mission_completed = to_control_andronika_mission
+				if = {
+					limit = {
+						owner = {
+							is_subject_of_type = to_elysian_governor
+							nhs_check_all_elysian_tags = { CONDITION = is_subject_of }
+						}
+					}
+					owner = {
+						overlord = {
+							mission_completed = to_control_andronika_mission
+						}
+					}
+				}
+				else = {
+					FROM = {
+						mission_completed = to_control_andronika_mission
+					}
 				}
 			}
 		}
@@ -11836,7 +11874,7 @@ cahokia = {
 		province_modifiers = {
 			local_defensiveness = 0.1
 			local_monthly_devastation = -0.25
-			local_prosperity_growth = 0.1
+			local_prosperity_growth = 0.5
 			province_trade_power_modifier = 0.05
 			province_trade_power_value = 5
 		}
@@ -11846,6 +11884,8 @@ cahokia = {
 			# tribal_development_growth = 0.01			
 		}
 		on_upgraded = {
+			to_nhs_despotate_monument_mod_transfer = yes
+			to_requires_control_andronika_mission_for_despotate_monument_mod_transfer = yes
 		}
 	}
 
@@ -11859,18 +11899,48 @@ cahokia = {
 		province_modifiers = {
 			local_defensiveness = 0.25
 			local_monthly_devastation = -0.5
-			local_prosperity_growth = 0.25
+			local_prosperity_growth = 0.5
 			province_trade_power_modifier = 0.15
 			province_trade_power_value = 10
 		}
 		area_modifier = {
 		}
 		country_modifiers = {
-			# tribal_development_growth = 0.02
-			tolerance_own = 1
-			global_manpower_modifier = 0.1
+			# Without this modifier the conditional modifiers aren't shown...
+			prestige = 0
+		}
+		conditional_modifier = {
+			trigger = {
+				culture_group = illini
+				has_owner_culture = yes
+			}
+			modifier = {
+				global_manpower_modifier = 0.1
+			}
+		}
+		conditional_modifier = {
+			trigger = {
+				owner = {
+					religion = totemism
+				}
+			}
+			modifier = {
+				tolerance_own = 1
+			}
+		}
+		conditional_modifier = {
+			trigger = {
+				owner = {
+					NOT = { religion = totemism }
+				}
+			}
+			modifier = {
+				num_accepted_cultures = 1
+			}
 		}
 		on_upgraded = {
+			to_nhs_despotate_monument_mod_transfer = yes
+			to_requires_control_andronika_mission_for_despotate_monument_mod_transfer = yes
 		}
 	}
 
@@ -11885,18 +11955,72 @@ cahokia = {
 			local_defensiveness = 0.5
 			province_trade_power_modifier = 0.25
 			province_trade_power_value = 25
-			local_manpower_modifier = 0.30
 		}
 		area_modifier = {
-			local_monthly_devastation = -1
-			local_prosperity_growth = 1
+			local_manpower_modifier = 0.50
+		}
+		region_modifier = {
+			local_monthly_devastation = -0.5
+			local_prosperity_growth = 0.5
 		}
 		country_modifiers = {
-			# tribal_development_growth = 0.03
-			tolerance_own = 3
-			global_manpower_modifier = 0.2
+			# Without this modifier the conditional modifiers aren't shown...
+			prestige = 0
+		}
+		conditional_modifier = {
+			trigger = {
+				owner = {
+					OR = {
+						religion = totemism
+						AND = {
+							culture_group = illini
+							has_owner_culture = yes
+						}
+					}
+				}
+			}
+			modifier = {
+				global_manpower_modifier = 0.2
+			}
+		}
+		conditional_modifier = {
+			trigger = {
+				owner = {
+					religion = totemism
+				}
+			}
+			modifier = {
+				tolerance_own = 3
+			}
+		}
+		conditional_modifier = {
+			trigger = {
+				owner = {
+					religion_group = pagan
+					NOT = { religion = totemism }
+				}
+			}
+			modifier = {
+				num_accepted_cultures = 1
+				tolerance_heretic = 2
+				tolerance_of_heretics_capacity = 2
+			}
+		}
+		conditional_modifier = {
+			trigger = {
+				owner = {
+					NOT = { religion_group = pagan }
+				}
+			}
+			modifier = {
+				num_accepted_cultures = 1
+				tolerance_heathen = 1
+				tolerance_of_heathens_capacity = 1
+			}
 		}
 		on_upgraded = {
+			to_nhs_despotate_monument_mod_transfer = yes
+			to_requires_control_andronika_mission_for_despotate_monument_mod_transfer = yes
 		}
 	}
 }
