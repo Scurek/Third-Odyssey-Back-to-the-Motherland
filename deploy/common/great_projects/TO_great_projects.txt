@@ -3270,12 +3270,12 @@ nhs_pantheon = {
 	start = 118
 	
 	# date built in real life (so anything built during game time will be there if you start a game after that date)
-	# date = 1483.1.1
-	date = 126.1.1
-	
+	# date = 126.1.1
+	date = 9999.1.1
+
 	#time to build
 	time = {
-		months = 0
+		months = 1
 	}
 	
 	#how much to build one
@@ -3288,16 +3288,22 @@ nhs_pantheon = {
 	move_days_per_unit_distance = 10
 	
 	#tier that the project starts at when first placed in the game (be that at game start or when built by a country as the game progresses)
-	starting_tier = 1
+	starting_tier = 0
 	
 	#project type
 	type = monument
 
 	#can we build it?
 	build_trigger = {
-		to_province_is_or_accepts_religion_exarch = {
+		hidden_trigger = {
+			has_province_flag = to_pantheon_great_project_non_syncretic
+		}
+		FROM = {
 			religion = pantheon_worship
 		}
+		# to_province_is_or_accepts_religion_exarch = {
+		# 	religion = pantheon_worship
+		# }
 	}
 
 	#what to do when it's built
@@ -3311,16 +3317,28 @@ nhs_pantheon = {
 
 	#can our country use it?
 	can_use_modifiers_trigger = {
-		to_province_is_or_accepts_religion_exarch = {
+		hidden_trigger = {
+			has_province_flag = to_pantheon_great_project_non_syncretic
+		}
+		FROM = {
 			religion = pantheon_worship
 		}
+		# to_province_is_or_accepts_religion_exarch = {
+		# 	religion = pantheon_worship
+		# }
 	}
 
 	#can our country upgrade it?
 	can_upgrade_trigger = {
-		to_province_is_or_accepts_religion_exarch = {
+		hidden_trigger = {
+			has_province_flag = to_pantheon_great_project_non_syncretic
+		}
+		FROM = {
 			religion = pantheon_worship
 		}
+		# to_province_is_or_accepts_religion_exarch = {
+		# 	religion = pantheon_worship
+		# }
 	}
 
 	#can our country keep it or is it destroyed when we get hold of it?
@@ -3412,6 +3430,10 @@ nhs_pantheon = {
 			local_missionary_strength = 0.05
 		}
 
+		region_modifier = {
+			local_missionary_strength = 0.01
+		}
+
 		#what modifiers are added to the country when we have this project here on this tier
 		country_modifiers = {
 			church_loyalty_modifier = 0.1
@@ -3445,6 +3467,10 @@ nhs_pantheon = {
 			local_missionary_strength = 0.10
 		}
 
+		region_modifier = {
+			local_missionary_strength = 0.03
+		}
+
 		#what modifiers are added to the country when we have this project here on this tier
 		country_modifiers = {
 			church_loyalty_modifier = 0.1
@@ -3465,12 +3491,11 @@ nhs_pantheon_syncretic = {
 	start = 118
 	
 	# date built in real life (so anything built during game time will be there if you start a game after that date)
-	# date = 1483.1.1
-	date = 9999.1.1
+	date = 126.1.1
 	
 	#time to build
 	time = {
-		months = 0
+		months = 1
 	}
 	
 	#how much to build one
@@ -3483,21 +3508,42 @@ nhs_pantheon_syncretic = {
 	move_days_per_unit_distance = 10
 	
 	#tier that the project starts at when first placed in the game (be that at game start or when built by a country as the game progresses)
-	starting_tier = 0
+	starting_tier = 1
 	
 	#project type
 	type = monument
 
 	#can we build it?
 	build_trigger = {
-		always = no
-		OR = {
-			to_province_is_or_accepts_religion_exarch = {
+		hidden_trigger = {
+			NOT = { has_province_flag = to_pantheon_great_project_non_syncretic }
+		}
+		if = {
+			limit = {
+				has_province_flag = to_enable_pantheon_for_christians
+			}
+			FROM = {
+				OR = {
+					religion = pantheon_worship
+					religion_group = christian
+				}
+			}
+			# OR = {
+			# 	to_province_is_or_accepts_religion_exarch = {
+			# 		religion = pantheon_worship
+			# 	}
+			# 	to_province_is_or_accepts_religion_group_exarch = {
+			# 		religion_group = christian
+			# 	}
+			# }
+		}
+		else = {
+			FROM = {
 				religion = pantheon_worship
 			}
-			to_province_is_or_accepts_religion_exarch = {
-				religion = catholic
-			}
+			# to_province_is_or_accepts_religion_exarch = {
+			# 	religion = pantheon_worship
+			# }
 		}
 	}
 
@@ -3512,27 +3558,69 @@ nhs_pantheon_syncretic = {
 
 	#can our country use it?
 	can_use_modifiers_trigger = {
-		always = no
-		OR = {
-			to_province_is_or_accepts_religion_exarch = {
+		hidden_trigger = {
+			NOT = { has_province_flag = to_pantheon_great_project_non_syncretic }
+		}
+		if = {
+			limit = {
+				has_province_flag = to_enable_pantheon_for_christians
+			}
+			FROM = {
+				OR = {
+					religion = pantheon_worship
+					religion_group = christian
+				}
+			}
+			# OR = {
+			# 	to_province_is_or_accepts_religion_exarch = {
+			# 		religion = pantheon_worship
+			# 	}
+			# 	to_province_is_or_accepts_religion_group_exarch = {
+			# 		religion_group = christian
+			# 	}
+			# }
+		}
+		else = {
+			FROM = {
 				religion = pantheon_worship
 			}
-			to_province_is_or_accepts_religion_exarch = {
-				religion = catholic
-			}
+			# to_province_is_or_accepts_religion_exarch = {
+			# 	religion = pantheon_worship
+			# }
 		}
 	}
 
 	#can our country upgrade it?
 	can_upgrade_trigger = {
-		always = no
-		OR = {
-			to_province_is_or_accepts_religion_exarch = {
+		hidden_trigger = {
+			NOT = { has_province_flag = to_pantheon_great_project_non_syncretic }
+		}
+		if = {
+			limit = {
+				has_province_flag = to_enable_pantheon_for_christians
+			}
+			FROM = {
+				OR = {
+					religion = pantheon_worship
+					religion_group = christian
+				}
+			}
+			# OR = {
+			# 	to_province_is_or_accepts_religion_exarch = {
+			# 		religion = pantheon_worship
+			# 	}
+			# 	to_province_is_or_accepts_religion_group_exarch = {
+			# 		religion_group = christian
+			# 	}
+			# }
+		}
+		else = {
+			FROM = {
 				religion = pantheon_worship
 			}
-			to_province_is_or_accepts_religion_exarch = {
-				religion = catholic
-			}
+			# to_province_is_or_accepts_religion_exarch = {
+			# 	religion = pantheon_worship
+			# }
 		}
 	}
 
@@ -3625,6 +3713,10 @@ nhs_pantheon_syncretic = {
 			local_unrest = -10
 		}
 
+		region_modifier = {
+			local_unrest = -3
+		}
+
 		#what modifiers are added to the country when we have this project here on this tier
 		country_modifiers = {
 			tolerance_heathen = 2
@@ -3654,6 +3746,11 @@ nhs_pantheon_syncretic = {
 
 		#what modifiers are added to the provinces in the map area when we have this project here on this tier
 		area_modifier = {
+			local_unrest = -10
+		}
+
+		region_modifier = {
+			local_unrest = -3
 		}
 
 		#what modifiers are added to the country when we have this project here on this tier
@@ -3662,6 +3759,7 @@ nhs_pantheon_syncretic = {
 			tolerance_of_heathens_capacity = 2
 			missionaries = 1
 			diplomatic_reputation = 1
+			unrest_catholic_provinces = -1
 		}
 
 		#what effects happen when this tier is achieved

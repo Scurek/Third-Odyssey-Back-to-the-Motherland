@@ -10189,3 +10189,527 @@ to_handle_symmachoi_flags_on_culture_conversion = {
 		set_province_flag = nhs_culture_changed_to_symmachoi
 	}
 }
+
+to_trial_and_execute_the_pope_effect = {
+	add_splendor = 50
+	add_prestige_or_monarch_power = { amount = 10 }
+	custom_tooltip = nhs_new_line_tt
+	to_seize_papal_treasury_christian = yes
+	add_estate_loyalty = {
+		estate = estate_church
+		loyalty = 20
+	}
+	custom_tooltip = nhs_new_line_tt
+	define_advisor = {
+		type = inquisitor
+		skill = 4
+		cost_multiplier = 0.1
+	}
+	custom_tooltip = nhs_new_line_tt
+	if = {
+		limit = {
+			has_estate_privilege = estate_burghers_enforced_interfaith_dialogue
+		}
+		remove_estate_privilege = estate_burghers_enforced_interfaith_dialogue
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -20
+		}
+		custom_tooltip = nhs_new_line_tt
+	}
+	add_country_modifier = {
+		name = to_executed_pope
+		duration = 18250
+	}
+}
+
+to_conquer_rome_christian_effect = {
+	if = {
+		limit = {
+			has_dlc = "Mandate of Heaven"
+		}
+		add_splendor = 50
+	}
+	else = {
+		add_stability_or_adm_power = yes
+	}
+	add_prestige_or_monarch_power = { amount = 20 }
+	add_estate_loyalty = {
+		estate = estate_church
+		loyalty = 10
+	}
+}
+
+to_conquer_rome_pagan_syncretic_effect = {
+	if = {
+		limit = {
+			has_dlc = "Mandate of Heaven"
+		}
+		add_splendor = 50
+	}
+	else = {
+		add_stability_or_adm_power = yes
+	}
+	add_prestige_or_monarch_power = { amount = 20 }
+	custom_tooltip = nhs_new_line_tt
+	if = {
+		limit = {
+			NOT = { has_dlc = "Leviathan" }
+		}
+		add_country_modifier = {
+			name = to_increased_tolerance
+			duration = 36500
+		}
+	}
+}
+
+to_conquer_rome_pagan_effect = {
+	if = {
+		limit = {
+			has_dlc = "Mandate of Heaven"
+		}
+		add_splendor = 50
+	}
+	else = {
+		add_stability_or_adm_power = yes
+	}
+	add_prestige_or_monarch_power = { amount = 20 }
+	custom_tooltip = nhs_new_line_tt
+	if = {
+		limit = {
+			has_dlc = "Leviathan"
+		}
+		custom_tooltip = to_enable_pantheon_monument_tt
+		hidden_effect = {
+			118 = {
+				set_province_flag = to_pantheon_great_project_non_syncretic
+				if = {
+					limit = {
+						has_great_project = {
+							type = nhs_pantheon_syncretic
+						}
+					}
+					destroy_great_project = {
+						type = nhs_pantheon_syncretic
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				118 = {
+					construction_progress = 0
+				}
+			}
+			custom_tooltip = to_monument_visible_when_construction_finished_tt
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						118 = {
+							construction_progress = 0
+						}
+					}
+				}
+				if = {
+					limit = {
+						118 = {
+							NOT = {
+								has_great_project = {
+									type = nhs_pantheon
+								}
+							}
+						}
+					}
+					118 = {
+						add_great_project = {
+							type = nhs_pantheon
+							instant = yes
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+	}
+	else = {
+		add_country_modifier = {
+			name = to_inspired_missionaries
+			duration = 36500
+		}
+	}
+}
+
+to_burn_rome_effect = {
+	add_splendor = 50
+	to_seize_papal_treasury_pagan = yes
+	if = {
+		limit = {
+			has_estate_privilege = estate_burghers_enforced_interfaith_dialogue
+		}
+		remove_estate_privilege = estate_burghers_enforced_interfaith_dialogue
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -20
+		}
+	}
+	custom_tooltip = nhs_new_line_tt
+	if = {
+		limit = {
+			has_dlc = "Leviathan"
+		}
+		add_country_modifier = {
+			name = to_religious_fanaticism
+			duration = 18250
+		}
+	}
+	else = {
+		add_country_modifier = {
+			name = to_religious_fanaticism
+			duration = 36500
+		}
+	}
+	custom_tooltip = to_rome_scope_tt
+	custom_tooltip = to_change_religion_to_ROOT_tt
+	custom_tooltip = to_gain_80_devastation_and_remova_all_loot_tt
+	custom_tooltip = to_reduce_rome_base_tax_tt
+	custom_tooltip = to_reduce_rome_base_production_tt
+	custom_tooltip = to_reduce_rome_base_manpower_tt
+	if = {
+		limit = {
+			has_dlc = "Leviathan"
+			118 = {
+				has_great_project = {
+					type = stpeters_cathedral
+				}
+			}
+		}
+		if = {
+			limit = {
+				118 = {
+					has_great_project = {
+						type = stpeters_cathedral
+						tier = 3
+					}
+				}
+			}
+			custom_tooltip = to_sack_stpeters_cathedral_3_tt
+			hidden_effect = {
+				add_treasury = 9000
+			}
+		}
+		else_if = {
+			limit = {
+				118 = {
+					has_great_project = {
+						type = stpeters_cathedral
+						tier = 2
+					}
+				}
+			}
+			custom_tooltip = to_sack_stpeters_cathedral_2_tt
+			hidden_effect = {
+				add_treasury = 4000
+			}
+		}
+		else_if = {
+			limit = {
+				118 = {
+					has_great_project = {
+						type = stpeters_cathedral
+						tier = 1
+					}
+				}
+			}
+			custom_tooltip = to_sack_stpeters_cathedral_1_tt
+			hidden_effect = {
+				add_treasury = 1500
+			}
+		}
+		else = {
+			custom_tooltip = to_sack_stpeters_cathedral_0_tt
+			hidden_effect = {
+				add_treasury = 500
+			}
+		}
+		hidden_effect = {
+			118 = {
+				destroy_great_project = {
+					type = stpeters_cathedral
+				}
+			}
+		}
+	}
+	hidden_effect = {
+		118 = {
+			change_religion = ROOT
+			add_devastation = 80
+			remove_loot = {
+				who = ROOT
+				amount = 1000
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = to_rome_removed_base_tax
+						value = 1
+					}
+				}
+				add_base_tax = -1
+				subtract_variable = {
+					which = to_rome_removed_base_tax
+					value = 1
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = to_rome_removed_base_production
+						value = 1
+					}
+				}
+				add_base_production = -1
+				subtract_variable = {
+					which = to_rome_removed_base_production
+					value = 1
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = to_rome_removed_base_manpower
+						value = 1
+					}
+				}
+				add_base_manpower = -1
+				subtract_variable = {
+					which = to_rome_removed_base_manpower
+					value = 1
+				}
+			}
+		}
+	}
+	custom_tooltip = nhs_new_line_tt
+	if = {
+		limit = {
+			has_dlc = "Leviathan"
+		}
+		custom_tooltip = to_enable_pantheon_monument_tt
+		hidden_effect = {
+			118 = {
+				set_province_flag = to_pantheon_great_project_non_syncretic
+				if = {
+					limit = {
+						has_great_project = {
+							type = nhs_pantheon_syncretic
+						}
+					}
+					destroy_great_project = {
+						type = nhs_pantheon_syncretic
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				118 = {
+					construction_progress = 0
+				}
+			}
+			custom_tooltip = to_monument_visible_when_construction_finished_tt
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						118 = {
+							construction_progress = 0
+						}
+					}
+				}
+				if = {
+					limit = {
+						118 = {
+							NOT = {
+								has_great_project = {
+									type = nhs_pantheon
+								}
+							}
+						}
+					}
+					118 = {
+						add_great_project = {
+							type = nhs_pantheon
+							instant = yes
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+	}
+}
+
+to_seize_papal_treasury_christian = {
+	if = {
+		limit = {
+			has_dlc = "Emperor"
+		}
+		# Alt: \nFurther §Y15.0%§! will be seized by §Y[Root.GetClergyName]§!, increasing their loyalty by §G20§!
+		custom_tooltip = to_seize_papal_treasury_christian_tt
+		hidden_effect = {
+			# add_estate_loyalty = {
+			# 	estate = estate_church
+			# 	loyalty = 20
+			# }
+			while = {
+				limit = {
+					check_variable = {
+						which = to_removed_curia_treasury
+						value = 1000
+					}
+				}
+				add_treasury = 1000
+				add_curia_treasury = -1000
+				subtract_variable = {
+					which = to_removed_curia_treasury
+					value = 1000
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = to_removed_curia_treasury
+						value = 100
+					}
+				}
+				add_treasury = 100
+				add_curia_treasury = -100
+				subtract_variable = {
+					which = to_removed_curia_treasury
+					value = 100
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = to_removed_curia_treasury
+						value = 10
+					}
+				}
+				add_treasury = 10
+				add_curia_treasury = -10
+				subtract_variable = {
+					which = to_removed_curia_treasury
+					value = 10
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = to_removed_curia_treasury
+						value = 1
+					}
+				}
+				add_treasury = 1
+				add_curia_treasury = -1
+				subtract_variable = {
+					which = to_removed_curia_treasury
+					value = 1
+				}
+			}
+			set_variable = {
+				which = to_removed_curia_treasury
+				value = 0
+			}
+		}
+	}
+	else = {
+		custom_tooltip = to_plunder_curia_treasury_christian_tt
+		# add_estate_loyalty = {
+		# 	estate = estate_church
+		# 	loyalty = 20
+		# }
+		hidden_effect = {
+			add_treasury = 2000
+		}
+	}
+}
+
+to_seize_papal_treasury_pagan = {
+	if = {
+		limit = {
+			has_dlc = "Emperor"
+		}
+		custom_tooltip = to_seize_papal_treasury_pagan_tt
+		hidden_effect = {
+			while = {
+				limit = {
+					check_variable = {
+						which = to_removed_curia_treasury
+						value = 1000
+					}
+				}
+				add_treasury = 1000
+				add_curia_treasury = -1000
+				subtract_variable = {
+					which = to_removed_curia_treasury
+					value = 1000
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = to_removed_curia_treasury
+						value = 100
+					}
+				}
+				add_treasury = 100
+				add_curia_treasury = -100
+				subtract_variable = {
+					which = to_removed_curia_treasury
+					value = 100
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = to_removed_curia_treasury
+						value = 10
+					}
+				}
+				add_treasury = 10
+				add_curia_treasury = -10
+				subtract_variable = {
+					which = to_removed_curia_treasury
+					value = 10
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = to_removed_curia_treasury
+						value = 1
+					}
+				}
+				add_treasury = 1
+				add_curia_treasury = -1
+				subtract_variable = {
+					which = to_removed_curia_treasury
+					value = 1
+				}
+			}
+			set_variable = {
+				which = to_removed_curia_treasury
+				value = 0
+			}
+		}
+	}
+	else = {
+		custom_tooltip = to_plunder_curia_treasury_pagan_tt
+		hidden_effect = {
+			add_treasury = 5000
+		}
+	}
+}
