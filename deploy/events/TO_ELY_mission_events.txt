@@ -1655,6 +1655,104 @@ country_event = {
 	}
 }
 
+# Sets trade power bonus from Control Andronika if Cahokia owner is your ally
+country_event = {
+	id = nhs_mission_events.16
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = Tenochtitlan_Expanded_eventPicture
+	
+	hidden = yes
+
+	trigger = {
+		mission_completed = to_control_andronika_mission
+		917 = {
+			NOT = {
+				has_trade_modifier = {
+					who = ROOT
+					key = to_cahokian_alliance_trm
+				}
+			}
+			owner = {
+				NOT = { tag = ROOT }
+				OR = {
+					alliance_with = ROOT
+					AND = {
+						is_subject = yes
+						overlord = {
+							alliance_with = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		917 = {
+			add_trade_modifier = {
+				who = ROOT
+				duration = -1
+				power = 50
+				key = to_cahokian_alliance_trm
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_hidden.a
+	}
+}
+
+# Removes trade power bonus from Control Andronika if Cahokia owner is not your ally
+country_event = {
+	id = nhs_mission_events.18
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = Tenochtitlan_Expanded_eventPicture
+	
+	hidden = yes
+
+	trigger = {
+		mission_completed = to_control_andronika_mission
+		917 = {
+			has_trade_modifier = {
+				who = ROOT
+				key = to_cahokian_alliance_trm
+			}
+			OR = {
+				owned_by = ROOT
+				owner = {
+					NOT = {
+						OR = {
+							alliance_with = ROOT
+							AND = {
+								is_subject = yes
+								overlord = {
+									alliance_with = ROOT
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		917 = {
+			remove_trade_modifier = {
+				who = ROOT
+				key = to_cahokian_alliance_trm
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_hidden.a
+	}
+}
+
 # Moving your capital back to Constantinople
 country_event = {
 	id = nhs_mission_events.22
