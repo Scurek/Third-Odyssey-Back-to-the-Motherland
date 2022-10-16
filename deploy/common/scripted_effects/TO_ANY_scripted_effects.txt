@@ -1175,3 +1175,83 @@ to_add_government_reform_short_tooltip = {
 		add_government_reform = $REFORM$
 	}
 }
+
+to_non_abrahamic_conversion_penalty_check_province = {
+	if = {
+		limit = {
+			to_has_abrahamic_religion = yes
+			owner = {
+				NOT = { to_has_abrahamic_religion = yes }
+				NOT = { mission_completed = to_the_old_gods_mission }
+				NOT = {
+					AND = {
+						is_subject = yes
+						overlord = {
+							OR = {
+								mission_completed = to_the_old_gods_mission
+								AND = {
+									is_subject = yes
+									overlord = {
+										mission_completed = to_the_old_gods_mission
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		add_province_modifier = {
+			name = to_abrahamic_conversion_penalty
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			has_province_modifier = to_abrahamic_conversion_penalty
+		}
+		remove_province_modifier = to_abrahamic_conversion_penalty
+	}
+}
+
+to_non_abrahamic_conversion_penalty_check_country = {
+	if = {
+		limit = {
+			OR = {
+				to_has_abrahamic_religion = yes
+				mission_completed = to_the_old_gods_mission
+				AND = {
+					is_subject = yes
+					overlord = {
+						OR = {
+							mission_completed = to_the_old_gods_mission
+							AND = {
+								is_subject = yes
+								overlord = {
+									mission_completed = to_the_old_gods_mission
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_province_modifier = to_abrahamic_conversion_penalty
+			}
+			remove_province_modifier = to_abrahamic_conversion_penalty
+		}
+	}
+	else = {
+		every_owned_province = {
+			limit = {
+				to_has_abrahamic_religion = yes
+			}
+			add_province_modifier = {
+				name = to_abrahamic_conversion_penalty
+				duration = -1
+			}
+		}
+	}
+}
