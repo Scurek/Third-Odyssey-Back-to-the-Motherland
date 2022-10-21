@@ -88,7 +88,11 @@ decisions_template = Template('''{% for exarch in exarchs %}
 			custom_tooltip = nhs_exarchate_starting_tt
 			custom_tooltip = nhs_exarchate_setting_desc_tt
 			custom_tooltip = to_exarchate_modifiers_tt
+			{%- if 'merchant_tooltip_overwrite' in exarch %}
+			{{ exarch["merchant_tooltip_overwrite"]}}
+			{%- else %}
 			custom_tooltip = nhs_exarch_bonus_merchant_tt
+			{%- endif %}
 			custom_tooltip = nhs_new_line_tt
 			
 			to_initialize_exarch = {

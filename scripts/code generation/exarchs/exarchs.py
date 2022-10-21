@@ -70,6 +70,7 @@ exarchs = [
         "primary_culture": 'catalan',
         "check_supply_lines": True,
         "gibraltar_check": True,
+        "merchant_tooltip_overwrite": "custom_tooltip = nhs_exarch_bonus_merchant_eeh_tt",
         "desc": "Spania has long been the home of warring tribes and petty kingdoms, from before we came to this land thousands of years ago to long after we left at the fall of the Western Empire. Now that it has been retaken, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite."
     },
     {
@@ -114,6 +115,16 @@ exarchs = [
         "culture_group": 'latin',
         "primary_culture": 'umbrian',
         "check_supply_lines": True,
+        "merchant_tooltip_overwrite": "if = {\n"
+                                      "				limit = { "
+                                      "VGD = { is_subject_of = ROOT is_subject_of_type = "
+                                      "elysian_subject_varangian }"
+                                      " }\n"
+                                      "				custom_tooltip = nhs_exarch_bonus_merchant_eer_tt\n"
+                                      "			}\n"
+                                      "			else = {\n"
+                                      "				custom_tooltip = nhs_exarch_bonus_merchant_tt\n"
+                                      "			}",
         "desc": "Italia was once the political, cultural and economic centre of the Ancient Roman Empire, however, "
                 "over the centuries it has developed its own distinct culture far from that of our own. Now that it has been finally retaken, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite."
     },
