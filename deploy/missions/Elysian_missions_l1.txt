@@ -3292,6 +3292,13 @@ nhs_final_red_mission_roman = {
 			hidden_effect = { 
 				swap_free_idea_group = yes
 				complete_mission = to_elysia_ascendant_mission
+				if = {
+					limit = {
+						mission_completed = to_the_promised_land_mission
+						mission_completed = to_koine_glossa_mission
+					}
+					swap_non_generic_missions = yes
+				}
 			}
 		}
 	}
@@ -3330,6 +3337,13 @@ nhs_final_red_mission_elysian = {
 			hidden_effect = { 
 				swap_free_idea_group = yes 
 				complete_mission = to_rome_restored_mission
+				if = {
+					limit = {
+						mission_completed = to_the_promised_land_mission
+						mission_completed = to_koine_glossa_mission
+					}
+					swap_non_generic_missions = yes
+				}
 			}
 		}
 	}
@@ -3868,6 +3882,16 @@ nhs_left_end = {
 						}
 						add_permanent_claim = ROOT
 					}
+				}
+				if = {
+					limit = {
+						mission_completed = to_koine_glossa_mission
+						OR = {
+							mission_completed = to_rome_restored_mission
+							mission_completed = to_elysia_ascendant_mission
+						}
+					}
+					swap_non_generic_missions = yes
 				}
 			}
 		}
@@ -4936,6 +4960,16 @@ nhs_right_end = {
 						key = NHS_KOINE_GLOSSA
 					}
 				}
+				if = {
+					limit = {
+						mission_completed = to_the_promised_land_mission
+						OR = {
+							mission_completed = to_rome_restored_mission
+							mission_completed = to_elysia_ascendant_mission
+						}
+					}
+					swap_non_generic_missions = yes
+				}
 			}
 		}
 	}
@@ -5413,6 +5447,196 @@ nhs_right_mid_end = {
 			custom_tooltip = to_can_annex_protectorates_in_east_asia_tt
 			custom_tooltip = nhs_dotted_line_tt
 			to_advance_world_empire_reward_tier = yes
+		}
+	}
+}
+
+nhs_super_secret_ending_rome = {
+	slot = 3
+	generic = no
+	ai = yes
+	has_country_shield = yes
+	potential = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		mission_completed = to_the_promised_land_mission
+		mission_completed = to_koine_glossa_mission
+		has_mission = to_rome_restored_mission
+		mission_completed = to_rome_restored_mission
+	}
+	
+	to_eternal_empire_mission = {
+		icon = mission_monarch_in_throne_room
+		position = 13
+		required_missions = {
+			to_the_promised_land_mission
+			to_koine_glossa_mission
+			to_rome_restored_mission
+		}
+		trigger = {
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
+				}
+				is_great_power = yes
+			}
+			monthly_income = 1000
+			navy_size = 500
+			army_size = 1000
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
+				}
+				NOT = { 
+					any_other_great_power = {
+						OR = {
+							monthly_income = ROOT
+							navy_size = ROOT
+							army_size = ROOT
+						}
+					}
+				}
+			}
+			else = {
+				NOT = { 
+					any_country = { 
+						OR = {
+							monthly_income = ROOT
+							navy_size = ROOT
+							army_size = ROOT
+						} 
+					}
+				}
+			}
+		}
+		effect = {
+			if = { 
+				limit = { has_dlc = "Mandate of Heaven" }
+				add_splendor = 3000
+				if = {
+					limit = { has_had_golden_age = yes }
+					custom_tooltip = nhs_new_line_tt
+					reset_golden_age = yes
+					custom_tooltip = to_next_golden_age_lasts_forever_tt
+				}
+				else_if = {
+					limit = { in_golden_age = yes }
+					custom_tooltip = to_extends_golden_age_until_the_end_tt
+					hidden_effect = {
+						extend_golden_age = 182500
+						set_country_flag = to_extended_golden_era
+					}
+				}
+				else = {
+					custom_tooltip = to_next_golden_age_lasts_forever_tt
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = to_golden_age
+					duration = -1 
+				}
+			}
+		}
+	}
+}
+
+nhs_super_secret_ending_elysia = {
+	slot = 3
+	generic = no
+	ai = yes
+	has_country_shield = yes
+	potential = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		mission_completed = to_the_promised_land_mission
+		mission_completed = to_koine_glossa_mission
+		has_mission = to_elysia_ascendant_mission
+		mission_completed = to_elysia_ascendant_mission
+	}
+	
+	to_eternal_empire_mission_ely = {
+		icon = mission_monarch_in_throne_room
+		position = 13
+		required_missions = {
+			to_the_promised_land_mission
+			to_koine_glossa_mission
+			to_elysia_ascendant_mission
+		}
+		trigger = {
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
+				}
+				is_great_power = yes
+			}
+			monthly_income = 1000
+			navy_size = 500
+			army_size = 1000
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
+				}
+				NOT = { 
+					any_other_great_power = {
+						OR = {
+							monthly_income = ROOT
+							navy_size = ROOT
+							army_size = ROOT
+						}
+					}
+				}
+			}
+			else = {
+				NOT = { 
+					any_country = { 
+						OR = {
+							monthly_income = ROOT
+							navy_size = ROOT
+							army_size = ROOT
+						} 
+					}
+				}
+			}
+		}
+		effect = {
+			if = { 
+				limit = { has_dlc = "Mandate of Heaven" }
+				add_splendor = 3000
+				if = {
+					limit = { has_had_golden_age = yes }
+					custom_tooltip = nhs_new_line_tt
+					reset_golden_age = yes
+					custom_tooltip = to_next_golden_age_lasts_forever_tt
+				}
+				else_if = {
+					limit = { in_golden_age = yes }
+					custom_tooltip = to_extends_golden_age_until_the_end_tt
+					hidden_effect = {
+						extend_golden_age = 182500
+						set_country_flag = to_extended_golden_era
+					}
+				}
+				else = {
+					custom_tooltip = to_next_golden_age_lasts_forever_tt
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = to_golden_age
+					duration = -1 
+				}
+			}
 		}
 	}
 }
