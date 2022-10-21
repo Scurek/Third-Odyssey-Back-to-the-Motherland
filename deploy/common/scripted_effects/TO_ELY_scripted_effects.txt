@@ -10616,3 +10616,238 @@ to_direct_control_from_capital_effect = {
 		}
 	}
 }
+
+to_increase_defender_of_faith_progress = {
+	if = {
+		limit = {
+			$TARGET$ = {
+				religion_group = christian
+				OR = {
+					nhs_check_all_elysian_tags = { CONDITION = tag }
+					AND = {
+						has_country_flag = to_gives_defender_of_faith_dof_credit
+						nhs_check_existing_elysian_tags_with_full_condition = {
+							CONDITION = "religion = PREV"
+						}
+					}
+				}
+			}
+		}
+		$EFFECT_SCOPE$ = {
+			limit = {
+				has_country_flag = to_gives_defender_of_faith_credit
+				NOT = { war_with = $TARGET$ }
+			}
+			if = {
+				limit = {
+					religion_group = christian
+				}
+				if = {
+					limit = {
+						OR = {
+							is_great_power = yes
+							AND = {
+								NOT = { has_dlc = "Rights of Man" }
+								NOT = { has_dlc = "Emperor" }
+								total_development = 500
+							}
+							has_country_flag = to_gives_defender_of_faith_great_power_credit
+						}
+					}
+					clr_country_flag = to_gives_defender_of_faith_great_power_credit
+					$TARGET$ = {
+						change_variable = {
+							which = to_defender_of_faith_mission_counter_great_power
+							value = 1
+						}
+						change_variable = {
+							which = to_defender_of_faith_progress
+							value = 5
+						}
+					}
+				}
+				if = {
+					limit = {
+						tag = PAP
+						$TARGET$ = {
+							NOT = { 
+								check_variable = {
+									which = to_defender_of_faith_mission_counter_pope
+									value = 1
+								}
+							}
+						}
+					}
+					$TARGET$ = {
+						change_variable = {
+							which = to_defender_of_faith_mission_counter_pope
+							value = 1
+						}
+						change_variable = {
+							which = to_defender_of_faith_progress
+							value = 5
+						}
+					}
+				}
+				clr_country_flag = to_gives_defender_of_faith_credit
+				$TARGET$ = {
+					change_variable = {
+						which = to_defender_of_faith_mission_counter_won_wars
+						value = 1
+					}
+					change_variable = {
+						which = to_defender_of_faith_progress
+						value = 5
+					}
+				}
+			}
+			else = {
+				clr_country_flag = to_gives_defender_of_faith_credit
+				clr_country_flag = to_gives_defender_of_faith_great_power_credit
+			}
+		}
+	}
+}
+
+to_increase_defender_of_faith_mission_progress_dof = {
+	if = {
+		limit = {
+			has_country_flag = to_gives_defender_of_faith_dof_credit
+			nhs_check_existing_elysian_tags_with_full_condition = {
+				CONDITION = "religion = PREV"
+			}
+			NOT = {
+				nhs_check_existing_elysian_tags_with_full_condition = {
+					CONDITION = "
+						is_in_war = {
+							defenders = THIS
+							defender_leader = ROOT
+						}
+					"
+				}
+			}
+		}
+		clr_country_flag = to_gives_defender_of_faith_dof_credit
+		nhs_effect_for_existing_elysian_tag = {
+			EFFECT = "
+				change_variable = {
+					which = to_defender_of_faith_mission_counter_dof
+					value = 1
+				}
+				change_variable = {
+					which = to_defender_of_faith_progress
+					value = 20
+				}
+			"
+		}
+	}
+}
+
+to_clear_invalid_defender_of_faith_mission_flags = {
+	if = {
+		limit = {
+			nhs_check_all_elysian_tags = { CONDITION = tag }
+			religion_group = christian
+		}
+		if = {
+			limit = {
+				any_country = {
+					has_country_flag = to_gives_defender_of_faith_credit
+					NOT = { war_with = ROOT }
+				}
+			}
+			every_country = {
+				limit = {
+					has_country_flag = to_gives_defender_of_faith_credit
+					NOT = { war_with = ROOT }
+				}
+				clr_country_flag = to_gives_defender_of_faith_credit
+				clr_country_flag = to_gives_defender_of_faith_great_power_credit
+			}
+		}
+		if = {
+			limit = {
+				is_defender_of_faith = yes
+				any_country = {
+					religion = ROOT
+					has_country_flag = to_gives_defender_of_faith_dof_credit
+					NOT = {
+						is_in_war = {
+							defenders = ROOT
+							defender_leader = THIS
+						}
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					religion = ROOT
+					has_country_flag = to_gives_defender_of_faith_dof_credit
+					NOT = {
+						is_in_war = {
+							defenders = ROOT
+							defender_leader = THIS
+						}
+					}
+				}
+				clr_country_flag = to_gives_defender_of_faith_dof_credit
+			}
+		}
+	}
+}
+
+to_clear_all_defender_of_faith_mission_flags = {
+	if = {
+		limit = {
+			nhs_check_all_elysian_tags = { CONDITION = tag }
+		}
+		set_variable = {
+			which = to_defender_of_faith_progress
+			value = 0
+		}
+		every_country = {
+			clr_country_flag = to_gives_defender_of_faith_credit
+			clr_country_flag = to_gives_defender_of_faith_great_power_credit
+			clr_country_flag = to_gives_defender_of_faith_dof_credit
+		}
+	}
+}
+
+to_defender_of_faith_mission_check_force_conversion = {
+	if = {
+		limit = {
+			FROM = {
+				religion_group = christian
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+			}
+		}
+		FROM = {
+			change_variable = {
+				which = to_defender_of_faith_mission_counter_force_conversion
+				value = 1
+			}
+			change_variable = {
+				which = to_defender_of_faith_progress
+				value = 5
+			}
+		}
+	}
+}
+
+to_add_champion_of_faith_modifier = {
+	if = {
+		limit = {
+			mission_completed = to_defender_of_the_faith_mission
+			religion_group = christian
+		}
+		add_country_modifier = {
+			name = to_improved_elysian_orthodox_defender_of_faith
+			duration = -1
+			desc = to_as_long_as_we_remain_dof
+		}
+	}
+}
+
+to_remove_champion_of_faith_modifier = {
+	remove_country_modifier = to_improved_elysian_orthodox_defender_of_faith
+}

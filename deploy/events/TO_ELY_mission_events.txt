@@ -1386,6 +1386,87 @@ country_event = {
 	}
 }
 
+# Sets defender of faith mission flags
+country_event = {
+	id = nhs_mission_events.14
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = Tenochtitlan_Expanded_eventPicture
+
+	hidden = yes
+	
+	trigger = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		religion_group = christian
+		is_at_war = yes
+		any_war_enemy_country = {
+			religion_group = christian
+			NOT = { religion = elysian_orthodoxy }
+			total_development = 50
+			NOT = { has_country_flag = to_gives_defender_of_faith_credit }
+			capital_scope = {
+				continent = europe
+			}
+		}
+	}
+	
+	immediate = {
+		every_war_enemy_country = {
+			limit = {
+				religion_group = christian
+				NOT = { religion = ROOT }
+				total_development = 50
+				NOT = { has_country_flag = to_gives_defender_of_faith_credit }
+				capital_scope = {
+					continent = europe
+				}
+			}
+			set_country_flag = to_gives_defender_of_faith_credit
+			if = {
+				limit = {
+					OR = {
+						is_great_power = yes
+						AND = {
+							NOT = { has_dlc = "Rights of Man" }
+							NOT = { has_dlc = "Emperor" }
+							total_development = 500
+						}
+					}
+				}
+				set_country_flag = to_gives_defender_of_faith_great_power_credit
+			}
+		}
+		if = {
+			limit = {
+				is_defender_of_faith = yes
+				any_country = {
+					religion = ROOT
+					is_in_war = {
+						defenders = ROOT
+						defender_leader = THIS
+					}
+					NOT = { has_country_flag = to_gives_defender_of_faith_dof_credit }
+				}
+			}
+			every_country = {
+				limit = {
+					religion = ROOT
+					is_in_war = {
+						defenders = ROOT
+						defender_leader = THIS
+					}
+					NOT = { has_country_flag = to_gives_defender_of_faith_dof_credit }
+				}
+				set_country_flag = to_gives_defender_of_faith_dof_credit
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_hidden.a
+	}
+}
+
 #Europeans converting
 country_event = {
 	id = nhs_mission_events.17

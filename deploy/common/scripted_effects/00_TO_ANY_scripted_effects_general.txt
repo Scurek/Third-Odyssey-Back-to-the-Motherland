@@ -548,6 +548,8 @@ nhs_on_religion_change = {
 	to_add_new_patriarch_modifier_all_provinces = yes
 	to_add_traditional_patriarch_modifier_all_provinces = yes
 	to_non_abrahamic_conversion_penalty_check_country = yes
+
+	to_clear_all_defender_of_faith_mission_flags = yes
 }
 
 # country
@@ -609,6 +611,28 @@ to_on_war_won = {
 		}
 		to_nat_handle_envoy_to_the_world = yes
 	}
+
+	clr_country_flag = to_gives_defender_of_faith_credit
+	clr_country_flag = to_gives_defender_of_faith_great_power_credit
+}
+
+on_main_war_won = {
+	to_increase_defender_of_faith_mission_progress_dof = yes
+}
+
+# country
+# root = winning country, from = loser country
+to_on_separate_war_won = {
+	to_clear_invalid_defender_of_faith_mission_flags = yes
+}
+
+# country
+# root = loser country, from = winner country
+to_on_war_lost = {
+	to_increase_defender_of_faith_progress = { 
+		EFFECT_SCOPE = every_country 
+		TARGET = FROM 
+	}
 }
 
 to_on_country_creation = {
@@ -628,7 +652,17 @@ to_on_annexed = {
 		to_nat_determine_new_confederation_leader = yes
 		to_nhs_remove_exarch_cores = yes
 		to_downgrade_japanese_boosts = yes
+
+		to_increase_defender_of_faith_progress = { 
+			EFFECT_SCOPE = if 
+			TARGET = ROOT
+		}
 	}
+}
+
+#ROOT = converted country, FROM = country which force converts ROOT, on_action gets called on Force religion peace and Enforce Religion subject interaction
+to_on_force_conversion = {
+	to_defender_of_faith_mission_check_force_conversion = yes
 }
 
 # country
@@ -714,9 +748,12 @@ to_on_defender_of_faith_claim = {
 		set_global_flag = to_saved_orthodox_dof_et
 		save_global_event_target_as = to_orthodox_dof
 	}
+
+	to_check_champion_of_faith_modifier = yes
 }
 
 to_on_defender_of_faith_loss = {
 	to_clear_RELIGION_defender_of_faith_et = { RELIGION = catholic }
 	to_clear_RELIGION_defender_of_faith_et = { RELIGION = orthodox }
+	to_remove_champion_of_faith_modifier = yes
 }

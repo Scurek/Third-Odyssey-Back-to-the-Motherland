@@ -3254,7 +3254,7 @@ nhs_final_red_mission_roman = {
 	to_rome_restored_mission = {
 		required_missions = {
 			#to_the_old_gods_mission
-			#to_restore_the_pentarchy_mission
+			#to_defender_of_the_faith_mission
 			to_basileus_basileon_mission
 		}
 		# icon = ROMflag
@@ -3268,7 +3268,7 @@ nhs_final_red_mission_roman = {
 				limit = {
 					NOT = { religion_group = pagan }
 				}
-				mission_completed = to_restore_the_pentarchy_mission
+				mission_completed = to_defender_of_the_faith_mission
 			}
 			else_if = {
 				limit = {
@@ -3309,7 +3309,7 @@ nhs_final_red_mission_elysian = {
 	to_elysia_ascendant_mission = {
 		required_missions = {
 			#to_the_old_gods_mission
-			#to_restore_the_pentarchy_mission
+			#to_defender_of_the_faith_mission
 			to_basileus_basileon_mission
 		}
 		# icon = ROMflag
@@ -3963,7 +3963,7 @@ nhs_left_mid_religion_orthodox = {
 	}
 	has_country_shield = yes
 	
-	to_restore_the_pentarchy_mission = {
+	to_defender_of_the_faith_mission = {
 		required_missions = {
 			to_heir_of_justinian_mission
 			#to_the_eagle_rises_mission
@@ -3971,83 +3971,53 @@ nhs_left_mid_religion_orthodox = {
 		icon = mission_pf_cross
 		position = 9
 		provinces_to_highlight = {
-			OR = {
-				province_id = 151
-				province_id = 118
-				province_id = 2313
-				province_id = 358
-				province_id = 379
-			}
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { religion = elysian_orthodoxy }
-			}
-			has_discovered = ROOT
 		}
 		trigger = {
-			religion = elysian_orthodoxy
-			OR = {
-				has_country_modifier = nhs2_23_reform
-				has_country_modifier = nhs2_4_reform
-			}
-			num_of_cities = 100
-			total_development = 1000
-			is_subject = no
-			is_at_war = no
-			OR = {
-				calc_true_if = {
-					desc = nhs_european_provinces_with_elysian_orthodoxy_tt
-					amount = 70
-					custom_trigger_tooltip = {
-						tooltip = nhs_european_provinces_with_elysian_orthodoxy_tt
-						all_province = {
-							religion = elysian_orthodoxy
+			religion_group = christian
+			if = {
+				limit = {
+					any_country = {
+						religion_group = christian
+						NOT = { religion = ROOT }
+						total_development = 50
+						capital_scope = {
 							continent = europe
 						}
 					}
 				}
-				AND = {
-					full_idea_group = humanist_ideas
-					calc_true_if = {
-						desc = nhs_european_provinces_with_elysian_orthodoxy_tt
-						amount = 30
-						all_province = {
-							religion = elysian_orthodoxy
-							continent = europe
-						}
+				custom_trigger_tooltip = {
+					tooltip = to_defender_of_the_faith_mission_tt
+					check_variable = {
+						which = to_defender_of_faith_progress
+						value = 100
 					}
 				}
 			}
-			151 = {
-				religion = elysian_orthodoxy
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			118 = {
-				religion = elysian_orthodoxy
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			2313 = {
-				religion = elysian_orthodoxy
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			358 = {
-				religion = elysian_orthodoxy
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			379 = {
-				religion = elysian_orthodoxy
-				country_or_non_sovereign_subject_holds = ROOT
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = to_defender_of_the_faith_mission_alt_tt
+					always = yes
+				}
 			}
 		}
 		
 		effect = {
-			custom_tooltip = to_restore_the_pentarchy_mission_converting_tt
-			custom_tooltip = nhs_convert_rome_rc_tt
-			hidden_effect = {
-				118 = {
-					remove_province_triggered_modifier = religious_center
-					add_province_triggered_modifier = religious_center_elysian_orthodox
+			if = {
+				limit = {
+					is_defender_of_faith = yes
 				}
+				add_country_modifier = {
+					name = to_improved_elysian_orthodox_defender_of_faith
+					duration = -1
+					desc = to_as_long_as_we_remain_dof
+				}
+			}
+			else = {
+				custom_tooltip = to_improved_dof_tt
+				custom_tooltip = nhs_new_line_tt
+			}
+			custom_tooltip = to_defender_of_the_faith_mission_converting_tt
+			hidden_effect = {
 				every_country = {
 					limit = {
 						religion_group = christian
