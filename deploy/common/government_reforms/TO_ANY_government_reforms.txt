@@ -16,6 +16,11 @@ peoples_kingdom_reform_nodlc = {
 to_promote_hestiates = {
 	icon = plutocracy_reform
 	potential = {
+		NOT = { has_government_attribute = is_pirate_republic_reform }
+		OR = {
+			is_revolutionary = no
+			NOT = { has_dlc = "Emperor" }
+		}
 		religion = pantheon_worship
 		has_country_modifier = nhs_high_priests
 	}
@@ -32,5 +37,54 @@ to_promote_hestiates = {
 		to_reduce_hellenic_festival_cost = yes
 		to_increase_hellenic_festival_frequency = yes
 		to_improved_focus_on_religion = yes
+	}
+}
+
+to_battlefield_ceremonies = {
+	icon = msg_sacrifice_yes
+	potential = {
+		NOT = { has_government_attribute = is_pirate_republic_reform }
+		OR = {
+			is_revolutionary = no
+			NOT = { has_dlc = "Emperor" }
+		}
+		religion = aztlan_worship
+	}
+	trigger = {
+		religion = aztlan_worship
+	}
+	modifiers = {
+		church_influence_modifier = 0.1
+		church_loyalty_modifier = 0.1
+		war_exhaustion = -0.03
+		general_cost = -0.10
+	}
+	custom_attributes = {
+		winning_battles_increases_legitimacy = yes
+		to_missionary_strength_from_battles = yes
+	}
+	effect = {
+		hidden_effect = {
+			if = {
+				limit = {
+					is_at_war = yes
+				}
+				set_country_flag = to_missionary_strength_from_battles_is_at_war
+			}
+		}
+	}
+	removed_effect = {
+		hidden_effect = {
+			to_missionary_strength_from_battles_after_war = yes
+			every_owned_province = {
+				limit = {
+					religion = ROOT
+				}
+				to_remove_missionary_strength_from_battles_TIER = { TIER = 1 }
+				to_remove_missionary_strength_from_battles_TIER = { TIER = 2 }
+				to_remove_missionary_strength_from_battles_TIER = { TIER = 3 }
+				to_remove_missionary_strength_from_battles_TIER = { TIER = 4 }
+			}
+		}
 	}
 }
