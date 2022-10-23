@@ -1277,6 +1277,8 @@ to_clear_RELIGION_defender_of_faith_et = {
 ##################################################
 
 to_missionary_strength_from_battles_clear_flags = {
+	clr_province_flag = to_missionary_strength_from_battles_cd
+	# If you want this to work on other religions add more flags here
 	clr_province_flag = to_missionary_strength_from_battles_aztlan
 }
 
@@ -1301,27 +1303,37 @@ to_add_missionary_strength_from_battles = {
 							war_with = event_target:to_battle_won_unit_tar
 						}
 					}
-					# If you want this to work on other religions add more checks here
+					# If you want this to work on other religions expand this
+					# OR = {
+					# 	NOT = { to_has_missionary_strength_from_battles_TIER = { TIER = 4 } }
+					# 	to_has_missionary_strength_from_battles_incorrect_religion = {
+					# 		COUNTRY_SCOPE = event_target:to_battle_won_unit_tar 
+					# 	}
+					# }
 					OR = {
-						NOT = { to_has_missionary_strength_from_battles_TIER = { TIER = 4 } }
-						to_has_missionary_strength_from_battles_incorrect_religion = {
-							COUNTRY_SCOPE = event_target:to_battle_won_unit_tar 
+						NOT = { has_province_flag = to_missionary_strength_from_battles_cd }
+						had_province_flag = {
+							flag = to_missionary_strength_from_battles_cd
+							days = 1
 						}
 					}
 				}
-				# If you want this to work on other religions add more checks here
-				if = {
-					limit = {
-						to_has_missionary_strength_from_battles_incorrect_religion = { 
-							COUNTRY_SCOPE = event_target:to_battle_won_unit_tar 
-						}
-					}
-					to_missionary_strength_from_battles_clear_flags = yes
-					to_remove_missionary_strength_from_battles_TIER = { TIER = 1 }
-					to_remove_missionary_strength_from_battles_TIER = { TIER = 2 }
-					to_remove_missionary_strength_from_battles_TIER = { TIER = 3 }
-					to_remove_missionary_strength_from_battles_TIER = { TIER = 4 }
-				}
+				# If you want this to work on other religions expand this
+				# if = {
+				# 	limit = {
+				# 		to_has_missionary_strength_from_battles_incorrect_religion = { 
+				# 			COUNTRY_SCOPE = event_target:to_battle_won_unit_tar 
+				# 		}
+				# 	}
+				# 	to_missionary_strength_from_battles_clear_flags = yes
+				# 	to_remove_missionary_strength_from_battles_TIER = { TIER = 1 }
+				# 	to_remove_missionary_strength_from_battles_TIER = { TIER = 2 }
+				# 	to_remove_missionary_strength_from_battles_TIER = { TIER = 3 }
+				# 	to_remove_missionary_strength_from_battles_TIER = { TIER = 4 }
+				# }
+
+				clr_province_flag = to_missionary_strength_from_battles_cd
+				set_province_flag = to_missionary_strength_from_battles_cd
 				if = {
 					limit = {
 						owner = {
@@ -1366,7 +1378,7 @@ to_add_missionary_strength_from_battles = {
 					}
 				}
 				else = {
-					# If you want this to work on other religions add a flag here
+					# If you want this to work on other religions expand this
 					if = {
 						limit = {
 							event_target:to_battle_won_unit_tar = {
@@ -1506,6 +1518,16 @@ to_missionary_strength_from_battles_after_war = {
 			}
 			clr_country_flag = to_missionary_strength_from_battles_is_at_war
 		}
+		[[CHECK_FROM] 
+		FROM = {
+			if = {
+				limit = {
+					is_at_war = no
+				}
+				clr_country_flag = to_missionary_strength_from_battles_is_at_war
+			}
+		}
+		]
 		every_province = {
 			limit = {
 				to_has_missionary_strength_from_battles_inactive = yes
