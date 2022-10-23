@@ -1293,7 +1293,14 @@ to_add_missionary_strength_from_battles = {
 		location = {
 			area = {
 				limit = {
+					is_empty = no
 					NOT = { religion = event_target:to_battle_won_unit_tar }
+					owner = {
+						OR = {
+							tag = event_target:to_battle_won_unit_tar
+							war_with = event_target:to_battle_won_unit_tar
+						}
+					}
 					# If you want this to work on other religions add more checks here
 					OR = {
 						NOT = { to_has_missionary_strength_from_battles_TIER = { TIER = 4 } }
@@ -1368,7 +1375,6 @@ to_add_missionary_strength_from_battles = {
 						}
 						set_province_flag = to_missionary_strength_from_battles_aztlan
 					}
-					set_province_flag = to_missionary_strength_from_battles_from@event_target:to_battle_won_unit_tar
 					if = {
 						limit = {
 							to_has_missionary_strength_from_battles_TIER = { TIER = 3 }
@@ -1472,17 +1478,14 @@ to_check_missionary_strength_from_battles = {
 				owner = {
 					has_government_attribute = to_missionary_strength_from_battles
 					PREV = {
-						has_province_flag = to_missionary_strength_from_battles_from@event_target:to_battle_won_unit_tar
 						to_has_missionary_strength_from_battles_correct_religion = { COUNTRY_SCOPE = PREV }
 					}
 				}
 			}
-			clr_province_flag = to_missionary_strength_from_battles_from@event_target:to_battle_won_unit_tar
 			to_missionary_strength_from_battles_clear_flags = yes
 			to_activate_missionary_strength_from_battles = yes
 		}
 		else = {
-			clr_province_flag = to_missionary_strength_from_battles_from@event_target:to_battle_won_unit_tar
 			to_missionary_strength_from_battles_clear_flags = yes
 			to_remove_missionary_strength_from_battles_TIER = { TIER = 1 }
 			to_remove_missionary_strength_from_battles_TIER = { TIER = 2 }
@@ -1495,23 +1498,25 @@ to_check_missionary_strength_from_battles = {
 to_missionary_strength_from_battles_after_war = {
 	if = {
 		limit = {
-			has_country_flag = to_missionary_strength_from_battles_is_at_war
-			is_at_war = no
+			$CHECK_IF$
 		}
-		clr_country_flag = to_missionary_strength_from_battles_is_at_war
+		if = {
+			limit = {
+				is_at_war = no
+			}
+			clr_country_flag = to_missionary_strength_from_battles_is_at_war
+		}
 		every_province = {
 			limit = {
-				has_province_flag = to_missionary_strength_from_battles_from@ROOT
+				to_has_missionary_strength_from_battles_inactive = yes
 			}
-			clr_province_flag = to_missionary_strength_from_battles_from@ROOT
 			if = {
 				limit = {
-					owned_by = ROOT
-					to_has_missionary_strength_from_battles_inactive = yes
+					owned_by = PREV
 					ROOT = {
 						has_government_attribute = to_missionary_strength_from_battles
 					}
-					to_has_missionary_strength_from_battles_correct_religion = { COUNTRY_SCOPE = ROOT }
+					to_has_missionary_strength_from_battles_correct_religion = { COUNTRY_SCOPE = PREV }
 				}
 				to_activate_missionary_strength_from_battles = yes
 			}
@@ -1523,18 +1528,19 @@ to_missionary_strength_from_battles_after_war = {
 								has_government_attribute = to_missionary_strength_from_battles
 								NOT = { religion = PREV }
 								PREV = {
-									has_province_flag = to_missionary_strength_from_battles_from@PREV
 									to_has_missionary_strength_from_battles_correct_religion = { COUNTRY_SCOPE = PREV }
 								}
 							}
 						}
 						NOT = {
-							any_war_enemy_country = {
-								has_government_attribute = to_missionary_strength_from_battles
-								NOT = { religion = PREV }
-								PREV = {
-									has_province_flag = to_missionary_strength_from_battles_from@PREV
-									to_has_missionary_strength_from_battles_correct_religion = { COUNTRY_SCOPE = PREV }
+							AND = {
+								is_at_war = yes
+								any_war_enemy_country = {
+									has_government_attribute = to_missionary_strength_from_battles
+									NOT = { religion = PREV }
+									PREV = {
+										to_has_missionary_strength_from_battles_correct_religion = { COUNTRY_SCOPE = PREV }
+									}
 								}
 							}
 						}
@@ -1547,5 +1553,17 @@ to_missionary_strength_from_battles_after_war = {
 				to_remove_missionary_strength_from_battles_TIER = { TIER = 4 }
 			}
 		}
+	}
+}
+
+to_remove_missionary_strength_from_battles_from_owned_provinces = {
+	every_owned_province = {
+		limit = {
+			to_has_missionary_strength_from_battles_active = yes
+		}
+		remove_province_modifier = to_missionary_strength_from_battles_1
+		remove_province_modifier = to_missionary_strength_from_battles_2
+		remove_province_modifier = to_missionary_strength_from_battles_3
+		remove_province_modifier = to_missionary_strength_from_battles_4
 	}
 }
