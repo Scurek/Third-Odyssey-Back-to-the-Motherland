@@ -1864,3 +1864,64 @@ to_establish_protectorate = {
 		always = no
 	}
 }
+
+nhs_vov_headquarters = {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		nhs_condition_all_ely = { KOMANDA = tag } 
+		NOT = { has_country_flag = nhs_v_settled_on_malta }
+		overlord_of = FROM
+		FROM = { 
+			tag = VGD 
+		}
+	}
+	is_allowed = {
+		adm_tech = 10
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+	}
+	on_accept = {
+		FROM = {
+			every_owned_province = {
+				if = {
+					limit = { is_capital = yes }
+					set_province_flag = vov_capital
+				}
+				cede_province = ROOT
+				if = {
+					limit = { has_province_flag = vov_capital }
+					add_province_modifier = {
+						name = nhs2_varangian_colony
+						duration = -1
+					}
+					clr_province_flag = vov_capital
+				}
+				else = {
+					add_province_modifier = {
+						name = nhs2_varangian_colony_f
+						duration = -1
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_global_flag = nhs_varangian_culture_change }
+					}
+					change_culture = varangian_n
+				}
+				else = {
+					change_culture = varangian_e
+				}
+				if = {
+					limit = {
+						is_core = FROM
+					}
+					add_core = ROOT
+					remove_core = FROM 
+				}
+			}
+		}
+	}
+}

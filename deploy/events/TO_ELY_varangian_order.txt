@@ -427,15 +427,23 @@ country_event = {
 	desc = nhs_vov_varangian_order_events.8.d
 	picture = varangian_offers_service_eventPicture
 	
-	fire_only_once = yes
-	
 	trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 		owns = 953
-		is_year = 1451
+		NOT = {
+			has_country_flag = nhs_varangian_rejected_2
+		}
+		NOT = { 
+			has_country_flag = established_varangians
+		}
 		OR = {
-			NOT = { has_global_flag = nhs_started_at_bookmark }
-			is_year = 1481
+			is_year = 1461
+			AND = {
+				is_year = 1451
+				NOT = {
+					has_country_flag = nhs_varangian_rejected
+				}
+			}
 		}
 		any_known_country = {
 			has_country_flag = nhs_met_greeks
@@ -444,6 +452,9 @@ country_event = {
 				tag = MK1
 				tag = HLL
 			}
+		}
+		NOT = {
+			has_country_flag = established_varangians
 		}
 	}
 	
@@ -474,11 +485,22 @@ country_event = {
 		ai_chance = {
 			factor = 20
 		}
+		if = {
+			limit = { 
+				has_country_flag = nhs_varangian_rejected
+			}
+			set_country_flag = nhs_varangian_rejected_2
+			custom_tooltip = nhs_last_establish_varangian_event_tt
+		}
+		else = {
+			set_country_flag = nhs_varangian_rejected
+			custom_tooltip = nhs_first_establish_varangian_event_tt
+		}
 		add_prestige = 10
 		add_army_tradition = 15
 	}
+	
 }
-
 #Varangians gain influence
 country_event = {
 	id = nhs_vov_varangian_order_events.9
@@ -515,7 +537,7 @@ country_event = {
 country_event = {
 	id = nhs_vov_varangian_order_events.10
 	title = nhs_vov_varangian_order_events.10.t
-	desc = nhs_vov_varangian_order_events.10.d
+	desc = nhs_vov_varangian_order_events.10.dc
 	picture = varangian_offers_service_eventPicture
 	
 	fire_only_once = yes
@@ -548,8 +570,7 @@ country_event = {
 	immediate = {
 		set_country_flag = nhs_varangian_estates
 		set_country_flag = nhs_v_d_p
-	}
-	
+	}	
 	option = {
 		name = "nhs_vov_varangian_order_events.10.a"
 		ai_chance = {
@@ -783,7 +804,7 @@ country_event = {
 country_event = {
 	id = nhs_vov_varangian_order_events.11
 	title = nhs_vov_varangian_order_events.11.t
-	desc = nhs_vov_varangian_order_events.11.d
+	desc = nhs_vov_varangian_order_events.11.dc
 	picture = varangian_offers_service_eventPicture
 	
 	trigger = {
@@ -3155,5 +3176,508 @@ country_event = {
 			male = yes 
 		}
 		vov_varangian_heir_ruler_general = { RULER_MALE = yes }
+	}
+}
+#Varagian Expedition
+country_event = {
+	id = nhs_vov_varangian_order_events.24
+	title = nhs_vov_varangian_order_events.24.t
+	desc = nhs_vov_varangian_order_events.24.dc
+	picture = varangian_offers_service_eventPicture
+	
+	is_triggered_only = yes
+
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		is_year = 1460
+		capital_scope = { has_province_modifier = nhs2_varangian_m }
+		any_owned_province = { is_colony = yes }
+	}
+
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 2
+			NOT = {
+				has_country_flag = nhs_vov_varangian_order_flavor_colony
+			}
+		}
+		modifier = {
+			factor = 0.8
+			has_country_flag = nhs_vov_varangian_order_flavor_colony
+		}
+
+		modifier = {
+			factor = 1.2
+			has_country_flag = nhs_delayed_varangians
+		}		
+	}
+
+	immediate = {
+		set_country_flag = nhs_vov_varangian_order_flavor_colony
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = nhs_vov_varangian_flavor_c_target }
+			}
+			random_owned_province = {
+				limit = {
+					is_colony = yes
+					NOT = { colonysize = 300 }
+					OR = {
+						area = maine_area
+						area = south_iroquoisia_area
+						area = hudson_valley_area
+						area = ottawa_valley_area
+						area = lower_canada_area
+					}
+				}
+				save_event_target_as = nhs_vov_varangian_flavor_c_target
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = nhs_vov_varangian_flavor_c_target }
+			}
+			random_owned_province = {
+				limit = {
+					is_colony = yes
+					NOT = { colonysize = 500 }
+					OR = {
+						area = maine_area
+						area = south_iroquoisia_area
+						area = hudson_valley_area
+						area = ottawa_valley_area
+						area = lower_canada_area
+					}
+				}
+				save_event_target_as = nhs_vov_varangian_flavor_c_target
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = nhs_vov_varangian_flavor_c_target }
+			}
+			random_owned_province = {
+				limit = {
+					is_colony = yes
+					NOT = { colonysize = 300 }
+					OR = {
+						area = massachusetts_bay_area
+						area = great_woods_area
+						area = connecticut_valley_area
+					}
+				}
+				save_event_target_as = nhs_vov_varangian_flavor_c_target
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = nhs_vov_varangian_flavor_c_target }
+			}
+			random_owned_province = {
+				limit = {
+					is_colony = yes
+					NOT = { colonysize = 500 }
+					OR = {
+						area = massachusetts_bay_area
+						area = great_woods_area
+						area = connecticut_valley_area
+					}
+				}
+				save_event_target_as = nhs_vov_varangian_flavor_c_target
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = nhs_vov_varangian_flavor_c_target }
+			}
+			random_owned_province = {
+				limit = {
+					is_colony = yes
+					OR = {
+						area = maine_area
+						area = south_iroquoisia_area
+						area = hudson_valley_area
+						area = ottawa_valley_area
+						area = lower_canada_area
+					}
+				}
+				save_event_target_as = nhs_vov_varangian_flavor_c_target
+			}
+		}
+		if = {
+			limit = {
+			}
+			random_owned_province = {
+				limit = {
+					is_colony = yes
+					OR = {
+						area = massachusetts_bay_area
+						area = great_woods_area
+						area = connecticut_valley_area
+					}
+				}
+				save_event_target_as = nhs_vov_varangian_flavor_c_target
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = nhs_vov_varangian_flavor_c_target }
+			}
+			random_owned_province = {
+				limit = {
+					is_colony = yes
+					region = northeast_america_region
+					}
+				save_event_target_as = nhs_vov_varangian_flavor_c_target
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					is_colony = yes
+					}
+				save_event_target_as = nhs_vov_varangian_flavor_c_target
+			}
+		}
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.24.a"
+		goto = event_target:nhs_vov_varangian_flavor_c_target
+		add_army_tradition = 5
+		event_target:nhs_vov_varangian_flavor_c_target = {
+			add_colonysize = 1000
+			add_province_modifier = {
+				name = nhs2_varangian_colony_f
+				duration = -1
+			}
+			if = {
+				limit = {
+					NOT = { has_global_flag = nhs_varangian_culture_change }
+				}
+				change_culture = varangian_n
+			}
+			else = {
+				change_culture = varangian_e
+			}
+		}
+	}
+}
+
+#Varangian Culture change
+country_event = {
+	id = nhs_vov_varangian_order_events.25
+	title = nhs_vov_varangian_order_events.25.t
+	desc = nhs_vov_varangian_order_events.25.dc
+	picture = viking_settlement_walking_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		culture_group = elysian_group
+		is_subject = no
+		OR = {
+			any_owned_province = { 
+				culture = varangian_n
+			}
+			any_subject_country = {
+				primary_culture = varangian_n
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 3
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.25.a"
+		add_army_tradition = 5
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_varangians_culture_change_tt
+		if = {
+			limit = {
+				any_subject_country = {
+					primary_culture = varangian_n
+				}
+			}
+			every_subject_country = {
+				limit = {
+					primary_culture = varangian_n
+				}
+				change_primary_culture = varangian_e
+			}
+		}
+		if = {
+			limit = {
+				any_province = {
+					country_or_subject_holds = ROOT
+					culture = varangian_n
+				}
+			}
+			every_province = {
+				limit = {
+					country_or_subject_holds = ROOT
+					culture = varangian_n
+				}
+				change_culture = varangian_e
+			}
+		}
+	}
+}
+
+#Varangian Artwork
+country_event = {
+	id = nhs_vov_varangian_order_events.26
+	title = nhs_vov_varangian_order_events.26.t
+	desc = nhs_vov_varangian_order_events.26.dc
+	picture = varangian_artwork_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		nhs_condition_all_ely = { KOMANDA = tag }
+		NOT = { has_country_flag = nhs_vov_varangian_art }
+		capital_scope = {
+			has_province_modifier = nhs2_varangian_m
+		}
+	}
+	
+	immediate = {
+		set_country_flag = nhs_vov_varangian_art
+	}
+	option = {
+		name = "nhs_vov_varangian_order_events.26.a"
+		add_treasury = -100
+		add_prestige = -10
+		add_estate_loyalty = {
+			estate = estate_nhs_nobles
+			loyalty = 10
+		}
+	}
+	option = {
+		name = "nhs_vov_varangian_order_events.26.b"
+		add_treasury = -50
+	}
+	option = {
+		name = "nhs_vov_varangian_order_events.26.c"
+		add_prestige = -5
+		add_estate_loyalty = {
+			estate = estate_nhs_nobles
+			loyalty = 5
+		}
+	}
+}
+
+#Varangians Capture Pirates
+country_event = {
+	id = nhs_vov_varangian_order_events.27
+	title = nhs_vov_varangian_order_events.27.t
+	desc = nhs_vov_varangian_order_events.27.dc
+	picture = norse_boats_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_year = 1470
+		nhs_condition_all_ely = { KOMANDA = tag }
+		OR = {
+			953 = {
+				has_province_modifier = nhs2_varangian_m
+			}
+			VGD = { is_subject_of = ROOT }
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_varangian_order_events.27.a"
+		if = {
+			limit = {
+				NOT = { monthly_income = 10 }
+			}
+			add_treasury = 50
+		}
+		else_if = {
+			limit = {
+				NOT = { monthly_income = 19 }
+			}
+			add_years_of_income = 0.42
+		}
+		else = {
+			add_treasury = 100
+		}
+	}
+	option = {
+		name = "nhs_vov_varangian_order_events.27.b"
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = 10
+		}
+	}
+}
+
+#Varangian brawl
+country_event = {
+	id = nhs_vov_varangian_order_events.28
+	title = nhs_vov_varangian_order_events.28.t
+	desc = nhs_vov_varangian_order_events.28.dc
+	picture = varangian_argument_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_year = 1450
+		nhs_condition_all_ely = { KOMANDA = tag }
+		953 = {
+			has_province_modifier = nhs2_varangian_m
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_varangian_order_events.28.a"
+		add_legitimacy = -10
+		add_mil_power = -25
+	}
+	option = {
+		name = "nhs_vov_varangian_order_events.28.b"
+		add_army_tradition = -10
+	}
+}
+
+#Varangian Vinlandic Relations
+country_event = {
+	id = nhs_vov_varangian_order_events.29
+	title = nhs_vov_varangian_order_events.29.t
+	desc = nhs_vov_varangian_order_events.29.dc
+	picture = varangians_returning_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_year = 1465
+		is_at_war = no
+		nhs_condition_all_ely = { KOMANDA = tag }
+		OR = {
+			exists = MK1
+			exists = HLL
+			exists = VIN
+		}
+		capital_scope = {
+			has_province_modifier = nhs2_varangian_m
+		}
+	}
+	immediate = {
+		if = {
+			limit = { exists = VIN }
+			VIN = { save_event_target_as = nhs_vov_varangian_opinion_target }
+		}
+		else_if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MK1
+						tag = HLL
+					}				
+					OR = {
+						has_country_modifier = nhs_vov_trade_deal
+						alliance_with = ROOT
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					OR = {
+						tag = MK1
+						tag = HLL
+					}
+					OR = {
+						has_country_modifier = nhs_vov_trade_deal
+						alliance_with =  ROOT
+					}
+				}
+				save_event_target_as = nhs_vov_varangian_opinion_target
+			}
+		}
+		else = {
+			random_country = {
+				limit = {
+					OR = {
+						tag = MK1
+						tag = HLL
+					}
+				}
+				save_event_target_as = nhs_vov_varangian_opinion_target
+			}
+		}
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.29.a"
+		add_prestige = 10
+		event_target:nhs_vov_varangian_opinion_target = {
+			add_opinion = {
+				who = ROOT
+				modifier = nhs_send_v_home_opinion
+			}
+		}
+	}
+}
+
+#Varangians Attack Natives
+country_event = {
+	id = nhs_vov_varangian_order_events.30
+	title = nhs_vov_varangian_order_events.30.t
+	desc = nhs_vov_varangian_order_events.30.dc
+	picture = NATIVE_ANGRY_MOB_eventPicture
+	is_triggered_only = yes
+
+	trigger = {
+		is_year = 1460
+		nhs_condition_all_ely = { KOMANDA = tag }
+		OR = {
+			953 = {
+				has_province_modifier = nhs2_varangian_m
+			}
+			VGD = { is_subject_of = ROOT }
+		}
+		nhs_has_any_native_estate = yes
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			NOT = { has_country_flag = nhs_varangian_natives }
+		}
+		modifier = {
+			factor = 0.9
+			is_year = 1480
+		}
+		modifier = {
+			factor = 0.8
+			is_year = 1510
+		}
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.30.a"
+		add_prestige = -10
+		add_legitimacy = -10
+		set_country_flag = nhs_varangian_natives
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.30.b"
+		add_estate_loyalty = {
+			estate = estate_all_natives
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_all_natives
+			influence = -10
+			duration = 3650
+		}
+		set_country_flag = nhs_varangian_natives
 	}
 }
