@@ -1,89 +1,21 @@
 namespace = nhs_vov_varangian_order_events
 
-#Varangian Order Formed (elysia)
-country_event = {
-	id = nhs_vov_varangian_order_events.1
-	title = nhs_vov_varangian_order_events.1.t
-	desc = nhs_vov_varangian_order_events.1.d
-	picture = varangian_offers_service_eventPicture
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		nhs_check_all_elysian_tags = { CONDITION = tag }
-	}
-	
-	option = {
-		name = "nhs_vov_varangian_order_events.1.a"
-	}
-}
 #Varangian Order Formed (norse colonies)
 country_event = {
 	id = nhs_vov_varangian_order_events.2
-	title = nhs_vov_varangian_order_events.1.t
+	title = nhs_vov_varangian_order_events.2.t
 	desc = nhs_vov_varangian_order_events.2.d
 	picture = varangian_offers_service_eventPicture
 	
 	is_triggered_only = yes
 	
-	trigger = {
-		OR = {
-			tag = HLL
-			tag = MK1
-			tag = JOM
-			tag = VIN
-		}
-	}
-	
 	option = {
 		name = "nhs_vov_varangian_order_events.2.a"
-	}
-}
-#Varangian Order Formed (everyone else)
-country_event = {
-	id = nhs_vov_varangian_order_events.3
-	title = nhs_vov_varangian_order_events.1.t
-	desc = nhs_vov_varangian_order_events.3.d
-	picture = varangian_offers_service_eventPicture
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		OR = {
-			tag = HLL
-			tag = MK1
-			tag = JOM
-			tag = VIN
+		add_prestige = 10
+		reverse_add_opinion = {
+			who = FROM
+			modifier = to_varangian_ties_om
 		}
-		capital_scope = {
-			continent = north_america	
-		}
-		knows_country = VGD
-	}
-	
-	option = {
-		name = "nhs_vov_varangian_order_events.3.a"
-	}
-}
-#Varangian Order Formed (Varangian Order)
-country_event = {
-	id = nhs_vov_varangian_order_events.4
-	title = nhs_vov_varangian_order_events.1.t
-	desc = nhs_vov_varangian_order_events.4.d
-	picture = varangian_offers_service_eventPicture
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		OR = {
-			tag = VGD
-		}
-		always = no
-	}
-	
-	option = {
-		name = "nhs_vov_varangian_order_events.3.a"
-		
 	}
 }
 
@@ -424,37 +356,36 @@ country_event = {
 country_event = {
 	id = nhs_vov_varangian_order_events.8
 	title = nhs_vov_varangian_order_events.8.t
-	desc = nhs_vov_varangian_order_events.8.d
+	desc = {
+		trigger = { NOT = { has_country_flag = nhs_varangians_delayed } }
+		desc = nhs_vov_varangian_order_events.8.da
+	}
+	desc = {
+		desc = nhs_vov_varangian_order_events.8.db
+	}
 	picture = varangian_offers_service_eventPicture
 	
 	trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
+		has_country_flag = to_can_get_varangians
+		NOT = { has_country_flag = established_varangians }
 		owns = 953
-		NOT = {
-			has_country_flag = nhs_varangian_rejected_2
-		}
-		NOT = { 
-			has_country_flag = established_varangians
-		}
+		is_year = 1451
 		OR = {
-			is_year = 1461
-			AND = {
-				is_year = 1451
-				NOT = {
-					has_country_flag = nhs_varangian_rejected
-				}
+			NOT = { has_country_flag = nhs_varangians_delayed }
+			had_country_flag = {
+				flag = nhs_varangians_delayed
+				days = 1825
 			}
 		}
 		any_known_country = {
 			has_country_flag = nhs_met_greeks
+			NOT = { war_with = ROOT }
 			OR = {
 				tag = VIN
 				tag = MK1
 				tag = HLL
 			}
-		}
-		NOT = {
-			has_country_flag = established_varangians
 		}
 	}
 	
@@ -464,6 +395,8 @@ country_event = {
 			factor = 80
 		}
 		set_country_flag = established_varangians
+		clr_country_flag = nhs_varangians_delayed
+		clr_country_flag = to_can_get_varangians
 		if = {
 			limit = {
 				ai = no
@@ -478,6 +411,25 @@ country_event = {
 				duration = -1
 			}
 		}
+		every_known_country = {
+			limit = {
+				nhs_check_all_vinland = { CONDITION = tag }
+				NOT = { war_with = ROOT }
+			}
+			country_event = { id = nhs_vov_varangian_order_events.2 }
+		}
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.8.b"
+		ai_chance = {
+			factor = 0
+		}
+		trigger = {
+			NOT = { has_country_flag = nhs_varangians_delayed }
+		}
+		set_country_flag = nhs_varangians_delayed
+		custom_tooltip = nhs_first_establish_varangian_event_tt
 	}
 	
 	option = {
@@ -485,19 +437,10 @@ country_event = {
 		ai_chance = {
 			factor = 20
 		}
-		if = {
-			limit = { 
-				has_country_flag = nhs_varangian_rejected
-			}
-			set_country_flag = nhs_varangian_rejected_2
-			custom_tooltip = nhs_last_establish_varangian_event_tt
-		}
-		else = {
-			set_country_flag = nhs_varangian_rejected
-			custom_tooltip = nhs_first_establish_varangian_event_tt
-		}
 		add_prestige = 10
 		add_army_tradition = 15
+		clr_country_flag = to_can_get_varangians
+		clr_country_flag = nhs_varangians_delayed
 	}
 	
 }
