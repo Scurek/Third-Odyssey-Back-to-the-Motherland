@@ -10860,3 +10860,344 @@ to_refresh_elysian_missions = {
 		swap_non_generic_missions = yes
 	}
 }
+
+to_handle_varangian_quarter_on_capital_moved = {
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = established_varangians
+			}
+			NOT = { has_province_modifier = nhs2_varangian_m }
+		}
+		owner = {
+			every_owned_province = {
+				remove_province_modifier = nhs2_varangian_m
+			}
+		}
+		add_province_modifier = {
+			name = nhs2_varangian_m
+			duration = -1
+		}
+	}
+}
+
+to_choose_potential_varangian_province_target = {
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_owned_province = {
+			limit = {
+				region = northeast_america_region
+				NOT = { area = chesapeake_area }
+				NOT = { has_albanian_majority_modifier = yes }
+				has_port = yes
+				NOT = {
+					OR = {
+						has_province_modifier = nhs2_european_enclave
+						has_province_modifier = nhs2_small_por_enclave
+						has_province_modifier = nhs2_por_enclave
+						has_province_modifier = nhs2_large_por_enclave
+					}
+				}
+				is_colony = no
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_owned_province = {
+			limit = {
+				region = northeast_america_region
+				NOT = { area = chesapeake_area }
+				NOT = { has_albanian_majority_modifier = yes }
+				NOT = {
+					OR = {
+						has_province_modifier = nhs2_european_enclave
+						has_province_modifier = nhs2_small_por_enclave
+						has_province_modifier = nhs2_por_enclave
+						has_province_modifier = nhs2_large_por_enclave
+					}
+				}
+				is_colony = no
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_owned_province = {
+			limit = {
+				region = northeast_america_region
+				NOT = { area = chesapeake_area }
+				NOT = { has_albanian_majority_modifier = yes }
+				is_colony = no
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+}
+
+to_disband_varangians = {
+	clr_country_flag = to_disable_found_varangian_order_decision
+	set_country_flag = nhs_disbanded_varangians
+	if = {
+		limit = {
+			has_regency = no
+		}
+		random = {
+			chance = 50
+			kill_ruler = yes
+		}
+	}
+	else_if = {
+		limit = {
+			has_consort_regency = yes
+		}
+		random = {
+			chance = 50
+			custom_tooltip = to_kill_consort_tt
+			hidden_effect = {
+				remove_consort = yes
+			}
+		}
+	}
+	else = {
+		random = {
+			chance = 50
+			kill_heir = {}
+		}
+	}
+	if = {
+		limit = {
+			capital_scope = {
+				controlled_by = ROOT
+			}
+		}
+		capital_scope = {
+			spawn_rebels = {
+				type = to_varangian_rebels
+				size = 1
+				win = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				area_for_scope_province = {
+					owned_by = ROOT
+					controlled_by = ROOT
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				area_for_scope_province = {
+					is_capital = yes
+					owned_by = ROOT
+				}
+			}
+			spawn_rebels = {
+				type = to_varangian_rebels
+				size = 1
+				win = yes
+			}
+		}
+	}
+	else = {
+		random_owned_province = {
+			limit = {
+				is_in_capital_area = yes
+				controlled_by = ROOT
+			}
+			spawn_rebels = {
+				type = to_varangian_rebels
+				size = 1
+				win = yes
+			}
+		}
+	}
+	remove_country_modifier = nhs2_varangian_influnce_m
+	if = {
+		limit = {
+			any_province = {
+				has_province_modifier = nhs2_varangian_m
+			}
+		}
+		every_province = {
+			limit = {
+				has_province_modifier = nhs2_varangian_m
+			}
+			remove_province_modifier = nhs2_varangian_m
+		}
+	}
+
+	[[WIPE_VARANGIAN_CORES]
+	hidden_effect = {
+		every_province = {
+			limit = {
+				is_core = VGD
+			}
+			remove_core = VGD
+		}
+	}
+	]
+
+	[[SPAWN_VARANGIAN_REBEL_STATE]
+	custom_tooltip = nhs_new_line_tt
+	if = {
+		limit = {
+			any_province = {
+				is_empty = yes
+				region = northeast_america_region
+				has_port = yes
+				NOT = {
+					any_neighbor_province = {
+						owner = {
+							OR = {
+								technology_group = exiled_greek
+								technology_group = viking
+							}
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = nhs_varangians_independant_tt
+		random_province = {
+			limit = {
+				is_empty = yes
+				region = northeast_america_region
+				has_port = yes
+				NOT = {
+					any_neighbor_province = {
+						owner = {
+							OR = {
+								technology_group = exiled_greek
+								technology_group = viking
+							}
+						}
+					}
+				}
+			}
+			to_nhs_set_up_independant_varangians_in_province = yes
+		}
+	}
+	else_if = {
+		limit = {
+			any_province = {
+				is_empty = yes
+				region = northeast_america_region
+				NOT = {
+					any_neighbor_province = {
+						owner = {
+							OR = {
+								technology_group = exiled_greek
+								technology_group = viking
+							}
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = nhs_varangians_independant_tt
+		random_province = {
+			limit = {
+				is_empty = yes
+				region = northeast_america_region
+				NOT = {
+					any_neighbor_province = {
+						owner = {
+							OR = {
+								technology_group = exiled_greek
+								technology_group = viking
+							}
+						}
+					}
+				}
+			}
+			to_nhs_set_up_independant_varangians_in_province = yes
+		}
+	}
+	else_if = {
+		limit = {
+			any_province = {
+				is_empty = yes
+				has_port = yes
+				region = great_lakes_region
+				NOT = {
+					any_neighbor_province = {
+						owner = {
+							OR = {
+								technology_group = exiled_greek
+								technology_group = viking
+							}
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = nhs_varangians_independant_tt
+		random_province = {
+			limit = {
+				is_empty = yes
+				has_port = yes
+				region = great_lakes_region
+				NOT = {
+					any_neighbor_province = {
+						owner = {
+							OR = {
+								technology_group = exiled_greek
+								technology_group = viking
+							}
+						}
+					}
+				}
+			}
+			to_nhs_set_up_independant_varangians_in_province = yes
+		}
+	}
+	else_if = {
+		limit = {
+			any_province = {
+				is_empty = yes
+				region = great_lakes_region
+				NOT = {
+					any_neighbor_province = {
+						owner = {
+							OR = {
+								technology_group = exiled_greek
+								technology_group = viking
+							}
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = nhs_varangians_independant_tt
+		random_province = {
+			limit = {
+				is_empty = yes
+				region = great_lakes_region
+				NOT = {
+					any_neighbor_province = {
+						owner = {
+							OR = {
+								technology_group = exiled_greek
+								technology_group = viking
+							}
+						}
+					}
+				}
+			}
+			to_nhs_set_up_independant_varangians_in_province = yes
+		}
+	}
+	]
+}

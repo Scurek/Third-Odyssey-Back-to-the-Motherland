@@ -1,0 +1,129 @@
+######################################################################
+# Varangian Rebels. Angy.
+######################################################################
+to_varangian_rebels = {
+
+	color = { 0 0 0 }
+
+	area = nation 					# Sticks to provinces of their nation
+	government = republic 			# Desires Theocracy
+	defection = none				# Will not defect
+	independence = none				# Does not strive for independence
+	unit_transfer = no
+	gfx_type = culture_owner
+	will_relocate = yes	
+	
+	resilient = yes
+	reinforcing = yes
+	general = yes
+	smart = yes
+	
+	artillery = 0
+	infantry = 1
+	cavalry = 0
+	
+	morale = 1.5
+
+	# Possible handle actions
+	handle_action_negotiate = no
+	handle_action_stability = no
+	handle_action_build_core = no
+	handle_action_send_missionary = no		
+	
+	# The rebel type with the highest modifier for this province gets picked
+	spawn_chance = {
+		factor = 0
+	}
+ 
+ 	# This is checked for EACH province in the Area of Operations
+	movement_evaluation = {
+		factor = 1
+		modifier = {
+			factor = 0.5
+			units_in_province = 1
+		}
+		modifier = {
+			factor = 0.001
+			controlled_by = REB
+		}
+		modifier = {
+			factor = 10
+			is_capital = yes
+	 	}
+		modifier = {
+			factor = 2
+			development = 10
+	 	}
+		modifier = {
+			factor = 2
+			development = 15
+	 	}
+		modifier = {
+			factor = 2
+			development = 20
+	 	}
+		modifier = {
+			factor = 2
+			development = 30
+	 	}
+	}
+ 
+ 	# Province Scope
+ 	siege_won_trigger = {
+		NOT = { culture_group = norse_g }
+		NOT = { culture = varangian_e }
+ 	}
+	siege_won_effect = {
+		add_devastation = 20
+	}
+	
+	# Country scope
+	can_negotiate_trigger = {
+		always = no
+	}
+	
+	# Country scope
+	can_enforce_trigger = {
+		always = yes
+	}
+	
+	# Localisation for their demands
+	demands_description = "to_varangian_rebels_demand"
+	
+	# Country Scope	
+	demands_enforced_effect = {
+		if = {
+			limit = {
+				has_regency = no
+			}
+			kill_ruler = yes
+		}
+		else_if = {
+			limit = {
+				has_consort_regency = yes
+			}
+			custom_tooltip = to_kill_consort_tt
+			hidden_effect = {
+				remove_consort = yes
+			}
+		}
+		else = {
+			kill_heir = {}
+		}
+		if = {
+			limit = {
+				NOT = { monthly_income = 21 }
+			}
+			add_treasury = -500
+		}
+		else_if = {
+			limit = {
+				NOT = { monthly_income = 417 }
+			}
+			add_years_of_income = -2
+		}
+		else = {
+			add_treasury = -10000
+		}
+	}
+}

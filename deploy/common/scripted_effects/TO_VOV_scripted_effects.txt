@@ -148,27 +148,31 @@ vov_handle_brave_the_elements = {
 }
 
 to_nhs_set_up_varangians_in_province = {
+	if = {
+		limit = {
+			any_owned_province = {
+				is_core = VGD
+				NOT = { province_id = $PROVINCE_ID$ }
+			}
+		}
+		every_owned_province = {
+			limit = {
+				is_core = VGD
+				NOT = { province_id = $PROVINCE_ID$ }
+			}
+			remove_core = VGD
+		}
+	}
 	tooltip = {
 		$PROVINCE_ID$ = {
 			cede_province = VGD
+			[[EXTRA_DEVELOPMENT]
 			add_base_manpower = 3
+			]
 		}
 		create_subject = {
 			subject_type = elysian_subject_varangian
 			subject = VGD
-		}
-	}
-	if = {
-		limit = {
-			any_province = {
-				has_province_modifier = nhs2_varangian_m
-			}
-		}
-		every_province = {
-			limit = {
-				has_province_modifier = nhs2_varangian_m
-			}
-			remove_province_modifier = nhs2_varangian_m
 		}
 	}
 	set_country_flag = nhs_varangian_guard_substate
@@ -208,7 +212,9 @@ to_nhs_set_up_varangians_in_province = {
 				}
 				nhs_add_gov_reform = { REF = varangian_guard }
 			}
+			[[EXTRA_DEVELOPMENT]
 			add_base_manpower = 3
+			]
 		}
 		every_province = {
 			limit = {
@@ -217,12 +223,7 @@ to_nhs_set_up_varangians_in_province = {
 			discover_country = VGD
 		}
 		VGD = {
-			if = {
-				limit = {
-					technology_group = exiled_greek
-				}
-				change_technology_group = viking
-			}
+			change_technology_group = viking
 		}
 		create_subject = {
 			subject_type = elysian_subject_varangian
@@ -252,10 +253,10 @@ to_nhs_set_up_independant_varangians_in_province = {
 				name = nhs_early_uprising_reduction
 				duration = 7300
 			}
+			every_war_enemy_country = {
+				white_peace = PREV
+			}
 		}
-	}
-	tooltip = {
-		cede_province = VGD
 	}
 }
 
