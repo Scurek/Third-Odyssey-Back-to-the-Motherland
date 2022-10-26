@@ -123,6 +123,7 @@ country_event = {
 	
 	option = {
 		name = "nhs_vov_varangian_order_events.2.a"
+		set_country_flag = to_witnessed_the_creation_of_varangian_order
 		add_prestige = 10
 		reverse_add_opinion = {
 			who = FROM
@@ -1028,32 +1029,32 @@ country_event = {
 }
 
 # The island of Malta (Varangians disbanded)
-country_event = {
-	id = nhs_vov_varangian_order_events.10
-	title = nhs_vov_varangian_order_events.10.t
-	desc = nhs_vov_varangian_order_events.10.d
-	picture = varangian_offers_service_eventPicture
+# country_event = {
+# 	id = nhs_vov_varangian_order_events.10
+# 	title = nhs_vov_varangian_order_events.10.t
+# 	desc = nhs_vov_varangian_order_events.10.d
+# 	picture = varangian_offers_service_eventPicture
 	
-	fire_only_once = yes
+# 	fire_only_once = yes
 	
-	trigger = {
-		NOT = { has_country_flag = to_can_settle_varangians_on_malta }
-		nhs_check_all_elysian_tags = { CONDITION = tag }
-		has_country_flag = nhs_disbanded_varangians
-		has_country_flag = established_varangians
-		NOT = { exists = VGD }
-		has_discovered = 126
-		OR = {
-			has_country_flag = nhs_invasion_begins
-			has_country_flag = nhs_invasion_over
-		}
-	}
+# 	trigger = {
+# 		NOT = { has_country_flag = to_can_settle_varangians_on_malta }
+# 		nhs_check_all_elysian_tags = { CONDITION = tag }
+# 		has_country_flag = nhs_disbanded_varangians
+# 		has_country_flag = established_varangians
+# 		NOT = { exists = VGD }
+# 		has_discovered = 126
+# 		OR = {
+# 			has_country_flag = nhs_invasion_begins
+# 			has_country_flag = nhs_invasion_over
+# 		}
+# 	}
 	
-	option = {
-		name = "nhs_vov_varangian_order_events.10.a"
-		set_country_flag = to_can_settle_varangians_on_malta
-	}
-}
+# 	option = {
+# 		name = "nhs_vov_varangian_order_events.10.a"
+# 		set_country_flag = to_can_settle_varangians_on_malta
+# 	}
+# }
 
 # Varangians disgruntled if at war with Vinlanders
 country_event = {
@@ -1319,6 +1320,7 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
+			clr_country_flag = to_witnessed_the_creation_of_varangian_order
 			set_variable = {
 				which = to_transfered_varangian_manpower_25
 				which = FROM
@@ -1406,6 +1408,7 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
+			clr_country_flag = to_witnessed_the_creation_of_varangian_order
 			set_variable = {
 				which = to_transfered_varangian_manpower_50
 				which = FROM
@@ -1471,7 +1474,7 @@ country_event = {
 	}
 }
 
-# The Væringjar
+# Varangian Veterans
 country_event = {
 	id = nhs_vov_varangian_order_events.14
 	title = nhs_vov_varangian_order_events.14.t
@@ -1479,29 +1482,174 @@ country_event = {
 	picture = norse_party_eventPicture
 
 	trigger = {
-		has_country_flag = to_enable_merc_varangian_elite
+		nhs_check_all_vinland = { CONDITION = tag }
+		NOT = { has_country_flag = to_witnessed_the_end_of_varangian_order }
+		NOT = { has_country_flag = to_enable_merc_vaeringjar }
+		NOT = { has_country_flag = to_enable_merc_varangian_veterans }
+		nhs_check_existing_elysian_tags_with_full_condition = {
+			CONDITION = "
+				has_country_flag = established_varangians
+				NOT = { has_country_flag = nhs_disbanded_varangians }
+				had_country_flag = {
+					flag = established_varangians
+					days = 3650
+				}
+				NOT = { war_with = ROOT }
+			"
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 3
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.14.a"
+		add_army_tradition = 10
+		set_country_flag = to_enable_merc_varangian_veterans
+		custom_tooltip = to_enable_varangian_veterans_mercs_tt
+		if = {
+			limit = {
+				has_dlc = "Common Sense"
+			}
+			custom_tooltip = to_varangian_veterans_mercs_no_proff_loss_tt
+		}
+	}
+}
+
+# Varangian Order Dismantled (for norse)
+country_event = {
+	id = nhs_vov_varangian_order_events.15
+	title = nhs_vov_varangian_order_events.15.t
+	desc = {
+		trigger = {
+			NOT = { nhs_check_all_elysian_tags = { CONDITION = exists } }
+		}
+		desc = nhs_vov_varangian_order_events.15.da
+	}
+	desc = {
+		desc = nhs_vov_varangian_order_events.15.db
+	}
+	picture = {
+		picture = nordic_battle_eventPicture
+		trigger = {
+			NOT = { nhs_check_all_elysian_tags = { CONDITION = exists } }
+		}
+	}
+	picture = {
+		picture = varangian_argument_eventPicture
+	}
+
+	trigger = {
+		nhs_check_all_vinland = { CONDITION = tag }
+		OR = {
+			has_country_flag = to_witnessed_the_creation_of_varangian_order
+			has_country_flag = to_enable_merc_varangian_veterans
+		}
+		NOT = { has_country_flag = to_witnessed_the_end_of_varangian_order }
+		NOT = { has_country_flag = to_enable_merc_vaeringjar }
+		OR = {
+			NOT = { nhs_check_all_elysian_tags = { CONDITION = exists } }
+			nhs_check_existing_elysian_tags_with_full_condition = {
+				CONDITION = "
+					has_country_flag = nhs_disbanded_varangians
+				"
+			}
+		}
+	}
+
+	immediate = {
+		clr_country_flag = to_witnessed_the_creation_of_varangian_order
+		set_country_flag = to_witnessed_the_end_of_varangian_order
+		hidden_effect = {
+			nhs_effect_with_condition_for_existing_elysian_tag = {
+				CONDITION = "
+					has_country_flag = nhs_disbanded_varangians
+				"
+				EFFECT = "
+					save_event_target_as = to_varangian_disbander
+				"
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 2
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.15.a"
+		add_prestige = -5
+		tooltip = {
+			if = {
+				limit = {
+					has_saved_event_target = to_varangian_disbander
+				}
+				event_target:to_varangian_disbander = {
+					reverse_add_opinion = {
+						who = ROOT
+						modifier = to_disbanded_varangian_order_om
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					has_opinion_modifier = {
+						who = ROOT
+						modifier = to_varangian_ties_om
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					has_opinion_modifier = {
+						who = ROOT
+						modifier = to_varangian_ties_om
+					}
+				}
+				remove_opinion = {
+					who = ROOT
+					modifier = to_varangian_ties_om
+				}
+			}
+		}
+	}
+}
+
+# The Væringjar
+country_event = {
+	id = nhs_vov_varangian_order_events.16
+	title = nhs_vov_varangian_order_events.16.t
+	desc = nhs_vov_varangian_order_events.16.d
+	picture = norse_party_eventPicture
+
+	trigger = {
+		nhs_check_all_vinland = { CONDITION = tag }
+		has_country_flag = to_enable_merc_varangian_veterans
 		had_country_flag = {
-			flag = to_enable_merc_varangian_elite
+			flag = to_witnessed_the_end_of_varangian_order
 			days = 10950
 		}
 		is_at_war = no
 	}
 
 	option = {
-		name = "nhs_vov_varangian_order_events.14.a"
-		clr_country_flag = to_enable_merc_varangian_elite
+		name = "nhs_vov_varangian_order_events.16.a"
+		clr_country_flag = to_enable_merc_varangian_veterans
 		set_country_flag = to_enable_merc_vaeringjar
-		custom_tooltip = to_permanently_disband_varangian_elite_tt
+		custom_tooltip = to_permanently_disband_varangian_veterans_tt
 		hidden_effect = {
 			if = {
 				limit = {
 					any_hired_mercenary_company = {
-						template = merc_varangian_elite
+						template = merc_varangian_veterans
 					}
 				}
 				random_hired_mercenary_company = {
 					limit = {
-						template = merc_varangian_elite
+						template = merc_varangian_veterans
 					}
 					disband_mercenary_company = THIS
 				}
@@ -1518,11 +1666,61 @@ country_event = {
 	}
 }
 
-#Varangian Culture change
+# The end of Varangian Elite
 country_event = {
 	id = nhs_vov_varangian_order_events.17
 	title = nhs_vov_varangian_order_events.17.t
 	desc = nhs_vov_varangian_order_events.17.d
+	picture = {
+		picture = runestone_eventPicture
+		trigger = {
+			religion = norse_pagan_reformed
+		}
+	}
+	picture = {
+		picture = viking_court_eventPicture
+	}
+	
+
+	trigger = {
+		nhs_check_all_vinland = { CONDITION = tag }
+		has_country_flag = to_enable_merc_varangian_elite
+		had_country_flag = {
+			flag = to_enable_merc_varangian_elite
+			days = 10950
+		}
+		is_at_war = no
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.17.a"
+		add_prestige = 10
+		add_army_tradition = 5
+		clr_country_flag = to_enable_merc_varangian_elite
+		custom_tooltip = to_permanently_disband_varangian_elite_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					any_hired_mercenary_company = {
+						template = merc_varangian_elite
+					}
+				}
+				random_hired_mercenary_company = {
+					limit = {
+						template = merc_varangian_elite
+					}
+					disband_mercenary_company = THIS
+				}
+			}
+		}
+	}
+}
+
+#Varangian Culture change
+country_event = {
+	id = nhs_vov_varangian_order_events.18
+	title = nhs_vov_varangian_order_events.18.t
+	desc = nhs_vov_varangian_order_events.18.d
 	picture = viking_settlement_walking_eventPicture
 
 	fire_only_once = yes
@@ -1545,7 +1743,7 @@ country_event = {
 	}
 
 	option = {
-		name = "nhs_vov_varangian_order_events.17.a"
+		name = "nhs_vov_varangian_order_events.18.a"
 		add_army_tradition = 5
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = nhs_varangians_culture_change_tt
