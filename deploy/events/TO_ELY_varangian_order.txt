@@ -29,10 +29,11 @@ country_event = {
 		any_known_country = {
 			has_country_flag = nhs_met_greeks
 			NOT = { war_with = ROOT }
-			OR = {
-				tag = VIN
-				tag = MK1
-				tag = HLL
+			nhs_check_all_vinland = { CONDITION = tag }
+		}
+		NOT = {
+			any_war_enemy_country = {
+				nhs_check_all_vinland = { CONDITION = tag }
 			}
 		}
 	}
@@ -41,6 +42,13 @@ country_event = {
 		name = "nhs_vov_varangian_order_events.1.a"
 		ai_chance = {
 			factor = 80
+			modifier = {
+				factor = 2
+				any_known_country = {
+					nhs_check_all_vinland = { CONDITION = tag }
+					ai = no
+				}
+			}
 		}
 		set_country_flag = established_varangians
 		clr_country_flag = nhs_initial_varangians_delayed
@@ -52,6 +60,13 @@ country_event = {
 			add_mil_power = -50
 		}
 		custom_tooltip = nhs_enables_varangian_guard_tt
+		if = {
+			limit = {
+				has_dlc = "Cradle of Civilization"
+			}
+			custom_tooltip = nhs_enables_varangian_guard_no_proff_loss_tt
+		}
+		custom_tooltip = to_varangian_loyalty_tt
 		custom_tooltip = nhs_new_line_tt
 		capital_scope = {
 			add_province_modifier = {
@@ -82,7 +97,7 @@ country_event = {
 	}
 	
 	option = {
-		name = "nhs_vov_varangian_order_events.1.b"
+		name = "nhs_vov_varangian_order_events.1.c"
 		ai_chance = {
 			factor = 20
 		}
@@ -91,7 +106,6 @@ country_event = {
 		clr_country_flag = to_can_get_varangians
 		clr_country_flag = nhs_initial_varangians_delayed
 	}
-	
 }
 
 # Varangian Order Formed (norse colonies)
@@ -1034,6 +1048,469 @@ country_event = {
 	option = {
 		name = "nhs_vov_varangian_order_events.10.a"
 		set_country_flag = to_can_settle_varangians_on_malta
+	}
+}
+
+# Varangians disgruntled if at war with Vinlanders
+country_event = {
+	id = nhs_vov_varangian_order_events.11
+	title = nhs_vov_varangian_order_events.11.t
+	desc = nhs_vov_varangian_order_events.11.d
+	picture = varangian_argument_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		has_country_flag = established_varangians
+		NOT = { has_country_flag = nhs_disbanded_varangians }
+		any_war_enemy_country = {
+			nhs_check_all_vinland = { CONDITION = tag }
+			defensive_war_with = ROOT
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			to_compute_merc_company_size = {
+				OUTPUT_VARIABLE = to_varangian_guard_size
+				REGIMENTS_PER_DEVELOPMENT = 0.02
+			}
+			multiply_variable = {
+				which = to_varangian_guard_size
+				value = 2000
+			}
+			set_variable = {
+				which = to_number_of_viking_countries_at_war_with
+				value = 0
+			}
+			every_war_enemy_country = {
+				limit = {
+					nhs_check_all_vinland = { CONDITION = tag }
+					defensive_war_with = ROOT
+				}
+				set_country_flag = to_viking_country_at_war_with
+				ROOT = {
+					change_variable = {
+						which = to_number_of_viking_countries_at_war_with
+						value = 1
+					}
+				}
+			}
+			to_calculate_transfered_varangian_manpower = {
+				FRACTION_TRANSFERED = 25
+			}
+			to_calculate_transfered_varangian_manpower = {
+				FRACTION_TRANSFERED = 50
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			clr_country_flag = to_calculated_transfered_manpower_subject
+			set_variable = {
+				which = to_number_of_viking_countries_at_war_with
+				value = 0
+			}
+			set_variable = {
+				which = to_varangian_guard_size
+				value = 0
+			}
+			every_country = {
+				clr_country_flag = to_viking_country_at_war_with
+			}
+			set_variable = {
+				which = to_transfered_varangian_manpower_gained_25
+				value = 0
+			}
+			set_variable = {
+				which = to_transfered_varangian_manpower_gained_50
+				value = 0
+			}
+			set_variable = {
+				which = to_transfered_varangian_manpower_25
+				value = 0
+			}
+			set_variable = {
+				which = to_transfered_varangian_manpower_50
+				value = 0
+			}
+		}
+	}
+	
+	option = {
+		name = "nhs_vov_varangian_order_events.11.a"
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0
+				NOT = { years_of_income = 1.5 }
+			}
+			modifier = {
+				factor = 0
+				ruler_has_personality = greedy_personality
+			}
+			modifier = {
+				factor = 3
+				OR = {
+					ruler_has_personality = fierce_negotiator_personality
+					ruler_has_personality = silver_tongue_personality
+					ruler_has_personality = charismatic_negotiator_personality
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { monthly_income = 42 }
+			}
+			add_treasury = -500
+		}
+		else_if = {
+			limit = {
+				NOT = { monthly_income = 417 }
+			}
+			add_years_of_income = -1
+		}
+		else = {
+			add_treasury = -5000
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_some_varangians_still_leave_tt
+		if = {
+			limit = {
+				any_hired_mercenary_company = {
+					template = merc_varangian_guard
+				}
+			}
+			random_hired_mercenary_company = {
+				limit = {
+					template = merc_varangian_guard
+				}
+				custom_tooltip = to_remove_25p_varangian_guard_manpower
+				hidden_effect = {
+					add_company_manpower = -0.25
+				}
+			}
+		}
+		to_transfer_varangian_manpower = {
+			FRACTION_TRANSFERED = 25
+			EXTRA_EFFECTS_FOR_OTHER_ENEMIES = "
+				add_army_tradition = 10
+				custom_tooltip = to_lift_for_of_war_from_ROOT_for_5_years_tt
+			"
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = to_viking_country_at_war_with
+				}
+				country_event = { id = nhs_vov_varangian_order_events.12 }
+			}
+		}
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.11.b"
+		ai_chance = {
+			factor = 75
+		}
+		if = {
+			limit = {
+				any_hired_mercenary_company = {
+					template = merc_varangian_guard
+				}
+			}
+			random_hired_mercenary_company = {
+				limit = {
+					template = merc_varangian_guard
+				}
+				tooltip = {
+					disband_mercenary_company = THIS
+				}
+				hidden_effect = {
+					add_company_manpower = -0.50
+					disband_mercenary_company = THIS
+				}
+			}
+		}
+		custom_tooltip = to_varangian_mercs_unavailable_for_10_years_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_many_varangians_leave_tt
+		if = {
+			limit = {
+				any_hired_mercenary_company = {
+					template = merc_varangian_guard
+				}
+			}
+			random_hired_mercenary_company = {
+				limit = {
+					template = merc_varangian_guard
+				}
+				custom_tooltip = to_remove_50p_varangian_guard_manpower
+				hidden_effect = {
+					add_company_manpower = -0.50
+				}
+			}
+		}
+		to_transfer_varangian_manpower = {
+			FRACTION_TRANSFERED = 50
+			EXTRA_EFFECTS_FOR_OTHER_ENEMIES = "
+				add_army_tradition = 20
+				custom_tooltip = to_lift_for_of_war_from_ROOT_for_10_years_tt
+				custom_tooltip = to_enables_varangian_elite_mercs_tt
+			"
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = to_viking_country_at_war_with
+				}
+				country_event = { id = nhs_vov_varangian_order_events.13 }
+			}
+			add_country_modifier = {
+				name = to_block_varangian_guard_recruitment
+				duration = 3650
+				hidden = yes
+			}
+		}
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.11.c"
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0
+				OR = {
+					ruler_has_personality = just_personality
+					ruler_has_personality = benevolent_personality
+					ruler_has_personality = craven_personality
+					ruler_has_personality = calm_personality
+					ruler_has_personality = kind_hearted_personality
+				}
+			}
+			modifier = {
+				factor = 3
+				OR = {
+					ruler_has_personality = malevolent_personality
+					ruler_has_personality = cruel_personality
+				}
+			}
+		}
+		to_disband_varangians = {
+			ANNEX_PROVINCES = yes
+		}
+	}
+}
+
+# Varangian Reinforcements, minor
+country_event = {
+	id = nhs_vov_varangian_order_events.12
+	title = nhs_vov_varangian_order_events.12.t
+	desc = nhs_vov_varangian_order_events.12.d
+	picture = norse_party_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				which = to_transfered_varangian_manpower_25
+				which = FROM
+			}
+			set_variable = {
+				which = to_transfered_varangian_manpower_gained_25
+				which = FROM
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			set_variable = {
+				which = to_transfered_varangian_manpower_25
+				value = 0
+			}
+			set_variable = {
+				which = to_transfered_varangian_manpower_gained_25
+				value = 0
+			}
+		}
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.12.a"
+		add_army_tradition = 10
+		custom_tooltip = to_gain_transfered_varangian_manpower_25_tt
+		custom_tooltip = to_lift_for_of_war_from_FROM_for_5_years_tt
+		hidden_effect = {
+			FROM = {
+				remove_fow = 1825
+			}
+			to_change_manpower_by_VARIABLE = {
+				VARIABLE = to_transfered_varangian_manpower_gained_25
+				SIGN = ""
+				SCOPE = ROOT
+			}
+			set_country_flag = to_enable_merc_varangian_elite
+		}
+		custom_tooltip = nhs_dotted_line_tt
+		custom_tooltip = to_has_already_happened_tt
+		tooltip = {
+			FROM = {
+				if = {
+					limit = {
+						NOT = { monthly_income = 42 }
+					}
+					add_treasury = -500
+				}
+				else_if = {
+					limit = {
+						NOT = { monthly_income = 417 }
+					}
+					add_years_of_income = -1
+				}
+				else = {
+					add_treasury = -5000
+				}
+				custom_tooltip = to_remove_25p_varangian_guard_manpower
+			}
+		}
+		if = {
+			limit = {
+				VGD = {
+					exists = yes
+					is_subject_of = FROM
+				}
+			}
+			VGD = {
+				custom_tooltip = to_lose_transfered_varangian_manpower_25_tt
+			}
+		}
+	}
+}
+
+# Varangian Reinforcements, major
+country_event = {
+	id = nhs_vov_varangian_order_events.13
+	title = nhs_vov_varangian_order_events.13.t
+	desc = nhs_vov_varangian_order_events.13.d
+	picture = norse_party_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				which = to_transfered_varangian_manpower_50
+				which = FROM
+			}
+			set_variable = {
+				which = to_transfered_varangian_manpower_gained_50
+				which = FROM
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			set_variable = {
+				which = to_transfered_varangian_manpower_50
+				value = 0
+			}
+			set_variable = {
+				which = to_transfered_varangian_manpower_gained_50
+				value = 0
+			}
+		}
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.13.a"
+		add_army_tradition = 20
+		custom_tooltip = to_gain_transfered_varangian_manpower_50_tt
+		custom_tooltip = to_lift_for_of_war_from_FROM_for_10_years_tt
+		hidden_effect = {
+			FROM = {
+				remove_fow = 3650
+			}
+			to_change_manpower_by_VARIABLE = {
+				VARIABLE = to_transfered_varangian_manpower_gained_50
+				SIGN = ""
+				SCOPE = ROOT
+			}
+			set_country_flag = to_enable_merc_varangian_elite
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_enables_varangian_elite_mercs_tt
+		if = {
+			limit = {
+				has_dlc = "Cradle of Civilization"
+			}
+			custom_tooltip = to_enables_varangian_elite_mercs_no_proff_loss_tt
+		}
+		custom_tooltip = nhs_dotted_line_tt
+		custom_tooltip = to_has_already_happened_tt
+		custom_tooltip = to_varangian_mercs_unavailable_for_10_years_FROM_tt
+		if = {
+			limit = {
+				VGD = {
+					exists = yes
+					is_subject_of = FROM
+				}
+			}
+			VGD = {
+				custom_tooltip = to_lose_transfered_varangian_manpower_50_tt
+			}	
+		}
+	}
+}
+
+# The Væringjar
+country_event = {
+	id = nhs_vov_varangian_order_events.14
+	title = nhs_vov_varangian_order_events.14.t
+	desc = nhs_vov_varangian_order_events.14.d
+	picture = norse_party_eventPicture
+
+	trigger = {
+		has_country_flag = to_enable_merc_varangian_elite
+		had_country_flag = {
+			flag = to_enable_merc_varangian_elite
+			days = 10950
+		}
+		is_at_war = no
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.14.a"
+		clr_country_flag = to_enable_merc_varangian_elite
+		set_country_flag = to_enable_merc_vaeringjar
+		custom_tooltip = to_permanently_disband_varangian_elite_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					any_hired_mercenary_company = {
+						template = merc_varangian_elite
+					}
+				}
+				random_hired_mercenary_company = {
+					limit = {
+						template = merc_varangian_elite
+					}
+					disband_mercenary_company = THIS
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_enables_merc_vaeringjar_tt
+		if = {
+			limit = {
+				has_dlc = "Common Sense"
+			}
+			custom_tooltip = to_enables_merc_vaeringjar_no_proff_loss_tt
+		}
 	}
 }
 

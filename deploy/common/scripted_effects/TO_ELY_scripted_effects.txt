@@ -11086,6 +11086,60 @@ to_disband_varangians = {
 			kill_heir = {}
 		}
 	}
+	custom_tooltip = to_varangian_guard_permanently_disbanded_tt
+	remove_country_modifier = nhs2_varangian_influence
+	if = {
+		limit = {
+			any_owned_province = {
+				has_province_modifier = to_varangian_quarter
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_province_modifier = to_varangian_quarter
+			}
+			remove_province_modifier = to_varangian_quarter
+		}
+	}
+	hidden_effect = {
+		if = {
+			limit = {
+				any_hired_mercenary_company = {
+					template = merc_varangian_guard
+				}
+			}
+			random_hired_mercenary_company = {
+				limit = {
+					template = merc_varangian_guard
+				}
+				disband_mercenary_company = THIS
+			}
+		}
+	}
+	custom_tooltip = nhs_new_line_tt
+	if = {
+		limit = {
+			any_known_country = {
+				nhs_check_all_vinland = { CONDITION = tag }
+			}
+		}
+		every_known_country = {
+			limit = {
+				nhs_check_all_vinland = { CONDITION = tag }
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = to_disbanded_varangian_order_om
+			}
+			hidden_effect = {
+				reverse_remove_opinion = {
+					who = ROOT
+					modifier = to_varangian_ties_om
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+	}
 	if = {
 		limit = {
 			capital_scope = {
@@ -11239,21 +11293,6 @@ to_disband_varangians = {
 			}
 		}
 	}
-	remove_country_modifier = nhs2_varangian_influence
-	if = {
-		limit = {
-			any_province = {
-				has_province_modifier = to_varangian_quarter
-			}
-		}
-		every_province = {
-			limit = {
-				has_province_modifier = to_varangian_quarter
-			}
-			remove_province_modifier = to_varangian_quarter
-		}
-	}
-
 	[[WIPE_VARANGIAN_CORES]
 	hidden_effect = {
 		every_province = {
@@ -11261,6 +11300,54 @@ to_disband_varangians = {
 				is_core = VGD
 			}
 			remove_core = VGD
+		}
+	}
+	]
+
+	[[ANNEX_PROVINCES]
+	if = {
+		limit = {
+			exists = VGD
+			VGD = {
+				is_subject_of = ROOT
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		every_province = {
+			limit = {
+				owned_by = VGD
+			}
+			if = {
+				limit = {
+					is_capital = yes
+				}
+				cede_province = ROOT
+				spawn_rebels = {
+					type = to_varangian_rebels
+					size = 2
+					win = yes
+				}
+			}
+			else_if = {
+				limit = {
+					OR = { 
+						culture = varangian_e
+						culture = varangian_n
+					}
+				}
+				cede_province = ROOT
+				spawn_rebels = {
+					type = to_varangian_rebels
+					size = 1
+					win = yes
+				}
+			}
+			else = {
+				cede_province = ROOT
+			}
+			hidden_effect = {
+				remove_core = VGD
+			}
 		}
 	}
 	]
@@ -11416,4 +11503,155 @@ to_disband_varangians = {
 		}
 	}
 	]
+}
+
+to_calculate_transfered_varangian_manpower = {
+	hidden_effect = {
+		set_variable = {
+			which = to_varangian_guard_size_contribution
+			which = to_varangian_guard_size
+		}
+		if = {
+			limit = {
+				any_war_enemy_country = {
+					nhs_check_all_vinland = { CONDITION = tag }
+					defensive_war_with = ROOT
+				}
+			}
+			if = {
+				limit = {
+					exists = VGD
+					VGD = {
+						is_subject_of = ROOT
+					}
+				}
+				set_country_flag = to_calculated_transfered_manpower_subject
+				export_to_variable = {
+					which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+					value = manpower
+					who = VGD
+				}
+				multiply_variable = {
+					which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+					value = 100
+				}
+				set_variable = {
+					which = to_true_fraction_transfered
+					value = $FRACTION_TRANSFERED$
+				}
+				divide_variable = {
+					which = to_true_fraction_transfered
+					value = 100
+				}
+				multiply_variable = {
+					which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+					which = to_true_fraction_transfered
+				}
+				multiply_variable = {
+					which = to_varangian_guard_size_contribution
+					which = to_true_fraction_transfered
+				}
+				set_variable = {
+					which = to_true_fraction_transfered
+					value = 0
+				}
+				to_round_down_variable = { VARIABLE = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$ }
+				multiply_variable = {
+					which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+					value = 10
+				}
+				set_variable = {
+					which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
+					which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+				}
+				change_variable = {
+					which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
+					which = to_varangian_guard_size_contribution
+				}
+				if = {
+					limit = {
+						check_variable = {
+							which = to_number_of_viking_countries_at_war_with
+							value = 2
+						}
+					}
+					divide_variable = {
+						which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
+						which = to_number_of_viking_countries_at_war_with
+					}
+					divide_variable = {
+						which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
+						value = 10
+					}
+					to_round_down_variable = { VARIABLE = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$ }
+					multiply_variable = {
+						which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
+						value = 10
+					}
+				}
+			}
+		}
+		set_variable = {
+			which = to_varangian_guard_size_contribution
+			which = 0
+		}
+	}
+}
+
+to_transfer_varangian_manpower = {
+	if = {
+		limit = {
+			any_war_enemy_country = {
+				nhs_check_all_vinland = { CONDITION = tag }
+				defensive_war_with = ROOT
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = to_calculated_transfered_manpower_subject
+			}
+			VGD = {
+				custom_tooltip = to_lose_transfered_varangian_manpower_$FRACTION_TRANSFERED$_tt
+			}
+		}
+		tooltip = {
+			if = {
+				limit = {
+					any_country = {
+						has_country_flag = to_viking_country_at_war_with
+					}
+				}
+				every_country = {
+					limit = {
+						has_country_flag = to_viking_country_at_war_with
+					}
+					custom_tooltip = to_gain_transfered_varangian_manpower_$FRACTION_TRANSFERED$_tt
+					[[EXTRA_EFFECTS_FOR_OTHER_ENEMIES]
+					$EXTRA_EFFECTS_FOR_OTHER_ENEMIES$
+					]
+				}
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = VGD
+					VGD = {
+						is_subject_of = ROOT
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_country_flag = to_calculated_transfered_manpower_subject }
+					}
+					to_calculate_transfered_varangian_manpower = { FRACTION_TRANSFERED = $FRACTION_TRANSFERED$ }
+				}
+				to_change_manpower_by_VARIABLE = {
+					VARIABLE = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+					SIGN = "-"
+					SCOPE = VGD
+				}
+			}
+		}
+	}
 }

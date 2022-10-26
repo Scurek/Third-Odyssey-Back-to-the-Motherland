@@ -495,6 +495,17 @@ to_round_up_variable = {
 	}
 }
 
+to_round_down_variable = {
+	multiply_variable = { 
+		which = $VARIABLE$
+		value = 0.001 
+	}
+	multiply_variable = { 
+		which = $VARIABLE$
+		value = 1000 
+	}
+}
+
 to_save_historal_friends_and_rivals = {
 	hidden_effect = {
 		every_country = {
@@ -1587,5 +1598,213 @@ to_remove_missionary_strength_from_battles_from_owned_provinces = {
 		remove_province_modifier = to_missionary_strength_from_battles_2
 		remove_province_modifier = to_missionary_strength_from_battles_3
 		remove_province_modifier = to_missionary_strength_from_battles_4
+	}
+}
+
+to_compute_merc_company_size = {
+	export_to_variable = {
+		which = to_total_development
+		value = total_development
+	}
+	set_variable = {
+		which = $OUTPUT_VARIABLE$
+		which = to_total_development
+	}
+	multiply_variable = {
+		which = $OUTPUT_VARIABLE$
+		value = $REGIMENTS_PER_DEVELOPMENT$
+	}
+	to_round_down_variable = { VARIABLE = $OUTPUT_VARIABLE$ }
+	if = {
+		limit = {
+			mil_tech = 16
+		}
+		set_variable = {
+			which = to_merc_size_cap
+			value = 30
+		}
+	}
+	else_if = {
+		limit = {
+			mil_tech = 14
+		}
+		set_variable = {
+			which = to_merc_size_cap
+			value = 29
+		}
+	}
+	else_if = {
+		limit = {
+			mil_tech = 11
+		}
+		set_variable = {
+			which = to_merc_size_cap
+			value = 27
+		}
+	}
+	else_if = {
+		limit = {
+			mil_tech = 9
+		}
+		set_variable = {
+			which = to_merc_size_cap
+			value = 25
+		}
+	}
+	else_if = {
+		limit = {
+			mil_tech = 6
+		}
+		set_variable = {
+			which = to_merc_size_cap
+			value = 24
+		}
+	}
+	else_if = {
+		limit = {
+			mil_tech = 5
+		}
+		set_variable = {
+			which = to_merc_size_cap
+			value = 22
+		}
+	}
+	else_if = {
+		limit = {
+			mil_tech = 2
+		}
+		set_variable = {
+			which = to_merc_size_cap
+			value = 20
+		}
+	}
+	else = {
+		set_variable = {
+			which = to_merc_size_cap
+			value = 15
+		}
+	}
+	set_variable = {
+		which = to_relative_size_mod
+		value = $REGIMENTS_PER_DEVELOPMENT$
+	}
+	divide_variable = {
+		which = to_relative_size_mod
+		value = 0.05
+	}
+	multiply_variable = {
+		which = to_merc_size_cap
+		which = to_relative_size_mod
+	}
+	to_round_down_variable = { VARIABLE = to_merc_size_cap }
+	if = {
+		limit = {
+			check_variable = {
+				which = $OUTPUT_VARIABLE$
+				which = to_merc_size_cap
+			}
+		}
+		set_variable = {
+			which = $OUTPUT_VARIABLE$
+			which = to_merc_size_cap
+		}
+	}
+	set_variable = {
+		which = to_total_development
+		which = 0
+	}
+	set_variable = {
+		which = to_merc_size_cap
+		which = 0
+	}
+	set_variable = {
+		which = to_relative_size_mod
+		which = 0
+	}
+}
+
+to_change_manpower_by_VARIABLE = {
+	set_variable = {
+		which = to_manpower_change_counter
+		which = $VARIABLE$
+	}
+	while = {
+		limit = {
+			check_variable = {
+				which = to_manpower_change_counter
+				value = 10000
+			}
+		}
+		subtract_variable = {
+			which = to_manpower_change_counter
+			value = 10000
+		}
+		$SCOPE$ = {
+			add_manpower = $SIGN$10
+		}
+	}
+	while = {
+		limit = {
+			check_variable = {
+				which = to_manpower_change_counter
+				value = 1000
+			}
+		}
+		subtract_variable = {
+			which = to_manpower_change_counter
+			value = 1000
+		}
+		$SCOPE$ = {
+			add_manpower = $SIGN$1
+		}
+	}
+	while = {
+		limit = {
+			check_variable = {
+				which = to_manpower_change_counter
+				value = 100
+			}
+		}
+		subtract_variable = {
+			which = to_manpower_change_counter
+			value = 100
+		}
+		$SCOPE$ = {
+			add_manpower = $SIGN$0.1
+		}
+	}
+	while = {
+		limit = {
+			check_variable = {
+				which = to_manpower_change_counter
+				value = 10
+			}
+		}
+		subtract_variable = {
+			which = to_manpower_change_counter
+			value = 10
+		}
+		$SCOPE$ = {
+			add_manpower = $SIGN$0.01
+		}
+	}
+	while = {
+		limit = {
+			check_variable = {
+				which = to_manpower_change_counter
+				value = 1
+			}
+		}
+		subtract_variable = {
+			which = to_manpower_change_counter
+			value = 1
+		}
+		$SCOPE$ = {
+			add_manpower = $SIGN$0.001
+		}
+	}
+	set_variable = {
+		which = to_manpower_change_counter
+		which = 0
 	}
 }
