@@ -179,10 +179,18 @@ country_event = {
 		has_country_flag = established_varangians
 		has_country_modifier = nhs2_varangian_influence
 		NOT = { has_country_flag = nhs_varangian_guard_substate }
+		NOT = { has_country_flag = nhs_varangian_guard_integrated }
 		NOT = { has_country_flag = nhs_disbanded_varangians }
 		NOT = { has_country_flag = to_promised_province_to_varangians }
 		is_at_war = no
 		NOT = { has_country_flag = to_disable_found_varangian_order_decision }
+		OR = {
+			NOT = { has_country_flag = nhs_delayed_varangians }
+			had_country_flag = {
+				flag = nhs_delayed_varangians
+				days = 3650
+			}
+		}
 		any_owned_province = {
 			region = northeast_america_region
 			NOT = { has_albanian_majority_modifier = yes }
@@ -190,6 +198,10 @@ country_event = {
 			is_colony = no
 			has_port = yes
 		}
+	}
+
+	mean_time_to_happen = {
+		months = 6
 	}
 	
 	immediate = {
@@ -267,6 +279,7 @@ country_event = {
 		ai_chance = {
 			factor = 0
 		}
+		custom_tooltip = to_demand_estates_again_in_10_years_tt
 		clr_country_flag = nhs_delayed_varangians
 		set_country_flag = nhs_delayed_varangians
 		clr_country_flag = to_disable_found_varangian_order_decision
@@ -295,6 +308,7 @@ country_event = {
 		ai_chance = {
 			factor = 0
 		}
+		custom_tooltip = to_demand_estates_again_in_10_years_tt
 		clr_country_flag = nhs_delayed_varangians
 		set_country_flag = nhs_delayed_varangians
 		clr_country_flag = to_disable_found_varangian_order_decision
@@ -634,10 +648,25 @@ country_event = {
 	
 	trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
-		has_country_flag = nhs_varangian_guard_substate
+		OR = {
+			has_country_flag = nhs_varangian_guard_substate
+			has_country_flag = nhs_varangian_guard_integrated
+		}
 		NOT = { has_country_flag = nhs_varangian_pending }
 		NOT = { has_country_flag = nhs_disbanded_varangians }
-		NOT = { exists = VGD }
+		if = {
+			limit = {
+				has_country_flag = nhs_varangian_guard_substate
+			}
+			NOT = { exists = VGD }
+		}
+		else = {
+			NOT = { 
+				any_owned_province = {
+					has_province_modifier = to_varangian_headquarters
+				}
+			}
+		}
 	}
 	
 	immediate = {
@@ -832,7 +861,6 @@ country_event = {
 	trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 		has_country_flag = nhs_varangian_pending
-		has_country_flag = nhs_varangian_guard_substate
 		is_at_war = no
 		OR = {
 			has_country_flag = to_varangians_settled_on_malta
@@ -1723,30 +1751,52 @@ country_event = {
 	desc = nhs_vov_varangian_order_events.18.d
 	picture = viking_settlement_walking_eventPicture
 
-	fire_only_once = yes
-
 	trigger = {
-		culture_group = elysian_group
+		culture_group = byzantine
 		is_subject = no
+		NOT = { has_country_flag = to_varangian_culture_change }
+		OR = {
+			mission_completed = to_taming_the_northmen_mission
+			had_country_flag = {
+				flag = established_varangians
+				days = 25550
+			}
+			AND = {
+				NOT = { has_country_flag = nhs_varangian_guard_substate }
+				had_country_flag = {
+					flag = established_varangians
+					days = 14600
+				}
+			}
+			is_year = 1600
+		}
 		OR = {
 			any_owned_province = { 
 				culture = varangian_n
 			}
 			any_subject_country = {
-				primary_culture = varangian_n
+				OR = {
+					primary_culture = varangian_n
+					any_owned_province = {
+						culture = varangian_n
+					}
+				}
 			}
 		}
 	}
 	
 	mean_time_to_happen = {
-		years = 3
+		months = 12
+		modifier = {
+			factor = 0.01
+			mission_completed = to_taming_the_northmen_mission
+		}
 	}
 
 	option = {
 		name = "nhs_vov_varangian_order_events.18.a"
 		add_army_tradition = 5
 		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = nhs_varangians_culture_change_tt
 		if = {
 			limit = {
 				any_subject_country = {
@@ -1760,19 +1810,22 @@ country_event = {
 				change_primary_culture = varangian_e
 			}
 		}
-		if = {
-			limit = {
-				any_province = {
-					country_or_subject_holds = ROOT
-					culture = varangian_n
-				}
-			}
-			every_province = {
+		custom_tooltip = nhs_varangians_culture_change_tt
+		hidden_effect = {
+			if = {
 				limit = {
-					country_or_subject_holds = ROOT
-					culture = varangian_n
+					any_province = {
+						country_or_subject_holds = ROOT
+						culture = varangian_n
+					}
 				}
-				change_culture = varangian_e
+				every_province = {
+					limit = {
+						country_or_subject_holds = ROOT
+						culture = varangian_n
+					}
+					change_culture = varangian_e
+				}
 			}
 		}
 	}
@@ -2543,16 +2596,26 @@ country_event = {
 	option = {
 		name = "nhs_vov_varangian_order_events.104.a"
 		goto = event_target:nhs_vov_varangian_flavor_c_target
-		add_army_tradition = 5
 		event_target:nhs_vov_varangian_flavor_c_target = {
 			add_colonysize = 1000
-			add_province_modifier = {
-				name = nhs2_varangian_colony_f
-				duration = -1
+			if = {
+				limit = {
+					has_country_flag = nhs_varangian_guard_integrated
+				}
+				add_province_modifier = {
+					name = to_varangian_stronghold_independent
+					duration = -1
+				}
+			}
+			else = {
+				add_province_modifier = {
+					name = to_varangian_stronghold
+					duration = -1
+				}
 			}
 			if = {
 				limit = {
-					NOT = { has_global_flag = nhs_varangian_culture_change }
+					NOT = { has_country_flag = to_varangian_culture_change }
 				}
 				change_culture = varangian_n
 			}

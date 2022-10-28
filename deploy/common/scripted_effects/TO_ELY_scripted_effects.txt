@@ -10877,71 +10877,96 @@ to_nhs_set_up_varangians_in_province = {
 			remove_core = VGD
 		}
 	}
-	tooltip = {
-		$PROVINCE_ID$ = {
-			cede_province = VGD
-			[[EXTRA_DEVELOPMENT]
-			add_base_manpower = 3
-			]
-		}
-		create_subject = {
-			subject_type = elysian_subject_varangian
-			subject = VGD
-		}
-	}
-	set_country_flag = nhs_varangian_guard_substate
 	if = {
 		limit = {
-			$PROVINCE_ID$ = {
-				OR = {
-					has_province_modifier = nhs2_european_enclave
-					has_province_modifier = nhs2_small_por_enclave
-					has_province_modifier = nhs2_por_enclave
-					has_province_modifier = nhs2_large_por_enclave
-				}
+			any_owned_province = {
+				has_province_modifier = to_varangian_headquarters
 			}
 		}
-		$PROVINCE_ID$ = {
-			nhs_move_t_post = yes
+		every_owned_province = {
+			remove_province_modifier = to_varangian_headquarters
 		}
 	}
-	
-	hidden_effect = {
+	if = {
+		limit = {
+			has_country_flag = nhs_varangian_guard_integrated
+		}
 		$PROVINCE_ID$ = {
-			add_core = VGD
-			ROOT = {
-				release = VGD
-			}
-			change_culture = varangian_n
-			change_religion = ROOT
-			hidden_effect = {
-				nhs_on_province_culture_converted_general = yes
-			}
-			VGD = {
-				set_capital = $PROVINCE_ID$
-				change_religion = ROOT
-				change_primary_culture = varangian_n
-				hidden_effect = {
-					nhs_change_government = { GOV = varangian_order_gov }
-				}
-				nhs_add_gov_reform = { REF = varangian_guard }
+			add_province_modifier = {
+				name = to_varangian_headquarters
+				duration = -1
 			}
 			[[EXTRA_DEVELOPMENT]
 			add_base_manpower = 3
 			]
 		}
-		every_province = {
-			limit = {
-				has_discovered = ROOT
+	}
+	else = {
+		tooltip = {
+			$PROVINCE_ID$ = {
+				cede_province = VGD
+				[[EXTRA_DEVELOPMENT]
+				add_base_manpower = 3
+				]
 			}
-			discover_country = VGD
+			create_subject = {
+				subject_type = elysian_subject_varangian
+				subject = VGD
+			}
 		}
-		VGD = {
-			change_technology_group = viking
+		set_country_flag = nhs_varangian_guard_substate
+		if = {
+			limit = {
+				$PROVINCE_ID$ = {
+					OR = {
+						has_province_modifier = nhs2_european_enclave
+						has_province_modifier = nhs2_small_por_enclave
+						has_province_modifier = nhs2_por_enclave
+						has_province_modifier = nhs2_large_por_enclave
+					}
+				}
+			}
+			$PROVINCE_ID$ = {
+				nhs_move_t_post = yes
+			}
 		}
-		create_subject = {
-			subject_type = elysian_subject_varangian
-			subject = VGD
+		hidden_effect = {
+			$PROVINCE_ID$ = {
+				add_core = VGD
+				ROOT = {
+					release = VGD
+				}
+				change_culture = varangian_n
+				change_religion = ROOT
+				hidden_effect = {
+					nhs_on_province_culture_converted_general = yes
+				}
+				VGD = {
+					set_capital = $PROVINCE_ID$
+					change_religion = ROOT
+					change_primary_culture = varangian_n
+					hidden_effect = {
+						nhs_change_government = { GOV = varangian_order_gov }
+					}
+					nhs_add_gov_reform = { REF = varangian_guard }
+				}
+				[[EXTRA_DEVELOPMENT]
+				add_base_manpower = 3
+				]
+			}
+			every_province = {
+				limit = {
+					has_discovered = ROOT
+				}
+				discover_country = VGD
+			}
+			VGD = {
+				change_technology_group = viking
+			}
+			create_subject = {
+				subject_type = elysian_subject_varangian
+				subject = VGD
+			}
 		}
 	}
 }
@@ -11058,6 +11083,12 @@ to_choose_potential_varangian_province_target = {
 
 to_disband_varangians = {
 	clr_country_flag = to_disable_found_varangian_order_decision
+	clr_country_flag = nhs_varangian_guard_substate
+	clr_country_flag = nhs_varangian_guard_integrated
+	clr_country_flag = to_promised_province_to_varangians
+	clr_country_flag = to_varangians_settled_on_malta
+	clr_country_flag = to_can_settle_varangians_on_malta
+	clr_country_flag = nhs_delayed_varangians
 	set_country_flag = nhs_disbanded_varangians
 	if = {
 		limit = {
@@ -11298,7 +11329,47 @@ to_disband_varangians = {
 		}
 	}
 	]
-
+	if = {
+		limit = {
+			any_owned_province = {
+				OR = {
+					has_province_modifier = to_varangian_headquarters
+					has_province_modifier = to_varangian_stronghold
+					has_province_modifier = to_varangian_stronghold_independent
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		every_owned_province = {
+			limit = {
+				OR = {
+					has_province_modifier = to_varangian_headquarters
+					has_province_modifier = to_varangian_stronghold
+					has_province_modifier = to_varangian_stronghold_independent
+				}
+			}
+			if = {
+				limit = {
+					has_province_modifier = to_varangian_headquarters
+				}
+				remove_province_modifier = to_varangian_headquarters
+				spawn_rebels = {
+					type = to_varangian_rebels
+					size = 2
+					win = yes
+				}
+			}
+			else = {
+				remove_province_modifier = to_varangian_stronghold
+				remove_province_modifier = to_varangian_stronghold_independent
+				spawn_rebels = {
+					type = to_varangian_rebels
+					size = 1
+					win = yes
+				}
+			}
+		}
+	}
 	[[ANNEX_PROVINCES]
 	if = {
 		limit = {
@@ -11307,7 +11378,20 @@ to_disband_varangians = {
 				is_subject_of = ROOT
 			}
 		}
-		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				NOT = {
+					any_owned_province = {
+						OR = {
+							has_province_modifier = to_varangian_headquarters
+							has_province_modifier = to_varangian_stronghold
+							has_province_modifier = to_varangian_stronghold_independent
+						}
+					}
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+		}
 		every_province = {
 			limit = {
 				owned_by = VGD

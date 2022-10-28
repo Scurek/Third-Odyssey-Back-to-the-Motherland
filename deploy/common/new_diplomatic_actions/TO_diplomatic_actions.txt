@@ -1865,12 +1865,11 @@ to_establish_protectorate = {
 	}
 }
 
-nhs_vov_headquarters = {
+to_integrate_varangian_order = {
 	category = influence
 	require_acceptance = no
 	is_visible = {
-		nhs_check_all_elysian_tags = { CONDITION = tag } 
-		NOT = { has_country_flag = to_varangians_settled_on_malta }
+		nhs_check_all_elysian_tags = { CONDITION = tag }
 		overlord_of = FROM
 		FROM = { 
 			tag = VGD 
@@ -1879,6 +1878,8 @@ nhs_vov_headquarters = {
 	is_allowed = {
 		adm_tech = 10
 		is_at_war = no
+		adm_power = 100
+		dip_power = 200
 		FROM = {
 			is_at_war = no
 			if = {
@@ -1917,35 +1918,27 @@ nhs_vov_headquarters = {
 		}
 	}
 	on_accept = {
+		clr_country_flag = nhs_varangian_guard_substate
+		set_country_flag = nhs_varangian_guard_integrated
 		FROM = {
+			capital_scope = {
+				set_province_flag = vov_capital
+			}
 			every_owned_province = {
-				if = {
-					limit = { is_capital = yes }
-					set_province_flag = vov_capital
-				}
 				cede_province = ROOT
 				if = {
 					limit = { has_province_flag = vov_capital }
 					add_province_modifier = {
-						name = nhs2_varangian_colony
+						name = to_varangian_headquarters
 						duration = -1
 					}
 					clr_province_flag = vov_capital
 				}
 				else = {
 					add_province_modifier = {
-						name = nhs2_varangian_colony_f
+						name = to_varangian_stronghold
 						duration = -1
 					}
-				}
-				if = {
-					limit = {
-						NOT = { has_global_flag = nhs_varangian_culture_change }
-					}
-					change_culture = varangian_n
-				}
-				else = {
-					change_culture = varangian_e
 				}
 				if = {
 					limit = {
@@ -1954,6 +1947,16 @@ nhs_vov_headquarters = {
 					add_core = ROOT
 					remove_core = FROM 
 				}
+			}
+		}
+		every_owned_province = {
+			limit = {
+				has_province_modifier = to_varangian_stronghold_independent
+			}
+			remove_province_modifier = to_varangian_stronghold_independent
+			add_province_modifier = {
+				name = to_varangian_stronghold
+				duration = -1
 			}
 		}
 	}

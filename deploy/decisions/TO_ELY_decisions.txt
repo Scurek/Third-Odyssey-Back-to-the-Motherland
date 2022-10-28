@@ -6257,16 +6257,22 @@ country_decisions = {
 		potential = {
 			nhs_check_all_elysian_tags = { CONDITION = tag }
 			has_country_flag = to_can_settle_varangians_on_malta
-			OR = {
-				NOT = { has_country_flag = to_varangians_settled_on_malta }
-				NOT = { exists = VGD }
-			}
+			NOT = { has_country_flag = to_varangians_settled_on_malta }
 		}
 		allow = {
-			owns = 126
+			owns_or_subject_of = 126
 			is_at_war = no
 			if = {
 				limit = {
+					exists = VGD
+				}
+				VGD = {
+					is_subject_of = ROOT
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_country_flag = nhs_varangian_guard_integrated }
 					126 = {
 						has_province_modifier = nhs2_supply_lines_tm
 					}
@@ -6281,13 +6287,90 @@ country_decisions = {
 			province_id = 126
 		}
 		effect = {
+			set_country_flag = to_varangians_settled_on_malta
+			clr_country_flag = nhs_varangian_pending
+			remove_country_modifier = nhs2_varangian_influence
+			custom_tooltip = nhs_new_line_tt
 			if = {
+				limit = {
+					has_country_flag = nhs_varangian_guard_integrated
+				}
+				hidden_effect = {
+					random_owned_province = {
+						limit = {
+							has_province_modifier = to_varangian_headquarters
+						}
+						set_province_flag = vov_capital
+					}
+				}
+				126 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+						}
+						cede_province = ROOT
+					}
+					add_province_modifier = {
+						name = to_varangian_headquarters
+						duration = -1
+					}
+					change_culture = varangian_n
+					change_religion = ROOT
+					add_base_manpower = 3
+					hidden_effect = {
+						nhs_on_province_culture_converted_general = yes
+					}
+				}
+				every_province = {
+					limit = {
+						has_province_flag = vov_capital
+					}
+					add_base_manpower = -3
+				}
+				custom_tooltip = nhs_new_line_tt
+				every_owned_province = {
+					limit = {
+						OR = {
+							has_province_flag = vov_capital
+							AND = {
+								has_province_modifier = to_varangian_stronghold
+								area_for_scope_province = {
+									has_province_flag = vov_capital
+								}
+							}
+						}
+					}
+					remove_province_modifier = to_varangian_headquarters
+					remove_province_modifier = to_varangian_stronghold
+					if = {
+						limit = {
+							OR = {
+								culture = varangian_e
+								culture_group = norse_g
+							}
+						}
+						if = {
+							limit = {
+								ROOT = {
+									culture_group = byzantine
+								}
+							}
+							to_ely_province_culture_check = {}
+						}
+						else = {
+							change_culture = ROOT
+						}
+						hidden_effect = {
+							nhs_on_province_culture_converted_general = yes
+						}
+					}
+				}
+			}
+			else_if = {
 				limit = {
 					exists = VGD
 				}
-				set_country_flag = to_varangians_settled_on_malta
-				clr_country_flag = nhs_varangian_pending
-				remove_country_modifier = nhs2_varangian_influence
+				set_country_flag = nhs_varangian_guard_substate
 				126 = {
 					cede_province = VGD
 					add_core = VGD
@@ -6351,9 +6434,7 @@ country_decisions = {
 				}	
 			}
 			else = {
-				set_country_flag = to_varangians_settled_on_malta
-				clr_country_flag = nhs_varangian_pending
-				remove_country_modifier = nhs2_varangian_influence
+				set_country_flag = nhs_varangian_guard_substate
 				tooltip = {
 					126 = {
 						cede_province = VGD
@@ -6411,90 +6492,96 @@ country_decisions = {
 				}
 			}
 			hidden_effect = {
-				every_province = {
+				if = {
 					limit = {
-						has_discovered = ROOT
+						NOT = { has_country_flag = nhs_varangian_guard_integrated }
 					}
-					discover_country = VGD
-				}
-				while = {
-					limit = {
-						any_province = {
-							NOT = { province_id = 126 }
-							OR = {
-								infantry_in_province = VGD
-								cavalry_in_province = VGD
-								artillery_in_province = VGD
-							}
+					every_province = {
+						limit = {
+							has_discovered = ROOT
 						}
+						discover_country = VGD
 					}
-					if = {
+					while = {
 						limit = {
 							any_province = {
 								NOT = { province_id = 126 }
-								infantry_in_province = VGD
+								OR = {
+									infantry_in_province = VGD
+									cavalry_in_province = VGD
+									artillery_in_province = VGD
+								}
 							}
 						}
-						random_province = {
+						if = {
 							limit = {
-								NOT = { province_id = 126 }
-								infantry_in_province = VGD
+								any_province = {
+									NOT = { province_id = 126 }
+									infantry_in_province = VGD
+								}
 							}
-							kill_units = {
-								who = VGD
-								amount = 1
+							random_province = {
+								limit = {
+									NOT = { province_id = 126 }
+									infantry_in_province = VGD
+								}
+								kill_units = {
+									who = VGD
+									amount = 1
+								}
+							}
+							126 = {
+								infantry = VGD
 							}
 						}
-						126 = {
-							infantry = VGD
-						}
-					}
-					else_if = {
-						limit = {
-							any_province = {
-								NOT = { province_id = 126 }
-								cavalry_in_province = VGD
-							}
-						}
-						random_province = {
+						else_if = {
 							limit = {
-								NOT = { province_id = 126 }
-								cavalry_in_province = VGD
+								any_province = {
+									NOT = { province_id = 126 }
+									cavalry_in_province = VGD
+								}
 							}
-							kill_units = {
-								who = VGD
-								amount = 1
+							random_province = {
+								limit = {
+									NOT = { province_id = 126 }
+									cavalry_in_province = VGD
+								}
+								kill_units = {
+									who = VGD
+									amount = 1
+								}
+							}
+							126 = {
+								cavalry = VGD
 							}
 						}
-						126 = {
-							cavalry = VGD
-						}
-					}
-					else_if = {
-						limit = {
-							any_province = {
-								NOT = { province_id = 126 }
-								artillery_in_province = VGD
-							}
-						}
-						random_province = {
+						else_if = {
 							limit = {
-								NOT = { province_id = 126 }
-								artillery_in_province = VGD
+								any_province = {
+									NOT = { province_id = 126 }
+									artillery_in_province = VGD
+								}
 							}
-							kill_units = {
-								who = VGD
-								amount = 1
+							random_province = {
+								limit = {
+									NOT = { province_id = 126 }
+									artillery_in_province = VGD
+								}
+								kill_units = {
+									who = VGD
+									amount = 1
+								}
 							}
-						}
-						126 = {
-							artillery = VGD
+							126 = {
+								artillery = VGD
+							}
 						}
 					}
 				}
 			}
 			if = {
 				limit = {
+					NOT = { has_country_flag = nhs_varangian_guard_integrated }
 					126 = {
 						has_province_modifier = nhs2_supply_lines_tm
 					}
