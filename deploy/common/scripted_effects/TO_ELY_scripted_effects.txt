@@ -11620,14 +11620,17 @@ to_calculate_transfered_varangian_manpower = {
 					}
 				}
 				set_country_flag = to_calculated_transfered_manpower_subject
-				export_to_variable = {
-					which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
-					value = manpower
-					who = VGD
+				to_calculate_fraction_of_varangian_subject_manpower = {
+					FRACTION_TRANSFERED = $FRACTION_TRANSFERED$
 				}
-				multiply_variable = {
-					which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
-					value = 100
+			}
+			else_if = {
+				limit = {
+					has_country_flag = nhs_varangian_guard_integrated
+				}
+				set_country_flag = to_calculated_transfered_manpower_integrated
+				to_calculate_fraction_of_integrated_varangian_manpower = {
+					VARIABLE = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
 				}
 				set_variable = {
 					which = to_true_fraction_transfered
@@ -11641,55 +11644,177 @@ to_calculate_transfered_varangian_manpower = {
 					which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
 					which = to_true_fraction_transfered
 				}
-				multiply_variable = {
-					which = to_varangian_guard_size_contribution
-					which = to_true_fraction_transfered
-				}
-				set_variable = {
-					which = to_true_fraction_transfered
-					value = 0
+				divide_variable = {
+					which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+					value = 10
 				}
 				to_round_down_variable = { VARIABLE = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$ }
 				multiply_variable = {
 					which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
 					value = 10
 				}
-				set_variable = {
-					which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
-					which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
-				}
-				change_variable = {
-					which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
-					which = to_varangian_guard_size_contribution
-				}
-				if = {
-					limit = {
-						check_variable = {
-							which = to_number_of_viking_countries_at_war_with
-							value = 2
-						}
-					}
-					divide_variable = {
-						which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
+			}
+			set_variable = {
+				which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
+				which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+			}
+
+			set_variable = {
+				which = to_true_fraction_transfered
+				value = $FRACTION_TRANSFERED$
+			}
+			divide_variable = {
+				which = to_true_fraction_transfered
+				value = 100
+			}
+			multiply_variable = {
+				which = to_varangian_guard_size_contribution
+				which = to_true_fraction_transfered
+			}
+			change_variable = {
+				which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
+				which = to_varangian_guard_size_contribution
+			}
+			if = {
+				limit = {
+					check_variable = {
 						which = to_number_of_viking_countries_at_war_with
+						value = 2
 					}
-					divide_variable = {
-						which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
-						value = 10
-					}
-					to_round_down_variable = { VARIABLE = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$ }
-					multiply_variable = {
-						which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
-						value = 10
-					}
+				}
+				divide_variable = {
+					which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
+					which = to_number_of_viking_countries_at_war_with
+				}
+				divide_variable = {
+					which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
+					value = 10
+				}
+				to_round_down_variable = { VARIABLE = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$ }
+				multiply_variable = {
+					which = to_transfered_varangian_manpower_gained_$FRACTION_TRANSFERED$
+					value = 10
 				}
 			}
 		}
-		set_variable = {
-			which = to_varangian_guard_size_contribution
-			which = 0
+
+		to_remove_var_if_not_0 = { VARIABLE = to_varangian_guard_size_contribution }
+		to_remove_var_if_not_0 = { VARIABLE = to_true_fraction_transfered }
+	}
+}
+
+to_calculate_fraction_of_varangian_subject_manpower = {
+	export_to_variable = {
+		which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+		value = max_manpower
+		who = VGD
+	}
+	multiply_variable = {
+		which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+		value = 100
+	}
+	set_variable = {
+		which = to_true_fraction_transfered
+		value = $FRACTION_TRANSFERED$
+	}
+	divide_variable = {
+		which = to_true_fraction_transfered
+		value = 100
+	}
+	multiply_variable = {
+		which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+		which = to_true_fraction_transfered
+	}
+	set_variable = {
+		which = to_true_fraction_transfered
+		value = 0
+	}
+	to_round_down_variable = { VARIABLE = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$ }
+	multiply_variable = {
+		which = to_transfered_varangian_manpower_$FRACTION_TRANSFERED$
+		value = 10
+	}
+}
+
+to_calculate_fraction_of_integrated_varangian_manpower = {
+	set_variable = {
+		which = $VARIABLE$
+		value = 0
+	}
+	every_owned_province = {
+		limit = {
+			OR = {
+				has_province_modifier = to_varangian_stronghold
+				has_province_modifier = to_varangian_stronghold_independent
+				has_province_modifier = to_varangian_headquarters
+			}
+		}
+		ROOT = {
+			export_to_variable = {
+				which = to_local_varangian_base_manpower
+				value = base_manpower
+				who = PREV
+			}
+			multiply_variable = {
+				which = to_local_varangian_base_manpower
+				value = 250
+			}
+			export_to_variable = {
+				which = to_local_varangian_manpower
+				value = modifier:local_manpower
+				who = PREV
+			}
+			multiply_variable = {
+				which = to_local_varangian_manpower
+				value = 1000
+			}
+			export_to_variable = {
+				which = to_local_varangian_manpower_modifier
+				value = modifier:local_manpower_modifier
+				who = PREV
+			}
+			set_variable = {
+				which = to_local_varangian_manpower_contribution
+				value = 0
+			}
+			change_variable = {
+				which = to_local_varangian_manpower_contribution
+				which = to_local_varangian_base_manpower
+			}
+			change_variable = {
+				which = to_local_varangian_manpower_contribution
+				which = to_local_varangian_manpower
+			}
+			multiply_variable = {
+				which = to_local_varangian_manpower_contribution
+				which = to_local_varangian_manpower_modifier
+			}
+			if = {
+				limit = {
+					PREV = {
+						NOT = {
+							OR = {
+								culture = varangian_e
+								culture_group = norse_g
+							}
+						}
+					}
+				}
+				divide_variable = {
+					which = to_local_varangian_manpower_contribution
+					value = 2
+				}
+			}
+			change_variable = {
+				which = $VARIABLE$
+				which = to_local_varangian_manpower_contribution
+			}
 		}
 	}
+	to_remove_var_if_not_0 = { VARIABLE = to_local_varangian_base_manpower }
+	to_remove_var_if_not_0 = { VARIABLE = to_local_varangian_manpower }
+	to_remove_var_if_not_0 = { VARIABLE = to_local_varangian_manpower_modifier }
+	to_remove_var_if_not_0 = { VARIABLE = to_local_varangian_manpower_contribution }
 }
 
 to_transfer_varangian_manpower = {
@@ -11703,10 +11828,19 @@ to_transfer_varangian_manpower = {
 		if = {
 			limit = {
 				has_country_flag = to_calculated_transfered_manpower_subject
+				VGD = {
+					is_subject_of = ROOT
+				}
 			}
 			VGD = {
 				custom_tooltip = to_lose_transfered_varangian_manpower_$FRACTION_TRANSFERED$_tt
 			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = to_calculated_transfered_manpower_integrated
+			}
+			custom_tooltip = to_lose_integrated_transfered_varangian_manpower_$FRACTION_TRANSFERED$_tt
 		}
 		tooltip = {
 			if = {

@@ -1142,33 +1142,16 @@ country_event = {
 	after = {
 		hidden_effect = {
 			clr_country_flag = to_calculated_transfered_manpower_subject
-			set_variable = {
-				which = to_number_of_viking_countries_at_war_with
-				value = 0
-			}
-			set_variable = {
-				which = to_varangian_guard_size
-				value = 0
-			}
+			clr_country_flag = to_calculated_transfered_manpower_integrated
 			every_country = {
 				clr_country_flag = to_viking_country_at_war_with
 			}
-			set_variable = {
-				which = to_transfered_varangian_manpower_gained_25
-				value = 0
-			}
-			set_variable = {
-				which = to_transfered_varangian_manpower_gained_50
-				value = 0
-			}
-			set_variable = {
-				which = to_transfered_varangian_manpower_25
-				value = 0
-			}
-			set_variable = {
-				which = to_transfered_varangian_manpower_50
-				value = 0
-			}
+			to_remove_var_if_not_0 = { VARIABLE = to_number_of_viking_countries_at_war_with }
+			to_remove_var_if_not_0 = { VARIABLE = to_varangian_guard_size }
+			to_remove_var_if_not_0 = { VARIABLE = to_transfered_varangian_manpower_gained_25 }
+			to_remove_var_if_not_0 = { VARIABLE = to_transfered_varangian_manpower_gained_50 }
+			to_remove_var_if_not_0 = { VARIABLE = to_transfered_varangian_manpower_25 }
+			to_remove_var_if_not_0 = { VARIABLE = to_transfered_varangian_manpower_50 }
 		}
 	}
 	
@@ -1362,14 +1345,8 @@ country_event = {
 
 	after = {
 		hidden_effect = {
-			set_variable = {
-				which = to_transfered_varangian_manpower_25
-				value = 0
-			}
-			set_variable = {
-				which = to_transfered_varangian_manpower_gained_25
-				value = 0
-			}
+			to_remove_var_if_not_0 = { VARIABLE = to_transfered_varangian_manpower_25 }
+			to_remove_var_if_not_0 = { VARIABLE = to_transfered_varangian_manpower_gained_25 }
 		}
 	}
 
@@ -1450,14 +1427,8 @@ country_event = {
 
 	after = {
 		hidden_effect = {
-			set_variable = {
-				which = to_transfered_varangian_manpower_50
-				value = 0
-			}
-			set_variable = {
-				which = to_transfered_varangian_manpower_gained_50
-				value = 0
-			}
+			to_remove_var_if_not_0 = { VARIABLE = to_transfered_varangian_manpower_50 }
+			to_remove_var_if_not_0 = { VARIABLE = to_transfered_varangian_manpower_gained_50 }
 		}
 	}
 
@@ -1844,6 +1815,8 @@ country_event = {
 	
 	trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
+		has_country_flag = established_varangians
+		NOT = { has_country_flag = nhs_disbanded_varangians }
 		OR = {
 			AND = {
 				capital_scope = {
@@ -1862,31 +1835,6 @@ country_event = {
 				days = 730
 			}
 		}
-		has_country_flag = established_varangians
-		OR = {
-			NOT = { has_country_flag = nhs_disbanded_varangians }
-			any_subject_country = {
-				tag = VGD
-			}
-		}
-		OR = {
-			NOT = { has_country_flag = nhs_varangian_guard_substate }
-			any_subject_country = {
-				tag = VGD
-			}
-		}
-		# OR = {
-		# 	unrest = 5
-		# 	capital_scope = {
-		# 		unrest = 0
-		# 	}
-		# 	calc_true_if = {
-		# 		all_owned_province = {
-		# 			unrest = 5
-		# 		}
-		# 		amount = 5
-		# 	}
-		# }
 	}
 	
 	mean_time_to_happen = {
@@ -2065,21 +2013,8 @@ country_event = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 		is_year = 1460
 		has_country_flag = established_varangians
+		NOT = { has_country_flag = nhs_disbanded_varangians }
 		NOT = { has_country_flag = to_varangians_settled_on_malta }
-		OR = {
-			NOT = { has_country_flag = nhs_disbanded_varangians }
-			any_country = {
-				tag = VGD
-				is_subject_of = ROOT
-			}
-		}
-		OR = {
-			NOT = { has_country_flag = nhs_varangian_guard_substate }
-			any_country = {
-				tag = VGD
-				is_subject_of = ROOT
-			}
-		}
 	}
 	
 	mean_time_to_happen = {
@@ -2170,22 +2105,20 @@ country_event = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 		is_year = 1455
 		has_country_flag = established_varangians
-		NOT = { has_country_flag = to_varangians_settled_on_malta }
+		NOT = { has_country_flag = nhs_disbanded_varangians }
+		OR = {
+			has_country_flag = nhs_varangian_guard_integrated
+			AND = {
+				has_country_flag = nhs_varangian_guard_substate
+				VGD = {
+					is_subject_of = ROOT
+				}
+			}
+			any_hired_mercenary_company = {
+				template = merc_varangian_guard
+			}
+		}
 		NOT = { had_recent_war = 2 }
-		OR = {
-			NOT = { has_country_flag = nhs_disbanded_varangians }
-			any_country = {
-				tag = VGD
-				is_subject_of = ROOT
-			}
-		}
-		OR = {
-			NOT = { has_country_flag = nhs_varangian_guard_substate }
-			any_country = {
-				tag = VGD
-				is_subject_of = ROOT
-			}
-		}
 		OR = {
 			AND = {
 				exists = VIN
@@ -2232,41 +2165,140 @@ country_event = {
 	
 	immediate = {
 		set_country_flag = nhs_had_event_varangian_order_events18
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = nhs_varangian_guard_substate
+					VGD = {
+						is_subject_of = ROOT
+					}
+				}
+				set_country_flag = to_calculated_varangian_manpower_subject
+				to_calculate_fraction_of_varangian_subject_manpower = {
+					FRACTION_TRANSFERED = 20
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = nhs_varangian_guard_integrated
+				}
+				set_country_flag = to_calculated_varangian_manpower_contribution
+				to_calculate_fraction_of_integrated_varangian_manpower = {
+					VARIABLE = to_varangian_manpower_contribution
+				}
+				multiply_variable = {
+					which = to_varangian_manpower_contribution
+					value = 0.25
+				}
+				divide_variable = {
+					which = to_varangian_manpower_contribution
+					value = 10
+				}
+				to_round_down_variable = { VARIABLE = to_varangian_manpower_contribution }
+				multiply_variable = {
+					which = to_varangian_manpower_contribution
+					value = 10
+				}
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			clr_country_flag = to_calculated_varangian_manpower_subject
+			clr_country_flag = to_calculated_varangian_manpower_contribution
+			to_remove_var_if_not_0 = { VARIABLE = to_transfered_varangian_manpower_20 }
+			to_remove_var_if_not_0 = { VARIABLE = to_varangian_manpower_contribution }
+		}
 	}
 	
 	option = {
 		name = "nhs_vov_varangian_order_events.102.a"
 		add_prestige = 5
 		add_army_tradition = -5
-		# if = {
-		# 	limit = {
-		# 		NOT = { total_development = 50 }
-		# 	}
-		# 	add_manpower = -1
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		NOT = { total_development = 100 }
-		# 	}
-		# 	add_manpower = -2
-		# }
-		# else = {
-		# 	add_manpower = -3
-		# }
-		
-		# if = {
-		# 	limit = {
-		# 		any_owned_province = {
-		# 			culture_group = norse_g
-		# 		}
-		# 	}
-		# 	random_owned_province = {
-		# 		limit = {
-		# 			culture_group = norse_g
-		# 		}
-		# 		add_unrest = -5
-		# 	}
-		# }
+		if = {
+			limit = {
+				has_country_flag = nhs_varangian_guard_integrated
+				has_country_flag = to_calculated_varangian_manpower_contribution
+			}
+			if = {
+				limit = {
+					NOT = {
+						check_variable = {
+							which = to_varangian_manpower_contribution
+							value = 1000
+						}
+					}
+				}
+				if = {
+					limit = {
+						any_hired_mercenary_company = {
+							template = merc_varangian_guard
+						}
+					}
+					random_hired_mercenary_company = {
+						limit = {
+							template = merc_varangian_guard
+						}
+						custom_tooltip = to_remove_25p_varangian_guard_manpower
+						hidden_effect = {
+							add_company_manpower = -0.25
+						}
+					}
+				}
+				else = {
+					add_manpower = -1
+				}
+			}
+			else = {
+				custom_tooltip = to_remove_varangian_manpower_contribution_tt
+				hidden_effect = {
+					to_change_manpower_by_VARIABLE = {
+						VARIABLE = to_varangian_manpower_contribution
+						SCOPE = ROOT
+						SIGN = "-"
+					}
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+		}
+		else_if = {
+			limit = {
+				any_hired_mercenary_company = {
+					template = merc_varangian_guard
+				}
+			}
+			random_hired_mercenary_company = {
+				limit = {
+					template = merc_varangian_guard
+				}
+				custom_tooltip = to_remove_25p_varangian_guard_manpower
+				hidden_effect = {
+					add_company_manpower = -0.25
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+		}
+		else_if = {
+			limit = {
+				has_country_flag = nhs_varangian_guard_substate
+				has_country_flag = to_calculated_varangian_manpower_subject
+				VGD = {
+					is_subject_of = ROOT
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			VGD = {
+				custom_tooltip = to_lose_transfered_varangian_manpower_20_tt
+			}
+			hidden_effect = {
+				to_change_manpower_by_VARIABLE = {
+					VARIABLE = to_transfered_varangian_manpower_20
+					SIGN = "-"
+					SCOPE = VGD
+				}
+			}
+		}
 		if = {
 			limit = {
 				any_country = {
@@ -2293,15 +2325,16 @@ country_event = {
 	}
 	option = {
 		name = "nhs_vov_varangian_order_events.102.b"
-		if = {
-			limit = {
-				is_at_war = no
-			}
-			add_war_exhaustion = 4
-		}
-		else = {
-			add_war_exhaustion = 2
-		}
+		add_mil_power = -50
+		# if = {
+		# 	limit = {
+		# 		is_at_war = no
+		# 	}
+		# 	add_war_exhaustion = 4
+		# }
+		# else = {
+		# 	add_war_exhaustion = 2
+		# }
 	}
 	option = {
 		name = "nhs_vov_varangian_order_events.102.c"
@@ -2312,9 +2345,8 @@ country_event = {
 				mil = 5
 			}
 		}
-		add_legitimacy = -5
-		add_mil_power = -25
-		add_treasury = -25
+		add_prestige = -10
+		add_legitimacy = -15
 		define_advisor = {
 			type = army_organiser
 			culture = varangian_e
