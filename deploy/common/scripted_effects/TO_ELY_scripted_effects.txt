@@ -11883,3 +11883,172 @@ to_transfer_varangian_manpower = {
 		}
 	}
 }
+
+to_select_varangian_expedition_target = {
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+			exists = VGD
+			VGD = {
+				is_subject_of = ROOT
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_colony = yes
+				NOT = { area = chesapeake_area }
+				$ADDITIONAL_TRIGGER$
+				any_neighbor_province = {
+					owned_by = VGD
+				}
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_owned_province = {
+			limit = {
+				is_colony = yes
+				region = canada_region
+				NOT = { area = chesapeake_area }
+				$ADDITIONAL_TRIGGER$
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_owned_province = {
+			limit = {
+				is_colony = yes
+				region = northeast_america_region
+				NOT = { area = chesapeake_area }
+				$ADDITIONAL_TRIGGER$
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_owned_province = {
+			limit = {
+				is_colony = yes
+				region = great_lakes_region
+				NOT = { area = chesapeake_area }
+				$ADDITIONAL_TRIGGER$
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_owned_province = {
+			limit = {
+				is_colony = yes
+				region = hudson_bay_region
+				NOT = { area = chesapeake_area }
+				$ADDITIONAL_TRIGGER$
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_owned_province = {
+			limit = {
+				is_colony = yes
+				region = southeast_america_region
+				NOT = { area = chesapeake_area }
+				$ADDITIONAL_TRIGGER$
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_owned_province = {
+			limit = {
+				is_colony = yes
+				region = mississippi_region
+				NOT = { area = chesapeake_area }
+				$ADDITIONAL_TRIGGER$
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_saved_event_target = $EVENT_TARGET$ }
+		}
+		random_owned_province = {
+			limit = {
+				is_colony = yes
+				continent = north_america
+				NOT = { area = chesapeake_area }
+				$ADDITIONAL_TRIGGER$
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+}
+
+to_varangian_expedition_on_colony_finished = {
+	if = {
+		limit = {
+			has_province_flag = to_varangian_stronghold_on_colony_finish_flag
+		}
+		clr_province_flag = to_varangian_stronghold_on_colony_finish_flag
+		if = {
+			limit = {
+				OR = {
+					has_province_modifier = to_varangian_stronghold_independent
+					has_province_modifier = to_varangian_stronghold
+				}
+			}
+			add_base_manpower = 1
+			if = {
+				limit = {
+					NOT = {
+						OR = {
+							culture = varangian_n
+							culture = varangian_e
+						}
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							NOT = { has_country_flag = to_varangian_culture_change }
+						}
+					}
+					change_culture = varangian_n
+				}
+				else = {
+					change_culture = varangian_e
+				}
+				hidden_effect = {
+					nhs_on_province_culture_converted_general = yes
+				}
+			}
+			if = {
+				limit = {
+					NOT = { religion = ROOT }
+				}
+				change_religion = ROOT
+			}
+		}
+	}
+}
