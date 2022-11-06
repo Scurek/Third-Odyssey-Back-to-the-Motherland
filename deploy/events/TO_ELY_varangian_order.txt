@@ -2488,6 +2488,8 @@ country_event = {
 
 	trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
+		has_country_flag = established_varangians
+		NOT = { has_country_flag = nhs_disbanded_varangians }
 		is_year = 1460
 		any_owned_province = {
 			is_colony = yes
@@ -2836,37 +2838,113 @@ country_event = {
 	id = nhs_vov_varangian_order_events.105
 	title = nhs_vov_varangian_order_events.105.t
 	desc = nhs_vov_varangian_order_events.105.d
-	picture = varangian_artwork_eventPicture
+	picture = TO_HALFDAN_WAS_HERE_eventPicture
 
 	is_triggered_only = yes
 
 	trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
+		is_year = 1470
+		has_country_flag = established_varangians
+		NOT = { has_country_flag = nhs_disbanded_varangians }
 		NOT = { has_country_flag = nhs_vov_varangian_art }
+		has_estate = estate_church
 	}
 	
 	immediate = {
 		set_country_flag = nhs_vov_varangian_art
 	}
+
 	option = {
 		name = "nhs_vov_varangian_order_events.105.a"
-		add_treasury = -100
-		add_prestige = -10
-		add_estate_loyalty = {
-			estate = estate_nhs_nobles
-			loyalty = 10
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0
+				NOT = {
+					OR = {
+						treasury = 750
+						years_of_income = 0.25
+					}
+				}
+			}
+		}
+		add_army_tradition = -5
+		if = {
+			limit = {
+				ai = no
+			}
+			if = {
+				limit = {
+					NOT = { monthly_income = 17 }
+				}
+				add_treasury = -50
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 250 }
+				}
+				add_years_of_income = -0.25
+			}
+			else = {
+				add_treasury = -750
+			}
 		}
 	}
+
 	option = {
 		name = "nhs_vov_varangian_order_events.105.b"
-		add_treasury = -50
+		ai_chance = {
+			factor = 4
+			modifier = {
+				factor = 0
+				NOT = {
+					OR = {
+						treasury = 750
+						years_of_income = 0.25
+					}
+				}
+			}
+		}
+		add_legitimacy = -5
+		if = {
+			limit = {
+				NOT = { monthly_income = 17 }
+			}
+			add_treasury = -50
+		}
+		else_if = {
+			limit = {
+				NOT = { monthly_income = 250 }
+			}
+			add_years_of_income = -0.25
+		}
+		else = {
+			add_treasury = -750
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -5
+		}
 	}
+	
 	option = {
 		name = "nhs_vov_varangian_order_events.105.c"
-		add_prestige = -5
+		ai_chance = {
+			factor = 1
+		}
+		add_legitimacy = -15
 		add_estate_loyalty = {
-			estate = estate_nhs_nobles
-			loyalty = 5
+			estate = estate_church
+			loyalty = -20
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -10
 		}
 	}
 }
@@ -2881,39 +2959,53 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_year = 1470
 		nhs_check_all_elysian_tags = { CONDITION = tag }
+		is_year = 1470
 		has_country_flag = established_varangians
+		NOT = { has_country_flag = nhs_disbanded_varangians }
+		num_of_ports = 10
 	}
-	
+
 	option = {
 		name = "nhs_vov_varangian_order_events.106.a"
 		if = {
 			limit = {
-				NOT = { monthly_income = 10 }
+				NOT = { monthly_income = 21 }
 			}
 			add_treasury = 50
 		}
 		else_if = {
 			limit = {
-				NOT = { monthly_income = 19 }
+				NOT = { monthly_income = 208 }
 			}
-			add_years_of_income = 0.42
+			add_years_of_income = 0.20
 		}
 		else = {
-			add_treasury = 100
+			add_treasury = 500
 		}
 	}
+
 	option = {
 		name = "nhs_vov_varangian_order_events.106.b"
-		add_estate_loyalty = {
-			estate = estate_burghers
-			loyalty = 10
+		if = {
+			limit = {
+				NOT = { monthly_income = 208 }
+			}
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 10
+			}
+		}
+		else = {
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 5
+			}
 		}
 	}
 }
 
-#Varangian brawl
+#Varangian-Dynatoi Brawl
 country_event = {
 	id = nhs_vov_varangian_order_events.107
 	title = nhs_vov_varangian_order_events.107.t
@@ -2926,16 +3018,40 @@ country_event = {
 		is_year = 1450
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 		has_country_flag = established_varangians
+		NOT = { has_country_flag = nhs_disbanded_varangians }
+		has_estate = estate_nhs_nobles
 	}
 	
 	option = {
 		name = "nhs_vov_varangian_order_events.107.a"
-		add_legitimacy = -10
-		add_mil_power = -25
+		add_estate_loyalty = {
+			estate = estate_nhs_nobles
+			loyalty = -10
+		}
 	}
+	
 	option = {
 		name = "nhs_vov_varangian_order_events.107.b"
-		add_army_tradition = -10
+		if = {
+			limit = {
+				army_tradition = 80
+			}
+			add_army_tradition = -10
+		}
+		else = {
+			add_army_tradition = -5
+		}
+	}
+
+	option = {
+		name = "nhs_vov_varangian_order_events.107.c"
+		highlight = yes
+		trigger = {
+			ruler_has_personality = just_personality
+		}
+		custom_tooltip = to_varangian_brawl_just_tt
+		custom_tooltip = nhs_new_line_tt
+		add_dip_power = -25
 	}
 }
 
@@ -2953,74 +3069,240 @@ country_event = {
 		is_at_war = no
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 		OR = {
-			exists = MK1
-			exists = HLL
-			exists = VIN
+			AND = {
+				exists = MK1
+				MK1 = {
+					NOT = { is_rival = ROOT }
+					NOT = { is_enemy = ROOT }
+					NOT = { war_with = ROOT }
+				}
+			}
+			AND = {
+				exists = HLL
+				HLL = {
+					NOT = { is_rival = ROOT }
+					NOT = { is_enemy = ROOT }
+					NOT = { war_with = ROOT }
+				}
+			}
+			AND = {
+				exists = VIN
+				VIN = {
+					NOT = { is_rival = ROOT }
+					NOT = { is_enemy = ROOT }
+					NOT = { war_with = ROOT }
+				}
+			}
 		}
 		has_country_flag = established_varangians
+		NOT = { has_country_flag = nhs_disbanded_varangians }
 	}
+	
 	immediate = {
-		if = {
-			limit = { exists = VIN }
-			VIN = { save_event_target_as = nhs_vov_varangian_opinion_target }
-		}
-		else_if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MK1
-						tag = HLL
-					}				
-					OR = {
-						has_country_modifier = nhs_vov_trade_deal
-						alliance_with = ROOT
+		hidden_effect = {
+			if = {
+				limit = { 
+					exists = VIN
+					VIN = {
+						NOT = { is_rival = ROOT }
+						NOT = { is_enemy = ROOT }
+						NOT = { war_with = ROOT }
 					}
+				}
+				VIN = { save_event_target_as = to_varangian_opinion_target }
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						OR = {
+							tag = MK1
+							tag = HLL
+							tag = VIN
+						}				
+						OR = {
+							has_country_modifier = nhs_vov_trade_deal
+							alliance_with = ROOT
+						}
+						NOT = { is_rival = ROOT }
+						NOT = { is_enemy = ROOT }
+						NOT = { war_with = ROOT }
+					}
+				}
+				random_country = {
+					limit = {
+						OR = {
+							tag = MK1
+							tag = HLL
+						}
+						OR = {
+							has_country_modifier = nhs_vov_trade_deal
+							alliance_with =  ROOT
+						}
+						NOT = { is_rival = ROOT }
+						NOT = { is_enemy = ROOT }
+						NOT = { war_with = ROOT }
+					}
+					save_event_target_as = to_varangian_opinion_target
 				}
 			}
-			random_country = {
-				limit = {
-					OR = {
-						tag = MK1
-						tag = HLL
+			else = {
+				random_country = {
+					limit = {
+						OR = {
+							tag = MK1
+							tag = HLL
+							tag = VIN
+						}
 					}
-					OR = {
-						has_country_modifier = nhs_vov_trade_deal
-						alliance_with =  ROOT
-					}
+					save_event_target_as = to_varangian_opinion_target
 				}
-				save_event_target_as = nhs_vov_varangian_opinion_target
-			}
-		}
-		else = {
-			random_country = {
-				limit = {
-					OR = {
-						tag = MK1
-						tag = HLL
-					}
-				}
-				save_event_target_as = nhs_vov_varangian_opinion_target
 			}
 		}
 	}
 
 	option = {
 		name = "nhs_vov_varangian_order_events.108.a"
-		add_prestige = 10
-		event_target:nhs_vov_varangian_opinion_target = {
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						has_dlc = "The Cossacks"
+						has_dlc = "Leviathan"
+					}
+				}
+			}
+			add_prestige = 10
+		}
+		event_target:to_varangian_opinion_target = {
 			add_opinion = {
 				who = ROOT
-				modifier = nhs_send_v_home_opinion
+				modifier = to_varangian_ties_om
 			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_dlc = "The Cossacks"
+					has_dlc = "Leviathan"
+				}
+			}
+			custom_tooltip = to_varangian_opinion_target_trust_tt
+			custom_tooltip = to_varangian_opinion_target_favors_tt
+			hidden_effect = {
+				event_target:to_varangian_opinion_target = {
+					add_trust = {
+						who = ROOT
+						value = 5
+					}
+					## Apparently you cannot use event target in who part of add_favors, so we now have this.
+					ROOT = {
+						add_favors = {
+							who = PREV
+							amount = 5
+						}
+					}
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+		}
+		tooltip = {
+			add_opinion = {
+				who = event_target:to_varangian_opinion_target
+				modifier = to_varangian_ties_om
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_dlc = "The Cossacks"
+					has_dlc = "Leviathan"
+				}
+			}
+			custom_tooltip = to_of_varangian_opinion_target_trust_tt
+			custom_tooltip = to_of_varangian_opinion_target_favors_tt
+		}
+		custom_tooltip = nhs_new_line_tt
+		event_target:to_varangian_opinion_target = {
+			country_event = { id = nhs_vov_varangian_order_events.109 }
+		}
+	}
+}
+
+#Varangian Roman Relations
+country_event = {
+	id = nhs_vov_varangian_order_events.109
+	title = nhs_vov_varangian_order_events.109.t
+	desc = nhs_vov_varangian_order_events.109.d
+	picture = varangians_returning_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = "nhs_vov_varangian_order_events.109.a"
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						has_dlc = "The Cossacks"
+						has_dlc = "Leviathan"
+					}
+				}
+			}
+			add_prestige = 10
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = to_varangian_ties_om
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_dlc = "The Cossacks"
+					has_dlc = "Leviathan"
+				}
+			}
+			custom_tooltip = to_from_add_trust_tt
+			custom_tooltip = to_from_add_favors_tt
+			hidden_effect = {
+				FROM = {
+					add_trust = {
+						who = ROOT
+						value = 5
+					}
+				}
+				add_favors = {
+					who = FROM
+					amount = 5
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+		}
+		tooltip = {
+			add_opinion = {
+				who = FROM
+				modifier = to_varangian_ties_om
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_dlc = "The Cossacks"
+					has_dlc = "Leviathan"
+				}
+			}
+			custom_tooltip = to_of_from_add_trust_tt
+			custom_tooltip = to_of_from_add_favors_tt
 		}
 	}
 }
 
 #Varangians Attack Natives
 country_event = {
-	id = nhs_vov_varangian_order_events.109
-	title = nhs_vov_varangian_order_events.109.t
-	desc = nhs_vov_varangian_order_events.109.d
+	id = nhs_vov_varangian_order_events.110
+	title = nhs_vov_varangian_order_events.110.t
+	desc = nhs_vov_varangian_order_events.110.d
 	picture = NATIVE_ANGRY_MOB_eventPicture
 	is_triggered_only = yes
 
@@ -3028,7 +3310,19 @@ country_event = {
 		is_year = 1460
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 		has_country_flag = established_varangians
+		NOT = { has_country_flag = nhs_disbanded_varangians }
 		nhs_has_any_native_estate = yes
+		any_owned_province = {
+			OR = {
+				AND = {
+					is_colony = yes
+					nhs_culturally_native = yes
+				}
+				any_empty_neighbor_province = {
+					nhs_culturally_native = yes
+				}
+			}
+		}
 	}
 	
 	mean_time_to_happen = {
@@ -3037,35 +3331,133 @@ country_event = {
 			factor = 1.5
 			NOT = { has_country_flag = nhs_varangian_natives }
 		}
-		modifier = {
-			factor = 0.9
-			is_year = 1480
-		}
-		modifier = {
-			factor = 0.8
-			is_year = 1510
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = nhs_varangian_natives
+			if = {
+				limit = {
+					any_neighbor_country = {
+						nhs_culturally_native_primary = yes
+					}
+				}
+				random_neighbor_country = {
+					limit = {
+						nhs_culturally_native_primary = yes
+					}
+					save_event_target_as = to_native_neighbor
+				}
+				random_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+					}
+					save_event_target_as = to_native_neighbor_province
+				}
+			}
+			else = {
+				random_owned_province = {
+					limit = {
+						is_colony = yes
+						nhs_culturally_native = yes
+						OR = {
+							has_province_modifier = to_varangian_stronghold
+							has_province_modifier = to_varangian_stronghold_independent
+						}
+					}
+					save_event_target_as = to_native_neighbor_province
+				}
+				if = {
+					limit = {
+						NOT = { has_saved_event_target = to_native_neighbor_province }
+					}
+					random_owned_province = {
+						limit = {
+							is_colony = yes
+							nhs_culturally_native = yes
+						}
+						save_event_target_as = to_native_neighbor_province
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_saved_event_target = to_native_neighbor_province }
+					}
+					random_owned_province = {
+						limit = {
+							any_empty_neighbor_province = {
+								nhs_culturally_native = yes
+							}
+						}
+						random_empty_neighbor_province = {
+							limit = {
+								nhs_culturally_native = yes
+							}
+							save_event_target_as = to_native_neighbor_province
+						}
+					}
+				}
+			}
 		}
 	}
 
 	option = {
-		name = "nhs_vov_varangian_order_events.109.a"
+		name = "nhs_vov_varangian_order_events.110.a"
 		add_prestige = -10
-		add_legitimacy = -10
-		set_country_flag = nhs_varangian_natives
+		add_dip_power = -50
+		if = {
+			limit = {
+				has_saved_event_target = to_native_neighbor
+			}
+			custom_tooltip = nhs_new_line_tt
+			reverse_add_opinion = {
+				who = event_target:to_native_neighbor
+				modifier = to_raided_by_varangians_minor_om
+			}
+		}
+		else_if = {
+			limit = {
+				has_saved_event_target = to_native_neighbor_province
+			}
+			custom_tooltip = nhs_new_line_tt
+			event_target:to_native_neighbor_province = {
+				change_native_hostileness = 2
+			}
+		}
 	}
 
 	option = {
-		name = "nhs_vov_varangian_order_events.109.b"
+		name = "nhs_vov_varangian_order_events.110.b"
 		add_estate_loyalty = {
 			estate = estate_all_natives
-			loyalty = -10
+			loyalty = -15
 		}
 		add_estate_influence_modifier = {
 			estate = estate_all_natives
-			influence = -10
+			influence = -5
 			duration = 3650
 		}
-		set_country_flag = nhs_varangian_natives
+		if = {
+			limit = {
+				has_saved_event_target = to_native_neighbor
+			}
+			custom_tooltip = nhs_new_line_tt
+			reverse_add_opinion = {
+				who = event_target:to_native_neighbor
+				modifier = to_raided_by_varangians_om
+			}
+		}
+		else_if = {
+			limit = {
+				has_saved_event_target = to_native_neighbor_province
+			}
+			custom_tooltip = nhs_new_line_tt
+			event_target:to_native_neighbor_province = {
+				change_native_hostileness = 5
+			}
+		}
 	}
 }
 
