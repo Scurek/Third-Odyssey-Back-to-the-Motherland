@@ -523,31 +523,50 @@ country_event = {
 # 	}
 # }
 
+# Epilektoi
 country_event = {
 	id = nhs2_countryevents.16
 	title = nhs2_countryevents.16.t
 	desc = nhs2_countryevents.16.d
-	picture = PRAETORIAN_eventPicture
-	
-	fire_only_once = yes
+	picture = GOOD_WITH_MONARCH_eventPicture
 
     trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
+		NOT = { has_country_flag = to_established_epilektoi }
 		has_idea = constantinople_never_again
-		capital_scope = {
-			has_building = fort_16th
+		OR = {
+			total_development = 500
+			mil_tech = 9
 		}
-		treasury = 250
+		OR = {
+			NOT = { has_country_flag = established_varangians } 
+			has_country_flag = nhs_disbanded_varangians
+			total_development = 1000
+			mil_tech = 13
+		}
 	}
 
 	mean_time_to_happen = {
-		months = 12
+		months = 6
 	}
 
-	option = {	
+	option = {
 		name = "nhs2_countryevents.16.a"
-		add_country_modifier = { name = "nhs_epilektoi" duration = -1 }
-		add_treasury = -150
+		set_country_flag = to_established_epilektoi
+		custom_tooltip = to_enables_epilektoi_tt
+		if = {
+			limit = {
+				has_dlc = "Cradle of Civilization"
+			}
+			custom_tooltip = to_enables_epilektoi_no_proff_loss_tt
+			custom_tooltip = nhs_new_line_tt
+		}
+		capital_scope = {
+			add_province_modifier = {
+				name = to_epilektoi_garrison
+				duration = -1
+			}
+		}
 	}
 }
 

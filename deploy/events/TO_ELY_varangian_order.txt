@@ -2358,111 +2358,105 @@ country_event = {
 }
 
 # Arguments with Epilektoi
-# Redo, Varangians are your religion anyway
-# country_event = {
-# 	id = nhs_vov_varangian_order_events.103
-# 	title = nhs_vov_varangian_order_events.103.t
-# 	desc = nhs_vov_varangian_order_events.103.d
-# 	picture = varangian_argument_eventPicture
+country_event = {
+	id = nhs_vov_varangian_order_events.103
+	title = nhs_vov_varangian_order_events.103.t
+	desc = nhs_vov_varangian_order_events.103.d
+	picture = varangian_argument_eventPicture
 
-# 	is_triggered_only = yes
+	is_triggered_only = yes
 	
-# 	trigger = {
-# 		NOT = { has_country_flag = nhs_had_event_varangian_order_events19 }
-# 		nhs_check_all_elysian_tags = { CONDITION = tag }
-# 		has_country_modifier = nhs_epilektoi
-# 		is_year = 1455
-# 		has_country_flag = established_varangians
-# 		NOT = { has_country_flag = to_varangians_settled_on_malta }
-# 		OR = {
-# 			NOT = { has_country_flag = nhs_disbanded_varangians }
-# 			any_country = {
-# 				tag = VGD
-# 				is_subject_of = ROOT
-# 			}
-# 		}
-# 		OR = {
-# 			NOT = { has_country_flag = nhs_varangian_guard_substate }
-# 			any_country = {
-# 				tag = VGD
-# 				is_subject_of = ROOT
-# 			}
-# 		}
-# 	}
+	trigger = {
+		to_can_have_varangian_flavor_events = yes
+		has_country_flag = to_established_epilektoi
+		NOT = { has_country_modifier = nhs_favors_epilektoi }
+		NOT = { has_country_modifier = nhs_favors_varangians }
+		NOT = { has_country_modifier = nhs_favors_both }
+	}
 	
-# 	mean_time_to_happen = {
-# 		days = 1
-# 		modifier = {
-# 			factor = 1.2
-# 			has_country_modifier = nhs2_varangian_influence
-# 		}
-# 		modifier = {
-# 			factor = 1.2
-# 			religion_group = christian
-# 		}
-# 	}
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			NOT = { has_country_flag = to_had_arguments_with_epilektoi_event }
+		}
+		modifier = {
+			factor = 1.5
+			any_hired_mercenary_company = {
+				template = merc_epilektoi
+			}
+			any_hired_mercenary_company = {
+				template = merc_varangian_guard
+			}
+		}
+	}
 	
-# 	immediate = {
-# 		set_country_flag = nhs_had_event_varangian_order_events19
-# 	}
+	immediate = {
+		set_country_flag = to_had_arguments_with_epilektoi_event
+	}
 	
-# 	option = {
-# 		name = "nhs_vov_varangian_order_events.103.a"
-# 		add_estate_influence_modifier = {
-# 			estate = estate_nhs_nobles
-# 			desc = EST_VAL_FAVORS_E
-# 			influence = 5
-# 			duration = 5475
-# 		}
-# 		add_estate_loyalty = {
-# 			estate = estate_nhs_nobles
-# 			loyalty = 10
-# 		}
-# 		add_prestige = 5
-# 		add_ruler_modifier = {
-# 			name = nhs_favors_epilektoi
-# 			duration = -1
-# 		}
-# 	}
-# 	option = {
-# 		name = "nhs_vov_varangian_order_events.103.b"
-# 		add_estate_influence_modifier = {
-# 			estate = estate_nhs_nobles
-# 			desc = EST_VAL_FAVORS_V
-# 			influence = -5
-# 			duration = 5475
-# 		}
-# 		add_estate_loyalty = {
-# 			estate = estate_nhs_nobles
-# 			loyalty = -10
-# 		}
-# 		add_ruler_modifier = {
-# 			name = nhs_favors_varangians
-# 			duration = -1
-# 		}
-# 	}
+	option = {
+		name = "nhs_vov_varangian_order_events.103.a"
+		add_legitimacy = 10
+		add_estate_loyalty = {
+			estate = estate_nhs_nobles
+			loyalty = 5
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_nobles
+			desc = EST_VAL_FAVORS_E
+			influence = 10
+			duration = 5475
+		}
+		custom_tooltip = nhs_new_line_tt
+		add_ruler_modifier = {
+			name = nhs_favors_epilektoi
+			duration = -1
+		}
+	}
+	option = {
+		name = "nhs_vov_varangian_order_events.103.b"
+		add_estate_loyalty = {
+			estate = estate_nhs_nobles
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nhs_nobles
+			desc = EST_VAL_FAVORS_V
+			influence = -5
+			duration = 5475
+		}
+		custom_tooltip = nhs_new_line_tt
+		add_ruler_modifier = {
+			name = nhs_favors_varangians
+			duration = -1
+		}
+	}
 	
-# 	option = {
-# 		name = "nhs_vov_varangian_order_events.103.c"
-# 		highlight = yes
-# 		trigger = {
-# 			has_country_modifier = nhs_expanded_pantheon
-# 			OR = {
-# 				religion = pantheon_worship
-# 				religion = aztlan_worship
-# 			}
-# 		}
-# 		add_estate_loyalty = {
-# 			estate = estate_nhs_nobles
-# 			loyalty = 5
-# 		}
-# 		add_legitimacy = 10
-# 		add_ruler_modifier = {
-# 			name = nhs_favors_both
-# 			duration = -1
-# 		}
-# 	}
-# }
+	option = {
+		name = "nhs_vov_varangian_order_events.103.c"
+		highlight = yes
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				OR = {
+					ruler_has_personality = charismatic_negotiator_personality
+					ruler_has_personality = silver_tongue_personality
+				}
+			}
+			else = {
+				dip = 5
+			}
+		}
+		add_dip_power = -25
+		add_ruler_modifier = {
+			name = nhs_favors_both
+			duration = -1
+		}
+	}
+}
 
 #Varagian Expedition
 country_event = {
