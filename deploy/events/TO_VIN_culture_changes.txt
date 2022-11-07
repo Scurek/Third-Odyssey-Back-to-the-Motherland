@@ -124,23 +124,22 @@ province_event = {
 		hidden_effect = {
 			clr_province_flag = nhs_culture_changed_to_skraeling
 			nhs_on_province_culture_converted_general = yes
+			owner = {
+				save_event_target_as = vov_culture_change_province_owner
+			}
 		}
 	}
 
 	option = {		# Vinlandic
 		name = "nhs_vov_culture.3.a"
 		trigger = {
-			NOT = {
-				OR = {
-					region = great_lakes_region
-					region = cascadia_region
-					region = great_plains_region
-					region = california_region
-					region = central_america_region
-					region = mexico_region
-					region = carribeans_region
-					continent = south_america
-				}
+			owner = {
+				NOT = { primary_culture = varangian_n }
+				NOT = { is_subject_of_type = elysian_subject_varangian }
+			}
+			OR = {
+				region = canada_region
+				region = greenland_region
 			}
 		}
 		if = {
@@ -154,6 +153,10 @@ province_event = {
 	option = {
 		name = "nhs_vov_culture.3.b"
 		trigger = {
+			owner = {
+				has_country_flag = to_vin_vatnmadr_culture
+				NOT = { is_subject_of_type = elysian_subject_varangian }
+			}
 			region = great_lakes_region
 		}
 		if = {
@@ -167,7 +170,14 @@ province_event = {
 	option = {
 		name = "nhs_vov_culture.3.e"
 		trigger = {
-			region = cascadia_region
+			owner = {
+				has_country_flag = to_vin_west_vinlandic_culture
+				NOT = { is_subject_of_type = elysian_subject_varangian }
+			}
+			OR = {
+				region = cascadia_region
+				region = rocky_mountains_region
+			}
 		}
 		if = {
 			limit = {
@@ -180,6 +190,10 @@ province_event = {
 	option = {
 		name = "nhs_vov_culture.3.f"
 		trigger = {
+			owner = {
+				has_country_flag = to_vin_vollrmadr_culture
+				NOT = { is_subject_of_type = elysian_subject_varangian }
+			}
 			region = great_plains_region
 		}
 		if = {
@@ -193,6 +207,10 @@ province_event = {
 	option = {
 		name = "nhs_vov_culture.3.g"
 		trigger = {
+			owner = {
+				has_country_flag = to_vin_rusnidr_culture
+				NOT = { is_subject_of_type = elysian_subject_varangian }
+			}
 			region = california_region
 		}
 		if = {
@@ -207,6 +225,10 @@ province_event = {
 	option = {
 		name = "nhs_vov_culture.3.i"
 		trigger = {
+			owner = {
+				has_country_flag = to_vin_arimadr_culture
+				NOT = { is_subject_of_type = elysian_subject_varangian }
+			}
 			OR = {
 				region = central_america_region
 				region = mexico_region
@@ -223,6 +245,10 @@ province_event = {
 	option = {
 		name = "nhs_vov_culture.3.j"
 		trigger = {
+			owner = {
+				has_country_flag = to_vin_islander_culture
+				NOT = { is_subject_of_type = elysian_subject_varangian }
+			}
 			region = carribeans_region
 		}
 		if = {
@@ -236,6 +262,10 @@ province_event = {
 	option = {
 		name = "nhs_vov_culture.3.k"
 		trigger = {
+			owner = {
+				has_country_flag = to_vin_south_vinlandic_culture
+				NOT = { is_subject_of_type = elysian_subject_varangian }
+			}
 			continent = south_america
 		}
 		if = {
@@ -243,6 +273,82 @@ province_event = {
 				NOT = { culture = south_vinlandic }
 			}
 			change_culture = south_vinlandic
+		}
+		to_nat_assimilate_local_tribal_development = yes
+	}
+	option = {		# owner culture
+		name = "nhs_vov_culture.3.l"
+		trigger = {
+			OR = {
+				is_subject_of_type = elysian_subject_varangian
+				NOT = {
+					OR = {
+						AND = {
+							owner = {
+								NOT = { primary_culture = varangian_n }
+							}
+							OR = {
+								region = canada_region
+								region = greenland_region
+							}
+						}
+						AND = {
+							owner = {
+								has_country_flag = to_vin_vatnmadr_culture
+							}
+							region = great_lakes_region
+						}
+						AND = {
+							owner = {
+								has_country_flag = to_vin_west_vinlandic_culture
+							}
+							OR = {
+								region = cascadia_region
+								region = rocky_mountains_region
+							}
+						}
+						AND = {
+							owner = {
+								has_country_flag = to_vin_vollrmadr_culture
+							}
+							region = great_plains_region
+						}
+						AND = {
+							owner = {
+								has_country_flag = to_vin_rusnidr_culture
+							}
+							region = california_region
+						}
+						AND = {
+							owner = {
+								has_country_flag = to_vin_arimadr_culture
+							}
+							OR = {
+								region = central_america_region
+								region = mexico_region
+							}
+						}
+						AND = {
+							owner = {
+								has_country_flag = to_vin_islander_culture
+							}
+							region = carribeans_region
+						}
+						AND = {
+							owner = {
+								has_country_flag = to_vin_south_vinlandic_culture
+							}
+							continent = south_america
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { culture = event_target:vov_culture_change_province_owner }
+			}
+			change_culture = event_target:vov_culture_change_province_owner
 		}
 		to_nat_assimilate_local_tribal_development = yes
 	}
@@ -258,6 +364,7 @@ country_event = {
 	trigger = {
 		culture_group = norse_g
 		NOT = { has_country_flag = to_vin_vatnmadr_culture }
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			is_colony = no
 			culture_group = norse_g
@@ -323,10 +430,14 @@ country_event = {
 	trigger = {
 		culture_group = norse_g
 		NOT = { has_country_flag = to_vin_west_vinlandic_culture }
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			is_colony = no
 			culture_group = norse_g
-			region = cascadia_region
+			OR = {
+				region = cascadia_region
+				region = rocky_mountains_region
+			}
 			NOT = { culture = skraeling }
 		}
 	}
@@ -348,7 +459,10 @@ country_event = {
 			limit = {
 				NOT = { nhs_check_all_norse = { CONDITION = tag } }
 				capital_scope = {
-					region = cascadia_region
+					OR = {
+						region = cascadia_region
+						region = rocky_mountains_region
+					}
 				}
 			}
 			change_primary_culture = west_vinlandic
@@ -358,7 +472,10 @@ country_event = {
 			every_province = {
 				limit = {
 					culture_group = norse_g
-					region = cascadia_region
+					OR = {
+						region = cascadia_region
+						region = rocky_mountains_region
+					}
 					NOT = { culture = west_vinlandic }
 					NOT = { culture = skraeling }
 					OR = {
@@ -388,6 +505,7 @@ country_event = {
 	trigger = {
 		culture_group = norse_g
 		NOT = { has_country_flag = to_vin_vollrmadr_culture }
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			is_colony = no
 			culture_group = norse_g
@@ -453,6 +571,7 @@ country_event = {
 	trigger = {
 		culture_group = norse_g
 		NOT = { has_country_flag = to_vin_rusnidr_culture }
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			is_colony = no
 			culture_group = norse_g
@@ -518,6 +637,7 @@ country_event = {
 	trigger = {
 		culture_group = norse_g
 		NOT = { has_country_flag = to_vin_islander_culture }
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			is_colony = no
 			culture_group = norse_g
@@ -583,6 +703,7 @@ country_event = {
 	trigger = {
 		culture_group = norse_g
 		NOT = { has_country_flag = to_vin_arimadr_culture }
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			is_colony = no
 			culture_group = norse_g
@@ -657,6 +778,7 @@ country_event = {
 	trigger = {
 		culture_group = norse_g
 		NOT = { has_country_flag = to_vin_south_vinlandic_culture }
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			culture_group = norse_g
 			continent = south_america
@@ -726,6 +848,7 @@ country_event = {
 	
 	trigger = {
 		culture_group = norse_g
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			NOT = { culture = skraeling }
 			is_colony = no
@@ -734,12 +857,7 @@ country_event = {
 				region = canada_region
 				region = greenland_region
 			}
-			NOT = {
-				OR = {
-					culture = varangian_e
-					culture = varangian_n
-				}
-			}
+			NOT = { culture = varangian_n }
 			NOT = { culture = vinlandic }
 		}
 	}
@@ -788,6 +906,7 @@ country_event = {
 	trigger = {
 		has_country_flag = to_vin_vatnmadr_culture
 		culture_group = norse_g
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			NOT = { culture = skraeling }
 			culture_group = norse_g
@@ -835,11 +954,15 @@ country_event = {
 	trigger = {
 		has_country_flag = to_vin_west_vinlandic_culture
 		culture_group = norse_g
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			is_colony = no
 			NOT = { culture = skraeling }
 			culture_group = norse_g
-			region = cascadia_region
+			OR = {
+				region = cascadia_region
+				region = rocky_mountains_region
+			}
 			NOT = { culture = west_vinlandic }
 		}
 	}
@@ -854,7 +977,10 @@ country_event = {
 				owned_by = ROOT
 				culture_group = norse_g
 				is_colony = no
-				region = cascadia_region
+				OR = {
+					region = cascadia_region
+					region = rocky_mountains_region
+				}
 				NOT = { culture = west_vinlandic }
 				NOT = { culture = skraeling }
 			}
@@ -883,6 +1009,7 @@ country_event = {
 	trigger = {
 		has_country_flag = to_vin_vollrmadr_culture
 		culture_group = norse_g
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			is_colony = no
 			NOT = { culture = skraeling }
@@ -931,6 +1058,7 @@ country_event = {
 	trigger = {
 		has_country_flag = to_vin_rusnidr_culture
 		culture_group = norse_g
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			is_colony = no
 			NOT = { culture = skraeling }
@@ -979,6 +1107,7 @@ country_event = {
 	trigger = {
 		has_country_flag = to_vin_islander_culture
 		culture_group = norse_g
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			is_colony = no
 			NOT = { culture = skraeling }
@@ -1030,7 +1159,7 @@ country_event = {
 	trigger = {
 		has_country_flag = to_vin_arimadr_culture
 		culture_group = norse_g
-		is_colony = no
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			NOT = { culture = skraeling }
 			is_colony = no
@@ -1084,6 +1213,7 @@ country_event = {
 	trigger = {
 		has_country_flag = to_vin_south_vinlandic_culture
 		culture_group = norse_g
+		NOT = { is_subject_of_type = elysian_subject_varangian }
 		any_owned_province = {
 			is_colony = no
 			NOT = { culture = skraeling }
