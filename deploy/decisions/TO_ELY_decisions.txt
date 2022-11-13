@@ -4299,119 +4299,40 @@ country_decisions = {
 			}
 		}
 		allow = {
-			treasury = 1000
 			if = {
 				limit = {
-					exists = MK1
-					MK1 = { NOT = { is_subject_of = ROOT } }
-					exists = HLL
-					HLL = { NOT = { is_subject_of = ROOT } }
-					exists = VIN
-					VIN = { NOT = { is_subject_of = ROOT } }
+					ai = no
 				}
-				
-				OR = {
-					nhs_can_offer_viking_subjegation = { 
-						TAG = MK1 
-						TRADE_DEAL_TRIGGER = trading_with_markland 
-					}
-					nhs_can_offer_viking_subjegation = { 
-						TAG = HLL
-						TRADE_DEAL_TRIGGER = trading_with_helluland 
-					}
-					nhs_can_offer_viking_subjegation = { 
-						TAG = VIN 
-						TRADE_DEAL_TRIGGER = trading_with_vinland 
-					}
-				}
+				treasury = 5000
 			}
-			else_if = {
-				limit = {
-					exists = MK1
-					MK1 = { NOT = { is_subject_of = ROOT } }
-					exists = HLL
-					HLL = { NOT = { is_subject_of = ROOT } }
-				}
-				OR = {
-					nhs_can_offer_viking_subjegation = { 
-						TAG = MK1 
-						TRADE_DEAL_TRIGGER = trading_with_markland 
-					}
-					nhs_can_offer_viking_subjegation = { 
-						TAG = HLL
-						TRADE_DEAL_TRIGGER = trading_with_helluland 
-					}
-				}
+			else = {
+				treasury = 1000
 			}
-			else_if = {
-				limit = {
-					exists = MK1
-					MK1 = { NOT = { is_subject_of = ROOT } }
-					exists = VIN
-					VIN = { NOT = { is_subject_of = ROOT } }
-				}
-				OR = {
-					nhs_can_offer_viking_subjegation = { 
-						TAG = MK1 
-						TRADE_DEAL_TRIGGER = trading_with_markland 
-					}
-					nhs_can_offer_viking_subjegation = { 
-						TAG = VIN 
-						TRADE_DEAL_TRIGGER = trading_with_vinland 
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					exists = HLL
-					HLL = { NOT = { is_subject_of = ROOT } }
-					exists = VIN
-					VIN = { NOT = { is_subject_of = ROOT } }
-				}
-				OR = {
-					nhs_can_offer_viking_subjegation = { 
-						TAG = HLL
-						TRADE_DEAL_TRIGGER = trading_with_helluland 
-					}
-					nhs_can_offer_viking_subjegation = { 
-						TAG = VIN 
-						TRADE_DEAL_TRIGGER = trading_with_vinland 
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					exists = HLL
-					HLL = { NOT = { is_subject_of = ROOT } }
+			OR = {
+				nhs_can_offer_viking_subjegation = {
+					TAG = MK1 
+					TRADE_DEAL_TRIGGER = trading_with_markland 
 				}
 				nhs_can_offer_viking_subjegation = { 
 					TAG = HLL
 					TRADE_DEAL_TRIGGER = trading_with_helluland 
 				}
-			}
-			else_if = {
-				limit = {
-					exists = VIN
-					VIN = { NOT = { is_subject_of = ROOT } }
-				}
 				nhs_can_offer_viking_subjegation = { 
-						TAG = VIN 
-						TRADE_DEAL_TRIGGER = trading_with_vinland 
-					}
-			}
-			else_if = {
-				limit = {
-					exists = MK1
-					MK1 = { NOT = { is_subject_of = ROOT } }
-				}
-				nhs_can_offer_viking_subjegation = { 
-					TAG = MK1 
-					TRADE_DEAL_TRIGGER = trading_with_markland 
+					TAG = VIN 
+					TRADE_DEAL_TRIGGER = trading_with_vinland 
 				}
 			}
 		}
 		effect = {
-			add_treasury = -1000
+			if = {
+				limit = {
+					ai = no
+				}
+				add_treasury = -5000
+			}
+			else = {
+				add_treasury = -1000
+			}
 			add_adm_power = -25
 			add_dip_power = -50
 			add_mil_power = -50
@@ -4485,6 +4406,77 @@ country_decisions = {
 				factor = 0
 				OR = {
 					NOT = { treasury = 1100 }
+					num_of_loans = 1
+				}
+			}
+		}
+	}
+
+	nhs_an_offer_they_cant_refuse_spartans = {
+		major = yes
+		potential = {
+			nhs_check_all_elysian_tags = { CONDITION = tag }
+			mission_completed = to_taming_the_northmen_mission
+			OR = {
+				AND = {
+					exists = MS1
+					MS1 = { NOT = { is_subject_of = ROOT } }
+				}
+				AND = {
+					exists = MSN
+					MSN = { NOT = { is_subject_of = ROOT } }
+				}
+			}
+		}
+		allow = {
+			treasury = 5000
+			if = {
+				limit = {
+					exists = MSN
+					MSN = { NOT = { is_subject_of = ROOT } }
+				}
+				to_can_offer_spartan_subjegation = {
+					TAG = MSN
+				}
+			}
+			else = {
+				to_can_offer_spartan_subjegation = {
+					TAG = MS1
+				}
+			}
+		}
+		effect = {
+			add_treasury = -5000
+			add_adm_power = -100
+			add_dip_power = -100
+			add_mil_power = -300
+			if = {
+				limit = {
+					exists = MSN
+					MSN = { NOT = { is_subject_of = ROOT } }
+				}
+				create_subject = {
+					subject_type = nhs_imperial_associate
+					subject = MSN
+				}
+			}
+			else_if = {
+				limit = {
+					exists = MS1
+					MSN = { NOT = { is_subject_of = ROOT } }
+				}
+				create_subject = {
+					subject_type = nhs_imperial_associate
+					subject = MS1
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				OR = {
+					NOT = { treasury = 5100 }
 					num_of_loans = 1
 				}
 			}

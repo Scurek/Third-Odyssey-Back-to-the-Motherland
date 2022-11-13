@@ -1255,31 +1255,200 @@ nhs_eligible_for_enclave_with_canada = {
 }
 
 nhs_can_offer_viking_subjegation = {
-	$TRADE_DEAL_TRIGGER$ = yes
-	$TAG$ = {
-		ai = yes
-		is_subject = no
+	if = {
+		limit = {
+			exists = $TAG$
+			$TAG$ = { NOT = { is_subject_of = ROOT } }
+		}
+		$TRADE_DEAL_TRIGGER$ = yes
+		$TAG$ = {
+			ai = yes
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = nhs_at_least_33_dev_tt
+				ROOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = nhs_my_total_dev
+							value = trigger_value:total_own_and_non_tributary_subject_development
+						}
+						export_to_variable = {
+							variable_name = nhs_viking_total_dev
+							value = total_development
+							who = $TAG$
+						}
+						multiply_variable = {
+							which = nhs_viking_total_dev
+							value = 3
+						}
+						check_variable = {
+							which = nhs_my_total_dev
+							which = nhs_viking_total_dev
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+to_can_offer_spartan_subjegation = {
+	if = {
+		limit = {
+			exists = $TAG$
+			$TAG$ = { NOT = { is_subject_of = ROOT } }
+		}
+		$TAG$ = {
+			ai = yes
+			is_subject = no
+		}
+		NOT = { war_with = $TAG$ }
+		reverse_has_opinion = {
+			who = $TAG$
+			value = -50
+		}
+		OR = {
+			army_tradition = 95
+			army_tradition = $TAG$
+		}
 		custom_trigger_tooltip = {
-			tooltip = nhs_at_least_33_dev_tt
-			ROOT = {
-				variable_arithmetic_trigger = {
-					export_to_variable = {
-						variable_name = nhs_my_total_dev
-						value = trigger_value:total_own_and_non_tributary_subject_development
+			tooltip = to_sparta_less_than_50p_army_size_tt
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					variable_name = to_my_army_size
+					value = trigger_value:army_size
+				}
+				# export_to_variable = {
+				# 	variable_name = to_my_forcelimit
+				# 	value = trigger_value:land_forcelimit
+				# }
+				if = {
+					limit = {
+						army_size_percentage = 1
 					}
-					export_to_variable = {
-						variable_name = nhs_viking_total_dev
-						value = total_development
-						who = $TAG$
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = to_my_fl
+							value = trigger_value:land_forcelimit
+						}
+						set_variable = {
+							which = to_my_army_size
+							which = to_my_fl
+						}
 					}
-					multiply_variable = {
-						which = nhs_viking_total_dev
-						value = 3
+				}
+				# else = {
+				# 	variable_arithmetic_trigger = {
+				# 		export_to_variable = {
+				# 			variable_name = to_my_army_size
+				# 			value = trigger_value:army_size
+				# 		}
+						
+				# 	}
+				# }
+				all_subject_country = {
+					if = {
+						limit = {
+							NOT = { is_subject_of_type = tributary_state }
+						}
+						if = {
+							limit = {
+								army_size_percentage = 1
+							}
+							ROOT = {
+								variable_arithmetic_trigger = {
+									export_to_variable = {
+										variable_name = to_subject_army_size
+										value = trigger_value:land_forcelimit
+										who = PREV
+									}
+									change_variable = {
+										which = to_my_army_size
+										which = to_subject_army_size
+									}
+								}
+							}
+						}
+						else = {
+							ROOT = {
+								variable_arithmetic_trigger = {
+									export_to_variable = {
+										variable_name = to_subject_army_size
+										value = trigger_value:army_size
+										who = PREV
+									}
+									change_variable = {
+										which = to_my_army_size
+										which = to_subject_army_size
+									}
+								}
+							}
+						}
 					}
-					check_variable = {
-						which = nhs_my_total_dev
-						which = nhs_viking_total_dev
+					# ROOT = {
+					# 	export_to_variable = {
+					# 		variable_name = to_subject_army_size
+					# 		value = trigger_value:army_size
+					# 		who = PREV
+					# 	}
+					# 	change_variable = {
+					# 		which = to_my_army_size
+					# 		which = to_subject_army_size
+					# 	}
+					# }
+				}
+				export_to_variable = {
+					variable_name = to_their_army_size
+					value = army_size
+					who = $TAG$
+				}
+				if = {
+					limit = {
+						$TAG$ = {
+							army_size_percentage = 1
+						}
 					}
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = to_their_fl
+							value = trigger_value:land_forcelimit
+							WHO = $TAG$
+						}
+						set_variable = {
+							which = to_their_army_size
+							which = to_their_fl
+						}
+					}
+				}
+				multiply_variable = {
+					which = to_their_army_size
+					value = 2
+				}
+				check_variable = {
+					which = to_my_army_size
+					which = to_their_army_size
+				}
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = to_sparta_has_less_than_50p_dev_tt
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					variable_name = nhs_my_total_dev
+					value = trigger_value:total_own_and_non_tributary_subject_development
+				}
+				export_to_variable = {
+					variable_name = nhs_their_total_dev
+					value = total_development
+					who = $TAG$
+				}
+				multiply_variable = {
+					which = nhs_their_total_dev
+					value = 2
+				}
+				check_variable = {
+					which = nhs_my_total_dev
+					which = nhs_their_total_dev
 				}
 			}
 		}

@@ -4313,6 +4313,7 @@ nhs_left_mid_end = {
 				}
 			}
 			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = nhs_unlocks_sparta_sub_dec_tt
 			if = {
 				limit = {
 					government = monarchy
@@ -4339,8 +4340,7 @@ nhs_left_mid_end = {
 						}
 					}
 				}
-				country_event = { id = nhs_mission_events.10 }
-				custom_tooltip = nhs_gain_spartan_pu_tt
+				country_event = { id = nhs_mission_events.10 tooltip = to_cb_over_sparta_event_tt }
 			}
 			else_if = {
 				limit = {
@@ -4364,36 +4364,35 @@ nhs_left_mid_end = {
 						}
 					}
 				}
-				country_event = { id = nhs_mission_events.11 }
-				custom_tooltip = nhs_gain_restore_family_cb_over_sparta_tt
+				country_event = { id = nhs_mission_events.11 tooltip = to_foreign_dynasty_cb_over_sparta_event_tt }
 			}
-			else_if = {
-				limit = {
-					OR = {
-						MSN = {
-							is_subject_of = ROOT
-						}
-						MS1 = {
-							is_subject_of = ROOT
-						}
-					}
-				}
-				country_event = { id = nhs_mission_events.12 }
-				custom_tooltip = nhs_gain_help_reclaim_subject_tt
-			}
-			else_if = {
-				limit = {
-					NOT = { nhs_check_all_spartan = { CONDITION = exists } }
-					any_province = {
-						nhs_check_all_spartan = { CONDITION = is_core }
-						NOT = { is_core = ROOT }
-						NOT = { owned_by = ROOT }
-						NOT = { is_permanent_claim = ROOT }
-					}
-				}
-				country_event = { id = nhs_mission_events.13 }
-				custom_tooltip = nhs_gain_claims_on_over_sparta_tt
-			}
+			# else_if = {
+			# 	limit = {
+			# 		OR = {
+			# 			MSN = {
+			# 				is_subject_of = ROOT
+			# 			}
+			# 			MS1 = {
+			# 				is_subject_of = ROOT
+			# 			}
+			# 		}
+			# 	}
+			# 	country_event = { id = nhs_mission_events.12 }
+			# 	custom_tooltip = nhs_gain_help_reclaim_subject_tt
+			# }
+			# else_if = {
+			# 	limit = {
+			# 		NOT = { nhs_check_all_spartan = { CONDITION = exists } }
+			# 		any_province = {
+			# 			nhs_check_all_spartan = { CONDITION = is_core }
+			# 			NOT = { is_core = ROOT }
+			# 			NOT = { owned_by = ROOT }
+			# 			NOT = { is_permanent_claim = ROOT }
+			# 		}
+			# 	}
+			# 	country_event = { id = nhs_mission_events.13 }
+			# 	custom_tooltip = nhs_gain_claims_on_over_sparta_tt
+			# }
 			if = {
 				limit = {
 					has_global_flag = nhs_msg_gone
@@ -4457,16 +4456,6 @@ nhs_left_mid_end = {
 					}
 				}
 			}
-			if = {
-				limit = {
-					has_global_flag = nhs_msg_gone
-					NOT = { nhs_check_all_spartan = { CONDITION = exists } }
-				}
-				custom_trigger_tooltip = {
-					tooltip = nhs_to_expanding_south_mission_spartan_trigger
-					always = yes
-				}
-			}
 		}
 		effect = {
 			#custom_tooltip = nhs_upgrade_nhs2_state_bonus
@@ -4480,8 +4469,21 @@ nhs_left_mid_end = {
 			#Add building cost reduction modifier
 			if = {
 				limit = {
+					exists = MS1
+					MS1 = {
+						is_subject_of = ROOT
+						historical_rival_with = ROOT
+					}
+				}
+				MS1 = {
+					remove_historical_rival = ROOT
+				}
+			}
+			if = {
+				limit = {
 					exists = MSN
 					MSN = {
+						is_subject_of = ROOT
 						historical_rival_with = ROOT
 					}
 				}
