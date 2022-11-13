@@ -2992,46 +2992,80 @@ country_event = {
 ### BOOKS EVENTS
 ###################################################
 
-# Delivering the books to Alexandrian Library
-# country_event = {
-# 	id = nhs2_countryevents.72
-# 	title = nhs_wtfzeph.t
-# 	desc = nhs_wtfzeph.d
-# 	picture = ACCUSATION_eventPicture
+# Enables Renaissance spread from books
+country_event = {
+	id = nhs2_countryevents.72
+	title = nhs2_countryevents.72.t
+	desc = nhs2_countryevents.72.d
+	picture = BIG_BOOK_eventPicture
 	
-# 	fire_only_once = yes
+	# fire_only_once = yes
+	is_triggered_only = yes
 	
-# 	trigger = {
-# 		nhs_check_all_elysian_tags = { CONDITION = tag }
-# 		has_country_modifier = nhs_secrets_books
-# 		2554 = {
-# 			owned_by = ROOT
-# 			OR = {
-# 				has_province_modifier = nhs_alexandrian_library_no_books_tm
-# 				has_province_modifier = nhs_alexandrian_library_no_books_tm_decay
-# 			}
-# 		}
-# 	}
+	# trigger = {
+	# 	nhs_check_all_elysian_tags = { CONDITION = tag }
+	# 	has_country_modifier = nhs_secrets_books
+	# 	is_institution_enabled = renaissance
+	# 	NOT = { is_institution_enabled = new_world_i }
+	# 	NOT = { has_institution = renaissance }
+	# }
 
-# 	option = {
-# 		name = "nhs_wtfzeph.a"
-# 		remove_country_modifier = nhs_secrets_books
-# 		custom_tooltip = nhs_upgrade_alexandrian_library_tt
-# 		hidden_effect = {
-# 			remove_province_triggered_modifier = nhs_alexandrian_library_no_books_tm
-# 			add_province_triggered_modifier = nhs_alexandrian_library_tm
-# 			if = {
-# 				limit = {
-# 					has_province_modifier = nhs_alexandrian_library_no_books_tm_decay
-# 				}
-# 				remove_province_triggered_modifier = nhs_alexandrian_library_no_books_tm_decay
-# 				clr_province_flag = nhs_ei_alexandrian_library_no_books_decay
-# 				set_province_flag = nhs_ei_alexandrian_library_decay
-# 				add_province_triggered_modifier = nhs_alexandrian_library_tm_decay
-# 			}
-# 		}
-# 	}
-# }
+	option = {
+		name = "nhs2_countryevents.72.a"
+		# The learning and knowledge that we have, is, at the most, but little compared with that of which we are ignorant.
+		# Thinking: the talking of the soul with itself.
+		# The mind is not a vessel to be filled but a fire to be kindled.
+		# If a man neglects education, he walks lame to the end of his life.
+		# Books give a soul to the universe, wings to the mind, flight to the imagination, and life to everything.
+		if = {
+			limit = {
+				has_dlc = "Rights of Man"
+				OR = {
+					has_regency = no
+					has_consort_regency = yes
+				}
+				NOT = { num_of_ruler_traits = { amount = 3 } }
+			}
+			custom_tooltip = nhs_institution_spread_from_books_tt
+			custom_tooltip = nhs_new_line_tt
+			random_list = {
+				1 = {
+					modifier = {
+						factor = 0
+						ruler_has_personality = righteous_personality
+					}
+					add_ruler_personality = righteous_personality
+				}
+				1 = {
+					modifier = {
+						factor = 0
+						ruler_has_personality = just_personality
+					}
+					add_ruler_personality = just_personality
+				}
+				1 = {
+					modifier = {
+						factor = 0
+						ruler_has_personality = free_thinker_personality
+					}
+					add_ruler_personality = free_thinker_personality
+				}
+				1 = {
+					modifier = {
+						factor = 0
+						ruler_has_personality = scholar_personality
+					}
+					add_ruler_personality = scholar_personality
+				}
+			}
+		}
+		else = {
+			add_prestige = 5
+			custom_tooltip = nhs_institution_spread_from_books_tt
+		}
+		
+	}
+}
 
 ###################################################
 ### VENETIAN EVENTS
