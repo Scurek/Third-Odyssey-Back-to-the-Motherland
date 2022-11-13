@@ -1170,12 +1170,16 @@ new_world_i = {
 		if = {
 			limit = {
 				owner = {
-					tag = POR
 					has_country_flag = nhs_portugese_secret
 					# has_country_modifier = nhs2_por_ely_trade
 				}
 			}
-			is_year = 1500
+			if = {
+				limit = {
+					NOT = { has_global_flag = nhs_europe_discovered }
+				}
+				is_year = 1505
+			}
 			if = {
 				limit = {
 					owner = {
@@ -1212,13 +1216,85 @@ new_world_i = {
 				has_port = yes
 			}
 		}
+		else_if = {
+			limit = {
+				has_global_flag = to_magellan_has_departed
+				owner = {
+					OR = {
+						has_country_flag = to_magellan_departure_country
+						AND = {
+							capital_scope = {
+								OR = {
+									continent = europe
+									superregion = africa_superregion
+								}
+							}
+							any_owned_province = {
+								continent = europe
+								sea_zone = {
+									region = north_atlantic_region
+								}
+							}
+							NOT = {
+								any_country = {
+									has_country_flag = to_magellan_departure_country
+								}
+							}
+						}
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_three_months_since_magellan_departed_tt
+				to_magellan_can_return = yes
+			}
+			if = {
+				limit = {
+					owner = {
+						capital_scope = {
+							continent = europe
+							sea_zone = {
+								region = north_atlantic_region
+							}
+						}
+					}
+				}
+				hidden_trigger = {
+					is_capital_of = ROOT
+				}
+				continent = europe
+				sea_zone = {
+					region = north_atlantic_region
+				}
+			}
+			else_if = {
+				limit = {
+					owner = {
+						any_owned_province = {
+							continent = europe
+							sea_zone = {
+								region = north_atlantic_region
+							}
+						}
+					}
+				}
+				continent = europe
+				sea_zone = {
+					region = north_atlantic_region
+				}
+			}
+			else = {
+				is_capital = yes
+			}
+		}
 		else = {
-			OR = {
-				custom_trigger_tooltip = {
-					tooltip = nhs_has_nhs_europe_discovered
+			custom_trigger_tooltip = {
+				tooltip = to_interest_in_overseas_exploration_renewed_tt
+				NOT = { has_global_flag = to_magellan_has_departed }
+				OR = {
+					is_year = 1535
 					has_global_flag = nhs_europe_discovered
 				}
-				is_year = 1535
 			}
 			continent = europe
 			OR = {
@@ -1245,9 +1321,19 @@ new_world_i = {
 					}
 				}
 			}
+			hidden_trigger = {
+				OR = {
+					NOT = { has_global_flag = nhs_portugese_secret_global }
+					NOT = {
+						any_country = {
+							has_country_flag = nhs_portugese_secret
+						}
+					}
+				}
+			}
 		}
 	}
-	start_chance = 33		#in 100 for when a province can_start
+	start_chance = 100		#in 100 for when a province can_start
 	
 	
 	on_start = institution_events.3

@@ -320,61 +320,46 @@ to_replace_idea_group_with_exploration_master_effect = {
 	}
 }
 
+to_trigger_colonialism_events_with_portugal = {
+	every_country = {
+		limit = {
+			NOT = { tag = ROOT }
+			to_eligible_for_exploration_event = yes
+		}
+		country_event = { id = to_colonialism_events.1 }
+	}
+	hidden_effect = {
+		every_country = {
+			limit = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+			}
+			country_event = { id = to_colonialism_events.4 }
+		}
+		every_country = {
+			limit = {
+				NOT = { tag = ROOT }
+				NOT = { nhs_check_all_elysian_tags = { CONDITION = tag } }
+				ai = no
+				NOT = { to_eligible_for_exploration_event = yes }
+			}
+			if = {
+				limit = {
+					knows_country = ROOT
+				}
+				country_event = { id = institution_events.300 }
+			}
+			else = {
+				country_event = { id = institution_events.301 }
+			}
+		}
+	}
+}
+
 to_trigger_colonialism_events_no_portugal = {
 	every_country = {
 		limit = {
 			NOT = { tag = ROOT }
-			technology_group = western
-			adm_tech = 5
-			is_subject = no
-			OR = {
-				ai = no
-				AND = {
-					num_of_cities = 8
-					num_of_owned_provinces_with = {
-						value = 3
-						has_port = yes
-						continent = europe
-						sea_zone = {
-							region = north_atlantic_region
-						}
-					}
-				}
-			}
-			OR = {
-				tag = POR
-				AND = {
-					adm_tech = 7
-					OR = {
-						tag = GBR
-						tag = SPA
-						tag = CAS
-						tag = NED
-					}
-				}
-				AND = {
-					adm_tech = 10
-					OR = {
-						tag = ENG
-						tag = FRA
-						capital_scope = {
-							OR = {
-								region = france_region
-								region = iberia_region
-								region = british_isles_region
-								region = low_countries_region
-							}
-						}
-					}
-				}
-			}
-			any_owned_province = {
-				has_port = yes
-				continent = europe
-				sea_zone = {
-					region = north_atlantic_region
-				}
-			}
+			to_eligible_for_exploration_event = yes
 		}
 		country_event = { id = to_colonialism_events.2 }
 	}
@@ -390,45 +375,7 @@ to_trigger_colonialism_events_no_portugal = {
 				NOT = { tag = ROOT }
 				NOT = { nhs_check_all_elysian_tags = { CONDITION = tag } }
 				ai = no
-				NOT = {
-					AND = {
-						technology_group = western
-						OR = {
-							tag = POR
-							AND = {
-								adm_tech = 7
-								OR = {
-									tag = GBR
-									tag = SPA
-									tag = CAS
-									tag = NED
-								}
-							}
-							AND = {
-								adm_tech = 10
-								OR = {
-									tag = ENG
-									tag = FRA
-									capital_scope = {
-										OR = {
-											region = france_region
-											region = iberia_region
-											region = british_isles_region
-											region = low_countries_region
-										}
-									}
-								}
-							}
-						}
-						any_owned_province = {
-							has_port = yes
-							continent = europe
-							sea_zone = {
-								region = north_atlantic_region
-							}
-						}
-					}
-				}
+				NOT = { to_eligible_for_exploration_event = yes }
 			}
 			if = {
 				limit = {
@@ -440,6 +387,489 @@ to_trigger_colonialism_events_no_portugal = {
 				country_event = { id = institution_events.301 }
 			}
 		}
+	}
+}
+
+to_trigger_colonialism_events_magellan = {
+	every_country = {
+		limit = {
+			NOT = { tag = ROOT }
+			to_eligible_for_exploration_event = yes
+		}
+		country_event = { id = to_colonialism_events.11 }
+	}
+	hidden_effect = {
+		every_country = {
+			limit = {
+				NOT = { tag = ROOT }
+				NOT = { nhs_check_all_elysian_tags = { CONDITION = tag } }
+				ai = no
+				NOT = { to_eligible_for_exploration_event = yes }
+			}
+			if = {
+				limit = {
+					knows_country = ROOT
+				}
+				country_event = { id = institution_events.300 }
+			}
+			else = {
+				country_event = { id = institution_events.301 }
+			}
+		}
+	}
+}
+
+to_birthplace_of_colonialism_effect = {
+	add_adm_power = 100
+	add_dip_power = 100
+	add_mil_power = 100
+	add_prestige = 20
+	if = {
+		limit = {
+			NOT = { has_completed_all_reforms_trigger = yes }
+		}
+		add_reform_progress_medium_effect = yes
+	}
+	[[ADD_MAGELLAN_EFFECT]
+	if =  {
+		limit = { 
+			has_dlc = "Rights of Man"
+			NOT = { num_of_ruler_traits = { amount = 3 } }
+			NOT = { ruler_has_personality = navigator_personality }
+			has_regency = no
+		}
+		add_navy_tradition = 10
+		add_ruler_personality = navigator_personality
+	}
+	else = { add_navy_tradition = 20 }
+	]
+	custom_tooltip = to_colonialism_spread_europe_tt
+	custom_tooltip = institution_events.3.a.tt
+	custom_tooltip = nhs_new_line_tt
+	FROM = {
+		add_permanent_province_modifier = {
+			name = "birthplace_of_the_new_world"
+			duration = -1
+		}
+		if = {
+			limit = {
+				owner = {
+					has_country_modifier = nhs2_por_ely_trade
+				}
+			}
+			tooltip = {
+				add_permanent_province_modifier = {
+					name = to_por_gateway_to_elysia
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				add_province_triggered_modifier = to_por_gateway_to_elysia_tm
+			}
+		}
+	}
+	[[ADD_MAGELLAN_EFFECT]
+	define_explorer = {
+		name = "Ferdinant Magellan"
+		shock = 2
+		fire = 1
+		manuever = 6
+		trait = accomplished_sailor_personality
+	}
+	]
+}
+
+to_discover_magellan_travels = {
+	custom_tooltip = to_discover_magellan_travels_tt
+	hidden_effect = {
+		discover_province = 1566
+		discover_province = 1578
+		discover_province = 1581
+		discover_province = 1576
+		discover_province = 1566
+		caribbean_sea_area = {
+			discover_country = ROOT
+		}
+		carribeans_region = {
+			limit = {
+				has_port = yes
+				NOT = { province_id = 481 }
+			}
+			discover_country = ROOT
+		}
+		if = {
+			limit = {
+				has_saved_event_target = to_magellan_landing
+			}
+			if = {
+				limit = {
+					event_target:to_magellan_landing = {
+						OR = {
+							province_id = 482
+							province_id = 483
+						}
+					}
+				}
+				bahama_channel_area = {
+					limit = {
+						NOT = { province_id = 481 }
+					}
+					discover_country = ROOT
+				}
+			}
+			else_if = {
+				limit = {
+					event_target:to_magellan_landing = {
+						OR = {
+							region = mississippi_region
+							region = rio_grande_region
+							region = mexico_region
+							region = central_america_region
+						}
+					}
+				}
+				gulf_of_mexico_area = {
+					limit = {
+						NOT = { province_id = 481 }
+					}
+					discover_country = ROOT
+				}
+				if = {
+					limit = {
+						event_target:to_magellan_landing = {
+							OR = {
+								region = mexico_region
+								region = central_america_region
+							}
+						}
+					}
+					every_province = {
+						limit = {
+							province_group = to_east_coast
+							region = event_target:to_magellan_landing
+							has_port = yes
+						}
+						discover_country = ROOT
+					}
+				}
+				else = {
+					every_province = {
+						limit = {
+							region = event_target:to_magellan_landing
+							has_port = yes
+						}
+						discover_country = ROOT
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					event_target:to_magellan_landing = {
+						region = colombia_region
+					}
+				}
+				discover_province = 1528
+				discover_province = 1527
+				# discover_province = 1522
+				# discover_province = 1520
+				# discover_province = 1519
+				# discover_province = 1517
+				# discover_province = 1515
+				# discover_province = 491
+				colombia_region = {
+					limit = {
+						has_port = yes
+					}
+					discover_country = ROOT
+				}
+			}
+			else_if = {
+				limit = {
+					event_target:to_magellan_landing = {
+						OR = {
+							area = north_florida_area
+							area = florida_area
+							area = south_carolina_area
+						}
+					}
+				}
+				bahama_channel_area = {
+					limit = {
+						NOT = { province_id = 481 }
+					}
+					discover_country = ROOT
+				}
+				if = {
+					limit = {
+						event_target:to_magellan_landing = {
+							OR = {
+								area = south_carolina_area
+								area = north_florida_area
+							}
+						}
+					}
+					discover_province = 1502
+				}
+				if = {
+					limit = {
+						event_target:to_magellan_landing = {
+							OR = {
+								area = florida_area
+								area = north_florida_area
+							}
+						}
+					}
+					discover_province = 1506
+				}
+				every_province = {
+					limit = {
+						area = event_target:to_magellan_landing
+						has_port = yes
+					}
+					discover_country = ROOT
+				}
+			}
+			else = {
+				every_province = {
+					limit = {
+						region = event_target:to_magellan_landing
+						has_port = yes
+					}
+					discover_country = ROOT
+				}
+			}
+		}
+	}
+}
+
+to_accept_magellan_offer = {
+	add_dip_power = -100
+	custom_tooltip = to_begin_magellan_voyage_tt
+	set_global_flag = to_magellan_has_departed
+	set_country_flag = to_magellan_departure_country
+	save_global_event_target_as = to_magellan_departure_country
+	hidden_effect = {
+		clear_global_event_target = to_magellan_initial_proposal
+		every_country = {
+			clr_country_flag = to_denied_magellan
+		}
+		random_country = {
+			limit = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+			}
+			country_event = { id = to_colonialism_events.9 days = 90 }
+		}
+	}
+}
+
+to_reject_magellan_offer = {
+	add_legitimacy = 10
+	hidden_effect = {
+		set_country_flag = to_denied_magellan
+		set_global_flag = to_magellan_seaches_for_employment
+	}
+	to_find_new_magellan_target = yes
+}
+
+to_find_new_magellan_target = {
+	if = {
+		limit = {
+			any_country = {
+				ai = no
+				OR = {
+					tag = POR
+					tag = CAS
+					tag = SPA
+				}
+				any_owned_province = {
+					continent = europe
+					sea_zone = {
+						region = north_atlantic_region
+					}
+				}
+				capital_scope = {
+					OR = {
+						continent = europe
+						superregion = africa_superregion
+					}
+				}
+				NOT = { has_country_flag = to_denied_magellan }
+			}
+		}
+		random_country = {
+			limit = {
+				ai = no
+				OR = {
+					tag = POR
+					tag = CAS
+					tag = SPA
+				}
+				any_owned_province = {
+					continent = europe
+					sea_zone = {
+						region = north_atlantic_region
+					}
+				}
+				capital_scope = {
+					OR = {
+						continent = europe
+						superregion = africa_superregion
+					}
+				}
+				NOT = { has_country_flag = to_denied_magellan }
+			}
+			country_event = { id = to_colonialism_events.7 days = 30 }
+		}
+	}
+	else_if = {
+		limit = {
+			any_country = {
+				ai = no
+				religion_group = ROOT
+				any_owned_province = {
+					continent = europe
+					sea_zone = {
+						region = north_atlantic_region
+					}
+				}
+				capital_scope = {
+					OR = {
+						continent = europe
+						superregion = africa_superregion
+					}
+				}
+				NOT = { has_country_flag = to_denied_magellan }
+			}
+		}
+		random_country = {
+			limit = {
+				ai = no
+				religion_group = ROOT
+				any_owned_province = {
+					continent = europe
+					sea_zone = {
+						region = north_atlantic_region
+					}
+				}
+				capital_scope = {
+					OR = {
+						continent = europe
+						superregion = africa_superregion
+					}
+				}
+				NOT = { has_country_flag = to_denied_magellan }
+			}
+			country_event = { id = to_colonialism_events.7 days = 30 }
+		}
+	}
+	else_if = {
+		limit = {
+			any_country = {
+				OR = {
+					tag = POR
+					tag = CAS
+					tag = SPA
+				}
+				any_owned_province = {
+					continent = europe
+					sea_zone = {
+						region = north_atlantic_region
+					}
+				}
+				capital_scope = {
+					OR = {
+						continent = europe
+						superregion = africa_superregion
+					}
+				}
+				NOT = { has_country_flag = to_denied_magellan }
+			}
+		}
+		random_country = {
+			limit = {
+				OR = {
+					tag = POR
+					tag = CAS
+					tag = SPA
+				}
+				any_owned_province = {
+					continent = europe
+					sea_zone = {
+						region = north_atlantic_region
+					}
+				}
+				capital_scope = {
+					OR = {
+						continent = europe
+						superregion = africa_superregion
+					}
+				}
+				NOT = { has_country_flag = to_denied_magellan }
+			}
+			country_event = { id = to_colonialism_events.7 days = 30 }
+		}
+	}
+	else_if = {
+		limit = {
+			any_country = {
+				religion_group = ROOT
+				any_owned_province = {
+					continent = europe
+					sea_zone = {
+						region = north_atlantic_region
+					}
+				}
+				capital_scope = {
+					OR = {
+						continent = europe
+						superregion = africa_superregion
+					}
+				}
+				NOT = { has_country_flag = to_denied_magellan }
+			}
+		}
+		random_country = {
+			limit = {
+				religion_group = ROOT
+				any_owned_province = {
+					continent = europe
+					sea_zone = {
+						region = north_atlantic_region
+					}
+				}
+				capital_scope = {
+					OR = {
+						continent = europe
+						superregion = africa_superregion
+					}
+				}
+				NOT = { has_country_flag = to_denied_magellan }
+			}
+			country_event = { id = to_colonialism_events.7 days = 30 }
+		}
+	}
+	else = {
+		custom_tooltip = to_magellan_private_financing_tt
+		clr_global_flag = to_magellan_seaches_for_employment
+		set_global_flag = to_magellan_private_financing
+		save_global_event_target_as = to_magellan_private_target
+	}
+}
+
+to_clean_magellan_flags = {
+	hidden_effect = {
+		every_country = {
+			clr_country_flag = to_magellan_departure_country
+			clr_country_flag = to_denied_magellan
+		}
+		every_province = {
+			clr_province_flag = to_magellan_landing
+		}
+		clr_global_flag = to_magellan_has_departed
+		clr_global_flag = to_magellan_found_elysia
+		clr_global_flag = to_magellan_seaches_for_employment
+		clear_global_event_target = to_magellan_departure_country
+		clear_global_event_target = to_magellan_initial_proposal
 	}
 }
 
@@ -1166,7 +1596,7 @@ nhs_set_center_in_a_region = {
 				NOT = { province_has_center_of_trade_of_level = 1 }
 			}
 		}
-		random__province = {
+		random_province = {
 			limit = {
 				owner = {
 					is_subject_of = ROOT

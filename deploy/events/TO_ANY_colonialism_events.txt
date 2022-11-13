@@ -1,5 +1,9 @@
 namespace = to_colonialism_events
 
+###################################################
+### COLONIALISM SPAWNS
+###################################################
+
 # Brave New World - With Portugal
 country_event = {
 	id = to_colonialism_events.1
@@ -124,7 +128,7 @@ country_event = {
 
 	is_triggered_only = yes
 
-	# goto = institution_origin
+	goto = institution_origin
 
 	option = {
 		name = to_colonialism_events.2.a
@@ -426,6 +430,934 @@ country_event = {
 
 	option = {
 		name = to_colonialism_events.5.a
+		custom_tooltip = institution_events.3.a.tt
+	}
+}
+
+###################################################
+### MAGELLAN EVENTS
+###################################################
+
+# Magellan proposes an expedition
+country_event = {
+	id = to_colonialism_events.6
+	title = to_colonialism_events.6.t
+	desc = to_colonialism_events.6.d
+	picture = SHIP_SAILING_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		is_year = 1525
+		NOT = { is_institution_enabled = new_world_i }
+		NOT = { has_global_flag = nhs_europe_discovered }
+		NOT = {
+			nhs_check_existing_elysian_tags_with_full_condition = {
+				CONDITION = "
+					OR = {
+						has_country_flag = nhs_the_explorer_went
+						has_country_flag = to_pytheas_returns_active
+					}
+				"
+			}
+		}
+		if = {
+			limit = {
+				exists = POR
+				POR = {
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+				}
+			}
+			tag = POR
+		}
+		else_if = {
+			limit = {
+				232 = {
+					owned_by = ROOT
+					OR = {
+						has_owner_culture = yes
+						ROOT = {
+							culture_group = PREV
+						}
+						has_owner_accepted_culture = yes
+					}
+					religion_group = ROOT
+					owner = {
+						capital_scope = {
+							OR = {
+								continent = europe
+								superregion = africa_superregion
+							}
+						}
+						any_owned_province = {
+							continent = europe
+							sea_zone = {
+								region = north_atlantic_region
+							}
+						}
+					}
+				}
+			}
+			owns = 232
+		}
+		else_if = {
+			limit = {
+				exists = SPA
+				SPA = {
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+				}
+			}
+			tag = SPA
+		}
+		else_if = {
+			limit = {
+				exists = CAS
+				CAS = {
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+				}
+			}
+			tag = CAS
+		}
+		else = {
+			capital_scope = {
+				OR = {
+					continent = europe
+					superregion = africa_superregion
+				}
+			}
+			any_owned_province = {
+				continent = europe
+				sea_zone = {
+					region = north_atlantic_region
+				}
+			}
+		}
+		NOT = { has_global_flag = to_magellan_has_departed }
+	}
+
+	option = {
+		name = to_colonialism_events.6.a
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0
+				any_country = {
+					ai = no
+					OR = {
+						tag = POR
+						tag = CAS
+						tag = SPA
+						religion_group = ROOT
+					}
+					NOT = { tag = ROOT }
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					NOT = { has_country_flag = to_denied_magellan }
+				}
+			}
+		}
+		to_accept_magellan_offer = yes
+	}
+
+	option = {
+		name = to_colonialism_events.6.b
+		trigger = {
+			OR = {
+				ai = no
+				any_country = {
+					NOT = { tag = ROOT }
+					OR = {
+						tag = POR
+						tag = CAS
+						tag = SPA
+						religion_group = ROOT
+					}
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					NOT = { has_country_flag = to_denied_magellan }
+				}
+			}
+			OR = {
+				ai = no
+				any_country = {
+					ai = no
+					NOT = { tag = ROOT }
+					OR = {
+						tag = POR
+						tag = CAS
+						tag = SPA
+						religion_group = ROOT
+					}
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					NOT = { has_country_flag = to_denied_magellan }
+				}
+				NOT = {
+					OR = {
+						dip = 5
+						ruler_has_personality = navigator_personality
+					}
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_effect = {
+			save_global_event_target_as = to_magellan_initial_proposal
+		}
+		to_reject_magellan_offer = yes
+	}
+}
+
+# Magellan proposes an expedition, next country
+country_event = {
+	id = to_colonialism_events.7
+	title = to_colonialism_events.6.t
+	desc = to_colonialism_events.7.d
+	picture = SHIP_SAILING_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		clr_global_flag = to_magellan_seaches_for_employment
+	}
+
+	option = {
+		name = to_colonialism_events.6.a
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0
+				any_country = {
+					ai = no
+					OR = {
+						tag = POR
+						tag = CAS
+						tag = SPA
+						religion_group = ROOT
+					}
+					NOT = { tag = ROOT }
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					NOT = { has_country_flag = to_denied_magellan }
+				}
+			}
+		}
+		to_accept_magellan_offer = yes
+	}
+
+	option = {
+		name = to_colonialism_events.6.b
+		trigger = {
+			OR = {
+				ai = no
+				any_country = {
+					NOT = { tag = ROOT }
+					OR = {
+						tag = POR
+						tag = CAS
+						tag = SPA
+						religion_group = ROOT
+					}
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					NOT = { has_country_flag = to_denied_magellan }
+				}
+			}
+			OR = {
+				ai = no
+				any_country = {
+					ai = no
+					NOT = { tag = ROOT }
+					OR = {
+						tag = POR
+						tag = CAS
+						tag = SPA
+						religion_group = ROOT
+					}
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					NOT = { has_country_flag = to_denied_magellan }
+				}
+				NOT = {
+					OR = {
+						dip = 5
+						ruler_has_personality = navigator_personality
+					}
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		to_reject_magellan_offer = yes
+	}
+}
+
+# Magellan proposes an expedition, next country fallback
+country_event = {
+	id = to_colonialism_events.8
+	title = to_colonialism_events.6.t
+	desc = to_colonialism_events.6.d
+	picture = SHIP_SAILING_eventPicture
+
+	trigger = {
+		capital_scope = {
+			OR = {
+				continent = europe
+				superregion = africa_superregion
+			}
+		}
+		had_global_flag = {
+			flag = to_magellan_seaches_for_employment
+			days = 100
+		}
+		any_owned_province = {
+			continent = europe
+			sea_zone = {
+				region = north_atlantic_region
+			}
+		}
+	}
+
+	immediate = {
+		clr_global_flag = to_magellan_seaches_for_employment
+	}
+
+	option = {
+		name = to_colonialism_events.6.a
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0
+				any_country = {
+					ai = no
+					OR = {
+						tag = POR
+						tag = CAS
+						tag = SPA
+						religion_group = ROOT
+					}
+					NOT = { tag = ROOT }
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					NOT = { has_country_flag = to_denied_magellan }
+				}
+			}
+		}
+		ai_chance = {
+			factor = 90
+		}
+		to_accept_magellan_offer = yes
+	}
+
+	option = {
+		name = to_colonialism_events.6.b
+		trigger = {
+			OR = {
+				ai = no
+				any_country = {
+					NOT = { tag = ROOT }
+					OR = {
+						tag = POR
+						tag = CAS
+						tag = SPA
+						religion_group = ROOT
+					}
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					NOT = { has_country_flag = to_denied_magellan }
+				}
+			}
+			OR = {
+				ai = no
+				any_country = {
+					ai = no
+					NOT = { tag = ROOT }
+					OR = {
+						tag = POR
+						tag = CAS
+						tag = SPA
+						religion_group = ROOT
+					}
+					any_owned_province = {
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+					capital_scope = {
+						OR = {
+							continent = europe
+							superregion = africa_superregion
+						}
+					}
+					NOT = { has_country_flag = to_denied_magellan }
+				}
+				NOT = {
+					OR = {
+						dip = 5
+						ruler_has_personality = navigator_personality
+					}
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		to_reject_magellan_offer = yes
+	}
+}
+
+# Magellan arrives in the new world
+country_event = {
+	id = to_colonialism_events.9
+	title = to_colonialism_events.9.t
+	desc = {
+		desc = to_colonialism_events.9.da
+		trigger = {
+			event_target:to_magellan_landing = {
+				country_or_subject_holds = ROOT
+			}
+		}
+	}
+	desc = {
+		desc = to_colonialism_events.9.db
+	}
+	picture = western_HARBOUR_eventPicture
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					carribeans_region = {
+						NOT = { province_id = 481 }
+						country_or_subject_holds = ROOT
+						has_port = yes
+						NOT = {
+							area_for_scope_province = {
+								is_capital_of = ROOT
+							}
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = carribeans_region
+						NOT = { province_id = 481 }
+						has_port = yes
+						NOT = {
+							area_for_scope_province = {
+								is_capital_of = ROOT
+							}
+						}
+					}
+					save_event_target_as = to_magellan_landing
+				}
+				if = {
+					limit = {
+						NOT = { has_saved_event_target = to_magellan_landing }
+					}
+					random_province = {
+						limit = {
+							NOT = { province_id = 481 }
+							country_or_subject_holds = ROOT
+							region = carribeans_region
+							has_port = yes
+							NOT = {
+								area_for_scope_province = {
+									is_capital_of = ROOT
+								}
+							}
+						}
+						save_event_target_as = to_magellan_landing
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_province = {
+						region = colombia_region
+						has_port = yes
+						NOT = {
+							area_for_scope_province = {
+								is_capital_of = ROOT
+							}
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = colombia_region
+						has_port = yes
+						NOT = {
+							area_for_scope_province = {
+								is_capital_of = ROOT
+							}
+						}
+					}
+					save_event_target_as = to_magellan_landing
+				}
+				if = {
+					limit = {
+						NOT = { has_saved_event_target = to_magellan_landing }
+					}
+					random_province = {
+						limit = {
+							country_or_subject_holds = ROOT
+							region = colombia_region
+							NOT = { area = popayan_area }
+							has_port = yes
+							NOT = {
+								area_for_scope_province = {
+									is_capital_of = ROOT
+								}
+							}
+						}
+						save_event_target_as = to_magellan_landing
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_province = {
+						country_or_subject_holds = ROOT
+						has_port = yes
+						OR = {
+							region = mississippi_region
+							region = rio_grande_region
+							AND = {
+								province_group = to_east_coast
+								OR = {
+									region = mexico_region
+									region = central_america_region
+								}
+							}
+						}
+						NOT = {
+							area_for_scope_province = {
+								is_capital_of = ROOT
+							}
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						has_port = yes
+						OR = {
+							region = mississippi_region
+							region = rio_grande_region
+							AND = {
+								province_group = to_east_coast
+								OR = {
+									region = mexico_region
+									region = central_america_region
+								}
+							}
+						}
+						NOT = {
+							area_for_scope_province = {
+								is_capital_of = ROOT
+							}
+						}
+					}
+					save_event_target_as = to_magellan_landing
+				}
+				if = {
+					limit = {
+						NOT = { has_saved_event_target = to_magellan_landing }
+					}
+					random_province = {
+						limit = {
+							country_or_subject_holds = ROOT
+							has_port = yes
+							OR = {
+								region = mississippi_region
+								region = rio_grande_region
+								AND = {
+									province_group = to_east_coast
+									OR = {
+										region = mexico_region
+										region = central_america_region
+									}
+								}
+							}
+							NOT = {
+								area_for_scope_province = {
+									is_capital_of = ROOT
+								}
+							}
+						}
+						save_event_target_as = to_magellan_landing
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_province = {
+						OR = {
+							area = north_florida_area
+							area = florida_area
+							area = south_carolina_area
+						}
+						has_port = yes
+						NOT = {
+							area_for_scope_province = {
+								is_capital_of = ROOT
+							}
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = north_florida_area
+							area = florida_area
+							area = south_carolina_area
+						}
+						has_port = yes
+						NOT = {
+							area_for_scope_province = {
+								is_capital_of = ROOT
+							}
+						}
+					}
+					save_event_target_as = to_magellan_landing
+				}
+				if = {
+					limit = {
+						NOT = { has_saved_event_target = to_magellan_landing }
+					}
+					random_province = {
+						limit = {
+							country_or_subject_holds = ROOT
+							OR = {
+								area = north_florida_area
+								area = florida_area
+								area = south_carolina_area
+							}
+							has_port = yes
+							NOT = {
+								area_for_scope_province = {
+									is_capital_of = ROOT
+								}
+							}
+						}
+						save_event_target_as = to_magellan_landing
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					carribeans_region = {
+						NOT = { province_id = 481 }
+						is_empty = no
+						has_port = yes
+					}
+				}
+				random_province = {
+					limit = {
+						NOT = { province_id = 481 }
+						is_empty = no
+						has_port = yes
+					}
+					save_event_target_as = to_magellan_landing
+				}
+			}
+			else_if = {
+				limit = {
+					carribeans_region = {
+						NOT = { province_id = 481 }
+						has_port = yes
+					}
+				}
+				random_province = {
+					limit = {
+						NOT = { province_id = 481 }
+						has_port = yes
+					}
+					save_event_target_as = to_magellan_landing
+				}
+			}
+			event_target:to_magellan_landing = {
+				set_province_flag = to_magellan_landing
+			}
+		}
+	}
+
+	option = {
+		name = to_colonialism_events.9.a
+		custom_tooltip = to_colonialism_enabled_soon_tt
+		set_global_flag = to_magellan_found_elysia
+	}
+}
+
+# Magellan Returns, but the institution is already present
+country_event = {
+	id = to_colonialism_events.10
+	title = to_colonialism_events.10.t
+	desc = {
+		trigger = {
+			has_global_flag = to_magellan_found_elysia
+		}
+		desc = institution_events.3.d.to.b
+	}
+	desc = {
+		desc = institution_events.3.d.to.c
+	}
+	picture = HARBOUR_eventPicture
+
+	trigger = {
+		has_country_flag = to_magellan_departure_country
+		is_institution_enabled = new_world_i
+		to_magellan_can_return = yes
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_province = {
+				limit = {
+					has_province_flag = to_magellan_landing
+				}
+				save_event_target_as = to_magellan_landing
+			}
+		}
+	}
+
+	after = {
+		to_clean_magellan_flags = yes
+	}
+
+	option = {
+		name = to_colonialism_events.10.a
+		if =  {
+			limit = { 
+				has_dlc = "Rights of Man"
+				NOT = { num_of_ruler_traits = { amount = 3 } }
+				NOT = { ruler_has_personality = navigator_personality }
+				has_regency = no
+			}
+			add_navy_tradition = 10
+			add_ruler_personality = navigator_personality
+		}
+		else = { add_navy_tradition = 20 }
+		to_discover_magellan_travels = yes
+		custom_tooltip = nhs_new_line_tt
+		define_explorer = {
+			name = "Ferdinant Magellan"
+			shock = 2
+			fire = 1
+			manuever = 6
+			trait = accomplished_sailor_personality
+		}
+	}
+}
+
+# Brave New World - Magellan
+country_event = {
+	id = to_colonialism_events.11
+	title = to_colonialism_events.11.t
+	desc = to_colonialism_events.11.d
+	picture = SHIP_SAILING_eventPicture
+
+	is_triggered_only = yes
+
+	goto = institution_origin
+
+	option = {
+		name = to_colonialism_events.11.a
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = { num_of_cities = 8 }
+			}
+			modifier = {
+				factor = 0
+				NOT = { tag = POR }
+				NOT = { adm_tech = 7 }
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						has_port = yes
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = to_colonialism_spread_europe_tt
+		custom_tooltip = institution_events.3.a.tt
+		to_replace_idea_group_with_exploration_master_effect = yes
+	}
+
+	option = {
+		trigger = {
+			NOT = { has_idea_group = exploration_ideas }
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					AND = {
+						OR = {
+							tag = FRA
+							tag = ENG
+						}
+						ENG = {
+							any_owned_province = {
+								NOT = { province_id = 87 }
+								region = france_region
+							}
+						}
+					}
+				}
+				NOT = {
+					any_province = {
+						is_core = ROOT
+						NOT = { country_or_subject_holds = ROOT }
+					}
+				}
+			}
+			# 20% chance for England and France if they haven't finished 100 year war properly
+			modifier = {
+				factor = 5
+				OR = {
+					tag = FRA
+					tag = ENG
+				}
+				ENG = {
+					any_owned_province = {
+						NOT = { province_id = 87 }
+						region = france_region
+					}
+				}
+			}
+		}
+		name = to_colonialism_events.11.b
+		custom_tooltip = to_colonialism_spread_europe_tt
 		custom_tooltip = institution_events.3.a.tt
 	}
 }
