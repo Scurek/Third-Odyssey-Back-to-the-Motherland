@@ -1562,6 +1562,16 @@ nhs_left_start = {
 
 			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = to_unlock_second_mission_path_tt
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					has_mission = to_elysia_ascendant_mission
+				}
+				custom_tooltip = to_unlock_third_mission_path_ely_tt
+			}
+			else = {
+				custom_tooltip = to_unlock_third_mission_path_tt
+			}
 		}
 	}
 }
@@ -3057,45 +3067,43 @@ nhs_centre_end = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-			always = no
-			owns_or_subject_of = 151
 			if = {
 				limit = {
 					NOT = { mission_completed = to_hegemony_mission }
 				}
 				custom_trigger_tooltip = {
-					tooltip = nhs_not_completed_outward_focus_tt
+					tooltip = nhs_not_completed_a_world_empire_mission_tt
 					NOT = { mission_completed = to_a_world_empire_mission }
 				}
 				custom_trigger_tooltip = {
-					tooltip = nhs_not_completed_inward_focus_tt
+					tooltip = nhs_not_completed_looking_inwards_mission_tt
 					NOT = { mission_completed = to_looking_inwards_mission }
 				}
 			}
 			else = {
-				custom_trigger_tooltip = {
-					tooltip = nhs_not_completed_both_inward_and_outward_focus_tt
-					NOT = {
-						AND = {
-							mission_completed = to_a_world_empire_mission
-							mission_completed = to_looking_inwards_mission
+				OR = {
+					AND = {
+						custom_trigger_tooltip = {
+							tooltip = nhs_not_completed_both_looking_inwards_and_a_world_empire_missions_tt
+							NOT = {
+								AND = {
+									mission_completed = to_a_world_empire_mission
+									mission_completed = to_looking_inwards_mission
+								}
+							}
 						}
+						OR = {
+							mission_completed = to_a_new_homeland_mission
+							mission_completed = to_expanding_south_mission
+							mission_completed = to_east_asian_monopolies_mission
+							mission_completed = to_indian_ambition_mission
+						}
+					}
+					AND = {
+						mission_completed = to_the_promised_land_mission
+						mission_completed = to_koine_glossa_mission
 					}
 				}
-				if = {
-					limit = {
-						OR = {
-							mission_completed = to_a_world_empire_mission
-							mission_completed = to_looking_inwards_mission
-						}
-					}
-					OR = {
-						mission_completed = to_the_jewel_of_elysia_mission
-						mission_completed = to_taming_the_northmen_mission
-						mission_completed = to_across_the_eirenic_mission
-						mission_completed = to_around_africa_mission
-					}
-				}	
 			}
 		}
 		
@@ -3277,11 +3285,15 @@ nhs_final_red_mission_roman = {
 			hidden_effect = { 
 				swap_free_idea_group = yes
 				complete_mission = to_elysia_ascendant_mission
-				if = {
-					limit = {
-						mission_completed = to_the_promised_land_mission
-						mission_completed = to_koine_glossa_mission
-					}
+			}
+			if = {
+				limit = {
+					mission_completed = to_the_promised_land_mission
+					mission_completed = to_koine_glossa_mission
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = to_unlock_eternal_empire_mission_tt
+				hidden_effect = {
 					swap_non_generic_missions = yes
 				}
 			}
@@ -3295,7 +3307,10 @@ nhs_final_red_mission_elysian = {
 	ai = yes
 	potential = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
-		tag = ELY
+		OR = {
+			tag = ELY
+			tag = ER1
+		}
 	}
 	has_country_shield = yes
 
@@ -3316,17 +3331,41 @@ nhs_final_red_mission_elysian = {
 		}
 		
 		effect = {
+			if = {
+				limit = {
+					OR = {
+						tag = NHS
+						tag = ERR
+					}
+				}
+				change_tag = ERR
+				custom_tooltip = nhs_new_line_tt
+			}
+			else_if = {
+				limit = {
+					OR = {
+						tag = ELY
+						tag = ER1
+					}
+				}
+				change_tag = ER1
+				custom_tooltip = nhs_new_line_tt
+			}
 			custom_tooltip = nhs_enables_improved_imperialism_cb_tt
 			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = nhs_third_shift_into_roman_tt
 			hidden_effect = { 
 				swap_free_idea_group = yes 
 				complete_mission = to_rome_restored_mission
-				if = {
-					limit = {
-						mission_completed = to_the_promised_land_mission
-						mission_completed = to_koine_glossa_mission
-					}
+			}
+			if = {
+				limit = {
+					mission_completed = to_the_promised_land_mission
+					mission_completed = to_koine_glossa_mission
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = to_unlock_eternal_empire_mission_tt
+				hidden_effect = {
 					swap_non_generic_missions = yes
 				}
 			}
@@ -3365,7 +3404,7 @@ nhs_left_end = {
 					NOT = { mission_completed = to_hegemony_mission }
 				}
 				custom_trigger_tooltip = {
-					tooltip = nhs_not_completed_outward_focus_tt
+					tooltip = nhs_not_completed_a_world_empire_mission_tt
 					NOT = { mission_completed = to_a_world_empire_mission }
 				}
 				custom_trigger_tooltip = {
@@ -3374,26 +3413,37 @@ nhs_left_end = {
 				}
 			}
 			else = {
-				custom_trigger_tooltip = {
-					tooltip = nhs_not_completed_both_outward_focus_and_heir_of_justinian_tt
-					NOT = {
-						AND = {
-							mission_completed = to_a_world_empire_mission
-							mission_completed = to_heir_of_justinian_mission
+				OR = {
+					AND = {
+						custom_trigger_tooltip = {
+							tooltip = nhs_not_completed_both_a_world_empire_and_heir_of_justinian_tt
+							NOT = {
+								AND = {
+									mission_completed = to_a_world_empire_mission
+									mission_completed = to_heir_of_justinian_mission
+								}
+							}
 						}
-					}
-				}
-				if = {
-					limit = {
 						OR = {
-							mission_completed = to_a_world_empire_mission
-							mission_completed = to_heir_of_justinian_mission
+							mission_completed = to_basileus_basileon_mission
+							mission_completed = to_east_asian_monopolies_mission
+							mission_completed = to_indian_ambition_mission
 						}
 					}
-					OR = {
-						mission_completed = to_the_eagle_rises_mission
-						mission_completed = to_across_the_eirenic_mission
-						mission_completed = to_around_africa_mission
+					if = {
+						limit = {
+							has_mission = to_elysia_ascendant_mission
+						}
+						AND = {
+							mission_completed = to_elysia_ascendant_mission
+							mission_completed = to_koine_glossa_mission
+						}
+					}
+					else = {
+						AND = {
+							mission_completed = to_rome_restored_mission
+							mission_completed = to_koine_glossa_mission
+						}
 					}
 				}
 			}
@@ -3868,14 +3918,18 @@ nhs_left_end = {
 						add_permanent_claim = ROOT
 					}
 				}
-				if = {
-					limit = {
-						mission_completed = to_koine_glossa_mission
-						OR = {
-							mission_completed = to_rome_restored_mission
-							mission_completed = to_elysia_ascendant_mission
-						}
+			}
+			if = {
+				limit = {
+					mission_completed = to_koine_glossa_mission
+					OR = {
+						mission_completed = to_rome_restored_mission
+						mission_completed = to_elysia_ascendant_mission
 					}
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = to_unlock_eternal_empire_mission_tt
+				hidden_effect = {
 					swap_non_generic_missions = yes
 				}
 			}
@@ -4575,7 +4629,7 @@ nhs_right_end = {
 					NOT = { mission_completed = to_hegemony_mission }
 				}
 				custom_trigger_tooltip = {
-					tooltip = nhs_not_completed_inward_focus_tt
+					tooltip = nhs_not_completed_looking_inwards_mission_tt
 					NOT = { mission_completed = to_looking_inwards_mission }
 				}
 				custom_trigger_tooltip = {
@@ -4584,26 +4638,37 @@ nhs_right_end = {
 				}
 			}
 			else = {
-				custom_trigger_tooltip = {
-					tooltip = nhs_not_completed_both_inward_focus_and_heir_of_justinian_tt
-					NOT = {
-						AND = {
-							mission_completed = to_looking_inwards_mission
-							mission_completed = to_heir_of_justinian_mission
+				OR = {
+					AND = {
+						custom_trigger_tooltip = {
+							tooltip = nhs_not_completed_both_looking_inwards_and_heir_of_justinian_missions_tt
+							NOT = {
+								AND = {
+									mission_completed = to_looking_inwards_mission
+									mission_completed = to_heir_of_justinian_mission
+								}
+							}
 						}
-					}
-				}
-				if = {
-					limit = {
 						OR = {
-							mission_completed = to_looking_inwards_mission
-							mission_completed = to_heir_of_justinian_mission
+							mission_completed = to_a_new_homeland_mission
+							mission_completed = to_expanding_south_mission
+							mission_completed = to_basileus_basileon_mission
 						}
 					}
-					OR = {
-						mission_completed = to_the_jewel_of_elysia_mission
-						mission_completed = to_taming_the_northmen_mission
-						mission_completed = to_the_eagle_rises_mission
+					if = {
+						limit = {
+							has_mission = to_elysia_ascendant_mission
+						}
+						AND = {
+							mission_completed = to_the_promised_land_mission
+							mission_completed = to_elysia_ascendant_mission
+						}
+					}
+					else = {
+						AND = {
+							mission_completed = to_the_promised_land_mission
+							mission_completed = to_rome_restored_mission
+						}
 					}
 				}
 			}
@@ -4947,14 +5012,18 @@ nhs_right_end = {
 						key = NHS_KOINE_GLOSSA
 					}
 				}
-				if = {
-					limit = {
-						mission_completed = to_the_promised_land_mission
-						OR = {
-							mission_completed = to_rome_restored_mission
-							mission_completed = to_elysia_ascendant_mission
-						}
+			}
+			if = {
+				limit = {
+					mission_completed = to_the_promised_land_mission
+					OR = {
+						mission_completed = to_rome_restored_mission
+						mission_completed = to_elysia_ascendant_mission
 					}
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = to_unlock_eternal_empire_mission_tt
+				hidden_effect = {
 					swap_non_generic_missions = yes
 				}
 			}
