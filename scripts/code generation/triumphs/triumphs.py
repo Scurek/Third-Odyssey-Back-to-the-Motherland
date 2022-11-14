@@ -333,6 +333,8 @@ country_event = {
 	picture = {{ region.event_picture }}
 	
 	trigger = {
+	    nhs_check_all_elysian_tags = { CONDITION = tag }
+        mission_completed = to_heir_of_justinian_mission
 		to_has_completed_triumph = { REGION = {{ region.region }} }
         {%- if region.cities is not none %}
         {%- for city in region.cities %}
