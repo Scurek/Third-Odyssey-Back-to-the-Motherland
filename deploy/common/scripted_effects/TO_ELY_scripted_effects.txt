@@ -12138,3 +12138,695 @@ to_varangian_expedition_on_colony_finished = {
 		}
 	}
 }
+
+to_add_old_world_claim = {
+	if = {
+		limit = {
+			OR = {
+				$TERRITORY$ = {
+					owned_by = $TAG$
+				}
+				NOT = {
+					$TERRITORY$ = {
+						country_or_subject_holds = $TAG$
+					}
+				}
+			}
+		}
+		$TERRITORY$ = {
+			limit = {
+				owned_by = $TAG$
+				NOT = { is_core = $TAG$ }
+			}
+			add_permanent_claim = $TAG$
+		}
+	}
+}
+
+to_add_old_world_exarch_claim = {
+	if = {
+		limit = {
+			$TERRITORY$ = {
+				owned_by = $TAG$
+			}
+		}
+		$TERRITORY$ = {
+			limit = {
+				owned_by = $TAG$
+				NOT = { is_core = $TAG$ }
+			}
+			add_permanent_claim = $TAG$
+		}
+	}
+}
+
+# Hard to consistently display the effect without overcomplicating it... Not worth the time
+# to_determine_turkish_emigration_countries = {
+# 	set_variable = {
+# 		which = to_turkish_dev
+# 		value = 0
+# 	}
+# 	every_province = {
+# 		limit = {
+# 			country_or_subject_holds = ROOT
+# 			culture = turkish
+# 			OR = {
+# 				area = hudavendigar_area
+# 				area = aydin_area
+# 				area = cukurova_area
+# 				area = kastamonu_area
+# 				region = balkan_region
+# 				province_id = 330
+# 			}
+# 		}
+# 		ROOT = {
+# 			export_to_variable = {
+# 				which = to_local_turkish_dev
+# 				value = trigger_value:development
+# 				who = PREV
+# 			}
+# 			multiply_variable = {
+# 				which = to_local_turkish_dev
+# 				value = 0.1
+# 			}
+# 			to_round_up_variable = { VARIABLE = to_local_turkish_dev }
+# 			change_variable = {
+# 				which = to_turkish_dev
+# 				which = to_local_turkish_dev
+# 			}
+# 			set_variable = {
+# 				which = to_local_turkish_dev
+# 				value = 0
+# 			}
+# 		}
+# 	}
+# 	every_province = {
+# 		limit = {
+# 			ROOT = {
+# 				check_variable = {
+# 					which = to_turkish_dev
+# 					value = 1
+# 				}
+# 			}
+# 			to_eligible_for_turkish_migration = yes
+# 			owner = {
+# 				NOT = { tag = ROOT }
+# 				culture = turkish
+# 			}
+# 		}
+# 		set_province_flag = to_turkish_migration_destination
+# 		owner = {
+# 			set_country_flag = to_turkish_migration_destination_country
+# 		}
+# 		to_calc_turkish_imigration = yes
+# 	}
+# 	if = {
+# 		limit = {
+# 			check_variable = {
+# 				which = to_turkish_dev
+# 				value = 1
+# 			}
+# 		}
+# 		every_province = {
+# 			limit = {
+# 				ROOT = {
+# 					check_variable = {
+# 						which = to_turkish_dev
+# 						value = 1
+# 					}
+# 				}
+# 				to_eligible_for_turkish_migration = yes
+# 				owner = {
+# 					NOT = { tag = ROOT }
+# 					accepted_culture = turkish
+# 				}
+# 			}
+# 			set_province_flag = to_turkish_migration_destination
+# 			owner = {
+# 				set_country_flag = to_turkish_migration_destination_country
+# 			}
+# 			change_variable = {
+# 				which = to_turkish_dev
+# 				value = -3
+# 			}
+# 		}
+# 	}
+# 	if = {
+# 		limit = {
+# 			check_variable = {
+# 				which = to_turkish_dev
+# 				value = 1
+# 			}
+# 		}
+# 		every_province = {
+# 			limit = {
+# 				ROOT = {
+# 					check_variable = {
+# 						which = to_turkish_dev
+# 						value = 1
+# 					}
+# 				}
+# 				to_eligible_for_turkish_migration = yes
+# 				owner = {
+# 					NOT = { tag = ROOT }
+# 					culture_group = turko_semitic
+# 				}
+# 			}
+# 			set_province_flag = to_turkish_migration_destination
+# 			owner = {
+# 				set_country_flag = to_turkish_migration_destination_country
+# 			}
+# 			change_variable = {
+# 				which = to_turkish_dev
+# 				value = -3
+# 			}
+# 		}
+# 	}
+# 	if = {
+# 		limit = {
+# 			check_variable = {
+# 				which = to_turkish_dev
+# 				value = 1
+# 			}
+# 		}
+# 		every_province = {
+# 			limit = {
+# 				ROOT = {
+# 					check_variable = {
+# 						which = to_turkish_dev
+# 						value = 1
+# 					}
+# 				}
+# 				to_eligible_for_turkish_migration = yes
+# 				owner = {
+# 					religion = sunni
+# 					NOT = { tag = ROOT }
+# 				}
+# 			}
+# 			set_province_flag = to_turkish_migration_destination
+# 			owner = {
+# 				set_country_flag = to_turkish_migration_destination_country
+# 			}
+# 			change_variable = {
+# 				which = to_turkish_dev
+# 				value = -3
+# 			}
+# 		}
+# 	}
+# 	if = {
+# 		limit = {
+# 			check_variable = {
+# 				which = to_turkish_dev
+# 				value = 1
+# 			}
+# 		}
+# 		every_province = {
+# 			limit = {
+# 				ROOT = {
+# 					check_variable = {
+# 						which = to_turkish_dev
+# 						value = 1
+# 					}
+# 				}
+# 				to_eligible_for_turkish_migration = yes
+# 				owner = {
+# 					tag = ROOT
+# 				}
+# 			}
+# 			set_province_flag = to_turkish_migration_destination
+# 			owner = {
+# 				set_country_flag = to_turkish_migration_destination_country
+# 			}
+# 			change_variable = {
+# 				which = to_turkish_dev
+# 				value = -3
+# 			}
+# 		}
+# 	}
+# 	if = {
+# 		limit = {
+# 			check_variable = {
+# 				which = to_turkish_dev
+# 				value = 1
+# 			}
+# 		}
+# 		every_province = {
+# 			limit = {
+# 				ROOT = {
+# 					check_variable = {
+# 						which = to_turkish_dev
+# 						value = 1
+# 					}
+# 				}
+# 				to_eligible_for_turkish_migration = yes
+# 			}
+# 			set_province_flag = to_turkish_migration_destination
+# 			owner = {
+# 				set_country_flag = to_turkish_migration_destination_country
+# 			}
+# 			change_variable = {
+# 				which = to_turkish_dev
+# 				value = -3
+# 			}
+# 		}
+# 	}
+# 	set_variable = {
+# 		which = to_turkish_dev
+# 		value = 0
+# 	}
+# 	set_variable = {
+# 		which = to_local_turkish_dev
+# 		value = 0
+# 	}
+# 	every_province = {
+# 		limit = {
+# 			has_province_flag = to_turkish_migration_destination
+# 		}
+# 		clr_province_flag = to_turkish_migration_destination
+# 	}
+# }
+
+# to_calc_turkish_emigration = {
+# 	set_variable = {
+# 		which = to_turkish_dev
+# 		value = 0
+# 	}
+# 	every_province = {
+# 		limit = {
+# 			country_or_subject_holds = ROOT
+# 			culture = turkish
+# 			OR = {
+# 				area = hudavendigar_area
+# 				area = aydin_area
+# 				area = cukurova_area
+# 				area = kastamonu_area
+# 				region = balkan_region
+# 				province_id = 330
+# 			}
+# 		}
+# 		ROOT = {
+# 			export_to_variable = {
+# 				which = to_local_turkish_dev
+# 				value = trigger_value:development
+# 				who = PREV
+# 			}
+# 			multiply_variable = {
+# 				which = to_local_turkish_dev
+# 				value = 0.1
+# 			}
+# 			to_round_up_variable = { VARIABLE = to_local_turkish_dev }
+# 			change_variable = {
+# 				which = to_turkish_dev
+# 				which = to_local_turkish_dev
+# 			}
+# 			set_variable = {
+# 				which = to_local_turkish_dev
+# 				value = 0
+# 			}
+# 		}
+# 	}
+# 	every_province = {
+# 		limit = {
+# 			ROOT = {
+# 				check_variable = {
+# 					which = to_turkish_dev
+# 					value = 1
+# 				}
+# 			}
+# 			to_eligible_for_turkish_migration = yes
+# 			owner = {
+# 				NOT = { tag = ROOT }
+# 				culture = turkish
+# 			}
+# 		}
+# 		set_province_flag = to_turkish_migration_destination
+# 		owner = {
+# 			set_country_flag = to_turkish_migration_destination_country
+# 		}
+# 		to_calc_turkish_imigration = yes
+# 	}
+# 	if = {
+# 		limit = {
+# 			check_variable = {
+# 				which = to_turkish_dev
+# 				value = 1
+# 			}
+# 		}
+# 		every_province = {
+# 			limit = {
+# 				ROOT = {
+# 					check_variable = {
+# 						which = to_turkish_dev
+# 						value = 1
+# 					}
+# 				}
+# 				to_eligible_for_turkish_migration = yes
+# 				owner = {
+# 					NOT = { tag = ROOT }
+# 					accepted_culture = turkish
+# 				}
+# 			}
+# 			set_province_flag = to_turkish_migration_destination
+# 			owner = {
+# 				set_country_flag = to_turkish_migration_destination_country
+# 			}
+# 			to_calc_turkish_imigration = yes
+# 		}
+# 	}
+# 	if = {
+# 		limit = {
+# 			check_variable = {
+# 				which = to_turkish_dev
+# 				value = 1
+# 			}
+# 		}
+# 		every_province = {
+# 			limit = {
+# 				ROOT = {
+# 					check_variable = {
+# 						which = to_turkish_dev
+# 						value = 1
+# 					}
+# 				}
+# 				to_eligible_for_turkish_migration = yes
+# 				owner = {
+# 					NOT = { tag = ROOT }
+# 					culture_group = turko_semitic
+# 				}
+# 			}
+# 			set_province_flag = to_turkish_migration_destination
+# 			owner = {
+# 				set_country_flag = to_turkish_migration_destination_country
+# 			}
+# 			to_calc_turkish_imigration = yes
+# 		}
+# 	}
+# 	if = {
+# 		limit = {
+# 			check_variable = {
+# 				which = to_turkish_dev
+# 				value = 1
+# 			}
+# 		}
+# 		every_province = {
+# 			limit = {
+# 				ROOT = {
+# 					check_variable = {
+# 						which = to_turkish_dev
+# 						value = 1
+# 					}
+# 				}
+# 				to_eligible_for_turkish_migration = yes
+# 				owner = {
+# 					religion = sunni
+# 					NOT = { tag = ROOT }
+# 				}
+# 			}
+# 			set_province_flag = to_turkish_migration_destination
+# 			owner = {
+# 				set_country_flag = to_turkish_migration_destination_country
+# 			}
+# 			to_calc_turkish_imigration = yes
+# 		}
+# 	}
+# 	if = {
+# 		limit = {
+# 			check_variable = {
+# 				which = to_turkish_dev
+# 				value = 1
+# 			}
+# 		}
+# 		every_province = {
+# 			limit = {
+# 				ROOT = {
+# 					check_variable = {
+# 						which = to_turkish_dev
+# 						value = 1
+# 					}
+# 				}
+# 				to_eligible_for_turkish_migration = yes
+# 				owner = {
+# 					tag = ROOT
+# 				}
+# 			}
+# 			set_province_flag = to_turkish_migration_destination
+# 			owner = {
+# 				set_country_flag = to_turkish_migration_destination_country
+# 			}
+# 			to_calc_turkish_imigration = yes
+# 		}
+# 	}
+# 	if = {
+# 		limit = {
+# 			check_variable = {
+# 				which = to_turkish_dev
+# 				value = 1
+# 			}
+# 		}
+# 		every_province = {
+# 			limit = {
+# 				ROOT = {
+# 					check_variable = {
+# 						which = to_turkish_dev
+# 						value = 1
+# 					}
+# 				}
+# 				to_eligible_for_turkish_migration = yes
+# 			}
+# 			set_province_flag = to_turkish_migration_destination
+# 			owner = {
+# 				set_country_flag = to_turkish_migration_destination_country
+# 			}
+# 			to_calc_turkish_imigration = yes
+# 		}
+# 	}
+# 	set_variable = {
+# 		which = to_turkish_dev
+# 		value = 0
+# 	}
+# 	every_province = {
+# 		limit = {
+# 			has_province_flag = to_turkish_migration_destination
+# 		}
+# 		clr_province_flag = to_turkish_migration_destination
+# 	}
+# }
+
+# to_calc_turkish_imigration = {
+# 	ROOT = {
+# 		if = {
+# 			limit = {
+# 				check_variable = {
+# 					which = to_turkish_dev
+# 					value = 3
+# 				}
+# 			}
+# 			subtract_variable = {
+# 				which = to_turkish_dev
+# 				value = -3
+# 			}
+# 			PREV = {
+# 				set_variable = {
+# 					which = to_incoming_turkish_dev
+# 					value = 3
+# 				}
+# 			}
+# 		}
+# 		else = {
+# 			if = {
+# 				limit = {
+# 					ROOT = {
+# 						check_variable = {
+# 							which = to_turkish_dev
+# 							value = 2
+# 						}
+# 					}
+# 				}
+# 				set_variable = {
+# 					which = to_incoming_turkish_dev
+# 					value = 2
+# 				}
+# 			}
+# 			else = {
+# 				set_variable = {
+# 					which = to_incoming_turkish_dev
+# 					value = 1
+# 				}
+# 			}
+# 			set_variable = {
+# 				which = to_turkish_dev
+# 				value = 0
+# 			}
+# 		}
+# 	}
+# }
+
+to_turkish_emigration_predict_lost_dev = {
+	set_variable = {
+		which = to_total_lost_dev
+		value = 0
+	}
+	every_province = {
+		limit = {
+			country_or_subject_holds = ROOT
+			culture = turkish
+			OR = {
+				area = hudavendigar_area
+				area = aydin_area
+				area = cukurova_area
+				area = kastamonu_area
+				region = balkan_region
+			}
+			development = 4
+		}
+		ROOT = {
+			export_to_variable = {
+				which = to_lost_dev
+				value = trigger_value:development
+				who = PREV
+			}
+			multiply_variable = {
+				which = to_lost_dev
+				value = 0.1
+			}
+			to_round_up_variable = { VARIABLE = to_lost_dev }
+			change_variable = {
+				which = to_total_lost_dev
+				which = to_lost_dev
+			}
+			set_variable = {
+				which = to_lost_dev
+				value = 0
+			}
+		}
+	}
+}
+
+to_turkish_emigration_remove_dev = {
+	export_to_variable = {
+		which = to_lost_dev
+		value = trigger_value:development
+	}
+	multiply_variable = {
+		which = to_lost_dev
+		value = 0.1
+	}
+	to_round_up_variable = { VARIABLE = to_lost_dev }
+	while = {
+		limit = {
+			check_variable = {
+				which = to_lost_dev
+				value = 1
+			}
+			development = 4
+		}
+		change_variable = {
+			which = to_lost_dev
+			value = -1
+		}
+		if = {
+			limit = {
+				base_manpower = 2
+			}
+			add_base_manpower = -1
+		}
+		else_if = {
+			limit = {
+				base_tax = 2
+			}
+			add_base_tax = -1
+		}
+		else_if = {
+			limit = {
+				base_production = 2
+			}
+			add_base_production = -1
+		}
+	}
+	set_variable = {
+		which = to_lost_dev
+		value = 0
+	}
+}
+
+to_handle_greek_immigration_modifier = {
+	if = {
+		limit = {
+			culture = turkish
+			region = anatolia
+			owner = {
+				OR = {
+					has_country_flag = to_favored_greeks_in_anatolia
+					overlord = {
+						has_country_flag = to_favored_greeks_in_anatolia
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_province_modifier = to_greek_immigration }
+			}
+			add_province_modifier = {
+				name = to_greek_immigration
+				duration = -1
+			}
+			change_original_culture = greek
+		}
+	}
+	else_if = {
+		limit = {
+			has_province_modifier = to_greek_immigration
+		}
+		remove_province_modifier = to_greek_immigration
+	}
+}
+
+to_handle_greek_immigration_modifier_country = {
+	every_owned_province = {
+		limit = {
+			region = anatolia
+		}
+		to_handle_greek_immigration_modifier = yes
+	}
+}
+
+to_handle_familiar_administration_modifier = {
+	if = {
+		limit = {
+			culture = turkish
+			region = anatolia
+			owner = {
+				has_country_flag = to_favored_turks_in_anatolia
+				overlord = {
+					has_country_flag = to_favored_turks_in_anatolia
+				}
+			}
+			
+		}
+		if = {
+			limit = {
+				NOT = { has_province_modifier = to_turkish_province_boost }
+			}
+			add_province_modifier = {
+				name = to_turkish_province_boost
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_province_modifier = to_turkish_province_boost
+		}
+		remove_province_modifier = to_turkish_province_boost
+	}
+}
+
+to_handle_familiar_administration_modifier_country = {
+	every_owned_province = {
+		limit = {
+			region = anatolia
+		}
+		to_handle_familiar_administration_modifier = yes
+	}
+}
