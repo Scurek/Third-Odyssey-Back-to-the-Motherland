@@ -9554,6 +9554,57 @@ to_nhs_remove_exarch_cores = {
 	}
 }
 
+to_cede_province_to_exarch = {
+	if = {
+		limit = {
+			is_state_core = event_target:to_exarch_overlord
+		}
+		remove_core = event_target:to_exarch_overlord
+		cede_province = ROOT
+		if = {
+			limit = {
+				NOT = { is_state_core = ROOT }
+			}
+			add_core = ROOT
+		}
+	}
+	else_if = {
+		limit = {
+			is_territorial_core = event_target:to_exarch_overlord
+		}
+		remove_core = event_target:to_exarch_overlord
+		cede_province = ROOT
+		add_territorial_core = ROOT
+	}
+	else_if = {
+		limit = {
+			is_permanent_claim = event_target:to_exarch_overlord
+		}
+		remove_permanent_claim = event_target:to_exarch_overlord
+		cede_province = ROOT
+		add_permanent_claim = ROOT
+	}
+	else_if = {
+		limit = {
+			is_claim = event_target:to_exarch_overlord
+		}
+		remove_claim = event_target:to_exarch_overlord
+		cede_province = ROOT
+		add_claim = ROOT
+	}
+	else = {
+		cede_province = ROOT
+	}
+	remove_claim = event_target:to_exarch_overlord
+	add_nationalism = -10
+	if = {
+		limit = {
+			tag = ELG
+		}
+		nhs_elg_gets_province_effect = yes
+	}
+}
+
 to_check_exarch_claims_check_all_provinces = {
 	every_owned_province = {
 		set_province_flag = nhs_eligible_for_exarch_claim@$EXARCH_TAG$
@@ -12140,39 +12191,26 @@ to_varangian_expedition_on_colony_finished = {
 }
 
 to_add_old_world_claim = {
-	if = {
+	$TERRITORY$ = {
 		limit = {
 			OR = {
-				$TERRITORY$ = {
-					owned_by = $TAG$
-				}
-				NOT = {
-					$TERRITORY$ = {
-						country_or_subject_holds = $TAG$
-					}
-				}
-			}
-		}
-		$TERRITORY$ = {
-			limit = {
 				owned_by = $TAG$
-				NOT = { is_core = $TAG$ }
+				NOT = { country_or_subject_holds = $TAG$ }
 			}
-			add_permanent_claim = $TAG$
+			NOT = { is_core = $TAG$ }
 		}
+		add_permanent_claim = $TAG$
 	}
 }
 
 to_add_old_world_exarch_claim = {
-	if = {
-		limit = {
-			$TERRITORY$ = {
-				owned_by = $TAG$
-			}
-		}
+	overlord = {
 		$TERRITORY$ = {
 			limit = {
-				owned_by = $TAG$
+				OR = {
+					owned_by = $TAG$
+					NOT = { country_or_subject_holds = PREV }
+				}
 				NOT = { is_core = $TAG$ }
 			}
 			add_permanent_claim = $TAG$

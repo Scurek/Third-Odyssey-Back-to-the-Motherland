@@ -100,6 +100,9 @@ decisions_template = Template('''{% for exarch in exarchs %}
                 CULTURE_GROUP = {{ exarch['culture_group'] }}
                 PRIMARY_CULTURE = {{ exarch['primary_culture'] }}
             }
+            {%- if 'additional_effects' in exarch %}
+			{{ exarch["additional_effects"]}}
+			{%- endif %}
 		}
 		ai_will_do = {
             factor = 1

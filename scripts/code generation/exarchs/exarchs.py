@@ -43,6 +43,12 @@ exarchs = [
         "name": 'aigyptos',
         "culture_group": 'turko_semitic',
         "primary_culture": 'al_misr_arabic',
+        "additional_effects":
+            "if = {\n"
+            "				limit = { mission_completed = to_in_alexios_footsteps_mission }\n"
+            "				custom_tooltip = nhs_new_line_tt\n"
+            "				to_add_old_world_exarch_claim = { TERRITORY = egypt_region TAG = EEE }\n"
+            "			}",
         "desc": "Aigyptos was once the breadbasket of the Ancient Roman Empire and one of its wealthiest provinces before being lost to Muslim conquest. Now that it has been retaken, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite."
     },
 
@@ -107,6 +113,16 @@ exarchs = [
         "name": 'syria',
         "culture_group": 'turko_semitic',
         "primary_culture": 'al_suryah_arabic',
+        "additional_effects":
+            "if = {\n"
+            "				limit = { mission_completed = to_in_alexios_footsteps_mission }\n"
+            "				custom_tooltip = nhs_new_line_tt\n"
+            "				to_add_old_world_exarch_claim = { TERRITORY = aleppo_area TAG = EEO }\n"
+            "				to_add_old_world_exarch_claim = { TERRITORY = syria_area TAG = EEO }\n"
+            "				to_add_old_world_exarch_claim = { TERRITORY = palestine_area TAG = EEO }\n"
+            "				to_add_old_world_exarch_claim = { TERRITORY = syrian_desert_area TAG = EEO }\n"
+            "				to_add_old_world_exarch_claim = { TERRITORY = trans_jordan_area TAG = EEO }\n"
+            "			}",
         "desc": "Syria includes much of the land taken from the Sassanid Empire at the Roman Empire's greatest extent, as well as the large, urbanized cities of the Levant. Now that it has been retaken, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite."
     },
     {

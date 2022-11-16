@@ -1,92 +1,5 @@
 namespace = nhs2_ely_marches
 
-# Bounce event
-country_event = {
-	id = nhs2_ely_marches.1
-	title = nhs2_ely_marches.1.t
-	desc = nhs2_ely_marches.1.d
-	picture = BYZANTINE_EMPEROR_eventPicture
-	
-	is_triggered_only = yes
-	hidden = yes
-	
-	immediate = {
-		overlord = {
-			country_event = { id = nhs2_ely_marches.2 }
-		}
-	}
-
-	option = {
-		name = "nhs2_ely_marches.1.a"
-	}
-}
-
-# Change vassal settings
-country_event = {
-	id = nhs2_ely_marches.2
-	title = nhs2_ely_marches.2.t
-	desc = nhs2_ely_marches.2.d
-	picture = BYZANTINE_EMPEROR_eventPicture
-	
-	is_triggered_only = yes
-
-	option = { # They get all land
-		name = "nhs2_ely_marches.2.a"
-		custom_tooltip = nhs_nhs_ely_march_all_tt
-		hidden_effect = {
-			FROM = {
-				clr_country_flag = nhs_ely_march_territory
-				clr_country_flag = nhs_ely_march_no_core
-				clr_country_flag = nhs_ely_march_no
-				set_country_flag = nhs_ely_march_all
-			}
-			clr_country_flag = nhs_changing_settings
-		}
-	}
-	
-	option = { # They get all territorial cores
-		name = "nhs2_countryevents.66.b"
-		custom_tooltip = nhs_ely_march_territory_tt
-		hidden_effect = {
-			FROM = {
-				clr_country_flag = nhs_ely_march_all
-				clr_country_flag = nhs_ely_march_no_core
-				clr_country_flag = nhs_ely_march_no
-				set_country_flag = nhs_ely_march_territory
-			}
-			clr_country_flag = nhs_changing_settings
-		}
-	}
-	
-	option = { # They get all non-cores
-		name = "nhs2_countryevents.66.c"
-		custom_tooltip = nhs_ely_march_no_core_tt
-		hidden_effect = {
-			FROM = {
-				clr_country_flag = nhs_ely_march_all
-				clr_country_flag = nhs_ely_march_territory
-				clr_country_flag = nhs_ely_march_no
-				set_country_flag = nhs_ely_march_no_core
-			}
-			clr_country_flag = nhs_changing_settings
-		}
-	}
-	
-	option = { # They get nothing
-		name = "nhs2_countryevents.66.e"
-		custom_tooltip = nhs_ely_march_no_tt
-		hidden_effect = {
-			FROM = {
-				clr_country_flag = nhs_ely_march_all
-				clr_country_flag = nhs_ely_march_territory
-				clr_country_flag = nhs_ely_march_no_core
-				set_country_flag = nhs_ely_march_no 
-			}
-			clr_country_flag = nhs_changing_settings
-		}
-	}
-}
-
 # Transfer provinces hidden event
 country_event = {
 	id = nhs2_ely_marches.3
@@ -98,8 +11,6 @@ country_event = {
 
 	trigger = {
 		is_subject_of_type = elysian_subject
-		is_subject = yes
-		NOT = { tag = CM1 }
 		
 		OR = {
 			AND = {
@@ -124,6 +35,9 @@ country_event = {
 	}
 	
 	immediate = {
+		overlord = {
+			save_event_target_as = to_exarch_overlord
+		}
 		if = {
 			limit = {
 				has_country_flag = nhs_ely_march_all
@@ -135,14 +49,7 @@ country_event = {
 				limit = {
 					nhs_ely_march_all_province = yes
 				}
-				cede_province = ROOT
-				add_nationalism = -10
-				if = {
-					limit = {
-						tag = ELG
-					}
-					nhs_elg_gets_province_effect = yes
-				}
+				to_cede_province_to_exarch = yes
 			}
 		}
 		else_if = {
@@ -156,14 +63,7 @@ country_event = {
 				limit = {
 					nhs_ely_march_territory_province = yes
 				}
-				cede_province = ROOT
-				add_nationalism = -10
-				if = {
-					limit = {
-						tag = ELG
-					}
-					nhs_elg_gets_province_effect = yes
-				}
+				to_cede_province_to_exarch = yes
 			}
 		}
 		else_if = {
@@ -177,63 +77,8 @@ country_event = {
 				limit = {
 					nhs_ely_march_no_core_province = yes
 				}
-				cede_province = ROOT
-				add_nationalism = -10
-				if = {
-					limit = {
-						tag = ELG
-					}
-					nhs_elg_gets_province_effect = yes
-				}
+				to_cede_province_to_exarch = yes
 			}
-		}
-		every_owned_province = {
-			limit = {
-				any_country = {
-					OR = {
-						AND = {
-							overlord_of = ROOT
-							is_core = PREV
-						}
-						AND = {
-							ROOT = {
-								NOT = { tag = ELG }
-							}
-							tag = ELG
-							is_subject = yes
-							is_core = PREV
-							overlord = {
-								overlord_of = ROOT
-							}
-						}
-					}
-				}
-			}
-			add_core = ROOT
-		}
-		every_owned_province = {
-			limit = {
-				any_country = {
-					OR = {
-						AND = {
-							overlord_of = ROOT
-							is_territorial_core = PREV
-						}
-						AND = {
-							ROOT = {
-								NOT = { tag = ELG }
-							}
-							tag = ELG
-							is_subject = yes
-							is_territorial_core = PREV
-							overlord = {
-								overlord_of = ROOT
-							}
-						}
-					}
-				}
-			}
-			add_territorial_core = ROOT
 		}
 		if = {
 			limit = {
@@ -377,20 +222,43 @@ country_event = {
 			if = {
 				limit = {
 					is_state_core = ROOT
-					NOT = { is_state_core = event_target:nhs_exarch_overlord }
 				}
-				add_core = event_target:nhs_exarch_overlord
 				remove_core = ROOT
+				cede_province = event_target:nhs_exarch_overlord
+				if = {
+					limit = {
+						NOT = { is_state_core = event_target:nhs_exarch_overlord }
+					}
+					add_core = event_target:nhs_exarch_overlord
+				}
 			}
 			else_if = {
 				limit = {
 					is_territorial_core = ROOT
-					NOT = { is_territorial_core = event_target:nhs_exarch_overlord }
 				}
-				add_territorial_core = event_target:nhs_exarch_overlord
 				remove_core = ROOT
+				cede_province = event_target:nhs_exarch_overlord
+				add_territorial_core = event_target:nhs_exarch_overlord
 			}
-			cede_province = event_target:nhs_exarch_overlord
+			else_if = {
+				limit = {
+					is_permanent_claim = ROOT
+				}
+				remove_permanent_claim = ROOT
+				cede_province = event_target:nhs_exarch_overlord
+				add_permanent_claim = event_target:nhs_exarch_overlord
+			}
+			else_if = {
+				limit = {
+					is_claim = ROOT
+				}
+				remove_claim = ROOT
+				cede_province = event_target:nhs_exarch_overlord
+				add_claim = event_target:nhs_exarch_overlord
+			}
+			else = {
+				cede_province = event_target:nhs_exarch_overlord
+			}
 		}
 	}
 	
