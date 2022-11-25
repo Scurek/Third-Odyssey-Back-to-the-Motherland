@@ -143,6 +143,7 @@ template_decisions = Template('''{%- for road in roads %}
 		potential = {
 		    nhs_check_all_elysian_tags = { CONDITION = tag }
 			has_global_flag = to_elysian_highways_project_tier_{{ road["tier"] }}
+			NOT = { has_global_flag = to_elysian_highways_{{ road["name"] }}_enabled }
 		}
 
 		provinces_to_highlight = {
