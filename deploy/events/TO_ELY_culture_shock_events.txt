@@ -69,6 +69,103 @@ country_event = {
 	}
 }
 
+# Greek Revolt (triggered by the disaster)
+country_event = {
+	id = nhs2_shock_events.2
+	title = nhs2_shock_events.2.t
+	desc = nhs2_shock_events.2.d
+	picture = CONQUEST_eventpicture
+
+	is_triggered_only = yes
+
+	# First option: Orthodox Roman Empire, we're finally home
+	option = {
+		name = nhs2_shock_events.2.a
+		if = {
+			limit = {
+				any_province = {
+					country_or_subject_holds = ROOT
+					OR = {
+						culture = greek
+						culture = pontic_greek
+					}
+					to_has_cultureshock = yes
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							culture = greek
+							culture = pontic_greek
+						}
+						to_has_cultureshock = yes
+					}
+					add_core = RR0
+				}
+			}
+			release = RR0
+			custom_tooltip = to_greek_revolt_provinces_tt
+			hidden_effect = {
+				every_province = {
+					limit = {
+						country_or_subject_holds = ROOT
+						OR = {
+							culture = greek
+							culture = pontic_greek
+						}
+						to_has_cultureshock = yes
+					}
+					add_core = RR0
+					cede_province = RR0
+					add_nationalism = -100
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					any_country = {
+						to_country_might_support_greeks = yes
+					}
+				}
+				custom_tooltip = to_countries_might_support_uprising_tt
+				every_country = {
+					limit = {
+						to_country_might_support_greeks = yes
+					}
+					country_event = { id = nhs2_shock_events.3 }
+				}
+			}
+		}
+	}
+}
+
+# Greek Revolt, greeks ask for support
+country_event = {
+	id = nhs2_shock_events.3
+	title = nhs2_shock_events.3.t
+	desc = nhs2_shock_events.3.d
+	picture = CONQUEST_eventpicture
+
+	is_triggered_only = yes
+	
+	option = {
+		name = nhs2_shock_events.3.a
+		add_power_projection = {
+			type = to_supported_greeks_power_projection
+			amount = 20
+		}
+		create_alliance = RR0
+		join_all_defensive_wars_of = RR0
+	}
+
+	# 
+	option = {
+		name = nhs2_shock_events.3.a
+		add_prestige = -20
+	}
+}
+
 ########## National Events 51 - 350 ##############
 
 # Greeks welcome new Patriarch!
