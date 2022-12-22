@@ -32,7 +32,7 @@ modifiers = [{'name': 'to_culture_assimilation',
               'title': 'Skraeling Assimilation',
               'desc': '[Root.GetSkraelingAssimilationDesc]'},
              {'name': 'to_culture_integration',
-              'title': 'Cultural Integration',
+              'title': 'Imperial Integration',
               'desc': '[Root.GetCultureIntegrationDesc]'}
              ]
 

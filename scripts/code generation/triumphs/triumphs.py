@@ -293,7 +293,7 @@ template_loc2 = Template(
 template_loc_triumph_modifiers = Template(
     "{% for region in regions %}"
     " to_increase_culture_integration_{{ region.region }}_tt:0 \""
-    " Increases the monthly progress of culture integration in §Y[{{ region.province }}.GetRegionName]§! by §G50.0%§!."
+    " Increases the monthly progress of Imperial Integration in §Y[{{ region.province }}.GetRegionName]§! by §G50.0%§!."
     "\"\n"
     " to_{{ region.region }}_warscore_cost_red_tt:0 \""
     "Every province in §Y[{{ region.province }}.GetRegionName]§! gains '§YTriumph Declared§!' modifier, "
