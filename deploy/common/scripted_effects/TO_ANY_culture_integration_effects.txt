@@ -1,21 +1,5 @@
 ### UNIVERSAL INTEGRATION SYSTEM
 
-to_set_empty_assimilation_progress = {
-	every_owned_province = {
-		limit = {
-			to_has_culture_adaptation_potential = yes
-			is_variable_equal = {
-				which = to_assimilation_progress
-				value = 0
-			}
-		}
-		set_variable = {
-			which = to_assimilation_progress
-			value = 0
-		}
-	}
-}
-
 to_culture_adaptation_on_culture_change = {
 	if = {
 		limit = {
@@ -59,6 +43,7 @@ to_culture_integrated_on_culture_change = {
 		limit = {
 			to_has_culture_integrated = yes
 		}
+		clr_province_flag = to_culture_integrated_flag
 		remove_province_modifier = to_culture_integrated
 		remove_province_modifier = to_culture_integrated_culture_group
 		remove_province_modifier = to_culture_integrated_unaccepted_republic
@@ -93,27 +78,100 @@ to_start_culture_adaptation = {
 		limit = {
 			to_has_culture_adaptation_potential = yes
 		}
-		if = {
-			limit = {
-				is_variable_equal = {
+		to_generic_adaptation_types_effect = {
+			EFFECT = "
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = to_assimilation_progress
+						value = 0
+					}
+				}
+				set_variable = {
 					which = to_assimilation_progress
 					value = 0
 				}
-			}
-			set_variable = {
-				which = to_assimilation_progress
-				value = 0
-			}
+			}"
+			EFFECT_INCREASING = "to_set_culture_adaptation_modifier = yes"
+			ASSIMIATION_EFFECT_NOT_INCREASING = "
+			to_culture_adaptation_inactive_setup = {
+				VARIANT = to_inactive_setup_assimilation
+			}"
+			EUROPEAN_INTEGRATION_EFFECT_NOT_INCREASING = "
+			to_culture_adaptation_inactive_setup = {
+				VARIANT = to_inactive_setup_european_integration
+			}"
+			TRIBAL_INTEGRATION_EFFECT_NOT_INCREASING = "
+			to_culture_adaptation_inactive_setup = {
+				VARIANT = to_inactive_setup_tribal_integration
+			}"
 		}
+	}
+}
+
+to_generic_adaptation_types_effect = {
+	if = {
+		limit = {
+			to_has_culture_assimilation = yes
+		}
+		[[EFFECT]$EFFECT$]
+		[[ASSIMIATION_EFFECT]$ASSIMIATION_EFFECT$]
 		if = {
 			limit = {
-				to_is_culture_adaptation_increasing = yes
+				[[EFFECT_INCREASING]
+				to_culture_assimilation_increasing = yes
+				]
 			}
-			to_set_culture_adaptation_modifier = yes
+			[[EFFECT_INCREASING]$EFFECT_INCREASING$]
+			[[ASSIMIATION_EFFECT_INCREASING]$ASSIMIATION_EFFECT_INCREASING$]
 		}
 		else = {
-			to_culture_adaptation_inactive_setup = yes
+			[[EFFECT_NOT_INCREASING]$EFFECT_NOT_INCREASING$]
+			[[ASSIMIATION_EFFECT_NOT_INCREASING]$ASSIMIATION_EFFECT_NOT_INCREASING$]
 		}
+		[[EFFECT_AFTER]$EFFECT_AFTER$]
+	}
+	else_if = {
+		limit = {
+			to_has_european_culture_integration = yes
+		}
+		[[EFFECT]$EFFECT$]
+		[[EUROPEAN_INTEGRATION_EFFECT]$EUROPEAN_INTEGRATION_EFFECT$]
+		if = {
+			limit = {
+				[[EFFECT_INCREASING]
+				to_culture_integration_increasing = yes
+				]
+			}
+			[[EFFECT_INCREASING]$EFFECT_INCREASING$]
+			[[EUROPEAN_INTEGRATION_EFFECT_INCREASING]$EUROPEAN_INTEGRATION_EFFECT_INCREASING$]
+		}
+		else = {
+			[[EFFECT_NOT_INCREASING]$EFFECT_NOT_INCREASING$]
+			[[EUROPEAN_INTEGRATION_EFFECT_NOT_INCREASING]$EUROPEAN_INTEGRATION_EFFECT_NOT_INCREASING$]
+		}
+		[[EFFECT_AFTER]$EFFECT_AFTER$]
+	}
+	else_if = {
+		limit = {
+			to_has_tribal_integration = yes
+		}
+		[[EFFECT]$EFFECT$]
+		[[TRIBAL_INTEGRATION_EFFECT]$TRIBAL_INTEGRATION_EFFECT$]
+		if = {
+			limit = {
+				[[EFFECT_INCREASING]
+				to_culture_assimilation_increasing = yes
+				]
+			}
+			[[EFFECT_INCREASING]$EFFECT_INCREASING$]
+			[[TRIBAL_INTEGRATION_EFFECT_INCREASING]$TRIBAL_INTEGRATION_EFFECT_INCREASING$]
+		}
+		else = {
+			[[EFFECT_NOT_INCREASING]$EFFECT_NOT_INCREASING$]
+			[[TRIBAL_INTEGRATION_EFFECT_NOT_INCREASING]$TRIBAL_INTEGRATION_EFFECT_NOT_INCREASING$]
+		}
+		[[EFFECT_AFTER]$EFFECT_AFTER$]
 	}
 }
 
@@ -140,42 +198,37 @@ to_culture_adaptation_progress_routine = {
 			limit = {
 				to_has_culture_adaptation_potential = yes
 			}
-			if = {
-				limit = {
-					to_is_culture_adaptation_increasing = yes
-				}
-				if = {
-					limit = {
-						to_has_culture_assimilation = yes
-					}
-					to_increase_culture_adaptation_progress_general = { 
-						OWNER_TARGET = to_culture_assimilation_owner
-						SPECIFIC_PROGRESS_INCREASE = to_culture_assimilation_progress
-					}
-				}
-				else_if = {
-					limit = {
-						to_has_european_culture_integration = yes
-					}
-					to_increase_culture_adaptation_progress_general = { 
-						OWNER_TARGET = to_culture_assimilation_owner
-						SPECIFIC_PROGRESS_INCREASE = to_culture_integration_progress
-					}
-				}
-				else_if = {
-					limit = {
-						to_has_tribal_integration = yes
-					}
-					to_increase_culture_adaptation_progress_general = { 
-						OWNER_TARGET = to_culture_assimilation_owner
-						SPECIFIC_PROGRESS_INCREASE = to_tribal_integration_progress
-					}
-				}
+			to_generic_adaptation_types_effect = {
+				EFFECT_INCREASING = ""
+				ASSIMIATION_EFFECT_INCREASING = "
+				to_increase_culture_adaptation_progress_general = { 
+					OWNER_TARGET = to_culture_assimilation_owner
+					SPECIFIC_PROGRESS_INCREASE = to_culture_assimilation_progress
+				}"
+				EUROPEAN_INTEGRATION_EFFECT_INCREASING = "
+				to_increase_culture_adaptation_progress_general = { 
+					OWNER_TARGET = to_culture_assimilation_owner
+					SPECIFIC_PROGRESS_INCREASE = to_culture_integration_progress
+				}"
+				TRIBAL_INTEGRATION_EFFECT_INCREASING = "
+				to_increase_culture_adaptation_progress_general = { 
+					OWNER_TARGET = to_culture_assimilation_owner
+					SPECIFIC_PROGRESS_INCREASE = to_tribal_integration_progress
+				}"
+				ASSIMIATION_EFFECT_NOT_INCREASING = "
+				to_culture_adaptation_inactive_setup = {
+					VARIANT = to_inactive_setup_assimilation
+				}"
+				EUROPEAN_INTEGRATION_EFFECT_NOT_INCREASING = "
+				to_culture_adaptation_inactive_setup = {
+					VARIANT = to_inactive_setup_european_integration
+				}"
+				TRIBAL_INTEGRATION_EFFECT_NOT_INCREASING = "
+				to_culture_adaptation_inactive_setup = {
+					VARIANT = to_inactive_setup_tribal_integration
+				}"
+				EFFECT_AFTER = "to_trigger_culture_adaptation_events = yes"
 			}
-			else = {
-				to_culture_adaptation_inactive_setup = yes
-			}
-			to_trigger_culture_adaptation_events = yes
 		}
 	}
 }
@@ -195,70 +248,43 @@ to_culture_adaptation_inactive_setup = {
 	}
 	clr_province_flag = to_assimilation_progressing
 	to_remove_culture_adaptation_modifiers = yes
+
+	$VARIANT$ = yes
+}
+
+to_inactive_setup_assimilation = {
 	if = {
 		limit = {
-			to_has_culture_assimilation = yes
+			culture = elysameric
+			owner = {
+				culture_group = byzantine
+			}
 		}
 		if = {
 			limit = {
-				culture = elysameric
-				owner = {
-					culture_group = byzantine
-				}
+				NOT = { has_province_modifier = to_culture_assimilation_roman_inactive }
 			}
-			if = {
-				limit = {
-					NOT = { has_province_modifier = to_culture_assimilation_roman_inactive }
-				}
-				to_remove_inactive_culture_adaptation_modifiers = yes
-				add_province_modifier = {
-					name = to_culture_assimilation_roman_inactive
-					duration = -1
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				culture = skraeling
-				owner = {
-					culture_group = norse_g
-				}
-			}
-			if = {
-				limit = {
-					NOT = { has_province_modifier = to_culture_assimilation_norse_inactive }
-				}
-				to_remove_inactive_culture_adaptation_modifiers = yes
-				add_province_modifier = {
-					name = to_culture_assimilation_norse_inactive
-					duration = -1
-				}
-			}
-		}
-		else = {
-			if = {
-				limit = {
-					NOT = { has_province_modifier = to_culture_assimilation_inactive }
-				}
-				to_remove_inactive_culture_adaptation_modifiers = yes
-				add_province_modifier = {
-					name = to_culture_assimilation_inactive
-					duration = -1
-				}
+			to_remove_inactive_culture_adaptation_modifiers = yes
+			add_province_modifier = {
+				name = to_culture_assimilation_roman_inactive
+				duration = -1
 			}
 		}
 	}
 	else_if = {
 		limit = {
-			to_has_european_culture_integration = yes
+			culture = skraeling
+			owner = {
+				culture_group = norse_g
+			}
 		}
 		if = {
 			limit = {
-				NOT = { has_province_modifier = to_culture_integration_inactive }
+				NOT = { has_province_modifier = to_culture_assimilation_norse_inactive }
 			}
 			to_remove_inactive_culture_adaptation_modifiers = yes
 			add_province_modifier = {
-				name = to_culture_integration_inactive
+				name = to_culture_assimilation_norse_inactive
 				duration = -1
 			}
 		}
@@ -266,13 +292,39 @@ to_culture_adaptation_inactive_setup = {
 	else = {
 		if = {
 			limit = {
-				NOT = { has_province_modifier = to_tribal_integration_inactive }
+				NOT = { has_province_modifier = to_culture_assimilation_inactive }
 			}
 			to_remove_inactive_culture_adaptation_modifiers = yes
 			add_province_modifier = {
-				name = to_tribal_integration_inactive
+				name = to_culture_assimilation_inactive
 				duration = -1
 			}
+		}
+	}
+}
+
+to_inactive_setup_european_integration = {
+	if = {
+		limit = {
+			NOT = { has_province_modifier = to_culture_integration_inactive }
+		}
+		to_remove_inactive_culture_adaptation_modifiers = yes
+		add_province_modifier = {
+			name = to_culture_integration_inactive
+			duration = -1
+		}
+	}
+}
+
+to_inactive_setup_tribal_integration = {
+	if = {
+		limit = {
+			NOT = { has_province_modifier = to_tribal_integration_inactive }
+		}
+		to_remove_inactive_culture_adaptation_modifiers = yes
+		add_province_modifier = {
+			name = to_tribal_integration_inactive
+			duration = -1
 		}
 	}
 }
