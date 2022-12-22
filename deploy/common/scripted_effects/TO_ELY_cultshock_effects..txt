@@ -1,7 +1,7 @@
 # Start effect, level is indicated using LEVEL = replace
 # Example: to_cultureshock_start = { LEVEL = vbad }
 # Levels are vbad, bad, medium, light, vlight.
-to_cultureshock_on_province_owner_change = {
+to_cultureshock_on_province_owner_culture_change = {
 	if = {
 		limit = {
 			to_eligible_for_cultureshock = yes
@@ -48,11 +48,49 @@ to_cultureshock_on_province_owner_change = {
 			}
 		}
 	}
+	else = {
+		to_remove_cultureshock_modifiers = yes
+	}
+}
+
+to_cultureshock_on_primary_culture_change = {
+	if = {
+		limit = {
+			nhs_check_all_elysian_tags = { CONDITION = tag }
+			NOT = { has_country_flag = to_integrated_greeks }
+			to_has_cultureshock_country = yes
+		}
+		if = {
+			limit = {
+				OR = {
+					primary_culture = greek
+					primary_culture = pontic
+				}
+			}
+			every_province = {
+				limit = {
+					country_or_subject_holds = ROOT
+					to_has_cultureshock = yes
+				}
+				to_remove_cultureshock_modifiers = yes
+			}
+		}
+		else = {
+			every_province = {
+				limit = {
+					country_or_subject_holds = ROOT
+					to_eligible_for_cultureshock = yes
+				}
+				to_add_current_cultureshock = yes
+			}
+		}
+	}
 }
 
 to_cultureshock_start = {
-	every_owned_province = {
+	every_province = {
 		limit = {
+			country_or_subject_holds = ROOT
 			to_eligible_for_cultureshock = yes
 		}
 		add_province_modifier = {
@@ -61,6 +99,14 @@ to_cultureshock_start = {
 		}
 		set_country_flag = has_cultureshock_$LEVEL$
 	}
+}
+
+to_remove_cultureshock_modifiers = {
+	remove_province_modifier = to_cultureshock_vbad
+	remove_province_modifier = to_cultureshock_bad
+	remove_province_modifier = to_cultureshock_medium
+	remove_province_modifier = to_cultureshock_light
+	remove_province_modifier = to_cultureshock_vlight
 }
 
 to_add_current_cultureshock = {
