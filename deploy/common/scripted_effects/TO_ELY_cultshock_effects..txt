@@ -9,12 +9,18 @@ to_cultureshock_on_province_owner_culture_change = {
 		if = {
 			limit = {
 				owner = {
-					to_has_cultureshock_country = yes
+					has_or_overlord_has = { TRIGGER = "to_has_cultureshock_country = yes" }
 				}
 			}
 			to_add_current_cultureshock = yes
+			to_start_culture_adaptation = yes
 		}
-		else = {
+		if = {
+			limit = {
+				owner = {
+					NOT = { has_or_overlord_has = { TRIGGER = "to_has_cultureshock_country = yes" } }
+				}
+			}
 			owner = {
 				if = {
 					limit = {
@@ -33,8 +39,9 @@ to_cultureshock_on_province_owner_culture_change = {
 						}
 					}
 				}
-				else_if = {
+				if = {
 					limit = {
+						is_subject = no
 						nhs_check_all_elysian_tags = { CONDITION = tag }
 						NOT = { has_country_flag = to_has_cultureshock }
 					}
@@ -88,6 +95,7 @@ to_cultureshock_on_primary_culture_change = {
 }
 
 to_cultureshock_start = {
+	set_country_flag = has_cultureshock_$LEVEL$
 	every_province = {
 		limit = {
 			country_or_subject_holds = ROOT
@@ -97,7 +105,7 @@ to_cultureshock_start = {
 			name = to_cultureshock_$LEVEL$
 			duration = -1
 		}
-		set_country_flag = has_cultureshock_$LEVEL$
+		to_start_culture_adaptation = yes
 	}
 }
 
@@ -112,7 +120,9 @@ to_remove_cultureshock_modifiers = {
 to_add_current_cultureshock = {
 	if = {
 		limit = {
-			has_country_flag = has_cultureshock_vbad
+			owner = {
+				has_or_overlord_has = { TRIGGER = "has_country_flag = has_cultureshock_vbad" }
+			}
 		}
 		add_province_modifier = {
 			name = to_cultureshock_vbad
@@ -121,7 +131,9 @@ to_add_current_cultureshock = {
 	}
 	else_if = {
 		limit = {
-			has_country_flag = has_cultureshock_bad
+			owner = {
+				has_or_overlord_has = { TRIGGER = "has_country_flag = has_cultureshock_bad" }
+			}
 		}
 		add_province_modifier = {
 			name = to_cultureshock_bad
@@ -130,7 +142,9 @@ to_add_current_cultureshock = {
 	}
 	else_if = {
 		limit = {
-			has_country_flag = has_cultureshock_medium
+			owner = {
+				has_or_overlord_has = { TRIGGER = "has_country_flag = has_cultureshock_medium" }
+			}
 		}
 		add_province_modifier = {
 			name = to_cultureshock_medium
@@ -139,7 +153,9 @@ to_add_current_cultureshock = {
 	}
 	else_if = {
 		limit = {
-			has_country_flag = has_cultureshock_light
+			owner = {
+				has_or_overlord_has = { TRIGGER = "has_country_flag = has_cultureshock_light" }
+			}
 		}
 		add_province_modifier = {
 			name = to_cultureshock_light
@@ -148,7 +164,9 @@ to_add_current_cultureshock = {
 	}
 	else_if = {
 		limit = {
-			has_country_flag = has_cultureshock_vlight
+			owner = {
+				has_or_overlord_has = { TRIGGER = "has_country_flag = has_cultureshock_vlight" }
+			}
 		}
 		add_province_modifier = {
 			name = to_cultureshock_vlight
@@ -165,8 +183,9 @@ to_cultureshock_decrease = {
 		custom_tooltip = nhs2_cultureshock_decrease.tt
 		custom_tooltip = nhs2_cultureshock_decrease_vbad_to_bad.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					country_or_subject_holds = ROOT
 					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_vbad
@@ -186,8 +205,9 @@ to_cultureshock_decrease = {
 		custom_tooltip = nhs2_cultureshock_decrease.tt
 		custom_tooltip = nhs2_cultureshock_decrease_bad_to_medium.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					country_or_subject_holds = ROOT
 					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_bad
@@ -207,8 +227,9 @@ to_cultureshock_decrease = {
 		custom_tooltip = nhs2_cultureshock_decrease.tt
 		custom_tooltip = nhs2_cultureshock_decrease_medium_to_light.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					country_or_subject_holds = ROOT
 					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_medium
@@ -228,8 +249,9 @@ to_cultureshock_decrease = {
 		custom_tooltip = nhs2_cultureshock_decrease.tt
 		custom_tooltip = nhs2_cultureshock_increase_light_to_vlight.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					country_or_subject_holds = ROOT
 					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_light
@@ -249,8 +271,9 @@ to_cultureshock_decrease = {
 		# custom_tooltip = nhs2_cultureshock_solved.tt
 		custom_tooltip = nhs2_cultureshock_decrease_unrest.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					country_or_subject_holds = ROOT
 					to_eligible_for_cultureshock = yes
 				}
 				# REPLACEME
@@ -272,8 +295,9 @@ to_cultureshock_increase = {
 		}
 		custom_tooltip = nhs2_cultureshock_increase_unrest.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					country_or_subject_holds = ROOT
 					to_eligible_for_cultureshock = yes
 				}
 				add_named_unrest = {
@@ -299,8 +323,9 @@ to_cultureshock_increase = {
 		custom_tooltip = nhs2_cultureshock_increase.tt
 		custom_tooltip = nhs2_cultureshock_increase_bad_to_vbad.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					country_or_subject_holds = ROOT
 					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_bad
@@ -320,8 +345,9 @@ to_cultureshock_increase = {
 		custom_tooltip = nhs2_cultureshock_increase.tt
 		custom_tooltip = nhs2_cultureshock_increase_medium_to_bad.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					country_or_subject_holds = ROOT
 					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_medium
@@ -341,8 +367,9 @@ to_cultureshock_increase = {
 		custom_tooltip = nhs2_cultureshock_increase.tt
 		custom_tooltip = nhs2_cultureshock_increase_light_to_medium.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					country_or_subject_holds = ROOT
 					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_light
@@ -362,8 +389,9 @@ to_cultureshock_increase = {
 		custom_tooltip = nhs2_cultureshock_increase.tt
 		custom_tooltip = nhs2_cultureshock_increase_vlight_to_light.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					country_or_subject_holds = ROOT
 					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_vlight
@@ -387,8 +415,9 @@ to_cultureshock_big_increase = {
 		}
 		custom_tooltip = nhs2_cultureshock_big_increase_unrest.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					country_or_subject_holds = ROOT
 					to_eligible_for_cultureshock = yes
 				}
 				add_named_unrest = {
@@ -415,9 +444,10 @@ to_cultureshock_big_increase = {
 		custom_tooltip = nhs2_cultureshock_increase_bad_to_vbad.tt
 		custom_tooltip = nhs2_cultureshock_additional_increase_unrest.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
-					has_province_modifier = to_cultureshock_bad
+					country_or_subject_holds = ROOT
+					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_bad
 				add_province_modifier = {
@@ -443,9 +473,10 @@ to_cultureshock_big_increase = {
 		custom_tooltip = nhs2_cultureshock_big_increase.tt
 		custom_tooltip = nhs2_cultureshock_increase_medium_to_vbad.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
-					has_province_modifier = to_cultureshock_medium
+					country_or_subject_holds = ROOT
+					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_medium
 				add_province_modifier = {
@@ -462,9 +493,10 @@ to_cultureshock_big_increase = {
 		custom_tooltip = nhs2_cultureshock_big_increase.tt
 		custom_tooltip = nhs2_cultureshock_increase_light_to_bad.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
-					has_province_modifier = to_cultureshock_light
+					country_or_subject_holds = ROOT
+					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_light
 				add_province_modifier = {
@@ -481,9 +513,10 @@ to_cultureshock_big_increase = {
 		custom_tooltip = nhs2_cultureshock_big_increase.tt
 		custom_tooltip = nhs2_cultureshock_increase_vlight_to_medium.tt
 		hidden_effect = {
-			every_owned_province = {
+			every_province = {
 				limit = {
-					has_province_modifier = to_cultureshock_vlight
+					country_or_subject_holds = ROOT
+					to_eligible_for_cultureshock = yes
 				}
 				remove_province_modifier = to_cultureshock_vlight
 				add_province_modifier = {

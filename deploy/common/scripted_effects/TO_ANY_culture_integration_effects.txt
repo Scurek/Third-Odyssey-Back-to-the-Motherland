@@ -97,6 +97,10 @@ to_start_culture_adaptation = {
 			to_culture_adaptation_inactive_setup = {
 				VARIANT = to_inactive_setup_assimilation
 			}"
+			GREEK_INTEGRATION_EFFECT_NOT_INCREASING = "
+			to_culture_adaptation_inactive_setup = {
+				VARIANT = to_inactive_setup_european_integration
+			}"
 			EUROPEAN_INTEGRATION_EFFECT_NOT_INCREASING = "
 			to_culture_adaptation_inactive_setup = {
 				VARIANT = to_inactive_setup_european_integration
@@ -128,6 +132,27 @@ to_generic_adaptation_types_effect = {
 		else = {
 			[[EFFECT_NOT_INCREASING]$EFFECT_NOT_INCREASING$]
 			[[ASSIMIATION_EFFECT_NOT_INCREASING]$ASSIMIATION_EFFECT_NOT_INCREASING$]
+		}
+		[[EFFECT_AFTER]$EFFECT_AFTER$]
+	}
+	else_if = {
+		limit = {
+			to_has_greek_integration = yes
+		}
+		[[EFFECT]$EFFECT$]
+		[[GREEK_INTEGRATION_EFFECT]$GREEK_INTEGRATION_EFFECT$]
+		if = {
+			limit = {
+				[[EFFECT_INCREASING]
+				to_greek_integration_increasing = yes
+				]
+			}
+			[[EFFECT_INCREASING]$EFFECT_INCREASING$]
+			[[GREEK_INTEGRATION_EFFECT_INCREASING]$GREEK_INTEGRATION_EFFECT_INCREASING$]
+		}
+		else = {
+			[[EFFECT_NOT_INCREASING]$EFFECT_NOT_INCREASING$]
+			[[GREEK_INTEGRATION_EFFECT_NOT_INCREASING]$GREEK_INTEGRATION_EFFECT_NOT_INCREASING$]
 		}
 		[[EFFECT_AFTER]$EFFECT_AFTER$]
 	}
@@ -205,6 +230,11 @@ to_culture_adaptation_progress_routine = {
 					OWNER_TARGET = to_culture_assimilation_owner
 					SPECIFIC_PROGRESS_INCREASE = to_culture_assimilation_progress
 				}"
+				GREEK_INTEGRATION_EFFECT_INCREASING = "
+				to_increase_culture_adaptation_progress_general = { 
+					OWNER_TARGET = to_culture_assimilation_owner
+					SPECIFIC_PROGRESS_INCREASE = to_greek_integration_progress
+				}"
 				EUROPEAN_INTEGRATION_EFFECT_INCREASING = "
 				to_increase_culture_adaptation_progress_general = { 
 					OWNER_TARGET = to_culture_assimilation_owner
@@ -218,6 +248,10 @@ to_culture_adaptation_progress_routine = {
 				ASSIMIATION_EFFECT_NOT_INCREASING = "
 				to_culture_adaptation_inactive_setup = {
 					VARIANT = to_inactive_setup_assimilation
+				}"
+				GREEK_INTEGRATION_EFFECT_NOT_INCREASING = "
+				to_culture_adaptation_inactive_setup = {
+					VARIANT = to_inactive_setup_european_integration
 				}"
 				EUROPEAN_INTEGRATION_EFFECT_NOT_INCREASING = "
 				to_culture_adaptation_inactive_setup = {
@@ -454,18 +488,6 @@ to_increase_culture_adaptation_progress_general = {
 			which = to_assimilation_modifier
 			value = 100
 		}
-		multiply_variable = {
-			which = to_culture_conversion_cost
-			value = 100
-		}
-		multiply_variable = {
-			which = to_native_assimilation
-			value = 100
-		}
-		multiply_variable = {
-			which = to_assimilation_development
-			value = 100
-		}
 		to_set_culture_adaptation_modifier = yes
 	}
 }
@@ -535,6 +557,10 @@ to_culture_assimilation_progress = {
 	change_variable = {
 		which = to_assimilation_modifier
 		which = to_assimilation_development
+	}
+	multiply_variable = {
+		which = to_assimilation_development
+		value = 100
 	}
 	if = {
 		limit = {
@@ -642,6 +668,10 @@ to_culture_assimilation_progress = {
 	# 	which = to_culture_conversion_cost
 	# 	value = -2
 	# }
+	multiply_variable = {
+		which = to_culture_conversion_cost
+		value = 100
+	}
 	# Native Assimilation (divided by 4)
 	if = {
 		limit = {
@@ -664,6 +694,308 @@ to_culture_assimilation_progress = {
 			which = to_assimilation_modifier
 			which = to_native_assimilation
 		}
+		multiply_variable = {
+			which = to_native_assimilation
+			value = 100
+		}
+	}
+}
+
+to_greek_integration_progress = {
+	set_variable = {
+		which = to_assimilation_base
+		value = 5
+	}
+	change_variable = {
+		which = to_assimilation_flat_increase
+		which = to_assimilation_base
+	}
+
+	clr_province_flag = to_a_new_hope_completed
+	clr_province_flag = to_culture_adaptation_heathen
+	clr_province_flag = to_culture_adaptation_heathen_overlord
+	clr_province_flag = to_culture_adaptation_heretic
+	clr_province_flag = to_culture_adaptation_heretic_overlord
+
+	set_variable = {
+		which = to_assimilation_development
+		value = 0
+	}
+	export_to_variable = {
+		variable_name = to_assimilation_development
+		value = trigger_value:development
+	}
+	multiply_variable = {
+		which = to_assimilation_development
+		value = -0.01
+	}
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					which = to_assimilation_development
+					value = -0.50
+				}
+			}
+		}
+		set_variable = {
+			which = to_assimilation_development
+			value = -0.50
+		}
+	}
+	change_variable = {
+		which = to_assimilation_modifier
+		which = to_assimilation_development
+	}
+	multiply_variable = {
+		which = to_assimilation_development
+		value = 100
+	}
+	# Separatism penalty
+	set_variable = {
+		which = to_assimilation_separatism
+		value = 0
+	}
+	export_to_variable = {
+		variable_name = to_assimilation_separatism
+		value = trigger_value:nationalism
+	}
+	# 1 Year of Separatism = 0.5 Unrest
+	multiply_variable = {
+		which = to_assimilation_separatism
+		value = -0.005
+	}
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					which = to_assimilation_separatism
+					value = -0.50
+				}
+			}
+		}
+		set_variable = {
+			which = to_assimilation_separatism
+			value = -0.50
+		}
+	}
+	multiply_variable = {
+		which = to_assimilation_separatism
+		value = 100
+	}
+	# A New Hope completed
+	if = {
+		limit = {
+			owner = {
+				OR = {
+					mission_completed = to_a_new_hope_mission
+					AND = {
+						is_subject = yes
+						overlord = {
+							mission_completed = to_a_new_hope_mission
+						}
+					}
+				}
+			}
+		}
+		set_province_flag = to_a_new_hope_completed
+		change_variable = {
+			which = to_assimilation_modifier
+			value = 0.5
+		}
+	}
+	# Local religion, used to be penlties but we got enough of those already
+	# Same religion
+	save_event_target_as = to_assimilation_province
+	if = {
+		limit = {
+			owner = {
+				to_has_cultureshock_country = yes
+				religion = PREV
+			}
+		}
+		set_province_flag = to_culture_adaptation_same_religion
+		change_variable = {
+			which = to_assimilation_modifier
+			value = 0.20
+		}
+	}
+	else_if = {
+		limit = {
+			owner = {
+				is_subject = yes
+				overlord = {
+					to_has_cultureshock_country = yes
+					religion = event_target:to_assimilation_province
+				}
+			}
+		}
+		set_province_flag = to_culture_adaptation_same_religion_overlord
+		change_variable = {
+			which = to_assimilation_modifier
+			value = 0.20
+		}
+	}
+	# Follows different religion (heretic)
+	else_if = {
+		limit = {
+			owner = {
+				to_has_cultureshock_country = yes
+				religion_group = PREV
+			}
+		}
+		set_province_flag = to_culture_adaptation_same_religion_group
+		change_variable = {
+			which = to_assimilation_modifier
+			value = 0.10
+		}
+	}
+	else_if = {
+		limit = {
+			owner = {
+				is_subject = yes
+				overlord = {
+					to_has_cultureshock_country = yes
+					religion_group = event_target:to_assimilation_province
+				}
+			}
+		}
+		set_province_flag = to_culture_adaptation_same_religion_group_overlord
+		change_variable = {
+			which = to_assimilation_modifier
+			value = 0.10
+		}
+	}
+	# Follows different religion (heathen)
+	# if = {
+	# 	limit = {
+	# 		owner = {
+	# 			to_has_cultureshock_country = yes
+	# 			NOT = { religion_group = PREV }
+	# 		}
+	# 	}
+	# 	set_province_flag = to_culture_adaptation_heathen
+	# 	change_variable = {
+	# 		which = to_assimilation_modifier
+	# 		value = -0.25
+	# 	}
+	# }
+	# else_if = {
+	# 	limit = {
+	# 		owner = {
+	# 			is_subject = yes
+	# 			overlord = {
+	# 				to_has_cultureshock_country = yes
+	# 				NOT = { religion_group = PREV }
+	# 			}
+	# 		}
+	# 	}
+	# 	set_province_flag = to_culture_adaptation_heathen_overlord
+	# 	change_variable = {
+	# 		which = to_assimilation_modifier
+	# 		value = -0.25
+	# 	}
+	# }
+	# # Follows different religion (heretic)
+	# else_if = {
+	# 	limit = {
+	# 		owner = {
+	# 			to_has_cultureshock_country = yes
+	# 			NOT = { religion = PREV }
+	# 		}
+	# 	}
+	# 	set_province_flag = to_culture_adaptation_heretic
+	# 	change_variable = {
+	# 		which = to_assimilation_modifier
+	# 		value = -0.15
+	# 	}
+	# }
+	# else_if = {
+	# 	limit = {
+	# 		owner = {
+	# 			is_subject = yes
+	# 			overlord = {
+	# 				to_has_cultureshock_country = yes
+	# 				NOT = { religion = PREV }
+	# 			}
+	# 		}
+	# 	}
+	# 	set_province_flag = to_culture_adaptation_heretic_overlord
+	# 	change_variable = {
+	# 		which = to_assimilation_modifier
+	# 		value = -0.15
+	# 	}
+	# }
+	# Culture Shock modifiers
+	if = {
+		limit = {
+			has_province_modifier = to_cultureshock_vbad
+		}
+		set_province_flag = to_integration_cultureshock_vbad
+		change_variable = {
+			which = to_assimilation_modifier
+			value = -0.50
+		}
+	}
+	else_if = {
+		limit = {
+			has_province_modifier = to_cultureshock_bad
+		}
+		set_province_flag = to_integration_cultureshock_bad
+		change_variable = {
+			which = to_assimilation_modifier
+			value = -0.35
+		}
+	}
+	else_if = {
+		limit = {
+			has_province_modifier = to_cultureshock_medium
+		}
+		set_province_flag = to_integration_cultureshock_medium
+		change_variable = {
+			which = to_assimilation_modifier
+			value = -0.20
+		}
+	}
+	else_if = {
+		limit = {
+			has_province_modifier = to_cultureshock_light
+		}
+		set_province_flag = to_integration_cultureshock_light
+		change_variable = {
+			which = to_assimilation_modifier
+			value = -0.10
+		}
+	}
+	# Culture conversion cost
+	export_to_variable = {
+		which = to_culture_conversion_cost
+		value = modifier:culture_conversion_cost
+		who = event_target:$OWNER_TARGET$
+	}
+	export_to_variable = {
+		which = to_local_culture_conversion_cost
+		value = modifier:local_culture_conversion_cost
+	}
+	change_variable = {
+		which = to_culture_conversion_cost
+		which = to_local_culture_conversion_cost
+	}
+	multiply_variable = {
+		which = to_culture_conversion_cost
+		value = -1
+	}
+	# divide_variable = {
+	# 	which = to_culture_conversion_cost
+	# 	value = -2
+	# }
+	change_variable = {
+		which = to_assimilation_modifier
+		which = to_culture_conversion_cost
+	}
+	multiply_variable = {
+		which = to_culture_conversion_cost
+		value = 100
 	}
 }
 
@@ -735,6 +1067,10 @@ to_culture_integration_progress = {
 		which = to_assimilation_modifier
 		which = to_assimilation_development
 	}
+	multiply_variable = {
+		which = to_assimilation_development
+		value = 100
+	}
 	# Triumph completed
 	if = {
 		limit = {
@@ -768,14 +1104,13 @@ to_culture_integration_progress = {
 	# 	which = to_culture_conversion_cost
 	# 	value = -2
 	# }
-
 	change_variable = {
 		which = to_assimilation_modifier
 		which = to_culture_conversion_cost
 	}
-	change_variable = {
-		which = to_assimilation_modifier
-		which = to_native_assimilation
+	multiply_variable = {
+		which = to_culture_conversion_cost
+		value = 100
 	}
 }
 
@@ -854,6 +1189,10 @@ to_tribal_integration_progress = {
 	change_variable = {
 		which = to_assimilation_modifier
 		which = to_assimilation_development
+	}
+	multiply_variable = {
+		which = to_assimilation_development
+		value = 100
 	}
 	if = {
 		limit = {
@@ -969,6 +1308,15 @@ to_tribal_integration_progress = {
 	change_variable = {
 		which = to_assimilation_modifier
 		which = to_native_assimilation
+	}
+
+	multiply_variable = {
+		which = to_culture_conversion_cost
+		value = 100
+	}
+	multiply_variable = {
+		which = to_native_assimilation
+		value = 100
 	}
 }
 
@@ -1214,6 +1562,14 @@ to_adapt_province_culture = {
 	}
 	else_if = {
 		limit = {
+			to_has_greek_integration = yes
+		}
+		set_province_flag = to_greeks_integrated_flag
+		add_nationalism = -100
+		to_remove_cultureshock_modifiers = yes
+	}
+	else_if = {
+		limit = {
 			to_has_european_culture_integration = yes
 		}
 		set_province_flag = to_culture_integrated_flag
@@ -1347,6 +1703,11 @@ to_remove_culture_adaptation_variables = {
 	clr_province_flag = to_tribal_assimilation_native_assimilation_enabled
 	clr_province_flag = to_assimilation_progressing
 	clr_province_flag = to_culture_integration_triumph_completed
+	clr_province_flag = to_a_new_hope_completed
+	clr_province_flag = to_culture_adaptation_heathen
+	clr_province_flag = to_culture_adaptation_heathen_overlord
+	clr_province_flag = to_culture_adaptation_heretic
+	clr_province_flag = to_culture_adaptation_heretic_overlord
 	set_variable = {
 		which = to_assimilation_progress
 		value = 0
@@ -1403,6 +1764,10 @@ to_remove_culture_adaptation_variables = {
 		which = to_assimilation_development
 		value = 0
 	}
+	set_variable = {
+		which = to_assimilation_separatism
+		value = 0
+	}
 }
 
 to_set_culture_adaptation_modifier = {
@@ -1432,7 +1797,10 @@ to_set_culture_adaptation_modifier = {
 	}
 	else_if = {
 		limit = {
-			to_has_european_culture_integration = yes
+			OR = {
+				to_has_greek_integration = yes
+				to_has_european_culture_integration = yes
+			}
 		}
 		to_set_correct_culture_adaptation_modifier = { MODIFIER_BASE_NAME = to_culture_integration }
 	}

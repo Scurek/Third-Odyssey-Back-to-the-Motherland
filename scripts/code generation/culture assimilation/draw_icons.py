@@ -33,7 +33,7 @@ modifiers = [{'name': 'to_culture_assimilation',
               'desc': '[Root.GetSkraelingAssimilationDesc]'},
              {'name': 'to_culture_integration',
               'title': 'Imperial Integration',
-              'desc': '[Root.GetCultureIntegrationDesc]'}
+              'desc': '[Root.GetImperialIntegrationDesc]'}
              ]
 
 images = [Image.open(f'{modifier["name"]}.dds') for modifier in modifiers]
