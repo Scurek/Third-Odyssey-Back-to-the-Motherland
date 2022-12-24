@@ -301,30 +301,31 @@ country_event = {
 ## Hellenic worship sites - what do? (Hellenic Event)
 
 # Parthanon, now a church, what do we do? (Hellenic Event)
-country_event = {
-	id = nhs2_shock_events.101
-	title = nhs2_shock_events.101.t
-	desc = nhs2_shock_events.101.d
-	picture = ATHENS_eventPicture
+# country_event = {
+# 	id = nhs2_shock_events.101
+# 	title = nhs2_shock_events.101.t
+# 	desc = nhs2_shock_events.101.d
+# 	picture = ATHENS_eventPicture
 
-	is_triggered_only = yes
+# 	is_triggered_only = yes
 
-	# Make it a dual-worship site, and keep the current building.
-	option = {
-		name = nhs2_shock_events.101.a
-	}
+# 	# Make it a dual-worship site, and keep the current building.
+# 	option = {
+# 		name = nhs2_shock_events.101.a
+# 	}
 
-	# Renovate it as a temple.
-	option = {
-		name = nhs2_shock_events.101.b
-	}
+# 	# Renovate it as a temple.
+# 	option = {
+# 		name = nhs2_shock_events.101.b
+# 		to_cultureshock_increase = yes
+# 	}
 
-	# Let the Christians keep it, and help them renovate.
-	option = {
-		name = nhs2_shock_events.101.c
-	}
+# 	# Let the Christians keep it, and help them renovate.
+# 	option = {
+# 		name = nhs2_shock_events.101.c
 
-}
+# 	}
+# }
 
 # The Hagia Sophia (Hellenic Event)
 # Maybe an alternate version if it is christian when recaptured?
@@ -339,23 +340,253 @@ country_event = {
 	# Force the Christians and Muhammedans to share.
 	option = {
 		name = nhs2_shock_events.105.a
-		to_cultureshock_increase = yes
+		custom_tooltip = to_unrest_in_christian_roman_and_sunni_levantine_provinces_tt
+		hidden_effect = {
+			every_province = {
+				limit = {
+					country_or_subject_holds = ROOT
+					OR = {
+						AND = {
+							culture_group = byzantine
+							religion_group = christian
+						}
+						AND = {
+							culture_group = turko_semitic
+							religion = sunni
+						}
+					}
+				}
+				add_named_unrest = {
+					name = to_forced_to_share_hagia_sophia
+					value = 5
+				}
+			}
+		}
 	}
 
 	# Give it back to our Greek subjects.
 	option = {
 		name = nhs2_shock_events.105.b
+		custom_tooltip = to_get_separatism_in_sunni_levantine_provinces_tt
+		hidden_effect = {
+			set_country_flag = to_get_separatism_in_sunni_levantine_provinces
+			every_province = {
+				limit = {
+					country_or_subject_holds = ROOT
+					culture_group = turko_semitic
+					religion = sunni
+				}
+				add_nationalism = 10
+			}
+		}
+		# custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_decrease_sunni_opinion_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					religion = sunni
+				}
+				if = {
+					limit = {
+						culture = turkish
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = to_gave_hagia_sophia_to_greeks_severe
+					}
+					add_aggressive_expansion = {
+						who = ROOT
+						value = 20
+						apply_calc = no
+					}
+				}
+				else = {
+					add_opinion = {
+						who = ROOT
+						modifier = to_gave_hagia_sophia_to_greeks
+					}
+					add_aggressive_expansion = {
+						who = ROOT
+						value = 10
+						apply_calc = no
+					}
+				}
+			}
+		}
+
+		custom_tooltip = nhs_new_line_tt	
+		to_cultureshock_decrease = yes
+
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = hagia_sophia_now_mosque }
+				clr_global_flag = hagia_sophia_now_mosque
+				show_ambient_object = hagia_sophia
+				hide_ambient_object = hagia_sophia_minarets
+			}
+		}
 	}
 
-	# Refurnish it.
-	option = {
-		name = nhs2_shock_events.105.c
-		to_cultureshock_decrease = yes
-	}
+	# # Refurnish it.
+	# option = {
+	# 	name = nhs2_shock_events.105.c
+	# }
 
 	# Burn it.
 	option = {
 		name = nhs2_shock_events.105.e
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 20
+		}
+		if = {
+			limit = {
+				has_dlc = "Leviathan"
+				151 = {
+					has_great_project = {
+						type = hagia_sophia
+					}
+				}
+			}
+			if = {
+				limit = {
+					151 = {
+						has_great_project = {
+							type = hagia_sophia
+							tier = 3
+						}
+					}
+				}
+				custom_tooltip = to_sack_hagia_sophia_3_tt
+				hidden_effect = {
+					add_treasury = 9000
+				}
+			}
+			else_if = {
+				limit = {
+					151 = {
+						has_great_project = {
+							type = hagia_sophia
+							tier = 2
+						}
+					}
+				}
+				custom_tooltip = to_sack_hagia_sophia_2_tt
+				hidden_effect = {
+					add_treasury = 4000
+				}
+			}
+			else_if = {
+				limit = {
+					151 = {
+						has_great_project = {
+							type = hagia_sophia
+							tier = 1
+						}
+					}
+				}
+				custom_tooltip = to_sack_hagia_sophia_1_tt
+				hidden_effect = {
+					add_treasury = 1500
+				}
+			}
+			else = {
+				custom_tooltip = to_sack_hagia_sophia_0_tt
+				hidden_effect = {
+					add_treasury = 500
+				}
+			}
+			hidden_effect = {
+				151 = {
+					destroy_great_project = {
+						type = hagia_sophia
+					}
+					hide_ambient_object = hagia_sophia_minarets
+					hide_ambient_object = hagia_sophia
+				}
+			}
+		}
+		else = {
+			add_treasury = 5000
+			if = {
+				limit = {
+					151 = { has_building = cathedral }
+				}
+				151 = { remove_building = cathedral }
+			}
+			if = {
+				limit = {
+					151 = { has_building = church }
+				}
+				151 = { remove_building = church }
+			}
+		}
+		151 = {
+			add_devastation = 20
+		}
+		custom_tooltip = nhs_dotted_line_tt
+		custom_tooltip = to_get_separatism_in_christian_roman_and_sunni_levantine_provinces_tt
+		hidden_effect = {
+			set_country_flag = to_get_separatism_in_christian_roman_and_sunni_levantine_provinces
+			every_province = {
+				limit = {
+					country_or_subject_holds = ROOT
+					OR = {
+						AND = {
+							culture_group = byzantine
+							religion_group = christian
+						}
+						AND = {
+							culture_group = turko_semitic
+							religion = sunni
+						}
+					}
+				}
+				add_nationalism = 20
+			}
+		}
+		# custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_decrease_sunni_and_christian_opinion_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						religion = christian
+						religion = sunni
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							religion = orthodox
+							culture = turkish
+						}
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = to_burned_hagia_sophia_severe
+					}
+					add_aggressive_expansion = {
+						who = ROOT
+						value = 30
+						apply_calc = no
+					}
+				}
+				else = {
+					add_opinion = {
+						who = ROOT
+						modifier = to_burned_hagia_sophia
+					}
+					add_aggressive_expansion = {
+						who = ROOT
+						value = 15
+						apply_calc = no
+					}
+				}
+			}
+		}
+
+		custom_tooltip = nhs_new_line_tt
 		to_cultureshock_big_increase = yes
 	}
 }
