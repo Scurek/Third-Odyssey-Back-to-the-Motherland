@@ -12700,9 +12700,70 @@ to_add_old_world_exarch_claim = {
 # 	}
 # }
 
+to_compute_avg_culture_shock_progress = {
+	set_variable = {
+		which = $VARIABLE$
+		value = 0
+	}
+	if = {
+		limit = {
+			any_province = {
+				country_or_subject_holds = ROOT
+				to_has_cultureshock = yes
+			}
+		}
+		set_variable = {
+			which = to_total_culture_shock_dev
+			value = 0
+		}
+		every_province = {
+			limit = {
+				country_or_subject_holds = ROOT
+				to_has_cultureshock = yes
+			}
+			ROOT = {
+				export_to_variable = {
+					which = to_local_dev
+					value = trigger_value:development
+					who = PREV
+				}
+				change_variable = {
+					which = to_total_culture_shock_dev
+					which = to_local_dev
+				}
+
+				set_variable = {
+					which = to_assimilation_progress
+					which = PREV
+				}
+				multiply_variable = {
+					which = to_assimilation_progress
+					which = to_local_dev
+				}
+				change_variable = {
+					which = $VARIABLE$
+					which = to_assimilation_progress
+				}
+			}
+		}
+		divide_variable = {
+			which = $VARIABLE$
+			which = to_total_culture_shock_dev
+		}
+		set_variable = {
+			which = to_assimilation_progress
+			value = 0
+		}
+		set_variable = {
+			which = to_local_dev
+			value = 0
+		}
+	}
+}
+
 to_turkish_emigration_predict_lost_dev = {
 	set_variable = {
-		which = to_total_lost_dev
+		which = $VARIABLE$
 		value = 0
 	}
 	every_province = {
@@ -12726,11 +12787,11 @@ to_turkish_emigration_predict_lost_dev = {
 			}
 			multiply_variable = {
 				which = to_lost_dev
-				value = 0.1
+				value = $FRACTION$
 			}
 			to_round_up_variable = { VARIABLE = to_lost_dev }
 			change_variable = {
-				which = to_total_lost_dev
+				which = $VARIABLE$
 				which = to_lost_dev
 			}
 			set_variable = {
@@ -12748,7 +12809,7 @@ to_turkish_emigration_remove_dev = {
 	}
 	multiply_variable = {
 		which = to_lost_dev
-		value = 0.1
+		value = $FRACTION$
 	}
 	to_round_up_variable = { VARIABLE = to_lost_dev }
 	while = {

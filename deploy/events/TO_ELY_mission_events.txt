@@ -2203,16 +2203,33 @@ country_event = {
 	
 	immediate = {
 		hidden_effect = {
-			to_turkish_emigration_predict_lost_dev = yes
+			to_turkish_emigration_predict_lost_dev = {
+				VARIABLE = to_total_lost_dev_10p
+				FRACTION = 0.1
+			}
+			to_turkish_emigration_predict_lost_dev = {
+				VARIABLE = to_total_lost_dev_20p
+				FRACTION = 0.2
+			}
+			# to_compute_avg_culture_shock_progress = { VARIABLE = to_avg_culture_shock_progress }
+			# to_round_down_variable_one_decimal = { VARIABLE = to_avg_culture_shock_progress }
 		}
 	}
 
 	after = {
 		hidden_effect = {
 			set_variable = {
-				which = to_total_lost_dev
+				which = to_total_lost_dev_10p
 				value = 0
 			}
+			set_variable = {
+				which = to_total_lost_dev_20p
+				value = 0
+			}
+			# set_variable = {
+			# 	which = to_avg_culture_shock_progress
+			# 	value = 0
+			# }
 		}
 	}
 
@@ -2246,16 +2263,50 @@ country_event = {
 			}
 			set_country_flag = to_turkish_provinces_change_to_own_religion
 			custom_tooltip = to_turkish_emigration_effect_own_religion_tt
+			if = {
+				limit = {
+					to_has_cultureshock_country = yes
+				}
+				custom_tooltip = to_turkish_dev_lost_20p_tt
+				custom_tooltip = to_set_greek_integration_progress_50_tt
+				# if = {
+				# 	limit = {
+				# 		check_variable = {
+				# 			which = to_assimilation_progress
+				# 			value = 10
+				# 		}
+				# 	}
+				# 	custom_tooltip = to_set_avg_greek_integration_progress_tt
+				# }
+			}
+			else = {
+				custom_tooltip = to_turkish_dev_lost_10p_tt
+			}
 			custom_tooltip = nhs_new_line_tt
 		}
 		else = {
 			custom_tooltip = to_turkish_emigration_effect_tt
+			if = {
+				limit = {
+					to_has_cultureshock_country = yes
+				}
+				custom_tooltip = to_turkish_dev_lost_20p_tt
+				custom_tooltip = to_set_greek_integration_progress_50_tt
+			}
+			else = {
+				custom_tooltip = to_turkish_dev_lost_10p_tt
+			}
 			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = to_turkish_emigration_religion_tooltip
 			custom_tooltip = nhs_dotted_line_tt
 		}
 		custom_tooltip = to_turkish_easier_conversion_effect_tt
 		hidden_effect = {
+			# to_compute_avg_culture_shock_progress = { VARIABLE = to_avg_culture_shock_progress }
+			# set_variable = {
+			# 	which = to_assimilation_progress
+			# 	which = to_avg_culture_shock_progress
+			# }
 			every_province = {
 				limit = {
 					country_or_subject_holds = ROOT
@@ -2284,8 +2335,50 @@ country_event = {
 					nhs_on_province_culture_converted_general = {}
 				}
 				add_devastation = 10
-				to_turkish_emigration_remove_dev = yes
+				if = {
+					limit = {
+						ROOT = {
+							to_has_cultureshock_country = yes
+						}
+					}
+					to_turkish_emigration_remove_dev = { FRACTION = 0.2 }
+					set_variable = {
+						which = to_assimilation_progress
+						value = 50
+					}
+					set_variable = {
+						which = to_assimilation_progress_display
+						value = 50
+					}
+					to_set_culture_adaptation_modifier = yes
+				}
+				else = {
+					to_turkish_emigration_remove_dev = { FRACTION = 0.1 }
+				}
+				# if = {
+				# 	limit = {
+				# 		ROOT = {
+				# 			check_variable = {
+				# 				which = to_assimilation_progress
+				# 				value = 0.001
+				# 			}
+				# 		}
+				# 	}
+				# 	change_variable = {
+				# 		which = to_assimilation_progress
+				# 		which = PREV
+				# 	}
+				# 	set_variable = {
+				# 		which = to_assimilation_progress_display
+				# 		which = to_assimilation_progress
+				# 	}
+				# 	to_round_down_variable_one_decimal = { VARIABLE = to_assimilation_progress_display }
+				# }
 			}
+			# set_variable = {
+			# 	which = to_assimilation_progress
+			# 	which = 0
+			# }
 			every_province = {
 				limit = {
 					country_or_subject_holds = ROOT
@@ -2299,6 +2392,13 @@ country_event = {
 				change_original_culture = greek
 			}
 			clr_country_flag = to_turkish_provinces_change_to_own_religion
+		}
+		if = {
+			limit = {
+				to_has_cultureshock_country = yes
+			}
+			custom_tooltip = nhs_dotted_line_tt
+			to_cultureshock_decrease = yes
 		}
 	}
 
@@ -2366,6 +2466,13 @@ country_event = {
 				}
 			}
 		}
+	}
+
+	# QOL - postpone the decision
+	option = {
+		name = nhs_mission_events.50.e
+		custom_tooltip = to_enable_fate_of_turks_in_anatolia_decision_tt
+		set_country_flag = to_enable_fate_of_turks_in_anatolia_decision
 	}
 }
 
