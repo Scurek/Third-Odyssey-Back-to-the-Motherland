@@ -1700,17 +1700,58 @@ country_event = {
 		custom_tooltip = nhs_exarchate_setting_desc_elg_tt
 		set_country_flag = nhs_formed_greek
 		hidden_effect = {
+			if = {
+				limit = {
+					146 = {
+						owned_by = ROOT
+						NOT = { has_province_modifier = nhs2_base_of_operations_tm }
+						nhs_is_not_current_base_of_operations_target = { FLAG_SCOPE = ROOT }
+						NOT = { has_construction = missionary }
+						NOT = { has_province_modifier = nhs2_supply_lines_tm }
+					}
+				}
+				146 = {
+					remove_core = ROOT
+					add_core = ELG
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						any_owned_province = {
+							OR = {
+								is_core = ROOT
+								has_construction = core
+							}
+							nhs_greek_areas = yes
+							NOT = { has_province_modifier = nhs2_base_of_operations_tm }
+							NOT = { province_id = 151 }
+							nhs_is_not_current_base_of_operations_target = { FLAG_SCOPE = ROOT }
+							NOT = { has_construction = missionary }
+							NOT = { has_province_modifier = nhs2_supply_lines_tm }
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						nhs_greek_areas = yes
+						NOT = { has_province_modifier = nhs2_base_of_operations_tm }
+						NOT = { province_id = 151 }
+						nhs_is_not_current_base_of_operations_target = { FLAG_SCOPE = ROOT }
+						NOT = { has_construction = missionary }
+						NOT = { has_province_modifier = nhs2_supply_lines_tm }
+					}
+					add_core = ELG
+				}
+			}
 			every_owned_province = {
 				limit = {
 					nhs_greek_areas = yes
 					NOT = { has_province_modifier = nhs2_base_of_operations_tm }
 					NOT = { province_id = 151 }
 					nhs_is_not_current_base_of_operations_target = { FLAG_SCOPE = ROOT }
-					NOT = { has_construction = missionary }
 					NOT = { has_province_modifier = nhs2_supply_lines_tm }
-				}
-				tooltip = {
-					cede_province = ELG
+					has_construction = core
 				}
 				add_core = ELG
 			}
@@ -1719,14 +1760,34 @@ country_event = {
 				subject_type = elysian_subject
 				subject = ELG
 			}
-			if = {
+			every_owned_province = {
 				limit = {
-					religion = pantheon_worship
+					nhs_greek_areas = yes
+					NOT = { has_province_modifier = nhs2_base_of_operations_tm }
+					NOT = { province_id = 151 }
+					nhs_is_not_current_base_of_operations_target = { FLAG_SCOPE = ROOT }
+					NOT = { has_construction = missionary }
+					NOT = { has_province_modifier = nhs2_supply_lines_tm }
+					NOT = { has_construction = core }
+					is_owned_by_trade_company = no
 				}
-				country_event = {
-					id = nhs2_mainlandevents.21
-					days = 2
-					tooltip = nhs2_mainlandevents.21.t
+				if = {
+					limit = {
+						is_core = ROOT
+					}
+					remove_core = ROOT
+					add_core = ELG
+					cede_province = ELG
+				}
+				else_if = {
+					limit = {
+						is_territorial_core = ROOT
+					}
+					cede_province = ELG
+					add_territorial_core = ELG
+				}
+				else = {
+					cede_province = ELG
 				}
 			}
 			ELG = {
@@ -1834,27 +1895,6 @@ country_event = {
 			}
 		}
 		set_country_flag = nhs_formed_greek
-		every_owned_province = {
-			limit = {
-				nhs_greek_areas = yes
-				NOT = { province_id = 151 }
-				NOT = { has_construction = missionary }
-			}
-			cede_province = ELG
-			add_core = ELG
-		}
-		hidden_effect = {
-			if = {
-				limit = {
-					religion = pantheon_worship
-				}
-				country_event = {
-					id = nhs2_mainlandevents.21
-					days = 1
-					tooltip = nhs2_mainlandevents.21.t
-				}
-			}
-		}
 		ELG = {
 			add_manpower = 10
 			reverse_add_opinion = {
@@ -1865,96 +1905,8 @@ country_event = {
 				who = ROOT
 				modifier = nhs_formed_greeko
 			}
-			# every_owned_province = {
-			# 	limit = {
-			# 		nhs_greek_areas = yes
-			# 	}
-			# 	add_core = ELG
-			# }
 		}
 	}
-	
-	# option = {
-	# 	name = "nhs2_mainlandevents.20.b"  # Vassal
-	# 	trigger = {
-	# 		NOT = { exists = ELG }
-	# 	}
-	# 	set_country_flag = nhs_formed_greek
-	# 	every_owned_province = {
-	# 		limit = {
-	# 			AND = {
-	# 				nhs_greek_areas = yes
-	# 				NOT = { province_id = 151 }
-	# 				NOT = { has_construction = missionary }
-	# 			}
-	# 		}
-	# 		tooltip = {
-	# 			cede_province = ELG
-	# 		}
-	# 		add_core = ELG
-	# 	}
-	# 	if = {
-	# 		limit = {
-	# 			NOT = { exists = ELG }
-	# 		}
-	# 		release = ELG
-	# 		create_subject = {
-	# 			subject_type = elysian_subject
-	# 			subject = ELG
-	# 		}
-	# 		ELG = {
-	# 			hidden_effect  = {
-	# 				change_primary_culture = greek
-	# 				nhs_change_government = { GOV = monarchy }
-	# 				nhs_add_gov_reform = { REF = autocracy_reform }
-	# 				change_technology_group = eastern
-	# 				change_unit_type = eastern
-	# 			}
-	# 			reverse_add_opinion = {
-	# 				who = ROOT
-	# 				modifier = nhs_formed_greeko
-	# 			}
-	# 			add_opinion = {
-	# 				who = ROOT
-	# 				modifier = nhs_formed_greeko
-	# 			}
-	# 			# hidden_effect = {
-	# 			# 	every_owned_province = {
-	# 			# 		limit = {
-	# 			# 			nhs_greek_areas = yes
-	# 			# 		}
-	# 			# 		add_core = ELG
-	# 			# 	}
-	# 			# }
-	# 			clr_country_flag = nhs_ely_march_all
-	# 			clr_country_flag = nhs_ely_march_territory
-	# 			clr_country_flag = nhs_ely_march_no
-	# 			set_country_flag = nhs_ely_march_no_core
-	# 		}
-	# 	}
-	# 	hidden_effect = {
-	# 		if = {
-	# 			limit = {
-	# 				religion = pantheon_worship
-	# 			}
-	# 			country_event = {
-	# 				id = nhs2_mainlandevents.21
-	# 				days = 1
-	# 				tooltip = nhs2_mainlandevents.21.t
-	# 			}
-	# 		}
-	# 		# ELG = {
-	# 		# 	hidden_effect = {
-	# 		# 		every_owned_province = {
-	# 		# 			limit = {
-	# 		# 				nhs_greek_areas = yes
-	# 		# 			}
-	# 		# 			add_core = ELG
-	# 		# 		}
-	# 		# 	}
-	# 		# }
-	# 	}
-	# }
 	
 	option = { # We have no need of them anymore
 		name = "nhs2_mainlandevents.20.c"
@@ -1967,142 +1919,6 @@ country_event = {
 		}
 		custom_tooltip = nhs_enable_form_konstantinia_decision_tt
 		set_country_flag = nhs_enable_form_konstantinia_decision
-	}
-}
-
-# Question of religion later
-country_event = {
-	id = nhs2_mainlandevents.25
-	title = nhs2_mainlandevents.25.t
-	desc = nhs2_mainlandevents.25.d
-	picture = PANTHEON_eventPicture
-	
-	trigger = {
-		tag = ELG
-		religion = pantheon_worship
-		any_owned_province = {
-			NOT = { has_province_flag = nhs_got_question_of_religion }
-			religion = orthodox
-			nhs_greek_areas = yes
-		}
-	}
-	
-	option = {
-		name = "nhs2_mainlandevents.25.a"
-		hidden_effect = {
-			every_owned_province = {
-				limit = {
-					religion = orthodox
-					NOT = { has_province_flag = nhs_got_question_of_religion }
-					nhs_greek_areas = yes
-				}
-				set_province_flag = nhs_got_question_of_religion
-				random_list = {
-					40 = {
-						add_province_modifier = {
-							name = "nhs2_greek_deny_religion"
-							duration = 7300
-						}
-					}
-					40 = { 
-						add_province_modifier = {
-							name = "nhs2_greek_accept_religion"
-							duration = 7300
-						}
-					}
-					10 = { change_religion = ROOT }
-					10 = { 
-						add_province_modifier = {
-							name = "missionary_failure"
-							duration = 7300
-						}
-					}
-				}
-			}		
-		}
-	}
-}
-
-# Question of religion
-country_event = {
-	id = nhs2_mainlandevents.21
-	title = nhs2_mainlandevents.21.t
-	desc = nhs2_mainlandevents.21.d
-	picture = PANTHEON_eventPicture
-	
-	is_triggered_only = yes
-	fire_only_once = yes
-	
-	option = { #Convert them
-		name = "nhs2_mainlandevents.21.a"
-		set_country_flag = nhs_converted_greeks
-		add_legitimacy = 10
-		ELG = {
-			change_religion = ROOT
-			add_country_modifier = {
-				name = religious_tolerance
-				duration =  3650
-			}
-			capital_scope = {
-				add_province_triggered_modifier = religious_center_pantheon
-			}
-		}
-		hidden_effect = {
-			ELG = {
-				capital_scope = {
-					change_religion = ROOT
-				}
-				random_owned_province = {
-					limit = {
-						religion = orthodox
-						nhs_greek_areas = yes
-					}
-					change_religion = ROOT
-				}
-				random_owned_province = {
-					limit = {
-						religion = orthodox
-						nhs_greek_areas = yes
-					}
-					change_religion = ROOT
-				}
-				every_owned_province = {
-					limit = {
-						religion = orthodox
-						NOT = { has_province_flag = nhs_got_question_of_religion }
-						nhs_greek_areas = yes
-					}
-					set_province_flag = nhs_got_question_of_religion
-					random_list = {
-						40 = {
-							add_province_modifier = {
-								name = "nhs2_greek_deny_religion"
-								duration = 7300
-							}
-						}
-						40 = { 
-							add_province_modifier = {
-								name = "nhs2_greek_accept_religion"
-								duration = 7300
-							}
-						}
-						10 = { change_religion = ROOT }
-						10 = { 
-							add_province_modifier = {
-								name = "missionary_failure"
-								duration = 7300
-							}
-						}
-					}
-				}
-			}			
-		}
-	}
-	
-	option = { # Let them be orthodox
-		name = "nhs2_mainlandevents.21.b"
-		add_prestige = -5
-		add_legitimacy = -5
 	}
 }
 
@@ -2152,22 +1968,46 @@ country_event = {
 		custom_tooltip = nhs_exarchate_setting_desc_elg_tt
 		set_country_flag = nhs_formed_greek
 		hidden_effect = {
+			if = {
+				limit = {
+					146 = {
+						owned_by = ROOT
+						NOT = { has_construction = missionary }
+					}
+				}
+				146 = {
+					remove_core = ROOT
+					add_core = ELG
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						any_owned_province = {
+							OR = {
+								is_core = ROOT
+								has_construction = core
+							}
+							nhs_greek_areas = yes
+							NOT = { province_id = 151 }
+							NOT = { has_construction = missionary }
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						nhs_greek_areas = yes
+						NOT = { province_id = 151 }
+						NOT = { has_construction = missionary }
+					}
+					add_core = ELG
+				}
+			}
 			every_owned_province = {
 				limit = {
 					nhs_greek_areas = yes
 					NOT = { province_id = 151 }
-					NOT = { has_construction = missionary }
-				}
-				# hidden_effect = {
-				# 	if = {
-				# 		limit = {
-				# 			is_claim = ROOT
-				# 		}
-				# 		remove_claim = ROOT
-				# 	}
-				# }
-				tooltip = {
-					cede_province = ELG
+					has_construction = core
 				}
 				add_core = ELG
 			}
@@ -2176,14 +2016,29 @@ country_event = {
 				subject_type = elysian_subject
 				subject = ELG
 			}
-			if = {
+			every_owned_province = {
 				limit = {
-					religion = pantheon_worship
+					nhs_greek_areas = yes
+					NOT = { province_id = 151 }
+					NOT = { has_construction = missionary }
 				}
-				country_event = {
-					id = nhs2_mainlandevents.21
-					days = 1
-					tooltip = nhs2_mainlandevents.21.t
+				if = {
+					limit = {
+						is_core = ROOT
+					}
+					remove_core = ROOT
+					add_core = ELG
+					cede_province = ELG
+				}
+				else_if = {
+					limit = {
+						is_territorial_core = ROOT
+					}
+					cede_province = ELG
+					add_territorial_core = ELG
+				}
+				else = {
+					cede_province = ELG
 				}
 			}
 			ELG = {
@@ -2209,12 +2064,6 @@ country_event = {
 				add_opinion = {
 					who = ROOT
 					modifier = nhs_formed_greeko
-				}
-				every_owned_province = {
-					limit = {
-						nhs_greek_areas = yes
-					}
-					add_core = ELG
 				}
 				add_treasury = 200
 				add_mil_power = 100
