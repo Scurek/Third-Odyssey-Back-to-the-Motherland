@@ -1252,23 +1252,31 @@ nhs_right_mid_start = {
 			OR = {
 				custom_trigger_tooltip = {
 					tooltip = to_at_least_100_trade_income_tt
-					variable_arithmetic_trigger = {
-						export_to_variable = {
-							value = trigger_value:trade_income_percentage
-							which = trade_income
+					if = {
+						limit = {
+							monthly_income = 100
 						}
-						export_to_variable = {
-							value = trigger_value:monthly_income
-							which = monthly_income
+						variable_arithmetic_trigger = {
+							export_to_variable = {
+								value = trigger_value:trade_income_percentage
+								which = trade_income
+							}
+							export_to_variable = {
+								value = trigger_value:monthly_income
+								which = monthly_income
+							}
+							multiply_variable = {
+								which = trade_income
+								which = monthly_income
+							}
+							check_variable = {
+								which = trade_income
+								value = 100
+							}
 						}
-						multiply_variable = {
-							which = trade_income
-							which = monthly_income
-						}
-						check_variable = {
-							which = trade_income
-							value = 100
-						}
+					}
+					else = {
+						always = no
 					}
 				}
 				custom_trigger_tooltip = {
