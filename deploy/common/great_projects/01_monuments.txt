@@ -1117,19 +1117,35 @@ parthenon = {
 
 	#can we build it?
 	build_trigger = {
-		OR = {
-			to_province_is_or_accepts_religion_group_exarch = {
-				religion_group = pagan
-			}
-			AND = {
-				culture = greek
-				to_province_is_or_accepts_culture_exarch = yes
-			}
-			AND = {
+		if = {
+			limit = {
 				culture = athenian
-				to_province_is_or_accepts_culture_exarch = yes
 			}
-		}	
+			OR = {
+				province_is_or_accepts_religion_group = {
+					religion_group = pagan
+				}
+				AND = {
+					culture = greek
+					province_is_or_accepts_culture = yes
+				}
+				AND = {
+					culture = athenian
+					province_is_or_accepts_culture = yes
+				}
+			}
+		}
+		else = {
+			OR = {
+				province_is_or_accepts_religion_group = {
+					religion_group = pagan
+				}
+				AND = {
+					culture = greek
+					province_is_or_accepts_culture = yes
+				}
+			}
+		}
 	}
 
 	#what to do when it's built
@@ -1154,34 +1170,81 @@ parthenon = {
 
 	#can our country use it?
 	can_use_modifiers_trigger = {
-		OR = {
-			province_is_or_accepts_religion_group = {
-				religion_group = pagan
-			}
-			AND = {
-				culture = greek
-				province_is_or_accepts_culture = yes
-			}
-			AND = {
+		if = {
+			limit = {
 				culture = athenian
-				province_is_or_accepts_culture = yes
+			}
+			OR = {
+				province_is_or_accepts_religion_group = {
+					religion_group = pagan
+				}
+				AND = {
+					culture = greek
+					province_is_or_accepts_culture = yes
+				}
+				AND = {
+					culture = athenian
+					province_is_or_accepts_culture = yes
+				}
+			}
+		}
+		else = {
+			OR = {
+				province_is_or_accepts_religion_group = {
+					religion_group = pagan
+				}
+				AND = {
+					culture = greek
+					province_is_or_accepts_culture = yes
+				}
 			}
 		}
 	}
 
 	#can our country upgrade it?
 	can_upgrade_trigger = {
-		OR = {
-			to_province_is_or_accepts_religion_group_exarch = {
+		if = {
+			limit = {
+				NOT = {
+					has_great_project = {
+						type = parthenon
+						tier = 1
+					}
+				}
+			}
+			if = {
+				limit = {
+					culture = athenian
+				}
+				OR = {
+					province_is_or_accepts_religion_group = {
+						religion_group = pagan
+					}
+					AND = {
+						culture = greek
+						province_is_or_accepts_culture = yes
+					}
+					AND = {
+						culture = athenian
+						province_is_or_accepts_culture = yes
+					}
+				}
+			}
+			else = {
+				OR = {
+					province_is_or_accepts_religion_group = {
+						religion_group = pagan
+					}
+					AND = {
+						culture = greek
+						province_is_or_accepts_culture = yes
+					}
+				}
+			}
+		}
+		else = {
+			province_is_or_accepts_religion_group = {
 				religion_group = pagan
-			}
-			AND = {
-				culture = greek
-				to_province_is_or_accepts_culture_exarch = yes
-			}
-			AND = {
-				culture = athenian
-				to_province_is_or_accepts_culture_exarch = yes
 			}
 		}
 	}
@@ -1208,6 +1271,7 @@ parthenon = {
 
 		#what modifiers are added to the provinces in the map area when we have this project here on this tier
 		area_modifier = {
+			local_missionary_strength = 0.01
 		}
 
 		#what modifiers are added to the country when we have this project here on this tier
@@ -1237,12 +1301,58 @@ parthenon = {
 
 		#what modifiers are added to the provinces in the map area when we have this project here on this tier
 		area_modifier = {
-			local_unrest = -3
+			local_missionary_strength = 0.01
 		}
 
 		#what modifiers are added to the country when we have this project here on this tier
+		# country_modifiers = {
+		# 	advisor_cost = -0.10
+		# }
+
 		country_modifiers = {
-			advisor_cost = -0.10
+			# Without this modifier the conditional modifiers aren't shown...
+			prestige = 0
+		}
+
+		conditional_modifier = {
+			trigger = {
+				NOT = { has_province_flag = to_parthenon_militarist }
+				NOT = { has_province_flag = to_parthenon_moderate }
+				NOT = { has_province_flag = to_parthenon_humanist }
+			}
+			modifier = {
+				tolerance_own = 0.5
+				missionary_maintenance_cost = -0.10
+			}
+		}
+
+		conditional_modifier = {
+			trigger = {
+				has_province_flag = to_parthenon_militarist
+			}
+			modifier = {
+				army_tradition = 0.25
+			}
+		}
+
+		conditional_modifier = {
+			trigger = {
+				has_province_flag = to_parthenon_moderate
+			}
+			modifier = {
+				tolerance_heathen = 1
+			}
+		}
+
+		conditional_modifier = {
+			trigger = {
+				has_province_flag = to_parthenon_humanist
+			}
+			modifier = {
+				tolerance_of_heathens_capacity = 0.5
+				religious_unity = 0.1
+				church_loyalty_modifier = -0.05
+			}
 		}
 
 		#what effects happen when this tier is achieved
@@ -1268,13 +1378,67 @@ parthenon = {
 
 		#what modifiers are added to the provinces in the map area when we have this project here on this tier
 		area_modifier = {
-			local_unrest = -3
+			local_missionary_strength = 0.02
 		}
 
 		#what modifiers are added to the country when we have this project here on this tier
+		# country_modifiers = {
+		# 	advisor_cost = -0.1
+		# 	advisor_pool = 1
+		# }
+
 		country_modifiers = {
-			advisor_cost = -0.1
-			advisor_pool = 1
+			# Without this modifier the conditional modifiers aren't shown...
+			prestige = 0
+		}
+
+		conditional_modifier = {
+			trigger = {
+				NOT = { has_province_flag = to_parthenon_militarist }
+				NOT = { has_province_flag = to_parthenon_moderate }
+				NOT = { has_province_flag = to_parthenon_humanist }
+			}
+			modifier = {
+				tolerance_own = 1
+				missionary_maintenance_cost = -0.25
+				relation_with_same_religion = 15
+				church_loyalty_modifier = 0.1
+				church_influence_modifier = 0.1
+			}
+		}
+
+		conditional_modifier = {
+			trigger = {
+				has_province_flag = to_parthenon_militarist
+			}
+			modifier = {
+				army_tradition = 0.25
+				stability_cost_modifier = -0.25
+			}
+		}
+
+		conditional_modifier = {
+			trigger = {
+				has_province_flag = to_parthenon_moderate
+			}
+			modifier = {
+				tolerance_heathen = 1
+				diplomatic_reputation = 1
+			}
+		}
+
+		conditional_modifier = {
+			trigger = {
+				has_province_flag = to_parthenon_humanist
+			}
+			modifier = {
+				tolerance_of_heathens_capacity = 1
+				tolerance_of_heretics_capacity = 0.5
+				religious_unity = 0.15
+				advisor_cost = -0.1
+				church_loyalty_modifier = -0.1
+				church_influence_modifier = -0.05
+			}
 		}
 
 		#what effects happen when this tier is achieved
@@ -1300,14 +1464,75 @@ parthenon = {
 
 		#what modifiers are added to the provinces in the map area when we have this project here on this tier
 		area_modifier = {
-			local_unrest = -3
+			local_missionary_strength = 0.02
+		}
+
+		region_modifier = {
+			local_missionary_strength = 0.01
 		}
 
 		#what modifiers are added to the country when we have this project here on this tier
+		# country_modifiers = {
+		# 	advisor_cost = -0.2
+		# 	advisor_pool = 1
+		# 	yearly_corruption = -0.1
+		# }
+
 		country_modifiers = {
-			advisor_cost = -0.2
-			advisor_pool = 1
-			yearly_corruption = -0.1
+			# Without this modifier the conditional modifiers aren't shown...
+			prestige = 0
+		}
+
+		conditional_modifier = {
+			trigger = {
+				NOT = { has_province_flag = to_parthenon_militarist }
+				NOT = { has_province_flag = to_parthenon_moderate }
+				NOT = { has_province_flag = to_parthenon_humanist }
+			}
+			modifier = {
+				tolerance_own = 1
+				missionaries = 1
+				missionary_maintenance_cost = -0.25
+				relation_with_same_religion = 30
+				church_loyalty_modifier = 0.2
+				church_influence_modifier = 0.1
+			}
+		}
+
+		conditional_modifier = {
+			trigger = {
+				has_province_flag = to_parthenon_militarist
+			}
+			modifier = {
+				army_tradition = 0.5
+				stability_cost_modifier = -0.25
+				missionaries = 1
+			}
+		}
+
+		conditional_modifier = {
+			trigger = {
+				has_province_flag = to_parthenon_moderate
+			}
+			modifier = {
+				tolerance_heathen = 1
+				diplomatic_reputation = 1
+				ae_impact = -0.1
+			}
+		}
+
+		conditional_modifier = {
+			trigger = {
+				has_province_flag = to_parthenon_humanist
+			}
+			modifier = {
+				tolerance_of_heathens_capacity = 1
+				tolerance_of_heretics_capacity = 1
+				religious_unity = 0.25
+				advisor_cost = -0.2
+				church_loyalty_modifier = -0.1
+				church_influence_modifier = -0.1
+			}
 		}
 
 		#what effects happen when this tier is achieved

@@ -342,3 +342,88 @@ to_increase_mana_or_add_power = {
 		add_$TYPE$_power = 50
 	}
 }
+
+to_check_greek_religion_approach = {
+	if = {
+		limit = {
+			OR = {
+				culture = greek
+				culture = pontic_greek
+			}
+			NOT = { religion = pantheon_worship }
+			owner = {
+				religion = pantheon_worship
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = to_greek_religion_humanist
+				}
+			}
+			add_province_modifier = {
+				name = to_humanist_approach
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_country_flag = to_greek_religion_moderate
+				}
+			}
+			add_province_modifier = {
+				name = to_moderate_approach
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_country_flag = to_greek_religion_militarist
+				}
+			}
+			add_province_modifier = {
+				name = to_militarist_approach
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_country_flag = to_greek_religion_purist
+				}
+			}
+			add_province_modifier = {
+				name = to_purist_approach
+				duration = -1
+			}
+		}
+	}
+	else = {
+		remove_province_modifier = to_humanist_approach
+		remove_province_modifier = to_moderate_approach
+		remove_province_modifier = to_militarist_approach
+		remove_province_modifier = to_purist_approach
+	}
+}
+
+to_check_greek_religion_approach_on_owner_religion_change = {
+	if = {
+		limit = {
+			NOT = { religion = pantheon_worship }
+			OR = {
+				has_country_flag = to_greek_religion_humanist
+				has_country_flag = to_greek_religion_moderate
+				has_country_flag = to_greek_religion_militarist
+				has_country_flag = to_greek_religion_purist
+			}
+		}
+		every_owned_province = {
+			remove_province_modifier = to_humanist_approach
+			remove_province_modifier = to_moderate_approach
+			remove_province_modifier = to_militarist_approach
+			remove_province_modifier = to_purist_approach
+		}
+	}
+}

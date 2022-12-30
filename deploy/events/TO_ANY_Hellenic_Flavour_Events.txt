@@ -248,7 +248,7 @@ country_event = {
 ########################
 #One Time Flavor Events#
 ########################
-# 2-7
+# 2-7, 12
 
 # Ares/Poseidon Temple
 country_event = {
@@ -1038,6 +1038,283 @@ country_event = {
 			add_ruler_modifier = {
 				name = nhs_deification_of_refused
 				hidden = yes
+			}
+		}
+	}
+}
+
+# Question of Greek Religion, starring Parthenon!
+country_event = {
+	id = to_hellenic_events.12
+	title = to_hellenic_events.12.t
+	desc = {
+		trigger = {
+			owns_or_subject_of = 146
+		}
+		desc = to_hellenic_events.12.da
+	}
+	desc = {
+		desc = to_hellenic_events.12.db
+	}
+	picture = {
+		trigger = {
+			owns_or_subject_of = 146
+		}
+		picture = ATHENS_eventPicture
+	}
+	picture = {
+		picture = RELIGIOUS_TURMOIL_eventPicture
+	}
+
+	fire_only_once = yes
+
+    trigger = {
+		if = {
+			limit = {
+				nhs_check_all_elysian_tags = { CONDITION = exists }
+			}
+			nhs_check_all_elysian_tags = { CONDITION = tag }
+		}
+		religion = pantheon_worship
+		OR = {
+			owns_or_subject_of = 146
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 8
+				nhs_greek_areas = yes
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 3
+	}
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					to_has_cultureshock_country = yes
+				}
+				add_country_modifier = {
+					name = to_had_culture_shock_event
+					duration = 120
+				}
+			}
+		}
+	}
+
+	# Favor the humanists.
+	option = {
+		name = to_hellenic_events.12.a
+		set_country_flag = to_greek_religion_humanist
+		custom_tooltip = to_humanist_approach_tt
+		custom_tooltip = to_humanist_modifiers_tt
+		hidden_effect = {
+			every_province = {
+				limit = {
+					country_or_subject_holds = ROOT
+					OR = {
+						culture = greek
+						culture = pontic_greek
+					}
+					NOT = { religion = ROOT }
+				}
+				add_province_modifier = {
+					name = to_humanist_approach
+					duration = -1
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				has_dlc = "Leviathan"
+				146 = {
+					has_great_project = {
+						type = parthenon
+					}
+				}
+			}
+			custom_tooltip = to_humanist_parthenon_tt
+		}
+		else = {
+			custom_tooltip = to_humanist_conquest_of_athens_tt
+		}
+		hidden_effect = {
+			146 = {
+				remove_province_triggered_modifier = nhs_conquest_of_athens
+				add_province_triggered_modifier = nhs_conquest_of_athens_humanist
+			}
+		}
+		if = {
+			limit = {
+				to_has_cultureshock_country = yes
+			}
+			custom_tooltip = nhs_dotted_line_tt
+			to_cultureshock_decrease = yes
+		}
+	}
+
+	# Favor the moderates.
+	option = {
+		name = to_hellenic_events.12.b
+		set_country_flag = to_greek_religion_moderate
+		custom_tooltip = to_moderate_approach_tt
+		custom_tooltip = to_moderate_modifiers_tt
+		hidden_effect = {
+			every_province = {
+				limit = {
+					country_or_subject_holds = ROOT
+					OR = {
+						culture = greek
+						culture = pontic_greek
+					}
+					NOT = { religion = ROOT }
+				}
+				add_province_modifier = {
+					name = to_moderate_approach
+					duration = -1
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				has_dlc = "Leviathan"
+				146 = {
+					has_great_project = {
+						type = parthenon
+					}
+				}
+			}
+			custom_tooltip = to_moderate_parthenon_tt
+		}
+		else = {
+			custom_tooltip = to_moderate_conquest_of_athens_tt
+		}
+		hidden_effect = {
+			146 = {
+				remove_province_triggered_modifier = nhs_conquest_of_athens
+				add_province_triggered_modifier = nhs_conquest_of_athens_moderate
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_global_flag = parthenon_now_mosque
+				}
+				clr_global_flag = parthenon_now_mosque
+				146 = {
+					show_ambient_object = parthenon
+					hide_ambient_object = parthenon_minaret
+				}
+			}
+		}
+	}
+
+	# Favor the militarists.
+	option = {
+		name = to_hellenic_events.12.c
+		set_country_flag = to_greek_religion_militarist
+		custom_tooltip = to_militarist_approach_tt
+		custom_tooltip = to_militarist_modifiers_tt
+		hidden_effect = {
+			every_province = {
+				limit = {
+					country_or_subject_holds = ROOT
+					OR = {
+						culture = greek
+						culture = pontic_greek
+					}
+					NOT = { religion = ROOT }
+				}
+				add_province_modifier = {
+					name = to_militarist_approach
+					duration = -1
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				has_dlc = "Leviathan"
+				146 = {
+					has_great_project = {
+						type = parthenon
+					}
+				}
+			}
+			custom_tooltip = to_militarist_parthenon_tt
+		}
+		else = {
+			custom_tooltip = to_militarist_conquest_of_athens_tt
+		}
+		hidden_effect = {
+			146 = {
+				remove_province_triggered_modifier = nhs_conquest_of_athens
+				add_province_triggered_modifier = nhs_conquest_of_athens_militarist
+			}
+		}
+		if = {
+			limit = {
+				to_has_cultureshock_country = yes
+			}
+			custom_tooltip = nhs_dotted_line_tt
+			to_cultureshock_increase = yes
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_global_flag = parthenon_now_mosque
+				}
+				clr_global_flag = parthenon_now_mosque
+				146 = {
+					show_ambient_object = parthenon
+					hide_ambient_object = parthenon_minaret
+				}
+			}
+		}
+	}
+
+	# Favor the purists.
+	option = {
+		name = to_hellenic_events.12.e
+		set_country_flag = to_greek_religion_purist
+		custom_tooltip = to_purist_approach_tt
+		custom_tooltip = to_purist_modifiers_tt
+		hidden_effect = {
+			every_province = {
+				limit = {
+					country_or_subject_holds = ROOT
+					OR = {
+						culture = greek
+						culture = pontic_greek
+					}
+					NOT = { religion = ROOT }
+				}
+				add_province_modifier = {
+					name = to_purist_approach
+					duration = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				to_has_cultureshock_country = yes
+			}
+			custom_tooltip = nhs_dotted_line_tt
+			to_cultureshock_big_increase = yes
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_global_flag = parthenon_now_mosque
+				}
+				clr_global_flag = parthenon_now_mosque
+				146 = {
+					show_ambient_object = parthenon
+					hide_ambient_object = parthenon_minaret
+				}
 			}
 		}
 	}
