@@ -11,10 +11,59 @@ province_event = {
 	is_triggered_only = yes
 
 	goto = ROOT
-	
+
+	immediate = {
+		owner = {
+			set_country_flag = to_dynamic_cot_event_active
+		}
+	}
+
 	option = {
 		name = "to_dynamic_cot.1.a"
 		remove_province_modifier = to_dynamic_cot
 		center_of_trade = 1
+	}
+
+	after = {
+		owner = {
+			if = {
+				limit = {
+					any_owned_province = {
+						has_province_modifier = to_dynamic_cot
+						base_production = 6
+						development = 15
+						OR = {
+							has_building = marketplace
+							has_building = trade_depot
+							has_building = stock_exchange
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						has_province_modifier = to_dynamic_cot
+						base_production = 6
+						development = 15
+						OR = {
+							has_building = marketplace
+							has_building = trade_depot
+							has_building = stock_exchange
+						}
+					}
+					province_event = { id = to_dynamic_cot.1 days = 1 }
+				}
+			}
+			else = {
+				clr_country_flag = to_dynamic_cot_event_active
+				every_owned_province = {
+					limit = {
+						has_province_modifier = to_dynamic_cot
+						NOT = { province_id = ROOT }
+						NOT = { has_province_modifier = to_dynamic_cot_tm }
+					}
+					add_province_triggered_modifier = to_dynamic_cot_tm
+				}
+			}
+		}
 	}
 }
