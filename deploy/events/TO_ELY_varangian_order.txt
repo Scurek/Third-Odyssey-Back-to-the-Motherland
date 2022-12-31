@@ -2644,13 +2644,26 @@ country_event = {
 		}
 		add_mil_power = -25
 		event_target:to_varangian_expedition_target = {
-			add_colonysize = 300
+			if = {
+				limit = {
+					has_province_flag = nhs_is_colony
+					colonysize = 700
+				}
+				set_province_flag = to_static_colonial_culture
+			}
+			tooltip = {
+				add_colonysize = 300
+			}
 			change_native_ferocity = -10
 			change_native_hostileness = -10
 			if = {
 				limit = {
-					colonysize = 700
+					NOT = { colonysize = 700 }
 				}
+				custom_tooltip = to_varangian_stronghold_on_colony_finish_tt
+				set_province_flag = to_varangian_stronghold_on_colony_finish_flag
+			}
+			else = {
 				add_base_manpower = 1
 				if = {
 					limit = {
@@ -2683,15 +2696,18 @@ country_event = {
 					change_religion = ROOT
 				}
 			}
-		}
-		if = {
-			limit = {
-				event_target:to_varangian_expedition_target = {
-					NOT = { colonysize = 700 }
-				}
+			hidden_effect = {
+				add_colonysize = 300
 			}
-			custom_tooltip = to_varangian_stronghold_on_colony_finish_tt
 		}
+		# if = {
+		# 	limit = {
+		# 		event_target:to_varangian_expedition_target = {
+		# 			NOT = { colonysize = 700 }
+		# 		}
+		# 	}
+		# 	custom_tooltip = to_varangian_stronghold_on_colony_finish_tt
+		# }
 		custom_tooltip = nhs_new_line_tt
 		event_target:to_varangian_expedition_target = {
 			if = {
@@ -2740,13 +2756,12 @@ country_event = {
 			add_base_manpower = -2
 		}
 		event_target:to_varangian_expedition_target = {
-			hidden_effect = {
-				if = {
-					limit = {
-						NOT = { colonysize = 400 }
-					}
-					set_province_flag = to_static_colonial_culture
+			if = {
+				limit = {
+					is_city = no
+					has_province_flag = nhs_is_colony
 				}
+				set_province_flag = to_static_colonial_culture
 			}
 			add_colonysize = 600
 			change_native_ferocity = -10
