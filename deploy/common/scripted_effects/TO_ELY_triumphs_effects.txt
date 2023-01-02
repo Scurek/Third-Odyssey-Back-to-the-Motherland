@@ -78,7 +78,21 @@ to_triumph_province_counter_check = {
 					}
 				}
 			}
-			to_change_triumph_province_counters = { CHANGE = 1 SCOPE = owner }
+			if = {
+				limit = {
+					nhs_check_all_elysian_tags = { CONDITION = owned_by }
+				}
+				to_change_triumph_province_counters = { CHANGE = 1 SCOPE = owner }
+			}
+			else = {
+				owner = {
+					overlord = {
+						save_event_target_as = to_roman_overlord
+					}
+				}
+				to_change_triumph_province_counters = { CHANGE = 1 SCOPE = event_target:to_roman_overlord }
+			}
+			
 		}
 		else_if = {
 			limit = {
@@ -92,7 +106,7 @@ to_triumph_province_counter_check = {
 					}
 				}
 			}
-			to_change_triumph_province_counters = { CHANGE = -1 SCOPE = owner }
+			to_change_triumph_province_counters = { CHANGE = -1 SCOPE = FROM }
 		}
 	}
 }
@@ -100,6 +114,9 @@ to_triumph_province_counter_check = {
 to_triumph_province_counter_dependancy_gained = {
 	if = {
 		limit = {
+			$SCOPE$ = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+			}
 			any_owned_province = {
 				to_triumph_province = yes
 				NOT = { previous_owner = $SCOPE$ }
@@ -118,6 +135,9 @@ to_triumph_province_counter_dependancy_gained = {
 to_triumph_province_counter_dependancy_lost = {
 	if = {
 		limit = {
+			$SCOPE$ = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+			}
 			any_owned_province = {
 				to_triumph_province = yes
 			}
