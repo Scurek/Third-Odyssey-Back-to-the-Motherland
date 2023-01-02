@@ -287,7 +287,7 @@ template_loc_v4_all = jinja_env.from_string(
 template_loc2 = Template(
     "{% for region in regions %}"
     " to_{{ region.region }}_triumph_progress_tt:0 \""
-    "[Get_{{ region.region }}_TooltipColor][to_{{ region.region }}_provinces.GetValue]§!\"\n"
+    "[Get_{{ region.region }}_TooltipColor][Root.to_{{ region.region }}_provinces.GetValue]§!\"\n"
     "{% endfor %}")
 
 template_loc_triumph_modifiers = Template(
