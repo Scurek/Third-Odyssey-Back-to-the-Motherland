@@ -3843,7 +3843,10 @@ estate_burghers_build_port_building_in_y = {
 			is_state_core = root
 			has_port = yes
 			OR = {
-				NOT = { has_building = grand_shipyard }
+				AND = {
+					NOT = { has_building = grand_shipyard }
+					to_can_build_shipyard = yes
+				}
 				NOT = { has_building = drydock }
 			}
 			OR = {
@@ -3854,6 +3857,7 @@ estate_burghers_build_port_building_in_y = {
 				AND = {
 					ROOT = { dip_tech = 8 }
 					NOT = { has_building = shipyard }
+					to_can_build_shipyard = yes
 					num_free_building_slots = 1
 				}
 				AND = {
@@ -3867,6 +3871,7 @@ estate_burghers_build_port_building_in_y = {
 				AND = {
 					ROOT = { dip_tech = 24 }
 					NOT = { has_building = grand_shipyard }
+					to_can_build_shipyard = yes
 					OR = {
 						num_free_building_slots = 1
 						has_building = shipyard
@@ -3898,7 +3903,10 @@ estate_burghers_build_port_building_in_y = {
 				is_state_core = root
 				has_port = yes
 				OR = {
-					NOT = { has_building = grand_shipyard }
+					AND = {
+						NOT = { has_building = grand_shipyard }
+						to_can_build_shipyard = yes
+					}
 					NOT = { has_building = drydock }
 				}
 				OR = {
@@ -3909,6 +3917,7 @@ estate_burghers_build_port_building_in_y = {
 					AND = {
 						ROOT = { dip_tech = 8 }
 						NOT = { has_building = shipyard }
+						to_can_build_shipyard = yes
 						num_free_building_slots = 1
 					}
 					AND = {
@@ -3922,6 +3931,7 @@ estate_burghers_build_port_building_in_y = {
 					AND = {
 						ROOT = { dip_tech = 24 }
 						NOT = { has_building = grand_shipyard }
+						to_can_build_shipyard = yes
 						OR = {
 							num_free_building_slots = 1
 							has_building = shipyard
@@ -3937,7 +3947,10 @@ estate_burghers_build_port_building_in_y = {
 				development = 12
 				has_port = yes
 				OR = {
-					NOT = { has_building = grand_shipyard }
+					AND = {
+						NOT = { has_building = grand_shipyard }
+						to_can_build_shipyard = yes
+					}
 					NOT = { has_building = drydock }
 				}
 				OR = {
@@ -3948,6 +3961,7 @@ estate_burghers_build_port_building_in_y = {
 					AND = {
 						ROOT = { dip_tech = 8 }
 						NOT = { has_building = shipyard }
+						to_can_build_shipyard = yes
 						num_free_building_slots = 1
 					}
 					AND = {
@@ -3961,6 +3975,7 @@ estate_burghers_build_port_building_in_y = {
 					AND = {
 						ROOT = { dip_tech = 24 }
 						NOT = { has_building = grand_shipyard }
+						to_can_build_shipyard = yes
 						OR = {
 							num_free_building_slots = 1
 							has_building = shipyard
@@ -3976,7 +3991,10 @@ estate_burghers_build_port_building_in_y = {
 				development = 20
 				has_port = yes
 				OR = {
-					NOT = { has_building = grand_shipyard }
+					AND = {
+						NOT = { has_building = grand_shipyard }
+						to_can_build_shipyard = yes
+					}
 					NOT = { has_building = drydock }
 				}
 				OR = {
@@ -3987,6 +4005,7 @@ estate_burghers_build_port_building_in_y = {
 					AND = {
 						ROOT = { dip_tech = 8 }
 						NOT = { has_building = shipyard }
+						to_can_build_shipyard = yes
 						num_free_building_slots = 1
 					}
 					AND = {
@@ -4000,6 +4019,7 @@ estate_burghers_build_port_building_in_y = {
 					AND = {
 						ROOT = { dip_tech = 24 }
 						NOT = { has_building = grand_shipyard }
+						to_can_build_shipyard = yes
 						OR = {
 							num_free_building_slots = 1
 							has_building = shipyard
@@ -4014,6 +4034,7 @@ estate_burghers_build_port_building_in_y = {
 				limit = {
 					has_building = shipyard
 					NOT = { has_building = grand_shipyard }
+					to_can_build_shipyard = yes
 					ROOT = { dip_tech = 24 }
 				}
 				ROOT = {
@@ -4027,6 +4048,7 @@ estate_burghers_build_port_building_in_y = {
 				limit = {
 					NOT = { has_building = shipyard }
 					NOT = { has_building = grand_shipyard }
+					to_can_build_shipyard = yes
 					ROOT = { dip_tech = 8 }
 				}
 				ROOT = {
@@ -4074,7 +4096,47 @@ estate_burghers_build_port_building_in_y = {
 				}
 			}
 			event_target:agenda_province = {
-				has_building = grand_shipyard
+				if = {
+					limit = {
+						province_id = 950
+						950 = {
+							has_great_project = {
+								type = nhs_elysian_arsenal
+								tier = 0
+							}
+						}
+					}
+					OR = {
+						has_building = grand_shipyard
+						has_great_project = {
+							type = nhs_elysian_arsenal
+							tier = 1
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						area = chesapeake_area
+						950 = {
+							has_great_project = {
+								type = nhs_elysian_arsenal
+								tier = 0
+							}
+						}
+					}
+					OR = {
+						has_building = grand_shipyard
+						950 = {
+							has_great_project = {
+								type = nhs_elysian_arsenal
+								tier = 3
+							}
+						}
+					}
+				}
+				else = {
+					has_building = grand_shipyard
+				}
 			}
 		}
 		else_if = {
@@ -4085,9 +4147,51 @@ estate_burghers_build_port_building_in_y = {
 				}
 			}
 			event_target:agenda_province = {
-				OR = {
-					has_building = shipyard
-					has_building = grand_shipyard
+				if = {
+					limit = {
+						province_id = 950
+						950 = {
+							has_great_project = {
+								type = nhs_elysian_arsenal
+								tier = 0
+							}
+						}
+					}
+					OR = {
+						has_building = shipyard
+						has_building = grand_shipyard
+						has_great_project = {
+							type = nhs_elysian_arsenal
+							tier = 1
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						area = chesapeake_area
+						950 = {
+							has_great_project = {
+								type = nhs_elysian_arsenal
+								tier = 0
+							}
+						}
+					}
+					OR = {
+						has_building = shipyard
+						has_building = grand_shipyard
+						950 = {
+							has_great_project = {
+								type = nhs_elysian_arsenal
+								tier = 3
+							}
+						}
+					}
+				}
+				else = {
+					OR = {
+						has_building = shipyard
+						has_building = grand_shipyard
+					}
 				}
 			}
 		}
