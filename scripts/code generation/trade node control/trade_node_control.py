@@ -31,7 +31,7 @@ trade_nodes = [
     },
     {
         "name": "gulf_of_aden",
-        "loc": "Ivory Coast",
+        "loc": "Gulf of Aden",
         "province": 4346,
         "cot_region": "trade_company_region = trade_company_gulf_of_aden",
         "share": 75,
