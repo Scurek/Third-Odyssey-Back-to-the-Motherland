@@ -1147,6 +1147,7 @@ to_correct_colony_culture = {
 				}
 				PREV = {
 					change_primary_culture = PREV
+					set_ruler_culture = PREV
 				}
 			}
 			else = {
@@ -2309,5 +2310,64 @@ to_check_culture_after_conversion = {
 			}
 			to_nhs_assign_correct_vinlandic_culture = {}
 		}
+	}
+}
+
+to_set_country_ruler_heir_consort_culture = {
+	change_primary_culture = $CULTURE$
+	set_ruler_culture = $CULTURE$
+	if = {
+		limit = {
+			has_heir = yes
+		}
+		set_heir_culture = $CULTURE$
+	}
+	if = {
+		limit = {
+			has_consort = yes
+		}
+		set_consort_culture = $CULTURE$
+	}
+}
+
+to_set_ruler_heir_consort_culture_if_primary = {
+	if = {
+		limit = {
+			ruler_culture = $PRIMARY_CULTURE$
+		}
+		set_ruler_culture = $CULTURE$
+	}
+	if = {
+		limit = {
+			has_heir = yes
+			heir_culture = $PRIMARY_CULTURE$
+		}
+		set_heir_culture = $CULTURE$
+	}
+	if = {
+		limit = {
+			has_consort = yes
+			consort_culture = $PRIMARY_CULTURE$
+		}
+		set_consort_culture = $CULTURE$
+	}
+}
+
+to_primary_culture_and_ruler_heir_consort_culture_if_primary = {
+	tooltip = {
+		change_primary_culture = $CULTURE$
+	}
+	[[ONLY_SHOW_PRIMARY]
+	hidden_effect = {
+	]
+		to_set_ruler_heir_consort_culture_if_primary = {
+			CULTURE = $CULTURE$
+			PRIMARY_CULTURE = $PRIMARY_CULTURE$
+		}
+	[[ONLY_SHOW_PRIMARY]
+	}
+	]
+	hidden_effect = {
+		change_primary_culture = $CULTURE$
 	}
 }
