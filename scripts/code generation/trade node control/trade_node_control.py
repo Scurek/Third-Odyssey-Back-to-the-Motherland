@@ -127,7 +127,7 @@ template_loc = Template("{%- for trade_node in trade_nodes %}"
                         "Has at least §Y{{ trade_node['share'] }}%§! Trade Share.\\n"
                         "       [Root.Has_{{ trade_node['n_cot'] }}_cot_in_{{ trade_node['name'] }}]"
                         "At least §Y{{ trade_node['n_cot'] }}§! "
-                        "Center(s) of Trade owned by us, our\\n             Subject or Allies."
+                        "Center(s) of Trade fully owned by us,\\n            our Subject or Allies."
                         "\"\n"
                         "{% endfor %}"
                         )
