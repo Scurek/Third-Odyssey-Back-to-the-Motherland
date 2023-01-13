@@ -10,7 +10,7 @@ trade_nodes = [
         "loc": "Ivory Coast",
         "province": 1466,
         "cot_region": "trade_company_region = trade_company_west_africa",
-        "share": 75,
+        "share": 66,
         "n_cot": 5
     },
     {
@@ -18,7 +18,7 @@ trade_nodes = [
         "loc": "Cape of Good Hope",
         "province": 1460,
         "cot_region": "trade_company_region = trade_company_south_africa",
-        "share": 75,
+        "share": 66,
         "n_cot": 1
     },
     {
@@ -26,7 +26,7 @@ trade_nodes = [
         "loc": "Zanzibar",
         "province": 1448,
         "cot_region": "trade_company_region = trade_company_east_africa",
-        "share": 75,
+        "share": 66,
         "n_cot": 5
     },
     {
@@ -34,7 +34,7 @@ trade_nodes = [
         "loc": "Gulf of Aden",
         "province": 4346,
         "cot_region": "trade_company_region = trade_company_gulf_of_aden",
-        "share": 75,
+        "share": 66,
         "n_cot": 2
     },
     {
@@ -42,7 +42,7 @@ trade_nodes = [
         "loc": "Alexandria",
         "province": 358,
         "cot_region": "trade_company_region = trade_company_alexandria",
-        "share": 75,
+        "share": 66,
         "n_cot": 2
     },
     {
@@ -50,7 +50,7 @@ trade_nodes = [
         "loc": "Tunis",
         "province": 341,
         "cot_region": "trade_company_region = trade_company_tunis",
-        "share": 75,
+        "share": 66,
         "n_cot": 1
     },
     {
@@ -58,7 +58,7 @@ trade_nodes = [
         "loc": "Sevilla",
         "province": 1293,
         "cot_region": "trade_company_region = trade_company_sevilla",
-        "share": 75,
+        "share": 66,
         "n_cot": 2
     }
     , {
