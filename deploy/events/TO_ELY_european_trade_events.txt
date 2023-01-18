@@ -77,6 +77,7 @@ country_event = {
 		NOT = { has_country_modifier = nhs2_elysian_restricted_trade }
 		NOT = { has_country_modifier = nhs2_elysian_free_trade }
 		NOT = { has_country_modifier = nhs2_elysian_isolationism }
+		NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
 		# OR = {
 		# 	NOT = { has_country_modifier = nhs2_elysian_isolationism }
 		# 	AND = {
@@ -712,6 +713,7 @@ country_event = {
 		has_country_modifier = nhs2_ely_por_trade
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 		had_global_flag = { flag = nhs_portugal_discovers_ely days = 3650 }
+		NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
 		any_country = {
 			exists = yes
 			has_country_flag = nhs_portugese_secret
@@ -727,12 +729,22 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
+			set_country_flag = to_block_deal_break_decisions
 			random_country = {
 				limit = {
 					has_country_flag = nhs_portugese_secret
 				}
 				save_event_target_as = nhs_portugal_tar
+				save_global_event_target_as = to_nhs_elysian_trading_partner
+				set_country_flag = to_block_deal_break_decisions
 			}
+		}
+	}
+
+	after = {
+		clr_country_flag = to_block_deal_break_decisions
+		event_target:nhs_portugal_tar = {
+			clr_country_flag = to_block_deal_break_decisions
 		}
 	}
 
@@ -757,45 +769,50 @@ country_event = {
 				ruler_has_personality = navigator_personality
 			}
 		}
-		custom_tooltip = nhs_treaty_of_lanthanopolis_tt
-		tooltip = {
-			event_target:nhs_portugal_tar = {
-				add_country_modifier = {
-					name = nhs2_treaty_of_lantanopolis_por
-					duration = -1
-				}
-			}
-			nhs_cede_elysian_brazilian_settlements = { RECIPIENT = event_target:nhs_portugal_tar }
-		}
 		if = {
 			limit = {
-				any_province = {
-					continent = north_america
-					OR = {
-						owned_by = event_target:nhs_portugal_tar
-						owner = {
-							AND = {
-								is_colonial_nation = yes
-								colonial_parent = {
-									tag = event_target:nhs_portugal_tar
+				to_port_trade_deal_events_not_blocked = yes
+			}
+			custom_tooltip = nhs_treaty_of_lanthanopolis_tt
+			tooltip = {
+				event_target:nhs_portugal_tar = {
+					add_country_modifier = {
+						name = nhs2_treaty_of_lantanopolis_por
+						duration = -1
+					}
+				}
+				nhs_cede_elysian_brazilian_settlements = { RECIPIENT = event_target:nhs_portugal_tar }
+			}
+			if = {
+				limit = {
+					any_province = {
+						continent = north_america
+						OR = {
+							owned_by = event_target:nhs_portugal_tar
+							owner = {
+								AND = {
+									is_colonial_nation = yes
+									colonial_parent = {
+										tag = event_target:nhs_portugal_tar
+									}
 								}
 							}
 						}
 					}
 				}
+				custom_tooltip = nhs_fate_of_p_settlements_tt #Current Portugese settlements will be relocated to SA
 			}
-			custom_tooltip = nhs_fate_of_p_settlements_tt #Current Portugese settlements will be relocated to SA
-		}
-		custom_tooltip = nhs_lose_claims_in_sa_tt
-		custom_tooltip = nhs_por_loses_claims_in_na_tt
-		event_target:nhs_portugal_tar = { country_event = { id = nhs2_european_trade_events.10 } }
-		if = {
-			limit = {
-				has_country_flag = nhs_has_small_por_enclave
+			custom_tooltip = nhs_lose_claims_in_sa_tt
+			custom_tooltip = nhs_por_loses_claims_in_na_tt
+			event_target:nhs_portugal_tar = { country_event = { id = nhs2_european_trade_events.10 } }
+			if = {
+				limit = {
+					has_country_flag = nhs_has_small_por_enclave
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = nhs_dotted_line_tt
+				nhs_improve_portuguese_enclave_from_small = yes
 			}
-			custom_tooltip = nhs_new_line_tt
-			custom_tooltip = nhs_dotted_line_tt
-			nhs_improve_portuguese_enclave_from_small = yes
 		}
 	}
 	option = {
@@ -819,20 +836,25 @@ country_event = {
 				ruler_has_personality = naive_personality
 			}
 		}
-		event_target:nhs_portugal_tar = {
-			add_opinion = {
-				who = ROOT
-				modifier = nhs_unchecked_expansion
-			}
-		}
-		event_target:nhs_portugal_tar = { add_trust = { who = ROOT value = 50 } }
 		if = {
 			limit = {
-				has_country_flag = nhs_has_small_por_enclave
+				to_port_trade_deal_events_not_blocked = yes
 			}
-			custom_tooltip = nhs_new_line_tt
-			custom_tooltip = nhs_dotted_line_tt
-			nhs_improve_portuguese_enclave_from_small = yes
+			event_target:nhs_portugal_tar = {
+				add_opinion = {
+					who = ROOT
+					modifier = nhs_unchecked_expansion
+				}
+			}
+			event_target:nhs_portugal_tar = { add_trust = { who = ROOT value = 50 } }
+			if = {
+				limit = {
+					has_country_flag = nhs_has_small_por_enclave
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = nhs_dotted_line_tt
+				nhs_improve_portuguese_enclave_from_small = yes
+			}
 		}
 	}
 	# option = {
@@ -857,7 +879,7 @@ country_event = {
 	# 		}
 	# 	}
 	# 	custom_tooltip = nhs_attract_eu_merchants_tt
-	# 	nhs_break_por_deal = yes
+	# 	to_rome_breaks_port_deal = yes
 	# 	# hidden_effect = {
 	# 	# 	event_target:nhs_portugal_tar = {
 	# 	# 		discover_province = 1470
@@ -925,8 +947,13 @@ country_event = {
 	fire_only_once = yes
 	is_triggered_only = yes
 
+	trigger = {
+		to_port_trade_deal_events_not_blocked = yes
+	}
+
 	immediate = {
 		hidden_effect = {
+			set_country_flag = to_block_deal_break_decisions
 			# Search for alternate province
 			discover_province = 1470
 			discover_province = 1469
@@ -1200,6 +1227,10 @@ country_event = {
 		}
 	}
 
+	after = {
+		clr_country_flag = to_block_deal_break_decisions
+	}
+
 	option = {
 		name = "nhs2_european_trade_events.10.a"
 		goto = 747
@@ -1223,10 +1254,14 @@ country_event = {
 				}
 			}
 		}
-		
-		nhs_set_por_colonial_capital = { TARGET_PROVINCE = 747 }
-		hidden_effect = {
-			nhs_discover_treaty_provinces_ely = yes
+		if = {
+			limit = {
+				to_port_trade_deal_events_not_blocked = yes
+			}
+			nhs_set_por_colonial_capital = { TARGET_PROVINCE = 747 }
+			hidden_effect = {
+				nhs_discover_treaty_provinces_ely = yes
+			}
 		}
 	}
 	option = {
@@ -1252,10 +1287,14 @@ country_event = {
 				}
 			}
 		}
-		
-		nhs_set_por_colonial_capital = { TARGET_PROVINCE = 748 }
-		hidden_effect = {
-			nhs_discover_treaty_provinces_ely = yes
+		if = {
+			limit = {
+				to_port_trade_deal_events_not_blocked = yes
+			}
+			nhs_set_por_colonial_capital = { TARGET_PROVINCE = 748 }
+			hidden_effect = {
+				nhs_discover_treaty_provinces_ely = yes
+			}
 		}
 	}
 	option = {
@@ -1281,10 +1320,14 @@ country_event = {
 				}
 			}
 		}
-
-		nhs_set_por_colonial_capital = { TARGET_PROVINCE = 749 }
-		hidden_effect = {
-			nhs_discover_treaty_provinces_ely = yes
+		if = {
+			limit = {
+				to_port_trade_deal_events_not_blocked = yes
+			}
+			nhs_set_por_colonial_capital = { TARGET_PROVINCE = 749 }
+			hidden_effect = {
+				nhs_discover_treaty_provinces_ely = yes
+			}
 		}
 	}
 
@@ -1312,10 +1355,14 @@ country_event = {
 		ai_chance = {
 			factor = 33
 		}
-
-		nhs_set_por_colonial_capital = { TARGET_PROVINCE = event_target:colonial_capital_alternate_target }
-		hidden_effect = {
-			nhs_discover_treaty_provinces_ely = yes
+		if = {
+			limit = {
+				to_port_trade_deal_events_not_blocked = yes
+			}
+			nhs_set_por_colonial_capital = { TARGET_PROVINCE = event_target:colonial_capital_alternate_target }
+			hidden_effect = {
+				nhs_discover_treaty_provinces_ely = yes
+			}
 		}
 	}
 
@@ -1342,8 +1389,13 @@ country_event = {
 		ai_chance = {
 			factor = 33
 		}
-		hidden_effect = {
-			nhs_discover_treaty_provinces_ely = yes
+		if = {
+			limit = {
+				to_port_trade_deal_events_not_blocked = yes
+			}
+			hidden_effect = {
+				nhs_discover_treaty_provinces_ely = yes
+			}
 		}
 	}
 
@@ -1352,10 +1404,15 @@ country_event = {
 		ai_chance = {
 			factor = 0
 		}
-		FROM = {
-			add_opinion = {
-				who = ROOT
-				modifier = nhs_dissapointed
+		if = {
+			limit = {
+				to_port_trade_deal_events_not_blocked = yes
+			}
+			FROM = {
+				add_opinion = {
+					who = ROOT
+					modifier = nhs_dissapointed
+				}
 			}
 		}
 	}
@@ -1370,6 +1427,10 @@ country_event = {
 	
 	is_triggered_only = yes
 
+	trigger = {
+		to_port_trade_deal_events_not_blocked = yes
+	}
+
 	option = {
 		name = nhs2_european_trade_events.18.a
 	}
@@ -1383,6 +1444,10 @@ country_event = {
 	picture = nhs_MERCHANTS_ARGUING_eventPicture
 	
 	is_triggered_only = yes
+
+	trigger = {
+		to_port_trade_deal_events_not_blocked = yes
+	}
 
 	option = {
 		name = nhs2_european_trade_events.19.a
@@ -1413,6 +1478,7 @@ country_event = {
 		NOT = { has_country_modifier = nhs2_elysian_restricted_trade }
 		NOT = { has_country_modifier = nhs2_elysian_free_trade }
 		NOT = { has_country_modifier = nhs2_elysian_isolationism }
+		NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
 		any_country = {
 			exists = yes
 			has_country_flag = nhs_portugese_secret
@@ -1428,12 +1494,22 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
+			set_country_flag = to_block_deal_break_decisions
 			random_country = {
 				limit = {
 					has_country_flag = nhs_portugese_secret
 				}
+				set_country_flag = to_block_deal_break_decisions
 				save_event_target_as = nhs_portugal_tar
+				save_global_event_target_as = to_nhs_elysian_trading_partner
 			}
+		}
+	}
+
+	after = {
+		clr_country_flag = to_block_deal_break_decisions
+		event_target:nhs_portugal_tar = {
+			clr_country_flag = to_block_deal_break_decisions
 		}
 	}
 
@@ -1442,69 +1518,98 @@ country_event = {
 		ai_chance = {
 			factor = 50
 		}
-		clr_country_flag = nhs_has_por_enclave
-		clr_country_flag = nhs_has_small_por_enclave
-		set_country_flag = nhs_has_large_por_enclave
-		add_dip_power = 50
-		# add_prestige = 10
-		add_legitimacy = 5
-		event_target:nhs_portugal_tar = {
-			add_opinion = {
-				who = ROOT
-				modifier = nhs_upheld_trade
-			}
-		}
-		add_trust = { who = event_target:nhs_portugal_tar value = 100 }
-		custom_tooltip = to_breaking_por_deal_costs_stability_tt
-		custom_tooltip = nhs_new_line_tt
-		set_global_flag = to_portugal_hates_colonizers
 		if = {
 			limit = {
-				any_country = {
-					alliance_with = event_target:nhs_portugal_tar
-					num_of_colonists = 1
-					NOT = { has_country_modifier = nhs2_ely_por_trade }
-					is_subject = no
-				}
+				to_port_trade_deal_events_not_blocked = yes
 			}
-			custom_tooltip = to_por_starts_hating_colonizers_break_alliances_tt
-			every_country = {
-				limit = {
-					alliance_with = event_target:nhs_portugal_tar
-					num_of_colonists = 1
-					NOT = { has_country_modifier = nhs2_ely_por_trade }
-					is_subject = no
-				}
-				custom_tooltip = to_break_alliance_with_por_tt
-				hidden_effect = {
-					break_alliance = event_target:nhs_portugal_tar
-				}
-			}
-			custom_tooltip = to_por_starts_hating_colonizers_lower_opinion_tt
-		}
-		else = {
-			custom_tooltip = to_por_starts_hating_colonizers_tt
-		}
-		hidden_effect = {
-			every_country = {
-				limit = {
-					num_of_colonists = 1
-					NOT = { has_country_modifier = nhs2_ely_por_trade }
-					is_subject = no
-				}
+			clr_country_flag = nhs_has_por_enclave
+			clr_country_flag = nhs_has_small_por_enclave
+			set_country_flag = nhs_has_large_por_enclave
+			add_dip_power = 50
+			# add_prestige = 10
+			add_legitimacy = 5
+			event_target:nhs_portugal_tar = {
 				add_opinion = {
-					who = event_target:nhs_portugal_tar
-					modifier = to_por_hates_colonizers
-				}
-				reverse_add_opinion = {
-					who = event_target:nhs_portugal_tar
-					modifier = to_por_hates_colonizers
+					who = ROOT
+					modifier = nhs_upheld_trade
 				}
 			}
-		}
-		custom_tooltip = nhs_dotted_line_tt
-		custom_tooltip = nhs_institution_spread_enclave_increased_tt
-		tooltip = {
+			add_trust = { who = event_target:nhs_portugal_tar value = 100 }
+			custom_tooltip = to_breaking_por_deal_costs_modifier_penalty_tt
+			custom_tooltip = nhs_new_line_tt
+			set_global_flag = to_portugal_hates_colonizers
+			if = {
+				limit = {
+					any_country = {
+						alliance_with = event_target:nhs_portugal_tar
+						num_of_colonists = 1
+						NOT = { has_country_modifier = nhs2_ely_por_trade }
+						is_subject = no
+					}
+				}
+				custom_tooltip = to_por_starts_hating_colonizers_break_alliances_tt
+				every_country = {
+					limit = {
+						alliance_with = event_target:nhs_portugal_tar
+						num_of_colonists = 1
+						NOT = { has_country_modifier = nhs2_ely_por_trade }
+						is_subject = no
+					}
+					custom_tooltip = to_break_alliance_with_por_tt
+					hidden_effect = {
+						break_alliance = event_target:nhs_portugal_tar
+					}
+				}
+				custom_tooltip = to_por_starts_hating_colonizers_lower_opinion_tt
+			}
+			else = {
+				custom_tooltip = to_por_starts_hating_colonizers_tt
+			}
+			hidden_effect = {
+				every_country = {
+					limit = {
+						num_of_colonists = 1
+						NOT = { has_country_modifier = nhs2_ely_por_trade }
+						is_subject = no
+					}
+					add_opinion = {
+						who = event_target:nhs_portugal_tar
+						modifier = to_por_hates_colonizers
+					}
+					reverse_add_opinion = {
+						who = event_target:nhs_portugal_tar
+						modifier = to_por_hates_colonizers
+					}
+				}
+			}
+			custom_tooltip = nhs_dotted_line_tt
+			custom_tooltip = nhs_institution_spread_enclave_increased_tt
+			tooltip = {
+				random_owned_province = {
+					limit = {
+						OR = {
+							has_province_modifier = nhs2_por_enclave
+							has_province_modifier = nhs2_small_por_enclave
+						}
+					}
+					if = {
+						limit = {
+							has_province_modifier = nhs2_por_enclave
+						}
+						remove_province_modifier = nhs2_por_enclave
+					}
+					if = {
+						limit = {
+							has_province_modifier = nhs2_small_por_enclave
+						}
+						remove_province_modifier = nhs2_small_por_enclave
+					}
+					add_province_modifier = {
+						name = nhs2_large_por_enclave
+						duration = -1
+					}
+				}
+			}
 			random_owned_province = {
 				limit = {
 					OR = {
@@ -1512,50 +1617,26 @@ country_event = {
 						has_province_modifier = nhs2_small_por_enclave
 					}
 				}
-				if = {
-					limit = {
-						has_province_modifier = nhs2_por_enclave
+				hidden_effect = {
+					if = {
+						limit = {
+							has_province_modifier = nhs2_por_enclave
+						}
+						remove_province_modifier = nhs2_por_enclave
 					}
-					remove_province_modifier = nhs2_por_enclave
-				}
-				if = {
-					limit = {
-						has_province_modifier = nhs2_small_por_enclave
+					if = {
+						limit = {
+							has_province_modifier = nhs2_small_por_enclave
+						}
+						remove_province_modifier = nhs2_small_por_enclave
 					}
-					remove_province_modifier = nhs2_small_por_enclave
+					add_province_modifier = {
+						name = nhs2_large_por_enclave
+						duration = -1
+					}
 				}
-				add_province_modifier = {
-					name = nhs2_large_por_enclave
-					duration = -1
-				}
+				nhs_set_center_of_trade_2 = yes
 			}
-		}
-		random_owned_province = {
-			limit = {
-				OR = {
-					has_province_modifier = nhs2_por_enclave
-					has_province_modifier = nhs2_small_por_enclave
-				}
-			}
-			hidden_effect = {
-				if = {
-					limit = {
-						has_province_modifier = nhs2_por_enclave
-					}
-					remove_province_modifier = nhs2_por_enclave
-				}
-				if = {
-					limit = {
-						has_province_modifier = nhs2_small_por_enclave
-					}
-					remove_province_modifier = nhs2_small_por_enclave
-				}
-				add_province_modifier = {
-					name = nhs2_large_por_enclave
-					duration = -1
-				}
-			}
-			nhs_set_center_of_trade_2 = yes
 		}
 	}
 	option = {
@@ -1584,8 +1665,13 @@ country_event = {
 			name = nhs2_elysian_restricted_trade
 			duration = -1
 		}
-		nhs_break_por_deal = {}
-		custom_tooltip = nhs_dotted_line_tt
+		if = {
+			limit = {
+				to_port_trade_deal_events_not_blocked = yes
+			}
+			to_rome_breaks_port_deal = {}
+			custom_tooltip = nhs_dotted_line_tt
+		}
 		tooltip = {
 			random_owned_province = {
 				limit = {
@@ -1612,34 +1698,48 @@ country_event = {
 				}
 			}
 		}
-		random_owned_province = {
+		if = {
 			limit = {
-				OR = {
-					has_province_modifier = nhs2_por_enclave
-					has_province_modifier = nhs2_small_por_enclave
-				}
-			}
-			hidden_effect = {
-				if = {
-					limit = {
+				any_owned_province = {
+					OR = {
 						has_province_modifier = nhs2_por_enclave
-					}
-					remove_province_modifier = nhs2_por_enclave
-				}
-				if = {
-					limit = {
 						has_province_modifier = nhs2_small_por_enclave
 					}
-					remove_province_modifier = nhs2_small_por_enclave
-				}
-				add_province_modifier = {
-					name = nhs2_european_enclave
-					duration = -1
 				}
 			}
-			nhs_set_center_of_trade_2 = yes
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_province_modifier = nhs2_por_enclave
+						has_province_modifier = nhs2_small_por_enclave
+					}
+				}
+				hidden_effect = {
+					if = {
+						limit = {
+							has_province_modifier = nhs2_por_enclave
+						}
+						remove_province_modifier = nhs2_por_enclave
+					}
+					if = {
+						limit = {
+							has_province_modifier = nhs2_small_por_enclave
+						}
+						remove_province_modifier = nhs2_small_por_enclave
+					}
+					add_province_modifier = {
+						name = nhs2_european_enclave
+						duration = -1
+					}
+				}
+				nhs_set_center_of_trade_2 = yes
+			}
+		}
+		else = {
+			to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_european_enclave }
 		}
 	}
+
 	option = {
 		name = "nhs2_european_trade_events.11.c"
 		ai_chance = {
@@ -1667,8 +1767,6 @@ country_event = {
 		}
 		custom_tooltip = nhs_institution_spread_enclave_free_change_tt
 		custom_tooltip = nhs_new_line_tt
-		clr_country_flag = nhs_has_small_por_enclave
-		clr_country_flag = nhs_has_por_enclave
 		# set_global_flag = nhs_broke_deals_with_por
 		# remove_country_modifier = nhs2_ely_por_trade
 		add_dip_power = 25
@@ -1677,7 +1775,12 @@ country_event = {
 			name = nhs2_elysian_free_trade
 			duration = -1
 		}
-		nhs_break_por_deal = {}
+		if = {
+			limit = {
+				to_port_trade_deal_events_not_blocked = yes
+			}
+			to_rome_breaks_port_deal = {}
+		}
 		# POR = {
 		# 	remove_country_modifier = nhs2_por_ely_trade
 		# 	add_trust = { who = ROOT value = -40 }
@@ -1690,7 +1793,38 @@ country_event = {
 		# 		modifier = nhs2_por_ely_trade
 		# 	}
 		# }
-		tooltip = {
+		if = {
+			limit = {
+				any_owned_province = {
+					OR = {
+						has_province_modifier = nhs2_por_enclave
+						has_province_modifier = nhs2_small_por_enclave
+					}
+				}
+			}
+			tooltip = {
+				random_owned_province = {
+					limit = {
+						OR = {
+							has_province_modifier = nhs2_por_enclave
+							has_province_modifier = nhs2_small_por_enclave
+						}
+					}
+					if = {
+						limit = {
+							has_province_modifier = nhs2_por_enclave
+						}
+						remove_province_modifier = nhs2_por_enclave
+					}
+					if = {
+						limit = {
+							has_province_modifier = nhs2_small_por_enclave
+						}
+						remove_province_modifier = nhs2_small_por_enclave
+					}
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
 			random_owned_province = {
 				limit = {
 					OR = {
@@ -1698,45 +1832,23 @@ country_event = {
 						has_province_modifier = nhs2_small_por_enclave
 					}
 				}
-				if = {
-					limit = {
-						has_province_modifier = nhs2_por_enclave
+				hidden_effect = {
+					if = {
+						limit = {
+							has_province_modifier = nhs2_por_enclave
+						}
+						remove_province_modifier = nhs2_por_enclave
 					}
-					remove_province_modifier = nhs2_por_enclave
-				}
-				if = {
-					limit = {
-						has_province_modifier = nhs2_small_por_enclave
+					if = {
+						limit = {
+							has_province_modifier = nhs2_small_por_enclave
+						}
+						remove_province_modifier = nhs2_small_por_enclave
 					}
-					remove_province_modifier = nhs2_small_por_enclave
 				}
+				nhs_set_center_of_trade_2 = yes
 			}
 		}
-		custom_tooltip = nhs_new_line_tt
-		random_owned_province = {
-			limit = {
-				OR = {
-					has_province_modifier = nhs2_por_enclave
-					has_province_modifier = nhs2_small_por_enclave
-				}
-			}
-			hidden_effect = {
-				if = {
-					limit = {
-						has_province_modifier = nhs2_por_enclave
-					}
-					remove_province_modifier = nhs2_por_enclave
-				}
-				if = {
-					limit = {
-						has_province_modifier = nhs2_small_por_enclave
-					}
-					remove_province_modifier = nhs2_small_por_enclave
-				}
-			}
-			nhs_set_center_of_trade_2 = yes
-		}
-		
 	}
 	
 	option = {
@@ -1767,7 +1879,12 @@ country_event = {
 		}
 		# set_global_flag = nhs_no_more_deals
 		nhs_increase_skoros_silk_price = yes
-		nhs_break_por_deal = { REMOVE_ENCLAVES = yes }
+		if = {
+			limit = {
+				to_port_trade_deal_events_not_blocked = yes
+			}
+			to_rome_breaks_port_deal = { REMOVE_ENCLAVES = yes }
+		}
 	}
 }
 
@@ -1782,6 +1899,7 @@ country_event = {
 
 	trigger = {
 		has_global_flag = to_portugal_hates_colonizers
+		NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
 		NOT = { has_country_modifier = nhs2_ely_por_trade }
 		is_subject = no
 		OR = {
@@ -1922,6 +2040,7 @@ country_event = {
 
 	trigger = {
 		NOT = { has_country_flag = nhs_enclave_pending }
+		NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
 		OR = {
 			AND = {
 				has_country_flag = nhs_has_small_por_enclave
@@ -2050,7 +2169,7 @@ country_event = {
 	# 		factor = 0
 	# 	}
 	# 	custom_tooltip = nhs_attract_eu_merchants_tt
-	# 	nhs_break_por_deal = yes
+	# 	to_rome_breaks_port_deal = yes
 	# }
 }
 
@@ -2063,186 +2182,28 @@ country_event = {
 	
 	trigger = {
 		has_country_modifier = nhs2_ely_por_trade
+		NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
 		NOT = {
 			any_country = {
-				exists = yes
 				has_country_modifier = nhs2_por_ely_trade
 				# has_country_flag = nhs_portugese_secret
 			}
 		}
 	}
 
+	immediate = {
+		set_country_flag = to_portuguese_deal_ended_event_active
+	}
+
+	after = {
+		clr_country_flag = to_portuguese_deal_ended_event_active
+	}
+
 	option = {
 		name = "nhs2_european_trade_events.13.a"
 		custom_tooltip = nhs_attract_eu_merchants_tt
 
-		nhs_break_por_deal = { REMOVE_ENCLAVES = yes }
-		# clr_country_flag = nhs_has_por_enclave
-		# clr_country_flag = nhs_has_large_por_enclave
-		# clr_country_flag = nhs_has_small_por_enclave
-		# clr_global_flag = nhs_treaty_of_lantanopolis
-		# # set_global_flag = nhs_broke_deals_with_por
-		# remove_country_modifier = nhs2_ely_por_trade
-		# hidden_effect = {
-		# 	random_country = {
-		# 		limit = {
-		# 			has_country_flag = nhs_portugese_secret
-		# 		}
-		# 		if = {
-		# 			limit = {
-		# 				has_country_modifier = nhs2_treaty_of_lantanopolis_por
-		# 			}
-		# 			remove_country_modifier = nhs2_treaty_of_lantanopolis_por
-		# 		}
-		# 		remove_country_modifier = nhs2_por_ely_trade
-		# 	}
-		# }
-		# if = {
-		# 	limit = {
-		# 		any_province = {
-		# 			has_province_modifier = nhs2_small_por_enclave
-		# 		}
-		# 	}
-		# 	every_province = {
-		# 		limit = {
-		# 			has_province_modifier = nhs2_small_por_enclave
-		# 		}
-		# 		remove_province_modifier = nhs2_small_por_enclave
-		# 	}
-		# }
-		# if = {
-		# 	limit = {
-		# 		any_province = {
-		# 			has_province_modifier = nhs2_por_enclave
-		# 		}
-		# 	}
-		# 	every_province = {
-		# 		limit = {
-		# 			has_province_modifier = nhs2_por_enclave
-		# 		}
-		# 		remove_province_modifier = nhs2_por_enclave
-		# 	}
-		# }
-		# if = {
-		# 	limit = {
-		# 		any_province = {
-		# 			has_province_modifier = nhs2_large_por_enclave
-		# 		}
-		# 	}
-		# 	every_province = {
-		# 		limit = {
-		# 			has_province_modifier = nhs2_large_por_enclave
-		# 		}
-		# 		remove_province_modifier = nhs2_large_por_enclave
-		# 	}
-		# }
-	}
-}
-
-# War with Portugal
-country_event = {
-	id = nhs2_european_trade_events.14
-	title = nhs2_european_trade_events.14.t
-	desc = nhs2_european_trade_events.14.d
-	picture = BATTLE_eventPicture
-	
-	trigger = {
-		has_country_modifier = nhs2_ely_por_trade
-		any_country = {
-			has_country_modifier = nhs2_por_ely_trade
-			OR = {
-				is_in_war = {
-					attacker_leader = ROOT
-					defender_leader = THIS
-				}
-				is_in_war = {
-					attacker_leader = THIS
-					defender_leader = ROOT
-				}
-			}
-		}
-	}
-
-	option = {
-		name = "nhs2_european_trade_events.14.a"
-		custom_tooltip = nhs_attract_eu_merchants_tt
-
-		nhs_break_por_deal = { REMOVE_ENCLAVES = yes }
-		# clr_country_flag = nhs_has_por_enclave
-		# clr_country_flag = nhs_has_large_por_enclave
-		# clr_country_flag = nhs_has_small_por_enclave
-		# clr_global_flag = nhs_treaty_of_lantanopolis
-		# set_global_flag = nhs_broke_deals_with_por
-		# remove_country_modifier = nhs2_ely_por_trade
-		# add_opinion = {
-		# 	who = POR
-		# 	modifier = nhs_broke_the_deals
-		# }
-		# remove_opinion = {
-		# 	who = POR
-		# 	modifier = nhs_por_trade_deal
-		# }
-		# POR = {
-		# 	if = {
-		# 		limit = {
-		# 			has_country_modifier = nhs2_treaty_of_lantanopolis_por
-		# 		}
-		# 		remove_country_modifier = nhs2_treaty_of_lantanopolis_por
-		# 	}
-		# 	remove_country_modifier = nhs2_por_ely_trade
-		# 	add_trust = { who = ROOT value = -40 mutual = yes }
-		# 	add_opinion = {
-		# 		who = ROOT
-		# 		modifier = nhs_broke_the_deals
-		# 	}
-		# 	remove_opinion = {
-		# 		who = ROOT
-		# 		modifier = nhs2_por_ely_trade
-		# 	}
-		# 	remove_opinion = {
-		# 		who = ROOT
-		# 		modifier = nhs_unchecked_expansion
-		# 	}
-		# }
-		# if = {
-		# 	limit = {
-		# 		any_province = {
-		# 			has_province_modifier = nhs2_small_por_enclave
-		# 		}
-		# 	}
-		# 	every_province = {
-		# 		limit = {
-		# 			has_province_modifier = nhs2_small_por_enclave
-		# 		}
-		# 		remove_province_modifier = nhs2_small_por_enclave
-		# 	}
-		# }
-		# if = {
-		# 	limit = {
-		# 		any_province = {
-		# 			has_province_modifier = nhs2_por_enclave
-		# 		}
-		# 	}
-		# 	every_province = {
-		# 		limit = {
-		# 			has_province_modifier = nhs2_por_enclave
-		# 		}
-		# 		remove_province_modifier = nhs2_por_enclave
-		# 	}
-		# }
-		# if = {
-		# 	limit = {
-		# 		any_province = {
-		# 			has_province_modifier = nhs2_large_por_enclave
-		# 		}
-		# 	}
-		# 	every_province = {
-		# 		limit = {
-		# 			has_province_modifier = nhs2_large_por_enclave
-		# 		}
-		# 		remove_province_modifier = nhs2_large_por_enclave
-		# 	}
-		# }
+		to_rome_port_deal_breaks_down = yes
 	}
 }
 
@@ -2252,22 +2213,19 @@ country_event = {
 	title = nhs2_hidden.t
 	desc = nhs2_hidden.d
 	picture = BAD_WITH_MONARCH_eventPicture
-
-	hidden = yes
 	
 	trigger = {
 		has_country_modifier = nhs2_por_ely_trade
-		NOT = { nhs_check_all_elysian_tags = { CONDITION = exists } }
 		NOT = {
-			any_country = {
-				has_country_modifier = nhs2_ely_por_trade
+			nhs_check_existing_elysian_tags_with_full_condition = {
+				CONDITION = "has_country_modifier = nhs2_ely_por_trade"
 			}
 		}
 	}
 
 	option = {
 		name = "nhs2_european_trade_events.13.a"
-		nhs_break_por_deal = {}
+		to_port_rome_deal_breaks_down = yes
 	}
 }
 
@@ -2514,7 +2472,7 @@ country_event = {
 	id = nhs2_european_trade_events.16
 	title = nhs2_european_trade_events.16.t
 	desc = nhs2_european_trade_events.16.d
-	picture = BATTLE_eventPicture
+	picture = RELIGIOUS_WARS_eventPicture
 	
 	is_triggered_only = yes
 
@@ -2529,11 +2487,429 @@ country_event = {
 	id = nhs2_european_trade_events.17
 	title = nhs2_european_trade_events.17.t
 	desc = nhs2_european_trade_events.17.d
-	picture = BATTLE_eventPicture
+	picture = RELIGIOUS_WARS_eventPicture
 	
 	is_triggered_only = yes
 
 	option = {
 		name = "nhs2_european_trade_events.17.a"
+	}
+}
+
+# Conquered Portuguese Province
+province_event = {
+	id = nhs2_european_trade_events.22
+	title = nhs2_european_trade_events.22.t
+	desc = nhs2_european_trade_events.22.d
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = {
+			has_country_modifier = nhs2_ely_por_trade
+			FROM = {
+				NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
+				NOT = { is_subject_of = PREV }
+				has_or_overlord_has = { TRIGGER = "has_country_modifier = nhs2_por_ely_trade" }
+			}
+			NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
+		}
+		# EU4 scopes are fun.
+		if = {
+			limit = {
+				FROM = {
+					is_subject = yes
+				}
+			}
+			NOT = {
+				any_subject_country = {
+					FROM = {
+						is_subject_of = PREV
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			owner = {
+				set_country_flag = to_portuguese_deal_ended_event_active
+				if = {
+					limit = {
+						has_country_flag = nhs_has_large_por_enclave
+					}
+					FROM = {
+						set_country_flag = to_port_trade_deal_penalty
+					}
+				}
+			}
+			FROM = {
+				country_event = { id = nhs2_european_trade_events.23 }
+			}
+		}
+	}
+
+	after = {
+		owner = {
+			clr_country_flag = to_portuguese_deal_ended_event_active
+		}
+	}
+
+	option = {
+		name = nhs2_european_trade_events.22.a
+		custom_tooltip = nhs_attract_eu_merchants_tt
+		owner = {
+			to_rome_breaks_port_deal = { REMOVE_ENCLAVES = yes }
+		}
+	}
+}
+
+# Conquered Portuguese Province - Notification for Portugal
+country_event = {
+	id = nhs2_european_trade_events.23
+	title = nhs2_european_trade_events.23.t
+	desc = nhs2_european_trade_events.23.d
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_modifier = nhs2_por_ely_trade
+		NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = to_portuguese_deal_ended_event_active
+			FROM = {
+				owner = {
+					save_event_target_as = to_offender_target
+				}
+			}
+		}
+	}
+
+	after = {
+		clr_country_flag = to_portuguese_deal_ended_event_active
+	}
+
+	option = {
+		name = nhs2_european_trade_events.23.a
+		to_rome_breaks_port_deal_portugal_response = { OFFENDER_SCOPE = event_target:to_offender_target }
+	}
+}
+
+# Conquered Greek Province
+province_event = {
+	id = nhs2_european_trade_events.24
+	title = nhs2_european_trade_events.24.t
+	desc = nhs2_european_trade_events.24.d
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = {
+			has_country_modifier = nhs2_por_ely_trade
+			FROM = {
+				NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
+				NOT = { is_subject_of = PREV }
+				has_or_overlord_has = { TRIGGER = "has_country_modifier = nhs2_ely_por_trade" }
+			}
+			# EU4 scopes are fun.
+			if = {
+				limit = {
+					FROM = {
+						is_subject = yes
+					}
+				}
+				NOT = {
+					any_subject_country = {
+						FROM = {
+							is_subject_of = PREV
+						}
+					}
+				}
+			}
+			NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			owner = {
+				set_country_flag = to_portuguese_deal_ended_event_active
+				if = {
+					limit = {
+						FROM = {
+							has_country_flag = nhs_has_large_por_enclave
+						}
+					}
+					set_country_flag = to_port_trade_deal_penalty
+				}
+			}
+			FROM = {
+				country_event = { id = nhs2_european_trade_events.25 }
+			}
+		}
+	}
+
+	after = {
+		owner = {
+			clr_country_flag = to_portuguese_deal_ended_event_active
+		}
+	}
+
+	option = {
+		name = nhs2_european_trade_events.24.a
+		custom_tooltip = nhs_attract_eu_merchants_tt
+		owner = {
+			to_port_breaks_rome_deal = yes
+		}
+	}
+}
+
+# Conquered Greek Province - Notification for Romans
+country_event = {
+	id = nhs2_european_trade_events.25
+	title = nhs2_european_trade_events.25.t
+	desc = nhs2_european_trade_events.25.d
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_modifier = nhs2_ely_por_trade
+		NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = to_portuguese_deal_ended_event_active
+			FROM = {
+				owner = {
+					save_event_target_as = to_offender_target
+				}
+			}
+		}
+	}
+
+	after = {
+		clr_country_flag = to_portuguese_deal_ended_event_active
+	}
+
+	option = {
+		name = nhs2_european_trade_events.25.a
+		custom_tooltip = nhs_attract_eu_merchants_tt
+		to_port_breaks_rome_deal_response = { 
+			REMOVE_ENCLAVES = yes
+			OFFENDER_SCOPE = event_target:to_offender_target
+		}
+	}
+}
+
+# War with Portugal
+country_event = {
+	id = nhs2_european_trade_events.26
+	title = nhs2_european_trade_events.26.t
+	desc = nhs2_european_trade_events.26.d
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+	
+	trigger = {
+		has_country_modifier = nhs2_ely_por_trade
+		NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
+		any_war_enemy_country = {
+			has_country_modifier = nhs2_por_ely_trade
+			is_in_war = {
+				attacker_leader = ROOT
+				defender_leader = THIS
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = to_portuguese_deal_ended_event_active
+			random_war_enemy_country = {
+				limit = {
+					has_country_modifier = nhs2_por_ely_trade
+					is_in_war = {
+						attacker_leader = ROOT
+						defender_leader = THIS
+					}
+				}
+				set_country_flag = to_portuguese_deal_ended_event_active
+				save_event_target_as = nhs_portugal_tar
+				country_event = { id = nhs2_european_trade_events.27 }
+			}
+		}
+	}
+
+	after = {
+		clr_country_flag = to_portuguese_deal_ended_event_active
+	}
+
+	option = {
+		name = nhs2_european_trade_events.26.a
+		custom_tooltip = nhs_attract_eu_merchants_tt
+
+		to_rome_breaks_port_deal = { REMOVE_ENCLAVES = yes }
+	}
+}
+
+# War with Portugal - Portuguese response
+country_event = {
+	id = nhs2_european_trade_events.27
+	title = nhs2_european_trade_events.27.t
+	desc = nhs2_european_trade_events.27.d
+	picture = FLAGSHIP_SUNK_eventPicture
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = to_portuguese_deal_ended_event_active
+		}
+	}
+
+	after = {
+		clr_country_flag = to_portuguese_deal_ended_event_active
+	}
+
+	option = {
+		name = nhs2_european_trade_events.27.a
+		to_rome_breaks_port_deal_portugal_response = { OFFENDER_SCOPE = FROM }
+	}
+}
+
+# War with Greek Colonies
+country_event = {
+	id = nhs2_european_trade_events.28
+	title = nhs2_european_trade_events.28.t
+	desc = nhs2_european_trade_events.28.d
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+	
+	trigger = {
+		has_country_modifier = nhs2_por_ely_trade
+		NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
+		any_war_enemy_country = {
+			has_country_modifier = nhs2_ely_por_trade
+			is_in_war = {
+				attacker_leader = ROOT
+				defender_leader = THIS
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = to_portuguese_deal_ended_event_active
+			random_war_enemy_country = {
+				limit = {
+					has_country_modifier = nhs2_ely_por_trade
+					is_in_war = {
+						attacker_leader = ROOT
+						defender_leader = THIS
+					}
+				}
+				set_country_flag = to_portuguese_deal_ended_event_active
+				save_event_target_as = nhs_portugal_tar
+				country_event = { id = nhs2_european_trade_events.29 }
+			}
+		}
+	}
+
+	after = {
+		clr_country_flag = to_portuguese_deal_ended_event_active
+	}
+
+	option = {
+		name = nhs2_european_trade_events.28.a
+		custom_tooltip = nhs_attract_eu_merchants_tt
+
+		to_port_breaks_rome_deal = yes
+	}
+}
+
+# War with Greek Colonies - Roman Response
+country_event = {
+	id = nhs2_european_trade_events.29
+	title = nhs2_european_trade_events.29.t
+	desc = nhs2_european_trade_events.29.d
+	picture = FLAGSHIP_SUNK_eventPicture
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = to_portuguese_deal_ended_event_active
+		}
+	}
+
+	after = {
+		clr_country_flag = to_portuguese_deal_ended_event_active
+	}
+
+	option = {
+		name = nhs2_european_trade_events.29.a
+		to_port_breaks_rome_deal_response = {
+			REMOVE_ENCLAVES = yes
+			OFFENDER_SCOPE = FROM
+		}
+	}
+}
+
+# Rome breaks the trade deal - Portuguese response
+country_event = {
+	id = nhs2_european_trade_events.30
+	title = nhs2_european_trade_events.30.t
+	desc = nhs2_european_trade_events.30.d
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = to_portuguese_deal_ended_event_active
+		}
+	}
+
+	after = {
+		clr_country_flag = to_portuguese_deal_ended_event_active
+	}
+
+	option = {
+		name = nhs2_european_trade_events.30.a
+		to_rome_breaks_port_deal_portugal_response = { OFFENDER_SCOPE = FROM }
+	}
+}
+
+# Portugal breaks the trade deal - Roman response
+country_event = {
+	id = nhs2_european_trade_events.31
+	title = nhs2_european_trade_events.31.t
+	desc = nhs2_european_trade_events.31.d
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+	
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = to_portuguese_deal_ended_event_active
+		}
+	}
+
+	after = {
+		clr_country_flag = to_portuguese_deal_ended_event_active
+	}
+
+	option = {
+		name = nhs2_european_trade_events.31.a
+		to_port_breaks_rome_deal_response = {
+			REMOVE_ENCLAVES = yes
+			OFFENDER_SCOPE = FROM
+		}
 	}
 }

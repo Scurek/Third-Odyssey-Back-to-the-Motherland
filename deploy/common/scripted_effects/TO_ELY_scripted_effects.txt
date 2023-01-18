@@ -3267,6 +3267,7 @@ nhs_improve_portuguese_enclave_from_small = {
 	clr_country_flag = nhs_has_small_por_enclave
 	set_country_flag = nhs_has_por_enclave
 	custom_tooltip = nhs_enclave_expansion_tt
+	custom_tooltip = to_breaking_por_deal_costs_stability_tt
 	custom_tooltip = nhs_institution_spread_enclave_increased_tt
 	if = {
 		limit = {
@@ -3883,81 +3884,95 @@ nhs_set_por_colonial_capital = {
 	}
 }
 
-nhs_break_por_deal = {
+to_rome_breaks_port_deal = {
+	clr_global_flag = nhs_treaty_of_lantanopolis
+	clr_global_flag = to_portugal_hates_colonizers
+	remove_country_modifier = nhs2_ely_por_trade
+	if = {
+		limit = {
+			has_country_flag = nhs_has_large_por_enclave
+		}
+		add_stability = -2
+		add_country_modifier = {
+			name = to_broken_port_trade_deal_major
+			duration = 7300
+		}
+	}
+	else_if = {
+		limit = {
+			has_country_flag = nhs_has_por_enclave
+		}
+		add_stability = -1
+	}
+	clr_country_flag = nhs_has_small_por_enclave
 	clr_country_flag = nhs_has_por_enclave
 	clr_country_flag = nhs_has_large_por_enclave
-	clr_country_flag = nhs_has_small_por_enclave
-	clr_global_flag = nhs_treaty_of_lantanopolis
-	# set_global_flag = nhs_broke_deals_with_por
-	clr_global_flag = to_portugal_hates_colonizers
-	if = {
-		limit = {
-			has_country_modifier = nhs2_ely_por_trade
-		}
-		remove_country_modifier = nhs2_ely_por_trade
-	}
-	if = {
-		limit = {
-			has_country_modifier = nhs2_por_ely_trade
-		}
-		remove_country_modifier = nhs2_por_ely_trade
-	}
-	random_country = {
-		limit = {
-			NOT = { tag = ROOT }
-			has_country_flag = nhs_portugese_secret
-		}
-		remove_historical_friend = ROOT
-		ROOT = {
-			remove_historical_friend = PREV
-		}
-		if = {
+	# This convoluded nonsense is due to how code formats in the tooltip. Do try putting the tooltip inside the scope!
+	tooltip = {
+		random_country = {
 			limit = {
-				has_country_modifier = nhs2_treaty_of_lantanopolis_por
+				NOT = { tag = PREV }
+				has_country_flag = nhs_portugese_secret
 			}
+			set_country_flag = to_break_por_deal_flag
+			remove_historical_friend = PREV
+			remove_country_modifier = nhs2_por_ely_trade
 			remove_country_modifier = nhs2_treaty_of_lantanopolis_por
-		}
-		hidden_effect = {
 			if = {
 				limit = {
-					tag = POR
-					has_dlc = "Golden Century"
-					NOT = { has_mission = gc_por_caribbean }
+					any_province = {
+						has_province_modifier = to_por_gateway_to_elysia
+					}
 				}
-				swap_non_generic_missions = yes
+				random_province = {
+					limit = {
+						has_province_modifier = to_por_gateway_to_elysia
+					}
+					remove_province_modifier = to_por_gateway_to_elysia
+				}
+			}
+			add_trust = { who = PREV value = -40 }
+			custom_tooltip = nhs_por_remove_150_opinion_tt
+			reverse_remove_opinion = {
+				who = PREV
+				modifier = nhs_por_trade_deal
+			}
+			if = {
+				limit = {
+					PREV = {
+						has_country_flag = nhs_has_large_por_enclave
+					}
+				}
+				add_country_modifier = {
+					name = to_broken_port_trade_deal_minor
+					duration = 7300
+				}
 			}
 		}
-		if = {
+	}
+	hidden_effect = {
+		random_country = {
 			limit = {
-				has_country_modifier = nhs2_por_ely_trade
+				has_country_flag = to_break_por_deal_flag
 			}
-			remove_country_modifier = nhs2_por_ely_trade
-		}
-		add_trust = { who = ROOT value = -40 }
-		custom_tooltip = nhs_por_remove_150_opinion_tt
-		hidden_effect = {
+			clr_country_flag = to_break_por_deal_flag
+			remove_historical_friend = PREV
+			add_trust = { who = PREV value = -40 }
 			add_opinion = {
-				who = ROOT
+				who = PREV
 				modifier = nhs_broke_the_deals
 			}
 			remove_opinion = {
-				who = ROOT
+				who = PREV
 				modifier = nhs_por_trade_deal
 			}
 			# remove_opinion = {
-			# 	who = ROOT
+			# 	who = PREV
 			# 	modifier = nhs_unchecked_expansion
 			# }
 		}
-		
-		reverse_remove_opinion = {
-			who = ROOT
-			modifier = nhs_por_trade_deal
-		}
-		
 	}
 	[[REMOVE_ENCLAVES]
-		custom_tooltip = nhs_new_line_tt
 		if = {
 			limit = {
 				any_province = {
@@ -3998,6 +4013,381 @@ nhs_break_por_deal = {
 			}
 		}
 	]
+}
+
+to_rome_breaks_port_deal_portugal_response = {
+	remove_country_modifier = nhs2_por_ely_trade
+	remove_country_modifier = nhs2_treaty_of_lantanopolis_por
+	if = {
+		limit = {
+			any_province = {
+				has_province_modifier = to_por_gateway_to_elysia
+			}
+		}
+		random_province = {
+			limit = {
+				has_province_modifier = to_por_gateway_to_elysia
+			}
+			remove_province_modifier = to_por_gateway_to_elysia
+		}
+	}
+	if = {
+		limit = {
+			has_country_flag = to_port_trade_deal_penalty
+		}
+		add_country_modifier = {
+			name = to_broken_port_trade_deal_minor
+			duration = 7300
+		}
+	}
+	tooltip = {
+		remove_historical_friend = $OFFENDER_SCOPE$
+	}
+	hidden_effect = {
+		$OFFENDER_SCOPE$ = {
+			remove_historical_friend = ROOT
+		}
+	}
+	tooltip = {
+		add_trust = { who = $OFFENDER_SCOPE$ value = -40 }
+	}
+	if = {
+		limit = {
+			has_opinion_modifier = {
+				who = $OFFENDER_SCOPE$
+				modifier = nhs_por_trade_deal
+			}
+		}
+		remove_opinion = {
+			who = $OFFENDER_SCOPE$
+			modifier = nhs_por_trade_deal
+		}
+	}
+	custom_tooltip = nhs_por_remove_150_opinion_reverse_tt
+	if = {
+		limit = {
+			has_country_flag = to_port_trade_deal_penalty
+		}
+		tooltip = {
+			$OFFENDER_SCOPE$ = {
+				add_stability = -2
+				add_country_modifier = {
+					name = to_broken_port_trade_deal_major
+					duration = 7300
+				}
+			}
+		}
+	}
+	hidden_effect = {
+		clr_country_flag = to_port_trade_deal_penalty
+		if = {
+			limit = {
+				tag = POR
+				has_dlc = "Golden Century"
+				NOT = { has_mission = gc_por_caribbean }
+			}
+			swap_non_generic_missions = yes
+		}
+	}
+}
+
+to_rome_port_deal_breaks_down = {
+	clr_global_flag = nhs_treaty_of_lantanopolis
+	clr_global_flag = to_portugal_hates_colonizers
+	remove_country_modifier = nhs2_ely_por_trade
+	if = {
+		limit = {
+			has_country_flag = nhs_has_por_enclave
+			has_country_flag = nhs_has_large_por_enclave
+		}
+		add_country_modifier = {
+			name = to_broken_port_trade_deal_minor
+			duration = 7300
+		}
+	}
+	clr_country_flag = nhs_has_por_enclave
+	clr_country_flag = nhs_has_large_por_enclave
+	clr_country_flag = nhs_has_small_por_enclave
+	if = {
+		limit = {
+			any_province = {
+				has_province_modifier = nhs2_small_por_enclave
+			}
+		}
+		every_province = {
+			limit = {
+				has_province_modifier = nhs2_small_por_enclave
+			}
+			remove_province_modifier = nhs2_small_por_enclave
+		}
+	}
+	if = {
+		limit = {
+			any_province = {
+				has_province_modifier = nhs2_por_enclave
+			}
+		}
+		every_province = {
+			limit = {
+				has_province_modifier = nhs2_por_enclave
+			}
+			remove_province_modifier = nhs2_por_enclave
+		}
+	}
+	if = {
+		limit = {
+			any_province = {
+				has_province_modifier = nhs2_large_por_enclave
+			}
+		}
+		every_province = {
+			limit = {
+				has_province_modifier = nhs2_large_por_enclave
+			}
+			remove_province_modifier = nhs2_large_por_enclave
+		}
+	}
+	if = {
+		limit = {
+			any_province = {
+				has_province_modifier = to_por_gateway_to_elysia
+			}
+		}
+		random_province = {
+			limit = {
+				has_province_modifier = to_por_gateway_to_elysia
+			}
+			remove_province_modifier = to_por_gateway_to_elysia
+		}
+	}
+}
+
+to_port_breaks_rome_deal = {
+	remove_country_modifier = nhs2_por_ely_trade
+	remove_country_modifier = nhs2_treaty_of_lantanopolis_por
+	clr_global_flag = nhs_treaty_of_lantanopolis
+	clr_global_flag = to_portugal_hates_colonizers
+	if = {
+		limit = {
+			any_province = {
+				has_province_modifier = to_por_gateway_to_elysia
+			}
+		}
+		random_province = {
+			limit = {
+				has_province_modifier = to_por_gateway_to_elysia
+			}
+			remove_province_modifier = to_por_gateway_to_elysia
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				has_global_flag = to_portugal_hates_colonizers
+				has_country_flag = to_port_trade_deal_penalty
+			}
+		}
+		add_stability = -1
+		add_country_modifier = {
+			name = to_broken_port_trade_deal_major
+			duration = 7300
+		}
+	}
+	tooltip = {
+		random_country = {
+			limit = {
+				NOT = { tag = PREV }
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+			}
+			set_country_flag = to_break_por_deal_flag
+			remove_historical_friend = PREV
+			remove_country_modifier = nhs2_ely_por_trade
+			add_trust = { who = PREV value = -40 }
+			custom_tooltip = nhs_por_remove_150_opinion_tt
+			reverse_remove_opinion = {
+				who = PREV
+				modifier = nhs_por_trade_deal
+			}
+			if = {
+				limit = {
+					PREV = {
+						OR = {
+							has_global_flag = to_portugal_hates_colonizers
+							has_country_flag = to_port_trade_deal_penalty
+						}
+					}
+				}
+				custom_tooltip = nhs_new_line_tt
+				add_stability = -1
+				add_country_modifier = {
+					name = to_broken_port_trade_deal_minor
+					duration = 7300
+				}
+			}
+		}
+	}
+	hidden_effect = {
+		clr_country_flag = to_port_trade_deal_penalty
+		random_country = {
+			limit = {
+				has_country_flag = to_break_por_deal_flag
+			}
+			clr_country_flag = to_break_por_deal_flag
+			remove_historical_friend = PREV
+			add_trust = { who = PREV value = -40 }
+			add_opinion = {
+				who = PREV
+				modifier = nhs_broke_the_deals
+			}
+			remove_opinion = {
+				who = PREV
+				modifier = nhs_por_trade_deal
+			}
+		}
+		if = {
+			limit = {
+				tag = POR
+				has_dlc = "Golden Century"
+				NOT = { has_mission = gc_por_caribbean }
+			}
+			swap_non_generic_missions = yes
+		}
+	}
+}
+
+to_port_breaks_rome_deal_response = {
+	remove_country_modifier = nhs2_ely_por_trade
+	if = {
+		limit = {
+			has_country_flag = nhs_has_large_por_enclave
+		}
+		add_stability = -1
+		add_country_modifier = {
+			name = to_broken_port_trade_deal_minor
+			duration = 7300
+		}
+	}
+	clr_country_flag = nhs_has_small_por_enclave
+	clr_country_flag = nhs_has_por_enclave
+	clr_country_flag = nhs_has_large_por_enclave
+	tooltip = {
+		remove_historical_friend = $OFFENDER_SCOPE$
+	}
+	hidden_effect = {
+		$OFFENDER_SCOPE$ = {
+			remove_historical_friend = ROOT
+		}
+	}
+	tooltip = {
+		add_trust = { who = $OFFENDER_SCOPE$ value = -40 }
+	}
+	if = {
+		limit = {
+			has_opinion_modifier = {
+				who = $OFFENDER_SCOPE$
+				modifier = nhs_por_trade_deal
+			}
+		}
+		remove_opinion = {
+			who = $OFFENDER_SCOPE$
+			modifier = nhs_por_trade_deal
+		}
+	}
+	custom_tooltip = nhs_por_remove_150_opinion_reverse_tt
+	if = {
+		limit = {
+			has_country_flag = nhs_has_large_por_enclave
+		}
+		tooltip = {
+			$OFFENDER_SCOPE$ = {
+				add_stability = -1
+				add_country_modifier = {
+					name = to_broken_port_trade_deal_major
+					duration = 7300
+				}
+			}
+		}
+	}
+	[[REMOVE_ENCLAVES]
+		if = {
+			limit = {
+				any_province = {
+					has_province_modifier = nhs2_small_por_enclave
+				}
+			}
+			every_province = {
+				limit = {
+					has_province_modifier = nhs2_small_por_enclave
+				}
+				remove_province_modifier = nhs2_small_por_enclave
+			}
+		}
+		if = {
+			limit = {
+				any_province = {
+					has_province_modifier = nhs2_por_enclave
+				}
+			}
+			every_province = {
+				limit = {
+					has_province_modifier = nhs2_por_enclave
+				}
+				remove_province_modifier = nhs2_por_enclave
+			}
+		}
+		if = {
+			limit = {
+				any_province = {
+					has_province_modifier = nhs2_large_por_enclave
+				}
+			}
+			every_province = {
+				limit = {
+					has_province_modifier = nhs2_large_por_enclave
+				}
+				remove_province_modifier = nhs2_large_por_enclave
+			}
+		}
+	]
+}
+
+to_port_rome_deal_breaks_down = {
+	remove_country_modifier = nhs2_por_ely_trade
+	remove_country_modifier = nhs2_treaty_of_lantanopolis_por
+	clr_global_flag = nhs_treaty_of_lantanopolis
+	if = {
+		limit = {
+			has_global_flag = to_portugal_hates_colonizers
+		}
+		add_country_modifier = {
+			name = to_broken_port_trade_deal_minor
+			duration = 7300
+		}
+	}
+	clr_global_flag = to_portugal_hates_colonizers
+	if = {
+		limit = {
+			any_province = {
+				has_province_modifier = to_por_gateway_to_elysia
+			}
+		}
+		random_province = {
+			limit = {
+				has_province_modifier = to_por_gateway_to_elysia
+			}
+			remove_province_modifier = to_por_gateway_to_elysia
+		}
+	}
+	hidden_effect = {
+		if = {
+			limit = {
+				tag = POR
+				has_dlc = "Golden Century"
+				NOT = { has_mission = gc_por_caribbean }
+			}
+			swap_non_generic_missions = yes
+		}
+	}
 }
 
 nhs_add_proper_enclave = {

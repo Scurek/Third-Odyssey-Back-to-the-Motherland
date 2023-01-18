@@ -4981,37 +4981,61 @@ country_decisions = {
 		potential = {
 			nhs_check_all_elysian_tags = { CONDITION = tag }
 			has_country_modifier = nhs2_ely_por_trade
+			NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
+			NOT = { has_country_flag = to_block_deal_break_decisions }
 			any_country = {
-				exists = yes
 				has_country_modifier = nhs2_por_ely_trade
-				# NOT = {
-				# 	OR = {
-				# 		is_in_war = {
-				# 			attacker_leader = ROOT
-				# 			defender_leader = THIS
-				# 		}
-				# 		is_in_war = {
-				# 			attacker_leader = THIS
-				# 			defender_leader = ROOT
-				# 		}
-				# 	}
-				# }
 			}
 		}
 
 		allow = {
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = nhs_has_large_por_enclave
+						has_country_flag = nhs_has_por_enclave
+					}
+				}
+				stability = 0
+			}
 			has_country_modifier = nhs2_ely_por_trade
 		}
 
 		effect = {
 			custom_tooltip = nhs_attract_eu_merchants_tt
+			to_rome_breaks_port_deal = { REMOVE_ENCLAVES = yes }
+			custom_tooltip = nhs_new_line_tt
+			country_event = { id = nhs2_european_trade_events.30 }
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	to_port_break_portuguese_trade_deal = {
+		potential = {
+			has_country_modifier = nhs2_por_ely_trade
+			NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
+			NOT = { has_country_flag = to_block_deal_break_decisions }
+			nhs_check_existing_elysian_tags_with_full_condition = {
+				CONDITION = "has_country_modifier = nhs2_ely_por_trade"
+			}
+		}
+
+		allow = {
 			if = {
 				limit = {
 					has_global_flag = to_portugal_hates_colonizers
 				}
-				add_stability = -2
+				stability = 0
 			}
-			nhs_break_por_deal = { REMOVE_ENCLAVES = yes }
+			has_country_modifier = nhs2_por_ely_trade
+		}
+
+		effect = {
+			to_port_breaks_rome_deal = yes
+			custom_tooltip = nhs_new_line_tt
+			country_event = { id = nhs2_european_trade_events.31 }
 		}
 		ai_will_do = {
 			factor = 0
