@@ -6828,4 +6828,130 @@ country_decisions = {
 			factor = 1
 		}
 	}
+
+	to_challenge_the_false_emperor = {
+		major = yes
+		potential = {
+			nhs_check_all_elysian_tags = { CONDITION = tag }
+			hre_size = 1
+			is_emperor = no
+			mission_completed = to_heir_of_justinian_mission
+		}
+		allow = {
+			mission_completed = to_heir_of_justinian_mission
+			# is_at_war = no
+			emperor = {
+				NOT = { war_with = ROOT }
+				NOT = { truce_with = ROOT }
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_all_electors_can_join_the_war_tt
+				NOT = {
+					any_country = {
+						is_emperor = no
+						is_subject = no
+						war_with = emperor
+						NOT = {
+							alliance_with = ROOT
+						}
+						if = {
+							limit = {
+								is_elector = no
+							}
+							any_subject_country = {
+								is_emperor = no
+								is_elector = yes
+							}
+						}
+					}
+				}
+			}
+		}
+
+		effect = {
+			declare_war_with_cb = {
+				who = emperor
+				casus_belli = cb_to_challenge_the_false_emperor
+			}
+			custom_tooltip = nhs_new_line_tt
+			every_country = {
+				limit = {
+					is_emperor = no
+					is_elector = yes
+					is_subject = no
+					NOT = { alliance_with = ROOT }
+				}
+				custom_tooltip = to_join_the_emperor_in_all_defensive_wars_tt
+				hidden_effect = {
+					join_all_defensive_wars_of = emperor
+				}
+				custom_tooltip = nhs_new_line_tt
+			}
+
+			every_country = {
+				limit = {
+					is_emperor = no
+					is_subject = no
+					is_elector = no
+					any_subject_country = {
+						is_emperor = no
+						is_elector = yes
+					}
+					NOT = { alliance_with = ROOT }
+				}
+				custom_tooltip = to_join_the_emperor_in_all_defensive_wars_overlord_tt
+				hidden_effect = {
+					join_all_defensive_wars_of = emperor
+				}
+				custom_tooltip = nhs_new_line_tt
+			}
+
+			every_country = {
+				limit = {
+					is_emperor = no
+					is_subject = no
+					is_elector = no
+					NOT = {
+						any_subject_country = {
+							is_emperor = no
+							is_elector = yes
+						}
+					}
+					any_ally = {
+						NOT = { alliance_with = ROOT }
+						OR = {
+							is_elector = yes
+							any_subject_country = {
+								is_elector = yes
+							}
+						}
+					}
+					NOT = { war_with = emperor }
+					NOT = { alliance_with = ROOT }
+					OR = {
+						NOT = { is_rival = emperor }
+						is_rival = ROOT
+					}
+				}
+				custom_tooltip = to_join_the_emperor_in_all_defensive_wars_ally_tt
+				hidden_effect = {
+					join_all_defensive_wars_of = emperor
+				}
+			}
+			# every_country = {
+			# 	limit = {
+			# 		is_emperor = no
+			# 		is_elector = yes
+			# 		is_subject = no
+			# 		NOT = { war_with = emperor }
+			# 		AND = {
+			# 			alliance_with = ROOT
+			# 			has_opinion = { who = ROOT value = 150 }
+			# 		}
+			# 	}
+			# 	custom_tooltip = to_join_us_against_emperor_tt
+			# 	join_all_offensive_wars_of = ROOT
+			# }
+		}
+	}
 }
