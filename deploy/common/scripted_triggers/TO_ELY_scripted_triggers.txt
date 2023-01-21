@@ -2122,6 +2122,16 @@ to_nhs_has_dynamic_elysian_primary_culture = {
 	}
 }
 
+to_pre_romaic_greek = {
+	culture = greek
+	NOT = { has_global_flag = nhs_romaic_culture_change }
+}
+
+to_pre_romaic_greek_primary = {
+	primary_culture = greek
+	NOT = { has_global_flag = nhs_romaic_culture_change }
+}
+
 to_nhs_eligible_for_romaic_culture = {
 	OR = {
 		AND = {
@@ -2141,6 +2151,79 @@ to_nhs_eligible_for_romaic_culture = {
 				}
 			}
 		}
+	}
+}
+
+to_can_spawn_roman_subculture = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = $GLOBAL_FLAG$ }
+		}
+		if = {
+			limit = {
+				had_country_flag = { flag = $COUNTRY_FLAG$ days = 14600 }
+			}
+			any_owned_province = {
+				$PROVINCE_TRIGGER$
+				is_colony = no
+				OR = {
+					to_pre_romaic_greek = yes
+					to_nhs_has_dynamic_elysian_culture = yes
+					[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				had_country_flag = { flag = $COUNTRY_FLAG$ days = 10950 }
+			}
+			num_of_owned_provinces_with = {
+				value = 3
+				$PROVINCE_TRIGGER$
+				is_colony = no
+				OR = {
+					to_pre_romaic_greek = yes
+					to_nhs_has_dynamic_elysian_culture = yes
+					[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				had_country_flag = { flag = $COUNTRY_FLAG$ days = 7300 }
+			}
+			num_of_owned_provinces_with = {
+				value = 6
+				$PROVINCE_TRIGGER$
+				is_colony = no
+				OR = {
+					to_pre_romaic_greek = yes
+					to_nhs_has_dynamic_elysian_culture = yes
+					[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				had_country_flag = { flag = $COUNTRY_FLAG$ days = 3650 }
+			}
+			num_of_owned_provinces_with = {
+				value = 10
+				$PROVINCE_TRIGGER$
+				is_colony = no
+				OR = {
+					to_pre_romaic_greek = yes
+					to_nhs_has_dynamic_elysian_culture = yes
+					[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
+				}
+			}
+		}
+		else = {
+			always = no
+		}
+	}
+	else = {
+		always = yes
 	}
 }
 
