@@ -30,7 +30,10 @@ country_event = {
 		# }
 		any_owned_province = {
 			has_port = yes
-			province_has_center_of_trade_of_level = 1
+			OR = {
+				has_province_modifier = to_dynamic_cot
+				province_has_center_of_trade_of_level = 1
+			}
 			to_east_coast_province = yes
 		}
 	}
@@ -75,6 +78,34 @@ country_event = {
 			name = msg_restricted_trade
 			duration = -1
 		}
+		if = {
+			limit = {
+				NOT = {
+					any_owned_province = {
+						has_port = yes
+						province_has_center_of_trade_of_level = 1
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					has_province_modifier = to_dynamic_cot
+				}
+				remove_province_modifier = to_dynamic_cot
+				center_of_trade = 1
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					province_has_center_of_trade_of_level = 1
+					NOT = { province_has_center_of_trade_of_level = 3 }
+				}
+				nhs_set_center_of_trade_2 = yes
+			}
+		}
 	}
 
 	option = {
@@ -100,6 +131,34 @@ country_event = {
 		add_country_modifier = {
 			name = msg_free_trade
 			duration = -1
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_owned_province = {
+						has_port = yes
+						province_has_center_of_trade_of_level = 1
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					has_province_modifier = to_dynamic_cot
+				}
+				remove_province_modifier = to_dynamic_cot
+				center_of_trade = 1
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					province_has_center_of_trade_of_level = 1
+					NOT = { province_has_center_of_trade_of_level = 3 }
+				}
+				nhs_set_center_of_trade_2 = yes
+			}
 		}
 	}	
 }
