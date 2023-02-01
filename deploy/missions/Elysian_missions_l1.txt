@@ -2078,13 +2078,22 @@ nhs_right_start_silk_with_secret = {
 			set_global_flag = nhs_elysian_silk_exists
 			953 = {
 				change_trade_goods = elysian_silk
-				tooltip = {
-					add_permanent_province_modifier = {
-						name = "nhs_silk_quarter"
-						duration = -1
+				if = {
+					limit = {
+						has_province_modifier = nhs_silk_quarter_early_tm
+					}
+					custom_tooltip = to_improve_silk_quarter_tt
+				}
+				else = {
+					tooltip = {
+						add_permanent_province_modifier = {
+							name = "nhs_silk_quarter"
+							duration = -1
+						}
 					}
 				}
 				hidden_effect = {
+					remove_province_triggered_modifier = nhs_silk_quarter_early_tm
 					add_province_triggered_modifier = nhs_silk_quarter_tm
 				}
 			}
@@ -2527,6 +2536,15 @@ nhs_centre_start = {
 					NOT = { has_country_flag = nhs_enable_venetian_merchant_estate }
 				}	
 				custom_tooltip = nhs_enables_merchnant_estate_tt
+			}
+			if = {
+				limit = {
+					capital_scope = {
+						trade_goods = skoros_silk
+					}
+				}
+				custom_tooltip = nhs_new_line_tt
+				country_event = { id = nhs2_countryevents.35 days = 720 }
 			}
 			#clr_country_flag = nhs_enable_venetian_merchant_estate
 			hidden_effect = {
