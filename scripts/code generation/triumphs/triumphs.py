@@ -23,7 +23,7 @@ class Region:
 
 
 regions = [
-    Region("balkan_region", 50, "Haemus", 136, [150, 136]),  # Total 57, 29 outside Greece
+    Region("balkan_region", 50, "Illyrikon", 136, [150, 136]),  # Total 57, 29 outside Greece
     Region("anatolia_region", 30, "Anatolia", 316, [318, 317]),  # Total 48
     Region("mashriq_region", 20, "Syria", 379, [2313]),  # Total 30
     Region("egypt_region", 20, "Aigyptos", 358, [358]),  # Total 29
