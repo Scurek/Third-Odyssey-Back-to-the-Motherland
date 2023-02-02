@@ -6889,6 +6889,12 @@ country_decisions = {
 						is_subject = no
 						war_with = emperor
 						NOT = {
+							is_in_war = {
+								participants = THIS
+								casus_belli = cb_religious_league
+							}
+						}
+						NOT = {
 							alliance_with = ROOT
 						}
 						if = {
@@ -6906,6 +6912,28 @@ country_decisions = {
 		}
 
 		effect = {
+			if = {
+				limit = {
+					emperor = {
+						is_in_war = {
+							casus_belli = cb_religious_league
+						}
+					}
+				}
+				custom_tooltip = to_league_war_will_end_tt
+				custom_tooltip = nhs_new_line_tt
+				hidden_effect = {
+					random_country = {
+						limit = {
+							is_in_war = {
+								attacker_leader = THIS
+								casus_belli = cb_religious_league
+							}
+						}
+						white_peace = emperor
+					}
+				}
+			}
 			declare_war_with_cb = {
 				who = emperor
 				casus_belli = cb_to_challenge_the_false_emperor
@@ -6963,7 +6991,14 @@ country_decisions = {
 							}
 						}
 					}
-					NOT = { war_with = emperor }
+					OR = {
+						NOT = { war_with = emperor }
+						is_in_war = {
+							participants = THIS
+							participants = emperor
+							casus_belli = cb_religious_league
+						}
+					}
 					NOT = { alliance_with = ROOT }
 					OR = {
 						NOT = { is_rival = emperor }
@@ -6975,20 +7010,6 @@ country_decisions = {
 					join_all_defensive_wars_of = emperor
 				}
 			}
-			# every_country = {
-			# 	limit = {
-			# 		is_emperor = no
-			# 		is_elector = yes
-			# 		is_subject = no
-			# 		NOT = { war_with = emperor }
-			# 		AND = {
-			# 			alliance_with = ROOT
-			# 			has_opinion = { who = ROOT value = 150 }
-			# 		}
-			# 	}
-			# 	custom_tooltip = to_join_us_against_emperor_tt
-			# 	join_all_offensive_wars_of = ROOT
-			# }
 		}
 	}
 }
