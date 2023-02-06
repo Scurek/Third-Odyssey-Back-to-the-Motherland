@@ -2377,3 +2377,56 @@ to_primary_culture_and_ruler_heir_consort_culture_if_primary = {
 		change_primary_culture = $CULTURE$
 	}
 }
+
+to_remove_fraction_of_aggressive_expansion = {
+	hidden_effect = {
+		every_country = {
+			limit = {
+				NOT = { tag = ROOT }
+				$COUNTRY_TRIGGER$
+			}
+			while = {
+				limit = {
+					has_opinion_modifier = {
+						who = ROOT
+						modifier = aggressive_expansion
+					}
+				}
+				change_variable = {
+					which = to_ae_counter
+					value = 1
+				}
+				add_aggressive_expansion = {
+					who = ROOT
+					value = -1
+					apply_calc = no
+				}
+			}
+			multiply_variable = {
+				which = to_ae_counter
+				value = $FRACTION$
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = to_ae_counter
+						value = 1
+					}
+				}
+				change_variable = {
+					which = to_ae_counter
+					value = -1
+				}
+				add_aggressive_expansion = {
+					who = ROOT
+					value = 1
+					apply_calc = no
+				}
+			}
+			set_variable = {
+				which = to_ae_counter
+				value = 0
+			}
+		}
+	}
+}

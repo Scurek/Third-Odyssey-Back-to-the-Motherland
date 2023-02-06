@@ -2409,6 +2409,10 @@ country_event = {
 	}
 }
 
+###################################
+#HRE Events
+###################################
+
 # Restitutor Orbis; for if Renovatio triggers for Roman/Elysian Emperor
 # "Restitutor Orbis" means "Restorer of the World" and was the title given to Emperor Aurelian.
 country_event = {
@@ -2446,6 +2450,9 @@ country_event = {
 				is_part_of_hre = yes
 				is_emperor = no
 				num_of_cities = 1
+				NOT = { is_subject_of_type = elysian_subject }
+				NOT = { is_subject_of_type = elysian_subject_varangian }
+				NOT = { is_subject_of_type = nhs_imperial_associate }
 			}
 			country_event = { id = 9076 }
 		}
@@ -2455,6 +2462,140 @@ country_event = {
 	}
 }
 
+# Walking across the Rhine
+country_event = {
+	id = nhs2_mainlandevents.40
+	title = nhs2_mainlandevents.40.t
+	desc = nhs2_mainlandevents.40.d
+	picture = HRE_eventPicture
+
+	major = yes
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			export_to_variable = {
+				which = to_hre_year
+				value = trigger_value:is_year
+			}
+			subtract_variable = {
+				which = to_hre_year
+				value = 800
+			}
+		}
+	}
+	
+	option = {
+		name = nhs2_mainlandevents.40.a
+		set_country_flag = to_kept_hre_bureaucracy
+		custom_tooltip = to_gain_opinion_with_hre_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					NOT = { tag = ROOT }
+					is_part_of_hre = yes
+				}
+				add_opinion = {
+					who = ROOT
+    				modifier = to_kept_hre_bureaucracy_om
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_gain_ia_from_restoring_imperial_provinces_tt
+		hidden_effect = {
+			every_province = {
+				limit = {
+					is_part_of_hre = yes
+					owner = {
+						OR = {
+							AND = {
+								is_part_of_hre = no
+								OR = {
+									is_subject = no
+									overlord = {
+										is_part_of_hre = no
+									}
+								}
+							}
+							AND = {
+								is_subject = yes
+								overlord = {
+									is_part_of_hre = no
+								}
+							}
+						}
+					}
+				}
+				set_province_flag = to_grants_ia_upon_reconquest
+			}
+		}
+		custom_tooltip = nhs_dotted_line_tt
+		custom_tooltip = to_set_hre_religion_to_root_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_reduce_hre_ae_tt
+		to_remove_fraction_of_aggressive_expansion = {
+			FRACTION = 0.5
+			COUNTRY_TRIGGER = "
+			is_part_of_hre = yes
+			has_opinion_modifier = {
+				who = ROOT
+				modifier = aggressive_expansion
+			}"
+		}
+	}
+	option = {
+		name = nhs2_mainlandevents.40.b
+		add_country_modifier = {
+			name = to_imperial_integration
+			duration = 10950
+		}
+		set_country_flag = to_integrated_hre_bureaucracy
+		custom_tooltip = to_can_no_longer_expand_hre_tt
+		if = {
+			limit = {
+				has_dlc = "Emperor"
+			}
+			custom_tooltip = to_disable_expand_hre_cb_tt
+		}
+		custom_tooltip = to_remove_all_outside_provinces_from_hre_tt
+		hidden_effect = {
+			every_province = {
+				limit = {
+					is_part_of_hre = yes
+					NOT = {
+						owner = {
+							OR = {
+								is_part_of_hre = yes
+								overlord = {
+									is_part_of_hre = yes
+								}
+							}
+						}
+					}
+				}
+				set_in_empire = no
+			}
+		}
+		custom_tooltip = nhs_dotted_line_tt
+		custom_tooltip = to_set_hre_religion_to_root_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_reduce_hre_ae_tt
+		to_remove_fraction_of_aggressive_expansion = {
+			FRACTION = 0.5
+			COUNTRY_TRIGGER = "
+			is_part_of_hre = yes
+			has_opinion_modifier = {
+				who = ROOT
+				modifier = aggressive_expansion
+			}"
+		}
+	}
+}
+
+###################################
+#Conquest of Rome
+###################################
 # Conquest of Rome (Christian)
 country_event = {
 	id = nhs2_mainlandevents.36
