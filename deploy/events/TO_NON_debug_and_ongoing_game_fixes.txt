@@ -915,31 +915,38 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		hidden_effect = {
-			to_compute_merc_company_size = {
-				OUTPUT_VARIABLE = test1
-				REGIMENTS_PER_DEVELOPMENT = 0.05
-			}
-			log = "Dev autonomy: [Root.test1.GetValue]"
-
-			to_compute_merc_company_size = {
-				OUTPUT_VARIABLE = test2
-				REGIMENTS_PER_DEVELOPMENT = 0.025
-			}
-			log = "Dev autonomy: [Root.test2.GetValue]"
-
-			to_compute_merc_company_size = {
-				OUTPUT_VARIABLE = test3
-				REGIMENTS_PER_DEVELOPMENT = 0.04
-			}
-			log = "Dev autonomy: [Root.test3.GetValue]"
-		}
+		
 	}
 	
 	option = {
 		name = "nhs2_test.43.a"
-		1853 = {
-			change_culture = turkish
+		if = {
+			limit = {
+				has_dlc = "Art of War"
+			}
+			if = {
+				limit = {
+					hre_religion_treaty = yes
+				}
+				set_hre_religion_treaty = no
+			}
+			set_hre_religion = ROOT
 		}
+		set_in_empire = yes
+		if = {
+			limit = {
+				NOT = { is_emperor = yes }
+			}
+			set_emperor = yes
+		}
+		hre_inheritable = yes
+		if = {
+			limit = {
+				has_dlc = "Art of War"
+			}
+			set_hre_religion = ROOT
+			set_hre_religion_locked = yes
+		}
+		country_event = { id = nhs2_mainlandevents.40 }
 	}
 }
