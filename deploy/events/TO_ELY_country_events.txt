@@ -60,8 +60,6 @@ province_event = {
 
     trigger = {
 		nhs_homelands_no_capital = yes
-		is_colony = no
-		NOT = { has_province_flag = nhs_is_colony }
 		NOT = { has_province_flag = nhs_got_core }
 		# NOT = { province_id = 952 }
 		owner = {
@@ -75,6 +73,7 @@ province_event = {
 			set_province_flag = nhs_had_dev_events_2
 			set_province_flag = nhs_got_core_culture_change_delay
 			owner = {
+				set_country_flag = to_homelands_event_active
 				remove_core = ROOT
 				add_core = ROOT
 			}
@@ -83,9 +82,22 @@ province_event = {
 
 	after = {
 		owner = {
+			clr_country_flag = to_homelands_event_active
 			set_country_flag = had_event_nhs2_countryevents_2
 		}
 		clr_province_flag = nhs_got_core_culture_change_delay
+		random_province = {
+			limit = {
+				is_colony = no
+				nhs_homelands_no_capital = yes
+				NOT = { has_province_flag = nhs_is_colony }
+				NOT = { has_province_flag = nhs_got_core }
+				owner = {
+					nhs_check_all_elysian_tags = { CONDITION = tag }
+				}
+			}
+			province_event = { id = nhs2_countryevents.2 days = 1 }
+		}
 	}
 
 	option = {
