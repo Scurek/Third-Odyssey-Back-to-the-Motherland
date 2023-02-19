@@ -2,13 +2,17 @@ country_decisions = {
 	# Konstantinia
 	nhs_form_konstantinia = {
 		potential = {
-			# nhs_check_all_elysian_tags = { CONDITION = tag }
+			nhs_check_all_elysian_tags = { CONDITION = tag }
 			OR = {
 				has_country_flag = nhs_enable_form_konstantinia_decision
 				has_country_flag = nhs_formed_greek
 			}
 			NOT = { exists = ELG }
 			NOT = { has_country_flag = to_moved_capital_to_constantinople }
+		}
+
+		allow = {
+			is_at_war = no
 			if = {
 				limit = {
 					OR = {
@@ -38,10 +42,6 @@ country_decisions = {
 					is_owned_by_trade_company = no
 				}
 			}
-		}
-
-		allow = {
-			is_at_war = no
 		}
 
 		effect = {
@@ -84,8 +84,7 @@ country_decisions = {
 						}
 					}
 					146 = {
-						remove_core = ROOT
-						add_core = ELG
+						to_add_core_and_release_exarch = { TAG = ELG }
 					}
 				}
 				else_if = {
@@ -117,10 +116,22 @@ country_decisions = {
 							NOT = { is_state_core = ROOT }
 							is_owned_by_trade_company = no
 						}
-						add_core = ELG
+						to_add_core_and_release_exarch = { TAG = ELG }
 					}
 				}
-				release = ELG
+				else = {
+					random_owned_province = {
+						limit = {
+							nhs_greek_areas = yes
+							NOT = { province_id = 151 }
+							NOT = { is_state_core = ROOT }
+							NOT = { has_construction = missionary }
+							NOT = { has_construction = core }
+							is_owned_by_trade_company = no
+						}
+						to_add_core_and_release_exarch = { TAG = ELG }
+					}
+				}
 				create_subject = {
 					subject_type = elysian_subject
 					subject = ELG
