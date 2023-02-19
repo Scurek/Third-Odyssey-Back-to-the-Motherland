@@ -34,15 +34,41 @@ to_ongoing_fixes = {
 		}
 	}
 
-	if = {
-		limit = {
-			has_country_modifier = nhs2_invasion_succeseful
-			has_country_flag = to_integrated_greeks
-		}
-		remove_country_modifier = nhs2_invasion_succeseful
-		add_country_modifier = {
-			name = nhs2_invasion_succeseful_2
-			duration = -1
+	# Recalc triumphs
+	hidden_effect = {
+		reset_triumph_counter = { REGION = france_region }
+		reset_triumph_counter = { REGION = low_countries_region }
+		reset_triumph_counter = { REGION = italy_region }
+		reset_triumph_counter = { REGION = south_german_region }
+		reset_triumph_counter = { REGION = iberia_region }
+		reset_triumph_counter = { REGION = british_isles_region }
+		reset_triumph_counter = { REGION = carpathia_region }
+		reset_triumph_counter = { REGION = egypt_region }
+		reset_triumph_counter = { REGION = maghreb_region }
+		reset_triumph_counter = { REGION = mashriq_region }
+		reset_triumph_counter = { REGION = anatolia_region }
+		reset_triumph_counter = { REGION = balkan_region }
+		every_province = {
+			limit = {
+				is_empty = no
+			}
+			if = {
+				limit = {
+					nhs_check_all_elysian_tags = { CONDITION = owned_by }
+				}
+				to_change_triumph_province_counters = { CHANGE = 1 SCOPE = owner }
+			}
+			else_if = {
+				limit = {
+					nhs_check_all_elysian_tags = { CONDITION = country_or_subject_holds }
+				}
+				owner = {
+					overlord = {
+						save_event_target_as = to_roman_overlord
+					}
+				}
+				to_change_triumph_province_counters = { CHANGE = 1 SCOPE = event_target:to_roman_overlord }
+			}
 		}
 	}
 }
