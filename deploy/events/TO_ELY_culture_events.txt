@@ -24,6 +24,7 @@ country_event = {
 		}
 		technology_group = exiled_greek
 		OR = {
+			is_year = 1525
 			AND = {
 				is_year = 1515
 				NOT = {
@@ -34,6 +35,7 @@ country_event = {
 					all_owned_province = {
 						OR = {
 							culture = elysameric
+							has_province_flag = to_culture_changed_from_symmachoi
 							to_ely_can_convert_to_barbaroi = yes
 						}
 					}
@@ -45,6 +47,7 @@ country_event = {
 				any_owned_province = {
 					OR = {
 						culture = elysameric
+						has_province_flag = to_culture_changed_from_symmachoi
 						to_ely_can_convert_to_barbaroi = yes
 					}
 				}
@@ -57,6 +60,7 @@ country_event = {
 					all_owned_province = {
 						OR = {
 							culture = elysameric
+							has_province_flag = to_culture_changed_from_symmachoi
 							to_ely_can_convert_to_barbaroi = yes
 						}
 					}
@@ -70,6 +74,7 @@ country_event = {
 					all_owned_province = {
 						OR = {
 							culture = elysameric
+							has_province_flag = to_culture_changed_from_symmachoi
 							to_ely_can_convert_to_barbaroi = yes
 						}
 					}
@@ -493,6 +498,7 @@ province_event = {
 		name = "nhs2_cultureevents.103.a"
 		to_nhs_assign_correct_elysian_culture = yes
 		hidden_effect = {
+			set_province_flag = to_culture_changed_from_symmachoi
 			clr_province_flag = nhs_culture_changed_to_symmachoi
 			hidden_effect = {
 				nhs_on_province_culture_converted_general = {}
@@ -523,8 +529,6 @@ country_event = {
 	desc = nhs2_cultureevents.106.d
 	picture = COLONIZATION_eventPicture
 
-	is_triggered_only = yes
-
 	trigger = {
 		NOT = { nhs_check_all_elysian_tags = { CONDITION = tag } }
 		NOT = { tag = CM1 }
@@ -534,7 +538,10 @@ country_event = {
 			capital_scope = { continent = north_america }
 			capital_scope = { continent = south_america }
 		}
-		has_global_flag = nhs_romaic_culture_change
+		OR = {
+			has_global_flag = nhs_romaic_to_elysian
+			has_global_flag = nhs_romaic_culture_change
+		}
 	}
 
 	option = {
@@ -550,20 +557,47 @@ country_event = {
 				set_province_flag = to_check_culture_after_conversion
 			}
 		}
-		to_primary_culture_and_ruler_heir_consort_culture_if_primary = {
-			CULTURE = romaic
-			PRIMARY_CULTURE = THIS
-		}
-		hidden_effect = {
-			every_province = {
-				limit = {
-					owned_by = ROOT
-					culture = greek
-					NOT = { continent = europe }
+		if = {
+			limit = {
+				is_subject = yes
+				overlord = {
+					primary_culture = elysian
 				}
-				change_culture = romaic
-				hidden_effect = {
-					nhs_on_province_culture_converted_general = {}
+			}
+			to_primary_culture_and_ruler_heir_consort_culture_if_primary = {
+				CULTURE = elysian
+				PRIMARY_CULTURE = THIS
+			}
+			hidden_effect = {
+				every_province = {
+					limit = {
+						owned_by = ROOT
+						culture = greek
+						NOT = { continent = europe }
+					}
+					change_culture = elysian
+					hidden_effect = {
+						nhs_on_province_culture_converted_general = {}
+					}
+				}
+			}
+		}
+		else = {
+			to_primary_culture_and_ruler_heir_consort_culture_if_primary = {
+				CULTURE = romaic
+				PRIMARY_CULTURE = THIS
+			}
+			hidden_effect = {
+				every_province = {
+					limit = {
+						owned_by = ROOT
+						culture = greek
+						NOT = { continent = europe }
+					}
+					change_culture = romaic
+					hidden_effect = {
+						nhs_on_province_culture_converted_general = {}
+					}
 				}
 			}
 		}
@@ -580,7 +614,10 @@ country_event = {
 	trigger = {
 		tag = CM1
 		primary_culture = greek
-		has_global_flag = nhs_romaic_culture_change
+		OR = {
+			has_global_flag = nhs_romaic_to_elysian
+			has_global_flag = nhs_romaic_culture_change
+		}
 		NOT = { has_country_flag = ctm_culture_union1 }
 	}
 

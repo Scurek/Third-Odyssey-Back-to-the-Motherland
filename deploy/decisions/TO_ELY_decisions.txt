@@ -4661,6 +4661,7 @@ country_decisions = {
 		}
 
 		effect = {
+			set_global_flag = nhs_romaic_to_elysian
 			set_country_flag = nhs_abandoned_greece
 			set_country_flag = nhs_abandoned_invasion_effort
 			custom_tooltip = nhs_no_longer_invade_tt
@@ -4710,29 +4711,11 @@ country_decisions = {
 			to_primary_culture_and_ruler_heir_consort_culture_if_primary = {
 				CULTURE = elysian
 				PRIMARY_CULTURE = THIS
+				ONLY_SHOW_PRIMARY = yes
 			}
-			hidden_effect = {
-				set_global_flag = nhs_romaic_to_elysian
-				remove_accepted_culture = romaic
-				if = {
-					limit = {
-						ruler_culture = greek
-					}
-					set_ruler_culture = elysian
-				}
-				if = {
-					limit = {
-						consort_culture = greek
-						has_consort = yes
-					}
-					set_consort_culture = elysian
-				}
-				if = {
-					limit = {
-						heir_culture = greek
-						has_heir = yes
-					}
-					set_heir_culture = elysian
+			if = {
+				limit = {
+					has_global_flag = nhs_romaic_culture_change
 				}
 				every_subject_country = {
 					limit = {
@@ -4741,7 +4724,7 @@ country_decisions = {
 					hidden_effect = {
 						every_province = {
 							limit = {
-								owned_by = ROOT
+								owned_by = PREV
 								NOT = { culture = romaic }
 								has_construction = culture
 								NOT = { has_albanian_majority_modifier = yes }
@@ -4755,19 +4738,85 @@ country_decisions = {
 						ONLY_SHOW_PRIMARY = yes
 					}
 				}
-				every_province = {
+			}
+			else = {
+				every_subject_country = {
 					limit = {
-						culture = romaic
-						owner = {
-							primary_culture = elysian
+						primary_culture = greek
+						technology_group = exiled_greek
+						OR = {
+							capital_scope = { continent = north_america }
+							capital_scope = { continent = south_america }
 						}
 					}
-					change_culture = elysian
 					hidden_effect = {
-						nhs_on_province_culture_converted_general = {}
+						every_province = {
+							limit = {
+								owned_by = PREV
+								NOT = { culture = greek }
+								has_construction = culture
+								NOT = { has_albanian_majority_modifier = yes }
+							}
+							set_province_flag = to_check_culture_after_conversion
+						}
+					}
+					to_primary_culture_and_ruler_heir_consort_culture_if_primary = {
+						CULTURE = elysian
+						PRIMARY_CULTURE = THIS
+						ONLY_SHOW_PRIMARY = yes
 					}
 				}
 			}
+			hidden_effect = {
+				if = {
+					limit = {
+						has_global_flag = nhs_romaic_culture_change
+					}
+					every_province = {
+						limit = {
+							culture = romaic
+							owner = {
+								primary_culture = elysian
+							}
+						}
+						change_culture = elysian
+						hidden_effect = {
+							nhs_on_province_culture_converted_general = {}
+						}
+					}
+				}
+				else = {
+					every_province = {
+						limit = {
+							culture = greek
+							OR = {
+								AND = {
+									owned_by = ROOT
+									NOT = { continent = europe }
+								}
+								continent = north_america
+								continent = south_america
+							}
+							NOT = { has_albanian_majority_modifier = yes }
+							NOT = {
+								owner = {
+									primary_culture = greek
+								}
+							}
+						}
+						change_culture = elysian
+						hidden_effect = {
+							nhs_on_province_culture_converted_general = {}
+						}
+					}
+					set_global_flag = nhs_romaic_culture_change
+					every_country = {
+						country_event = { id = nhs2_cultureevents.106 }
+						country_event = { id = nhs2_cultureevents.107 }
+					}
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
 			if = {
 				limit = {
 					mission_completed = to_assemble_an_invasion_force_mission
