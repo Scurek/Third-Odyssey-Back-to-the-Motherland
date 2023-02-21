@@ -41,9 +41,8 @@ roads = [
         "name": "south",
         "tier": 1,
         "cost": 500,
-        "requires_build": [
-            4887, 918
-        ],
+        "additional_potential": "has_global_flag = to_elysian_highways_south_apaleisian_enabled\n"
+                                "			NOT = { has_global_flag = to_elysian_highways_south_alt_enabled }",
         "provinces": [
             {"id": 2528},
             {"id": 2529},
@@ -53,9 +52,25 @@ roads = [
         ]
     },
     {
+        "name": "south_alt",
+        "tier": 1,
+        "cost": 500,
+        "additional_potential": "NOT = { has_global_flag = to_elysian_highways_south_apaleisian_enabled }\n"
+                                "			NOT = { has_global_flag = to_elysian_highways_south_enabled }",
+        "provinces": [
+            {"id": 2514},
+            {"id": 4923},
+            {"id": 895, "duplicate": True},
+            {"id": 4885},
+            {"id": 2014},
+            {"id": 893, "duplicate": True},
+        ]
+    },
+    {
         "name": "coastal",
         "tier": 2,
         "cost": 1500,
+        "additional_potential": "has_global_flag = to_elysian_highways_south_apaleisian_enabled",
         "requires_build": [
             4887, 918, 2528, 2529, 4884
         ],
@@ -76,7 +91,35 @@ roads = [
             {"id": 950},
             {"id": 952},
             {"id": 2550},
-            # {"id": 953},
+        ]
+    },
+    {
+        "name": "coastal_alt",
+        "tier": 2,
+        "cost": 1500,
+        "flag_override": "coastal",
+        "province_list_override": "coastal",
+        "additional_potential": "NOT = { has_global_flag = to_elysian_highways_south_apaleisian_enabled }",
+        "requires_build": [
+            2514, 4923, 895, 4885, 2014
+        ],
+        "provinces": [
+            {"id": 2530, "duplicate": True},
+            {"id": 922, "duplicate": True},
+            {"id": 923, "duplicate": True},
+            {"id": 2533, "duplicate": True},
+            {"id": 4881, "duplicate": True},
+            {"id": 2539, "duplicate": True},
+            {"id": 929, "duplicate": True},
+            {"id": 2542, "duplicate": True},
+            {"id": 932, "duplicate": True},
+            {"id": 2543, "duplicate": True},
+            {"id": 2546, "duplicate": True},
+            {"id": 938, "duplicate": True},
+            {"id": 2547, "duplicate": True},
+            {"id": 950, "duplicate": True},
+            {"id": 952, "duplicate": True},
+            {"id": 2550, "duplicate": True},
         ]
     },
     {
@@ -123,6 +166,7 @@ roads = [
         "name": "west",
         "tier": 3,
         "cost": 2500,
+        "additional_potential": "has_global_flag = to_elysian_highways_south_apaleisian_enabled",
         "requires_build": [
             4887, 918, 2528
         ],
@@ -150,6 +194,40 @@ roads = [
             {"id": 870},
             {"id": 5364},
             {"id": 2021}
+        ]
+    },
+    {
+        "name": "west_alt",
+        "tier": 3,
+        "cost": 2500,
+        "flag_override": "west",
+        "additional_potential": "NOT = { has_global_flag = to_elysian_highways_south_apaleisian_enabled }",
+        "requires_build": [
+            2514, 4923, 895
+        ],
+        "provinces": [
+            {"id": 894, "duplicate": True},
+            {"id": 4911, "duplicate": True},
+            {"id": 886, "duplicate": True},
+            {"id": 4909, "duplicate": True},
+            {"id": 2500, "duplicate": True},
+            {"id": 2497, "duplicate": True},
+            {"id": 4628, "duplicate": True},
+            {"id": 881, "duplicate": True},
+            {"id": 2492, "duplicate": True},
+            {"id": 879, "duplicate": True},
+            {"id": 4633, "duplicate": True},
+            {"id": 877, "duplicate": True},
+            {"id": 876, "duplicate": True},
+            {"id": 867, "duplicate": True},
+            {"id": 5368, "duplicate": True},
+            {"id": 5394, "duplicate": True},
+            {"id": 868, "duplicate": True},
+            {"id": 5387, "duplicate": True},
+            {"id": 2478, "duplicate": True},
+            {"id": 870, "duplicate": True},
+            {"id": 5364, "duplicate": True},
+            {"id": 2021, "duplicate": True}
         ]
     },
     {
