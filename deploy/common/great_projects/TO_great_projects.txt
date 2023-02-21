@@ -3829,22 +3829,27 @@ akrotirion = {
 
 	build_trigger = {
 		region = carribeans_region
-		NOT = { has_global_flag = to_akrotirion_build }
+		NOT = { has_global_flag = to_akrotirion_build2 }
 		FROM = {
 			mission_completed = to_gateway_to_elysium_mission
+		}
+		NOT = {
+			any_province = {
+				region = carribeans_region
+				has_construction = canal
+			}
 		}
 	}
 
 	on_built = {
-		if = {
+		set_global_flag = to_akrotirion_build2
+		every_province = {
 			limit = {
-				has_global_flag = to_akrotirion_build
+				region = carribeans_region
+				has_construction = canal
 			}
-			destroy_great_project = {
-				type = akrotirion
-			}
+			cancel_construction = yes
 		}
-		set_global_flag = to_akrotirion_build
 	}
 
 	on_destroyed = {
@@ -3957,26 +3962,65 @@ to_elysian_highways_project = {
 
 	build_trigger = {
 		to_has_elysian_highway_modifier = yes
-		NOT = { has_global_flag = to_elysian_highways_project_build }
+		NOT = { has_global_flag = to_elysian_highways_project_build2 }
 		FROM = {
 			mission_completed = to_beyond_the_apaleisians_mission
 		}
-		# has_province_flag = to_elysian_highways_project_province
-		# FROM = {
-		# 	nhs_eligible_for_elysian_monument = yes
-		# }
+		OR = {
+			to_elysian_highway_north_apaleisian_province_trigger = { TRIGGER = province_id }
+			to_elysian_highway_south_apaleisian_province_trigger = { TRIGGER = province_id }
+		}
+		NOT = {
+			any_province = {
+				OR = {
+					to_elysian_highway_north_apaleisian_province_trigger = { TRIGGER = province_id }
+					to_elysian_highway_south_apaleisian_province_trigger = { TRIGGER = province_id }
+				}
+				has_construction = canal
+			}
+		}
 	}
 
 	on_built = {
+		set_global_flag = to_elysian_highways_project_build2
+		every_province = {
+			limit = {
+				OR = {
+					to_elysian_highway_north_apaleisian_province_trigger = { TRIGGER = province_id }
+					to_elysian_highway_south_apaleisian_province_trigger = { TRIGGER = province_id }
+				}
+				to_has_elysian_highway_modifier = yes
+				has_construction = canal
+			}
+			cancel_construction = yes
+		}
 		if = {
 			limit = {
-				has_global_flag = to_elysian_highways_project_build
+				has_global_flag = to_elysian_highways_project_tier_3
 			}
-			destroy_great_project = {
+			add_great_project_tier = {
 				type = to_elysian_highways_project
+				tier = 3
 			}
 		}
-		set_global_flag = to_elysian_highways_project_build
+		else_if = {
+			limit = {
+				has_global_flag = to_elysian_highways_project_tier_2
+			}
+			add_great_project_tier = {
+				type = to_elysian_highways_project
+				tier = 2
+			}
+		}
+		else_if = {
+			limit = {
+				has_global_flag = to_elysian_highways_project_tier_1
+			}
+			add_great_project_tier = {
+				type = to_elysian_highways_project
+				tier = 1
+			}
+		}
 	}
 
 	on_destroyed = {
