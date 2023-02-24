@@ -71,6 +71,36 @@ decisions_template = Template('''{% for exarch in exarchs %}
 				    {%- endif %}
 				}
 			}
+			{%- elif 'varangians_check' in exarch %}
+            if = {
+				limit = {
+					126 = {
+					    owned_by = ROOT
+						has_province_modifier = to_varangian_headquarters
+					}
+				}
+				any_owned_province = {
+					nhs_{{ exarch['tag'] }}_province = yes
+					NOT = { is_state_core = ROOT }
+					NOT = { has_construction = core }
+					is_owned_by_trade_company = no
+					NOT = { has_province_modifier = to_varangian_headquarters }
+					{%- if 'check_supply_lines' in exarch %}
+				    NOT = { has_province_modifier = nhs2_supply_lines_tm }
+				    {%- endif %}
+				}
+			}
+			else = {
+				any_owned_province = {
+					nhs_{{ exarch['tag'] }}_province = yes
+					NOT = { is_state_core = ROOT }
+					NOT = { has_construction = core }
+					is_owned_by_trade_company = no
+					{%- if 'check_supply_lines' in exarch %}
+				    NOT = { has_province_modifier = nhs2_supply_lines_tm }
+				    {%- endif %}
+				}
+			}
             {%- else %}
 			any_owned_province = {
 				nhs_{{ exarch['tag'] }}_province = yes
@@ -78,7 +108,7 @@ decisions_template = Template('''{% for exarch in exarchs %}
 				NOT = { has_construction = core }
 				is_owned_by_trade_company = no
 				{%- if 'check_supply_lines' in exarch %}
-				    NOT = { has_province_modifier = nhs2_supply_lines_tm }
+				NOT = { has_province_modifier = nhs2_supply_lines_tm }
 				{%- endif %}
 			}
 			{%- endif %}

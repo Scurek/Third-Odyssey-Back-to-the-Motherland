@@ -131,6 +131,7 @@ exarchs = [
         "culture_group": 'latin',
         "primary_culture": 'umbrian',
         "check_supply_lines": True,
+        "varangians_check": True,
         "merchant_tooltip_overwrite": "if = {\n"
                                       "				limit = { "
                                       "VGD = { is_subject_of = ROOT is_subject_of_type = "
