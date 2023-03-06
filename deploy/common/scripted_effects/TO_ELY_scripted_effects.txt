@@ -13645,12 +13645,27 @@ to_the_final_triumph_effect = {
 						who = ROOT
 						modifier = aggressive_expansion
 					}
-					every_province = {
+					if = {
 						limit = {
-							is_core = PREV
-							country_or_subject_holds = ROOT
+							NOT = { is_subject_of = ROOT }
+							NOT = {
+								AND = {
+									is_subject = yes
+									overlord = {
+										is_subject = yes
+										is_subject_of = ROOT
+									}
+								}
+							}
 						}
-						remove_core = PREV
+						every_province = {
+							limit = {
+								is_core = PREV
+								country_or_subject_holds = ROOT
+								NOT = { owned_by = PREV }
+							}
+							remove_core = PREV
+						}
 					}
 				}
 			}
