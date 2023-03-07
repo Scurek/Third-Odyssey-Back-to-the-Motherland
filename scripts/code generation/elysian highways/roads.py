@@ -67,9 +67,10 @@ roads = [
         ]
     },
     {
-        "name": "coastal",
+        "name": "coastal_alt",
         "tier": 2,
         "cost": 1500,
+        "flag_override": "coastal",
         "additional_potential": "has_global_flag = to_elysian_highways_south_apaleisian_enabled",
         "requires_build": [
             4887, 918, 2528, 2529, 4884
@@ -94,16 +95,15 @@ roads = [
         ]
     },
     {
-        "name": "coastal_alt",
+        "name": "coastal",
         "tier": 2,
         "cost": 1500,
-        "flag_override": "coastal",
-        "province_list_override": "coastal",
         "additional_potential": "NOT = { has_global_flag = to_elysian_highways_south_apaleisian_enabled }",
         "requires_build": [
             2514, 4923, 895, 4885, 2014
         ],
         "provinces": [
+            {"id": 921, "duplicate": True},
             {"id": 2530, "duplicate": True},
             {"id": 922, "duplicate": True},
             {"id": 923, "duplicate": True},
