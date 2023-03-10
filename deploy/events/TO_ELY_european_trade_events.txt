@@ -1558,6 +1558,10 @@ country_event = {
 					custom_tooltip = to_break_alliance_with_por_tt
 					hidden_effect = {
 						break_alliance = event_target:nhs_portugal_tar
+						remove_historical_friend = event_target:nhs_portugal_tar
+						event_target:nhs_portugal_tar = {
+							remove_historical_friend = PREV
+						}
 					}
 				}
 				custom_tooltip = to_por_starts_hating_colonizers_lower_opinion_tt
@@ -1899,16 +1903,20 @@ country_event = {
 
 	trigger = {
 		has_global_flag = to_portugal_hates_colonizers
+		has_country_modifier = nhs2_por_ely_trade
 		NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
-		NOT = { has_country_modifier = nhs2_ely_por_trade }
-		is_subject = no
 		OR = {
 			AND = {
-				num_of_colonists = 1
 				any_known_country = {
-					has_country_flag = nhs_portugese_secret
-					has_country_modifier = nhs2_por_ely_trade
+					is_subject = no
+					num_of_colonists = 1
+					NOT = { has_country_modifier = nhs2_ely_por_trade }
 					OR = {
+						historical_friend_with = ROOT
+						ROOT = {
+							historical_friend_with = PREV
+						}
+						alliance_with = ROOT
 						NOT = {
 							has_opinion_modifier = {
 								who = ROOT
@@ -1925,10 +1933,13 @@ country_event = {
 				}
 			}
 			AND = {
-				NOT = { num_of_colonists = 1 }
 				any_known_country = {
-					has_country_flag = nhs_portugese_secret
-					has_country_modifier = nhs2_por_ely_trade
+					is_subject = no
+					OR = {
+						is_subject = yes
+						NOT = { num_of_colonists = 1 }
+						has_country_modifier = nhs2_ely_por_trade
+					}
 					OR = {
 						has_opinion_modifier = {
 							who = ROOT
@@ -1945,83 +1956,102 @@ country_event = {
 	}
 
 	immediate = {
-		if = {
+		every_known_country = {
 			limit = {
+				is_subject = no
 				num_of_colonists = 1
-			}
-			random_known_country = {
-				limit = {
-					has_country_flag = nhs_portugese_secret
-					has_country_modifier = nhs2_por_ely_trade
-					OR = {
-						NOT = {
-							has_opinion_modifier = {
-								who = ROOT
-								modifier = to_por_hates_colonizers
-							}
-						}
-						NOT = {
-							reverse_has_opinion_modifier = {
-								who = ROOT
-								modifier = to_por_hates_colonizers
-							}
-						}
-					}
-				}
-				if = {
-					limit = {
-						NOT = {
-							has_opinion_modifier = {
-								who = ROOT
-								modifier = to_por_hates_colonizers
-							}
-						}
-					}
-					add_opinion = {
-						who = ROOT
-						modifier = to_por_hates_colonizers
-					}
-				}
-				if = {
-					limit = {
-						NOT = {
-							reverse_has_opinion_modifier = {
-								who = ROOT
-								modifier = to_por_hates_colonizers
-							}
-						}
-					}
-					reverse_add_opinion = {
-						who = ROOT
-						modifier = to_por_hates_colonizers
-					}
-				}
-			}
-		}
-		else = {
-			random_known_country = {
-				limit = {
-					has_country_flag = nhs_portugese_secret
-					has_country_modifier = nhs2_por_ely_trade
-					OR = {
+				NOT = { has_country_modifier = nhs2_ely_por_trade }
+				OR = {
+					alliance_with = ROOT
+					NOT = {
 						has_opinion_modifier = {
 							who = ROOT
 							modifier = to_por_hates_colonizers
 						}
+					}
+					NOT = {
 						reverse_has_opinion_modifier = {
 							who = ROOT
 							modifier = to_por_hates_colonizers
 						}
 					}
 				}
-				remove_opinion = {
+			}
+			if = {
+				limit = {
+					alliance_with = ROOT
+				}
+				break_alliance = ROOT
+			}
+			if = {
+				limit = {
+					historical_friend_with = ROOT
+				}
+				remove_historical_friend = ROOT
+			}
+			ROOT = {
+				if = {
+					limit = {
+						historical_friend_with = PREV
+					}
+					remove_historical_friend = PREV
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = to_por_hates_colonizers
+						}
+					}
+				}
+				add_opinion = {
 					who = ROOT
 					modifier = to_por_hates_colonizers
 				}
-				reverse_remove_opinion = {
+			}
+			if = {
+				limit = {
+					NOT = {
+						reverse_has_opinion_modifier = {
+							who = ROOT
+							modifier = to_por_hates_colonizers
+						}
+					}
+				}
+				reverse_add_opinion = {
 					who = ROOT
 					modifier = to_por_hates_colonizers
 				}
+			}
+		}
+
+		every_known_country = {
+			limit = {
+				OR = {
+					NOT = { num_of_colonists = 1 }
+					has_country_modifier = nhs2_ely_por_trade
+					is_subject = yes
+				}
+				OR = {
+					has_opinion_modifier = {
+						who = ROOT
+						modifier = to_por_hates_colonizers
+					}
+					reverse_has_opinion_modifier = {
+						who = ROOT
+						modifier = to_por_hates_colonizers
+					}
+				}
+			}
+			remove_opinion = {
+				who = ROOT
+				modifier = to_por_hates_colonizers
+			}
+			reverse_remove_opinion = {
+				who = ROOT
+				modifier = to_por_hates_colonizers
 			}
 		}
 	}
