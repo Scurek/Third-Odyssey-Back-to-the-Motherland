@@ -966,19 +966,35 @@ msg_destroy_elysia = {
 			government = monarchy
 			NOT = { nhs_check_all_elysian_tags_with_if = { CONDITION = alliance_with } }
 			custom_trigger_tooltip = {
-				tooltip = msg_can_claim_elysian_throne_tooltip
-				NOT = { exists = NHS }
+				tooltip = msg_can_claim_elysian_throne_tt
 				OR = {
 					NOT = { nhs_check_all_elysian_tags = { CONDITION = exists } }
-					nhs_msg_claim_elysian_throne_trigger_ely = yes
 					is_year = 1700
+					AND = {
+						ai = no
+						total_development = 2000
+						legitimacy = 100
+					}
+					953 = {
+						NOT = { nhs_check_all_elysian_tags = { CONDITION = country_or_non_sovereign_subject_holds } }
+					}
+					nhs_check_existing_elysian_tags_with_full_condition = {
+						CONDITION = "
+							OR = {
+								has_regency = yes
+								151 = { #implies Elysia got Constantinople, but lost it again
+									is_core = PREV
+									NOT = { country_or_non_sovereign_subject_holds = PREV }
+								}
+							}
+						"
+					}
 				}
 			}
 			if = {
 				limit = {
 					ai = yes
 					nhs_check_all_elysian_tags = { CONDITION = exists }
-					NOT = { nhs_msg_claim_elysian_throne_trigger_ely = yes }
 					NOT = { nhs_check_all_elysian_tags_army_size = { VALUE = 0.75 } }
 				}
 				always = no
