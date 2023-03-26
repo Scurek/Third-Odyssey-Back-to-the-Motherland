@@ -910,12 +910,51 @@ curtail_clergy_power_reform = {
 			NOT = { has_dlc = "Emperor" }
 		}
 	}
+	allow = {
+		if = {
+			limit = {
+				has_estate_privilege = estate_church_nhs_inquisition_privilege
+			}
+			NOT = { has_estate_privilege = estate_church_nhs_inquisition_privilege }
+		}
+		if = {
+			limit = {
+				religion = elysian_orthodoxy
+			}
+			NOT = { has_estate_privilege = to_estate_church_patriarchal_dominance }
+		}
+		if = {
+			limit = {
+				has_country_flag = to_patriarchal_autonomy_event_active
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_patriarchal_autonomy_event_not_active_tt
+				always = no
+			}
+		}
+	}
 	modifiers = {
 		adm_tech_cost_modifier = -0.1
 		church_influence_modifier = -0.1
 	}
 	custom_attributes = {
 		seizing_land_no_rebels_from_estate_church = yes
+	}
+
+	effect = {
+		if = {
+			limit = {
+				religion = elysian_orthodoxy
+				OR = {
+					has_country_flag = nhs_patriarch_requested_autonomy
+					has_country_flag = nhs_patriarch_requested_partial_rule
+				}
+				NOT = { has_country_flag = nhs_refused_partial_rule }
+				NOT = { has_country_flag = nhs_patriarch_requested_total_rule }
+			}
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_ends_the_patriarch_total_rule_event_chain_tt
+		}
 	}
 	
 	ai = {
@@ -1005,11 +1044,85 @@ separate_clergy_from_state_affairs_reform = {
 		}
 		NOT = { has_idea_group = religious_ideas }
 		NOT = { has_idea_group = theocracy_ideas }
+		if = {
+			limit = {
+				has_estate_privilege = estate_church_nhs_inquisition_privilege
+			}
+			NOT = { has_estate_privilege = estate_church_nhs_inquisition_privilege }
+		}
+		if = {
+			limit = {
+				religion = elysian_orthodoxy
+			}
+			NOT = { has_estate_privilege = to_estate_church_patriarchal_dominance }
+		}
+		if = {
+			limit = {
+				has_country_flag = to_patriarchal_autonomy_event_active
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_patriarchal_autonomy_event_not_active_tt
+				always = no
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = to_patriarchate_land_event_active
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_patriarchate_land_event_not_active_tt
+				always = no
+			}
+		}
 	}
 	modifiers = {
 		tolerance_of_heathens_capacity = 1
 		tolerance_of_heretics_capacity = 1
 		innovativeness_gain = 0.25
+	}
+	effect = {
+		if = {
+			limit = {
+				religion = elysian_orthodoxy
+			}
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							OR = {
+								has_country_flag = nhs_patriarch_requested_autonomy
+								has_country_flag = nhs_patriarch_requested_partial_rule
+							}
+							NOT = { has_country_flag = nhs_refused_partial_rule }
+							NOT = { has_country_flag = nhs_patriarch_requested_total_rule }
+						}
+						any_owned_province = {
+							has_province_modifier = nhs2_patriarchate_land
+						}
+					}
+				}
+				custom_tooltip = to_reform_effects_tt
+			}
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = nhs_patriarch_requested_autonomy
+						has_country_flag = nhs_patriarch_requested_partial_rule
+					}
+					NOT = { has_country_flag = nhs_refused_partial_rule }
+					NOT = { has_country_flag = nhs_patriarch_requested_total_rule }
+				}
+				custom_tooltip = to_ends_the_patriarch_total_rule_event_chain_tt
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						has_province_modifier = nhs2_patriarchate_land
+					}
+				}
+				to_remove_all_patriarchate_land_and_trigger_revolt = yes
+			}
+		}
 	}
 	custom_attributes = {
 		disables_estate_church = yes
