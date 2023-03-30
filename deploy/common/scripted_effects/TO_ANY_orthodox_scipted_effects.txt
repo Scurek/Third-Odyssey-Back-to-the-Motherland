@@ -962,3 +962,78 @@ to_remove_all_patriarchate_land_and_trigger_revolt = {
 		}
 	}
 }
+
+to_find_special_patriarch_province = {
+	every_owned_province = {
+		limit = {
+			is_city = yes
+			$PROVINCE_TRIGGERS$
+		}
+		set_variable = {
+			which = to_patriarch_value
+			value = 0
+		}
+		if = {
+			limit = {
+				OR = {
+					province_has_center_of_trade_of_level = 1
+					has_province_modifier = to_dynamic_cot
+				}
+			}
+			change_variable = {
+				which = to_patriarch_value
+				value = 10
+			}
+		}
+		if = {
+			limit = {
+				has_river_estuary_trigger = yes
+			}
+			change_variable = {
+				which = to_patriarch_value
+				value = 5
+			}
+		}
+		export_to_variable = {
+			which = to_local_development
+			value = trigger_value:development
+		}
+		change_variable = {
+			which = to_patriarch_value
+			which = to_local_development
+		}
+		if = {
+			limit = {
+				NOT = { has_saved_event_target = $EVENT_TARGET$ }
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = to_patriarch_value
+					which = event_target:$EVENT_TARGET$
+				}
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+}
+
+to_set_patriarchate_flag = {
+	trigger_switch = {
+		on_trigger = region
+		hudson_bay_region = { set_global_flag = nhs2_patriarchate_hudson_bay }
+		canada_region = { set_global_flag = nhs2_patriarchate_canada }
+		great_lakes_region = { set_global_flag = nhs2_patriarchate_great_lakes }
+
+		mexico_region = { set_global_flag = nhs2_patriarchate_mexico }
+		central_america_region = { set_global_flag = nhs2_patriarchate_central_america }
+		
+		mississippi_region = { set_global_flag = nhs2_patriarchate_mississippi }
+		rocky_mountains_region = { set_global_flag = nhs2_patriarchate_rocky_mountains }
+		cascadia_region = { set_global_flag = nhs2_patriarchate_cascadia }
+		rio_grande_region = { set_global_flag = nhs2_patriarchate_rio_grande }
+		carribeans_region = { set_global_flag = nhs2_patriarchate_carribeans }
+	}
+}
