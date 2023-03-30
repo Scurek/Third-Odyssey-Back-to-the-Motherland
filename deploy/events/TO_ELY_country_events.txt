@@ -2792,30 +2792,211 @@ country_event = {
 }
 
 ###################################################
-### EVENTS THAT REMOVE MODIFIERS SINCE GOV. REFORMS CAN'T DO THAT
+### MAINTENANCE EVENTS
 ###################################################
 
 # Remove modifiers #2
 country_event = {
 	id = nhs2_countryevents.66
-	title = nhs2_countryevents.66.t
-	desc = nhs2_countryevents.66.d
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
 	picture = BATTLE_eventPicture
 	
 	hidden = yes
-	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "Emperor"
+		OR = {
+			mission_completed = to_eternal_empire_mission
+			mission_completed = to_eternal_empire_mission_ely
+		}
+		if = {
+			limit = {
+				is_hegemon_of_type = economic_hegemon
+			}
+			OR = {
+				has_country_modifier = to_economic_hegemon
+				OR = {
+					NOT = { has_country_modifier = to_naval_hegemon }
+					any_country = {
+						NOT = { tag = ROOT }
+						is_hegemon_of_type = naval_hegemon
+					}
+				}
+				OR = {
+					NOT = { has_country_modifier = to_military_hegemon }
+					any_country = {
+						NOT = { tag = ROOT }
+						is_hegemon_of_type = military_hegemon
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				is_hegemon_of_type = naval_hegemon
+			}
+			OR = {
+				has_country_modifier = to_naval_hegemon
+				OR = {
+					NOT = { has_country_modifier = to_economic_hegemon }
+					any_country = {
+						NOT = { tag = ROOT }
+						is_hegemon_of_type = economic_hegemon
+					}
+				}
+				OR = {
+					NOT = { has_country_modifier = to_military_hegemon }
+					any_country = {
+						NOT = { tag = ROOT }
+						is_hegemon_of_type = military_hegemon
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				is_hegemon_of_type = military_hegemon
+			}
+			OR = {
+				has_country_modifier = to_military_hegemon
+				OR = {
+					NOT = { has_country_modifier = to_economic_hegemon }
+					any_country = {
+						NOT = { tag = ROOT }
+						is_hegemon_of_type = economic_hegemon
+					}
+				}
+				OR = {
+					NOT = { has_country_modifier = to_naval_hegemon }
+					any_country = {
+						NOT = { tag = ROOT }
+						is_hegemon_of_type = naval_hegemon
+					}
+				}
+			}
+		}
+		else = {
+			OR = {
+				has_country_modifier = to_economic_hegemon
+				has_country_modifier = to_naval_hegemon
+				has_country_modifier = to_military_hegemon
+			}
+		}
+	}
 	
 	immediate = {
 		if = {
 			limit = {
-				has_country_modifier = rev_absolute_authority
+				is_hegemon_of_type = economic_hegemon
 			}
-			remove_country_modifier = rev_absolute_authority
+			remove_country_modifier = to_economic_hegemon
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							NOT = { tag = ROOT }
+							is_hegemon_of_type = naval_hegemon
+						}
+					}
+				}
+				add_country_modifier = {
+					name = to_naval_hegemon
+					duration = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							NOT = { tag = ROOT }
+							is_hegemon_of_type = military_hegemon
+						}
+					}
+				}
+				add_country_modifier = {
+					name = to_military_hegemon
+					duration = -1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				is_hegemon_of_type = naval_hegemon
+			}
+			remove_country_modifier = to_naval_hegemon
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							NOT = { tag = ROOT }
+							is_hegemon_of_type = economic_hegemon
+						}
+					}
+				}
+				add_country_modifier = {
+					name = to_economic_hegemon
+					duration = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							NOT = { tag = ROOT }
+							is_hegemon_of_type = military_hegemon
+						}
+					}
+				}
+				add_country_modifier = {
+					name = to_military_hegemon
+					duration = -1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				is_hegemon_of_type = military_hegemon
+			}
+			remove_country_modifier = to_military_hegemon
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							NOT = { tag = ROOT }
+							is_hegemon_of_type = economic_hegemon
+						}
+					}
+				}
+				add_country_modifier = {
+					name = to_economic_hegemon
+					duration = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							NOT = { tag = ROOT }
+							is_hegemon_of_type = naval_hegemon
+						}
+					}
+				}
+				add_country_modifier = {
+					name = to_naval_hegemon
+					duration = -1
+				}
+			}
+		}
+		else = {
+			remove_country_modifier = to_economic_hegemon
+			remove_country_modifier = to_naval_hegemon
+			remove_country_modifier = to_military_hegemon
 		}
 	}
 
 	option = {
-		name = "nhs2_countryevents.66.a"
+		name = "nhs2_hidden.a"
 	}
 }
 
