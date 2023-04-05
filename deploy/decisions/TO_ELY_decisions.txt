@@ -2513,20 +2513,18 @@ country_decisions = {
 		potential = {
 			OR = {
 				religion = elysian_orthodoxy
-				AND = {
-					religion = orthodox
-					NOT = { any_country = { religion = elysian_orthodoxy } }
-					OR = {
-						capital_scope = { continent = north_america }
-						capital_scope = { continent = south_america }
-					}
-				}
+				to_pre_elysian_orthodox = yes
 			}
 			NOT = { has_global_flag = nhs_first_reform }
 		}
 		allow = {
-			OR = {
+			if = {
+				limit = {
+					is_religion_enabled = elysian_orthodoxy
+				}
 				religion = elysian_orthodoxy
+			}
+			else = {
 				religion = orthodox
 			}
 			OR = {
@@ -2535,17 +2533,72 @@ country_decisions = {
 			}
 			is_subject = no
 			is_at_war = no
-			OR = {
-				has_idea = church_attendance_duty
-				has_idea = planned_metropoles
-				temple = 10
-				religion = elysian_orthodoxy
+
+			if = {
+				limit = {
+					OR = {
+						ai = no
+						any_country = {
+							ai = no
+							OR = {
+								religion = elysian_orthodoxy
+								to_pre_elysian_orthodox = yes
+							}
+						}
+					}
+				}
+				capital_scope = {
+					custom_trigger_tooltip = {
+						tooltip = to_has_church_or_cathedral_tt
+						OR = {
+							has_building = temple
+							has_building = cathedral
+						}
+					}
+				}
+				
+				OR = {
+					has_idea = church_attendance_duty
+					num_of_owned_provinces_with = {
+						value = 7
+						custom_trigger_tooltip = {
+							tooltip = to_a_church_or_cathedral_tt
+							OR = {
+								has_building = temple
+								has_building = cathedral
+							}
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					religion = elysian_orthodoxy
+					has_idea = church_attendance_duty
+					num_of_owned_provinces_with = {
+						value = 7
+						custom_trigger_tooltip = {
+							tooltip = to_a_church_or_cathedral_tt
+							OR = {
+								has_building = temple
+								has_building = cathedral
+							}
+						}
+					}
+				}
 			}
 		}
 		effect = {
-			add_legitimacy = 5
-			add_prestige_or_monarch_power = { amount = 15 }
+			add_legitimacy = 20
+			add_prestige_or_monarch_power = { amount = 20 }
 			custom_tooltip = nhs_new_line_tt
+			capital_scope = {
+				hidden_effect = {
+					remove_building = temple
+				}
+				add_building = cathedral
+			}
+			custom_tooltip = nhs_dotted_line_tt
 			custom_tooltip = nhs_orthodox_reform_replace_0_1_tt
 			set_global_flag = nhs_first_reform
 			custom_tooltip = nhs_new_line_tt
@@ -2599,9 +2652,14 @@ country_decisions = {
 			}
 		}
 		effect = {
-			add_legitimacy = 10
-			add_prestige_or_monarch_power = { amount = 20 }
+			add_legitimacy = 50
+			add_prestige_or_monarch_power = { amount = 50 }
 			custom_tooltip = nhs_new_line_tt
+			add_country_modifier = {
+				name = to_righteous_conquest
+				duration = 9125
+			}
+			custom_tooltip = nhs_dotted_line_tt
 			if = {
 				limit = {
 					NOT = { has_global_flag = nhs_third_reform }
@@ -2634,31 +2692,74 @@ country_decisions = {
 			owner = { NOT = { religion = elysian_orthodoxy } }
 		}
 		potential = {
-			religion = elysian_orthodoxy
+			OR = {
+				religion = elysian_orthodoxy
+				to_pre_elysian_orthodox = yes
+			}
 			has_global_flag = nhs_first_reform
 			NOT = { has_global_flag = nhs_third_reform }
 		}
 		allow = {
-			religion = elysian_orthodoxy
+			if = {
+				limit = {
+					religion = elysian_orthodoxy
+				}
+				religion = elysian_orthodoxy
+			}
+			else = {
+				religion = orthodox
+			}
 			is_subject = no
 			is_at_war = no
-			calc_true_if = {
-				custom_trigger_tooltip = {
-					tooltip = nhs_provinces_with_elysian_orthodoxy_tt
+			if = {
+				limit = {
+					religion = elysian_orthodoxy
+				}
+				num_of_owned_provinces_with = {
+					value = 40
+					is_city = yes
+					religion = elysian_orthodoxy
+				}
+				calc_true_if = {
+					desc = nhs_provinces_with_elysian_orthodoxy_tt
 					all_province = {
 						religion = elysian_orthodoxy
 					}
+					amount = 70
 				}
-				amount = 70
 			}
-			custom_trigger_tooltip = {
-				NOT = {
-					any_province = {
-						nhs_is_patriarchate = yes
-						owner = { NOT = { religion = elysian_orthodoxy } }
-					}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 40
+					is_city = yes
+					religion = orthodox
 				}
-				tooltip = nhs_all_by_eo
+				calc_true_if = {
+					desc = to_orthodox_provinces_in_new_world_tt
+					all_province = {
+						religion = orthodox
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+					}
+					amount = 70
+				}
+			}
+			
+			if = {
+				limit = {
+					religion = elysian_orthodoxy
+				}
+				custom_trigger_tooltip = {
+					NOT = {
+						any_province = {
+							nhs_is_patriarchate = yes
+							owner = { NOT = { religion = elysian_orthodoxy } }
+						}
+					}
+					tooltip = nhs_all_by_eo
+				}
 			}
 			# custom_trigger_tooltip = {
 			# 	nhs_two_thirds_p = yes
@@ -2666,9 +2767,20 @@ country_decisions = {
 			# }
 		}
 		effect = {
-			add_legitimacy = 10
+			add_legitimacy = 20
 			add_prestige_or_monarch_power = { amount = 20 }
 			custom_tooltip = nhs_new_line_tt
+			
+			to_add_ruler_heir_personality_or_modifier = {
+				RULER_PERSONALITY = to_religious_reformer_personality
+				RULER_MODIFIER = to_religious_reformer_personality_mod
+				HEIR_PERSONALITY = to_religious_reformer_personality
+				HEIR_FLAG = to_get_religious_reformer_modifier
+				HEIR_TOOLTIP_PERSONALITY = to_get_to_religious_reformer_personality_tt
+				HEIR_TOOLTIP_MODIFIER = to_get_religious_reformer_modifier_tt
+			}
+
+			custom_tooltip = nhs_dotted_line_tt
 			custom_tooltip = nhs_enables_icons_tt
 			custom_tooltip = nhs_new_line_tt
 			if = {
@@ -2784,9 +2896,18 @@ country_decisions = {
 		}
 		effect = {
 			set_global_flag = nhs_fourth_reform
-			add_legitimacy = 15
-			add_prestige_or_monarch_power = { amount = 25 }
+			add_legitimacy = 100
+			add_prestige_or_monarch_power = { amount = 100 }
 			custom_tooltip = nhs_new_line_tt
+			to_add_ruler_heir_personality_or_modifier = {
+				RULER_PERSONALITY = to_unifier_personality
+				RULER_MODIFIER = to_unifier_personality_mod
+				HEIR_PERSONALITY = to_unifiers_prodege_personality
+				HEIR_FLAG = to_get_unifier_prodege_modifier
+				HEIR_TOOLTIP_PERSONALITY = to_get_unifier_prodege_personality_tt
+				HEIR_TOOLTIP_MODIFIER = to_get_unifier_prodege_modifier_tt
+			}
+			custom_tooltip = nhs_dotted_line_tt
 			custom_tooltip = nhs_convert_rome_rc_tt
 			hidden_effect = {
 				118 = {
