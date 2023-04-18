@@ -8810,6 +8810,9 @@ to_nhs_remove_pre_hellenic_disaster_province_modifiers = {
 
 to_nhs_remove_pre_hellenic_disaster_flags = {
 	clr_country_flag = hellenic_conversion_preacher
+	clr_country_flag = to_had_hellenic_disaster_random_event
+	clr_country_flag = to_had_pagan_assemblies_event
+	clr_country_flag = to_had_inquisition_event
 
 	clr_country_flag = TO_hcd_picked_major_event
 	clr_country_flag = TO_nhs_hellenicconversion_2
@@ -8833,6 +8836,133 @@ to_nhs_remove_pre_hellenic_disaster_flags = {
 
 	clr_country_flag = nhs_pagan_assemblies
 	# clr_country_flag = nhs_hcd_opposed_the_inquisition
+}
+
+to_trigger_hellenic_disaster_random_event = {
+	if = {
+		limit = {
+			NOT = { is_year = 1468 }
+			nhs_check_existing_elysian_tags_with_full_condition = {
+				CONDITION = "
+				has_country_flag = hellenic_conversion_preacher
+				OR = {
+					NOT = { has_country_flag = to_had_hellenic_disaster_random_event }
+					had_country_flag = {
+						flag = to_had_hellenic_disaster_random_event
+						days = 650
+					}
+				}
+				"
+			}
+		}
+		nhs_effect_for_existing_elysian_tag = {
+			EFFECT = "
+				clr_country_flag = to_had_hellenic_disaster_random_event
+				set_country_flag = to_had_hellenic_disaster_random_event
+				country_event = { 
+					id = nhs_hellenicconversion.100
+					days = 120
+					random = 120
+				}
+			"
+		}
+	}
+}
+
+to_trigger_pagan_assemblies_event = {
+	if = {
+		limit = {
+			NOT = { is_year = 1468 }
+			nhs_check_existing_elysian_tags_with_full_condition = {
+				CONDITION = "
+				has_country_flag = nhs_pagan_assemblies
+				OR = {
+					NOT = { has_country_flag = to_had_pagan_assemblies_event }
+					had_country_flag = {
+						flag = to_had_pagan_assemblies_event
+						days = 1000
+					}
+				}
+				"
+			}
+		}
+		random_list = {
+			50 = {
+				nhs_effect_for_existing_elysian_tag = {
+					EFFECT = "
+						clr_country_flag = to_had_pagan_assemblies_event
+						set_country_flag = to_had_pagan_assemblies_event
+						country_event = { 
+							id = nhs_hellenicconversion.1000
+							days = 1
+							random = 120
+						}
+					"
+				}
+			}
+			50 = {
+				nhs_effect_for_existing_elysian_tag = {
+					EFFECT = "
+						clr_country_flag = to_had_pagan_assemblies_event
+						set_country_flag = to_had_pagan_assemblies_event
+						country_event = { 
+							id = nhs_hellenicconversion.1000
+							days = 240
+							random = 120
+						}
+					"
+				}
+			}
+		}
+	}
+}
+
+to_trigger_inquisition_event = {
+	if = {
+		limit = {
+			NOT = { is_year = 1468 }
+			nhs_check_existing_elysian_tags_with_full_condition = {
+				CONDITION = "
+				to_nhs_hellenic_disaster_eligible_for_inquisition_events = yes
+				OR = {
+					NOT = { has_country_flag = to_had_inquisition_event }
+					had_country_flag = {
+						flag = to_had_inquisition_event
+						days = 1000
+					}
+				}
+				"
+			}
+		}
+		random_list = {
+			50 = {
+				nhs_effect_for_existing_elysian_tag = {
+					EFFECT = "
+						clr_country_flag = to_had_inquisition_event
+						set_country_flag = to_had_inquisition_event
+						country_event = { 
+							id = nhs_hellenicconversion.1001
+							days = 1
+							random = 120
+						}
+					"
+				}
+			}
+			50 = {
+				nhs_effect_for_existing_elysian_tag = {
+					EFFECT = "
+						clr_country_flag = to_had_inquisition_event
+						set_country_flag = to_had_inquisition_event
+						country_event = { 
+							id = nhs_hellenicconversion.1001
+							days = 240
+							random = 120
+						}
+					"
+				}
+			}
+		}
+	}
 }
 
 to_nhs_remove_all_clergy_privileges = {
