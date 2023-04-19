@@ -25,10 +25,10 @@ estate_pipiltin_land_rights = {
 	icon = privilege_grant_autonomy
 	land_share = 5
 	max_absolutism = -5
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 1 } }
 	loyalty = 0.05
 	influence = 0.05
 	can_select = {
-		to_num_of_privileges_check_estate_nhs_pipiltin = yes
 	}
 	on_granted = {
 	}
@@ -145,9 +145,9 @@ estate_pipiltin_nobility_primacy = {
 	icon = privilege_military_power
 	land_share = 10
 	max_absolutism = -5
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 1 } }
 	loyalty = -0.05
 	can_select = {
-		to_num_of_privileges_check_estate_nhs_pipiltin = yes
 	}
 	on_granted = {
 	}
@@ -172,7 +172,7 @@ estate_pipiltin_nobility_primacy = {
 		}
 	}
 	ai_will_do = {
-		factor = 12
+		factor = 100
 		modifier = {
 			factor = 0
 			msg_has_build_estate_palace = { ESTATE = pipiltin }
@@ -183,7 +183,7 @@ estate_pipiltin_nobility_primacy = {
 				NOT = { crown_land_share = 30 }
 				estate_influence = {
 					estate = estate_nhs_pipiltin
-					influence = 75
+					influence = 95
 				}
 			}
 			NOT = { has_estate_privilege = estate_pipiltin_nobility_primacy }
@@ -207,16 +207,13 @@ estate_pipiltin_nobility_primacy = {
 			factor = 1.25
 			NOT = { mil = 2 }
 		}
-		modifier = {
-			factor = 0.8
-			mil = 5
-		}
 	}
 }
 
 estate_pipiltin_officer_corp = {
 	icon = privilege_demand_more_troops
 	max_absolutism = -5
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 1 } }
 	influence = 0.05
 	is_valid = {
 		if = {
@@ -227,7 +224,6 @@ estate_pipiltin_officer_corp = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_nhs_pipiltin = yes
 		NOT = { has_estate_privilege = estate_apogonoi_officer_corp }
 		army_tradition = 20
 	}
@@ -250,6 +246,7 @@ estate_pipiltin_officer_corp = {
 estate_pipiltin_advisors = {
 	icon = privilege_recruit_minister
 	max_absolutism = -5
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 1 } }
 	influence = 0.1
 	loyalty = 0.05
 	is_valid = {
@@ -261,7 +258,6 @@ estate_pipiltin_advisors = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_nhs_pipiltin = yes
 		NOT = { has_estate_privilege = estate_apogonoi_advisors }
 	}
 	penalties = {
@@ -270,21 +266,17 @@ estate_pipiltin_advisors = {
 		estate_nhs_apogonoi_loyalty_modifier = -0.05
 	}
 	benefits = {
-		mil_advisor_cost = -0.25
+		mil_advisor_cost = -0.15
 	}
 	ai_will_do = {
-		factor = 10
+		factor = 9
 		modifier = {
 			factor = 0.5
 			is_absolutism_active = yes
 		}
 		modifier = {
-			factor = 1.25
-			NOT = { mil = 2 }
-		}
-		modifier = {
-			factor = 0.8
-			mil = 5
+			factor = 3
+			uses_meritocracy = yes
 		}
 	}
 }
@@ -292,10 +284,10 @@ estate_pipiltin_advisors = {
 estate_pipiltin_right_of_counsel = {
 	icon = privilege_royal_authority
 	max_absolutism = -10
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 2 } }
 	loyalty = 0.1
 	influence = 0.1
 	can_select = {
-		to_num_of_privileges_check_estate_nhs_pipiltin = yes
 	}
 	# penalties = {
 	# 	estate_nhs_apogonoi_loyalty_modifier = -0.1
@@ -337,13 +329,13 @@ estate_pipiltin_right_of_counsel = {
 estate_pipiltin_supremacy_over_crown = {
 	icon = privilege_empty_throne
 	max_absolutism = -5
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 1 } }
 	influence = 0.2
 	loyalty = 0.2
 	is_valid = {
 		has_dlc = "Emperor"
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_nhs_pipiltin = yes
 	}
 	penalties = {
 		burghers_influence_modifier = -0.05
@@ -368,6 +360,7 @@ estate_pipiltin_supremacy_over_crown = {
 estate_pipiltin_strong_duchies = {
 	icon = privilege_royal_authority
 	max_absolutism = -10
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 2 } }
 	influence = 0.1
 	loyalty = 0.05
 	is_valid = {
@@ -376,36 +369,33 @@ estate_pipiltin_strong_duchies = {
 				has_estate_privilege = estate_pipiltin_strong_duchies
 			}
 			NOT = { has_estate_privilege = estate_apogonoi_better_integration }
-			OR = {
-				any_subject_country = {
-					is_march = yes
+			any_subject_country = {
+				OR = {
+					is_subject_of_type = vassal
+					is_subject_of_type = client_vassal
+					is_subject_of_type = march
+					is_subject_of_type = client_march
+					is_subject_of_type = personal_union
 				}
-				vassal = 1
 			}
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_nhs_pipiltin = yes
 		NOT = { has_estate_privilege = estate_apogonoi_better_integration }
-		if = {
-			limit = {
-				has_dlc = "Art of War"
-			}
-			custom_trigger_tooltip = {
-				tooltip = estate_nobles_strong_duchies_trigger_tooltip
-				calc_true_if = {
-					amount = 2
-					all_subject_country = {
-						OR = {
-							is_march = yes
-							is_vassal = yes
-						}
+		custom_trigger_tooltip = {
+			tooltip = estate_nobles_strong_duchies_trigger_tooltip
+			calc_true_if = {
+				amount = 2
+				all_subject_country = {
+					OR = {
+						is_subject_of_type = vassal
+						is_subject_of_type = client_vassal
+						is_subject_of_type = march
+						is_subject_of_type = client_march
+						is_subject_of_type = personal_union
 					}
 				}
 			}
-		}
-		else = {
-			vassal = 2
 		}
 	}
 	penalties = {
@@ -415,10 +405,30 @@ estate_pipiltin_strong_duchies = {
 		reduced_liberty_desire = 10
 	}
 	ai_will_do = {
-		factor = 1
-		modifier = { #will lose it via invalid sooner or later
-			factor = 10
-			has_estate_privilege = estate_nobles_strong_duchies
+		factor = 2
+		modifier = {
+			factor = 3
+			calc_true_if = {
+				amount = 1
+				all_subject_country = {
+					OR = {
+						is_march = yes
+						is_vassal = yes
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			calc_true_if = {
+				amount = 2
+				all_subject_country = {
+					OR = {
+						is_march = yes
+						is_vassal = yes
+					}
+				}
+			}
 		}
 	}
 }
@@ -470,7 +480,6 @@ estate_pipiltin_sell_land = {
 # 	is_valid = {
 # 	}
 # 	can_select = {
-# 		to_num_of_privileges_check_estate_nhs_pipiltin = yes
 # 	}
 # 	modifier_by_land_ownership = {
 # 		global_tax_modifier = -0.10
@@ -567,9 +576,13 @@ estate_pipiltin_sell_land = {
 estate_pipiltin_monopoly_of_metals = {
 	icon = privilege_monopoly_of_goods_iron
 	max_absolutism = -10
-	loyalty = 0.1
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 2 } }
+	loyalty = 0.05
 	is_valid = {
-		has_dlc = "Emperor"
+		OR = {
+			has_dlc = "Emperor"
+			has_country_flag = buffed_monopolies
+		}
 		any_owned_province = {
 			OR = {
 				trade_goods = iron
@@ -578,7 +591,6 @@ estate_pipiltin_monopoly_of_metals = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_nhs_pipiltin = yes
 		NOT = { has_estate_privilege = estate_nobles_monopoly_of_metals }
 		custom_trigger_tooltip = {
 			tooltip = unavailable_during_revolution_disaster
@@ -668,6 +680,15 @@ estate_pipiltin_monopoly_of_metals = {
 	}
 
 	cooldown_years = 10
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = buffed_monopolies
+		}
+		modifier = {
+			max_absolutism = 10
+			nobles_privilege_slots = 1
+		}
+	}
 	on_cooldown_expires = {
 		country_event = { id = monopoly_privileges.5 }
 	}
@@ -679,15 +700,18 @@ estate_pipiltin_monopoly_of_metals = {
 estate_pipiltin_monopoly_of_livestock = {
 	icon = privilege_monopoly_of_goods_livestock
 	max_absolutism = -10
-	loyalty = 0.1
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 2 } }
+	loyalty = 0.05
 	is_valid = {
-		has_dlc = "Emperor"
+		OR = {
+			has_dlc = "Emperor"
+			has_country_flag = buffed_monopolies
+		}
 		any_owned_province = {
 			trade_goods = livestock
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_nhs_pipiltin = yes
 		NOT = { has_estate_privilege = estate_nobles_monopoly_of_livestock }
 		custom_trigger_tooltip = {
 			tooltip = unavailable_during_revolution_disaster
@@ -767,6 +791,15 @@ estate_pipiltin_monopoly_of_livestock = {
 	benefits = {
 	}
 	cooldown_years = 10
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = buffed_monopolies
+		}
+		modifier = {
+			max_absolutism = 10
+			nobles_privilege_slots = 1
+		}
+	}
 	on_cooldown_expires = {
 		country_event = { id = monopoly_privileges.6 }
 	}
@@ -778,15 +811,18 @@ estate_pipiltin_monopoly_of_livestock = {
 estate_pipiltin_monopoly_of_gems = {
 	icon = privilege_monopoly_of_goods_gems
 	max_absolutism = -10
-	loyalty = 0.1
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 2 } }
+	loyalty = 0.05
 	is_valid = {
-		has_dlc = "Emperor"
+		OR = {
+			has_dlc = "Emperor"
+			has_country_flag = buffed_monopolies
+		}
 		any_owned_province = {
 			trade_goods = gems
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_nhs_pipiltin = yes
 		NOT = { has_estate_privilege = estate_nobles_monopoly_of_gems }
 		custom_trigger_tooltip = {
 			tooltip = unavailable_during_revolution_disaster
@@ -867,6 +903,15 @@ estate_pipiltin_monopoly_of_gems = {
 	}
 
 	cooldown_years = 10
+	conditional_modifier = {
+		trigger = {
+			has_country_flag = buffed_monopolies
+		}
+		modifier = {
+			max_absolutism = 10
+			nobles_privilege_slots = 1
+		}
+	}
 	on_cooldown_expires = {
 		country_event = { id = monopoly_privileges.7 }
 	}

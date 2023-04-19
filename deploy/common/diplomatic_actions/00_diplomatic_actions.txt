@@ -116,7 +116,36 @@ declarewar = {
 	#		}
 	#	}
 	#}
+	condition = {
+		tooltip = AI_CANNOT_DECLARE_WHEN_STABILITY_LOSS
+		potential = {
+			ai = yes
+		}
+		allow = {
+			ai = yes
+			NOT = {
+				has_global_modifier_value = {
+					which = stability_cost_to_declare_war
+					value = 1
+				}
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_DECLARE_WARS_OTHER_THAN_INDEPENDENCE_WARS
+		potential = {
+			has_country_modifier = revoked_war_rights
+			FROM = { NOT = { overlord_of = ROOT } }
+		}
+		allow = {
+			OR = {
+				NOT = { has_country_modifier = revoked_war_rights }
+				FROM = { overlord_of = ROOT }
+			}
+		}
+	}
 	effect = {
+		on_war_declaration_effect = yes
 		if = {
 			limit = { 
 				has_country_flag = nor_norwegian_independence_modifier
@@ -483,14 +512,33 @@ allianceaction = {
 		}
 		allow = {
 			OR = {
-				OR = {
-					government = republic 
-					is_revolutionary = yes
-				}
+				government = republic 
+				is_revolutionary = yes
 				NOT = { FROM = { has_government_attribute = cannot_ally_non_republics_or_non_rev } }
 			}
 		}
 	}
+	condition = {
+		tooltip = CANNOT_MAKE_ALLIANCES
+		potential = {
+			has_government_attribute = cannot_form_alliances
+		}
+		allow = {
+			NOT = { has_government_attribute = cannot_form_alliances }
+		}
+	}
+	condition = {
+		tooltip = FROM_CANNOT_MAKE_ALLIANCES
+		potential = {
+			FROM = {
+				has_government_attribute = cannot_form_alliances
+			}
+		}
+		allow = {
+			NOT = { FROM = { has_government_attribute = cannot_form_alliances } }
+		}
+	}
+	# Third Odyssey
 	condition = {
 		tooltip = NHS_CANNOT_ALLY_YET
 		potential = {
@@ -792,13 +840,18 @@ annexationaction = {
 	condition = {
 		tooltip = ANNEX_TOO_LOW
 		potential = {
-			NOT = { mission_completed = to_koine_glossa_mission }
 			FROM = {
 				OR = {
+					is_subject_of_type = core_eyalet
+					is_subject_of_type = appanage
 					vassal_of = ROOT
+					# Third Odyssey
 					is_subject_of_type = nhs_imperial_associate
+					# TO END
 				}
 			}
+			# Third Odyssey
+			NOT = { mission_completed = to_koine_glossa_mission }
 		}
 		allow = {
 			FROM = {
@@ -809,6 +862,46 @@ annexationaction = {
 			}
 		}
 	}
+	#condition = {
+	#	tooltip = ANNEXINVALID
+	#	potential = {
+	#		FROM = {
+	#			vassal_of = ROOT
+	#		}
+	#	}
+	#	allow = {
+	#		FROM = {
+	#			years_in_vassalage_under = {
+	#				who = ROOT
+	#				years = 10
+	#			}
+	#		}
+	#	}
+	#}
+	condition = {
+		tooltip = CANNOT_ANNEX
+		potential = {
+			FROM = {
+				has_country_modifier = tur_mamlukian_administration
+			}
+		}
+		allow = {
+			FROM = {
+				NOT = { has_country_modifier = tur_mamlukian_administration }
+			}
+		}
+	}
+	condition = {
+		tooltip = NEEDS_50_CROWNLAND_TT
+		potential = {
+			has_government_attribute = need_crownland_to_annex
+			NOT = { crown_land_share = 50 }
+		}
+		allow = {
+			crown_land_share = 50
+		}
+	}
+	# Third Odyssey
 	condition = {
 		tooltip = ANNEX_TOO_LOW_KOINE_GLOSSA
 		potential = {
@@ -826,32 +919,6 @@ annexationaction = {
 					who = ROOT
 					value = 50
 				}
-			}
-		}
-	}
-	condition = {
-		tooltip = ANNEX_PU
-		potential = {
-			FROM = {
-				is_subject_of_type = personal_union
-				religion_group = ROOT
-			}
-		}
-		allow = {
-			always = no
-		}
-	}
-	condition = {
-		tooltip = ANNEX_PU_50_YEARS
-		potential = {
-			FROM = {
-				is_subject_of_type = personal_union
-				NOT = { religion_group = ROOT }
-			}
-		}
-		allow = {
-			FROM = {
-				had_country_flag = { flag = to_became_a_subject days = 18250 }
 			}
 		}
 	}
@@ -1032,30 +1099,15 @@ annexationaction = {
 			}
 		}
 	}
-	#condition = {
-	#	tooltip = ANNEXINVALID
-	#	potential = {
-	#		FROM = {
-	#			vassal_of = ROOT
-	#		}
-	#	}
-	#	allow = {
-	#		FROM = {
-	#			years_in_vassalage_under = {
-	#				who = ROOT
-	#				years = 10
-	#			}
-	#		}
-	#	}
-	#}
 }
 
 integrationaction = {
 	condition = {
 		tooltip = INTEGRATETOOLOWDESC
 		potential = {
-			NOT = { mission_completed = to_koine_glossa_mission }
 			senior_union_with = FROM
+			# Third Odyssey
+			NOT = { mission_completed = to_koine_glossa_mission }
 		}
 		allow = {
 			FROM = {
@@ -1066,6 +1118,29 @@ integrationaction = {
 			}
 		}
 	}
+	condition = {
+		tooltip = PUINTEGRATIONIMPOSSIBLE
+		potential = {
+			has_government_attribute = cannot_integrate_personal_unions
+		}
+		allow = {
+			NOT = { has_government_attribute = cannot_integrate_personal_unions }
+		}
+	}
+	condition = {
+		tooltip = CANNOT_ANNEX
+		potential = {
+			FROM = {
+				has_country_modifier = tur_mamlukian_administration
+			}
+		}
+		allow = {
+			FROM = {
+				NOT = { has_country_modifier = tur_mamlukian_administration }
+			}
+		}
+	}
+	# Third Odyssey
 	condition = {
 		tooltip = INTEGRATETOOLOWDESC_KOINE_GLOSSA
 		potential = {
@@ -1081,29 +1156,6 @@ integrationaction = {
 			}
 		}
 	}
-	condition = {
-		tooltip = PUINTEGRATIONIMPOSSIBLE
-		potential = {
-			has_government_attribute = cannot_integrate_personal_unions
-		}
-		allow = {
-			NOT = { has_government_attribute = cannot_integrate_personal_unions }
-		}
-	}
-	#condition = {
-	#	tooltip = INTEGRATEINVALID
-	#	potential = {
-	#		senior_union_with = FROM
-	#	}
-	#	allow = {
-	#		FROM = {
-	#			years_in_union_under = {
-	#				who = ROOT
-	#				years = 50
-	#			}
-	#		}
-	#	}
-	#}
 }
 
 vassalaction = {
@@ -1122,7 +1174,7 @@ vassalaction = {
 			FROM = { is_at_war = no }
 		}
 	}
-	
+	# Third Odyssey
 	condition = {
 	#	tooltip = NHS_NO_MORE_PORT_UNION
 		potential = {
@@ -1167,7 +1219,7 @@ vassalaction = {
 	}
 }
 
-abandon_union_action = {
+abandon_union = {
 	condition = {
 		potential = {
 		}
@@ -1208,7 +1260,7 @@ form_coalition = {
 			}
 		}
 	}
-	
+	# Third Odyssey
 	condition = {
 	#	tooltip = NHS_NO_MORE_PORT_UNION
 		potential = {
@@ -1308,6 +1360,12 @@ ask_for_tributary_state_action = {
 				}
 			}
 		}
+	}
+}
+
+break_alliance = {
+	effect = {
+		on_alliance_broken_effect = yes
 	}
 }
 

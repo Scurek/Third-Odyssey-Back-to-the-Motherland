@@ -1,32 +1,9 @@
-#All scopes are country scope
-#All parameters are optional
-
-# estate_privilege = {
-# 	is_valid = { triggers }						#Conditions for whether it is possible for the country to have this privilege (it will not display on the list if they are false, and will be revoked if it has already been granted)
-# 	can_select = { triggers } 					#Conditions for whether the country is allowed to select the privilege (with conditions for why not displayed)
-# 	on_granted = { effects } 					#Effects executed immediately upon the privilege being taken
-# 	can_revoke = { triggers } 					#Conditions for whether the country can revoke the privilege
-# 	on_revoked = { effects } 					#Effects executed upon the privilege being revoked by the country
-# 	on_invalid = { effects } 					#Effects executed upon the privilege being removed due to invalidity (is_valid becomes false or the estate is removed)
-# 	penalties = { modifiers } 					#Negative modifiers granted while the privilege is active (creates different tooltip to benefits)
-# 	conditional_modifier = { 					#Modifier that are applied if the specified conditions are true.
-# 		trigger = { triggers }
-# 		modifier = { modifiers }
-# 		is_bad = yes/no							#Specifies whether the modifier should be listed as positive or negative in the tooltips.
-# 	}
-# 	modifier_by_land_ownership = { modifiers } 	#Multiplies the modifier by the % of land owned by the estate.
-# 	mechanics = { mechanics } 					#Special mechanics the privilege enables
-# 	cooldown_years = int 						#Time limit before which the privilege cannot be revoked
-# 	on_cooldown_expires = { effects }			#Effect executed once the specified cooldown_years timer has run down
-#	ai_will_do									#If above ESTATE_PRIVILEGE_GRANT_THRESHOLD define, AI will try to apply. If below ESTATE_PRIVILEGE_REVOKE_THRESHOLD, AI will try to revoke.
-# }
-
-
 #Special privileges for the church for the disaster
 
 estate_church_nhs_inquisition_privilege = {
 	icon = privilege_recruit_minister
 	max_absolutism = -10
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 2 } }
 	influence = 0.20
 	loyalty = 0.05
 	is_valid = {
@@ -35,7 +12,9 @@ estate_church_nhs_inquisition_privilege = {
 	}
 	can_select = {
 	}
-	
+	benefits = {
+		church_privilege_slots = 1
+	}
 	can_revoke = {
 		estate_loyalty = {
 			estate = estate_church
@@ -55,7 +34,6 @@ estate_church_nhs_inquisition_privilege = {
 		}
 	}
 	on_granted = {
-		custom_tooltip = nhs_add_estate_church_privilege_slot_tt
 		if = {
 			limit = {
 				has_country_flag = hellenic_conversion_preacher
@@ -120,6 +98,7 @@ estate_church_nhs_inquisition_privilege = {
 to_nhs_estate_nhs_nobles_land_sale_privilege = {
 	icon = privilege_sell_autonomy
 	max_absolutism = -10
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 2 } }
 	influence = 0.10
 	loyalty = 0.10
 	cooldown_years = 10
@@ -128,7 +107,6 @@ to_nhs_estate_nhs_nobles_land_sale_privilege = {
 		NOT = { has_country_flag = nhs_disable_noble_privileges }
 	}
 	can_select = {
-		to_num_of_noble_privileges_check = yes
 	}
 	
 	can_revoke = {
@@ -158,6 +136,7 @@ to_nhs_estate_nhs_nobles_land_sale_privilege = {
 to_estate_church_patriarchal_dominance = {
 	icon = privilege_patriarch_authority
 	max_absolutism = -20
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 4 } }
 	influence = 0.30
 	loyalty = 0.15
 	land_share = 20
@@ -172,8 +151,10 @@ to_estate_church_patriarchal_dominance = {
 	can_revoke = {
 		NOT = { patriarch_authority = 0.75 }
 	}
+	benefits = {
+		church_privilege_slots = 1
+	}
 	on_granted = {
-		custom_tooltip = nhs_add_estate_church_privilege_slot_tt
 		if = {
 			limit = {
 				has_country_flag = to_patriarchal_autonomy_event_active

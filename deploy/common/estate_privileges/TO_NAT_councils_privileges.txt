@@ -37,7 +37,6 @@ nhs_native_privilege_foreign_invaders = {
 		}
 	}
 	on_granted = {
-		custom_tooltip = nhs_remove_estate_all_natives_privilege_slot_tt
 		custom_tooltip = nhs_native_privilege_foreign_invaders_tooltip
 	}
 	mechanics = {
@@ -45,6 +44,9 @@ nhs_native_privilege_foreign_invaders = {
 	}
 	modifier_by_land_ownership = {
 		global_manpower_modifier = 0.60
+	}
+	penalties = {
+		estate_all_natives_privilege_slots = -1
 	}
 	conditional_modifier = {
 		trigger = {
@@ -91,10 +93,13 @@ nhs_native_privilege_seize_land = {
 			NOT = { has_country_modifier = estate_natives_sell_land_cd }
 		}
 	}
+	benefits = {
+		estate_all_natives_privilege_slots = 1
+	}
 	on_granted = {
 		custom_tooltip = to_nat_seize_council_land_tt
 		hidden_effect = {
-			nhs_change_any_native_estate_land_share = {
+			to_change_any_native_estate_land_share = {
 				SHARE = -5
 			}
 		}
@@ -132,7 +137,6 @@ nhs_native_privilege_seize_land = {
 			custom_tooltip = to_native_estate_seize_land_rebels_potential_tt
 		}
 		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = nhs_add_estate_all_natives_privilege_slot_tt
 		custom_tooltip = nhs_auto_revoke_privilege_after_cooldown_tt
 		hidden_effect = {
 			if = {
@@ -235,7 +239,6 @@ nhs_native_priv_inclusive_citizenship_early = {
 	can_select = {
 		has_estate_privilege = nhs_native_priv_ancestral_land
 		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
-		to_num_of_privileges_check_estate_all_natives = yes
 		to_councils_formation_not_active = yes
 	}
 	can_revoke = {
@@ -457,7 +460,6 @@ nhs_native_priv_inclusive_citizenship_mid = {
 	can_select = {
 		has_estate_privilege = nhs_native_priv_ancestral_land
 		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
-		to_num_of_privileges_check_estate_all_natives = yes
 		to_councils_formation_not_active = yes
 	}
 	on_granted = {
@@ -586,6 +588,7 @@ nhs_native_priv_ancestral_land = {
     icon = privilege_native_advancement
 
 	max_absolutism = -10
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 2 } }
 	land_share = 10
 	loyalty = 0.15
 	influence = 0.25
@@ -602,7 +605,6 @@ nhs_native_priv_ancestral_land = {
 	}
 
 	can_select = {
-		to_num_of_privileges_check_estate_all_natives = yes
 		to_councils_formation_not_active = yes
 	}
 	can_revoke = {
@@ -681,6 +683,7 @@ nhs_native_priv_local_councils_empowered = {
     icon = privilege_royal_authority
 
 	max_absolutism = -10
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 2 } }
 	loyalty = 0.1
 	influence = 0.10
 
@@ -700,7 +703,6 @@ nhs_native_priv_local_councils_empowered = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_all_natives = yes
 		to_councils_formation_not_active = yes
 	}
 	can_revoke = {
@@ -798,7 +800,7 @@ nhs_native_priv_increase_tribute = {
     icon = privilege_give_money
 
 	loyalty = -0.15
-	max_absolutism = 5
+	# max_absolutism = 5
 	
 	is_valid = {
 		if = {
@@ -818,7 +820,6 @@ nhs_native_priv_increase_tribute = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_all_natives = yes
 		NOT = { has_estate_privilege = nhs_native_priv_designate_development_zones }
 		to_councils_formation_not_active = yes
 	}
@@ -980,7 +981,6 @@ nhs_native_priv_citizenship_for_service = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_all_natives = yes
 		to_councils_formation_not_active = yes
 	}
 	can_revoke = {
@@ -1071,7 +1071,7 @@ nhs_native_priv_pax_romana_early = {
 			limit = {
 				has_estate_privilege = nhs_native_priv_pax_romana_early
 			}
-			NOT = { nhs_has_native_priv_divide_et_impera = yes }
+			NOT = { to_has_native_priv_divide_et_impera = yes }
 		}
 
 		if = {
@@ -1093,7 +1093,6 @@ nhs_native_priv_pax_romana_early = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_all_natives = yes
 		NOT = { has_estate_privilege = nhs_native_priv_divide_et_impera_early }
 		to_councils_formation_not_active = yes
 	}
@@ -1217,7 +1216,7 @@ nhs_native_priv_pax_romana_mid = {
 			limit = {
 				has_estate_privilege = nhs_native_priv_pax_romana_mid
 			}
-			NOT = { nhs_has_native_priv_divide_et_impera = yes }
+			NOT = { to_has_native_priv_divide_et_impera = yes }
 		}
 
 		if = {
@@ -1239,7 +1238,6 @@ nhs_native_priv_pax_romana_mid = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_all_natives = yes
 		NOT = { has_estate_privilege = nhs_native_priv_divide_et_impera_mid }
 		to_councils_formation_not_active = yes
 	}
@@ -1334,7 +1332,7 @@ nhs_native_priv_pax_romana_revoke = {
     icon = privilege_supply_arms_revoke
 	
 	is_valid = {
-		nhs_has_native_priv_pax_romana = yes
+		to_has_native_priv_pax_romana = yes
 
 		if = {
 			limit = {
@@ -1432,7 +1430,6 @@ nhs_native_priv_encourage_barbaroi_officials = {
 	}
 	can_select = {
 		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
-		to_num_of_privileges_check_estate_all_natives = yes
 		to_councils_formation_not_active = yes
 	}
 	can_revoke = {
@@ -1586,7 +1583,6 @@ nhs_native_priv_designate_development_zones = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_all_natives = yes
 		NOT = { has_estate_privilege = nhs_native_priv_increase_tribute }
 		to_councils_formation_not_active = yes
 	}
@@ -1675,7 +1671,7 @@ nhs_native_priv_designate_development_zones = {
 nhs_native_priv_divide_et_impera_early = {
     icon = privilege_new_world_mission
 	cooldown_years = 5
-	max_absolutism = 5
+	# max_absolutism = 5
 	loyalty = 0.15
 	influence = -0.05
 	
@@ -1687,7 +1683,7 @@ nhs_native_priv_divide_et_impera_early = {
 			limit = {
 				has_estate_privilege = nhs_native_priv_divide_et_impera_early
 			}
-			NOT = { nhs_has_native_priv_pax_romana = yes }
+			NOT = { to_has_native_priv_pax_romana = yes }
 		}
 
 		if = {
@@ -1703,7 +1699,6 @@ nhs_native_priv_divide_et_impera_early = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_all_natives = yes
 		NOT = { has_estate_privilege = nhs_native_priv_pax_romana_early }
 		to_councils_formation_not_active = yes
 	}
@@ -1822,7 +1817,7 @@ nhs_native_priv_divide_et_impera_early = {
 nhs_native_priv_divide_et_impera_mid = {
     icon = privilege_new_world_mission
 	cooldown_years = 5
-	max_absolutism = 5
+	# max_absolutism = 5
 	loyalty = 0.10
 	influence = -0.05
 	
@@ -1833,7 +1828,7 @@ nhs_native_priv_divide_et_impera_mid = {
 			limit = {
 				has_estate_privilege = nhs_native_priv_divide_et_impera_mid
 			}
-			NOT = { nhs_has_native_priv_pax_romana = yes }
+			NOT = { to_has_native_priv_pax_romana = yes }
 		}
 
 		if = {
@@ -1849,7 +1844,6 @@ nhs_native_priv_divide_et_impera_mid = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_all_natives = yes
 		NOT = { has_estate_privilege = nhs_native_priv_pax_romana_mid }
 		to_councils_formation_not_active = yes
 	}
@@ -1951,7 +1945,7 @@ nhs_native_priv_divide_et_impera_revoke = {
     icon = privilege_new_world_mission_revoke
 	
 	is_valid = {
-		nhs_has_native_priv_divide_et_impera = yes
+		to_has_native_priv_divide_et_impera = yes
 
 		if = {
 			limit = {
@@ -2030,6 +2024,7 @@ to_vov_native_priv_skraeling_thingas = {
 	loyalty = 0.10
 	influence = 0.05
 	max_absolutism = -10
+	conditional_modifier = { trigger = { has_absolutism_reduction_for_estate_privileges = yes } modifier = { max_absolutism = 2 } }
 	
 	is_valid = {
 		nhs_check_all_vinland = { CONDITION = tag }
@@ -2047,7 +2042,6 @@ to_vov_native_priv_skraeling_thingas = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_all_natives = yes
 		to_councils_formation_not_active = yes
 	}
 	can_revoke = {
@@ -2154,7 +2148,6 @@ to_vov_native_priv_raiding_hosts = {
 		}
 	}
 	can_select = {
-		to_num_of_privileges_check_estate_all_natives = yes
 		to_councils_formation_not_active = yes
 	}
 	can_revoke = {
@@ -2273,7 +2266,6 @@ to_vov_native_priv_benevolent_conquerors = {
 	}
 	can_select = {
 		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
-		to_num_of_privileges_check_estate_all_natives = yes
 		to_councils_formation_not_active = yes
 	}
 	can_revoke = {
@@ -2458,7 +2450,6 @@ to_vov_native_priv_freedom_of_worship = {
 			to_nat_tribal_native_culture_province = yes
 			NOT = { religion = root }
 		}
-		to_num_of_privileges_check_estate_all_natives = yes
 		to_councils_formation_not_active = yes
 	}
 	can_revoke = {
@@ -2597,7 +2588,6 @@ to_vov_native_priv_open_ranks = {
 	}
 	can_select = {
 		NOT = { has_estate_privilege = estate_church_one_faith_one_culture }
-		to_num_of_privileges_check_estate_all_natives = yes
 		to_councils_formation_not_active = yes
 	}
 	can_revoke = {

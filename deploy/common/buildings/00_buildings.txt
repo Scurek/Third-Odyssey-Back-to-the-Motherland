@@ -36,6 +36,7 @@ marketplace = {
 	}
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = marketplace }
+		# TO END
 		add_development_from_building = {
 			building = marketplace
 			type = production
@@ -44,12 +45,17 @@ marketplace = {
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = marketplace }
+		# TO END
 		remove_development_from_building = {
 			building = marketplace
 			type = production
 			value = 1
 		}
 	}
+
+	on_construction_started = { } #Fires when you start the construction,  ROOT - Province FROM - Country that started
+	on_construction_canceled = { } #Fires when you cancel the construction, ROOT - Province FROM - Country that canceled
+
 	on_obsolete = {
 	}
 
@@ -66,6 +72,7 @@ workshop = {
 	}
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = workshop }
+		# TO END
 		add_development_from_building = {
 			building = workshop
 			type = production
@@ -74,6 +81,7 @@ workshop = {
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = workshop }
+		# TO END
 		remove_development_from_building = {
 			building = workshop
 			type = production
@@ -97,6 +105,8 @@ temple = {
 		local_tax_modifier = 0.4
 	}
 	on_built = {
+		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = temple }
+		# TO END
 		on_province_tax_building_built_estate_privileges_effect = yes
 		add_development_from_building = {
 			building = temple
@@ -117,15 +127,17 @@ temple = {
 		if = {
 			limit = {
 				FROM = { has_government_attribute = temples_modifier }
+				owned_by = FROM 
 			}
 			add_province_modifier = {
 				name = gov_expanded_temple_rights_mod
 				duration = -1
 			}
 		}
-		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = temple }
 	}
 	on_destroyed = {
+		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = temple }
+		# TO END
 		on_province_tax_building_destroyed_estate_privileges_effect = yes
 		remove_development_from_building = {
 			building = temple
@@ -144,7 +156,6 @@ temple = {
 			}
 		}
 		remove_province_modifier = gov_expanded_temple_rights_mod
-		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = temple }
 	}
 	on_obsolete = {
 	}
@@ -160,14 +171,28 @@ barracks = {
 		local_manpower_modifier = 0.5
 	}
 	on_built = {
+		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = barracks }
+		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = barracks }
+		# TO END
 		if = {
 			limit = {
 				FROM = {
-					has_reform = corvee_reform
+					has_government_attribute = manpower_sailors_on_build
 				}
 			}
 			FROM = {
 				add_manpower = 1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = 0.001
 			}
 		}
 		add_development_from_building = {
@@ -175,18 +200,33 @@ barracks = {
 			type = manpower
 			value = 1
 		}
-		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = barracks }
-		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = barracks }
+		update_improved_military_buildings_modifier = {
+			building = barracks
+		}
 	}
 	on_destroyed = {
+		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = barracks }
+		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = barracks }
+		# TO END
 		if = {
 			limit = {
 				FROM = {
-					has_reform = corvee_reform
+					has_government_attribute = manpower_sailors_on_build
 				}
 			}
 			FROM = {
 				add_manpower = -1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = -0.001
 			}
 		}
 		remove_development_from_building = {
@@ -194,8 +234,9 @@ barracks = {
 			type = manpower
 			value = 1
 		}
-		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = barracks }
-		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = barracks }
+		update_improved_military_buildings_modifier = {
+			building = barracks
+		}
 	}
 	on_obsolete = {
 	}
@@ -233,6 +274,7 @@ shipyard = {
 	time = 12
 	build_trigger = {
 		has_port = yes
+		# Third Odyssey
 		NOT = {
 			to_has_great_project_at_least_at_tier_1 = {
 				TYPE = nhs_elysian_arsenal
@@ -254,9 +296,12 @@ shipyard = {
 		naval_forcelimit = 2
 		ship_recruit_speed = -0.25
 		local_ship_repair = 0.25
+		local_has_man_of_war = yes
+		local_has_galleass = yes
 	}
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = shipyard }
+		# TO END
 		add_development_from_building = {
 			building = shipyard
 			type = production
@@ -265,6 +310,7 @@ shipyard = {
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = shipyard }
+		# TO END
 		remove_development_from_building = {
 			building = shipyard
 			type = production
@@ -300,12 +346,16 @@ fort_15th = {
 
 	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
 	on_built = {
+		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 2 }
+		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = fort_15th }
+		to_handle_para_bellum_modifier_fort_build = yes
+		# TO END
 		if = {
 			limit = {
 				FROM = { NOT = { mil_tech = 14 } has_government_attribute = on_fort_built_nobles_loyalty }
 			}
 			FROM = {
-				nhs_add_noble_estate_loyalty = {
+				to_add_noble_estate_loyalty = {
 					loyalty = 5
 				}
 				if = {
@@ -328,9 +378,18 @@ fort_15th = {
 				}
 			}
 		}
-		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 2 }
-		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = fort_15th }
-		to_handle_para_bellum_modifier_fort_build = yes
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_development_of_castles
+				}
+				NOT = { has_province_modifier = estate_nobles_development_of_castles_mod }
+			}
+			add_province_modifier = {
+				name = estate_nobles_development_of_castles_mod
+				duration = -1
+			}
+		}
 	}
 
 	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
@@ -338,6 +397,13 @@ fort_15th = {
 		nhs_fort_manpower_remove_all_modifiers = yes
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = fort_15th }
 		to_handle_para_bellum_modifier_on_fort_destroyed = yes
+		# TO END
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_development_of_castles_mod
+			}
+			remove_province_modifier = estate_nobles_development_of_castles_mod
+		}
 	}
 
 	# THIS = Province, FROM = Destroyer, Will not be called on buildings destroyed!
@@ -404,19 +470,31 @@ courthouse = {
 	}
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = courthouse }
+		# TO END
 		add_development_from_building = {
 			building = courthouse
 			type = tax
 			value = 1
 		}
+		if = { 
+			limit = { 
+				FROM = { has_country_flag = fra_courthouse_bonus_flag }
+			}
+			add_province_modifier = {
+				name = fra_improved_court_houses_modifier
+				duration = -1 
+			}
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = courthouse }
+		# TO END
 		remove_development_from_building = {
 			building = courthouse
 			type = tax
 			value = 1
 		}
+		remove_province_modifier = fra_improved_court_houses_modifier
 	}
 	on_obsolete = {
 	}
@@ -489,21 +567,24 @@ dock = {
 	}
 	modifier = {
 		local_sailors_modifier = 0.5
+		local_has_man_of_war = yes
+		local_has_galleass = yes
 	}
 	
 	on_built = {
+		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = dock }
+		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = dock }
+		# TO END
 		if = {
 			limit = {
 				FROM = {
-					has_reform = corvee_reform
+					has_government_attribute = manpower_sailors_on_build
 				}
 			}
 			FROM = {
 				add_sailors = 200
 			}
 		}
-		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = dock }
-		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = dock }
 		add_development_from_building = {
 			building = dock
 			type = production
@@ -512,18 +593,19 @@ dock = {
 	}
 	
 	on_destroyed = {
+		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = dock }
+		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = dock }
+		# TO END
 		if = {
 			limit = {
 				FROM = {
-					has_reform = corvee_reform
+					has_government_attribute = manpower_sailors_on_build
 				}
 			}
 			FROM = {
 				add_sailors = -200
 			}
 		}
-		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = dock }
-		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = dock }
 		remove_development_from_building = {
 			building = dock
 			type = production
@@ -558,7 +640,7 @@ dock = {
 		modifier = {
 			owner = {
 				OR = {
-					has_idea_group = naval_ideas 
+					full_idea_group = naval_ideas
 					has_idea_group = maritime_ideas
 				}
 			}
@@ -613,18 +695,48 @@ regimental_camp = {
 #	}
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = regimental_camp }
+		# TO END
 		add_development_from_building = {
 			building = regimental_camp
 			type = manpower
 			value = 1
 		}
+		update_improved_military_buildings_modifier = {
+			building = regimental_camp
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = 0.001
+			}
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = regimental_camp }
+		# TO END
 		remove_development_from_building = {
 			building = regimental_camp
 			type = manpower
 			value = 1
+		}
+		update_improved_military_buildings_modifier = {
+			building = regimental_camp
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = -0.001
+			}
 		}
 	}
 	on_obsolete = {
@@ -653,12 +765,16 @@ fort_16th = {
 
 	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
 	on_built = {
+		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 4 }
+		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = fort_16th OLD_BUILDING = fort_15th }
+		to_handle_para_bellum_modifier_fort_build = yes
+		# TO END
 		if = {
 			limit = {
 				FROM = { NOT = { mil_tech = 19 } has_government_attribute = on_fort_built_nobles_loyalty }
 			}
 			FROM = {
-				nhs_add_noble_estate_loyalty = {
+				to_add_noble_estate_loyalty = {
 					loyalty = 5
 				}
 				if = {
@@ -681,9 +797,18 @@ fort_16th = {
 				}
 			}
 		}
-		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 4 }
-		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = fort_16th OLD_BUILDING = fort_15th }
-		to_handle_para_bellum_modifier_fort_build = yes
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_development_of_castles
+				}
+				NOT = { has_province_modifier = estate_nobles_development_of_castles_mod }
+			}
+			add_province_modifier = {
+				name = estate_nobles_development_of_castles_mod
+				duration = -1
+			}
+		}
 	}
 
 	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
@@ -695,6 +820,12 @@ fort_16th = {
 
 	# THIS = Province, FROM = Destroyer, Will not be called on buildings destroyed!
 	on_obsolete = {
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_development_of_castles_mod
+			}
+			remove_province_modifier = estate_nobles_development_of_castles_mod
+		}
 	}
 
 	onmap = yes
@@ -703,6 +834,7 @@ fort_16th = {
 
 	ai_will_do = {
 		factor = 1 #Lots of logic in code instead, that multiplies with this value
+		# Third Odyssey
 		modifier = {
 			factor = 0
 			owner = {
@@ -758,6 +890,9 @@ cathedral = {
 		local_tax_modifier = 0.6
 	}
 	on_built = {
+		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = cathedral }
+		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = cathedral OLD_BUILDING = temple }
+		# TO END
 		on_province_tax_building_built_estate_privileges_effect = yes
 		add_development_from_upgrading_or_building = {
 			building = cathedral
@@ -780,21 +915,23 @@ cathedral = {
 		if = {
 			limit = {
 				FROM = { has_government_attribute = temples_modifier }
+				owned_by = FROM 
 			}
 			add_province_modifier = {
 				name = gov_expanded_temple_rights_mod
 				duration = -1
 			}
 		}
-		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = cathedral }
-		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = cathedral OLD_BUILDING = temple }
 	}
 	on_destroyed = {
+		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = cathedral }
+		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = cathedral }
+		# TO END
 		on_province_tax_building_destroyed_estate_privileges_effect = yes
 		remove_development_from_building = {
 			building = cathedral
 			type = tax
-			value = 3
+			value = 2
 		}
 		if = {
 			limit = {
@@ -808,8 +945,6 @@ cathedral = {
 			}
 		}
 		remove_province_modifier = gov_expanded_temple_rights_mod
-		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = cathedral }
-		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = cathedral }
 	}
 	on_obsolete = {
 	}
@@ -831,6 +966,7 @@ university = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = university }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = university }
+		# TO END
 		add_development_from_building = {
 			building = university
 			type = tax
@@ -840,6 +976,7 @@ university = {
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = university }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = university }
+		# TO END
 		remove_development_from_building = {
 			building = university
 			type = tax
@@ -929,6 +1066,7 @@ trade_depot = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = trade_depot }
 		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = trade_depot OLD_BUILDING = marketplace }
+		# TO END
 		add_development_from_upgrading_or_building = {
 			building = trade_depot
 			obsolete_building = marketplace
@@ -940,6 +1078,7 @@ trade_depot = {
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = trade_depot }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = trade_depot }
+		# TO END
 		remove_development_from_building = {
 			building = trade_depot
 			type = production
@@ -962,6 +1101,7 @@ grand_shipyard = {
 
 	build_trigger = {
 		has_port = yes
+		# Third Odyssey
 		NOT = {
 			to_has_great_project_at_least_at_tier_1 = {
 				TYPE = nhs_elysian_arsenal
@@ -983,11 +1123,14 @@ grand_shipyard = {
 		naval_forcelimit = 4
 		ship_recruit_speed = -0.50
 		local_ship_repair = 0.50
+		local_has_man_of_war = yes
+		local_has_galleass = yes
 	}
 
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = grand_shipyard }
 		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = grand_shipyard OLD_BUILDING = shipyard }
+		# TO END
 		add_development_from_upgrading_or_building = {
 			building = grand_shipyard
 			obsolete_building = shipyard
@@ -999,6 +1142,7 @@ grand_shipyard = {
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = grand_shipyard }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = grand_shipyard }
+		# TO END
 		remove_development_from_building = {
 			building = grand_shipyard
 			type = production
@@ -1059,19 +1203,20 @@ training_fields = {
 	}
 	
 	on_built = {
+		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = training_fields REMOVE_BUILDING_MODIFIER = barracks }
+		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = training_fields }
+		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = training_fields OLD_BUILDING = barracks }
+		# TO END
 		if = {
 			limit = {
 				FROM = {
-					has_reform = corvee_reform
+					has_government_attribute = manpower_sailors_on_build
 				}
 			}
 			FROM = {
 				add_manpower = 1
 			}
 		}
-		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = training_fields REMOVE_BUILDING_MODIFIER = barracks }
-		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = training_fields }
-		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = training_fields OLD_BUILDING = barracks }
 		add_development_from_upgrading_or_building = {
 			building = training_fields
 			obsolete_building = barracks
@@ -1079,28 +1224,57 @@ training_fields = {
 			value = 2
 			upgrade_value = 1
 		}
-	}
-	on_destroyed = {
+		update_improved_military_buildings_modifier = {
+			building = training_fields
+		}
 		if = {
 			limit = {
 				FROM = {
-					has_reform = corvee_reform
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = 0.001
+			}
+		}
+	}
+	on_destroyed = {
+		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = training_fields }
+		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = training_fields }
+		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = training_fields }
+		# TO END
+		if = {
+			limit = {
+				FROM = {
+					has_government_attribute = manpower_sailors_on_build
 				}
 			}
 			FROM = {
 				add_manpower = -1
 			}
 		}
-		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = training_fields }
-		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = training_fields }
-		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = training_fields }
-	}
-	on_obsolete = {
+		update_improved_military_buildings_modifier = {
+			building = training_fields
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = -0.001
+			}
+		}
 		remove_development_from_building = {
 			building = training_fields
 			type = manpower
 			value = 2
 		}
+	}
+	on_obsolete = {
 	}
 
 	ai_will_do = {
@@ -1121,12 +1295,16 @@ fort_17th = {
 
 	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
 	on_built = {
+		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 6 }
+		nhs_building_counter_effect_add_with_two_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = fort_17th OLD_BUILDING = fort_16th OLD_BUILDING_2 = fort_15th }
+		to_handle_para_bellum_modifier_fort_build = yes
+		# TO END
 		if = {
 			limit = {
 				FROM = { NOT = { mil_tech = 19 } has_government_attribute = on_fort_built_nobles_loyalty }
 			}
 			FROM = {
-				nhs_add_noble_estate_loyalty = {
+				to_add_noble_estate_loyalty = {
 					loyalty = 5
 				}
 				if = {
@@ -1149,9 +1327,18 @@ fort_17th = {
 				}
 			}
 		}
-		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 6 }
-		nhs_building_counter_effect_add_with_two_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = fort_17th OLD_BUILDING = fort_16th OLD_BUILDING_2 = fort_15th }
-		to_handle_para_bellum_modifier_fort_build = yes
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_development_of_castles
+				}
+				NOT = { has_province_modifier = estate_nobles_development_of_castles_mod }
+			}
+			add_province_modifier = {
+				name = estate_nobles_development_of_castles_mod
+				duration = -1
+			}
+		}
 	}
 
 	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
@@ -1159,6 +1346,13 @@ fort_17th = {
 		nhs_fort_manpower_remove_all_modifiers = yes
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = fort_17th }
 		to_handle_para_bellum_modifier_on_fort_destroyed = yes
+		# TO END
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_development_of_castles_mod
+			}
+			remove_province_modifier = estate_nobles_development_of_castles_mod
+		}
 	}
 
 	# THIS = Province, FROM = Destroyer, Will not be called on buildings destroyed!
@@ -1171,6 +1365,7 @@ fort_17th = {
 
 	ai_will_do = {
 		factor = 1 #Lots of logic in code instead, that multiplies with this value
+		# Third Odyssey
 		modifier = {
 			factor = 0
 			owner = {
@@ -1203,24 +1398,29 @@ stock_exchange = {
 	on_built = {
 		nhs_building_counter_effect_add_with_obsolete = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = stock_exchange OLD_BUILDING = trade_depot }
 		nhs_building_counter_effect_add_with_two_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = stock_exchange OLD_BUILDING = trade_depot OLD_BUILDING_2 = marketplace }
+		# TO END
 		if = {
 			limit = {
 				has_province_flag = built_dev_trade_depot
 			}
-			add_development_from_building = {
+			add_development_from_upgrading_or_building = {
 				building = stock_exchange
+				obsolete_building = trade_depot
 				type = production
-				value = 1
+				value = 3
+				upgrade_value = 1
 			}
 		}
 		else_if = {
 			limit = {
 				has_province_flag = built_dev_marketplace
 			}
-			add_development_from_building = {
+			add_development_from_upgrading_or_building = {
 				building = stock_exchange
+				obsolete_building = marketplace
 				type = production
-				value = 2
+				value = 3
+				upgrade_value = 2
 			}
 		}
 		else = {
@@ -1234,6 +1434,7 @@ stock_exchange = {
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = stock_exchange }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = stock_exchange }
+		# TO END
 		remove_development_from_building = {
 			building = stock_exchange
 			type = production
@@ -1260,6 +1461,7 @@ counting_house = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = counting_house }
 		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = counting_house OLD_BUILDING = workshop }
+		# TO END
 		add_development_from_upgrading_or_building = {
 			building = counting_house
 			obsolete_building = workshop
@@ -1271,6 +1473,7 @@ counting_house = {
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = counting_house }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = counting_house }
+		# TO END
 		remove_development_from_building = {
 			building = counting_house
 			type = production
@@ -1306,6 +1509,7 @@ town_hall = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = town_hall }
 		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = town_hall OLD_BUILDING = courthouse }
+		# TO END
 		add_development_from_upgrading_or_building = {
 			building = town_hall
 			obsolete_building = courthouse
@@ -1313,15 +1517,27 @@ town_hall = {
 			value = 2
 			upgrade_value = 1
 		}
+		if = { 
+			limit = { 
+				FROM = { has_country_flag = fra_courthouse_bonus_flag }
+				NOT = { has_province_modifier = fra_improved_court_houses_modifier }
+			}
+			add_province_modifier = {
+				name = fra_improved_court_houses_modifier
+				duration = -1 
+			}
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = town_hall }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = town_hall }
+		# TO END
 		remove_development_from_building = {
 			building = town_hall
 			type = tax
 			value = 2
 		}
+		remove_province_modifier = fra_improved_court_houses_modifier 
 	}
 	on_obsolete = {
 	}
@@ -1402,22 +1618,25 @@ drydock = {
 
 	modifier = {
 		local_sailors_modifier = 1.0
+		local_has_man_of_war = yes
+		local_has_galleass = yes
 	}
 	
 	on_built = {
+		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = drydock REMOVE_BUILDING_MODIFIER = dock }
+		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = drydock }
+		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = drydock OLD_BUILDING = dock }
+		# TO END
 		if = {
 			limit = {
 				FROM = {
-					has_reform = corvee_reform
+					has_government_attribute = manpower_sailors_on_build
 				}
 			}
 			FROM = {
 				add_sailors = 200
 			}
 		}
-		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = drydock REMOVE_BUILDING_MODIFIER = dock }
-		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = drydock }
-		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = drydock OLD_BUILDING = dock }
 		add_development_from_upgrading_or_building = {
 			building = drydock
 			obsolete_building = dock
@@ -1428,19 +1647,20 @@ drydock = {
 	}
 	
 	on_destroyed = {
+		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = drydock }
+		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = drydock }
+		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = drydock }
+		# TO END
 		if = {
 			limit = {
 				FROM = {
-					has_reform = corvee_reform
+					has_government_attribute = manpower_sailors_on_build
 				}
 			}
 			FROM = {
 				add_sailors = -200
 			}
 		}
-		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = drydock }
-		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = drydock }
-		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = drydock }
 		remove_development_from_building = {
 			building = drydock
 			type = production
@@ -1492,6 +1712,7 @@ conscription_center = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = conscription_center }
 		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = conscription_center OLD_BUILDING = regimental_camp }
+		# TO END
 		add_development_from_upgrading_or_building = {
 			building = conscription_center
 			obsolete_building = regimental_camp
@@ -1499,14 +1720,43 @@ conscription_center = {
 			value = 2
 			upgrade_value = 1
 		}
+		update_improved_military_buildings_modifier = {
+			building = conscription_center
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = 0.001
+			}
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = conscription_center }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = conscription_center }
+		# TO END
 		remove_development_from_building = {
 			building = conscription_center
 			type = manpower
 			value = 2
+		}
+		update_improved_military_buildings_modifier = {
+			building = conscription_center
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = -0.001
+			}
 		}
 	}
 	on_obsolete = {
@@ -1540,12 +1790,16 @@ fort_18th = {
 
 	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
 	on_built = {
+		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 8 }
+		nhs_building_counter_effect_add_with_three_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = fort_18th OLD_BUILDING = fort_17th OLD_BUILDING_2 = fort_16th OLD_BUILDING_3 = fort_15th }
+		to_handle_para_bellum_modifier_fort_build = yes
+		# TO END
 		if = {
 			limit = {
 				FROM = { has_government_attribute = on_fort_built_nobles_loyalty }
 			}
 			FROM = {
-				nhs_add_noble_estate_loyalty = {
+				to_add_noble_estate_loyalty = {
 					loyalty = 5
 				}
 				if = {
@@ -1568,9 +1822,18 @@ fort_18th = {
 				}
 			}
 		}
-		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 8 }
-		nhs_building_counter_effect_add_with_three_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = fort_18th OLD_BUILDING = fort_17th OLD_BUILDING_2 = fort_16th OLD_BUILDING_3 = fort_15th }
-		to_handle_para_bellum_modifier_fort_build = yes
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_development_of_castles
+				}
+				NOT = { has_province_modifier = estate_nobles_development_of_castles_mod }
+			}
+			add_province_modifier = {
+				name = estate_nobles_development_of_castles_mod
+				duration = -1
+			}
+		}
 	}
 
 	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
@@ -1578,6 +1841,13 @@ fort_18th = {
 		nhs_fort_manpower_remove_all_modifiers = yes
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = fort_18th }
 		to_handle_para_bellum_modifier_on_fort_destroyed = yes
+		# TO END
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_development_of_castles_mod
+			}
+			remove_province_modifier = estate_nobles_development_of_castles_mod
+		}
 	}
 
 	# THIS = Province, FROM = Destroyer, Will not be called on buildings destroyed!
@@ -1590,6 +1860,7 @@ fort_18th = {
 
 	ai_will_do = {
 		factor = 1 #Lots of logic in code instead, that multiplies with this value
+		# Third Odyssey
 		modifier = {
 			factor = 0
 			owner = {
@@ -1628,19 +1899,32 @@ wharf = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		add_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
 		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1 
+		}
+		
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		remove_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
 		}
 	}
 	on_obsolete = {
@@ -1685,19 +1969,31 @@ weapons = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		add_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
 		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1 
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		remove_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1
 		}
 	}
 	on_obsolete = {
@@ -1721,19 +2017,31 @@ textile = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		add_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
 		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1 
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		remove_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
 		}
 	}
 	on_obsolete = {
@@ -1757,19 +2065,31 @@ plantations = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		add_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
 		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1 
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		remove_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
 		}
 	}
 	on_obsolete = {
@@ -1793,19 +2113,31 @@ tradecompany = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		add_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
 		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1 
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		remove_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
 		}
 	}
 	on_obsolete = {
@@ -1827,19 +2159,31 @@ farm_estate = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		add_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
 		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
-		remove_development_from_building = {
-			building = manufactory
-			type = production
-			value = 2
+		# TO END
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1 
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
 		}
 	}
 	on_obsolete = {
@@ -1862,19 +2206,31 @@ mills = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		add_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
 		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1 
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		remove_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
 		}
 	}
 	on_obsolete = {
@@ -1903,6 +2259,7 @@ furnace = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		add_development_from_building = {
 			building = manufactory
 			type = production
@@ -1912,6 +2269,7 @@ furnace = {
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = manufactory }
+		# TO END
 		remove_development_from_building = {
 			building = manufactory
 			type = production
@@ -1931,18 +2289,9 @@ ramparts = {
 		all
 	}
 
-	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
-	on_built = {
-		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = ramparts }
-		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = ramparts }
-	}
-
-	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
-	on_destroyed = {
-		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = ramparts }
-		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = ramparts }
-	}
-
+	#build_trigger = {
+	#	is_flatland = yes
+	#}
 	modifier = {
 		local_hostile_attrition = 1
 		local_defensiveness = 0.15
@@ -1950,7 +2299,46 @@ ramparts = {
 	}
 	onmap = no
 	show_separate = yes # Means as a manufactory it will be shown according to the old way
-
+	
+	on_built = {
+		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = ramparts }
+		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = ramparts }
+		# TO END
+		add_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1 
+		}
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_development_of_castles
+				}
+				NOT = { has_province_modifier = estate_nobles_development_of_castles_ramparts_mod }
+			}
+			add_province_modifier = {
+				name = estate_nobles_development_of_castles_ramparts_mod
+				duration = -1
+			}
+		}
+	}
+	
+	on_destroyed = {
+		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = ramparts }
+		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = ramparts }
+		# TO END
+		remove_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1
+		}
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_development_of_castles_ramparts_mod
+			}
+			remove_province_modifier = estate_nobles_development_of_castles_ramparts_mod
+		}
+	}
 	ai_will_do = {
 		factor = 1
 	}
@@ -1979,19 +2367,48 @@ soldier_households = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = soldier_households }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = soldier_households }
+		# TO END
 		add_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
 		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1 
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_government_attribute = improved_military_buildings
+				}
+			}
+			add_province_modifier = {
+				name = wei_suo_system_reform_soldier_households_modifier
+				duration = -1
+			}
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = soldier_households }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = soldier_households }
+		# TO END
 		remove_development_from_building = {
 			building = manufactory
 			type = production
 			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1
+		}
+		if = {
+			limit = {
+				has_province_modifier = wei_suo_system_reform_soldier_households_modifier
+			}
+			remove_province_modifier = wei_suo_system_reform_soldier_households_modifier
 		}
 	}
 	on_obsolete = {
@@ -2033,19 +2450,31 @@ impressment_offices = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = impressment_offices }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = impressment_offices }
+		# TO END
 		add_development_from_building = {
 			building = impressment_offices
 			type = manpower
 			value = 2
 		}
+		add_dev_from_building = {
+			building = impressment_offices 
+			type = manpower 
+			value = 1 
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = impressment_offices }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = impressment_offices }
+		# TO END
 		remove_development_from_building = {
 			building = impressment_offices
 			type = manpower
 			value = 2
+		}
+		remove_dev_from_building = {
+			building = impressment_offices 
+			type = manpower 
+			value = 1 
 		}
 	}
 	on_obsolete = {
@@ -2115,6 +2544,7 @@ state_house = {
 	on_built = {
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = state_house }
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = state_house }
+		# TO END
 		add_development_from_building = {
 			building = state_house
 			type = tax
@@ -2124,6 +2554,7 @@ state_house = {
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = state_house }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = state_house }
+		# TO END
 		remove_development_from_building = {
 			building = state_house
 			type = tax

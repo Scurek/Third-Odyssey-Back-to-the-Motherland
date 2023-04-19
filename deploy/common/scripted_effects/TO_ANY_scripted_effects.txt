@@ -1416,6 +1416,7 @@ nhs_set_center_of_trade_1 = {
 	custom_tooltip = nhs_add_center_of_trade_1_tt
 	hidden_effect = {
 		remove_province_modifier = to_dynamic_cot
+		remove_province_triggered_modifier = to_dynamic_cot_tm
 		if = {
 			limit = {
 				NOT = { province_has_center_of_trade_of_level = 1 }
@@ -1427,6 +1428,7 @@ nhs_set_center_of_trade_1 = {
 				add_treasury = 50
 			}
 		}
+		to_check_trade_center_modifiers_from_privileges = yes
 	}
 }
 
@@ -1434,6 +1436,7 @@ nhs_set_center_of_trade_2 = {
 	custom_tooltip = nhs_add_center_of_trade_2_tt
 	hidden_effect = {
 		remove_province_modifier = to_dynamic_cot
+		remove_province_triggered_modifier = to_dynamic_cot_tm
 		if = {
 			limit = {
 				NOT = { province_has_center_of_trade_of_level = 1 }
@@ -1451,6 +1454,7 @@ nhs_set_center_of_trade_2 = {
 				add_treasury = 100
 			}
 		}
+		to_check_trade_center_modifiers_from_privileges = yes
 	}
 }
 
@@ -1458,6 +1462,7 @@ nhs_set_center_of_trade_3 = {
 	custom_tooltip = nhs_add_center_of_trade_3_tt
 	hidden_effect = {
 		remove_province_modifier = to_dynamic_cot
+		remove_province_triggered_modifier = to_dynamic_cot_tm
 		if = {
 			limit = {
 				NOT = { province_has_center_of_trade_of_level = 1 }
@@ -1475,6 +1480,7 @@ nhs_set_center_of_trade_3 = {
 				add_treasury = 500
 			}
 		}
+		to_check_trade_center_modifiers_from_privileges = yes
 	}
 }
 
@@ -2908,5 +2914,71 @@ to_add_ruler_heir_personality_or_modifier = {
 		}
 		set_heir_flag = $HEIR_FLAG$
 		custom_tooltip = $HEIR_TOOLTIP_MODIFIER$
+	}
+}
+
+to_check_trade_center_modifiers_from_privileges = {
+	if = {
+		limit = {
+			owner = {
+				has_estate_privilege = estate_burghers_development_of_cities
+			}
+			NOT = { has_province_modifier = estate_burghers_development_of_cities_mod }
+		}
+		add_province_modifier = {
+			name = estate_burghers_development_of_cities_mod
+			duration = -1
+		}
+	}
+	if = {
+		limit = {
+			owner = {
+				has_estate_privilege = estate_vaisyas_development_of_cities
+			}
+			NOT = { has_province_modifier = estate_vaisyas_development_of_cities_mod }
+		}
+		add_province_modifier = {
+			name = estate_vaisyas_development_of_cities_mod
+			duration = -1
+		}
+	}
+	if = {
+		limit = {
+			owner = {
+				has_estate_privilege = estate_jains_development_of_cities
+			}
+			NOT = { has_province_modifier = estate_jains_development_of_cities_mod }
+		}
+		add_province_modifier = {
+			name = estate_jains_development_of_cities_mod
+			duration = -1
+		}
+	}
+	owner = {
+		save_event_target_as = to_province_owner
+	}
+	if = {
+		limit = {
+			owner = {
+				has_estate_privilege = estate_burghers_exclusive_trade_rights
+			}
+			calc_true_if = {
+				amount = 3
+				all_trade_node_member_province = {
+					owned_by = event_target:to_province_owner
+					province_has_center_of_trade_of_level = 1
+				}
+			}
+		}
+		every_trade_node_member_province = {
+			limit = {
+				owned_by = event_target:to_province_owner
+				province_has_center_of_trade_of_level = 1
+			}
+			add_province_modifier = {
+				name = estate_burghers_exclusive_trade_rights_mod
+				duration = -1
+			}
+		}
 	}
 }

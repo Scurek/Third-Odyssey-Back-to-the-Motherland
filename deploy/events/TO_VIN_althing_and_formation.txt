@@ -125,11 +125,37 @@ country_event = {
 	trigger = {
 		has_reform = althing_republic
 	}
+
+	immediate = {
+		hidden_effect = {
+			pre_select_possible_ruler_focus = yes
+			if = {
+				limit = { has_government_attribute = has_limited_terms }
+				export_to_variable = {
+					which = max_election_term
+					value = modifier:max_terms
+				}
+			}
+		}
+	}
+
+	after = {
+		clr_country_flag = caretaker_revolutionary_government
+		post_ruler_focus_clearance = yes
+	}
 	
 	option = {
 		name = "nhs_vov_althingevents.3.a"	# Current ruler stays
 		trigger = {
 			has_regency = no
+			NOT = { has_ruler_flag = leader_has_been_pushed_out }
+			OR = {
+				NOT = { has_government_attribute = has_limited_terms }
+				check_variable = {
+					which = max_election_term
+					which = election_term
+				}
+			}
 		}
 		ai_chance = { 
 			factor = 60
@@ -151,11 +177,24 @@ country_event = {
 			}		
 		}
 		custom_tooltip = remains_ruler
+		if = {
+			limit = { has_government_attribute = has_limited_terms }
+			custom_tooltip = current_term_tt
+		}
 		change_adm = 1
 		change_dip = 1
 		change_mil = 1
 			
-		add_scaled_republican_tradition = -10
+		if = {
+			limit = {
+				has_country_flag = increased_election_cost
+			}
+			add_scaled_republican_tradition = -15
+			clr_country_flag = increased_election_cost
+		}
+		else = {
+			add_scaled_republican_tradition = -10
+		}
 		random_list = {
 			10 = {
 				add_adm_power = 50
@@ -167,102 +206,218 @@ country_event = {
 				add_mil_power = 50
 			}
 		}
+
+		if = {
+			limit = {
+				has_government_attribute = reelection_depowers_estates
+			}
+			add_estate_influence_modifier = {
+				estate = all
+				influence = -10
+				duration = 1460
+				desc = REELCTION_DEPOWER_ESTATES
+			}
+		}
+		if = {
+			limit = { has_government_attribute = elections_influence_estates }
+			add_estate_loyalty = {
+				estate = all
+				loyalty = 5
+			}
+		}
+		if = {
+			limit = { has_government_attribute = reelection_increases_absolutism }
+			tooltip = {
+				add_absolutism = 10
+			}
+			custom_tooltip = ADD_ABSOLUTISM_BASED_ON_ELECTION_TERM
+			hidden_effect = {
+				for_variable_amount = {
+					variable = election_term
+					effect = "
+						add_absolutism = 10
+					"
+				}
+			}
+			hidden_effect = {
+				change_variable = {
+					which = election_term
+					value = 1
+				}
+			}
+		}
+		if = {
+			limit = { has_government_attribute = elections_increase_factions_influence }
+			add_influence_to_random_faction = {
+				influence = 20
+			}
+		}
+		add_karma = -5
+		if = {
+			limit = {
+				has_government_attribute = has_limited_terms
+			}
+			hidden_effect = {
+				change_variable = {
+					which = election_term
+					value = 1
+				}
+			}
+		}
 	}
 	option = {
 		name = "nhs_vov_althingevents.3.b"	# An administrator type
 		ai_chance = { factor = 20 }
-		# hidden_effect = {
-			if = {
-				limit = { has_active_policy = mandatory_service }
-				define_ruler = {
-					adm = 4
-					max_random_dip = 3
-					random_gender = yes
-					hide_skills = yes
-				}
-			}
-			else = {
-				define_ruler = {
-					adm = 4
-					max_random_dip = 3
-					hide_skills = yes
-				}
-			}
-		# }
-		custom_tooltip = vov_elections_adm_tt
 		if = {
-			limit = { 
-				has_faction = vin_gothar 
+			limit = { republic_with_female_rulers_trigger = yes }
+			define_ruler = {
+				adm = 4
+				max_random_dip = 3
+				random_gender = yes
+				hide_skills = yes
 			}
-			add_faction_influence = {
-				faction = vin_gothar
+		}
+		else = {
+			define_ruler = {
+				adm = 4
+				max_random_dip = 3
+				hide_skills = yes
+			}
+		}
+		custom_tooltip = vov_elections_adm_tt
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = { has_government_attribute = elections_increase_factions_influence }
+			add_influence_to_adm_faction = {
 				influence = 20
-			}				
+			}
+		}
+		add_karma = 10
+		if = {
+			limit = { has_government_attribute = elections_influence_estates }
+			add_estate_loyalty_by_class_adm = {
+				loyalty = 10
+			}
+		}
+		if = {
+			limit = {
+				has_government_attribute = has_limited_terms
+			}
+			hidden_effect = {
+				set_variable = {
+					which = election_term
+					value = 1
+				}
+			}
+		}
+		if = {
+			limit = { has_government_attribute = has_candidate_bonus }
+			assign_ruler_focus = {
+				type = adm
+			}
 		}
 	}
 	option = {
 		name = "nhs_vov_althingevents.3.c"	# A diplomat
 		ai_chance = { factor = 20 }
-		# hidden_effect = {
-			if = {
-				limit = { has_active_policy = mandatory_service }
-				define_ruler = {
-					dip = 4
-					max_random_mil = 3
-					random_gender = yes
-					hide_skills = yes
-				}
+		if = {
+			limit = { republic_with_female_rulers_trigger = yes }
+			define_ruler = {
+				dip = 4
+				max_random_mil = 3
+				random_gender = yes
+				hide_skills = yes
 			}
-			else = {
-				define_ruler = {
-					dip = 4
-					max_random_mil = 3
-					hide_skills = yes
-				}
+		}
+		else = {
+			define_ruler = {
+				dip = 4
+				max_random_mil = 3
+				hide_skills = yes
 			}
-		# }
+		}
 		custom_tooltip = vov_elections_dip_tt
 		if = {
-			limit = { 
-				has_faction = vin_farmadr 
-			}
-			add_faction_influence = {
-				faction = vin_farmadr
+			limit = { has_government_attribute = elections_increase_factions_influence }
+			add_influence_to_dip_faction = {
 				influence = 20
-			}				
-		}		
+			}
+		}
+		add_karma = 10
+		if = {
+			limit = { has_government_attribute = elections_influence_estates }
+			add_estate_loyalty_by_class_dip = {
+				loyalty = 10
+			}
+		}
+		if = {
+			limit = {
+				has_government_attribute = has_limited_terms
+			}
+			hidden_effect = {
+				set_variable = {
+					which = election_term
+					value = 1
+				}
+			}
+		}
+		if = {
+			limit = { has_government_attribute = has_candidate_bonus }
+			assign_ruler_focus = {
+				type = dip
+			}
+		}
 	}
 	option = {
 		name = "nhs_vov_althingevents.3.e"	# A military man
 		ai_chance = { factor = 20 }
-		# hidden_effect = {
-			if = {
-				limit = { has_active_policy = mandatory_service }
-				define_ruler = {
-					mil = 4
-					max_random_adm = 3
-					random_gender = yes
-					hide_skills = yes
-				}
+		if = {
+			limit = { republic_with_female_rulers_trigger = yes }
+			define_ruler = {
+				mil = 4
+				max_random_adm = 3
+				random_gender = yes
+				hide_skills = yes
 			}
-			else = {
-				define_ruler = {
-					mil = 4
-					max_random_adm = 3
-					hide_skills = yes
-				}
+		}
+		else = {
+			define_ruler = {
+				mil = 4
+				max_random_adm = 3
+				hide_skills = yes
 			}
-		# }
+		}
 		custom_tooltip = vov_elections_mil_tt
 		if = {
-			limit = { 
-				has_faction = vin_vikingr 
-			}
-			add_faction_influence = {
-				faction = vin_vikingr
+			limit = { has_government_attribute = elections_increase_factions_influence }
+			add_influence_to_mil_faction = {
 				influence = 20
-			}				
-		}		
+			}
+		}
+		add_karma = 10
+		if = {
+			limit = { has_government_attribute = elections_influence_estates }
+			add_estate_loyalty_by_class_mil = {
+				loyalty = 10
+			}
+		}
+		if = {
+			limit = {
+				has_government_attribute = has_limited_terms
+			}
+			hidden_effect = {
+				set_variable = {
+					which = election_term
+					value = 1
+				}
+			}
+		}
+		if = {
+			limit = { has_government_attribute = has_candidate_bonus }
+			assign_ruler_focus = {
+				type = mil
+			}
+		}
 	}
 }
 
@@ -278,102 +433,132 @@ country_event = {
 	trigger = {
 		has_reform = althing_republic 
 	}
+
+	immediate = {
+		hidden_effect = {
+			pre_select_possible_ruler_focus = yes
+		}
+	}
+	after = {
+		post_ruler_focus_clearance = yes
+	}
 	
 	option = {
 		name = "nhs_vov_althingevents.4.a"	# An administrator type
 		ai_chance = { factor = 40 }
-		# hidden_effect = {
-			if = {
-				limit = { has_active_policy = mandatory_service }
-				define_ruler = {
-					adm = 4
-					max_random_dip = 3
-					random_gender = yes
-					hide_skills = yes
-				}
+		if = {
+			limit = { has_active_policy = mandatory_service }
+			define_ruler = {
+				adm = 4
+				max_random_dip = 3
+				random_gender = yes
+				hide_skills = yes
 			}
-			else = {
-				define_ruler = {
-					adm = 4
-					max_random_dip = 3
-					hide_skills = yes
-				}
+		}
+		else = {
+			define_ruler = {
+				adm = 4
+				max_random_dip = 3
+				hide_skills = yes
 			}
-		# }
+		}
 		custom_tooltip = vov_elections_adm_tt
 		if = {
-			limit = { 
-				has_faction = vin_gothar
-			}
-			add_faction_influence = {
-				faction = vin_gothar
+			limit = { has_government_attribute = elections_increase_factions_influence }
+			add_influence_to_adm_faction = {
 				influence = 20
-			}				
+			}
+		}
+		if = {
+			limit = { has_government_attribute = elections_influence_estates }
+			add_estate_loyalty_by_class_adm = {
+				loyalty = 10
+			}
+		}
+		if = {
+			limit = { has_government_attribute = has_candidate_bonus }
+			assign_ruler_focus = {
+				type = adm
+			}
 		}
 	}
 	option = {
 		name = "nhs_vov_althingevents.4.b"	# A diplomat
 		ai_chance = { factor = 30 }
-		# hidden_effect = {
-			if = {
-				limit = { has_active_policy = mandatory_service }
-				define_ruler = {
-					dip = 4
-					max_random_mil = 3
-					random_gender = yes
-					hide_skills = yes
-				}
+		if = {
+			limit = { has_active_policy = mandatory_service }
+			define_ruler = {
+				dip = 4
+				max_random_mil = 3
+				random_gender = yes
+				hide_skills = yes
 			}
-			else = {
-				define_ruler = {
-					dip = 4
-					max_random_mil = 3
-					hide_skills = yes
-				}
+		}
+		else = {
+			define_ruler = {
+				dip = 4
+				max_random_mil = 3
+				hide_skills = yes
 			}
-		# }
+		}
 		custom_tooltip = vov_elections_dip_tt
 		if = {
-			limit = { 
-				has_faction = vin_farmadr 
-			}
-			add_faction_influence = {
-				faction = vin_farmadr
+			limit = { has_government_attribute = elections_increase_factions_influence }
+			add_influence_to_dip_faction = {
 				influence = 20
-			}				
-		}			
+			}
+		}
+		if = {
+			limit = { has_government_attribute = elections_influence_estates }
+			add_estate_loyalty_by_class_dip = {
+				loyalty = 10
+			}
+		}
+		if = {
+			limit = { has_government_attribute = has_candidate_bonus }
+			assign_ruler_focus = {
+				type = dip
+			}
+		}
 	}
 	option = {
 		name = "nhs_vov_althingevents.4.c"	# A military man
 		ai_chance = { factor = 30 }
-		# hidden_effect = {
-			if = {
-				limit = { has_active_policy = mandatory_service }
-				define_ruler = {
-					mil = 4
-					max_random_adm = 3
-					random_gender = yes
-					hide_skills = yes
-				}
+		if = {
+			limit = { has_active_policy = mandatory_service }
+			define_ruler = {
+				mil = 4
+				max_random_adm = 3
+				random_gender = yes
+				hide_skills = yes
 			}
-			else = {
-				define_ruler = {
-					mil = 4
-					max_random_adm = 3
-					hide_skills = yes
-				}
+		}
+		else = {
+			define_ruler = {
+				mil = 4
+				max_random_adm = 3
+				hide_skills = yes
 			}
-		# }
+		}
 		custom_tooltip = vov_elections_mil_tt
 		if = {
-			limit = { 
-				has_faction = vin_vikingr 
-			}
-			add_faction_influence = {
-				faction = vin_vikingr
+			limit = { has_government_attribute = elections_increase_factions_influence }
+			add_influence_to_mil_faction = {
 				influence = 20
-			}				
-		}		
+			}
+		}	
+		if = {
+			limit = { has_government_attribute = elections_influence_estates }
+			add_estate_loyalty_by_class_mil = {
+				loyalty = 10
+			}
+		}
+		if = {
+			limit = { has_government_attribute = has_candidate_bonus }
+			assign_ruler_focus = {
+				type = mil
+			}
+		}
 	}
 }
 ###Faction struggle events
