@@ -96,6 +96,7 @@ to_three_year_event_pulse_3_effect = {
 to_monthly_pulse_effect = {
 	to_culture_adaptation_progress_routine = yes
 	to_elysian_highways_progress_routine = yes
+	to_administrative_burden_check_subject_penalty = yes
 }
 
 to_handle_colonies = {
@@ -157,10 +158,12 @@ on_colony_created = {
 	to_nat_handle_expand_overseas_modifier = yes
 
 	to_destroy_forbidden_colonies = yes
+	to_ab_increase_colony_penalty = { SCOPE = owner }
 }
 
 on_colony_destroyed = {
 	remove_province_modifier = nhs_native_priv_inclusive_citizenship_mod
+	to_ab_decrease_colony_penalty = { SCOPE = FROM }
 }
 
 #ROOT - Province
@@ -183,6 +186,7 @@ to_on_colony_finished = {
 	to_nhs_handle_post_disaster_tolerance_modifier = yes
 	to_nhs_handle_lots_of_people_modifiers = yes
 	nhs_handle_naphtha = yes
+	to_ab_decrease_colony_penalty = { SCOPE = owner }
 	province_event = { id = to_nat_tribal_development.1 }
 	clr_province_flag = to_static_colonial_culture
 }
@@ -651,4 +655,49 @@ to_on_capital_moved = {
 to_on_new_monarch = {
 	to_add_religious_reformer_modifier = yes
 	to_add_unifier_modifier = yes
+}
+
+# country
+to_on_leader_recruited = {
+	# to_add_administrative_burden = { VALUE = 2 } # Moved to individual effects, since it showed up when changing ruler to general, but did not do anything in this case
+}
+
+# country
+to_on_general_recruited = {
+	to_add_administrative_burden = { VALUE = 2 }
+}
+
+# country
+to_on_admiral_recruited = {
+	to_add_administrative_burden = { VALUE = 2 }
+}
+
+# country
+to_on_conquistador_recruited = {
+	to_add_administrative_burden = { VALUE = 2 }
+}
+
+# country
+to_on_explorer_recruited = {
+	to_add_administrative_burden = { VALUE = 2 }
+}
+
+# THIS = Province, FROM = Country
+to_on_regiment_recruited = {
+	FROM = { to_add_administrative_burden = { VALUE = 1 } }
+}
+
+# THIS = Province, FROM = Country, ROOT = Merc Unit
+to_on_mercenary_recruited = {
+	FROM = { to_add_administrative_burden = { VALUE = 4 } }
+}
+
+# Fires when you start the construction,  ROOT - Province FROM - Country that started
+to_on_construction_started = {
+	to_administrative_burden_on_construction_started = { BUILDING = $BUILDING$ }
+}
+
+# Fires when you cancel the construction, ROOT - Province FROM - Country that canceled
+to_on_construction_canceled = {
+	to_administrative_burden_on_construction_canceled = { BUILDING = $BUILDING$ }
 }

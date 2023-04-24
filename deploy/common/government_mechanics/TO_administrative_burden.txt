@@ -1,0 +1,279 @@
+to_administrative_burden_mechanic = {
+	alert_icon_gfx = GFX_to_administrative_burden_alert_icon
+	alert_icon_index = 1
+	available = {
+	}
+
+	powers = {
+		to_administrative_burden = {
+			gui = to_administrative_burden_gov_mech
+			show_before_interactions = yes
+			max = 100
+			default = 10
+			reset_on_new_ruler = no
+			base_monthly_growth = -0.05
+			is_good = no
+			
+			scaled_modifier = {
+				modifier = {
+					administrative_efficiency = -0.5
+					all_estate_influence_modifier = 0.20
+					global_autonomy = 0.2
+					colony_cost_modifier = 1
+				}
+			}
+		}
+	}
+
+	interactions = {
+		to_administrative_burden_expand_bureaucracy = {
+			gui = to_administrative_burden_gov_mech_interaction
+			icon = GFX_to_administrative_burden_expand_bureaucracy
+			trigger = {
+				# treasury = 100
+				to_ab_can_expand_bureaucracy_adm = yes
+				manpower = 0.5
+			}
+			effect = { 
+				add_government_power = {
+					mechanic_type = to_administrative_burden_mechanic
+					power_type = to_administrative_burden
+					value = -5
+				}
+				custom_tooltip = nhs_new_line_tt
+				# add_treasury = -100
+				# add_adm_power = -50
+				if = {
+					limit = {
+						NOT = {
+							check_variable = {
+								which = to_ab_expand_bureaucracy_cost
+								value = 50
+							}
+						}
+					}
+					add_adm_power = -50
+				}
+				else = {
+					custom_tooltip = to_ab_expand_bureaucracy_cost_tt
+				}
+				add_manpower = -0.5
+				custom_tooltip = nhs_new_line_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							NOT = {
+								check_variable = {
+									which = to_ab_expand_bureaucracy_cost
+									value = 50
+								}
+							}
+						}
+						add_adm_power = -50
+						set_variable = {
+							which = to_ab_expand_bureaucracy_cost
+							value = 50
+						}
+					}
+					else = {
+						for_variable_amount = {
+							variable = to_ab_expand_bureaucracy_cost
+							effect = "add_adm_power = 1"
+						}
+					}
+				}
+				if = {
+					limit = {
+						NOT = {
+							check_variable = {
+								which = to_ab_expand_bureaucracy_cost
+								value = 200
+							}
+						}
+					}
+					custom_tooltip = to_ab_expand_bureaucracy_cost_increase_tt
+					hidden_effect = {
+						change_variable = {
+							which = to_ab_expand_bureaucracy_cost
+							value = 25
+						}
+					}
+				}
+			}
+			cooldown_years = 0
+			ai_chance = {
+				factor = 0
+			}
+		}
+		
+		to_administrative_burden_empower_estates = {
+			gui = to_administrative_burden_gov_mech_interaction
+			icon = GFX_to_administrative_burden_empower_estates
+			trigger = {
+				custom_trigger_tooltip = {
+					tooltip = to_not_seized_land_in_5_years_tt
+					OR = {
+						NOT = { has_country_flag = recent_land_seizure }
+						had_country_flag = {
+							flag = recent_land_seizure
+							days = 1825
+						}
+					}
+				}
+			}
+			effect = {
+				add_country_modifier = {
+					name = to_empowered_estate_ab
+					duration = 3650
+				}
+				custom_tooltip = to_cannot_seize_land_if_modifier_active_tt
+			}
+			cooldown_years = 10
+		}
+
+		# to_administrative_burden_raise_militia = {
+		# 	gui = to_administrative_burden_gov_mech_interaction
+		# 	icon = GFX_to_administrative_burden_raise_militia
+		# 	trigger = {
+		# 		NOT = {
+		# 			has_government_power = {
+		# 				mechanic_type = to_administrative_burden_mechanic
+		# 				power_type = to_administrative_burden
+		# 				value = 90
+		# 			}
+		# 		}
+		# 		is_at_war = yes
+		# 		any_owned_province = {
+		# 			controlled_by = ROOT
+		# 		}
+		# 	}
+		# 	effect = {
+		# 		add_government_power = {
+		# 			mechanic_type = to_administrative_burden_mechanic
+		# 			power_type = to_administrative_burden
+		# 			value = 10
+		# 		}
+		# 		custom_tooltip = nhs_new_line_tt
+		# 		if = {
+		# 			limit = {
+		# 				capital_scope = {
+		# 					controlled_by = ROOT
+		# 				}
+		# 			}
+		# 			capital_scope = {
+		# 				infantry = ROOT
+		# 				infantry = ROOT
+		# 				infantry = ROOT
+		# 				infantry = ROOT
+		# 				infantry = ROOT
+		# 			}
+		# 		}
+		# 		else = {
+		# 			random_owned_province = {
+		# 				limit = {
+		# 					controlled_by = ROOT  
+		# 				}
+		# 				infantry = ROOT
+		# 				infantry = ROOT
+		# 				infantry = ROOT
+		# 				infantry = ROOT
+		# 				infantry = ROOT
+		# 			}
+		# 		}
+		# 		add_country_modifier = {
+		# 			name = "nhs_drafted_militia"
+		# 			duration = 7300
+		# 		}
+		# 	}
+		# 	cooldown_years = 20
+		# }
+
+		to_administrative_burden_raise_tax = {
+			gui = to_administrative_burden_gov_mech_interaction
+			icon = GFX_to_administrative_burden_raise_tax
+			trigger = {
+				NOT = {
+					has_government_power = {
+						mechanic_type = to_administrative_burden_mechanic
+						power_type = to_administrative_burden
+						value = 85
+					}
+				}
+			}
+			effect = {
+				add_government_power = {
+					mechanic_type = to_administrative_burden_mechanic
+					power_type = to_administrative_burden
+					value = 15
+				}
+				custom_tooltip = nhs_new_line_tt
+				add_treasury = 100
+				add_owned_provinces_development_ducats = {
+					custom_tooltip = to_from_provinces_of_culture_group_tt
+					trigger = {
+						owner = {
+							culture_group = PREV
+						}
+					}
+					multiplier = 1
+					age_multiplier = 1
+				}
+				if = {
+					limit = {
+						has_estate = estate_nhs_nobles
+					}
+					add_estate_loyalty = {
+						estate = estate_nhs_nobles
+						loyalty = -10
+					}
+				}
+				else = {
+					custom_tooltip = to_reduce_starting_loyalty_dynatoi_tt
+					hidden_effect = {
+						change_variable = {
+							which = to_reduce_starting_loyalty_estate_nhs_nobles
+							value = 1
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate = estate_church
+					}
+					add_estate_loyalty = {
+						estate = estate_church
+						loyalty = -10
+					}
+				}
+				else = {
+					custom_tooltip = to_reduce_starting_loyalty_church_tt
+					hidden_effect = {
+						change_variable = {
+							which = to_reduce_starting_loyalty_estate_church
+							value = 1
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate = estate_burghers
+					}
+					add_estate_loyalty = {
+						estate = estate_burghers
+						loyalty = -10
+					}
+				}
+				else = {
+					custom_tooltip = to_reduce_starting_loyalty_burghers_tt
+					hidden_effect = {
+						change_variable = {
+							which = to_reduce_starting_loyalty_estate_burghers
+							value = 1
+						}
+					}
+				}
+			}
+			cooldown_years = 20
+		}
+	}
+}

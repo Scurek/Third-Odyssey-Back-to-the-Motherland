@@ -9532,6 +9532,22 @@ to_nhs_setup_church_land = {
 				share = 5
 			}
 		}
+		if = {
+			limit = {
+				check_variable = {
+					which = to_reduce_starting_loyalty_estate_church
+					value = 1
+				}
+			}
+			for_variable_amount = {
+				variable = to_reduce_starting_loyalty_estate_church
+				effect = "
+				add_estate_loyalty = {
+					estate = estate_church
+					loyalty = -10
+				}"
+			}
+		}
 	}
 }
 
@@ -13639,149 +13655,304 @@ to_remove_ia_per_reform = {
 
 to_the_final_triumph_effect = {
 	custom_tooltip = $EVENT_ID$.tt
+	custom_tooltip = nhs_new_line_tt
+	if = {
+		limit = {
+			any_country = {
+				ai = yes
+				NOT = { tag = ROOT }
+				NOT = { tag = REB }
+				NOT = { tag = PIR }
+				NOT = { tag = NAT }
+				exists = yes
+				OR = {
+					technology_group = western
+					technology_group = eastern
+					technology_group = muslim
+					technology_group = ottoman
+				}
+				NOT = { is_subject_of_type = elysian_subject }
+				#NOT = { is_rival = ROOT }
+				NOT = {
+					capital_scope = {
+						PREV = {
+							any_core_province = {
+								region = PREV
+								country_or_subject_holds = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
 		custom_tooltip = nhs_new_line_tt
-		if = {
+		custom_tooltip = $EVENT_ID$.tt.2
+		every_country = {
 			limit = {
-				any_country = {
-					ai = yes
-					NOT = { tag = ROOT }
-					NOT = { tag = REB }
-					NOT = { tag = PIR }
-					NOT = { tag = NAT }
-					exists = yes
-					OR = {
-						technology_group = western
-						technology_group = eastern
-						technology_group = muslim
-						technology_group = ottoman
-					}
-					NOT = { is_subject_of_type = elysian_subject }
-					#NOT = { is_rival = ROOT }
-					NOT = {
-						capital_scope = {
-							PREV = {
-								any_core_province = {
-									region = PREV
-									country_or_subject_holds = ROOT
-								}
+				ai = yes
+				NOT = { tag = ROOT }
+				NOT = { tag = REB }
+				NOT = { tag = PIR }
+				NOT = { tag = NAT }
+				exists = yes
+				OR = {
+					technology_group = western
+					technology_group = eastern
+					technology_group = muslim
+					technology_group = ottoman
+				}
+				NOT = { is_subject_of_type = elysian_subject }
+				NOT = {
+					capital_scope = {
+						PREV = {
+							any_core_province = {
+								region = PREV
+								country_or_subject_holds = ROOT
 							}
 						}
 					}
 				}
 			}
-			custom_tooltip = nhs_new_line_tt
-			custom_tooltip = $EVENT_ID$.tt.2
-			every_country = {
-				limit = {
-					ai = yes
-					NOT = { tag = ROOT }
-					NOT = { tag = REB }
-					NOT = { tag = PIR }
-					NOT = { tag = NAT }
-					exists = yes
-					OR = {
-						technology_group = western
-						technology_group = eastern
-						technology_group = muslim
-						technology_group = ottoman
-					}
-					NOT = { is_subject_of_type = elysian_subject }
-					NOT = {
-						capital_scope = {
-							PREV = {
-								any_core_province = {
-									region = PREV
-									country_or_subject_holds = ROOT
-								}
-							}
-						}
-					}
+			custom_tooltip = $EVENT_ID$.tt.3
+			custom_tooltip = to_lose_ae_and_cores_tt
+			hidden_effect = {
+				remove_opinion = {
+					who = ROOT
+					modifier = aggressive_expansion
 				}
-				custom_tooltip = $EVENT_ID$.tt.3
-				custom_tooltip = to_lose_ae_and_cores_tt
-				hidden_effect = {
-					remove_opinion = {
-						who = ROOT
-						modifier = aggressive_expansion
-					}
-					if = {
-						limit = {
-							NOT = { is_subject_of = ROOT }
-							NOT = {
-								AND = {
+				if = {
+					limit = {
+						NOT = { is_subject_of = ROOT }
+						NOT = {
+							AND = {
+								is_subject = yes
+								overlord = {
 									is_subject = yes
-									overlord = {
-										is_subject = yes
-										is_subject_of = ROOT
-									}
+									is_subject_of = ROOT
 								}
 							}
 						}
-						every_province = {
-							limit = {
-								is_core = PREV
-								country_or_subject_holds = ROOT
-								NOT = { owned_by = PREV }
-							}
-							remove_core = PREV
+					}
+					every_province = {
+						limit = {
+							is_core = PREV
+							country_or_subject_holds = ROOT
+							NOT = { owned_by = PREV }
+						}
+						remove_core = PREV
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			any_country = {
+				ai = yes
+				NOT = { tag = ROOT }
+				NOT = { tag = REB }
+				NOT = { tag = PIR }
+				NOT = { tag = NAT }
+				exists = yes
+				OR = {
+					technology_group = western
+					technology_group = eastern
+					technology_group = muslim
+					technology_group = ottoman
+				}
+				NOT = { is_subject_of_type = elysian_subject }
+				capital_scope = {
+					PREV = {
+						any_core_province = {
+							region = PREV
+							country_or_subject_holds = ROOT
 						}
 					}
 				}
 			}
 		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = $EVENT_ID$.tt.4
+		every_country = {
+			limit = {
+				ai = yes
+				NOT = { tag = ROOT }
+				NOT = { tag = REB }
+				NOT = { tag = PIR }
+				NOT = { tag = NAT }
+				exists = yes
+				OR = {
+					technology_group = western
+					technology_group = eastern
+					technology_group = muslim
+					technology_group = ottoman
+				}
+				NOT = { is_subject_of_type = elysian_subject }
+				capital_scope = {
+					PREV = {
+						any_core_province = {
+							region = PREV
+							country_or_subject_holds = ROOT
+						}
+					}
+				}
+			}
+			custom_tooltip = to_do_not_lose_ae_and_cores_tt
+		}
+	}
+}
+
+to_add_administrative_burden = {
+	if = {
+		limit = {
+			has_government_mechanic = to_administrative_burden_mechanic
+		}
+		add_government_power = {
+			mechanic_type = to_administrative_burden_mechanic
+			power_type = to_administrative_burden
+			value = $VALUE$
+		}
+	}
+}
+
+# Fires when you start the construction,  ROOT - Province FROM - Country that started
+to_administrative_burden_on_construction_started = {
+	if = {
+		limit = {
+			FROM = { has_government_mechanic = to_administrative_burden_mechanic }
+		}
+		FROM = { to_add_administrative_burden = { VALUE = 1 } }
+		set_province_flag = to_ab_construction_$BUILDING$
+	}
+}
+
+# Fires when you cancel the construction, ROOT - Province FROM - Country that canceled
+to_administrative_burden_on_construction_canceled = {
+	if = {
+		limit = {
+			has_province_flag = to_ab_construction_$BUILDING$
+		}
+		FROM = { to_add_administrative_burden = { VALUE = -1 } }
+	}
+}
+
+to_ab_increase_colony_penalty = {
+	$SCOPE$ = {
 		if = {
 			limit = {
-				any_country = {
-					ai = yes
-					NOT = { tag = ROOT }
-					NOT = { tag = REB }
-					NOT = { tag = PIR }
-					NOT = { tag = NAT }
-					exists = yes
-					OR = {
-						technology_group = western
-						technology_group = eastern
-						technology_group = muslim
-						technology_group = ottoman
-					}
-					NOT = { is_subject_of_type = elysian_subject }
-					capital_scope = {
-						PREV = {
-							any_core_province = {
-								region = PREV
-								country_or_subject_holds = ROOT
-							}
-						}
-					}
-				}
+				has_government_mechanic = to_administrative_burden_mechanic
 			}
-			custom_tooltip = nhs_new_line_tt
-			custom_tooltip = $EVENT_ID$.tt.4
-			every_country = {
-				limit = {
-					ai = yes
-					NOT = { tag = ROOT }
-					NOT = { tag = REB }
-					NOT = { tag = PIR }
-					NOT = { tag = NAT }
-					exists = yes
-					OR = {
-						technology_group = western
-						technology_group = eastern
-						technology_group = muslim
-						technology_group = ottoman
-					}
-					NOT = { is_subject_of_type = elysian_subject }
-					capital_scope = {
-						PREV = {
-							any_core_province = {
-								region = PREV
-								country_or_subject_holds = ROOT
-							}
-						}
-					}
-				}
-				custom_tooltip = to_do_not_lose_ae_and_cores_tt
+			change_variable = {
+				which = to_ab_colony_penalty
+				value = 1
+			}
+			to_set_administrative_burden_penalty = {
+				MODIFIER_BASE = to_ab_colony_penalty_mod
+				VARIABLE = to_ab_colony_penalty
 			}
 		}
+	}
+}
+
+to_ab_decrease_colony_penalty = {
+	$SCOPE$ = {
+		if = {
+			limit = {
+				has_government_mechanic = to_administrative_burden_mechanic
+			}
+			change_variable = {
+				which = to_ab_colony_penalty
+				value = -1
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = to_ab_colony_penalty
+						value = 1
+					}
+				}
+				to_set_administrative_burden_penalty = {
+					MODIFIER_BASE = to_ab_colony_penalty_mod
+					VARIABLE = to_ab_colony_penalty
+				}
+			}
+			else = {
+				to_remove_ab_penalty_modifiers = { MODIFIER_BASE = to_ab_colony_penalty_mod }
+			}
+		}
+	}
+}
+
+to_administrative_burden_check_subject_penalty = {
+	# The below effect cannot go here directly, since this has 500 something character limit
+	nhs_effect_for_existing_elysian_tag = {
+		EFFECT = "
+		save_event_target_as = to_existing_elysia
+		"
+	}
+	if = {
+		limit = {
+			has_saved_event_target = to_existing_elysia
+		}
+		event_target:to_existing_elysia = {
+			if = {
+				limit = {
+					has_government_mechanic = to_administrative_burden_mechanic
+				}
+				set_variable = {
+					which = to_ab_subject_penalty
+					value = 0
+				}
+				every_subject_country = {
+					limit = {
+						# ai_attitude = {
+						# 	who = PREV
+						# 	attitude = attitude_disloyal
+						# }
+						liberty_desire = 50
+					}
+					PREV = {
+						change_variable = {
+							which = to_ab_subject_penalty
+							value = 1
+						}
+					}
+				}
+				if = {
+					limit = {
+						check_variable = {
+							which = to_ab_subject_penalty
+							value = 1
+						}
+					}
+					to_set_administrative_burden_penalty = {
+						MODIFIER_BASE = to_ab_subject_penalty_mod
+						VARIABLE = to_ab_subject_penalty
+					}
+				}
+				else = {
+					to_remove_ab_penalty_modifiers = { MODIFIER_BASE = to_ab_subject_penalty_mod }
+				}
+			}
+		}
+	}
+}
+
+to_set_administrative_burden_penalty = {
+	# Code generated by administrative burden/administrative_burden.py
+	if={limit={check_variable={which=$VARIABLE$ value=6}}if={limit={check_variable={which=$VARIABLE$ value=8}}if={limit={check_variable={which=$VARIABLE$ value=9}}if={limit={check_variable={which=$VARIABLE$ value=10}}if = {limit={NOT={has_country_modifier=$MODIFIER_BASE$_10}} to_remove_ab_penalty_modifiers={ MODIFIER_BASE = $MODIFIER_BASE$ } add_country_modifier={name=$MODIFIER_BASE$_10 duration=-1 hidden = yes} }}else={if = {limit={NOT={has_country_modifier=$MODIFIER_BASE$_9}} to_remove_ab_penalty_modifiers={ MODIFIER_BASE = $MODIFIER_BASE$ } add_country_modifier={name=$MODIFIER_BASE$_9 duration=-1 hidden = yes} }}}else={if = {limit={NOT={has_country_modifier=$MODIFIER_BASE$_8}} to_remove_ab_penalty_modifiers={ MODIFIER_BASE = $MODIFIER_BASE$ } add_country_modifier={name=$MODIFIER_BASE$_8 duration=-1 hidden = yes} }}}else={if={limit={check_variable={which=$VARIABLE$ value=7}}if = {limit={NOT={has_country_modifier=$MODIFIER_BASE$_7}} to_remove_ab_penalty_modifiers={ MODIFIER_BASE = $MODIFIER_BASE$ } add_country_modifier={name=$MODIFIER_BASE$_7 duration=-1 hidden = yes} }}else={if = {limit={NOT={has_country_modifier=$MODIFIER_BASE$_6}} to_remove_ab_penalty_modifiers={ MODIFIER_BASE = $MODIFIER_BASE$ } add_country_modifier={name=$MODIFIER_BASE$_6 duration=-1 hidden = yes} }}}}else={if={limit={check_variable={which=$VARIABLE$ value=3}}if={limit={check_variable={which=$VARIABLE$ value=4}}if={limit={check_variable={which=$VARIABLE$ value=5}}if = {limit={NOT={has_country_modifier=$MODIFIER_BASE$_5}} to_remove_ab_penalty_modifiers={ MODIFIER_BASE = $MODIFIER_BASE$ } add_country_modifier={name=$MODIFIER_BASE$_5 duration=-1 hidden = yes} }}else={if = {limit={NOT={has_country_modifier=$MODIFIER_BASE$_4}} to_remove_ab_penalty_modifiers={ MODIFIER_BASE = $MODIFIER_BASE$ } add_country_modifier={name=$MODIFIER_BASE$_4 duration=-1 hidden = yes} }}}else={if = {limit={NOT={has_country_modifier=$MODIFIER_BASE$_3}} to_remove_ab_penalty_modifiers={ MODIFIER_BASE = $MODIFIER_BASE$ } add_country_modifier={name=$MODIFIER_BASE$_3 duration=-1 hidden = yes} }}}else={if={limit={check_variable={which=$VARIABLE$ value=2}}if = {limit={NOT={has_country_modifier=$MODIFIER_BASE$_2}} to_remove_ab_penalty_modifiers={ MODIFIER_BASE = $MODIFIER_BASE$ } add_country_modifier={name=$MODIFIER_BASE$_2 duration=-1 hidden = yes} }}else={if = {limit={NOT={has_country_modifier=$MODIFIER_BASE$_1}} to_remove_ab_penalty_modifiers={ MODIFIER_BASE = $MODIFIER_BASE$ } add_country_modifier={name=$MODIFIER_BASE$_1 duration=-1 hidden = yes} }}}}
+}
+	
+to_remove_ab_penalty_modifiers = {
+	# Code generated by administrative burden/administrative_burden.py
+	remove_country_modifier = $MODIFIER_BASE$_1
+	remove_country_modifier = $MODIFIER_BASE$_2
+	remove_country_modifier = $MODIFIER_BASE$_3
+	remove_country_modifier = $MODIFIER_BASE$_4
+	remove_country_modifier = $MODIFIER_BASE$_5
+	remove_country_modifier = $MODIFIER_BASE$_6
+	remove_country_modifier = $MODIFIER_BASE$_7
+	remove_country_modifier = $MODIFIER_BASE$_8
+	remove_country_modifier = $MODIFIER_BASE$_9
+	remove_country_modifier = $MODIFIER_BASE$_10
 }
