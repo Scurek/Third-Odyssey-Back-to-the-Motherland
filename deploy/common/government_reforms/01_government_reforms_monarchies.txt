@@ -373,7 +373,7 @@ feudal_france_reform = {
 	custom_attributes = {
 		locked_government_type = yes
 		has_appanages = yes
-		need_crownland_to_annex = yes
+		#need_crownland_to_annex = yes
 		nobility_loyalty_hit_on_integration = yes
 	}
 }
@@ -882,7 +882,11 @@ english_monarchy = {
 	icon = "british_queen"
 	allow_normal_conversion = no
 	potential = {
-		have_had_reform = english_monarchy
+		OR = {
+			have_had_reform = english_monarchy
+			tag = ENG
+			was_tag = ENG
+		}
 	}
 	lock_level_when_selected = yes
 	valid_for_nation_designer = yes
@@ -2099,6 +2103,19 @@ eyalet_government = {
 		no_religion_penalty = yes
 		governing_capacity = 100
 	}
+	removed_effect = {
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { is_subject_of_type = eyalet }
+					NOT = { is_subject_of_type = core_eyalet }
+				}
+				country_event = {
+					id = flavor_tur.1000
+				}
+			}
+		}
+	}
 
 	custom_attributes = {
 		locked_government_type = yes
@@ -2137,6 +2154,19 @@ barbary_eyalet_government = {
 		capture_ship_chance = 0.25
 		naval_forcelimit_modifier = 0.1
 		governing_capacity = 100
+	}
+	removed_effect = {
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { is_subject_of_type = eyalet }
+					NOT = { is_subject_of_type = core_eyalet }
+				}
+				country_event = {
+					id = flavor_tur.1000
+				}
+			}
+		}
 	}
 
 	custom_attributes = {
@@ -2600,7 +2630,7 @@ russian_empire_reform = {
 
 	modifiers = {
 		max_absolutism = 10
-		yearly_absolutism = 0.05
+		yearly_absolutism = 0.5
 		global_autonomy = -0.05
 		global_manpower_modifier = 0.20
 		embracement_cost = -0.5
@@ -4053,6 +4083,7 @@ livonian_constitutional_monarchy = {
 				government_reform = livonian_constitutional_monarchy
 			}
 		}
+		is_not_blocked_by_estate_privilege = { estate = estate_nobles }
 	}
 	valid_for_nation_designer = yes
 	nation_designer_trigger = {
@@ -6677,18 +6708,27 @@ japanese_divine_empire = {
 		}
 		NOT = { has_reform = absolute_shogunate_reform }
 	}
-	trigger = { 
-		num_of_estate_privileges = {
-			estate = estate_nobles 
-			value = 6 
+	trigger = {
+		if = { 
+			limit = { has_estate = estate_nobles }
+			num_of_estate_privileges = {
+				estate = estate_nobles 
+				value = 6 
+			}
 		}
-		num_of_estate_privileges = {
-			estate = estate_burghers 
-			value = 6 
+		if = { 
+			limit = { has_estate = estate_burghers }
+			num_of_estate_privileges = {
+				estate = estate_burghers 
+				value = 6 
+			}
 		}
-		num_of_estate_privileges = {
-			estate = estate_church 
-			value = 6 
+		if = { 
+			limit = { has_estate = estate_church }
+			num_of_estate_privileges = {
+				estate = estate_church 
+				value = 6 
+			}
 		}
 	}
 	valid_for_nation_designer = yes
