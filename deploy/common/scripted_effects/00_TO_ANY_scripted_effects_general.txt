@@ -124,16 +124,6 @@ to_handle_colonies = {
 	}
 	else_if = {
 		limit = {
-			has_province_flag = nhs_is_empty_province
-			is_empty = no
-			# is_colony = yes
-		}
-		on_colony_created = yes
-		clr_province_flag = nhs_is_empty_province
-		set_province_flag = nhs_is_colony
-	}
-	else_if = {
-		limit = {
 			NOT = { has_province_flag = nhs_is_empty_province }
 			is_empty = yes
 		}
@@ -147,7 +137,11 @@ to_handle_colonies = {
 	}
 }
 
-on_colony_created = {
+##scope = colony province, FROM = owner country or province if there's a minority expulsion source, fires when the colony is created
+to_on_colony_established = {
+	clr_province_flag = nhs_is_empty_province
+	set_province_flag = nhs_is_colony
+
 	vov_handle_culture_change_on_coastal_bonus = yes
 	nhs_settler_boost_on_colony_created = yes
 	handle_nhs_native_priv_inclusive_citizenship_modifier = yes
@@ -157,8 +151,8 @@ on_colony_created = {
 	to_nat_handle_native_expansion_modifier = yes
 	to_nat_handle_expand_overseas_modifier = yes
 
-	to_destroy_forbidden_colonies = yes
 	to_ab_increase_colony_penalty = { SCOPE = owner }
+	to_destroy_forbidden_colonies = yes
 }
 
 on_colony_destroyed = {
