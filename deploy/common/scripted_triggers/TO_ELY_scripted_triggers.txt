@@ -2784,3 +2784,183 @@ to_has_imperial_protectorate_tech_group = {
 		technology_group = aboriginal_tech
 	}
 }
+
+to_does_not_have_disabled_monopolies = {
+	if = {
+		limit = {
+			has_government_attribute = to_remove_monopoly_privileges
+		}
+		NOT = { has_government_attribute = to_remove_monopoly_privileges }
+	}
+}
+
+to_has_not_recently_forcefully_revoked_monopolies = {
+	has_estate_loyalty_modifier = {
+		estate = $ESTATE$
+		modifier = to_revoked_monopoly
+	}
+}
+
+to_has_not_recently_forcefully_revoked_noble_monopolies = {
+	to_has_noble_loyalty_modifier = {
+		modifier = to_revoked_monopoly
+	}
+}
+
+to_war_economy_good_province = {
+	OR = {
+		trade_goods = iron
+		trade_goods = copper
+		trade_goods = naval_supplies
+	}
+}
+
+to_cash_crops_good_province = {
+	OR = {
+		trade_goods = tobacco
+		trade_goods = sugar
+		trade_goods = cotton
+		trade_goods = cocoa
+		trade_goods = spices
+		trade_goods = tea
+		trade_goods = coffee
+		trade_goods = cloves
+	}
+}
+
+to_autarky_good_province = {
+	OR = {
+		trade_goods = grain
+		trade_goods = livestock
+		trade_goods = fish
+		trade_goods = fur
+		trade_goods = salt
+		trade_goods = wine
+		trade_goods = wool
+		trade_goods = copper
+		trade_goods = iron
+		trade_goods = coal
+		trade_goods = coal_2
+	}
+}
+
+to_has_foreign_trade_quarter = {
+	has_country_modifier = nhs2_elysian_isolationism
+	NOT = { has_government_attribute = to_does_not_have_foreign_trade_quarter }
+}
+
+to_province_can_get_manufactories = {
+	is_in_capital_area = yes
+	is_island = no
+	is_state = yes
+	development = 20
+	printing_press = 100
+	global_trade = 100
+	custom_trigger_tooltip = {
+		tooltip = two_neighbor_dev_15_provinces
+		calc_true_if = {
+			amount = 2
+			all_neighbor_province = {
+				development = 15
+			}
+		}
+	}
+	OR = {
+		has_building = wharf
+		has_building = weapons
+		has_building = textile
+		has_building = plantations
+		has_building = tradecompany
+		has_building = mills
+	}
+}
+
+to_province_can_get_enlightenment = {
+	is_in_capital_area = yes
+	is_island = no
+	is_state = yes
+	printing_press = 100
+	global_trade = 100
+	development = 30
+	OR = {
+		custom_trigger_tooltip = {
+			tooltip = tooltip_has_seat_in_parliament
+			has_seat_in_parliament = yes
+		}
+		has_building = university
+		AND = {
+			continent = europe
+			owner = {
+				ADM = 5
+				MIL = 5
+				DIP = 5
+			}
+		}
+	}
+}
+
+to_province_can_get_industrialization = {
+	OR = {
+		AND = {
+			province_id = 953
+			owner = { mission_completed = to_capital_of_innovation_mission }
+		}
+		AND = {
+			has_building = furnace
+			owner = {
+				OR = {
+					production_leader = {
+						trade_goods = iron
+					}
+					production_leader = {
+						trade_goods = cloth
+					}
+					production_leader = {
+						trade_goods = coal
+					}
+					num_of_trading_bonuses = 3
+					is_year = 1770 #fallback
+				}
+			}
+			OR = {
+				highest_value_trade_node = yes
+				is_year = 1760 #fallback
+			}
+		}
+	}
+}
+
+to_province_can_get_industrialization_nodlc = {
+	OR = {
+		AND = {
+			province_id = 953
+			owner = { mission_completed = to_capital_of_innovation_mission }
+		}
+		AND = {
+			OR = {
+				has_building = weapons
+				has_building = textile
+				has_building = furnace
+			}
+			owner = {
+				OR = {
+					production_leader = {
+						trade_goods = iron
+					}
+					production_leader = {
+						trade_goods = cloth
+					}
+					production_leader = {
+						trade_goods = coal_2
+					}
+					num_of_trading_bonuses = 3
+					is_year = 1770 #fallback
+				}
+			}
+			OR = {
+				highest_value_trade_node = yes
+				is_year = 1760 #fallback
+			}
+		}
+	}
+}

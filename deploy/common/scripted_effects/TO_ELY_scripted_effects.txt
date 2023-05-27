@@ -3226,7 +3226,7 @@ nhs_improve_portuguese_enclave_from_small = {
 			}
 			
 			remove_province_modifier = nhs2_small_por_enclave
-			add_province_modifier = {
+			add_permanent_province_modifier = {
 				name = nhs2_por_enclave
 				duration = -1
 			}
@@ -3803,6 +3803,9 @@ nhs_set_por_colonial_capital = {
 }
 
 to_rome_breaks_port_deal = {
+	set_country_flag = to_show_advanced_economic_reforms
+	set_country_flag = to_portuguese_deal_broken_recently
+
 	clr_global_flag = nhs_treaty_of_lantanopolis
 	clr_global_flag = to_portugal_hates_colonizers
 	remove_country_modifier = nhs2_ely_por_trade
@@ -3825,6 +3828,10 @@ to_rome_breaks_port_deal = {
 	clr_country_flag = nhs_has_small_por_enclave
 	clr_country_flag = nhs_has_por_enclave
 	clr_country_flag = nhs_has_large_por_enclave
+	[[TRIGGER_POLICY_EVENT]
+	country_event = { id = nhs2_european_trade_events.14 days = 30 }
+	custom_tooltip = nhs_new_line_tt	
+	]
 	# This convoluded nonsense is due to how code formats in the tooltip. Do try putting the tooltip inside the scope!
 	tooltip = {
 		random_country = {
@@ -4010,6 +4017,9 @@ to_rome_breaks_port_deal_portugal_response = {
 }
 
 to_rome_port_deal_breaks_down = {
+	set_country_flag = to_show_advanced_economic_reforms
+	set_country_flag = to_portuguese_deal_broken_recently
+
 	clr_global_flag = nhs_treaty_of_lantanopolis
 	clr_global_flag = to_portugal_hates_colonizers
 	remove_country_modifier = nhs2_ely_por_trade
@@ -4023,6 +4033,8 @@ to_rome_port_deal_breaks_down = {
 			duration = 7300
 		}
 	}
+	country_event = { id = nhs2_european_trade_events.14 days = 30 }
+	custom_tooltip = nhs_new_line_tt	
 	clr_country_flag = nhs_has_por_enclave
 	clr_country_flag = nhs_has_large_por_enclave
 	clr_country_flag = nhs_has_small_por_enclave
@@ -4174,6 +4186,9 @@ to_port_breaks_rome_deal = {
 }
 
 to_port_breaks_rome_deal_response = {
+	set_country_flag = to_show_advanced_economic_reforms
+	set_country_flag = to_portuguese_deal_broken_recently
+
 	remove_country_modifier = nhs2_ely_por_trade
 	if = {
 		limit = {
@@ -4185,6 +4200,8 @@ to_port_breaks_rome_deal_response = {
 			duration = 7300
 		}
 	}
+	country_event = { id = nhs2_european_trade_events.14 days = 30 }
+	custom_tooltip = nhs_new_line_tt	
 	clr_country_flag = nhs_has_small_por_enclave
 	clr_country_flag = nhs_has_por_enclave
 	clr_country_flag = nhs_has_large_por_enclave
@@ -4314,7 +4331,7 @@ nhs_add_proper_enclave = {
 		limit = {
 			owner = { has_country_flag = nhs_has_small_por_enclave }
 		}
-		add_province_modifier = {
+		add_permanent_province_modifier = {
 			name = nhs2_small_por_enclave
 			duration = -1
 		}
@@ -4323,7 +4340,7 @@ nhs_add_proper_enclave = {
 		limit = {
 			owner = { has_country_flag = nhs_has_por_enclave }
 		}
-		add_province_modifier = {
+		add_permanent_province_modifier = {
 			name = nhs2_por_enclave
 			duration = -1
 		}
@@ -4332,19 +4349,27 @@ nhs_add_proper_enclave = {
 		limit = {
 			owner = { has_country_flag = nhs_has_large_por_enclave }
 		}
-		add_province_modifier = {
+		add_permanent_province_modifier = {
 			name = nhs2_large_por_enclave
 			duration = -1
 		}
 	}
 	if = {
 		limit = {
-			owner = { has_country_flag = nhs_has_eu_enclave }
+			owner = { to_has_foreign_trade_quarter = yes }
 		}
-		add_province_modifier = {
+		add_permanent_province_modifier = {
 			name = nhs2_european_enclave
 			duration = -1
 		}
+	}
+}
+
+to_add_enclave_to_province = {
+	# set_province_flag = to_has_enclave
+	add_permanent_province_modifier = {
+		name = $ENCLAVE_MODIFIER$
+		duration = -1
 	}
 }
 
@@ -4357,10 +4382,7 @@ to_nhs_spawn_enclave = {
 			}
 		}
 		950 = {
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4384,10 +4406,7 @@ to_nhs_spawn_enclave = {
 				NOT = { has_albanian_majority_modifier = yes }
 			}
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4409,10 +4428,7 @@ to_nhs_spawn_enclave = {
 				NOT = { has_albanian_majority_modifier = yes }
 			}
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4438,10 +4454,7 @@ to_nhs_spawn_enclave = {
 				NOT = { has_albanian_majority_modifier = yes }
 			}
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4465,10 +4478,7 @@ to_nhs_spawn_enclave = {
 				NOT = { has_albanian_majority_modifier = yes }
 			}
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4481,10 +4491,7 @@ to_nhs_spawn_enclave = {
 		}
 		957 = {
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4506,10 +4513,7 @@ to_nhs_spawn_enclave = {
 				NOT = { has_albanian_majority_modifier = yes }
 			}
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4528,10 +4532,7 @@ to_nhs_spawn_enclave = {
 				NOT = { has_albanian_majority_modifier = yes }
 			}
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4549,10 +4550,7 @@ to_nhs_spawn_enclave = {
 				NOT = { has_albanian_majority_modifier = yes }
 			}
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4568,10 +4566,7 @@ to_nhs_spawn_enclave = {
 				culture_group = ROOT
 			}
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4586,10 +4581,7 @@ to_nhs_spawn_enclave = {
 				culture_group = ROOT
 			}
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4605,10 +4597,7 @@ to_nhs_spawn_enclave = {
 				culture_group = ROOT
 			}
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else_if = {
@@ -4622,10 +4611,7 @@ to_nhs_spawn_enclave = {
 				nhs_eligible_for_enclave_with_canada = yes
 			}
 			custom_tooltip = nhs_temporary_enclave_tt
-			add_province_modifier = {
-				name = $ENCLAVE_MODIFIER$
-				duration = -1
-			}
+			to_add_enclave_to_province = { ENCLAVE_MODIFIER = $ENCLAVE_MODIFIER$ }
 		}
 	}
 	else = {
@@ -4669,6 +4655,23 @@ nhs_move_t_post = {
 		remove_province_modifier = nhs2_large_por_enclave
 		ROOT = {
 			to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_large_por_enclave }
+		}
+	}
+}
+
+to_on_enclave_conquered = {
+	if = {
+		limit = {
+			has_province_modifier = nhs2_european_enclave
+		}
+		remove_province_modifier = nhs2_european_enclave
+		if = {
+			limit = {
+				FROM = {
+					to_has_foreign_trade_quarter = yes
+				}
+			}
+			FROM = { country_event = { id = nhs2_european_trade_events.3 } }
 		}
 	}
 }
@@ -13939,4 +13942,951 @@ to_remove_ab_penalty_modifiers = {
 	remove_country_modifier = $MODIFIER_BASE$_8
 	remove_country_modifier = $MODIFIER_BASE$_9
 	remove_country_modifier = $MODIFIER_BASE$_10
+}
+
+to_on_change_trade_policy_penalty = {
+	add_stability = -1
+	add_dip_power = -100
+	hidden_effect = {
+		add_country_modifier = {
+			name = to_trade_policy_switch_cd
+			duration = 7300
+		}
+	}
+}
+
+to_on_change_trade_policy_protectionism = {
+	if = {
+		limit = {
+			OR = {		
+				has_country_modifier = nhs2_elysian_free_trade
+				has_country_modifier = nhs2_elysian_isolationism
+		
+				# has_country_modifier = vov_free_trade
+				# has_country_modifier = vov_isolationism
+		
+				# has_country_modifier = msg_free_trade
+				# has_country_modifier = msg_isolationism
+			}
+		}
+		[[SHOW_REFORM_EFFECT_TOOLTIP]
+			custom_tooltip = to_reform_effects_tt
+		]
+		to_on_change_trade_policy_penalty = yes
+		# if = {
+		# 	limit = {
+		# 		OR = {
+		# 			has_country_modifier = vov_free_trade
+		# 			has_country_modifier = vov_isolationism
+		# 		}
+		# 	}
+		# 	remove_country_modifier = vov_free_trade
+		# 	remove_country_modifier = vov_isolationism
+		# 	add_country_modifier = {
+		# 		name = vov_restricted_trade
+		# 		duration = -1
+		# 	}
+		# }
+		# else_if = {
+		# 	limit = {
+		# 		OR = {
+		# 			has_country_modifier = msg_free_trade
+		# 			has_country_modifier = msg_isolationism
+		# 		}
+		# 	}
+		# 	remove_country_modifier = msg_free_trade
+		# 	remove_country_modifier = msg_isolationism
+		# 	add_country_modifier = {
+		# 		name = msg_restricted_trade
+		# 		duration = -1
+		# 	}
+		# }
+		# else = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = to_got_protectionism_mercantilism }
+					NOT = { has_country_flag = to_lost_protectionism_mercantilism }
+				}
+				add_mercantilism = 10
+			}
+			remove_country_modifier = nhs2_elysian_free_trade
+			remove_country_modifier = nhs2_elysian_isolationism
+			custom_tooltip = to_protectionism_institutions_tt
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_add_protectionism_country_modifier_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = nhs2_elysian_restricted_trade
+					duration = -1
+				}
+			}
+			custom_tooltip = to_forced_new_line_tt
+		# }
+	}
+}
+
+to_on_change_trade_policy_free_trade = {
+	if = {
+		limit = {
+			OR = {
+				has_country_modifier = nhs2_elysian_restricted_trade
+				has_country_modifier = nhs2_elysian_isolationism
+		
+				# has_country_modifier = vov_restricted_trade
+				# has_country_modifier = vov_isolationism
+		
+				# has_country_modifier = msg_restricted_trade
+				# has_country_modifier = msg_isolationism
+			}
+		}
+		[[SHOW_REFORM_EFFECT_TOOLTIP]
+			custom_tooltip = to_reform_effects_tt
+		]
+		to_on_change_trade_policy_penalty = yes
+		# if = {
+		# 	limit = {
+		# 		OR = {
+		# 			has_country_modifier = vov_restricted_trade
+		# 			has_country_modifier = vov_isolationism
+		# 		}
+		# 	}
+		# 	remove_country_modifier = vov_restricted_trade
+		# 	remove_country_modifier = vov_isolationism
+		# 	add_country_modifier = {
+		# 		name = vov_free_trade
+		# 		duration = -1
+		# 	}
+		# }
+		# else_if = {
+		# 	limit = {
+		# 		OR = {
+		# 			has_country_modifier = msg_restricted_trade
+		# 			has_country_modifier = msg_isolationism
+		# 		}
+		# 	}
+		# 	remove_country_modifier = msg_restricted_trade
+		# 	remove_country_modifier = msg_isolationism
+		# 	add_country_modifier = {
+		# 		name = msg_free_trade
+		# 		duration = -1
+		# 	}
+		# }
+		# else = {
+			if = {
+				limit = {
+					has_country_flag = to_got_protectionism_mercantilism
+				}
+				clr_country_flag = to_got_protectionism_mercantilism
+				set_country_flag = to_lost_protectionism_mercantilism
+				add_mercantilism = -60
+			}
+			else = {
+				add_mercantilism = -50
+			}
+			remove_country_modifier = nhs2_elysian_restricted_trade
+			remove_country_modifier = nhs2_elysian_isolationism
+			custom_tooltip = to_free_trade_institutions_tt
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_add_free_trade_country_modifier_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = nhs2_elysian_free_trade
+					duration = -1
+				}
+			}
+			custom_tooltip = to_forced_new_line_tt
+		# }
+	}
+}
+
+to_on_change_trade_policy_isolationism = {
+	if = {
+		limit = {
+			OR = {
+				has_country_modifier = nhs2_elysian_restricted_trade
+				has_country_modifier = nhs2_elysian_free_trade
+		
+				# has_country_modifier = vov_restricted_trade
+				# has_country_modifier = vov_free_trade
+		
+				# has_country_modifier = msg_restricted_trade
+				# has_country_modifier = msg_free_trade
+			}
+		}
+		[[SHOW_REFORM_EFFECT_TOOLTIP]
+			custom_tooltip = to_reform_effects_tt
+		]
+		to_on_change_trade_policy_penalty = yes
+		# if = {
+		# 	limit = {
+		# 		OR = {
+		# 			has_country_modifier = vov_restricted_trade
+		# 			has_country_modifier = vov_free_trade
+		# 		}
+		# 	}
+		# 	remove_country_modifier = vov_restricted_trade
+		# 	remove_country_modifier = vov_free_trade
+		# 	add_country_modifier = {
+		# 		name = vov_isolationism
+		# 		duration = -1
+		# 	}
+		# }
+		# else_if = {
+		# 	limit = {
+		# 		OR = {
+		# 			has_country_modifier = msg_restricted_trade
+		# 			has_country_modifier = msg_free_trade
+		# 		}
+		# 	}
+		# 	remove_country_modifier = msg_restricted_trade
+		# 	remove_country_modifier = msg_free_trade
+		# 	add_country_modifier = {
+		# 		name = msg_isolationism
+		# 		duration = -1
+		# 	}
+		# }
+		# else = {
+			if = {
+				limit = {
+					has_country_flag = to_got_protectionism_mercantilism
+				}
+				clr_country_flag = to_got_protectionism_mercantilism
+				set_country_flag = to_lost_protectionism_mercantilism
+				add_mercantilism = -10
+			}
+			remove_country_modifier = nhs2_elysian_restricted_trade
+			remove_country_modifier = nhs2_elysian_free_trade
+			[[ISOLATIONISM_INSTITION_SPREAD]
+			custom_tooltip = to_isolationism_institutions_tt
+			]
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_add_isolationism_country_modifier_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = nhs2_elysian_isolationism
+					duration = -1
+				}
+			}
+			[[ISOLATIONISM_INSTITION_SPREAD]
+			hidden_effect = {
+				to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_european_enclave }
+			}
+			]
+			custom_tooltip = to_forced_new_line_tt
+		# }
+	}
+}
+
+to_european_immigration_effect = {
+	if = {
+		limit = {
+			NOT = { has_province_flag = to_static_colonial_culture }
+			owner = { has_government_attribute = to_colonies_can_get_european_cultures }
+		}
+		random = {
+			chance = 20
+			owner = {
+				clr_country_flag = to_found_european_emigration_province
+				every_province = {
+					limit = {
+						NOT = { culture_group = ROOT }
+						has_port = yes
+						continent = europe
+						sea_zone = {
+							region = north_atlantic_region
+						}
+						NOT = { has_province_modifier = to_recent_european_emigration }
+					}
+					export_to_variable = {
+						which = to_emigration_weight
+						value = trigger_value:devastation
+					}
+					divide_variable = {
+						which = to_emigration_weight
+						value = 2
+					}
+					set_variable = {
+						which = to_local_unrest
+						value = 0
+					}
+					change_variable = {
+						which = to_emigration_weight
+						which = to_local_unrest
+					}
+					# Only slightly weigh by local development
+					export_to_variable = {
+						which = to_local_development
+						value = trigger_value:development
+					}
+					divide_variable = {
+						which = to_local_development
+						value = 50
+					}
+					change_variable = {
+						which = to_emigration_weight
+						which = to_local_development
+					}
+					# If you own provinces, those should not be prioritized
+					if = {
+						limit = {
+							owner = {
+								has_government_attribute = to_colonies_can_get_european_cultures
+							}
+						}
+						change_variable = {
+							which = to_emigration_weight
+							value = -1000
+						}
+					}
+					set_variable = {
+						which = to_tolerance_to_this
+						value = 0
+					}
+					if = {
+						limit = {
+							unrest = 0.1
+						}
+						export_to_variable = {
+							which = to_local_unrest
+							value = trigger_value:unrest
+						}
+						divide_variable = {
+							which = to_local_unrest
+							value = 4
+						}
+					}
+					change_variable = {
+						which = to_emigration_weight
+						which = to_local_unrest
+					}
+					set_variable = {
+						which = to_tolerance_to_this
+						value = 0
+					}
+					if = {
+						limit = {
+							has_owner_religion = no
+							NOT = { tolerance_to_this = 0 }
+						}
+						add_base_manpower = 1
+						export_to_variable = {
+							which = to_tolerance_to_this
+							value = trigger_value:tolerance_to_this
+						}
+						# Tolerance is negative, so subtracting yiels positive
+						subtract_variable = {
+							which = to_emigration_weight
+							which = to_tolerance_to_this
+						}
+					}
+					if = {
+						limit = {
+							has_owner_culture = no
+							has_owner_accepted_culture = no
+						}
+						if = {
+							limit = {
+								culture_group = owner
+							}
+							change_variable = {
+								which = to_emigration_weight
+								value = 1
+							}
+						}
+						else = {
+							change_variable = {
+								which = to_emigration_weight
+								value = 3
+							}
+						}
+					}
+					if = {
+						limit = {
+							has_missionary = yes
+						}
+						change_variable = {
+							which = to_emigration_weight
+							value = 2
+						}
+					}
+					if = {
+						limit = {
+							has_construction = culture
+						}
+						change_variable = {
+							which = to_emigration_weight
+							value = 10
+						}
+					}
+					# add_province_modifier = {
+					# 	name = to_show_european_emigration
+					# 	duration = -1
+					# }
+					if = {
+						limit = {
+							PREV = {
+								has_country_flag = to_found_european_emigration_province
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									event_target:to_european_emigration_province = {
+										check_variable = {
+											which = to_emigration_weight
+											which = PREV
+										}
+									}
+								}
+							}
+							save_event_target_as = to_european_emigration_province
+						}
+					}
+					else = {
+						PREV = {
+							set_country_flag = to_found_european_emigration_province
+						}
+						save_event_target_as = to_european_emigration_province
+					}
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = to_found_european_emigration_province
+					}
+				}
+				event_target:to_european_emigration_province = {
+					add_province_modifier = {
+						name = to_recent_european_emigration
+						duration = 3650
+						# hidden = yes
+					}
+				}
+				set_province_flag = to_static_colonial_culture
+				if = {
+					limit = {
+						NOT = { culture = event_target:to_european_emigration_province }
+					}
+					change_culture = event_target:to_european_emigration_province
+				}
+				if = {
+					limit = {
+						NOT = { religion = event_target:to_european_emigration_province }
+					}
+					change_religion = event_target:to_european_emigration_province
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = to_has_european_immigration_event_active
+						}
+					}
+					set_province_flag = to_european_immigration_event_pending
+				}
+				if = {
+					limit = {
+						owner = {
+							NOT = { has_country_flag = to_has_european_immigration_event_active }
+						}
+					}
+					province_event = { id = nhs2_countryevents.36 }
+				}
+			}
+		}
+	}
+}
+
+to_remove_estate_privilege_short_tooltip = {
+	if = {
+		limit = {
+			has_estate_privilege = $PRIVILEGE$
+		}
+		[[CANNOT_REVOKE_EFFECT]
+		if = {
+			limit = {
+				NOT = { can_revoke_estate_privilege = $PRIVILEGE$ }
+			}
+			$CANNOT_REVOKE_EFFECT$
+		}
+		]
+		custom_tooltip = to_remove_$PRIVILEGE$_tt
+		hidden_effect = {
+			remove_estate_privilege = $PRIVILEGE$
+		}
+	}
+}
+
+to_remove_all_nobles_monopolies_and_apply_penalties = {
+	if = {
+		limit = {
+			to_has_monopoly_estate_privilege_nobles = yes
+		}
+		to_remove_estate_privilege_short_tooltip = { 
+			PRIVILEGE = estate_nobles_monopoly_of_metals
+			CANNOT_REVOKE_EFFECT = "
+			hidden_effect = {
+				to_add_noble_estate_loyalty_modifier = {
+					loyalty = -20
+					desc = to_revoked_monopoly
+					duration = 3650
+				}
+			}
+			"
+		}
+		to_remove_estate_privilege_short_tooltip = { 
+			PRIVILEGE = estate_nobles_monopoly_of_livestock
+			CANNOT_REVOKE_EFFECT = "
+			hidden_effect = {
+				to_add_noble_estate_loyalty_modifier = {
+					loyalty = -20
+					desc = to_revoked_monopoly
+					duration = 3650
+				}
+			}
+			"
+		}
+		to_remove_estate_privilege_short_tooltip = { 
+			PRIVILEGE = estate_nobles_monopoly_of_gems
+			CANNOT_REVOKE_EFFECT = "
+			hidden_effect = {
+				to_add_noble_estate_loyalty_modifier = {
+					loyalty = -20
+					desc = to_revoked_monopoly
+					duration = 3650
+				}
+			}
+			"
+		}
+		if = {
+			limit = {
+				has_estate_privilege = estate_nobles_monopoly_of_metals
+				has_estate_privilege = estate_nobles_monopoly_of_livestock
+				has_estate_privilege = estate_nobles_monopoly_of_gems
+			}
+			to_add_noble_estate_loyalty = {
+				loyalty = -60
+			}
+		}
+		else_if = {
+			limit = {
+				calc_true_if = {
+					amount = 2
+					has_estate_privilege = estate_nobles_monopoly_of_metals
+					has_estate_privilege = estate_nobles_monopoly_of_livestock
+					has_estate_privilege = estate_nobles_monopoly_of_gems
+				}
+			}
+			to_add_noble_estate_loyalty = {
+				loyalty = -40
+			}
+		}
+		else = {
+			to_add_noble_estate_loyalty = {
+				loyalty = -20
+			}
+		}
+		custom_tooltip = to_nobility_monopolies_revoke_loyalty_equilibrium_tt
+	}
+}
+
+to_remove_all_clergy_monopolies_and_apply_penalties = {
+	if = {
+		limit = {
+			to_has_monopoly_estate_privilege_church = yes
+		}
+		to_remove_estate_privilege_short_tooltip = { 
+			PRIVILEGE = estate_church_monopoly_of_incense
+			CANNOT_REVOKE_EFFECT = "
+			hidden_effect = {
+				add_estate_loyalty_modifier = {
+					estate = estate_church
+					loyalty = -20
+					desc = to_revoked_monopoly
+					duration = 3650
+				}
+			}
+			"
+		}
+		to_remove_estate_privilege_short_tooltip = { 
+			PRIVILEGE = estate_church_monopoly_of_wool
+			CANNOT_REVOKE_EFFECT = "
+			hidden_effect = {
+				add_estate_loyalty_modifier = {
+					estate = estate_church
+					loyalty = -20
+					desc = to_revoked_monopoly
+					duration = 3650
+				}
+			}
+			"
+		}
+		to_remove_estate_privilege_short_tooltip = { 
+			PRIVILEGE = estate_church_monopoly_of_wine
+			CANNOT_REVOKE_EFFECT = "
+			hidden_effect = {
+				add_estate_loyalty_modifier = {
+					estate = estate_church
+					loyalty = -20
+					desc = to_revoked_monopoly
+					duration = 3650
+				}
+			}
+			"
+		}
+		to_remove_estate_privilege_short_tooltip = { 
+			PRIVILEGE = estate_church_monopoly_of_slaves
+			CANNOT_REVOKE_EFFECT = "
+			hidden_effect = {
+				add_estate_loyalty_modifier = {
+					estate = estate_church
+					loyalty = -20
+					desc = to_revoked_monopoly
+					duration = 3650
+				}
+			}
+			"
+		}
+		if = {
+			limit = {
+				has_estate_privilege = estate_church_monopoly_of_incense
+				has_estate_privilege = estate_church_monopoly_of_wool
+				has_estate_privilege = estate_church_monopoly_of_wine
+				has_estate_privilege = estate_church_monopoly_of_slaves
+			}
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -80
+			}
+		}
+		else_if = {
+			limit = {
+				calc_true_if = {
+					amount = 3
+					has_estate_privilege = estate_church_monopoly_of_incense
+					has_estate_privilege = estate_church_monopoly_of_wool
+					has_estate_privilege = estate_church_monopoly_of_wine
+					has_estate_privilege = estate_church_monopoly_of_slaves
+				}
+			}
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -60
+			}
+		}
+		else_if = {
+			limit = {
+				calc_true_if = {
+					amount = 2
+					has_estate_privilege = estate_church_monopoly_of_incense
+					has_estate_privilege = estate_church_monopoly_of_wool
+					has_estate_privilege = estate_church_monopoly_of_wine
+					has_estate_privilege = estate_church_monopoly_of_slaves
+				}
+			}
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -40
+			}
+		}
+		else = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -20
+			}
+		}
+		custom_tooltip = to_church_monopolies_revoke_loyalty_equilibrium_tt
+	}
+}
+
+to_remove_all_burghers_monopolies_and_apply_penalties = {
+	if = {
+		limit = {
+			to_has_monopoly_estate_privilege_burghers = yes
+		}
+		to_remove_estate_privilege_short_tooltip = { 
+			PRIVILEGE = estate_burghers_monopoly_of_textiles
+			CANNOT_REVOKE_EFFECT = "
+			hidden_effect = {
+				add_estate_loyalty_modifier = {
+					estate = estate_burghers
+					loyalty = -20
+					desc = to_revoked_monopoly
+					duration = 3650
+				}
+			}
+			"
+		}
+		to_remove_estate_privilege_short_tooltip = { 
+			PRIVILEGE = estate_burghers_monopoly_of_dyes
+			CANNOT_REVOKE_EFFECT = "
+			hidden_effect = {
+				add_estate_loyalty_modifier = {
+					estate = estate_burghers
+					loyalty = -20
+					desc = to_revoked_monopoly
+					duration = 3650
+				}
+			}
+			"
+		}
+		to_remove_estate_privilege_short_tooltip = { 
+			PRIVILEGE = estate_burghers_monopoly_of_glass
+			CANNOT_REVOKE_EFFECT = "
+			hidden_effect = {
+				add_estate_loyalty_modifier = {
+					estate = estate_burghers
+					loyalty = -20
+					desc = to_revoked_monopoly
+					duration = 3650
+				}
+			}
+			"
+		}
+		to_remove_estate_privilege_short_tooltip = { 
+			PRIVILEGE = estate_burghers_monopoly_of_paper
+			CANNOT_REVOKE_EFFECT = "
+			hidden_effect = {
+				add_estate_loyalty_modifier = {
+					estate = estate_burghers
+					loyalty = -20
+					desc = to_revoked_monopoly
+					duration = 3650
+				}
+			}
+			"
+		}
+		if = {
+			limit = {
+				has_estate_privilege = estate_burghers_monopoly_of_textiles
+				has_estate_privilege = estate_burghers_monopoly_of_dyes
+				has_estate_privilege = estate_burghers_monopoly_of_glass
+				has_estate_privilege = estate_burghers_monopoly_of_paper
+			}
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = -80
+			}
+		}
+		else_if = {
+			limit = {
+				calc_true_if = {
+					amount = 3
+					has_estate_privilege = estate_burghers_monopoly_of_textiles
+					has_estate_privilege = estate_burghers_monopoly_of_dyes
+					has_estate_privilege = estate_burghers_monopoly_of_glass
+					has_estate_privilege = estate_burghers_monopoly_of_paper
+				}
+			}
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = -60
+			}
+		}
+		else_if = {
+			limit = {
+				calc_true_if = {
+					amount = 2
+					has_estate_privilege = estate_burghers_monopoly_of_textiles
+					has_estate_privilege = estate_burghers_monopoly_of_dyes
+					has_estate_privilege = estate_burghers_monopoly_of_glass
+					has_estate_privilege = estate_burghers_monopoly_of_paper
+				}
+			}
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = -40
+			}
+		}
+		else = {
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = -20
+			}
+		}
+		custom_tooltip = to_burghers_monopolies_revoke_loyalty_equilibrium_tt
+	}
+}
+
+to_handle_embrace_mercantilism_colonial_modifier = {
+	if = {
+		limit = {
+			owner = { has_government_attribute = to_increased_colonial_growth_overseas }
+			to_overseas_colony_trigger = yes
+		}
+		add_province_modifier = { 
+			name = to_embrace_mercantilism_colonial_modifier
+			duration = -1
+		}
+	}
+	else = {
+		remove_province_modifier = to_embrace_mercantilism_colonial_modifier
+	}
+}
+
+to_handle_embrace_mercantilism_colonial_modifier_capital_moved = {
+	if = {
+		limit = {
+			owner = {
+				has_government_attribute = to_increased_colonial_growth_overseas
+			}
+		}
+		owner = {
+			every_owned_province = {
+				to_handle_embrace_mercantilism_colonial_modifier = yes
+			}
+		}
+	}
+}
+
+to_handle_war_economy_province_modifier = {
+	if = {
+		limit = {
+			owner = { has_government_attribute = to_production_bonus_on_military_goods }
+			to_war_economy_good_province = yes
+		}
+		add_province_modifier = { 
+			name = to_war_economy_province_modifier
+			duration = -1
+		}
+	}
+	else = {
+		remove_province_modifier = to_war_economy_province_modifier
+	}
+}
+
+to_handle_cash_crops_province_modifier = {
+	if = {
+		limit = {
+			owner = { has_government_attribute = to_improve_cash_crop_provinces }
+		}
+		if = {
+			limit = {
+				to_cash_crops_good_province = yes
+			}
+			remove_province_modifier = to_cash_crops_bad_province_modifier
+			add_province_modifier = { 
+				name = to_cash_crops_good_province_modifier
+				duration = -1
+			}
+		}
+		else = {
+			remove_province_modifier = to_cash_crops_good_province_modifier
+			add_province_modifier = { 
+				name = to_cash_crops_bad_province_modifier
+				duration = -1
+			}
+		}
+	}
+	else = {
+		remove_province_modifier = to_cash_crops_bad_province_modifier
+		remove_province_modifier = to_cash_crops_good_province_modifier
+	}
+}
+
+to_handle_autarky_province_modifier = {
+	if = {
+		limit = {
+			owner = { has_government_attribute = to_bonus_on_agricultural_and_mining_goods }
+			to_autarky_good_province = yes
+		}
+		add_province_modifier = { 
+			name = to_autarky_province_modifier
+			duration = -1
+		}
+	}
+	else = {
+		remove_province_modifier = to_autarky_province_modifier
+	}
+}
+
+to_handle_mercantile_nation_cot_boost_modifier = {
+	if = {
+		limit = {
+			owner = { has_government_attribute = to_reduce_dev_cost_on_centers_of_trade }
+			province_has_center_of_trade_of_level = 1
+		}
+		add_province_modifier = { 
+			name = to_mercantile_nation_cot_boost
+			duration = -1
+		}
+	}
+	else = {
+		remove_province_modifier = to_mercantile_nation_cot_boost
+	}
+}
+
+to_handle_free_haven_pirate_opinion_modifier = {
+	if = {
+		limit = {
+			has_government_attribute = is_pirate_republic_reform
+		}
+		every_country = {
+			if = {
+				limit = {
+					has_government_attribute = to_opinion_with_pirate_nations
+				}
+				if = {
+					limit = {
+						NOT = {
+							reverse_has_opinion_modifier = {
+								who = PREV
+								modifier = to_free_haven_pirate_opinion
+							}
+						}
+					}
+					reverse_add_opinion = {
+						who = PREV
+						modifier = to_free_haven_pirate_opinion
+					}
+				}
+			}
+			else = {
+				reverse_remove_opinion = {
+					who = PREV
+					modifier = to_free_haven_pirate_opinion
+				}
+			}
+		}
+	}
+}
+
+to_handle_free_haven_pirate_opinion_modifier_remove = {
+	every_country = {
+		reverse_remove_opinion = {
+			who = PREV
+			modifier = to_free_haven_pirate_opinion
+		}
+	}
+}
+
+to_handle_naval_bateries_give_defensivness_modifier = {
+	if = {
+		limit = {
+			owner = { has_government_attribute = to_naval_bateries_give_defensivness }
+		}
+		add_province_modifier = { 
+			name = to_coastal_defence_defensivness_modifier
+			duration = -1
+		}
+	}
+	else = {
+		remove_province_modifier = to_coastal_defence_defensivness_modifier
+	}
+}
+
+to_handle_naval_bateries_give_defensivness_modifier_on_build = {
+	if = {
+		limit = {
+			owner = { has_government_attribute = to_naval_bateries_give_defensivness }
+		}
+		add_province_modifier = { 
+			name = to_coastal_defence_defensivness_modifier
+			duration = -1
+		}
+	}
+}
+
+to_remove_naval_bateries_give_defensivness = {
+	remove_province_modifier = to_coastal_defence_defensivness_modifier
 }

@@ -1,4 +1,6 @@
+########################################
 # Tier I
+########################################
 
 elysian_empire = {
 	icon = "elysian_empire"
@@ -257,13 +259,18 @@ elysian_absolute_empire = {
 	}
 }
 
+########################################
 # Tier III
+########################################
 
 to_thalassocracy_reform_tierIII = {
 	icon = "admiralty_reform"
 	allow_normal_conversion = yes
 	potential = {
-		nhs_check_all_elysian_tags = { CONDITION = tag }
+		OR = {
+			to_has_advanced_economic_reforms = yes
+			nhs_check_all_elysian_tags = { CONDITION = tag }
+		}
 		has_unlocked_government_reform = {
 			government_reform = thalassocracy_reform
 		}
@@ -284,7 +291,9 @@ to_thalassocracy_reform_tierIII = {
 	}
 }
 
+########################################
 # Tier XI
+########################################
 
 royal_decree_reform_ely = {
 	icon = "king"
@@ -333,8 +342,692 @@ general_estates_reform_ely = {
 	}
 }
 
+########################################
+# Tier VIII (Economic Reforms)
+########################################
 
-# TIER IX
+# Protectionism
+
+to_embrace_mercantilism = {
+	icon = to_gold_and_silver_reform
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { PROTECTIONISM = yes }
+	}
+	modifiers = {
+		global_own_trade_power = 0.15
+		mercantilism_cost = -0.25
+		global_tariffs = 0.50
+		global_foreign_trade_power = -0.33
+	}
+	custom_attributes = {
+		to_increased_colonial_growth_overseas = yes
+	}
+	effect = {
+		to_on_change_trade_policy_protectionism = { SHOW_REFORM_EFFECT_TOOLTIP = yes }
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					to_overseas_colony_trigger = yes
+				}
+				add_province_modifier = { 
+					name = to_embrace_mercantilism_colonial_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	removed_effect = {
+		hidden_effect = {
+			every_owned_province = {
+				remove_province_modifier = to_embrace_mercantilism_colonial_modifier
+			}
+		}
+	}
+	ai = {
+		factor = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_modifier = nhs2_elysian_restricted_trade }
+		}
+	}
+}
+
+to_imperial_seal = {
+	icon = paper_with_seal
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { PROTECTIONISM = yes }
+	}
+	modifiers = {
+		trade_efficiency = 0.05
+		yearly_corruption = -0.2
+		burghers_influence_modifier = -0.1
+	}
+	custom_attributes = {
+		no_mercantilism_loss_from_privilege = yes
+		to_lower_absolutism_from_burgher_privileges = yes
+		# Apparently Paradox forgot to include a moddable trigger for that diplo action
+		# to_immune_to_corrupt_officials = yes
+	}
+	effect = {
+		to_on_change_trade_policy_protectionism = { SHOW_REFORM_EFFECT_TOOLTIP = yes }
+	}
+	removed_effect = {
+	}
+	ai = {
+		factor = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_modifier = nhs2_elysian_restricted_trade }
+		}
+	}
+}
+
+to_war_economy = {
+	icon = war_economy
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { PROTECTIONISM = yes }
+	}
+	modifiers = {
+		trade_efficiency = -0.10
+		development_cost = 0.05
+		global_regiment_cost = -0.2
+		global_ship_cost = -0.2
+		land_attrition = -0.25
+		mil_tech_cost_modifier = -0.1
+	}
+	custom_attributes = {
+		to_production_bonus_on_military_goods = yes
+	}
+	conditional = {
+		allow = {
+			has_dlc = "Emperor"
+		}
+		custom_attributes = {
+			to_remove_metal_monopolies = yes
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				has_dlc = "Emperor"
+				has_estate_privilege = estate_nobles_monopoly_of_metals
+			}
+			custom_tooltip = to_reform_effects_tt
+			to_remove_estate_privilege_short_tooltip = { 
+				PRIVILEGE = estate_nobles_monopoly_of_metals
+				CANNOT_REVOKE_EFFECT = "
+				hidden_effect = {
+					to_add_noble_estate_loyalty_modifier = {
+						loyalty = -20
+						desc = to_revoked_monopoly
+						duration = 3650
+					}
+				}
+				"
+			}
+			to_add_noble_estate_loyalty = {
+				loyalty = -20
+			}
+			if = {
+				limit = {
+					NOT = { can_revoke_estate_privilege = estate_nobles_monopoly_of_metals }
+				}
+				custom_tooltip = to_metals_monopoly_revoke_loyalty_equilibrium_tt
+			}
+			custom_tooltip = nhs_new_line_tt
+			to_on_change_trade_policy_protectionism = {}
+		}
+		else = {
+			to_on_change_trade_policy_protectionism = { SHOW_REFORM_EFFECT_TOOLTIP = yes }
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					to_war_economy_good_province = yes
+				}
+				add_province_modifier = {
+					name = to_war_economy_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	removed_effect = {
+		every_owned_province = {
+			remove_province_modifier = to_war_economy_province_modifier
+		}
+	}
+	ai = {
+		factor = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_modifier = nhs2_elysian_restricted_trade }
+		}
+	}
+}
+
+to_encourage_cash_crops = {
+	icon = to_spices_reform
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { PROTECTIONISM = yes }
+	}
+	modifiers = {
+		trade_steering = 0.2
+		trade_range_modifier = 0.25
+		global_unrest = 1
+	}
+	custom_attributes = {
+		to_improve_cash_crop_provinces = yes
+		to_higher_chance_of_cash_crops_in_colonies = yes
+		to_higher_dev_cost_in_non_cash_crop_provinces = yes
+		# to_higher_chance_of_famine_events = yes
+	}
+	effect = {
+		to_on_change_trade_policy_protectionism = { SHOW_REFORM_EFFECT_TOOLTIP = yes }
+		hidden_effect = {
+			# If done in one scope it shits out errors for some reason
+			every_owned_province = {
+				limit = {
+					to_cash_crops_good_province = yes
+				}
+				add_province_modifier = {
+					name = to_cash_crops_good_province_modifier
+					duration = -1
+				}
+			}
+			every_owned_province = {
+				limit = {
+					NOT = { to_cash_crops_good_province = yes }
+				}
+				add_province_modifier = {
+					name = to_cash_crops_bad_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	removed_effect = {
+		hidden_effect = {
+			every_owned_province = {
+				remove_province_modifier = to_cash_crops_good_province_modifier
+				remove_province_modifier = to_cash_crops_bad_province_modifier
+			}
+		}
+	}
+	ai = {
+		factor = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_modifier = nhs2_elysian_restricted_trade }
+		}
+	}
+}
+
+# Free Trade
+
+to_mercantile_nation = {
+	icon = merchant
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { FREE_TRADE = yes }
+		if = {
+			limit = {
+				has_country_modifier = nhs2_ely_por_trade
+			}
+			NOT = { has_country_modifier = nhs2_ely_por_trade }
+		}
+	}
+	modifiers = {
+		global_trade_goods_size_modifier = 0.05
+		burghers_influence_modifier = 0.10
+		burghers_privilege_slots = 2
+	}
+	custom_attributes = {
+		to_reduce_dev_cost_on_centers_of_trade = yes
+		to_improve_control_over_monetary_policy_privilege = yes
+	}
+	conditional = {
+		allow = {
+			has_dlc = "Mare Nostrum"
+		}
+		can_form_trade_league = yes
+		trade_city_reform = trading_city
+	}
+	effect = {
+		to_on_change_trade_policy_free_trade = { SHOW_REFORM_EFFECT_TOOLTIP = yes }
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					province_has_center_of_trade_of_level = 1
+				}
+				add_province_modifier = {
+					name = to_mercantile_nation_cot_boost
+					duration = -1
+				}
+			}
+		}
+	}
+	removed_effect = {
+		hidden_effect = {
+			every_owned_province = {
+				remove_province_modifier = to_mercantile_nation_cot_boost
+			}
+		}
+	}
+	ai = {
+		factor = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_modifier = nhs2_elysian_free_trade }
+		}
+	}
+}
+
+to_safeguard_the_mercantile_fleets = {
+	icon = war_ship # merchant_ship
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { FREE_TRADE = yes }
+		if = {
+			limit = {
+				has_country_modifier = nhs2_ely_por_trade
+			}
+			NOT = { has_country_modifier = nhs2_ely_por_trade }
+		}
+	}
+	modifiers = {
+		light_ship_power = 0.5
+		transport_power = 1
+		movement_speed_in_fleet_modifier = 1
+		global_ship_trade_power = 0.5
+		ship_power_propagation = 0.25
+	}
+	conditional = {
+		allow = {
+			has_dlc = "Emperor"
+		}
+		custom_attributes = {
+			to_hegemony_with_light_ships = yes
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				NOT = { has_dlc = "Emperor" }
+			}
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_hegemony_mission_with_light_ships_tt
+			custom_tooltip = nhs_new_line_tt
+			to_on_change_trade_policy_free_trade = {}
+		}
+		else = {
+			to_on_change_trade_policy_free_trade = { SHOW_REFORM_EFFECT_TOOLTIP = yes }
+		}
+	}
+	removed_effect = {
+	}
+	ai = {
+		factor = 0
+	}
+}
+
+to_free_haven = {
+	icon = to_port_reform
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { FREE_TRADE = yes }
+		if = {
+			limit = {
+				has_country_modifier = nhs2_ely_por_trade
+			}
+			NOT = { has_country_modifier = nhs2_ely_por_trade }
+		}
+	}
+	modifiers = {
+		global_colonial_growth = 40
+		privateer_efficiency = 0.25
+		improve_relation_modifier = -0.20
+		merc_independent_from_trade_range = yes
+	}
+	custom_attributes = {
+		to_colonies_can_get_european_cultures = yes
+		to_opinion_with_pirate_nations = yes
+	}
+	effect = {
+		to_on_change_trade_policy_free_trade = { SHOW_REFORM_EFFECT_TOOLTIP = yes }
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_government_attribute = is_pirate_republic_reform
+					NOT = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = to_free_haven_pirate_opinion
+						}
+					}
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = to_free_haven_pirate_opinion
+				}
+			}
+		}
+	}
+	removed_effect = {
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_government_attribute = is_pirate_republic_reform
+				}
+				remove_opinion = {
+					who = ROOT
+					modifier = to_free_haven_pirate_opinion
+				}
+			}
+		}
+	}
+	ai = {
+		factor = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_modifier = nhs2_elysian_free_trade }
+		}
+	}
+}
+
+to_beacon_of_liberty = {
+	icon = liberte_reform #constitution
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { FREE_TRADE = yes }
+		if = {
+			limit = {
+				has_country_modifier = nhs2_ely_por_trade
+			}
+			NOT = { has_country_modifier = nhs2_ely_por_trade }
+		}
+	}
+	modifiers = {
+		idea_cost = -0.10
+		yearly_innovativeness = 0.25
+		tolerance_heathen = 1
+		tolerance_heretic = 1
+		max_absolutism = -10
+		nobles_loyalty_modifier = -0.10
+		estate_nhs_nobles_loyalty_modifier = -0.10
+		church_loyalty_modifier = -0.10
+		nobles_influence_modifier = -0.10
+		estate_nhs_nobles_influence_modifier = -0.10
+		church_influence_modifier = -0.10
+	}
+	custom_attributes = {
+		to_institution_spawn_priority = yes
+	}
+	effect = {
+		to_on_change_trade_policy_free_trade = { SHOW_REFORM_EFFECT_TOOLTIP = yes }
+	}
+	removed_effect = {
+	}
+	ai = {
+		factor = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_modifier = nhs2_elysian_free_trade }
+		}
+	}
+}
+
+# Isolation
+
+to_enforce_state_monopolies = {
+	icon = crown #byzantine_rule
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { ISOLATIONISM = yes }
+		if = {
+			limit = {
+				has_country_modifier = nhs2_ely_por_trade
+			}
+			NOT = { has_country_modifier = nhs2_ely_por_trade }
+		}
+	}
+	modifiers = {
+		max_absolutism = 10
+		mercantilism_cost = -0.25
+		production_efficiency = 0.20
+		development_cost = 0.10
+	}
+	effect = {
+		if = {
+			limit = {
+				has_dlc = "Emperor"
+			}
+			custom_tooltip = to_reform_effects_tt
+			if = {
+				limit = {
+					OR = {
+						to_has_monopoly_estate_privilege_nobles = yes
+						to_has_monopoly_estate_privilege_church = yes
+						to_has_monopoly_estate_privilege_burghers = yes
+					}
+				}
+				to_remove_all_nobles_monopolies_and_apply_penalties = yes
+				to_remove_all_clergy_monopolies_and_apply_penalties = yes
+				to_remove_all_burghers_monopolies_and_apply_penalties = yes
+			}
+			else = {
+				custom_tooltip = to_monopolies_revoke_loyalty_equilibrium_tt
+			}
+			custom_tooltip = nhs_new_line_tt
+			to_on_change_trade_policy_isolationism = { ISOLATIONISM_INSTITION_SPREAD = yes }
+		}
+		else = {
+			to_on_change_trade_policy_isolationism = {
+				SHOW_REFORM_EFFECT_TOOLTIP = yes
+				ISOLATIONISM_INSTITION_SPREAD = yes
+			}
+		}
+	}
+	removed_effect = {
+	}
+	conditional = {
+		allow = {
+			has_dlc = "Emperor"
+		}
+		custom_attributes = {
+			to_remove_monopoly_privileges = yes
+		}
+	}
+	ai = {
+		factor = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_modifier = nhs2_elysian_isolationism }
+		}
+	}
+}
+
+to_autarky = {
+	icon = peasants
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { ISOLATIONISM = yes }
+		if = {
+			limit = {
+				has_country_modifier = nhs2_ely_por_trade
+			}
+			NOT = { has_country_modifier = nhs2_ely_por_trade }
+		}
+	}
+	modifiers = {
+		trade_efficiency = -0.1
+		global_foreign_trade_power = -1
+		development_cost = -0.1
+		# global_tax_modifier = 0.25
+		global_monthly_devastation = -0.25
+		war_exhaustion = -0.05
+		centralize_state_cost = -0.5
+	}
+	custom_attributes = {
+		# to_bonus_on_agricultural_and_mining_goods = yes
+		# Apparently Paradox forgot to include a moddable trigger for this diplo action
+		# to_immune_to_slander_merchants = yes
+		to_does_not_have_foreign_trade_quarter = yes
+	}
+	effect = {
+		to_on_change_trade_policy_isolationism = { SHOW_REFORM_EFFECT_TOOLTIP = yes }
+		hidden_effect = {
+			# every_owned_province = {
+			# 	limit = {
+			# 		to_autarky_good_province = yes
+			# 	}
+			# 	add_province_modifier = {
+			# 		name = to_autarky_province_modifier
+			# 		duration = -1
+			# 	}
+			# }
+			random_owned_province = {
+				limit = {
+					has_province_modifier = nhs2_european_enclave
+				}
+				remove_province_modifier = nhs2_european_enclave
+			}
+		}
+	}
+	removed_effect = {
+		hidden_effect = {
+			# every_owned_province = {
+			# 	remove_province_modifier = to_autarky_province_modifier
+			# }
+			to_nhs_spawn_enclave = { ENCLAVE_MODIFIER = nhs2_european_enclave }
+		}
+	}
+	ai = {
+		factor = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_modifier = nhs2_elysian_isolationism }
+		}
+	}
+}
+
+to_secure_the_borders = {
+	icon = mountain_fort
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { ISOLATIONISM = yes }
+		if = {
+			limit = {
+				has_country_modifier = nhs2_ely_por_trade
+			}
+			NOT = { has_country_modifier = nhs2_ely_por_trade }
+		}
+	}
+	modifiers = {
+		global_institution_spread = -0.25
+		caravan_power = -0.50
+		garrison_size = 0.33
+		fort_maintenance_modifier = -0.50
+		rival_border_fort_maintenance = -0.50
+		own_territory_dice_roll_bonus = 1
+		global_spy_defence = 0.5
+	}
+	custom_attributes = {
+		to_no_institution_spread_across_borders = yes
+		# Apparently Paradox forgot to include a moddable trigger for that diplo action
+		# to_immune_to_sobotage_recruitment = yes
+		to_immune_to_sow_discontent = yes
+		to_immune_to_infiltrate_administration = yes
+	}
+	effect = {
+		to_on_change_trade_policy_isolationism = { 
+			SHOW_REFORM_EFFECT_TOOLTIP = yes
+			ISOLATIONISM_INSTITION_SPREAD = yes
+		}
+	}
+	removed_effect = {
+	}
+	ai = {
+		factor = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_modifier = nhs2_elysian_isolationism }
+		}
+	}
+}
+
+to_safeguard_home_waters = {
+	icon = to_safeguard_home_waters_reform
+	potential = {
+		to_has_advanced_economic_reforms = yes
+	}
+	trigger = {
+		to_can_change_trade_policy = { ISOLATIONISM = yes }
+		if = {
+			limit = {
+				has_country_modifier = nhs2_ely_por_trade
+			}
+			NOT = { has_country_modifier = nhs2_ely_por_trade }
+		}
+	}
+	modifiers = {
+		naval_forcelimit_modifier = 0.20
+		global_sailors_modifier = 0.20
+		global_ship_cost = -0.1
+		global_ship_trade_power = -0.33
+		own_coast_naval_combat_bonus = 1.0
+		sea_repair = yes
+	}
+	custom_attributes = {
+		to_naval_bateries_give_defensivness = yes
+	}
+	effect = {
+		to_on_change_trade_policy_isolationism = { 
+			SHOW_REFORM_EFFECT_TOOLTIP = yes
+			ISOLATIONISM_INSTITION_SPREAD = yes
+		}
+	}
+	removed_effect = {
+	}
+	ai = {
+		factor = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_modifier = nhs2_elysian_isolationism }
+		}
+	}
+}
+
+
+########################################
+# Tier IX
+########################################
 
 letat_cest_moi_reform_ely = {
 	icon = "queen"
@@ -417,7 +1110,9 @@ nhs_consolidate_senate_of_cities = {
 	}
 }
 
-# TIER X
+########################################
+# Tier X
+########################################
 
 nhs_reduce_senate_reform = {
 	icon = "nhs_reduce_senate_reform"

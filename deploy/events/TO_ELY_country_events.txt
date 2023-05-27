@@ -798,9 +798,61 @@ country_event = {
 	is_triggered_only = yes
 	
 	option = {	# Let him
-		name = "nhs2_countryevents.17.a"
+		name = nhs2_countryevents.34.a
 		custom_tooltip = nhs_unlock_invasion_decision_tt
 		clr_country_flag = to_block_invasion_and_abandon_heritage
+	}
+}
+
+# Immigration from Free Haven
+province_event = {
+	id = nhs2_countryevents.36
+	title = nhs2_countryevents.36.t
+	desc = nhs2_countryevents.36.d
+	picture = COLONIZATION_eventPicture
+
+	goto = to_european_emigration_province
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			owner = {
+				set_country_flag = to_has_european_immigration_event_active
+			}
+		}
+	}
+
+	after = {
+		owner = {
+			clr_country_flag = to_has_european_immigration_event_active
+			if = {
+				limit = {
+					any_owned_province = {
+						has_province_flag = to_european_immigration_event_pending
+					}
+				}
+				random_owned_province = {
+					limit = {
+						has_province_flag = to_european_immigration_event_pending
+					}
+					clr_province_flag = to_european_immigration_event_pending
+					province_event = { id = nhs2_countryevents.36 days = 1 }
+				}
+			}
+		}
+	}
+	
+	option = {	# Let him
+		name = nhs2_countryevents.36.a
+		goto = ROOT
+
+		custom_tooltip = to_european_immigration_tt
+		custom_tooltip = nhs_new_line_tt
+		add_province_modifier = {
+			name = to_recent_immigration
+			duration = 3650
+		}
 	}
 }
 
@@ -4296,7 +4348,7 @@ country_event = {
 	option = {
 		name = "nhs2_countryevents.70.a"
 		define_conquistador = {
-			name = "Orhan Çelebi"
+			name = "Orhan ï¿½elebi"
 			shock = 3
 			fire = 3
 			manuever = 2
@@ -4329,7 +4381,7 @@ country_event = {
 		name = "nhs2_countryevents.70.b"
 		define_advisor = {
 			type = commandant
-			name = "Orhan Çelebi"
+			name = "Orhan ï¿½elebi"
 			skill = 2
 			culture = turkish
 			religion = sunni

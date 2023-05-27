@@ -404,6 +404,7 @@ to_has_free_trade = {
 	OR = {
 		has_country_modifier = msg_free_trade
 		has_country_modifier = vov_free_trade
+		has_country_modifier = nhs2_elysian_free_trade
 	}
 }
 
@@ -411,6 +412,7 @@ to_has_restricted_trade = {
 	OR = {
 		has_country_modifier = msg_restricted_trade
 		has_country_modifier = vov_restricted_trade
+		has_country_modifier = nhs2_elysian_restricted_trade
 	}
 }
 
@@ -1018,5 +1020,139 @@ to_has_range_reducing_modifier = {
 		has_country_modifier = nhs_vov_population
 		to_has_colonial_range_reduction = yes
 		has_country_modifier = nhs_msg_handicap_settlers
+	}
+}
+
+to_has_advanced_economic_reforms = {
+	OR = {
+		has_country_flag = to_show_advanced_economic_reforms
+
+		has_country_modifier = nhs2_elysian_restricted_trade
+		has_country_modifier = nhs2_elysian_free_trade
+		has_country_modifier = nhs2_elysian_isolationism
+		has_country_modifier = nhs2_ely_por_trade
+
+		# has_country_modifier = vov_restricted_trade
+		# has_country_modifier = vov_free_trade
+		# has_country_modifier = vov_isolationism
+
+		# has_country_modifier = msg_restricted_trade
+		# has_country_modifier = msg_free_trade
+		# has_country_modifier = msg_isolationism
+	}
+	NOT = { has_country_flag = to_hide_advanced_economic_reforms }
+}
+
+to_can_change_trade_policy = {
+	if = {
+		limit = {
+			[[PROTECTIONISM]
+			OR = {		
+				has_country_modifier = nhs2_elysian_free_trade
+				has_country_modifier = nhs2_elysian_isolationism
+		
+				# has_country_modifier = vov_isolationism
+				# has_country_modifier = vov_free_trade
+		
+				# has_country_modifier = msg_isolationism
+				# has_country_modifier = msg_free_trade
+			}
+			]
+			[[FREE_TRADE]
+			OR = {
+				has_country_modifier = nhs2_elysian_restricted_trade
+				has_country_modifier = nhs2_elysian_isolationism
+		
+				# has_country_modifier = vov_restricted_trade
+				# has_country_modifier = vov_isolationism
+		
+				# has_country_modifier = msg_restricted_trade
+				# has_country_modifier = msg_isolationism
+			}
+			]
+			[[ISOLATIONISM]
+			OR = {
+				has_country_modifier = nhs2_elysian_restricted_trade
+				has_country_modifier = nhs2_elysian_free_trade
+		
+				# has_country_modifier = vov_restricted_trade
+				# has_country_modifier = vov_free_trade
+		
+				# has_country_modifier = msg_restricted_trade
+				# has_country_modifier = msg_free_trade
+			}
+			]
+		}
+		stability = 1
+		dip_power = 100
+	}
+	custom_trigger_tooltip = {
+		tooltip = to_has_not_changed_trade_policy_recently_tt
+		NOT = { has_country_modifier = to_trade_policy_switch_cd }
+	}
+	if = {
+		limit = {
+			has_country_flag = to_trade_policy_event_active
+		}
+		custom_trigger_tooltip = {
+			tooltip = to_policy_event_not_active_tt
+			always = no
+		}
+	}
+	if = {
+		limit = {
+			has_country_flag = to_portuguese_deal_broken_recently
+		}
+		custom_trigger_tooltip = {
+			tooltip = to_cannot_switch_until_event_tt
+			always = no
+		}
+	}
+}
+
+to_has_monopoly_estate_privilege_nobles = {
+	OR = {
+		has_estate_privilege = estate_nobles_monopoly_of_metals
+		has_estate_privilege = estate_nobles_monopoly_of_livestock
+		has_estate_privilege = estate_nobles_monopoly_of_gems
+	}
+}
+
+to_has_monopoly_estate_privilege_church = {
+	OR = {
+		has_estate_privilege = estate_church_monopoly_of_incense
+		has_estate_privilege = estate_church_monopoly_of_wool
+		has_estate_privilege = estate_church_monopoly_of_wine
+		has_estate_privilege = estate_church_monopoly_of_slaves
+	}
+}
+
+to_has_monopoly_estate_privilege_burghers = {
+	OR = {
+		has_estate_privilege = estate_burghers_monopoly_of_textiles
+		has_estate_privilege = estate_burghers_monopoly_of_dyes
+		has_estate_privilege = estate_burghers_monopoly_of_glass
+		has_estate_privilege = estate_burghers_monopoly_of_paper
+	}
+}
+
+to_overseas_colony_trigger = {
+	is_empty = no
+	is_city = no
+	# is_overseas = yes
+	NOT = { same_continent = capital }
+}
+
+to_owner_or_passable_border = {
+	owner = {
+		OR = {
+			tag = ROOT
+			NOT = {
+				AND = {
+					NOT = { has_government_attribute = to_no_institution_spread_across_borders }
+					ROOT = { NOT ={ has_government_attribute = to_no_institution_spread_across_borders } }
+				}
+			}
+		}
 	}
 }
