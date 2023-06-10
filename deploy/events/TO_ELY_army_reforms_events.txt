@@ -68,11 +68,12 @@ country_event = {
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = to_nhs_enable_native_mercenary_companies_tt
 		add_country_modifier = {
-			name = nhs2_native_army_reform
+			name = to_ad_conscript_natives
 			duration = -1
+			desc = to_until_a_new_age_mission_tt
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 365
 		}
 		clr_country_flag = nhs_fire_reform
@@ -94,11 +95,12 @@ country_event = {
 		custom_tooltip = nhs2_army_reforms.1.t2
 		custom_tooltip = nhs_new_line_tt
 		add_country_modifier = {
-			name = nhs2_traditional_army_reform
+			name = to_ad_expand_militia
 			duration = -1
+			desc = to_until_a_new_age_mission_tt
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 365
 		}
 		clr_country_flag = nhs_fire_reform
@@ -119,11 +121,12 @@ country_event = {
 		custom_tooltip = nhs2_army_reforms.1.t3
 		custom_tooltip = nhs_new_line_tt
 		add_country_modifier = {
-			name = nhs2_janissary_army_reform
+			name = to_ad_janissaries
 			duration = -1
+			desc = to_until_a_new_age_mission_tt
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 730
 		}
 		every_country = {
@@ -154,18 +157,6 @@ country_event = {
 		NOT = { has_country_flag = nhs_third_a_reform }
 		NOT = { has_country_flag = nhs_fourth_a_reform }
 	}
-
-	# trigger = {
-	# 	nhs_check_all_elysian_tags = { CONDITION = tag }
-	# 	OR = {
-	# 		has_global_flag = nhs_europe_discovered
-	# 		is_year = 1530
-	# 	}
-	# 	is_at_war = no
-	# 	NOT = {
-	# 		mil_tech = 16
-	# 	}
-	# }
 	
 	immediate = {
 		hidden_effect = {
@@ -178,55 +169,73 @@ country_event = {
 		}
 	}
 
-	option = { ##  Implement the old Byzantine model
+	option = { # Reconnaissance and Ambush
 		name = "nhs2_army_reforms.2.a"
 		ai_chance = {
-			factor = 40
-			modifier = {
-				factor = 1.2
-				religion_group = pagan
-			}
+			factor = 50
 		}
 		custom_tooltip = nhs2_army_reforms.2.t1
 		custom_tooltip = nhs_new_line_tt
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_army_reform_byz
+			name = to_ad_lessons_from_the_frontier
 			duration = -1
+			desc = to_until_mil_tech_16_tt
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
+			duration = 912
+		}
+		clr_country_flag = nhs_fire_reform
+		nhs_reset_elysian_sprites = yes
+	}
+	option = { # Reform Theme System
+		name = "nhs2_army_reforms.2.b"
+		ai_chance = {
+			factor = 20
+		}
+		custom_tooltip = nhs2_army_reforms.2.t2
+		custom_tooltip = nhs_new_line_tt
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = to_ad_reformed_theme_system
+			duration = -1
+			desc = to_until_mil_tech_16_tt
+		}
+		add_country_modifier = {
+			name = to_reforming_army
 			duration = 1825
 		}
 		clr_country_flag = nhs_fire_reform
 		nhs_reset_elysian_sprites = yes
 	}
-	option = { ## European (quantity and sieges)
-		name = "nhs2_army_reforms.2.b"
+	option = { ## European
+		name = "nhs2_army_reforms.2.c"
 		ai_chance = {
-			factor = 50
+			factor = 30
 			modifier = {
-				factor = 1.2
-				religion_group = christian
+				factor = 0.33
+				NOT = { religion_group = christian }
 			}
 		}
 		
-		custom_tooltip = nhs2_army_reforms.2.t2
+		custom_tooltip = nhs2_army_reforms.2.t3
 		custom_tooltip = nhs_new_line_tt
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_army_reform_euro
+			name = to_ad_foreign_advisors
 			duration = -1
+			desc = to_until_mil_tech_16_tt
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 2920
 		}
 		clr_country_flag = nhs_fire_reform
 		nhs_reset_elysian_sprites = yes
 	}
 	option = { ## Greek Fire
-		name = "nhs2_army_reforms.2.c"
+		name = "nhs2_army_reforms.2.e"
 		trigger = {
 			nhs_has_fire_all_cases = yes
 		}
@@ -234,7 +243,7 @@ country_event = {
 		ai_chance = {
 			factor = 0
 		}
-		custom_tooltip = nhs2_army_reforms.2.t3
+		custom_tooltip = nhs2_army_reforms.2.t4
 		custom_tooltip = nhs_new_line_tt
 		
 		nhs_remove_reforms = yes
@@ -248,68 +257,25 @@ country_event = {
 			custom_tooltip = nhs_bonuses_later_tooltip
 			tooltip = {
 				add_country_modifier = {
-					name = nhs2_fire_army_reform
+					name = to_ad_greek_fire
 					duration = -1
+					desc = to_until_mil_tech_16_tt
 				}
 			}
 		}
 		else = {
 			add_country_modifier = {
-				name = nhs2_fire_army_reform
+				name = to_ad_greek_fire
 				duration = -1
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_noble_cataphracts
-				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
-			}
-			custom_tooltip = nhs_fire_nobles_tooltip
-			add_country_modifier = {
-				name = nhs2_disgruntled_nobles
-				duration = -1
+				desc = to_until_mil_tech_16_tt
 			}
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 3650
 		}
 		set_country_flag = nhs_fire_reform
 		nhs_set_greek_fire_sprites = yes
-	}
-	option = { ## No reform
-		name = "nhs2_army_reforms.2.e"
-		ai_chance = {
-			factor = 0
-		}
-		custom_tooltip = nhs2_army_reforms.2.t4
-		custom_tooltip = nhs_new_line_tt
-		
-		if = {
-			limit = {
-				has_country_modifier = nhs2_native_army_reform
-			}
-			custom_tooltip = nhs2_keep_first_reform_native_tt
-		}
-		else_if = {
-			limit = {
-				has_country_modifier = nhs2_traditional_army_reform
-			}
-			custom_tooltip = nhs2_keep_first_reform_traditional_tt
-		}
-		else_if = {
-			limit = {
-				has_country_modifier = nhs2_janissary_army_reform
-			}
-			custom_tooltip = nhs2_keep_first_reform_janissary_tt
-		}
-		add_country_modifier = {
-			name = nhs2_army_reform_no
-			duration = -1
-		}
-		# custom_tooltip = nhs_disadvantage_tootip
-		clr_country_flag = nhs_fire_reform
-		nhs_reset_elysian_sprites = yes
 	}
 }
 
@@ -371,74 +337,84 @@ country_event = {
 		}
 	}
 
-	option = { ## Massed Pike and shot (quantity based)
+	option = { ## Pike and Shot
 		name = "nhs2_army_reforms.3.a"
 		ai_chance = {
-			factor = 60
-			modifier = {
-				factor = 1.5
-				religion_group = christian
-			}
+			factor = 70
 		}
 		custom_tooltip = nhs2_army_reforms.3.t1
 		custom_tooltip = nhs_new_line_tt
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_army_reform_pas
+			name = to_ad_pike_and_shot
 			duration = -1
+			desc = to_until_mil_tech_23_tt
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
-			duration = 2555
+			name = to_reforming_army
+			duration = 365
 		}
+		to_add_settler_heritage_three = yes
+		clr_country_flag = nhs_fire_reform
+		nhs_reset_elysian_sprites = yes
+	}
+	option = { ## Volley Fire
+		name = "nhs2_army_reforms.3.b"
+		ai_chance = {
+			factor = 30
+		}
+		custom_tooltip = nhs2_army_reforms.3.t2
+		custom_tooltip = nhs_new_line_tt
+		nhs_remove_reforms = yes
+		if = {
+			limit = {
+				has_dlc = "Cradle of Civilization"
+			}
+			custom_tooltip = to_add_ad_volley_fire_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = to_ad_volley_fire
+					duration = -1
+				}
+			}
+		}
+		else = {
+			custom_tooltip = to_add_ad_volley_fire_nodlc_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = to_ad_volley_fire_nodlc
+					duration = -1
+				}
+			}
+		}
+		custom_tooltip = to_penalty_above_max_fl_tt
+		custom_tooltip = nhs_new_line_tt
+		add_country_modifier = {
+			name = to_reforming_army
+			duration = 1825
+		}
+		custom_tooltip = nhs_new_line_tt
 		to_add_settler_heritage_three = yes
 		clr_country_flag = nhs_fire_reform
 		nhs_reset_elysian_sprites = yes
 	}
 	option = { ## Cavalry (if picked cataprach modifier)
-		name = "nhs2_army_reforms.3.b"
+		name = "nhs2_army_reforms.3.c"
 		ai_chance = {
-			factor = 25
-			modifier = {
-				factor = 1.5
-				religion_group = pagan
-			}
+			factor = 0
 		}
-		custom_tooltip = nhs2_army_reforms.3.t2
+		custom_tooltip = nhs2_army_reforms.3.t3
 		custom_tooltip = nhs_new_line_tt
 		
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_army_reform_cavalry
+			name = to_ad_cataphract_army_core
 			duration = -1
+			desc = to_until_mil_tech_23_tt
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
-			duration = 2555
-		}
-		to_add_settler_heritage_three = yes
-		clr_country_flag = nhs_fire_reform
-		nhs_reset_elysian_sprites = yes
-	}
-	option = { ## Crossbow (Shock)
-		name = "nhs2_army_reforms.3.c"
-		ai_chance = {
-			factor = 50
-			modifier = {
-				factor = 1.5
-				religion_group = pagan
-			}
-		}
-		custom_tooltip = nhs2_army_reforms.3.t3
-		custom_tooltip = nhs_new_line_tt
-		nhs_remove_reforms = yes
-		add_country_modifier = {
-			name = nhs2_army_reform_xbow
-			duration = -1
-		}
-		add_country_modifier = {
-			name = nhs_reforming_army
-			duration = 1825
+			name = to_reforming_army
+			duration = 730
 		}
 		to_add_settler_heritage_three = yes
 		clr_country_flag = nhs_fire_reform
@@ -467,30 +443,21 @@ country_event = {
 			custom_tooltip = nhs_bonuses_later_tooltip
 			tooltip = {
 				add_country_modifier = {
-					name = nhs2_fire_army_reform2
+					name = to_ad_greek_fire2
 					duration = -1
+					desc = to_until_mil_tech_23_tt
 				}
 			}
 		}
 		else = {
 			add_country_modifier = {
-				name = nhs2_fire_army_reform2
+				name = to_ad_greek_fire2
 				duration = -1
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_noble_cataphracts
-				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
-			}
-			custom_tooltip = nhs_fire_nobles_tooltip
-			add_country_modifier = {
-				name = nhs2_disgruntled_nobles
-				duration = -1
+				desc = to_until_mil_tech_23_tt
 			}
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 3650
 		}
 		set_country_flag = nhs_fire_reform
@@ -527,7 +494,7 @@ country_event = {
 		}
 	}
 	
-	option = { ## Massed muskets
+	option = { ## Administration Reform
 		name = "nhs2_army_reforms.4.a"
 		ai_chance = {
 			factor = 50
@@ -536,11 +503,11 @@ country_event = {
 		custom_tooltip = nhs_new_line_tt
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_amry_reform_mm
+			name = to_ad_administration_reform
 			duration = -1
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 1460
 		}
 		remove_country_modifier = nhs_settler_heritage
@@ -549,7 +516,7 @@ country_event = {
 		clr_country_flag = nhs_fire_reform
 		nhs_reset_elysian_sprites = yes
 	}
-	option = { ## New Model Army. profesional army (quality)
+	option = { ## Profesional army
 		name = "nhs2_army_reforms.4.b"
 		ai_chance = {
 			factor = 50
@@ -557,12 +524,70 @@ country_event = {
 		custom_tooltip = nhs2_army_reforms.4.t2
 		custom_tooltip = nhs_new_line_tt
 		nhs_remove_reforms = yes
-		add_country_modifier = {
-			name = nhs2_amry_reform_nma
-			duration = -1
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				is_at_war = yes
+			}
+			custom_tooltip = to_can_no_longer_recruit_normal_mercs_tt
+			custom_tooltip = to_keep_current_merc_companies_until_war_ends_tt
 		}
+		else = {
+			custom_tooltip = to_can_no_longer_recruit_normal_mercs_disband_tt
+		}
+		custom_tooltip = to_replace_mercenary_ideas_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					has_idea_group = mercenary_ideas
+				}
+				country_event = { id = nhs2_army_reforms.6 }
+			}
+			if = {
+				limit = {
+					is_at_war = no
+				}
+				while = {
+					limit = {
+						any_hired_mercenary_company = {
+							to_is_non_free_mercenary_company = yes
+						}
+					}
+					random_hired_mercenary_company = {
+						limit = {
+							to_is_non_free_mercenary_company = yes
+						}
+						disband_mercenary_company = THIS
+					}
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				has_dlc = "Cradle of Civilization"
+			}
+			custom_tooltip = to_add_ad_professional_army_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = to_ad_professional_army
+					duration = -1
+				}
+			}
+		}
+		else = {
+			custom_tooltip = to_add_ad_professional_army_nodlc_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = to_ad_professional_army_nodlc
+					duration = -1
+				}
+			}
+		}
+		custom_tooltip = to_penalty_above_max_fl_2_tt
+		custom_tooltip = nhs_new_line_tt
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 2920
 		}
 		remove_country_modifier = nhs_settler_heritage
@@ -586,11 +611,11 @@ country_event = {
 			custom_tooltip = nhs_no_proffesionalism_loss_for_mercs_tt
 		}
 		add_country_modifier = {
-			name = nhs2_amry_reform_ga
+			name = to_ad_expeditionary_forces
 			duration = -1
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 1825
 		}
 		remove_country_modifier = nhs_settler_heritage
@@ -609,17 +634,17 @@ country_event = {
 		tooltip = {
 			nhs_remove_reforms = yes
 			add_country_modifier = {
-				name = nhs2_army_reform_cavalry2
+				name = to_ad_hussars_and_cataphracts
 				duration = -1
 			}
 		}
 		
 		if = {
 			limit = {
-				NOT = { has_country_modifier = nhs2_army_reform_cavalry }
+				NOT = { has_country_modifier = to_ad_cataphract_army_core }
 			}
 			add_country_modifier = {
-				name = nhs_reforming_army
+				name = to_reforming_army
 				duration = 1825
 			}
 		}
@@ -627,7 +652,7 @@ country_event = {
 		hidden_effect = {
 			nhs_remove_reforms = yes
 			add_country_modifier = {
-				name = nhs2_army_reform_cavalry2
+				name = to_ad_hussars_and_cataphracts
 				duration = -1
 			}
 		}
@@ -660,30 +685,19 @@ country_event = {
 			custom_tooltip = nhs_bonuses_later_tooltip
 			tooltip = {
 				add_country_modifier = {
-					name = nhs2_fire_army_reform3
+					name = to_ad_greek_fire3
 					duration = -1
 				}
 			}
 		}
 		else = {
 			add_country_modifier = {
-				name = nhs2_fire_army_reform3
-				duration = -1
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_noble_cataphracts
-				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
-			}
-			custom_tooltip = nhs_fire_nobles_tooltip
-			add_country_modifier = {
-				name = nhs2_disgruntled_nobles
+				name = to_ad_greek_fire3
 				duration = -1
 			}
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 3650
 		}
 		remove_country_modifier = nhs_settler_heritage
@@ -691,6 +705,173 @@ country_event = {
 		remove_country_modifier = nhs_settler_heritage_three
 		set_country_flag = nhs_fire_reform
 		nhs_set_greek_fire_sprites = yes
+	}
+}
+
+# Switch Mercenary Army Reform
+country_event = {
+	id = nhs2_army_reforms.6
+	title = nhs2_army_reforms.6.t
+	desc = nhs2_army_reforms.6.d
+	picture = WESTERNISATION_eventPicture
+
+	is_triggered_only = yes
+	
+	option = {	# Aristocratic
+		name = nhs2_army_reforms.6.a
+		trigger = {
+			NOT = { has_idea_group = aristocracy_ideas }
+			has_government_attribute = enables_aristocratic_idea_group
+		}
+		to_replace_merc_ideas_with_group = {
+			IDEA_GROUP = aristocracy_ideas
+			TRIGGER = "has_government_attribute = enables_aristocratic_idea_group"
+			IDEA_1 = noble_knights
+			IDEA_2 = serfdom
+			IDEA_3 = noble_resilience
+			IDEA_4 = noble_officers
+			IDEA_5 = international_nobility
+			IDEA_6 = rightful_conquest
+			IDEA_7 = local_nobility
+		}
+	}
+	option = {	# Plutocratic
+		name = nhs2_army_reforms.6.b
+		trigger = {
+			NOT = { has_idea_group = plutocracy_ideas }
+			has_government_attribute = enables_plutocratic_idea_group
+		}
+		to_replace_merc_ideas_with_group = {
+			IDEA_GROUP = plutocracy_ideas
+			TRIGGER = "has_government_attribute = enables_plutocratic_idea_group"
+			IDEA_1 = tradition_of_payment
+			IDEA_2 = abolished_serfdom
+			IDEA_3 = bill_of_rights
+			IDEA_4 = free_merchants
+			IDEA_5 = free_subjects
+			IDEA_6 = free_cities
+			IDEA_7 = emancipation
+		}
+	}
+	option = {	# Horde, idk why but might as well
+		name = nhs2_army_reforms.6.c
+		trigger = {
+			NOT = { has_idea_group = horde_gov_ideas }
+			has_government_attribute = enables_horde_idea_group
+		}
+		to_replace_merc_ideas_with_group = {
+			IDEA_GROUP = horde_gov_ideas
+			TRIGGER = "has_government_attribute = enables_horde_idea_group"
+			IDEA_1 = horse_lords
+			IDEA_2 = beyond_the_sun
+			IDEA_3 = mandate_of_the_khan
+			IDEA_4 = there_shall_be_no_grass
+			IDEA_5 = horde_loyalty
+			IDEA_6 = watchers_of_the_silk_road
+			IDEA_7 = a_magnanimous_empire
+		}
+	}
+	option = {	# Theocracy
+		name = nhs2_army_reforms.6.e
+		trigger = {
+			NOT = { has_idea_group = theocracy_gov_ideas }
+			has_government_attribute = enables_divine_idea_group
+		}
+		to_replace_merc_ideas_with_group = {
+			IDEA_GROUP = theocracy_gov_ideas
+			TRIGGER = "has_government_attribute = enables_divine_idea_group"
+			IDEA_1 = servants_of_god
+			IDEA_2 = by_the_grace_of_god
+			IDEA_3 = friends_in_high_places
+			IDEA_4 = flesh_is_weak
+			IDEA_5 = alpha_and_omega
+			IDEA_6 = conviction_of_sin
+			IDEA_7 = martyrs
+		}
+	}
+	option = {	# Offensive
+		name = nhs2_army_reforms.6.f
+		trigger = {
+			NOT = { has_idea_group = offensive_ideas }
+		}
+		to_replace_merc_ideas_with_group = {
+			IDEA_GROUP = offensive_ideas
+			IDEA_1 = bayonet_leaders
+			IDEA_2 = national_conscripts
+			IDEA_3 = superior_firepower
+			IDEA_4 = glorious_arms
+			IDEA_5 = engineer_corps
+			IDEA_6 = grand_army
+			IDEA_7 = napoleonic_warfare
+		}
+	}
+	option = {	# Defensive
+		name = nhs2_army_reforms.6.g
+		trigger = {
+			NOT = { has_idea_group = defensive_ideas }
+		}
+		to_replace_merc_ideas_with_group = {
+			IDEA_GROUP = defensive_ideas
+			IDEA_1 = battlefield_commisions
+			IDEA_2 = military_drill
+			IDEA_3 = improved_manuever
+			IDEA_4 = regimental_system
+			IDEA_5 = defensive_mentality
+			IDEA_6 = supply_trains
+			IDEA_7 = improved_foraging
+		}
+	}
+	option = {	# Quality
+		name = nhs2_army_reforms.6.h
+		trigger = {
+			NOT = { has_idea_group = quality_ideas }
+		}
+		to_replace_merc_ideas_with_group = {
+			IDEA_GROUP = quality_ideas
+			IDEA_1 = private_to_marshal
+			IDEA_2 = quality_education
+			IDEA_3 = finest_of_horses
+			IDEA_4 = escort_ships
+			IDEA_5 = naval_drill
+			IDEA_6 = copper_bottoms
+			IDEA_7 = massed_battery
+		}
+	}
+	option = {	# Quantity
+		name = nhs2_army_reforms.6.i
+		trigger = {
+			NOT = { has_idea_group = quantity_ideas }
+		}
+		to_replace_merc_ideas_with_group = {
+			IDEA_GROUP = quantity_ideas
+			IDEA_1 = mass_army
+			IDEA_2 = the_young_can_serve
+			IDEA_3 = enforced_service
+			IDEA_4 = camp_followers
+			IDEA_5 = reinforcement_drafts
+			IDEA_6 = the_old_and_infirm
+			IDEA_7 = expanded_supply_trains
+		}
+	}
+	option = {	# Naval
+		name = nhs2_army_reforms.6.j
+		trigger = {
+			NOT = { has_idea_group = naval_ideas }
+		}
+		to_replace_merc_ideas_with_group = {
+			IDEA_GROUP = naval_ideas
+			IDEA_1 = boarding_parties
+			IDEA_2 = improved_rams
+			IDEA_3 = naval_cadets
+			IDEA_4 = naval_glory
+			IDEA_5 = press_gangs
+			IDEA_6 = oak_forests_for_ships
+			IDEA_7 = superior_seamanship
+		}
+	}
+	option = {	# Refund
+		name = nhs2_army_reforms.6.k
+		to_refund_mercenary_ideas = yes
 	}
 }
 
@@ -706,8 +887,7 @@ country_event = {
 	option = {
 		name = "nhs2_army_reforms.1.a"
 		trigger = {
-			has_country_modifier = nhs2_traditional_army_reform
-			NOT = { has_country_modifier = nhs2_army_reform_no }
+			has_country_modifier = to_ad_expand_militia
 		}
 		custom_tooltip = nhs2_army_reforms.1.t1
 		custom_tooltip = nhs_new_line_tt
@@ -724,11 +904,11 @@ country_event = {
 		}
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_native_army_reform
+			name = to_ad_conscript_natives
 			duration = -1
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 365
 		}
 		hidden_effect = {
@@ -739,8 +919,7 @@ country_event = {
 	option = {
 		name = "nhs2_army_reforms.1.b"
 		trigger = {
-			has_country_modifier = nhs2_native_army_reform
-			NOT = { has_country_modifier = nhs2_army_reform_no }
+			has_country_modifier = to_ad_conscript_natives
 		}
 		custom_tooltip = nhs2_army_reforms.1.t2
 		custom_tooltip = nhs_new_line_tt
@@ -757,11 +936,11 @@ country_event = {
 		}
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_traditional_army_reform
+			name = to_ad_expand_militia
 			duration = -1
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 365
 		}
 		hidden_effect = {
@@ -771,32 +950,28 @@ country_event = {
 	}
 	##### 2
 	
-	option = { ##  Implement the old Byzantine model
+	option = { # Reconnaissance and Ambush
 		name = "nhs2_army_reforms.2.a"
 		trigger = {
 			OR = {
-				has_country_modifier = nhs2_army_reform_euro
-				has_country_modifier = nhs2_fire_army_reform
-				has_country_modifier = nhs2_army_reform_no
+				has_country_modifier = to_ad_foreign_advisors
+				has_country_modifier = to_ad_reformed_theme_system
+				has_country_modifier = to_ad_greek_fire
 			}
 		}
 		custom_tooltip = nhs2_army_reforms.2.t1
 		custom_tooltip = nhs_new_line_tt
 		ai_chance = {
-			factor = 40
-			modifier = {
-				factor = 1.2
-				religion_group = pagan
-			}
+			factor = 50
 		}
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_army_reform_byz
+			name = to_ad_lessons_from_the_frontier
 			duration = -1
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
-			duration = 1825
+			name = to_reforming_army
+			duration = 912
 		}
 		clr_country_flag = nhs_fire_reform
 		hidden_effect = {
@@ -805,31 +980,57 @@ country_event = {
 		}
 		nhs_reset_elysian_sprites = yes
 	}
-	option = { ## European (quantity and sieges)
+	option = { # Reform Theme System
 		name = "nhs2_army_reforms.2.b"
 		trigger = {
 			OR = {
-				has_country_modifier = nhs2_army_reform_byz
-				has_country_modifier = nhs2_fire_army_reform
-				has_country_modifier = nhs2_army_reform_no
+				has_country_modifier = to_ad_foreign_advisors
+				has_country_modifier = to_ad_lessons_from_the_frontier
+				has_country_modifier = to_ad_greek_fire
 			}
 		}
 		ai_chance = {
-			factor = 50
-			modifier = {
-				factor = 1.2
-				religion_group = christian
-			}
+			factor = 20
 		}
 		custom_tooltip = nhs2_army_reforms.2.t2
 		custom_tooltip = nhs_new_line_tt
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_army_reform_euro
+			name = to_ad_reformed_theme_system
 			duration = -1
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
+			duration = 1825
+		}
+		clr_country_flag = nhs_fire_reform
+		nhs_reset_elysian_sprites = yes
+	}
+	option = { ## European
+		name = "nhs2_army_reforms.2.c"
+		trigger = {
+			OR = {
+				has_country_modifier = to_ad_lessons_from_the_frontier
+				has_country_modifier = to_ad_reformed_theme_system
+				has_country_modifier = to_ad_greek_fire
+			}
+		}
+		ai_chance = {
+			factor = 30
+			modifier = {
+				factor = 0.33
+				NOT = { religion_group = christian }
+			}
+		}
+		custom_tooltip = nhs2_army_reforms.2.t3
+		custom_tooltip = nhs_new_line_tt
+		nhs_remove_reforms = yes
+		add_country_modifier = {
+			name = to_ad_foreign_advisors
+			duration = -1
+		}
+		add_country_modifier = {
+			name = to_reforming_army
 			duration = 2920
 		}
 		clr_country_flag = nhs_fire_reform
@@ -844,9 +1045,9 @@ country_event = {
 		trigger = {
 			nhs_has_fire_all_cases = yes
 			OR = {
-				has_country_modifier = nhs2_army_reform_byz
-				has_country_modifier = nhs2_army_reform_euro
-				has_country_modifier = nhs2_army_reform_no
+				has_country_modifier = to_ad_lessons_from_the_frontier
+				has_country_modifier = to_ad_reformed_theme_system
+				has_country_modifier = to_ad_foreign_advisors
 			}
 		}
 		highlight = yes
@@ -866,30 +1067,19 @@ country_event = {
 			custom_tooltip = nhs_bonuses_later_tooltip
 			tooltip = {
 				add_country_modifier = {
-					name = nhs2_fire_army_reform
+					name = to_ad_greek_fire
 					duration = -1
 				}
 			}
 		}
 		else = {
 			add_country_modifier = {
-				name = nhs2_fire_army_reform
-				duration = -1
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_noble_cataphracts
-				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
-			}
-			custom_tooltip = nhs_fire_nobles_tooltip
-			add_country_modifier = {
-				name = nhs2_disgruntled_nobles
+				name = to_ad_greek_fire
 				duration = -1
 			}
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 3650
 		}
 		set_country_flag = nhs_fire_reform
@@ -902,32 +1092,78 @@ country_event = {
 	
 	##### 3
 	
-	option = { ## Massed Pike and shot (quantity based)
+	option = { ## Pike and Shot
 		name = "nhs2_army_reforms.3.a"
 		trigger = {
 			OR = {
-				has_country_modifier = nhs2_army_reform_cavalry
-				has_country_modifier = nhs2_army_reform_xbow
-				has_country_modifier = nhs2_fire_army_reform2
+				has_country_modifier = to_ad_cataphract_army_core
+				has_country_modifier = to_ad_volley_fire
+				has_country_modifier = to_ad_volley_fire_nodlc
+				has_country_modifier = to_ad_greek_fire2
 			}
 		}
 		ai_chance = {
-			factor = 60
-			modifier = {
-				factor = 1.5
-				religion_group = christian
-			}
+			factor = 70
 		}
 		custom_tooltip = nhs2_army_reforms.3.t1
 		custom_tooltip = nhs_new_line_tt
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_army_reform_pas
+			name = to_ad_pike_and_shot
 			duration = -1
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 2555
+		}
+		clr_country_flag = nhs_fire_reform
+		hidden_effect = {
+			clr_country_flag = nhs_recent_a_reform
+			set_country_flag = nhs_recent_a_reform
+		}
+		nhs_reset_elysian_sprites = yes
+	}
+	option = { # Volley Fire
+		name = "nhs2_army_reforms.3.b"
+		trigger = {
+			OR = {
+				has_country_modifier = to_ad_pike_and_shot
+				has_country_modifier = to_ad_cataphract_army_core
+				has_country_modifier = to_ad_greek_fire2
+			}
+		}
+		ai_chance = {
+			factor = 30
+		}
+		custom_tooltip = nhs2_army_reforms.3.t2
+		custom_tooltip = nhs_new_line_tt
+		nhs_remove_reforms = yes
+		if = {
+			limit = {
+				has_dlc = "Cradle of Civilization"
+			}
+			custom_tooltip = to_add_ad_volley_fire_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = to_ad_volley_fire
+					duration = -1
+				}
+			}
+		}
+		else = {
+			custom_tooltip = to_add_ad_volley_fire_nodlc_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = to_ad_volley_fire_nodlc
+					duration = -1
+				}
+			}
+		}
+		custom_tooltip = to_penalty_above_max_fl_tt
+		custom_tooltip = nhs_new_line_tt
+		add_country_modifier = {
+			name = to_reforming_army
+			duration = 1825
 		}
 		clr_country_flag = nhs_fire_reform
 		hidden_effect = {
@@ -939,64 +1175,26 @@ country_event = {
 	option = { ## Cavalry (if picked cataprach modifier)
 		trigger = {
 			OR = {
-				has_country_modifier = nhs2_army_reform_pas
-				has_country_modifier = nhs2_army_reform_xbow
-				has_country_modifier = nhs2_fire_army_reform2
+				has_country_modifier = to_ad_pike_and_shot
+				has_country_modifier = to_ad_volley_fire
+				has_country_modifier = to_ad_volley_fire_nodlc
+				has_country_modifier = to_ad_greek_fire2
 			}
 		}
-		highlight = yes
-		name = "nhs2_army_reforms.3.b"
-		ai_chance = {
-			factor = 25
-			modifier = {
-				factor = 1.5
-				religion_group = pagan
-			}
-		}
-		custom_tooltip = nhs2_army_reforms.3.t2
-		custom_tooltip = nhs_new_line_tt
-		nhs_remove_reforms = yes
-		add_country_modifier = {
-			name = nhs2_army_reform_cavalry
-			duration = -1
-		}
-		add_country_modifier = {
-			name = nhs_reforming_army
-			duration = 2555
-		}
-		clr_country_flag = nhs_fire_reform
-		hidden_effect = {
-			clr_country_flag = nhs_recent_a_reform
-			set_country_flag = nhs_recent_a_reform
-		}
-		nhs_reset_elysian_sprites = yes
-	}
-	option = { ## Crossbow (Shock)
 		name = "nhs2_army_reforms.3.c"
-		trigger = {
-			OR = {
-				has_country_modifier = nhs2_army_reform_pas
-				has_country_modifier = nhs2_army_reform_cavalry
-				has_country_modifier = nhs2_fire_army_reform2
-			}
-		}
 		ai_chance = {
-			factor = 50
-			modifier = {
-				factor = 1.5
-				religion_group = pagan
-			}
+			factor = 0
 		}
 		custom_tooltip = nhs2_army_reforms.3.t3
 		custom_tooltip = nhs_new_line_tt
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_army_reform_xbow
+			name = to_ad_cataphract_army_core
 			duration = -1
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
-			duration = 1825
+			name = to_reforming_army
+			duration = 730
 		}
 		clr_country_flag = nhs_fire_reform
 		hidden_effect = {
@@ -1010,9 +1208,10 @@ country_event = {
 		trigger = {
 			nhs_has_fire_all_cases = yes
 			OR = {
-				has_country_modifier = nhs2_army_reform_pas
-				has_country_modifier = nhs2_army_reform_cavalry
-				has_country_modifier = nhs2_army_reform_xbow
+				has_country_modifier = to_ad_pike_and_shot
+				has_country_modifier = to_ad_cataphract_army_core
+				has_country_modifier = to_ad_volley_fire
+				has_country_modifier = to_ad_volley_fire_nodlc
 			}
 		}
 		highlight = yes
@@ -1032,30 +1231,19 @@ country_event = {
 			custom_tooltip = nhs_bonuses_later_tooltip
 			tooltip = {
 				add_country_modifier = {
-					name = nhs2_fire_army_reform2
+					name = to_ad_greek_fire2
 					duration = -1
 				}
 			}
 		}
 		else = {
 			add_country_modifier = {
-				name = nhs2_fire_army_reform2
-				duration = -1
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_noble_cataphracts
-				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
-			}
-			custom_tooltip = nhs_fire_nobles_tooltip
-			add_country_modifier = {
-				name = nhs2_disgruntled_nobles
+				name = to_ad_greek_fire2
 				duration = -1
 			}
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 3650
 		}
 		set_country_flag = nhs_fire_reform
@@ -1075,21 +1263,22 @@ country_event = {
 		}
 		trigger = {
 			OR = {
-				has_country_modifier = nhs2_amry_reform_nma
-				has_country_modifier = nhs2_amry_reform_ga
-				has_country_modifier = nhs2_fire_army_reform3
-				has_country_modifier = nhs2_army_reform_cavalry2
+				has_country_modifier = to_ad_professional_army
+				has_country_modifier = to_ad_professional_army_nodlc
+				has_country_modifier = to_ad_expeditionary_forces
+				has_country_modifier = to_ad_greek_fire3
+				has_country_modifier = to_ad_hussars_and_cataphracts
 			}
 		}
 		custom_tooltip = nhs2_army_reforms.4.t1
 		custom_tooltip = nhs_new_line_tt
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_amry_reform_mm
+			name = to_ad_administration_reform
 			duration = -1
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 1460
 		}
 		clr_country_flag = nhs_fire_reform
@@ -1103,10 +1292,10 @@ country_event = {
 		name = "nhs2_army_reforms.4.b"
 		trigger = {
 			OR = {
-				has_country_modifier = nhs2_amry_reform_mm
-				has_country_modifier = nhs2_amry_reform_ga
-				has_country_modifier = nhs2_fire_army_reform3
-				has_country_modifier = nhs2_army_reform_cavalry2
+				has_country_modifier = to_ad_administration_reform
+				has_country_modifier = to_ad_expeditionary_forces
+				has_country_modifier = to_ad_greek_fire3
+				has_country_modifier = to_ad_hussars_and_cataphracts
 			}
 		}
 		ai_chance = {
@@ -1115,12 +1304,70 @@ country_event = {
 		custom_tooltip = nhs2_army_reforms.4.t2
 		custom_tooltip = nhs_new_line_tt
 		nhs_remove_reforms = yes
-		add_country_modifier = {
-			name = nhs2_amry_reform_nma
-			duration = -1
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				is_at_war = yes
+			}
+			custom_tooltip = to_can_no_longer_recruit_normal_mercs_tt
+			custom_tooltip = to_keep_current_merc_companies_until_war_ends_tt
 		}
+		else = {
+			custom_tooltip = to_can_no_longer_recruit_normal_mercs_disband_tt
+		}
+		custom_tooltip = to_replace_mercenary_ideas_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					has_idea_group = mercenary_ideas
+				}
+				country_event = { id = nhs2_army_reforms.6 }
+			}
+			if = {
+				limit = {
+					is_at_war = no
+				}
+				while = {
+					limit = {
+						any_hired_mercenary_company = {
+							to_is_non_free_mercenary_company = yes
+						}
+					}
+					random_hired_mercenary_company = {
+						limit = {
+							to_is_non_free_mercenary_company = yes
+						}
+						disband_mercenary_company = THIS
+					}
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				has_dlc = "Cradle of Civilization"
+			}
+			custom_tooltip = to_add_ad_professional_army_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = to_ad_professional_army
+					duration = -1
+				}
+			}
+		}
+		else = {
+			custom_tooltip = to_add_ad_professional_army_nodlc_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = to_ad_professional_army_nodlc
+					duration = -1
+				}
+			}
+		}
+		custom_tooltip = to_penalty_above_max_fl_2_tt
+		custom_tooltip = nhs_new_line_tt
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 2920
 		}
 		clr_country_flag = nhs_fire_reform
@@ -1133,10 +1380,11 @@ country_event = {
 	option = { ## Global Army, something to do with easier transport and mobilisation
 		trigger = {
 			OR = {
-				has_country_modifier = nhs2_amry_reform_mm
-				has_country_modifier = nhs2_amry_reform_nma
-				has_country_modifier = nhs2_fire_army_reform3
-				has_country_modifier = nhs2_army_reform_cavalry2
+				has_country_modifier = to_ad_administration_reform
+				has_country_modifier = to_ad_professional_army
+				has_country_modifier = to_ad_professional_army_nodlc
+				has_country_modifier = to_ad_greek_fire3
+				has_country_modifier = to_ad_hussars_and_cataphracts
 			}
 		}
 		name = "nhs2_army_reforms.4.c"
@@ -1153,11 +1401,11 @@ country_event = {
 			custom_tooltip = nhs_no_proffesionalism_loss_for_mercs_tt
 		}
 		add_country_modifier = {
-			name = nhs2_amry_reform_ga
+			name = to_ad_expeditionary_forces
 			duration = -1
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 1825
 		}
 		clr_country_flag = nhs_fire_reform
@@ -1171,10 +1419,11 @@ country_event = {
 		name = "nhs2_army_reforms.4.f"
 		trigger = {
 			OR = {
-				has_country_modifier = nhs2_amry_reform_mm
-				has_country_modifier = nhs2_amry_reform_nma
-				has_country_modifier = nhs2_amry_reform_ga
-				has_country_modifier = nhs2_fire_army_reform3
+				has_country_modifier = to_ad_administration_reform
+				has_country_modifier = to_ad_professional_army
+				has_country_modifier = to_ad_professional_army_nodlc
+				has_country_modifier = to_ad_expeditionary_forces
+				has_country_modifier = to_ad_greek_fire3
 			}
 		}
 		ai_chance = {
@@ -1184,11 +1433,11 @@ country_event = {
 		custom_tooltip = nhs_new_line_tt
 		nhs_remove_reforms = yes
 		add_country_modifier = {
-			name = nhs2_army_reform_cavalry2
+			name = to_ad_hussars_and_cataphracts
 			duration = -1
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 1825
 		}
 		clr_country_flag = nhs_fire_reform
@@ -1199,10 +1448,11 @@ country_event = {
 		trigger = {
 			nhs_has_fire_all_cases = yes
 			OR = {
-				has_country_modifier = nhs2_amry_reform_mm
-				has_country_modifier = nhs2_amry_reform_nma
-				has_country_modifier = nhs2_amry_reform_ga
-				has_country_modifier = nhs2_army_reform_cavalry2
+				has_country_modifier = to_ad_administration_reform
+				has_country_modifier = to_ad_professional_army
+				has_country_modifier = to_ad_professional_army_nodlc
+				has_country_modifier = to_ad_expeditionary_forces
+				has_country_modifier = to_ad_hussars_and_cataphracts
 			}
 		}
 		highlight = yes
@@ -1222,30 +1472,19 @@ country_event = {
 			custom_tooltip = nhs_bonuses_later_tooltip
 			tooltip = {
 				add_country_modifier = {
-					name = nhs2_fire_army_reform3
+					name = to_ad_greek_fire3
 					duration = -1
 				}
 			}
 		}
 		else = {
 			add_country_modifier = {
-				name = nhs2_fire_army_reform3
-				duration = -1
-			}
-		}
-		if = {
-			limit = {
-				has_country_modifier = nhs_noble_cataphracts
-				NOT = { has_country_modifier = nhs2_disgruntled_nobles }
-			}
-			custom_tooltip = nhs_fire_nobles_tooltip
-			add_country_modifier = {
-				name = nhs2_disgruntled_nobles
+				name = to_ad_greek_fire3
 				duration = -1
 			}
 		}
 		add_country_modifier = {
-			name = nhs_reforming_army
+			name = to_reforming_army
 			duration = 3650
 		}
 		set_country_flag = nhs_fire_reform

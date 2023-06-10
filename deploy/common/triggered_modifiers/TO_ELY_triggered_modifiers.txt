@@ -785,33 +785,6 @@ to_hre_dominant_elysian_orthodox = {
 }
 
 ###########################################
-# FIRE AND REFORMS
-###########################################
-
-# nhs2_army_reform_no_at_war_modifier = {
-# 	potential = {
-# 		has_country_modifier = nhs2_army_reform_no
-# 	}
-# 	trigger = {
-# 		has_country_modifier = nhs2_army_reform_no
-# 		any_country = {
-# 			OR = {
-# 				technology_group = western
-# 				technology_group = eastern
-# 				technology_group = ottoman
-# 				technology_group = muslim
-# 			}
-# 			war_with = ROOT
-# 		}
-# 	}
-# 	fire_damage_received = 0.10
-# 	fire_damage = -0.1
-# 	discipline = -0.05
-# 	land_morale = -0.05
-# 	siege_ability = -0.33
-# }
-
-###########################################
 # SUBJECT MODIFIERS
 ###########################################
 
@@ -1102,4 +1075,76 @@ to_prince_bonus_5 = {
 		hre_size = 100
 	}
 	imperial_authority_value = 0.5
+}
+
+###########################################
+# ARMY REFORMS
+###########################################
+
+to_professional_army_expensive_mercs = {
+	potential = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		to_has_professional_army_reform = yes
+		any_hired_mercenary_company = {
+			to_is_non_free_mercenary_company = yes
+		}
+	}
+	trigger = {
+		if = {
+			limit = {
+				has_country_modifier = to_ad_professional_army
+			}
+			has_country_modifier = to_ad_professional_army
+		}
+		else = {
+			has_country_modifier = to_ad_professional_army_nodlc
+		}
+		custom_trigger_tooltip = {
+			tooltip = to_has_non_free_mercenary_company_tt
+			always = yes
+		}
+	}
+
+	merc_maintenance_modifier = 2
+	discipline = -0.05
+}
+
+to_over_forcelimit_penalty_volley_fire = {
+	potential = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		to_has_volley_fire_army_reform = yes
+	}
+	trigger = {
+		if = {
+			limit = {
+				has_country_modifier = to_ad_volley_fire
+			}
+			has_country_modifier = to_ad_volley_fire
+		}
+		else = {
+			has_country_modifier = to_ad_volley_fire_nodlc
+		}
+		to_above_max_forcelimit = yes
+	}
+	discipline = -0.10
+}
+
+to_over_forcelimit_penalty_professional_army = {
+	potential = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		to_has_professional_army_reform = yes
+	}
+	trigger = {
+		if = {
+			limit = {
+				has_country_modifier = to_ad_professional_army
+			}
+			has_country_modifier = to_ad_professional_army
+		}
+		else = {
+			has_country_modifier = to_ad_professional_army_nodlc
+		}
+		to_above_max_forcelimit = yes
+	}
+	discipline = -0.15
 }
