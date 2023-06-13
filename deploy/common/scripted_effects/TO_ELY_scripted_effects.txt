@@ -15079,12 +15079,26 @@ to_remove_naval_bateries_give_defensivness = {
 to_check_increase_devastation_upon_fort_capture = {
 	if = {
 		limit = {
-			has_government_attribute = to_increase_devastation_upon_fort_capture
+			has_reform = to_indiscriminate_greek_fire_use_reform
 			FROM = {
 				fort_level = 1
 				NOT = { has_province_modifier = to_devastated_by_greek_fire }
 				owner = {
 					war_with = ROOT
+				}
+			}
+			if = {
+				limit = {
+					has_country_flag = to_spared_greeks_from_fire_modifier
+				}
+				if = {
+					limit = {
+						has_country_flag = to_spared_albanians_from_fire_modifier
+					}
+					NOT = { to_eligible_for_spared_from_greek_fire_with_albanians = yes }
+				}
+				else = {
+					NOT = { to_eligible_for_spared_from_greek_fire_greeks = yes }
 				}
 			}
 		}
@@ -15264,6 +15278,167 @@ to_check_increase_devastation_upon_fort_capture = {
 								base_manpower = 1
 							}
 							add_base_manpower = -1
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+to_check_spared_from_greek_fire = {
+	if = {
+		limit = {
+			has_province_modifier = to_spared_from_greek_fire_tm
+		}
+		if = {
+			limit = {
+				OR = {
+					owner = {
+						NOT = {
+							nhs_check_all_elysian_tags = { CONDITION = war_with }
+						}
+					}
+					NOT = { to_eligible_for_spared_from_greek_fire = yes }
+					NOT = { fort_level = 1 }
+				}
+			}
+			remove_province_triggered_modifier = to_spared_from_greek_fire_tm
+		}
+	}
+	else_if = {
+		limit = {
+			to_eligible_for_spared_from_greek_fire = yes
+			fort_level = 1
+			owner = {
+				has_country_flag = to_got_spared_from_greek_fire_modifier
+			}
+		}
+		add_province_triggered_modifier = to_spared_from_greek_fire_tm
+	}
+}
+
+to_check_spared_from_greek_fire_on_fort_build = {
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = to_got_spared_from_greek_fire_modifier
+			}
+			NOT = { has_province_modifier = to_spared_from_greek_fire_tm }
+			to_eligible_for_spared_from_greek_fire = yes
+		}
+		add_province_triggered_modifier = to_spared_from_greek_fire_tm
+	}
+}
+
+to_check_spared_from_greek_fire_on_fort_destroyed = {
+	if = {
+		limit = {
+			has_province_modifier = to_spared_from_greek_fire_tm
+		}
+		remove_province_triggered_modifier = to_spared_from_greek_fire_tm
+	}
+}
+
+to_check_spared_from_greek_fire_on_war_ended = {
+	if = {
+		limit = {
+			has_country_flag = to_got_spared_from_greek_fire_modifier
+			NOT = {
+				any_war_enemy_country = {
+					nhs_check_all_elysian_tags = { CONDITION = tag }
+					has_reform = to_indiscriminate_greek_fire_use_reform
+				}
+			}
+		}
+		clr_country_flag = to_got_spared_from_greek_fire_modifier
+		every_owned_province = {
+			remove_province_triggered_modifier = to_spared_from_greek_fire_tm
+		}
+	}
+	FROM = {
+		if = {
+			limit = {
+				has_country_flag = to_got_spared_from_greek_fire_modifier
+				NOT = {
+					any_war_enemy_country = {
+						nhs_check_all_elysian_tags = { CONDITION = tag }
+						has_reform = to_indiscriminate_greek_fire_use_reform
+					}
+				}
+			}
+			clr_country_flag = to_got_spared_from_greek_fire_modifier
+			every_owned_province = {
+				remove_province_triggered_modifier = to_spared_from_greek_fire_tm
+			}
+		}
+	}
+}
+
+to_check_discouraged_recruits = {
+	if = {
+		limit = {
+			has_province_modifier = to_discouraged_recruits
+			OR = {
+				AND = {
+					NOT = { culture = shqiperi }
+					NOT = { culture = shqipproi }
+				}
+				# This part doesn't work properly if you release Albania as a vassal, since they don't become subject until getting all the provinces internally. So far I have no idea how to handle this.
+				owner = {
+					NOT = { has_or_overlord_has = { TRIGGER = "has_country_flag = to_used_greek_fire_on_greeks" } }
+				}
+			}
+		}
+		remove_province_modifier = to_discouraged_recruits
+	}
+}
+
+to_check_discouraged_recruits_dependancy_lost = {
+	if = {
+		limit = {
+			has_country_flag = to_used_greek_fire_on_greeks
+			NOT = { had_country_flag = {flag = to_used_greek_fire_on_greeks days = 10950 } }
+		}
+		FROM = {
+			every_owned_province = {
+				limit = {
+					has_province_modifier = to_discouraged_recruits
+				}
+				remove_province_modifier = to_discouraged_recruits
+				export_to_variable = {
+					which = to_base_manpower
+					value = trigger_value:base_manpower
+				}
+				while = {
+					limit = {
+						check_variable = {
+							which = to_base_manpower
+							value = 1
+						}
+					}
+					if = {
+						limit = {
+							check_variable = {
+								which = to_base_manpower
+								value = 5
+							}
+						}
+						subtract_variable = {
+							which = to_base_manpower
+							value = 5
+						}
+						owner = {
+							add_manpower = 1.25
+						}
+					}
+					else = {
+						subtract_variable = {
+							which = to_base_manpower
+							value = 1
+						}
+						owner = {
+							add_manpower = 0.25
 						}
 					}
 				}
