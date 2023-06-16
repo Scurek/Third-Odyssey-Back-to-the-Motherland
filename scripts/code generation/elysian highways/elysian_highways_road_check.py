@@ -176,7 +176,7 @@ for road in roads:
     f.write(f'and [{road["provinces"][-1]["id"]}.GetName] ')
     f.write(f'get \'§YElysian Highway§!\' modifier until the end of the game, giving the following effects:\\n')
     f.write(f' Local Development Cost: §G-10.0%§!\\n Local Trade Power: §G+1.00§!\\n Friendly Movement Speed: '
-            f'§G+25.0%§!\\n Hostile Movement Speed: §R+20.0%§!\"\n')
+            f'§G+25.0%§!\\n Hostile Movement Speed: §R+20.0%§!\\n Local Institution Spread: §G+10.0%§!\"\n')
 f.close()
 
 template_decisions = Template('''{%- for road in roads %}
