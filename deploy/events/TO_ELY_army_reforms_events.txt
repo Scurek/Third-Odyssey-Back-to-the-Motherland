@@ -15,10 +15,23 @@ country_event = {
 
 	trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
-		is_year = 1448
+		is_year = 1452
 		OR = {
 			num_of_cities = 5
-			is_year = 1450
+			is_year = 1455
+		}
+		if = {
+			limit = {
+				OR = {
+					has_dlc = "Cradle of Civilization"
+					has_dlc = "Domination"
+				}
+				has_country_flag = nhs_new_flight_taken_turks
+			}
+			had_country_flag = {
+				flag = to_had_janissary_events_2
+				days = 120
+			}
 		}
 		NOT = { has_global_flag = nhs_europe_discovered }
 		NOT = { has_country_flag = nhs_first_a_reform }
@@ -79,6 +92,7 @@ country_event = {
 		clr_country_flag = nhs_fire_reform
 		
 	}
+
 	option = {
 		name = "nhs2_army_reforms.1.b"
 		ai_chance = {
@@ -113,6 +127,14 @@ country_event = {
 				tooltip = nhs_has_taken_turks_tt
 				has_country_flag = nhs_new_flight_taken_turks
 			}
+			hidden_trigger = {
+				NOT = {
+					OR = {
+						has_dlc = "Cradle of Civilization"
+						has_dlc = "Domination"
+					}
+				}
+			}
 		}
 		highlight = yes
 		ai_chance = {
@@ -141,6 +163,34 @@ country_event = {
 		}
 		clr_country_flag = nhs_fire_reform
 	}
+
+	option = {
+		name = "nhs2_army_reforms.1.e"
+		trigger = {
+			has_country_modifier = to_orhan_janissaries
+		}
+		highlight = yes
+		ai_chance = {
+			factor = 300
+		}
+		custom_tooltip = nhs2_army_reforms.1.t4
+		custom_tooltip = nhs_new_line_tt
+		add_country_modifier = {
+			name = to_ad_encourage_janissaries
+			duration = -1
+			desc = to_until_a_new_age_mission_tt
+		}
+		add_country_modifier = {
+			name = to_ad_janissary_core
+			duration = -1
+			desc = to_until_a_new_age_mission_tt
+		}
+		add_country_modifier = {
+			name = to_reforming_army
+			duration = 730
+		}
+		clr_country_flag = nhs_fire_reform
+	}
 }
 
 # 2nd army reform
@@ -166,6 +216,21 @@ country_event = {
 			clr_country_flag = nhs_fourth_a_reform
 			clr_country_flag = nhs_recent_a_reform
 			set_country_flag = nhs_recent_a_reform
+		}
+	}
+
+	after = {
+		if = {
+			limit = {
+				has_country_flag = nhs_new_flight_taken_turks
+				NOT = {
+					OR = {
+						has_dlc = "Cradle of Civilization"
+						has_dlc = "Domination"
+					}
+				}
+			}
+			country_event = { id = to_janissary_events.3 }
 		}
 	}
 

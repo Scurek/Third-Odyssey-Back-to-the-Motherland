@@ -19,6 +19,10 @@ country_event = {
 		}
 	}
 
+	after = {
+		set_country_flag = to_had_janissary_events_1
+	}
+
 	option = {
 		name = "to_janissary_events.1.a"
 		define_conquistador = {
@@ -92,21 +96,25 @@ country_event = {
 				is_colony = yes
 				colonysize = 400
 			}
-			if = {
-				limit = {
-					OR = {
-						has_dlc = "Cradle of Civilization"
-						has_dlc = "Domination"
-					}
+			add_colonysize = 400
+			add_base_manpower = 2
+		}
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				OR = {
+					has_dlc = "Cradle of Civilization"
+					has_dlc = "Domination"
 				}
-				custom_tooltip = to_spawn_janissary_regiments_tt
-				hidden_effect = {
+			}
+			custom_tooltip = to_spawn_janissary_regiments_capital_tt
+			hidden_effect = {
+				capital_scope = {
 					janissary_infantry = ROOT
 					janissary_infantry = ROOT
 				}
 			}
-			add_colonysize = 400
-			add_base_manpower = 2
+			custom_tooltip = nhs_new_line_tt
 		}
 		every_province = {
 			limit = {
@@ -119,5 +127,110 @@ country_event = {
 			change_native_ferocity = -10
 			change_native_hostileness = -10
 		}
+	}
+}
+
+# Orhanns Janissaries
+country_event = {
+    id = to_janissary_events.2
+    title = to_janissary_events.2.t
+    desc = to_janissary_events.2.d
+    picture = imported_PASHAS_eventPicture
+
+    fire_only_once = yes
+    
+    trigger = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+        is_year = 1447
+        is_month = 5
+        had_country_flag = {
+            flag = to_had_janissary_events_1
+            days = 90
+        }
+        OR = {
+            has_dlc = "Cradle of Civilization"
+            has_dlc = "Domination"
+        }
+    }
+
+	immediate = {
+		clr_country_flag = to_had_janissary_events_1
+	}
+
+	after = {
+		clr_country_flag = to_had_janissary_events_2
+	}
+
+    option = {
+        name = "to_janissary_events.2.a"
+		add_legitimacy = -10
+        add_country_modifier = {
+            name = to_orhan_janissaries
+            duration = -1
+        }
+    }
+    
+    option = {
+        name = "to_janissary_events.2.b"
+        add_army_tradition = 10
+        add_mil_power = 50
+    }
+}
+
+# Prinkipes (Mercenaries)
+country_event = {
+	id = to_janissary_events.3
+	title = to_janissary_events.3.t
+	desc = {
+		trigger = {
+			has_country_flag = to_had_orhans_jannisaries_ad
+		}
+		desc = to_janissary_events.3.da
+	}
+	desc = {
+		desc = to_janissary_events.3.db
+	}
+	picture = imported_JANISSARIES_IN_FORMATION_eventPicture
+
+	is_triggered_only = yes
+
+	after = {
+		clr_country_flag = to_had_orhans_jannisaries_ad
+	}
+
+	option = {
+		name = "to_janissary_events.3.aa"
+		trigger = {
+			has_country_flag = to_had_orhans_jannisaries_ad
+		}
+		add_legitimacy = -10
+		set_country_flag = to_established_prinkipes
+		custom_tooltip = to_enables_prinkipes_mercs_tt
+		custom_tooltip = nhs_new_line_tt
+		add_country_modifier = {
+			name = to_prinkipe_recruitment
+			duration = -1
+		}
+	}
+
+	option = {
+		name = "to_janissary_events.3.ab"
+		trigger = {
+			NOT = { has_country_flag = to_had_orhans_jannisaries_ad }
+		}
+		add_legitimacy = -10
+		set_country_flag = to_established_prinkipes
+		custom_tooltip = to_enables_prinkipes_mercs_tt
+		custom_tooltip = nhs_new_line_tt
+		add_country_modifier = {
+			name = to_prinkipe_recruitment
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = "to_janissary_events.3.b"
+		add_manpower = 5
+		add_mil_power = 50
 	}
 }
