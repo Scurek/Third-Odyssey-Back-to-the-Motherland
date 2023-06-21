@@ -378,12 +378,7 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		set_country_flag = to_janissary_laws_menu_open
-	}
-
-	after = {
-		clr_country_flag = to_janissary_laws_menu_open
-		country_event = { id = to_janissary_events.5 }
+		to_on_janissary_law_open = yes
 	}
 
 	# Enact child levy
@@ -392,19 +387,9 @@ country_event = {
 		trigger = {
 			NOT = { has_country_modifier = to_janissary_child_levy }
 		}
-		custom_tooltip = to_child_levy_flavor_tt
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = to_child_levy_enact_tt
+		to_consider_child_levy = yes
 
-		hidden_effect = {
-			add_country_modifier = {
-				name = to_janissary_child_levy
-				duration = -1
-				hidden = yes
-			}
-		}
-
-		to_add_janissary_law_cooldown = yes
+		to_switch_janissary_law_event = yes
 	}
 
 	# End the child levy
@@ -413,57 +398,25 @@ country_event = {
 		trigger = {
 			has_country_modifier = to_janissary_child_levy
 		}
-		custom_tooltip = to_child_levy_flavor_tt
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = to_child_levy_revoke_tt
-		hidden_effect = {
-			remove_country_modifier = to_janissary_child_levy
-		}
-
-		if = {
-			limit = {
-				has_country_modifier = to_janissary_from_true_faith
-			}
-			custom_tooltip = nhs_new_line_tt
-			custom_tooltip = to_from_subjects_revoke_tt
-			hidden_effect = {
-				remove_country_modifier = to_janissaries_from_true_faith
-			}
-		}
-
-		if = {
-			limit = {
-				has_country_modifier = to_janissary_from_true_faith
-			}
-			custom_tooltip = nhs_new_line_tt
-			custom_tooltip = to_from_true_faith_revoke_tt
-			hidden_effect = {
-				clr_country_flag = to_janissary_from_subjects
-			}
-		}
+		to_consider_revoke_child_levy = yes
 		
-		to_add_janissary_law_cooldown = yes
+		to_switch_janissary_law_event = yes
 	}
 
 	# Draft the Faithful
 	option = {
 		name = "to_janissary_events.5.ba"
 		trigger = {
-			has_country_modifier = to_janissary_child_levy
-			NOT = { has_country_modifier = to_janissaries_from_true_faith }
-		}
-		custom_tooltip = to_from_true_faith_flavor_tt
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = to_from_true_faith_enact_tt
-		hidden_effect = {
-			add_country_modifier = {
-				name = to_janissaries_from_true_faith
-				duration = -1
-				hidden = yes
+			OR = {
+				has_country_modifier = to_janissary_child_levy
+				has_country_flag = to_consider_child_levy
 			}
+			NOT = { has_country_modifier = to_janissaries_from_true_faith }
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
 		}
+		to_consider_from_true_faith = yes
 
-		to_add_janissary_law_cooldown = yes
+		to_switch_janissary_law_event = yes
 	}
 
 	# End the Draft of the Faithful
@@ -471,24 +424,23 @@ country_event = {
 		name = "to_janissary_events.5.bb"
 		trigger = {
 			has_country_modifier = to_janissaries_from_true_faith
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
 		}
+		to_consider_revoke_from_true_faith = yes
 
-		custom_tooltip = to_from_true_faith_flavor_tt
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = to_from_true_faith_revoke_tt
-		hidden_effect = {
-			remove_country_modifier = to_janissaries_from_true_faith
-		}
-
-		to_add_janissary_law_cooldown = yes
+		to_switch_janissary_law_event = yes
 	}
 
 	# Constript from Subjects
 	option = {
 		name = "to_janissary_events.5.ca"
 		trigger = {
-			has_country_modifier = to_janissary_child_levy
+			OR = {
+				has_country_modifier = to_janissary_child_levy
+				has_country_flag = to_consider_child_levy
+			}
 			NOT = { has_country_flag = to_janissary_from_subjects }
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
 		}
 
 		custom_tooltip = to_from_subjects_flavor_tt
@@ -498,7 +450,7 @@ country_event = {
 			set_country_flag = to_janissary_from_subjects
 		}
 
-		to_add_janissary_law_cooldown = yes
+		to_switch_janissary_law_event = yes
 	}
 
 	# End Constription from Subjects
@@ -506,6 +458,7 @@ country_event = {
 		name = "to_janissary_events.5.cb"
 		trigger = {
 			has_country_flag = to_janissary_from_subjects
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
 		}
 
 		custom_tooltip = to_from_subjects_flavor_tt
@@ -515,7 +468,7 @@ country_event = {
 			clr_country_flag = to_janissary_from_subjects
 		}
 		
-		to_add_janissary_law_cooldown = yes
+		to_switch_janissary_law_event = yes
 	}
 
 	# Open Recruitment
@@ -525,18 +478,9 @@ country_event = {
 			NOT = { has_country_modifier = to_janissary_open_recruitment }
 		}
 
-		custom_tooltip = to_open_recruitment_flavor_tt
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = to_open_recruitment_enact_tt
-		hidden_effect = {
-			add_country_modifier = {
-				name = to_janissary_open_recruitment
-				duration = -1
-				hidden = yes
-			}
-		}
+		to_consider_open_recruitment = yes
 
-		to_add_janissary_law_cooldown = yes
+		to_switch_janissary_law_event = yes
 	}
 
 	# Restrict Recruitment
@@ -545,14 +489,10 @@ country_event = {
 		trigger = {
 			has_country_modifier = to_janissary_open_recruitment
 		}
-		custom_tooltip = to_open_recruitment_flavor_tt
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = to_open_recruitment_revoke_tt
-		hidden_effect = {
-			remove_country_modifier = to_janissary_open_recruitment
-		}
+
+		to_consider_revoke_open_recruitment = yes
 		
-		to_add_janissary_law_cooldown = yes
+		to_switch_janissary_law_event = yes
 	}
 
 	# Increase Compensation
@@ -562,24 +502,9 @@ country_event = {
 			NOT = { has_country_modifier = to_janissary_increase_compensation }
 		}
 
-		custom_tooltip = to_increase_compensation_flavor_tt
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = to_increase_compensation_enact_tt
-		hidden_effect = {
-			add_country_modifier = {
-				name = to_janissary_increase_compensation
-				duration = -1
-				hidden = yes
-			}
-			add_country_modifier = {
-				name = to_janissary_increase_compensation_regiments
-				duration = -1
-				hidden = yes
-			}
-		}
+		to_consider_increase_compensation = yes
 
-		set_country_flag = to_janissary_increase_compensation
-		to_add_janissary_law_cooldown = yes
+		to_switch_janissary_law_event = yes
 	}
 
 	# Reduce Compensation
@@ -589,19 +514,205 @@ country_event = {
 			has_country_modifier = to_janissary_increase_compensation
 		}
 
-		custom_tooltip = to_increase_compensation_flavor_tt
-		custom_tooltip = nhs_new_line_tt
-		custom_tooltip = to_increase_compensation_revoke_tt
-		hidden_effect = {
-			remove_country_modifier = to_janissary_increase_compensation
-			remove_country_modifier = to_janissary_increase_compensation_regiments
-		}
+		to_consider_revoke_increase_compensation = yes
 		
-		to_add_janissary_law_cooldown = yes
+		to_switch_janissary_law_event = yes
+	}
+
+	# Revise Laws
+	option = {
+		name = "to_janissary_events.5.f"
+		highlight = yes
+		trigger = {
+			hidden_trigger = {
+				to_is_considering_janissary_law = yes
+			}
+		}
+
+		to_enact_janissary_law_changes = yes
+		clr_country_flag = to_janissary_laws_menu_open
 	}
 
 	# Exit
 	option = {
+		name = "to_janissary_events.5.g"
+		trigger = {
+			NOT = { to_is_considering_janissary_law = yes }
+		}
+		clr_country_flag = to_janissary_laws_menu_open
+	}
+}
+
+# Janissaries Laws 2
+country_event = {
+	id = to_janissary_events.6
+	title = to_janissary_events.5.t
+	desc = to_janissary_events.5.d
+	picture = BIG_BOOK_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	# Enact child levy
+	option = {
+		name = "to_janissary_events.5.aa"
+		trigger = {
+			NOT = { has_country_modifier = to_janissary_child_levy }
+		}
+		to_consider_child_levy = yes
+
+		to_switch_janissary_law_event_2 = yes
+	}
+
+	# End the child levy
+	option = {
+		name = "to_janissary_events.5.ab"
+		trigger = {
+			has_country_modifier = to_janissary_child_levy
+		}
+		to_consider_revoke_child_levy = yes
+		
+		to_switch_janissary_law_event_2 = yes
+	}
+
+	# Draft the Faithful
+	option = {
+		name = "to_janissary_events.5.ba"
+		trigger = {
+			OR = {
+				has_country_modifier = to_janissary_child_levy
+				has_country_flag = to_consider_child_levy
+			}
+			NOT = { has_country_modifier = to_janissaries_from_true_faith }
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
+		}
+		to_consider_from_true_faith = yes
+
+		to_switch_janissary_law_event_2 = yes
+	}
+
+	# End the Draft of the Faithful
+	option = {
+		name = "to_janissary_events.5.bb"
+		trigger = {
+			has_country_modifier = to_janissaries_from_true_faith
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
+		}
+		to_consider_revoke_from_true_faith = yes
+
+		to_switch_janissary_law_event_2 = yes
+	}
+
+	# Constript from Subjects
+	option = {
+		name = "to_janissary_events.5.ca"
+		trigger = {
+			OR = {
+				has_country_modifier = to_janissary_child_levy
+				has_country_flag = to_consider_child_levy
+			}
+			NOT = { has_country_flag = to_janissary_from_subjects }
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
+		}
+
+		custom_tooltip = to_from_subjects_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_from_subjects_enact_tt
+		hidden_effect = {
+			set_country_flag = to_janissary_from_subjects
+		}
+
+		to_switch_janissary_law_event_2 = yes
+	}
+
+	# End Constription from Subjects
+	option = {
+		name = "to_janissary_events.5.cb"
+		trigger = {
+			has_country_flag = to_janissary_from_subjects
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
+		}
+
+		custom_tooltip = to_from_subjects_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_from_subjects_revoke_tt
+		hidden_effect = {
+			clr_country_flag = to_janissary_from_subjects
+		}
+		
+		to_switch_janissary_law_event_2 = yes
+	}
+
+	# Open Recruitment
+	option = {
+		name = "to_janissary_events.5.da"
+		trigger = {
+			NOT = { has_country_modifier = to_janissary_open_recruitment }
+		}
+
+		to_consider_open_recruitment = yes
+
+		to_switch_janissary_law_event_2 = yes
+	}
+
+	# Restrict Recruitment
+	option = {
+		name = "to_janissary_events.5.db"
+		trigger = {
+			has_country_modifier = to_janissary_open_recruitment
+		}
+
+		to_consider_revoke_open_recruitment = yes
+		
+		to_switch_janissary_law_event_2 = yes
+	}
+
+	# Increase Compensation
+	option = {
+		name = "to_janissary_events.5.ea"
+		trigger = {
+			NOT = { has_country_modifier = to_janissary_increase_compensation }
+		}
+
+		to_consider_increase_compensation = yes
+
+		to_switch_janissary_law_event_2 = yes
+	}
+
+	# Reduce Compensation
+	option = {
+		name = "to_janissary_events.5.eb"
+		trigger = {
+			has_country_modifier = to_janissary_increase_compensation
+		}
+
+		to_consider_revoke_increase_compensation = yes
+		
+		to_switch_janissary_law_event_2 = yes
+	}
+
+	# Revise Laws
+	option = {
 		name = "to_janissary_events.5.f"
+		highlight = yes
+		trigger = {
+			hidden_trigger = {
+				to_is_considering_janissary_law = yes
+			}
+		}
+
+		to_enact_janissary_law_changes = yes
+		clr_country_flag = to_janissary_laws_menu_open
+	}
+
+	# Exit
+	option = {
+		name = "to_janissary_events.5.g"
+		trigger = {
+			NOT = { to_is_considering_janissary_law = yes }
+		}
+		clr_country_flag = to_janissary_laws_menu_open
 	}
 }
