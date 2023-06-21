@@ -168,6 +168,15 @@ country_event = {
             name = to_orhan_janissaries
             duration = -1
         }
+		custom_tooltip = to_enable_janissary_mechanic_tt
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_janissary_child_levy
+				duration = -1
+				hidden = yes
+			}
+			to_roman_janissaries_maintenance = {}
+		}
     }
     
     option = {
@@ -232,5 +241,367 @@ country_event = {
 		name = "to_janissary_events.3.b"
 		add_manpower = 5
 		add_mil_power = 50
+	}
+}
+
+# Janissaries Recruitment Menu
+country_event = {
+	id = to_janissary_events.4
+	title = to_janissary_events.4.t
+	desc = to_janissary_events.4.d
+	picture = imported_JANISSARIES_IN_FORMATION_eventPicture
+
+	goto = to_janissary_recruitment_province
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = to_janissary_recruitment_menu_open
+		hidden_effect = {
+			if = {
+				limit = {
+					capital_scope = {
+						controlled_by = ROOT
+					}
+				}
+				capital_scope = {
+					save_event_target_as = to_janissary_recruitment_province
+				}
+			}
+			else_if = {
+				limit = {
+					capital_scope = {
+						area_for_scope_province = {
+							controlled_by = ROOT
+						}
+					}
+				}
+				capital_scope = {
+					save_event_target_as = to_janissary_recruitment_province
+				}
+			}
+			else = {
+				capital_scope = {
+					save_event_target_as = to_janissary_recruitment_province
+				}
+			}
+		}
+	}
+
+	after = {
+		clr_country_flag = to_janissary_recruitment_menu_open
+		country_event = { id = to_janissary_events.4 }
+	}
+
+	option = {
+		name = "to_janissary_events.4.a"
+		trigger = {
+			capital_scope = {
+				area_for_scope_province = {
+					controlled_by = ROOT
+				}
+			}
+		}
+		if = {
+			limit = {
+				capital_scope = {
+					controlled_by = ROOT
+				}
+			}
+			capital_scope = {
+				janissary_infantry = ROOT
+			}
+		}
+		else_if = {
+			limit = {
+				event_target:to_janissary_recruitment_province = {
+					controlled_by = ROOT
+				}
+			}
+			capital_scope = {
+				janissary_infantry = ROOT
+			}
+		}
+		else_if = {
+			limit = {
+				capital_scope = {
+					area_for_scope_province = {
+						controlled_by = ROOT
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					controlled_by = ROOT
+					area_for_scope_province = {
+						is_capital_of = ROOT
+					}
+				}
+				janissary_infantry = ROOT
+			}
+		}
+		else = {
+			capital_scope = {
+				janissary_infantry = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = "to_janissary_events.3.ab"
+		trigger = {
+			NOT = { has_country_flag = to_had_orhans_jannisaries_ad }
+		}
+		
+	}
+
+	option = {
+		name = "to_janissary_events.3.ab"
+		trigger = {
+			NOT = { has_country_flag = to_had_orhans_jannisaries_ad }
+		}
+		
+	}
+	
+	option = {
+		name = "to_janissary_events.3.b"
+	}
+}
+
+# Janissaries Laws
+country_event = {
+	id = to_janissary_events.5
+	title = to_janissary_events.5.t
+	desc = to_janissary_events.5.d
+	picture = BIG_BOOK_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = to_janissary_laws_menu_open
+	}
+
+	after = {
+		clr_country_flag = to_janissary_laws_menu_open
+		country_event = { id = to_janissary_events.5 }
+	}
+
+	# Enact child levy
+	option = {
+		name = "to_janissary_events.5.aa"
+		trigger = {
+			NOT = { has_country_modifier = to_janissary_child_levy }
+		}
+		custom_tooltip = to_child_levy_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_child_levy_enact_tt
+
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_janissary_child_levy
+				duration = -1
+				hidden = yes
+			}
+		}
+
+		to_add_janissary_law_cooldown = yes
+	}
+
+	# End the child levy
+	option = {
+		name = "to_janissary_events.5.ab"
+		trigger = {
+			has_country_modifier = to_janissary_child_levy
+		}
+		custom_tooltip = to_child_levy_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_child_levy_revoke_tt
+		hidden_effect = {
+			remove_country_modifier = to_janissary_child_levy
+		}
+
+		if = {
+			limit = {
+				has_country_modifier = to_janissary_from_true_faith
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_from_subjects_revoke_tt
+			hidden_effect = {
+				remove_country_modifier = to_janissaries_from_true_faith
+			}
+		}
+
+		if = {
+			limit = {
+				has_country_modifier = to_janissary_from_true_faith
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_from_true_faith_revoke_tt
+			hidden_effect = {
+				clr_country_flag = to_janissary_from_subjects
+			}
+		}
+		
+		to_add_janissary_law_cooldown = yes
+	}
+
+	# Draft the Faithful
+	option = {
+		name = "to_janissary_events.5.ba"
+		trigger = {
+			has_country_modifier = to_janissary_child_levy
+			NOT = { has_country_modifier = to_janissaries_from_true_faith }
+		}
+		custom_tooltip = to_from_true_faith_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_from_true_faith_enact_tt
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_janissaries_from_true_faith
+				duration = -1
+				hidden = yes
+			}
+		}
+
+		to_add_janissary_law_cooldown = yes
+	}
+
+	# End the Draft of the Faithful
+	option = {
+		name = "to_janissary_events.5.bb"
+		trigger = {
+			has_country_modifier = to_janissaries_from_true_faith
+		}
+
+		custom_tooltip = to_from_true_faith_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_from_true_faith_revoke_tt
+		hidden_effect = {
+			remove_country_modifier = to_janissaries_from_true_faith
+		}
+
+		to_add_janissary_law_cooldown = yes
+	}
+
+	# Constript from Subjects
+	option = {
+		name = "to_janissary_events.5.ca"
+		trigger = {
+			has_country_modifier = to_janissary_child_levy
+			NOT = { has_country_flag = to_janissary_from_subjects }
+		}
+
+		custom_tooltip = to_from_subjects_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_from_subjects_enact_tt
+		hidden_effect = {
+			set_country_flag = to_janissary_from_subjects
+		}
+
+		to_add_janissary_law_cooldown = yes
+	}
+
+	# End Constription from Subjects
+	option = {
+		name = "to_janissary_events.5.cb"
+		trigger = {
+			has_country_flag = to_janissary_from_subjects
+		}
+
+		custom_tooltip = to_from_subjects_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_from_subjects_revoke_tt
+		hidden_effect = {
+			clr_country_flag = to_janissary_from_subjects
+		}
+		
+		to_add_janissary_law_cooldown = yes
+	}
+
+	# Open Recruitment
+	option = {
+		name = "to_janissary_events.5.da"
+		trigger = {
+			NOT = { has_country_modifier = to_janissary_open_recruitment }
+		}
+
+		custom_tooltip = to_open_recruitment_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_open_recruitment_enact_tt
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_janissary_open_recruitment
+				duration = -1
+				hidden = yes
+			}
+		}
+
+		to_add_janissary_law_cooldown = yes
+	}
+
+	# Restrict Recruitment
+	option = {
+		name = "to_janissary_events.5.db"
+		trigger = {
+			has_country_modifier = to_janissary_open_recruitment
+		}
+		custom_tooltip = to_open_recruitment_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_open_recruitment_revoke_tt
+		hidden_effect = {
+			remove_country_modifier = to_janissary_open_recruitment
+		}
+		
+		to_add_janissary_law_cooldown = yes
+	}
+
+	# Increase Compensation
+	option = {
+		name = "to_janissary_events.5.ea"
+		trigger = {
+			NOT = { has_country_modifier = to_janissary_increase_compensation }
+		}
+
+		custom_tooltip = to_increase_compensation_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_increase_compensation_enact_tt
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_janissary_increase_compensation
+				duration = -1
+				hidden = yes
+			}
+			add_country_modifier = {
+				name = to_janissary_increase_compensation_regiments
+				duration = -1
+				hidden = yes
+			}
+		}
+
+		set_country_flag = to_janissary_increase_compensation
+		to_add_janissary_law_cooldown = yes
+	}
+
+	# Reduce Compensation
+	option = {
+		name = "to_janissary_events.5.eb"
+		trigger = {
+			has_country_modifier = to_janissary_increase_compensation
+		}
+
+		custom_tooltip = to_increase_compensation_flavor_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_increase_compensation_revoke_tt
+		hidden_effect = {
+			remove_country_modifier = to_janissary_increase_compensation
+			remove_country_modifier = to_janissary_increase_compensation_regiments
+		}
+		
+		to_add_janissary_law_cooldown = yes
+	}
+
+	# Exit
+	option = {
+		name = "to_janissary_events.5.f"
 	}
 }
