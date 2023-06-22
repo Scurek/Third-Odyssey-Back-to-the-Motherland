@@ -95,21 +95,85 @@ to_roman_janissary_mechanic = {
 		}
 		
 		to_harsh_recruitment = {
-			icon = GFX_to_janissary_harsh_recruitment
+			icon = GFX_to_recruit_janissaries_multiple
 			trigger = {
-			}
-			effect = {
-				add_mil_power = -25
-				custom_tooltip = nhs_new_line_tt
-				custom_tooltip = to_janissary_harsh_recruitment_tt
-				hidden_effect = {
-					add_country_modifier = {
-						name = to_janissary_harsh_recruitment
-						duration = 7300
+				custom_trigger_tooltip = {
+					tooltip = to_janissary_reserve_for_five_regiments_tt
+					has_government_power = {
+						mechanic_type = to_roman_janissary_mechanic
+						power_type = to_janissary_regiments
+						value = 5
+					}
+				}
+				capital_scope = {
+					area_for_scope_province = {
+						controlled_by = ROOT
 					}
 				}
 			}
-			cooldown_years = 20
+			effect = {
+				add_mil_power = -15
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = -5
+				}
+				if = {
+					limit = {
+						capital_scope = {
+							controlled_by = ROOT
+						}
+					}
+					capital_scope = {
+						custom_tooltip = to_get_5_janissary_regiments_tt
+						hidden_effect = {
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						capital_scope = {
+							area_for_scope_province = {
+								controlled_by = ROOT
+							}
+						}
+					}
+					random_owned_province = {
+						limit = {
+							controlled_by = ROOT
+							area_for_scope_province = {
+								is_capital_of = ROOT
+							}
+						}
+						custom_tooltip = to_get_5_janissary_regiments_tt
+						hidden_effect = {
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+						}
+					}
+				}
+				else = {
+					capital_scope = {
+						custom_tooltip = to_get_5_janissary_regiments_tt
+						hidden_effect = {
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+							janissary_infantry = ROOT
+						}
+					}
+				}
+			}
+			cooldown_years = 0
 		}
 
 		to_roman_janissary_laws = {
@@ -117,6 +181,9 @@ to_roman_janissary_mechanic = {
 			trigger = {
 				NOT = {
 					has_country_modifier = to_recent_janissary_law
+				}
+				hidden_trigger = {
+					NOT = { has_country_flag = to_janissary_laws_menu_open }
 				}
 			}
 			effect = {

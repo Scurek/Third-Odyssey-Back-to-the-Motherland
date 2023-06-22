@@ -15606,37 +15606,45 @@ to_roman_janissaries_maintenance = {
 				has_country_modifier = to_janissary_harsh_recruitment
 			}
 			set_variable = {
-				which = to_janissary_regiments_harsh_recruitment
+				which = to_janissary_regiments_recruitment_quotas
 				which = to_janissary_regiments_child_levy
 			}
+			multiply_variable = {
+				which = to_janissary_regiments_recruitment_quotas
+				value = 1.50
+			}
+			change_variable = {
+				which = to_janissary_regiments_change
+				which = to_janissary_regiments_recruitment_quotas
+			}
+			subtract_variable = {
+				which = to_janissary_regiments_recruitment_quotas
+				which = to_janissary_regiments_child_levy
+			}
+			
 			if = {
 				limit = {
 					has_country_modifier = to_janissaries_from_true_faith
 				}
 				change_variable = {
-					which = to_janissary_regiments_harsh_recruitment
+					which = to_janissary_regiments_recruitment_quotas_from_true_faith
 					which = to_janissaries_from_true_faith
 				}
-			}
-			multiply_variable = {
-				which = to_janissary_regiments_harsh_recruitment
-				value = 1.25
-			}
-			change_variable = {
-				which = to_janissary_regiments_change
-				which = to_janissary_regiments_harsh_recruitment
-			}
-			subtract_variable = {
-				which = to_janissary_regiments_harsh_recruitment
-				which = to_janissary_regiments_child_levy
-			}
-			if = {
-				limit = {
-					has_country_modifier = to_janissaries_from_true_faith
+				multiply_variable = {
+					which = to_janissary_regiments_recruitment_quotas_from_true_faith
+					value = 1.25
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					which = to_janissary_regiments_recruitment_quotas_from_true_faith
 				}
 				subtract_variable = {
-					which = to_janissary_regiments_harsh_recruitment
+					which = to_janissary_regiments_recruitment_quotas_from_true_faith
 					which = to_janissaries_from_true_faith
+				}
+				change_variable = {
+					which = to_janissary_regiments_recruitment_quotas
+					which = to_janissary_regiments_recruitment_quotas_from_true_faith
 				}
 			}
 		}
@@ -16135,6 +16143,42 @@ to_consider_revoke_from_true_faith = {
 	}
 }
 
+to_consider_recruitment_quotas = {
+	custom_tooltip = to_recruitment_quotas_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_recruitment_quotas_enact_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_recruitment_quotas_gain_tt
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_recruitment_quotas
+		}
+		clr_country_flag = to_consider_recruitment_quotas
+	}
+	else = {
+		set_country_flag = to_consider_recruitment_quotas
+	}
+}
+
+to_consider_revoke_recruitment_quotas = {
+	custom_tooltip = to_recruitment_quotas_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_recruitment_quotas_revoke_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_recruitment_quotas_loss_tt
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_revoke_recruitment_quotas
+		}
+		clr_country_flag = to_consider_revoke_recruitment_quotas
+	}
+	else = {
+		set_country_flag = to_consider_revoke_recruitment_quotas
+	}
+}
+
 to_consider_open_recruitment = {
 	custom_tooltip = to_open_recruitment_flavor_tt
 	custom_tooltip = nhs_new_line_tt
@@ -16208,7 +16252,6 @@ to_enact_janissary_law_changes = {
 		limit = {
 			has_country_flag = to_consider_child_levy
 		}
-		clr_country_flag = to_consider_child_levy
 		hidden_effect = {
 			add_country_modifier = {
 				name = to_janissary_child_levy
@@ -16223,7 +16266,6 @@ to_enact_janissary_law_changes = {
 		limit = {
 			has_country_flag = to_consider_revoke_child_levy
 		}
-		clr_country_flag = to_consider_revoke_child_levy
 		hidden_effect = {
 			remove_country_modifier = to_janissary_child_levy
 		}
@@ -16244,12 +16286,14 @@ to_enact_janissary_law_changes = {
 
 		if = {
 			limit = {
-				has_country_flag = to_janissary_from_subjects
+				has_country_modifier = to_janissary_recruitment_quotas
 			}
+			clr_country_flag = to_consider_recruitment_quotas
+			clr_country_flag = to_consider_revoke_recruitment_quotas
 			custom_tooltip = nhs_new_line_tt
-			custom_tooltip = to_from_true_faith_revoke_tt
+			custom_tooltip = to_recruitment_quotas_revoke_tt
 			hidden_effect = {
-				clr_country_flag = to_janissary_from_subjects
+				remove_country_modifier = to_janissary_recruitment_quotas
 			}
 		}
 		custom_tooltip = nhs_new_line_tt
@@ -16258,8 +16302,11 @@ to_enact_janissary_law_changes = {
 	if = {
 		limit = {
 			has_country_flag = to_consider_from_true_faith
+			OR = {
+				has_country_modifier = to_janissary_child_levy
+				has_country_flag = to_consider_child_levy
+			}
 		}
-		clr_country_flag = to_consider_from_true_faith
 		hidden_effect = {
 			add_country_modifier = {
 				name = to_janissaries_from_true_faith
@@ -16273,8 +16320,8 @@ to_enact_janissary_law_changes = {
 	else_if = {
 		limit = {
 			has_country_flag = to_consider_revoke_from_true_faith
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
 		}
-		clr_country_flag = to_consider_revoke_from_true_faith
 		hidden_effect = {
 			remove_country_modifier = to_janissaries_from_true_faith
 		}
@@ -16284,9 +16331,38 @@ to_enact_janissary_law_changes = {
 
 	if = {
 		limit = {
+			has_country_flag = to_consider_recruitment_quotas
+			OR = {
+				has_country_modifier = to_janissary_child_levy
+				has_country_flag = to_consider_child_levy
+			}
+		}
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_janissary_recruitment_quotas
+				duration = -1
+				hidden = yes
+			}
+		}
+		custom_tooltip = to_recruitment_quotas_enact_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+	else_if = {
+		limit = {
+			has_country_flag = to_consider_revoke_recruitment_quotas
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
+		}
+		hidden_effect = {
+			remove_country_modifier = to_janissary_recruitment_quotas
+		}
+		custom_tooltip = to_recruitment_quotas_revoke_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+
+	if = {
+		limit = {
 			has_country_flag = to_consider_open_recruitment
 		}
-		clr_country_flag = to_consider_open_recruitment
 		hidden_effect = {
 			add_country_modifier = {
 				name = to_janissary_open_recruitment
@@ -16301,7 +16377,6 @@ to_enact_janissary_law_changes = {
 		limit = {
 			has_country_flag = to_consider_revoke_open_recruitment
 		}
-		clr_country_flag = to_consider_revoke_open_recruitment
 		hidden_effect = {
 			remove_country_modifier = to_janissary_open_recruitment
 		}
@@ -16313,7 +16388,6 @@ to_enact_janissary_law_changes = {
 		limit = {
 			has_country_flag = to_consider_increase_compensation
 		}
-		clr_country_flag = to_consider_increase_compensation
 		hidden_effect = {
 			add_country_modifier = {
 				name = to_janissary_increase_compensation
@@ -16333,7 +16407,6 @@ to_enact_janissary_law_changes = {
 		limit = {
 			has_country_flag = to_consider_revoke_increase_compensation
 		}
-		clr_country_flag = to_consider_revoke_increase_compensation
 		hidden_effect = {
 			remove_country_modifier = to_janissary_increase_compensation
 			remove_country_modifier = to_janissary_increase_compensation_regiments
@@ -16357,6 +16430,17 @@ to_on_janissary_law_open = {
 			NOT = { has_country_flag = to_janissary_laws_menu_open }
 		}
 		set_country_flag = to_janissary_laws_menu_open
+
+		clr_country_flag = to_consider_child_levy
+		clr_country_flag = to_consider_revoke_child_levy
+		clr_country_flag = to_consider_from_true_faith
+		clr_country_flag = to_consider_revoke_from_true_faith
+		clr_country_flag = to_consider_recruitment_quotas
+		clr_country_flag = to_consider_revoke_recruitment_quotas
+		clr_country_flag = to_consider_open_recruitment
+		clr_country_flag = to_consider_revoke_open_recruitment
+		clr_country_flag = to_consider_increase_compensation
+		clr_country_flag = to_consider_revoke_increase_compensation
 
 		set_variable = {
 			which = to_child_levy_potential
@@ -16458,40 +16542,37 @@ to_on_janissary_law_open = {
 			value = 0.005
 		}
 
-		if = {
-			limit = {
-				has_country_modifier = to_janissary_harsh_recruitment
-			}
-			set_variable = {
-				which = to_harsh_recruitment_potential
-				which = to_child_levy_potential
-			}
-			if = {
-				limit = {
-					has_country_modifier = to_janissaries_from_true_faith
-				}
-				change_variable = {
-					which = to_harsh_recruitment_potential
-					which = to_from_true_faith_potential
-				}
-			}
-			multiply_variable = {
-				which = to_harsh_recruitment_potential
-				value = 1.25
-			}
-			subtract_variable = {
-				which = to_harsh_recruitment_potential
-				which = to_child_levy_potential
-			}
-			if = {
-				limit = {
-					has_country_modifier = to_janissaries_from_true_faith
-				}
-				subtract_variable = {
-					which = to_harsh_recruitment_potential
-					which = to_from_true_faith_potential
-				}
-			}
+		set_variable = {
+			which = to_recruitment_quotas_potential
+			which = to_child_levy_potential
+		}
+		multiply_variable = {
+			which = to_recruitment_quotas_potential
+			value = 1.50
+		}
+		set_variable = {
+			which = to_recruitment_quotas_potential_with_from_true_faith
+			which = to_from_true_faith_potential
+		}
+		multiply_variable = {
+			which = to_recruitment_quotas_potential_with_from_true_faith
+			value = 1.25
+		}
+		change_variable = {
+			which = to_recruitment_quotas_potential_with_from_true_faith
+			which = to_recruitment_quotas_potential
+		}
+		subtract_variable = {
+			which = to_recruitment_quotas_potential
+			which = to_child_levy_potential
+		}
+		subtract_variable = {
+			which = to_recruitment_quotas_potential_with_from_true_faith
+			which = to_child_levy_potential
+		}
+		subtract_variable = {
+			which = to_recruitment_quotas_potential_with_from_true_faith
+			which = to_from_true_faith_potential
 		}
 		####
 		if = {

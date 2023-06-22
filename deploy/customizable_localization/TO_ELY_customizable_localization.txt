@@ -2298,50 +2298,6 @@ defined_text = {
 	}
 }
 
-defined_text = {
-	name = GetJanissaryChangeForeignDev
-	random = no
-
-	text = {
-		localisation_key = to_yellow_plus_zero_tt
-		trigger = {
-			is_variable_equal = {
-				which = to_janissary_regiments_child_levy
-				value = 0
-			}
-		}
-	}
-
-	text = {
-		localisation_key = to_janissary_change_foreign_dev_tt
-	}
-}
-
-defined_text = {
-	name = GetJanissaryChangeHarshRecruitment
-	random = no
-
-	text = {
-		localisation_key = to_janissary_harsh_recruitment_change_zero_tt
-		trigger = {
-			is_variable_equal = {
-				which = to_janissary_regiments_harsh_recruitment
-				value = 0
-			}
-		}
-	}
-
-	text = {
-		localisation_key = to_janissary_harsh_recruitment_change_tt
-		trigger = {
-			is_variable_equal = {
-				which = to_janissary_regiments_harsh_recruitment
-				value = 0
-			}
-		}
-	}
-}
-
 ### Child Levy
 defined_text = {
 	name = GetChildLevyStatus
@@ -2356,6 +2312,32 @@ defined_text = {
 
 	text = {
 		localisation_key = to_child_levy_off_tt
+	}
+}
+
+defined_text = {
+	name = GetJanissaryChangeChildLevy
+	random = no
+
+	text = {
+		localisation_key = to_empty_string_tt
+		trigger = {
+			NOT = { has_country_modifier = to_janissary_child_levy }
+		}
+	}
+
+	text = {
+		localisation_key = to_child_levy_change_zero_tt
+		trigger = {
+			is_variable_equal = {
+				which = to_janissary_regiments_child_levy
+				value = 0
+			}
+		}
+	}
+
+	text = {
+		localisation_key = to_child_levy_change_tt
 	}
 }
 
@@ -2530,14 +2512,6 @@ defined_text = {
 	text = {
 		trigger = {
 			has_country_modifier = to_janissaries_from_true_faith
-			to_has_abrahamic_religion = yes
-		}
-		localisation_key = to_true_faith_reserve_heretic_tt
-	}
-
-	text = {
-		trigger = {
-			has_country_modifier = to_janissaries_from_true_faith
 		}
 		localisation_key = to_from_true_faith_on_tt
 	}
@@ -2548,8 +2522,42 @@ defined_text = {
 }
 
 defined_text = {
+	name = GetJanissaryChangeFromTrueFaith
+	random = no
+
+	text = {
+		localisation_key = to_empty_string_tt
+		trigger = {
+			NOT = { has_country_modifier = to_janissaries_from_true_faith }
+		}
+	}
+
+	text = {
+		localisation_key = to_from_true_faith_change_zero_tt
+		trigger = {
+			is_variable_equal = {
+				which = to_janissaries_from_true_faith
+				value = 0
+			}
+		}
+	}
+
+	text = {
+		localisation_key = to_from_true_faith_change_tt
+	}
+}
+
+defined_text = {
 	name = GetFromTrueFaithReserve
 	random = no
+
+	text = {
+		trigger = {
+			has_country_modifier = to_janissaries_from_true_faith
+			to_has_abrahamic_religion = yes
+		}
+		localisation_key = to_true_faith_reserve_heretic_tt
+	}
 
 	text = {
 		trigger = {
@@ -2589,6 +2597,11 @@ defined_text = {
 		localisation_key = to_not_has_janissary_law_consider_enact_tt
 		trigger = {
 			has_country_flag = to_consider_from_true_faith
+			OR = {
+				has_country_modifier = to_janissary_child_levy
+				has_country_flag = to_consider_child_levy
+			}
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
 		}
 	}
 
@@ -2690,31 +2703,164 @@ defined_text = {
 }
 
 ### Conscript from Subjects
+# defined_text = {
+# 	name = GetFromSubjectsStatus
+# 	random = no
+
+# 	text = {
+# 		trigger = {
+# 			has_country_flag = to_janissary_from_subjects
+# 		}
+# 		localisation_key = to_from_subjects_on_tt
+# 	}
+
+# 	text = {
+# 		localisation_key = to_from_subjects_off_tt
+# 	}
+# }
+
+# defined_text = {
+# 	name = GetFromSubjectsReserve
+# 	random = no
+
+# 	text = {
+# 		trigger = {
+# 			has_country_flag = to_janissary_from_subjects
+# 		}
+# 		localisation_key = to_from_subjects_reserve_tt
+# 	}
+
+# 	text = {
+# 		localisation_key = to_empty_string_tt
+# 	}
+# }
+
+# defined_text = {
+# 	name = GetJanissaryFromSubjects
+# 	random = no
+
+# 	text = {
+# 		localisation_key = to_has_janissary_law_tt
+# 		trigger = {
+# 			has_country_flag = to_janissary_from_subjects
+# 		}
+# 	}
+
+# 	text = {
+# 		localisation_key = to_not_has_janissary_law_tt
+# 	}
+# }
+
+# defined_text = {
+# 	name = GetFromSubjectsEffect
+# 	random = no
+
+# 	text = {
+# 		localisation_key = to_from_subjects_effect_tt
+# 	}
+# }
+
+# defined_text = {
+# 	name = GetFromSubjectsEffectRemoved
+# 	random = no
+
+# 	text = {
+# 		localisation_key = to_from_subjects_removed_effect_tt
+# 	}
+# }
+
+# defined_text = {
+# 	name = GetFromSubjectsHereticEffect
+# 	random = no
+
+# 	text = {
+# 		localisation_key = to_from_subjects_effect_heretic_tt
+# 		trigger = {
+# 			NOT = { to_has_abrahamic_religion = yes }
+# 		}
+# 	}
+
+# 	text = {
+# 		localisation_key = to_empty_string_tt
+# 	}
+# }
+
+# defined_text = {
+# 	name = GetFromSubjectsHereticEffectRemoved
+# 	random = no
+
+# 	text = {
+# 		localisation_key = to_from_subjects_effect_heretic_removed_tt
+# 		trigger = {
+# 			NOT = { to_has_abrahamic_religion = yes }
+# 		}
+# 	}
+
+# 	text = {
+# 		localisation_key = to_empty_string_tt
+# 	}
+# }
+
+### Recruitment Quotas
 defined_text = {
-	name = GetFromSubjectsStatus
+	name = GetRecruitmentQuotasStatus
 	random = no
 
 	text = {
 		trigger = {
-			has_country_flag = to_janissary_from_subjects
+			has_country_modifier = to_janissary_recruitment_quotas
 		}
-		localisation_key = to_from_subjects_on_tt
+		localisation_key = to_recruitment_quotas_on_tt
 	}
 
 	text = {
-		localisation_key = to_from_subjects_off_tt
+		localisation_key = to_recruitment_quotas_off_tt
 	}
 }
 
 defined_text = {
-	name = GetFromSubjectsReserve
+	name = GetJanissaryChangeRecruitmentQuotas
+	random = no
+
+	text = {
+		localisation_key = to_empty_string_tt
+		trigger = {
+			NOT = { has_country_modifier = to_janissary_recruitment_quotas }
+		}
+	}
+
+	text = {
+		localisation_key = to_recruitment_quotas_change_zero_tt
+		trigger = {
+			is_variable_equal = {
+				which = to_janissary_regiments_recruitment_quotas
+				value = 0
+			}
+		}
+	}
+
+	text = {
+		localisation_key = to_recruitment_quotas_change_tt
+	}
+}
+
+defined_text = {
+	name = GetRecruitmentQuotasReserve
 	random = no
 
 	text = {
 		trigger = {
-			has_country_flag = to_janissary_from_subjects
+			has_country_modifier = to_janissary_recruitment_quotas
+			has_country_modifier = to_janissaries_from_true_faith
 		}
-		localisation_key = to_from_subjects_reserve_tt
+		localisation_key = to_recruitment_quotas_reserve_with_from_true_faith_tt
+	}
+
+	text = {
+		trigger = {
+			has_country_modifier = to_janissary_recruitment_quotas
+		}
+		localisation_key = to_recruitment_quotas_reserve_tt
 	}
 
 	text = {
@@ -2723,13 +2869,36 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetJanissaryFromSubjects
+	name = GetJanissaryRecruitmentQuotas
 	random = no
+
+	text = {
+		localisation_key = to_has_janissary_law_consider_revoke_tt
+		trigger = {
+			has_country_modifier = to_janissary_recruitment_quotas
+			OR = {
+				has_country_flag = to_consider_revoke_recruitment_quotas
+				has_country_flag = to_consider_revoke_child_levy
+			}
+		}
+	}
 
 	text = {
 		localisation_key = to_has_janissary_law_tt
 		trigger = {
-			has_country_flag = to_janissary_from_subjects
+			has_country_modifier = to_janissary_recruitment_quotas
+		}
+	}
+
+	text = {
+		localisation_key = to_not_has_janissary_law_consider_enact_tt
+		trigger = {
+			has_country_flag = to_consider_recruitment_quotas
+			OR = {
+				has_country_modifier = to_janissary_child_levy
+				has_country_flag = to_consider_child_levy
+			}
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
 		}
 	}
 
@@ -2739,31 +2908,13 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetFromSubjectsEffect
+	name = ConsideringRecruitmentQuotas
 	random = no
 
 	text = {
-		localisation_key = to_from_subjects_effect_tt
-	}
-}
-
-defined_text = {
-	name = GetFromSubjectsEffectRemoved
-	random = no
-
-	text = {
-		localisation_key = to_from_subjects_removed_effect_tt
-	}
-}
-
-defined_text = {
-	name = GetFromSubjectsHereticEffect
-	random = no
-
-	text = {
-		localisation_key = to_from_subjects_effect_heretic_tt
+		localisation_key = to_y_icon_tt
 		trigger = {
-			NOT = { to_has_abrahamic_religion = yes }
+			has_country_flag = to_consider_recruitment_quotas
 		}
 	}
 
@@ -2773,13 +2924,13 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetFromSubjectsHereticEffectRemoved
+	name = ConsideringRevokeRecruitmentQuotas
 	random = no
 
 	text = {
-		localisation_key = to_from_subjects_effect_heretic_removed_tt
+		localisation_key = to_y_icon_tt
 		trigger = {
-			NOT = { to_has_abrahamic_religion = yes }
+			has_country_flag = to_consider_revoke_recruitment_quotas
 		}
 	}
 
@@ -2787,7 +2938,72 @@ defined_text = {
 		localisation_key = to_empty_string_tt
 	}
 }
- 
+
+defined_text = {
+	name = RecruitmentQuotasPotentialGainLoss
+	random = no
+
+	text = {
+		localisation_key = to_yellow_zero_tt
+		trigger = {
+			is_variable_equal = {
+				which = to_child_levy_potential
+				value = 0
+			}
+		}
+	}
+
+	text = {
+		localisation_key = to_recruitment_quotas_pontential_with_from_true_faith_loss_tt
+		trigger = {
+			has_country_modifier = to_janissary_recruitment_quotas
+			OR = {
+				has_country_flag = to_consider_from_true_faith
+				has_country_modifier = to_janissary_child_levy
+			}
+		}
+	}
+
+	text = {
+		localisation_key = to_recruitment_quotas_pontential_loss_tt
+		trigger = {
+			has_country_modifier = to_janissary_recruitment_quotas
+		}
+	}
+
+	text = {
+		localisation_key = to_recruitment_quotas_pontential_with_from_true_faith_gain_tt
+		trigger = {
+			OR = {
+				has_country_flag = to_consider_from_true_faith
+				has_country_modifier = to_janissary_child_levy
+			}
+		}
+	}
+
+	text = {
+		localisation_key = to_recruitment_quotas_pontential_gain_tt
+	}
+}
+
+defined_text = {
+	name = GetRecruitmentQuotasEffect
+	random = no
+
+	text = {
+		localisation_key = to_recruitment_quotas_effect_tt
+	}
+}
+
+defined_text = {
+	name = GetRecruitmentQuotasEffectRemoved
+	random = no
+
+	text = {
+		localisation_key = to_recruitment_quotas_removed_effect_tt
+	}
+}
+
 ### Open Recruitment
 defined_text = {
 	name = GetOpenRecruitmentStatus
@@ -2802,6 +3018,32 @@ defined_text = {
 
 	text = {
 		localisation_key = to_open_recruitment_off_tt
+	}
+}
+
+defined_text = {
+	name = GetJanissaryChangeOpenRecruitment
+	random = no
+
+	text = {
+		localisation_key = to_empty_string_tt
+		trigger = {
+			NOT = { has_country_modifier = to_janissary_open_recruitment }
+		}
+	}
+
+	text = {
+		localisation_key = to_open_recruitment_change_zero_tt
+		trigger = {
+			is_variable_equal = {
+				which = to_janissary_regiments_open_recruitment
+				value = 0
+			}
+		}
+	}
+
+	text = {
+		localisation_key = to_open_recruitment_change_tt
 	}
 }
 
