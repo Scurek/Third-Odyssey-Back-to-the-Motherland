@@ -517,76 +517,35 @@ country_event = {
 country_event = {
 	id = to_hellenic_events.3
 	title = to_hellenic_events.3.t
-	desc = to_hellenic_events.3.d
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = nhs_enable_tolerated_minority }
+		}
+		desc = to_hellenic_events.3.da
+	}
+	desc = {
+		desc = to_hellenic_events.3.db
+	}
 	picture = OLYMPIANS_eventPicture
 
     trigger = {
-		is_year = 1465
+		nhs_check_all_elysian_tags = { CONDITION = tag }
 		OR = {
 			religion = pantheon_worship
 			religion = aztlan_worship
 		}
 		NOT = { has_country_modifier = nhs_high_priests }
-		nhs_check_all_elysian_tags = { CONDITION = tag }
-		has_any_disaster = no
-		any_owned_province = {
-			religion = ROOT
-			is_city = yes
-			OR = {
-				is_capital = yes
-				is_in_capital_area = yes
-				has_province_flag = nhs_hcd_first_pagan_minority_province
-			}
-		}
+		NOT = { has_country_flag = to_enable_high_priesthood_decision }
+		NOT = { has_disaster = nhs_hcd_hellenic_crisis }
+		NOT = { has_country_flag = hellenic_conversion_preacher }
+		NOT = { has_country_flag = to_elysian_religious_wars_flag }
 	}
 
 	immediate = {
-		hidden_effect = {
-			random_owned_province = {
-				limit = {
-					has_province_flag = nhs_hcd_first_pagan_minority_province
-					religion = ROOT
-				}
-				save_event_target_as = nhs_high_priesthood_target
-			}
-			if = {
-				limit = {
-					NOT = { has_saved_event_target = nhs_high_priesthood_target }
-				}
-				random_owned_province = {
-					limit = {
-						is_capital = yes
-						religion = ROOT
-					}
-					save_event_target_as = nhs_high_priesthood_target
-				}
-			}
-			if = {
-				limit = {
-					NOT = { has_saved_event_target = nhs_high_priesthood_target }
-				}
-				random_owned_province = {
-					limit = {
-						is_city = yes
-						is_in_capital_area = yes
-						religion = ROOT
-					}
-					save_event_target_as = nhs_high_priesthood_target
-				}
-			}
-		}
 	}
 
 	mean_time_to_happen = {
-		months = 12
-		modifier = {
-			factor = 0.5
-			stability = 1
-		}
-		modifier = {
-			factor = 5
-			is_at_war = yes
-		}
+		months = 6
 	}
 
 	option = {	
@@ -595,141 +554,8 @@ country_event = {
 		trigger = {
 			nhs_check_all_elysian_tags = { CONDITION = tag }
 		}
-		ai_chance = { factor = 100 }
-		custom_tooltip = nhs_enable_heralds_dispatch_tt
-		custom_tooltip = nhs_new_line_tt
-		add_country_modifier = {
-			name = nhs_high_priests
-			duration = -1
-		}
-
-		if = {
-			limit = {
-				has_saved_event_target = nhs_high_priesthood_target
-				event_target:nhs_high_priesthood_target = {
-					owned_by = ROOT
-				}
-			}
-			event_target:nhs_high_priesthood_target = {
-				tooltip = {
-					add_permanent_province_modifier = {
-						name = nhs_seat_of_high_priesthood_t
-						duration = -1
-					}
-				}
-				hidden_effect = {
-					add_province_triggered_modifier = nhs_seat_of_high_priesthood
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				any_owned_province = {
-					religion = ROOT
-					is_capital = yes
-				}
-			}
-			capital_scope = {
-				tooltip = {
-					add_permanent_province_modifier = {
-						name = nhs_seat_of_high_priesthood_t
-						duration = -1
-					}
-				}
-				hidden_effect = {
-					add_province_triggered_modifier = nhs_seat_of_high_priesthood
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				any_owned_province = {
-					is_city = yes
-					religion = ROOT
-					OR = {
-						is_capital = yes
-						is_in_capital_area = yes
-						has_province_flag = nhs_hcd_first_pagan_minority_province
-					}
-				}
-			}
-			random_owned_province = {
-				limit = {
-					is_city = yes
-					religion = ROOT
-					OR = {
-						is_capital = yes
-						is_in_capital_area = yes
-						has_province_flag = nhs_hcd_first_pagan_minority_province
-					}
-				}
-				tooltip = {
-					add_permanent_province_modifier = {
-						name = nhs_seat_of_high_priesthood_t
-						duration = -1
-					}
-				}
-				hidden_effect = {
-					add_province_triggered_modifier = nhs_seat_of_high_priesthood
-				}
-			}
-		}
-		else = {
-			random_owned_province = {
-				limit = {
-					is_city = yes
-				}
-				tooltip = {
-					add_permanent_province_modifier = {
-						name = nhs_seat_of_high_priesthood_t
-						duration = -1
-					}
-				}
-				hidden_effect = {
-					add_province_triggered_modifier = nhs_seat_of_high_priesthood
-				}
-			}
-		}
-		if = {
-			limit = {
-				religion = pantheon_worship
-			}
-			custom_tooltip = to_enable_hestias_gov_reform_tt
-			custom_tooltip = to_enable_hellenic_reform_tt
-			custom_tooltip = to_enable_hellenic_festivals_tt
-		}
-	}
-}
-
-# Establish High Priests for others
-country_event = {
-	id = to_hellenic_events.4
-	title = to_hellenic_events.4.t
-	desc = to_hellenic_events.4.d
-	picture = OLYMPIANS_eventPicture
-
-    trigger = {
-		is_year = 1470
-		religion = pantheon_worship
-		NOT = {	nhs_check_all_elysian_tags = { CONDITION = tag } }
-		NOT = { has_country_modifier = nhs_high_priests }
-	}
-
-	mean_time_to_happen = {
-		months = 10
-	}
-
-	option = {	
-		name = to_hellenic_events.4.a
-		ai_chance = { factor = 100 }
-		add_dip_power = -25
-		add_country_modifier = {
-			name = nhs_high_priests
-			duration = -1
-		}
-		custom_tooltip = to_enable_hestias_gov_reform_tt
-		custom_tooltip = to_enable_hellenic_reform_tt
-		custom_tooltip = to_enable_hellenic_festivals_tt
+		set_country_flag = to_enable_high_priesthood_decision
+		custom_tooltip = to_enable_high_priesthood_decision_tt
 	}
 }
 
