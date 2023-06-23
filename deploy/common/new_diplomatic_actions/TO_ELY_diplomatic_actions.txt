@@ -1,5 +1,6 @@
 # Triggers and effects will be given the Actor's scope, with the Recipient's as FROM
 
+# Imperial Associates
 cancel_nhs_associate =  {
 	category = influence
 	require_acceptance = no
@@ -25,6 +26,7 @@ cancel_nhs_associate =  {
 	}
 }
 
+# Colonial Actions
 nhs_limit_expansion_on =  {
 	category = influence
 	require_acceptance = no
@@ -162,6 +164,8 @@ nhs_carribean_to_kykladia = {
 	}
 }
 
+
+# Exarchs
 nhs_annex_exarchate = {
 	category = province
 	require_acceptance = no
@@ -631,6 +635,7 @@ nhs_fabricate_exarch_claim = {
 # 	}
 # }
 
+# Imperial Protectorates
 to_release_as_protectorate = {
 	category = influence
 	require_acceptance = no
@@ -1299,6 +1304,7 @@ to_dissolve_imperial_protectorate =  {
 	}
 }
 
+# Varangians
 nhs_vgd_grant_area = {
 	category = influence
 	require_acceptance = no
@@ -1473,5 +1479,93 @@ to_integrate_varangian_order = {
 				duration = -1
 			}
 		}
+	}
+}
+
+# Roman Janissaries
+to_demand_blood_tax = {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		has_country_modifier = to_janissary_child_levy
+		FROM = { is_subject_of = ROOT }
+		FROM = { NOT = { has_country_modifier = to_blood_tax } }
+		FROM = { NOT = { has_country_modifier = to_blood_tax_true_faith } }
+	}
+	is_allowed = {
+		FROM = { NOT = { primary_culture = ROOT } }
+		if = {
+			limit = {
+				to_has_abrahamic_religion = yes
+			}
+			OR = {
+				NOT = { religion_group = FROM }
+				has_country_modifier = to_janissaries_from_true_faith
+			}
+		}
+		else = {
+			OR = {
+				NOT = { religion = FROM }
+				has_country_modifier = to_janissaries_from_true_faith
+			}
+		}
+	}
+	on_accept = {
+		FROM = {
+			if = {
+				limit = {
+					to_has_abrahamic_religion = yes
+					religion_group = ROOT
+				}
+				add_country_modifier = {
+					name = to_blood_tax_true_faith
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = to_blood_tax
+					duration = -1
+				}
+			}
+			clr_country_flag = to_has_blood_tax
+			set_country_flag = to_has_blood_tax
+		}
+	}
+	ai_will_do = {
+		always = no
+	}
+}
+
+to_revoke_blood_tax = {
+	category = influence
+	require_acceptance = no
+	is_visible = {
+		has_country_modifier = to_janissary_child_levy
+		FROM = { is_subject_of = ROOT }
+		FROM = {
+			OR = {
+				has_country_modifier = to_blood_tax
+				has_country_modifier = to_blood_tax_true_faith
+			}
+		}
+	}
+	is_allowed = {
+		FROM = {
+			had_country_flag = {
+				flag = to_has_blood_tax
+				days = 7300
+			}
+		}
+	}
+	on_accept = {
+		FROM = {
+			remove_country_modifier = to_blood_tax
+			remove_country_modifier = to_blood_tax_true_faith
+			clr_country_flag = to_has_blood_tax
+		}
+	}
+	ai_will_do = {
+		always = no
 	}
 }

@@ -15609,7 +15609,7 @@ to_roman_janissaries_maintenance = {
 
 		if = {
 			limit = {
-				has_country_modifier = to_janissary_harsh_recruitment
+				has_country_modifier = to_janissary_recruitment_quotas
 			}
 			set_variable = {
 				which = to_janissary_regiments_recruitment_quotas
@@ -15634,7 +15634,7 @@ to_roman_janissaries_maintenance = {
 				}
 				change_variable = {
 					which = to_janissary_regiments_recruitment_quotas_from_true_faith
-					which = to_janissaries_from_true_faith
+					which = to_janissary_regiments_from_true_faith
 				}
 				multiply_variable = {
 					which = to_janissary_regiments_recruitment_quotas_from_true_faith
@@ -15646,7 +15646,7 @@ to_roman_janissaries_maintenance = {
 				}
 				subtract_variable = {
 					which = to_janissary_regiments_recruitment_quotas_from_true_faith
-					which = to_janissaries_from_true_faith
+					which = to_janissary_regiments_from_true_faith
 				}
 				change_variable = {
 					which = to_janissary_regiments_recruitment_quotas
@@ -15665,7 +15665,7 @@ to_roman_janissaries_maintenance = {
 				}
 				change_variable = {
 					which = to_janissary_regiments_change
-					which = to_janissaries_from_true_faith
+					which = to_janissary_regiments_from_true_faith
 				}
 			}
 		}
@@ -15717,6 +15717,8 @@ to_roman_janissaries_maintenance = {
 				which = to_janissary_regiments_open_recruitment
 			}
 		}
+
+		to_roman_janissaries_maintenance_subjects = yes
 
 		set_variable = {
 			which = to_janissary_regiments_change_tooltip
@@ -15904,6 +15906,61 @@ to_roman_janissaries_maintenance = {
 		}
 		
 		]
+	}
+}
+
+to_roman_janissaries_maintenance_subjects = {
+	if = {
+		limit = {
+			has_country_modifier = to_janissary_child_levy
+		}
+		save_event_target_as = to_blood_tax_overlord
+		set_variable = {
+			which = to_janissary_regiments_blood_tax
+			value = 0
+		}
+		every_subject_country = {
+			to_calculate_janissary_reserve_potential_subject = yes
+			if = {
+				limit = {
+					OR = {
+						has_country_modifier = to_blood_tax
+						has_country_modifier = to_blood_tax_true_faith
+					}
+				}
+				if = {
+					limit = {
+						PREV = { has_country_modifier = to_janissaries_from_true_faith }
+					}
+					PREV = {
+						set_variable = {
+							which = to_blood_tax_from_true_faith_potential
+							which = PREV
+						}
+						change_variable = {
+							which = to_janissary_regiments_blood_tax
+							which = to_blood_tax_from_true_faith_potential
+						}
+					}
+				}
+				else = {
+					PREV = {
+						set_variable = {
+							which = to_blood_tax_potential
+							which = PREV
+						}
+						change_variable = {
+							which = to_janissary_regiments_blood_tax
+							which = to_blood_tax_potential
+						}
+					}
+				}
+			}
+		}
+		change_variable = {
+			which = to_janissary_regiments_change
+			which = to_janissary_regiments_blood_tax
+		}
 	}
 }
 
@@ -16120,6 +16177,7 @@ to_enact_janissary_law_changes = {
 				duration = -1
 				hidden = yes
 			}
+			to_calculate_janissary_reserve_potential_all_subjects = yes
 		}
 		custom_tooltip = to_child_levy_enact_tt
 		custom_tooltip = nhs_new_line_tt
@@ -16130,6 +16188,11 @@ to_enact_janissary_law_changes = {
 		}
 		hidden_effect = {
 			remove_country_modifier = to_janissary_child_levy
+			every_subject_country = {
+				remove_country_modifier = to_blood_tax
+				remove_country_modifier = to_blood_tax_true_faith
+				clr_country_flag = to_has_blood_tax
+			}
 		}
 		custom_tooltip = to_child_levy_revoke_tt
 
@@ -16143,6 +16206,10 @@ to_enact_janissary_law_changes = {
 			custom_tooltip = to_from_subjects_revoke_tt
 			hidden_effect = {
 				remove_country_modifier = to_janissaries_from_true_faith
+				every_subject_country = {
+					remove_country_modifier = to_blood_tax_true_faith
+					clr_country_flag = to_has_blood_tax
+				}
 			}
 		}
 
@@ -16175,6 +16242,23 @@ to_enact_janissary_law_changes = {
 				duration = -1
 				hidden = yes
 			}
+			every_subject_country = {
+				limit = {
+					has_country_modifier = to_blood_tax
+					OR = {
+						religion = ROOT
+						AND = {
+							to_has_abrahamic_religion = yes
+							religion_group = ROOT
+						}
+					}
+				}
+				remove_country_modifier = to_blood_tax
+				add_country_modifier = {
+					name = to_blood_tax_true_faith
+					duration = -1
+				}
+			}
 		}
 		custom_tooltip = to_from_true_faith_enact_tt
 		custom_tooltip = nhs_new_line_tt
@@ -16186,6 +16270,10 @@ to_enact_janissary_law_changes = {
 		}
 		hidden_effect = {
 			remove_country_modifier = to_janissaries_from_true_faith
+			every_subject_country = {
+				remove_country_modifier = to_blood_tax_true_faith
+				clr_country_flag = to_has_blood_tax
+			}
 		}
 		custom_tooltip = to_from_true_faith_revoke_tt
 		custom_tooltip = nhs_new_line_tt
@@ -16364,7 +16452,10 @@ to_on_janissary_law_open = {
 			}
 			every_owned_province = {
 				limit = {
-					has_owner_culture = no
+					OR = {
+						NOT = { culture_group = PREV }
+						culture = elysameric
+					}
 					religion_group = PREV
 				}
 				PREV = {
@@ -16383,7 +16474,10 @@ to_on_janissary_law_open = {
 		else = {
 			every_owned_province = {
 				limit = {
-					has_owner_culture = no
+					OR = {
+						NOT = { culture_group = PREV }
+						culture = elysameric
+					}
 					has_owner_religion = yes
 				}
 				PREV = {
@@ -16437,18 +16531,78 @@ to_on_janissary_law_open = {
 			which = to_from_true_faith_potential
 		}
 		####
+		# Blood Tax
+		every_subject_country = {
+			limit = {
+				OR = {
+					has_country_modifier = to_blood_tax
+					has_country_modifier = to_blood_tax_true_faith
+				}
+			}
+			PREV = {
+				set_variable = {
+					which = to_blood_tax_potential
+					which = PREV
+				}
+				change_variable = {
+					which = to_child_levy_potential
+					which = to_blood_tax_potential
+				}
+			}
+			PREV = {
+				set_variable = {
+					which = to_blood_tax_from_true_faith_potential
+					which = PREV
+				}
+				subtract_variable = {
+					which = to_blood_tax_from_true_faith_potential
+					which = to_blood_tax_potential
+				}
+				change_variable = {
+					which = to_from_true_faith_potential
+					which = to_blood_tax_from_true_faith_potential
+				}
+			}
+		}
+		####
+		# Child Levy full potential
 		if = {
 			limit = {
 				has_country_modifier = to_janissary_child_levy
-				has_country_modifier = to_janissaries_from_true_faith
 			}
 			set_variable = {
 				which = to_child_levy_full_potential
 				which = to_child_levy_potential
 			}
-			change_variable = {
-				which = to_child_levy_full_potential
-				which = to_from_true_faith_potential
+			if = {
+				limit = {
+					has_country_modifier = to_janissaries_from_true_faith
+				}
+				change_variable = {
+					which = to_child_levy_full_potential
+					which = to_from_true_faith_potential
+				}
+			}
+			if = {
+				limit = {
+					has_country_modifier = to_janissaries_from_true_faith
+					has_country_modifier = to_janissary_recruitment_quotas
+				}
+				change_variable = {
+					which = to_child_levy_full_potential
+					which = to_recruitment_quotas_potential_with_from_true_faith
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						has_country_modifier = to_janissary_recruitment_quotas
+					}
+					change_variable = {
+						which = to_child_levy_full_potential
+						which = to_recruitment_quotas_potential
+					}
+				}
 			}
 		}
 		####
@@ -16486,6 +16640,208 @@ to_on_janissary_law_open = {
 		multiply_variable = {
 			which = to_open_recruitment_potential
 			value = 0.001
+		}
+	}
+}
+
+to_calculate_janissary_reserve_potential_all_subjects = {
+	every_subject_country = {
+		to_calculate_janissary_reserve_potential_subject = yes
+	}
+}
+
+to_calculate_janissary_reserve_potential_subject = {
+	overlord = {
+		add_treasury = 1000
+		save_event_target_as = to_blood_tax_overlord
+	}
+	if = {
+		limit = {
+			event_target:to_blood_tax_overlord = {
+				to_has_abrahamic_religion = yes
+			}
+		}
+		every_owned_province = {
+			limit = {
+				event_target:to_blood_tax_overlord = {
+					NOT = { primary_culture = PREV }
+					NOT = { religion_group = PREV }
+				}
+			}
+			PREV = {
+				export_to_variable = {
+					which = to_local_development
+					value = trigger_value:development
+					who = PREV
+				}
+				change_variable = {
+					which = to_child_levy_potential
+					which = to_local_development
+				}
+			}
+		}
+	}
+	else = {
+		every_owned_province = {
+			limit = {
+				event_target:to_blood_tax_overlord = {
+					NOT = { primary_culture = PREV }
+					NOT = { religion = PREV }
+				}
+			}
+			PREV = {
+				export_to_variable = {
+					which = to_local_development
+					value = trigger_value:development
+					who = PREV
+				}
+				change_variable = {
+					which = to_child_levy_potential
+					which = to_local_development
+				}
+			}
+		}
+	}
+	multiply_variable = {
+		which = to_child_levy_potential
+		value = 0.01
+	}
+	####
+	set_variable = {
+		which = to_from_true_faith_potential
+		value = 0
+	}
+	if = {
+		limit = {
+			event_target:to_blood_tax_overlord = {
+				has_country_modifier = to_janissaries_from_true_faith
+				to_has_abrahamic_religion = yes
+			}
+		}
+		every_owned_province = {
+			limit = {
+				event_target:to_blood_tax_overlord = {
+					OR = {
+						NOT = { culture_group = PREV }
+						culture = elysameric
+					}
+					religion_group = PREV
+				}
+			}
+			PREV = {
+				export_to_variable = {
+					which = to_local_development
+					value = trigger_value:development
+					who = PREV
+				}
+				change_variable = {
+					which = to_from_true_faith_potential
+					which = to_local_development
+				}
+			}
+		}
+	}
+	else = {
+		every_owned_province = {
+			limit = {
+				event_target:to_blood_tax_overlord = {
+					OR = {
+						NOT = { culture_group = PREV }
+						culture = elysameric
+					}
+					religion = PREV
+				}
+			}
+			PREV = {
+				export_to_variable = {
+					which = to_local_development
+					value = trigger_value:development
+					who = PREV
+				}
+				change_variable = {
+					which = to_from_true_faith_potential
+					which = to_local_development
+				}
+			}
+		}
+	}
+	multiply_variable = {
+		which = to_from_true_faith_potential
+		value = 0.005
+	}
+
+	set_variable = {
+		which = to_blood_tax_potential
+		which = to_child_levy_potential
+	}
+
+	set_variable = {
+		which = to_blood_tax_from_true_faith_potential
+		which = to_blood_tax_potential
+	}
+	change_variable = {
+		which = to_blood_tax_from_true_faith_potential
+		which = to_from_true_faith_potential
+	}
+}
+
+to_janissaries_on_become_subject = {
+	if = {
+		limit = {
+			overlord = {
+				has_country_modifier = to_janissary_child_levy
+			}
+		}
+		to_calculate_janissary_reserve_potential_subject = yes
+	}
+}
+
+to_janissaries_on_independence_subject = {
+	remove_country_modifier = to_blood_tax
+	remove_country_modifier = to_blood_tax_true_faith
+	clr_country_flag = to_has_blood_tax
+}
+
+to_roman_janissaries_on_religion_change = {
+	if = {
+		limit = {
+			has_government_mechanic = to_roman_janissary_mechanic
+		}
+		every_subject_country = {
+			limit = {
+				has_country_modifier = to_blood_tax
+				OR = {
+					religion = ROOT
+					AND = {
+						to_has_abrahamic_religion = yes
+						religion_group = ROOT
+					}
+				}
+			}
+			remove_country_modifier = to_blood_tax
+			add_country_modifier = {
+				name = to_blood_tax_true_faith
+				duration = -1
+			}
+		}
+		every_subject_country = {
+			limit = {
+				has_country_modifier = to_blood_tax_true_faith
+				NOT = {
+					OR = {
+						religion = ROOT
+						AND = {
+							to_has_abrahamic_religion = yes
+							religion_group = ROOT
+						}
+					}
+				}
+			}
+			remove_country_modifier = to_blood_tax_true_faith
+			add_country_modifier = {
+				name = to_blood_tax
+				duration = -1
+			}
 		}
 	}
 }
