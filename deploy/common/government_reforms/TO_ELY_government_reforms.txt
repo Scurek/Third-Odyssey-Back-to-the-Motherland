@@ -1446,45 +1446,104 @@ regional_representation_reform_ely = {
 	}
 }
 
-nhs_expand_senate_of_cities = {
+to_expand_senate_of_cities_nodlc = {
 	icon = "parliament"
 	potential = {
+		NOT = {
+			OR = {
+				has_dlc = "Common Sense"
+				has_dlc = "Domination"
+			}
+		}
 		OR = {
 			has_reform = senatorial_empire
 			has_reform = elysian_patriarchy
 		}
 	}
 	modifiers = {
-		core_creation = -0.10
-		diplomatic_upkeep = -1
-		max_absolutism = -10
+		core_creation = -0.05
+		years_of_nationalism = -5
 	}
 	effect = {
 		clr_country_flag = nhs_remember_expanding_senate
 	}
+	removed_effect = {
+		clr_country_flag = nhs_remember_expanding_senate
+	}
 }
 
-nhs_consolidate_senate_of_cities = {
+to_consolidate_senate_of_cities_nodlc = {
 	icon = "assembly_hall"
 	potential = {
+		NOT = {
+			OR = {
+				has_dlc = "Common Sense"
+				has_dlc = "Domination"
+			}
+		}
 		OR = {
 			has_reform = senatorial_empire
 			has_reform = elysian_patriarchy
 		}
 	}
 	modifiers = {
-		free_adm_policy = 1
-		state_governing_cost = -0.1
+		max_absolutism = 5
 		national_focus_years = -10
 	}
-	# conditional = {
-	# 	allow = { has_dlc = "Common Sense" }
-	# 	custom_attributes = {
-	# 		halved_parliament_bribes = yes
-	# 	}
-	# }
 	effect = {
 		set_country_flag = nhs_remember_consolidating_senate
+	}
+	removed_effect = {
+		clr_country_flag = nhs_remember_consolidating_senate
+	}
+}
+
+to_expand_senate_of_cities = {
+	icon = "parliament"
+	potential = {
+		has_reform = senatorial_empire
+		OR = {
+			has_dlc = "Common Sense"
+			has_dlc = "Domination"
+		}
+	}
+	modifiers = {
+		core_creation = -0.05
+		years_of_nationalism = -5
+		num_of_parliament_issues = 5
+		parliament_debate_duration = -4
+	}
+
+	effect = {
+		clr_country_flag = nhs_remember_expanding_senate
+	}
+	removed_effect = {
+		clr_country_flag = nhs_remember_expanding_senate
+	}
+}
+
+to_consolidate_senate_of_cities = {
+	icon = "assembly_hall"
+	potential = {
+		has_reform = senatorial_empire
+		OR = {
+			has_dlc = "Common Sense"
+			has_dlc = "Domination"
+		}
+	}
+	modifiers = {
+		max_absolutism = 5
+		national_focus_years = -10
+		parliament_backing_chance = 0.25
+		parliament_effect_duration = 5
+		can_revoke_parliament_seats = yes
+	}
+	
+	effect = {
+		set_country_flag = nhs_remember_consolidating_senate
+	}
+	removed_effect = {
+		clr_country_flag = nhs_remember_consolidating_senate
 	}
 }
 
@@ -1618,12 +1677,12 @@ nhs_empower_senate_reform = {
 				limit = {
 					has_country_flag = nhs_remember_consolidating_senate
 				}
-				to_add_government_reform_short_tooltip = { REFORM = nhs_consolidate_senate_of_cities }
+				to_add_government_reform_short_tooltip = { REFORM = to_consolidate_senate_of_cities }
 			}
 			else = {
-				to_add_government_reform_short_tooltip = { REFORM = nhs_expand_senate_of_cities }
+				to_add_government_reform_short_tooltip = { REFORM = to_expand_senate_of_cities }
 			}
-			to_add_government_reform_short_tooltip = { REFORM = legislative_houses_reform_ely }
+			# to_add_government_reform_short_tooltip = { REFORM = legislative_houses_reform_ely }
 			
 			add_stability_or_adm_power = yes
 			add_legitimacy = 20
