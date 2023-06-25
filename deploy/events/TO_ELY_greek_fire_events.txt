@@ -20,7 +20,7 @@ country_event = {
 		nhs_has_greek_active_modifier = yes
 	}
 
-	immediate = {
+	after = {
 		set_country_flag = nhs_depleting_fire
 	}
 
@@ -31,9 +31,10 @@ country_event = {
 		}
 		remove_country_modifier = nhs_secrets_greekfire
 		add_country_modifier = {
-			name = nhs2_depleting_fire_forts
+			name = nhs2_depleting_fire_ships_and_forts
 			duration = 5475
 		}
+		country_event = { id = nhs2_greek_fire.2 days = 30 }
 	}
 	option = { ## Reserve it for ships
 		name = "nhs2_greek_fire.1.b"
@@ -42,8 +43,44 @@ country_event = {
 		}
 		remove_country_modifier = nhs_secrets_greekfire
 		add_country_modifier = {
-			name = nhs2_depleting_fire_ships
+			name = nhs2_depleting_fire_sieges
 			duration = 5475
+		}
+		custom_tooltip = to_enable_greek_firethrower_unit_tt
+		custom_tooltip = to_enable_greek_firethrower_unit_warning_tt
+		custom_tooltip = nhs_new_line_tt
+		hidden_effect = {
+			# If you add a new unit type while the row is still locked you can't switch to it unless you do this
+			set_country_flag = to_got_siege_flamethrowers
+			change_unit_type = western
+			change_unit_type = exiled_greek
+			country_event = { id = nhs2_greek_fire.20 days = 5475 }
+		}
+		country_event = { id = nhs2_greek_fire.2 days = 30 }
+	}
+}
+
+# Greek Fire for siege runs out
+country_event = {
+	id = nhs2_greek_fire.20
+	title = nhs2_greek_fire.20.t
+	desc = nhs2_greek_fire.20.d
+	picture = alchemist_eventpicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = nhs_found_the_source }
+		NOT = { nhs_has_greek_active_modifier = yes }
+	}
+
+	option = { ## Send out the search parties
+		name = "nhs2_greek_fire.20.a"
+		remove_country_modifier = nhs2_depleting_fire_sieges
+		add_country_modifier = {
+			name = nhs2_depleted_fire_sieges
+			duration = -1
+			desc = to_until_naphtha_source_is_found_tt
 		}
 	}
 }
@@ -55,17 +92,7 @@ country_event = {
 	desc = nhs2_greek_fire.2.d
 	picture = EXPLORERS_eventPicture
 
-	fire_only_once = yes
-
-	trigger = {
-		nhs_check_all_elysian_tags = { CONDITION = tag }
-		is_year = 1453
-		has_country_flag = nhs_depleting_fire
-	}
-
-	mean_time_to_happen = {
-		days = 50
-	}
+	is_triggered_only = yes
 
 	option = { ## Send out the search parties
 		name = "nhs2_greek_fire.2.a"
@@ -118,6 +145,25 @@ country_event = {
 	immediate = {
 		hidden_effect = {
 			discover_province = 954
+			if = {
+				limit = {
+					954 = {
+						OR = {
+							country_or_subject_holds = ROOT
+							owner = {
+								OR = {
+									technology_group = north_american
+									# technology_group = hellenised_american
+									technology_group = south_american
+								}
+								has_country_modifier = nhs_greek_fire_deal
+								
+							}
+						}
+					}
+				}
+				set_country_flag = nhs_found_the_source
+			}
 		}
 	}
 
@@ -187,19 +233,11 @@ country_event = {
 					set_province_flag = nhs_province_had_naptha_exploitation
 				}
 			}
-			if = {
-				limit = {
-					has_country_modifier = nhs2_depleting_fire_ships
-				}
-				remove_country_modifier = nhs2_depleting_fire_ships
-			}
-			if = {
-				limit = {
-					has_country_modifier = nhs2_depleting_fire_forts
-				}
-				remove_country_modifier = nhs2_depleting_fire_forts
-			}
+			remove_country_modifier = nhs2_depleting_fire_sieges
+			remove_country_modifier = nhs2_depleted_fire_sieges
+			remove_country_modifier = nhs2_depleting_fire_ships_and_forts
 			nhs_set_the_fire_on = yes
+			to_enable_siege_flamethrowers = yes
 		}
 	}
 }
@@ -305,19 +343,11 @@ country_event = {
 					set_province_flag = nhs_province_had_naptha_exploitation
 				}
 			}
-			if = {
-				limit = {
-					has_country_modifier = nhs2_depleting_fire_ships
-				}
-				remove_country_modifier = nhs2_depleting_fire_ships
-			}
-			if = {
-				limit = {
-					has_country_modifier = nhs2_depleting_fire_forts
-				}
-				remove_country_modifier = nhs2_depleting_fire_forts
-			}
+			remove_country_modifier = nhs2_depleting_fire_sieges
+			remove_country_modifier = nhs2_depleted_fire_sieges
+			remove_country_modifier = nhs2_depleting_fire_ships_and_forts
 			nhs_set_the_fire_on = yes
+			to_enable_siege_flamethrowers = yes
 		}
 	}
 }
@@ -453,18 +483,9 @@ country_event = {
 					}
 				}
 			}
-			if = {
-				limit = {
-					has_country_modifier = nhs2_depleting_fire_ships
-				}
-				remove_country_modifier = nhs2_depleting_fire_ships
-			}
-			if = {
-				limit = {
-					has_country_modifier = nhs2_depleting_fire_forts
-				}
-				remove_country_modifier = nhs2_depleting_fire_forts
-			}
+			remove_country_modifier = nhs2_depleting_fire_sieges
+			remove_country_modifier = nhs2_depleted_fire_sieges
+			remove_country_modifier = nhs2_depleting_fire_ships_and_forts
 			nhs_set_the_fire_on = yes
 			event_target:nhs_naphta_province = {
 				if = {
@@ -484,6 +505,7 @@ country_event = {
 					set_province_flag = nhs_province_had_naptha_exploitation
 				}
 			}
+			to_enable_siege_flamethrowers = yes
 		}
 	}
 }
@@ -979,18 +1001,9 @@ country_event = {
 			}
 			set_country_flag = nhs_found_the_source
 			clr_country_flag = nhs2_had_greek_fire
-			if = {
-				limit = {
-					has_country_modifier = nhs2_depleting_fire_ships
-				}
-				remove_country_modifier = nhs2_depleting_fire_ships
-			}
-			if = {
-				limit = {
-					has_country_modifier = nhs2_depleting_fire_forts
-				}
-				remove_country_modifier = nhs2_depleting_fire_forts
-			}
+			remove_country_modifier = nhs2_depleting_fire_sieges
+			remove_country_modifier = nhs2_depleted_fire_sieges
+			remove_country_modifier = nhs2_depleting_fire_ships_and_forts
 			nhs_set_the_fire_on = yes
 			add_opinion = {
 				who = FROM
@@ -1022,6 +1035,7 @@ country_event = {
 					}
 				}
 			}
+			to_enable_siege_flamethrowers = yes
 		}
 	}
 }
