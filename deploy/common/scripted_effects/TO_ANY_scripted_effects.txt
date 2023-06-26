@@ -3033,3 +3033,30 @@ to_check_trade_center_modifiers_from_privileges = {
 	}
 	to_handle_mercantile_nation_cot_boost_modifier = yes
 }
+
+to_native_undiscover_provinces_outside_of_capital_region_if_annexed = {
+	if = {
+		limit = {
+			NOT = { technology_group = FROM }
+			FROM = {
+				OR = {
+					technology_group = north_american
+					technology_group = south_american
+					technology_group = mesoamerican
+					technology_group = andean
+				}
+			}
+		}
+		FROM = {
+			capital_scope = {
+				save_event_target_as = to_annexed_capital_scope
+			}
+			every_province = {
+				limit = {
+					NOT = { region = event_target:to_annexed_capital_scope }
+				}
+				undiscover_country = PREV
+			}
+		}
+	}
+}
