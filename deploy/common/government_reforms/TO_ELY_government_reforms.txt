@@ -86,8 +86,15 @@ senatorial_empire = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 	}
 	trigger = {
-		has_reform = senatorial_empire
-		NOT = { has_reform = to_reduce_senate_reform }
+		if = {
+			limit = {
+				has_country_flag = to_allow_senatorial_empire_reforms
+			}
+			has_country_flag = to_allow_senatorial_empire_reforms
+		}
+		else = {
+			has_reform = senatorial_empire
+		}
 	}
 	fixed_rank = 3
 	#lock_level_when_selected = yes
@@ -255,7 +262,13 @@ elysian_absolute_empire = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 	}
 	trigger = {
-		has_reform = to_reduce_senate_reform
+		custom_trigger_tooltip = {
+			tooltip = to_restricted_power_of_the_senate_tt
+			OR = {
+				has_reform = to_reduce_senate_reform
+				has_country_flag = to_restricted_power_of_the_senate
+			}
+		}
 	}
 	#lock_level_when_selected = yes
 	valid_for_new_country = no
@@ -270,11 +283,11 @@ elysian_absolute_empire = {
 		allow_free_estate_privilege_revocation = yes
 		all_estate_loyalty_equilibrium = -0.1
 		all_estate_influence_modifier = -0.15
+
+		# from to_reduce_senate_reform
+		max_absolutism = 10
+		yearly_absolutism = 1.5
 	}
-	# conditional = {
-		# allow = { has_dlc = "Common Sense" }
-		# has_parliament = no
-	# }
 	conditional = {
 		allow = {	
 			has_global_flag = nhs_enable_venetian_merchant_estate_g
@@ -394,7 +407,10 @@ to_indiscriminate_greek_fire_use_reform = {
 royal_decree_reform_ely = {
 	icon = "king"
 	potential = {
-		has_reform = senatorial_empire
+		OR = {
+			has_reform = senatorial_empire
+			has_country_flag = to_allow_senatorial_empire_reforms
+		}
 	}
 	allow_normal_conversion = yes
 	modifiers = {
@@ -1420,7 +1436,7 @@ to_safeguard_home_waters = {
 ########################################
 
 letat_cest_moi_reform_ely = {
-	icon = "queen"
+	icon = "to_reduce_senate_reform"
 	potential = {
 		OR = {
 			has_reform = elysian_empire
@@ -1559,21 +1575,16 @@ to_consolidate_senate_of_cities = {
 	}
 }
 
-########################################
-# Tier X
-########################################
-
 to_reduce_senate_reform = {
 	icon = "to_reduce_senate_reform"
 	allow_normal_conversion = yes
 	modifiers = {
-		max_absolutism = 10
-		yearly_absolutism = 1.5
 	}
 	potential = {
 		OR = {
 			has_reform = senatorial_empire
-			has_reform = elysian_absolute_empire
+			has_country_flag = to_allow_senatorial_empire_reforms
+			# has_reform = elysian_absolute_empire
 			# has_reform = elysian_revolutionary_empire
 		}
 	}
@@ -1601,12 +1612,13 @@ to_reduce_senate_reform = {
 		}
 	}
 	effect = {
+		set_country_flag = to_restricted_power_of_the_senate
 		if = {
 			limit = {
-				NOT = { has_country_flag = nhs_no_reduce_senate_effect }
 				has_reform = senatorial_empire
 			}
 			custom_tooltip = to_reform_effects_tt
+			set_country_flag = to_allow_senatorial_empire_reforms
 			to_add_government_reform_short_tooltip = { REFORM = elysian_absolute_empire }
 			to_add_government_reform_short_tooltip = { REFORM = royal_decree_reform }
 			to_add_government_reform_short_tooltip = { REFORM = letat_cest_moi_reform_ely }
@@ -1620,34 +1632,45 @@ to_reduce_senate_reform = {
 				share = -10
 			}
 		}
-		else_if = {
-			limit = {
-				NOT = { has_country_flag = nhs_no_reduce_senate_effect }
-				has_reform = elysian_absolute_empire
-			}
-			custom_tooltip = to_reform_effects_tt
-			tooltip = {
-				to_add_government_reform_short_tooltip = { REFORM = elysian_absolute_empire }
-				to_add_government_reform_short_tooltip = { REFORM = royal_decree_reform }
-				to_add_government_reform_short_tooltip = { REFORM = letat_cest_moi_reform_ely }
-				add_absolutism = 5
-				add_stability = -2
-				add_legitimacy = -30
-				remove_country_modifier = nhs2_patriarch_influences_major
-				remove_country_modifier = nhs2_patriarch_influences_minor
-				change_estate_land_share = {
-					estate = all
-					share = -10
-				}
-			}
-		}
+		# else_if = {
+		# 	limit = {
+		# 		has_reform = elysian_absolute_empire
+		# 	}
+		# 	custom_tooltip = to_reform_effects_tt
+		# 	tooltip = {
+		# 		to_add_government_reform_short_tooltip = { REFORM = elysian_absolute_empire }
+		# 		to_add_government_reform_short_tooltip = { REFORM = royal_decree_reform }
+		# 		to_add_government_reform_short_tooltip = { REFORM = letat_cest_moi_reform_ely }
+		# 		add_absolutism = 5
+		# 		add_stability = -2
+		# 		add_legitimacy = -30
+		# 		remove_country_modifier = nhs2_patriarch_influences_major
+		# 		remove_country_modifier = nhs2_patriarch_influences_minor
+		# 		change_estate_land_share = {
+		# 			estate = all
+		# 			share = -10
+		# 		}
+		# 	}
+		# }
 		# custom_tooltip = nhs_path_to_revolution_tt
 		# custom_tooltip = nhs_new_line_tt
 		hidden_effect = {
 			set_ruler_flag = nhs_changed_to_abs
 		}
 	}
+
+	modifiers = {
+		governing_capacity = 250
+	}
+
+	removed_effect = {
+		clr_country_flag = to_allow_senatorial_empire_reforms
+	}
 }
+
+########################################
+# Tier X
+########################################
 
 legislative_houses_reform_ely = {
 	icon = "parliament_hall"
@@ -1664,7 +1687,11 @@ to_empower_senate_reform = {
 	icon = "parliament_hall"
 	allow_normal_conversion = yes
 	potential = {
-		has_reform = elysian_absolute_empire
+		OR = {
+			has_reform = elysian_absolute_empire
+			has_country_flag = to_allow_absolute_empire_reforms
+		}
+		
 	}
 	trigger = {
 		custom_trigger_tooltip = {
@@ -1684,17 +1711,18 @@ to_empower_senate_reform = {
 				}
 				remove_government_reform = royal_decree_reform_ely
 			}
+			set_country_flag = to_allow_absolute_empire_reforms
 			to_add_government_reform_short_tooltip = { REFORM = senatorial_empire }
 			if = {
 				limit = {
-					has_country_flag = nhs_remember_consolidating_senate
+					has_country_flag = nhs_remember_expanding_senate
 				}
-				to_add_government_reform_short_tooltip = { REFORM = to_consolidate_senate_of_cities }
-			}
-			else = {
 				to_add_government_reform_short_tooltip = { REFORM = to_expand_senate_of_cities }
 			}
-			# to_add_government_reform_short_tooltip = { REFORM = legislative_houses_reform_ely }
+			else = {
+				to_add_government_reform_short_tooltip = { REFORM = to_consolidate_senate_of_cities }
+			}
+			to_add_government_reform_short_tooltip = { REFORM = legislative_houses_reform_ely }
 			
 			add_stability_or_adm_power = yes
 			add_legitimacy = 20
@@ -1739,6 +1767,7 @@ to_empower_senate_reform = {
 		}
 		hidden_effect = {
 			set_ruler_flag = nhs_changed_to_abs
+			clr_country_flag = to_restricted_power_of_the_senate
 		}
 	}
 	conditional = {
@@ -1751,7 +1780,10 @@ to_empower_senate_reform = {
 		has_parliament = yes
 	}
 	modifiers = {
-		possible_adm_policy = 1
-		global_unrest = -1
+		free_policy = 1
+	}
+
+	removed_effect = {
+		clr_country_flag = to_allow_absolute_empire_reforms
 	}
 }
