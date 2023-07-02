@@ -743,3 +743,111 @@ to_on_siege_won_country = {
 to_on_war_ended = {
 	to_check_spared_from_greek_fire_on_war_ended = yes
 }
+
+##scope = colony province, FROM = owner country or province if there's a minority expulsion source
+to_on_colonist_boosting_colony = {
+	hidden_effect = {
+		if = {
+			limit = {
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+				owner = {
+					to_has_native_priv_inclusive_citizenship = yes
+				}
+				NOT = { nhs_culturally_native = yes }
+				NOT = { has_province_flag = to_static_colonial_culture }
+				native_size = 0.01
+				to_nat_has_culture_flag = yes
+			}
+			to_nat_restore_original_culture_from_flag = { CHANGE_ORIGINAL_CULTURE = yes }
+		}
+		else_if = {
+			limit = {
+				NOT = { has_province_flag = to_static_colonial_culture }
+				NOT = { to_has_correct_ely_dynamic_culture = yes }
+				OR = {
+					to_has_incorrect_ely_dynamic_culture = yes
+					NOT = {
+						AND = {
+							culture = FROM
+							religion = FROM
+						}
+					}
+				}
+				NOT = {
+					AND = {
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+						owner = {
+							to_has_native_priv_inclusive_citizenship = yes
+						}
+						OR = {
+							nhs_culturally_native = yes
+							to_nat_has_culture_flag = yes
+						}
+						native_size = 0.01
+					}
+				}
+				OR = {
+					AND = {
+						religion = noreligion
+						religion = noculture
+					}
+					AND = {
+						NOT = {
+							OR = {
+								continent = north_america
+								continent = south_america
+								continent = new_world
+							}
+						}
+						NOT = {
+							OR = {
+								has_dlc = "Dharma"
+								has_dlc = "Wealth of Nations"
+							}
+						}
+					}
+					#test if colonists outnumber natives
+					if = {
+						limit = {
+							owner = {
+								has_idea = free_colonies
+							}
+						}
+						NOT = { native_size = 20 }
+					}
+					else = {
+						variable_arithmetic_trigger = {
+							custom_tooltip = colonysize_is_larger_than_nativesize_tt
+							export_to_variable = {
+								which = vab_colonysize
+								value = trigger_value:colonysize
+							}
+							export_to_variable = {
+								which = vab_nativesize
+								value = trigger_value:native_size
+							}
+							multiply_variable = {
+								which = vab_nativesize
+								value = 100
+							}
+							check_variable = {
+								which = vab_colonysize
+								which = vab_nativesize
+							}
+						}
+					}
+				}
+			}
+			change_religion = FROM
+			change_culture = FROM
+			change_original_culture = FROM
+			to_ely_province_culture_check = { CHANGE_ORIGINAL_CULTURE = yes }
+		}
+	}
+}
