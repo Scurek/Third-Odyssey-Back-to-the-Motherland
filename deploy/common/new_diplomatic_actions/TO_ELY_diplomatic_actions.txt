@@ -1569,3 +1569,221 @@ to_revoke_blood_tax = {
 		always = no
 	}
 }
+
+to_demand_religious_unity = {
+	category = emperor
+	require_acceptance = yes
+	is_visible = {
+		is_emperor = yes
+		mission_completed = to_neither_holy_nor_roman_mission
+		religion_group = christian
+		FROM = {
+			is_part_of_hre = yes
+			religion_group = christian
+			NOT = { religion = ROOT }
+		}
+	}
+	is_allowed = {
+		if = {
+			limit = {
+				NOT = { imperial_influence = 1 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_less_than_one_authority_diplo_tt
+				always = no
+			}
+		}
+	}
+	on_accept = {
+		add_imperial_influence = -1
+		FROM = {
+			change_religion = ROOT
+			force_converted = yes
+		}
+	}
+	on_decline = {
+		add_imperial_influence = -1
+		add_casus_belli = {
+			target = FROM
+			type = cb_religious_conformance
+			months = 24
+		}
+	}
+
+	ai_acceptance = { # This works similarly to variable_arithmetic_trigger, but does not support triggers generally. Instead, "limit" will be evaluated first and the rest ignored if it isn't passed.
+		add_entry = {
+			name = attitude_allied_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_allied } } }
+			export_to_variable = { variable_name = ai_value value = 20 }
+		}
+		add_entry = {
+			name = attitude_neutral_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_neutral } } }
+			export_to_variable = { variable_name = ai_value value = -10 }
+		}
+		add_entry = {
+			name = attitude_rivalry_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_rivalry } } }
+			export_to_variable = { variable_name = ai_value value = -1000 }
+		}
+		add_entry = {
+			name = attitude_hostile_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_hostile } } }
+			export_to_variable = { variable_name = ai_value value = -1000 }
+		}
+		add_entry = {
+			name = attitude_friendly_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_friendly } } }
+			export_to_variable = { variable_name = ai_value value = 20 }
+		}
+		add_entry = {
+			name = attitude_threatened_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_threatened } } }
+			export_to_variable = { variable_name = ai_value value = -10 }
+		}
+		add_entry = {
+			name = attitude_outraged_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_outraged } } }
+			export_to_variable = { variable_name = ai_value value = -1000 }
+		}
+		add_entry = {
+			name = attitude_domineering_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_domineering } } }
+			export_to_variable = { variable_name = ai_value value = -1000 }
+		}
+		add_entry = {
+			name = attitude_rebellious_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_rebellious } } }
+			export_to_variable = { variable_name = ai_value value = -1000 }
+		}
+		add_entry = {
+			name = attitude_disloyal_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_disloyal } } }
+			export_to_variable = { variable_name = ai_value value = -30 }
+		}
+		add_entry = {
+			name = attitude_loyal_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_loyal } } }
+			export_to_variable = { variable_name = ai_value value = 20 }
+		}
+		add_entry = {
+			name = attitude_protective_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_protective } } }
+			export_to_variable = { variable_name = ai_value value = 20 }
+		}
+		add_entry = {
+			name = attitude_defensive_DIPLO_ATTITUDE_TT
+			limit = { FROM = { ai_attitude = { who = ROOT attitude = attitude_defensive } } }
+			export_to_variable = { variable_name = ai_value value = 20 }
+		}
+		add_entry = {
+			name = DIPLO_OPPINION
+			limit = { FROM = { has_opinion = { who = ROOT opinion = 0 } } }
+			export_to_variable = {
+				variable_name = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = {
+				which = ai_value 
+				value = 5
+			}
+		}
+		add_entry = {
+			name = DIPLO_OPPINION
+			limit = { FROM = { NOT = { has_opinion = { who = ROOT opinion = 0 } } } }
+			export_to_variable = {
+				variable_name = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = {
+				which = ai_value 
+				value = 2
+			}
+		}
+		add_entry = {
+			name = AI_DIPLOMATIC_REPUTATION
+			export_to_variable = {
+				variable_name = ai_value
+				value = trigger_value:diplomatic_reputation
+			}
+			# Round down, couse pdx did it as well
+			multiply_variable = { 
+				which = ai_value
+				value = 0.001
+			}
+			multiply_variable = { 
+				which = ai_value
+				value = 1000
+			}
+			#1 rep = 3
+			multiply_variable = {
+				which = ai_value
+				value = 3
+			}
+		}
+		add_entry = {
+			name = TO_PRESTIGE
+			export_to_variable = {
+				variable_name = ai_value
+				value = trigger_value:prestige
+			}
+			export_to_variable = {
+				variable_name = prestige_from
+				value = trigger_value:prestige
+				who = FROM
+			}
+			subtract_variable = {
+				which = ai_value
+				which = prestige_from
+			}
+			divide_variable = {
+				which = ai_value
+				value = 10
+			}
+			# Round up
+			change_variable = {
+				which = ai_value
+				value = 0.501
+			}
+			multiply_variable = { 
+				which = ai_value
+				value = 0.001
+			}
+			multiply_variable = { 
+				which = ai_value
+				value = 1000
+			}
+		}
+		add_entry = {
+			name = DIPLO_NUM_OF_PROVINCES
+			export_to_variable = {
+				variable_name = ai_value
+				value = trigger_value:num_of_cities
+				who = FROM
+			}
+			#Vanilla, each province beyond 1st: 5
+			#Here, each province beyond 1st: 3
+			subtract_variable = {
+				which = ai_value
+				value = 1
+			}
+			multiply_variable = {
+				which = ai_value
+				value = -3
+			}
+		}
+		add_entry = {
+			name = TO_IS_AT_WAR_AGAINST
+			limit = { FROM = { war_with = ROOT } }
+			export_to_variable = { variable_name = ai_value value = -1000 }
+		}
+	}
+
+	ai_will_do = {
+		always = no
+	}
+}
