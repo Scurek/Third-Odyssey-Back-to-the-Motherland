@@ -8817,8 +8817,8 @@ to_nhs_handle_post_disaster_tolerance_modifier = {
 				has_country_flag = nhs_enable_tolerated_minority
 				culture_group = PREV
 			}
-			if = {
-				limit = {
+			OR = {
+				NOT = {
 					OR = {
 						culture = greek
 						culture = pontic_greek
@@ -8878,8 +8878,8 @@ to_nhs_handle_post_disaster_tolerance_modifier = {
 				culture_group = PREV
 			}
 			religion = pantheon_worship
-			if = {
-				limit = {
+			OR = {
+				NOT = {
 					OR = {
 						culture = greek
 						culture = pontic_greek
@@ -9136,6 +9136,7 @@ to_nhs_remove_pre_hellenic_disaster_flags = {
 	clr_country_flag = TO_nhs_hellenicconversion_105
 	clr_country_flag = TO_nhs_hellenicconversion_106
 	clr_country_flag = TO_nhs_hellenicconversion_107
+	clr_country_flag = TO_nhs_hellenicconversion_21
 
 	clr_country_flag = nhs_had_hellenicconversion_41
 	clr_country_flag = nhs_had_hellenicconversion_43
@@ -9147,6 +9148,8 @@ to_nhs_remove_pre_hellenic_disaster_flags = {
 
 	clr_country_flag = nhs_pagan_assemblies
 	# clr_country_flag = nhs_hcd_opposed_the_inquisition
+
+	clr_country_flag = to_computed_zealous_heir_stats
 }
 
 to_trigger_hellenic_disaster_random_event = {
@@ -9371,6 +9374,7 @@ to_nhs_remove_all_non_tolerant_clergy_privileges = {
 		remove_estate_privilege = estate_church_enforced_one_faith
 	}
 }
+
 nhs_set_clergy_loyalty_to_50 = {
 	custom_tooltip = nhs_set_clergy_loyalty_to_50_tt
 	hidden_effect = {
@@ -9382,6 +9386,280 @@ nhs_set_clergy_loyalty_to_50 = {
 			estate = estate_church
 			loyalty = -50
 		}
+	}
+}
+
+to_compute_zealous_heir_stats = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = to_computed_zealous_heir_stats }
+			has_heir = yes
+		}
+		set_country_flag = to_computed_zealous_heir_stats
+		export_to_variable = {
+			variable_name = to_heir_adm
+			value = trigger_value:$SOURCE_ADM$
+		}
+		export_to_variable = {
+			variable_name = to_heir_dip
+			value = trigger_value:$SOURCE_DIP$
+		}
+		export_to_variable = {
+			variable_name = to_heir_mil
+			value = trigger_value:$SOURCE_MIL$
+		}
+		set_variable = {
+			which = ForLoopCounter
+			value = 2
+		}	
+		while = {
+			limit = {
+				check_variable = {
+					which = ForLoopCounter
+					value = 1
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = to_heir_dip
+						value = 1
+					}
+				}
+				change_variable = {
+					which = to_heir_dip
+					value = -1
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = to_heir_mil
+						value = 1
+					}
+				}
+				change_variable = {
+					which = to_heir_mil
+					value = -1
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = to_heir_adm
+						value = 1
+					}
+				}
+				change_variable = {
+					which = to_heir_adm
+					value = -1
+				}
+			}
+			subtract_variable = {
+				which = ForLoopCounter
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = to_heir_mil
+						value = 6
+					}
+				}
+			}
+			change_variable = {
+				which = to_heir_mil
+				value = 1
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = to_heir_adm
+						value = 6
+					}
+				}
+			}
+			change_variable = {
+				which = to_heir_adm
+				value = 1
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = to_heir_dip
+						value = 6
+					}
+				}
+			}
+			change_variable = {
+				which = to_heir_dip
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = to_heir_adm
+						value = 6
+					}
+				}
+			}
+			change_variable = {
+				which = to_heir_adm
+				value = 1
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = to_heir_mil
+						value = 6
+					}
+				}
+			}
+			change_variable = {
+				which = to_heir_mil
+				value = 1
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = to_heir_dip
+						value = 6
+					}
+				}
+			}
+			change_variable = {
+				which = to_heir_dip
+				value = 1
+			}
+		}
+	}
+}
+
+to_assign_zealous_heir = {
+	if = {
+		limit = {
+			has_dlc = "Rights of Man"
+		}
+		custom_tooltip = to_get_zealous_heir_with_personality_tt
+	}
+	else = {
+		custom_tooltip = to_get_zealous_heir_tt
+	}
+	hidden_effect = {
+		to_generate_ruler_from_variable = {
+			ADM_VARIABLE = to_heir_adm
+			DIP_VARIABLE = to_heir_dip
+			MIL_VARIABLE = to_heir_mil
+			EFFECT = "to_generate_zealous_heir"
+		}
+		if = {
+			limit = {
+				has_dlc = "Rights of Man"
+			}
+			add_heir_personality = zealot_personality
+		}
+	}
+}
+
+to_assign_zealous_ruler = {
+	if = {
+		limit = {
+			has_dlc = "Rights of Man"
+		}
+		custom_tooltip = to_get_zealous_ruler_with_personality_tt
+	}
+	else = {
+		custom_tooltip = to_get_zealous_ruler_tt
+	}
+	hidden_effect = {
+		to_generate_ruler_from_variable = {
+			ADM_VARIABLE = to_heir_adm
+			DIP_VARIABLE = to_heir_dip
+			MIL_VARIABLE = to_heir_mil
+			EFFECT = "to_generate_zealous_ruler"
+		}
+		if = {
+			limit = {
+				has_dlc = "Rights of Man"
+			}
+			add_ruler_personality = zealot_personality
+		}
+	}
+}
+
+to_generate_zealous_heir = {
+	define_heir = {
+		dynasty = ROOT
+		adm = $ADM$
+		dip = $DIP$
+		mil = $MIL$
+		max_random_adm = $ADM$
+		max_random_dip = $DIP$
+		max_random_mil = $MIL$
+		birth_date = "1447.9.18"
+		claim = 75
+		religion = orthodox
+		no_consort_with_heir = yes
+		female = no
+	}
+}
+
+to_generate_zealous_ruler = {
+	define_ruler = {
+		dynasty = ROOT
+		adm = $ADM$
+		dip = $DIP$
+		mil = $MIL$
+		max_random_adm = $ADM$
+		max_random_dip = $DIP$
+		max_random_mil = $MIL$
+		min_age = 15
+		max_age = 21
+		claim = 75
+		religion = orthodox
+		female = no
+	}
+}
+
+to_restore_heir_claim_hellenic = {
+	if = {
+		limit = {
+			OR = {
+				has_heir_flag = to_heir_lost_claim_hellenic
+				has_heir_flag = to_heir_lost_claim_hellenic_minor
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_restore_lost_heir_claim_hellenic_tt
+		if = {
+			limit = {
+				has_heir_flag = to_heir_lost_claim_hellenic
+			}
+			add_heir_claim = 33
+		}
+		else = {
+			add_heir_claim = 10
+		}
+	}
+	else_if = {
+		limit = {
+			has_heir_flag = to_heir_lost_claim_hellenic_major
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_restore_lost_heir_claim_hellenic_major_tt
+		add_heir_claim = 75
 	}
 }
 
