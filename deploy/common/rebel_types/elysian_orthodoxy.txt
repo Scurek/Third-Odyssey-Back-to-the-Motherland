@@ -145,18 +145,15 @@ elysian_orthodoxy_rebels = {
 					duration = 730
 				}
 			}
-			if = {
-				limit = {
-					NOT = { religion = elysian_orthodoxy }
-					is_reformation_center = no
-					NOT = { owner = { religion = elysian_orthodoxy } }
-				}
+			else = {
 				change_religion = elysian_orthodoxy
 				add_province_modifier = {
 					name = "forced_conversion"
 					duration = 730
 				}
 			}
+			# Third Odyssey
+			to_on_rebels_siege_province_land_share = { religion = elysian_orthodoxy }
 		}
 	}
 	
@@ -196,34 +193,7 @@ elysian_orthodoxy_rebels = {
 			}
 			add_stability = -1
 		}
-		if = {
-			limit = {
-				religion = elysian_orthodoxy
-			}
-			add_country_modifier = {
-				name = "religious_intolerance_enforced"
-				duration = 3650
-			}
-		}
-		if = {
-			limit = {
-				religion = elysian_orthodoxy
-				has_estate = estate_church
-				NOT = {
-					has_estate_influence_modifier = {
-						estate = estate_church
-						modifier = EST_VAL_RELIGIOUS_ZEALOTS_TRIUMPH
-					}
-				}
-			}
-			add_estate_influence_modifier = {
-				estate = estate_church
-				desc = EST_VAL_RELIGIOUS_ZEALOTS_TRIUMPH
-				duration = 3650
-				influence = 15
-			}
-		}
-		if = {
+		else_if = {
 			limit = {
 				NOT = { religion = elysian_orthodoxy }
 				dominant_religion = elysian_orthodoxy
@@ -232,17 +202,29 @@ elysian_orthodoxy_rebels = {
 			change_religion = elysian_orthodoxy
 			force_converted = yes
 		}
-		if = {
+		else_if = {
+			limit = {
+				religion = elysian_orthodoxy
+			}
+			add_country_modifier = {
+				name = "religious_intolerance_enforced"
+				duration = 3650
+			}
+		}
+		else_if = {
 			limit = {
 				NOT = { religion = elysian_orthodoxy }
 				NOT = { dominant_religion = elysian_orthodoxy }
-				NOT = { tag = PAP }
 				religion_group = christian
+				NOT = { has_country_modifier = heretic_tolerance }
 			}
 			add_country_modifier = {
 				name = "heretic_tolerance"
 				duration = 3650
 			}
 		}
+		else = { add_stability = -1 } #Should probably never get here
+
+		to_on_rebels_enforce_demands_land_share = { religion = elysian_orthodoxy }
 	}
 }

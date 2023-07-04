@@ -153,13 +153,8 @@ maya_rebels = {
 				}
 			}
 		}
-		owner = {
-			change_estate_land_share = {
-				estate = estate_church
-				share = 10.0
-				province = ROOT
-			}
-		}
+		# Third Odyssey
+		to_on_rebels_siege_province_land_share = { religion = mesoamerican_religion }
 	}
 	
 	# Country scope
@@ -186,12 +181,7 @@ maya_rebels = {
 		}
 		if = {
 			limit = {
-				OR = {
-					NOT = { religion_group = pagan }
-					religion = pantheon_worship
-					religion = aztlan_worship
-					religion = norse_pagan_reformed
-				}
+				NOT = { religion = mesoamerican_religion }
 			}
 			add_prestige = -50
 			every_owned_province = {
@@ -209,17 +199,6 @@ maya_rebels = {
 		}
 		else_if = {
 			limit = {
-				religion_group = pagan
-				NOT = { religion = pantheon_worship }
-				NOT = { religion = aztlan_worship }
-				NOT = { religion = norse_pagan_reformed }
-				NOT = { religion = mesoamerican_religion }
-			}
-			change_religion = mesoamerican_religion
-			force_converted = yes
-		}
-		else_if = {
-			limit = {
 				religion = mesoamerican_religion
 			}
 			add_country_modifier = {
@@ -227,36 +206,20 @@ maya_rebels = {
 				duration = 3650
 			}
 		}
-		else = { add_stability = -1 } #Should probably never get here
-		if = {
+		else_if = {
 			limit = {
-				religion = mesoamerican_religion
-				has_estate = estate_church
-				NOT = {
-					has_estate_influence_modifier = {
-						estate = estate_church
-						modifier = EST_VAL_RELIGIOUS_ZEALOTS_TRIUMPH
-					}
-				}
+				NOT = { religion = mesoamerican_religion }
+				religion_group = pagan
+				NOT = { has_country_modifier = heretic_tolerance }
 			}
-			add_estate_influence_modifier = {
-				estate = estate_church
-				desc = EST_VAL_RELIGIOUS_ZEALOTS_TRIUMPH
+			add_country_modifier = {
+				name = "heretic_tolerance"
 				duration = 3650
-				influence = 15
 			}
 		}
-		#if = {
-		#	limit = {
-		#		religion_group = pagan
-		#		NOT = { religion = mesoamerican_religion }
-		#	}
-		#	change_religion = mesoamerican_religion
-		#	force_converted = yes
-		#}
-		change_estate_land_share = {
-			estate = estate_church
-			share = 10.0
-		}
+		else = { add_stability = -1 } #Should probably never get here
+
+		# Third Odyssey
+		to_on_rebels_enforce_demands_land_share = { religion = mesoamerican_religion }
 	}
 }

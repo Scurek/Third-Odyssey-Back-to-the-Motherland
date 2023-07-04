@@ -1,13 +1,15 @@
 
 ######################################################################
-# Pantheon rebels. Disgruntled fanatics.
+# Sihk rebels. Disgruntled fanatics.
 ######################################################################
-pantheon_worship_rebels = {
+sikhism_rebels = {
+
+	color = { 230 175 175 }
 
 	area = nation 					# Sticks to provinces of their nation
 	government = theocracy 			# Desires Theocracy
-	religion = pantheon_worship
-	defection = religion			# Defects to countries of their religion
+	religion = sikhism
+	defection = none				# Will not defect
 	defect_delay = 120				# Held provinces will auto-defect after 18 months, regardless of accept/enforce demands.
 	independence = none				# Does not strive for independence
 	unit_transfer = no
@@ -44,7 +46,7 @@ pantheon_worship_rebels = {
 		}
 		modifier = {
 			factor = 0.0
-			NOT = { religion = pantheon_worship }
+			NOT = { religion = sikhism }
 		}
 		modifier = {
 			factor = 0.001
@@ -89,21 +91,21 @@ pantheon_worship_rebels = {
 		}
 		modifier = {
 			factor = 0.0
-			religion = pantheon_worship
-			owner = { religion = pantheon_worship }
+			religion = sikhism
+			owner = { religion = sikhism }
 		}
 		modifier = {
 			factor = 2.0
-			NOT = { religion = pantheon_worship }
+			NOT = { religion = sikhism }
 			any_neighbor_province = {
-	 			religion = pantheon_worship
+	 			religion = sikhism
 	 			NOT = { has_province_modifier = "forced_conversion" }
 	 		}
 	 	}
 		modifier = {
-			factor = 1.5
+			factor = 5
 			has_missionary = yes
-			religion = pantheon_worship
+			religion = sikhism
 		}
 		modifier = {
 			factor = 1.5
@@ -129,37 +131,44 @@ pantheon_worship_rebels = {
 		}
  	}
 	siege_won_effect = {
-		if = {
-			limit = {
-				OR = {
-					religion = pantheon_worship
-					is_reformation_center = yes
-					owner = { religion = pantheon_worship }
-					owner = {
-						has_country_flag = hellenic_conversion_preacher
-						NOT = { has_disaster = nhs_hcd_hellenic_crisis }
+		custom_tooltip = religious_rebels_seige_effect_tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						religion = sikhism
+						is_reformation_center = yes
+						owner = { religion = sikhism }
 					}
 				}
+				add_province_modifier = {
+					name = "religious_violence"
+					duration = 730
+				}
 			}
-			add_province_modifier = {
-				name = "religious_violence"
-				duration = 730
-			}
-		}
-		else = {
-			change_religion = pantheon_worship
-			add_province_modifier = {
-				name = "forced_conversion"
-				duration = 730
+			if = {
+				limit = {
+					NOT = { religion = sikhism }
+					is_reformation_center = no
+					NOT = { owner = { religion = sikhism } }
+				}
+				change_religion = sikhism
+				add_province_modifier = {
+					name = "forced_conversion"
+					duration = 730
+				}
 			}
 		}
 		# Third Odyssey
-		to_on_rebels_siege_province_land_share = { religion = pantheon_worship }
+		to_on_rebels_siege_province_land_share = { religion = sikhism }
 	}
 	
 	# Country scope
 	can_negotiate_trigger = {
-		religion_group = pagan
+		OR = {
+			religion_group = dharmic
+			dominant_religion = sikhism
+		}
 	}
 	
 	# Country scope
@@ -168,9 +177,9 @@ pantheon_worship_rebels = {
 	}
 	
 	# Localisation for their demands
-	demands_description = "pantheon_worship_rebels_demand"
+	demands_description = "sikhism_rebels_demand"
 	
-	# Country Scope	
+	# Country Scope
 	demands_enforced_effect = {
 		hidden_effect = {
 			add_country_modifier = {
@@ -181,7 +190,7 @@ pantheon_worship_rebels = {
 		}
 		if = {
 			limit = {
-				NOT = { religion_group = pagan }
+				NOT = { religion_group = dharmic }
 			}
 			add_prestige = -50
 			every_owned_province = {
@@ -199,29 +208,27 @@ pantheon_worship_rebels = {
 		}
 		else_if = {
 			limit = {
-				religion = pantheon_worship
+				religion = sikhism
 			}
 			add_country_modifier = {
 				name = "religious_intolerance_enforced"
 				duration = 3650
 			}
 		}
+		
 		else_if = {
 			limit = {
-				NOT = { religion = pantheon_worship }
-				OR = {
-					religion_group = pagan
-					dominant_religion = pantheon_worship
-				}
+				NOT = { religion = sikhism }
+				dominant_religion = sikhism
 			}
-			change_religion = pantheon_worship
+			change_religion = sikhism
 			force_converted = yes
 		}
 		else_if = {
 			limit = {
-				NOT = { religion = pantheon_worship }
-				NOT = { dominant_religion = pantheon_worship }
-				religion_group = pagan
+				NOT = { religion = sikhism }
+				NOT = { dominant_religion = sikhism }
+				religion_group = dharmic
 				NOT = { has_country_modifier = heretic_tolerance }
 			}
 			add_country_modifier = {
@@ -229,10 +236,16 @@ pantheon_worship_rebels = {
 				duration = 3650
 			}
 		}
-		else = { add_stability = -1 }
+		else = { add_stability = -1 } #Should probably never get here
+
+		if = {
+			limit = {
+				has_idea_group = indian_muslim_ideas 
+			}
+			swap_free_idea_group = yes
+		}
 
 		# Third Odyssey
-		to_on_rebels_enforce_demands_land_share = { religion = pantheon_worship }
+		to_on_rebels_enforce_demands_land_share = { religion = sikhism }
 	}
 }
-

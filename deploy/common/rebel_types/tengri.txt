@@ -1,13 +1,14 @@
+######################################################################
+# Tengri rebels. Disgruntled fanatics.
+######################################################################
+tengri_pagan_reformed_rebels = {
 
-######################################################################
-# Pantheon rebels. Disgruntled fanatics.
-######################################################################
-pantheon_worship_rebels = {
+	color = { 230 175 175 }
 
 	area = nation 					# Sticks to provinces of their nation
 	government = theocracy 			# Desires Theocracy
-	religion = pantheon_worship
-	defection = religion			# Defects to countries of their religion
+	religion = tengri_pagan_reformed
+	defection = none				# Will not defect
 	defect_delay = 120				# Held provinces will auto-defect after 18 months, regardless of accept/enforce demands.
 	independence = none				# Does not strive for independence
 	unit_transfer = no
@@ -44,7 +45,7 @@ pantheon_worship_rebels = {
 		}
 		modifier = {
 			factor = 0.0
-			NOT = { religion = pantheon_worship }
+			NOT = { religion = tengri_pagan_reformed }
 		}
 		modifier = {
 			factor = 0.001
@@ -89,21 +90,21 @@ pantheon_worship_rebels = {
 		}
 		modifier = {
 			factor = 0.0
-			religion = pantheon_worship
-			owner = { religion = pantheon_worship }
+			religion = tengri_pagan_reformed
+			owner = { religion = tengri_pagan_reformed }
 		}
 		modifier = {
 			factor = 2.0
-			NOT = { religion = pantheon_worship }
+			NOT = { religion = tengri_pagan_reformed }
 			any_neighbor_province = {
-	 			religion = pantheon_worship
+	 			religion = tengri_pagan_reformed
 	 			NOT = { has_province_modifier = "forced_conversion" }
 	 		}
 	 	}
 		modifier = {
-			factor = 1.5
+			factor = 5
 			has_missionary = yes
-			religion = pantheon_worship
+			religion = tengri_pagan_reformed
 		}
 		modifier = {
 			factor = 1.5
@@ -129,32 +130,36 @@ pantheon_worship_rebels = {
 		}
  	}
 	siege_won_effect = {
-		if = {
-			limit = {
-				OR = {
-					religion = pantheon_worship
-					is_reformation_center = yes
-					owner = { religion = pantheon_worship }
-					owner = {
-						has_country_flag = hellenic_conversion_preacher
-						NOT = { has_disaster = nhs_hcd_hellenic_crisis }
+		custom_tooltip = religious_rebels_seige_effect_tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						religion = tengri_pagan_reformed
+						is_reformation_center = yes
+						owner = { religion = tengri_pagan_reformed }
 					}
 				}
+				add_province_modifier = {
+					name = "religious_violence"
+					duration = 730
+				}
 			}
-			add_province_modifier = {
-				name = "religious_violence"
-				duration = 730
-			}
-		}
-		else = {
-			change_religion = pantheon_worship
-			add_province_modifier = {
-				name = "forced_conversion"
-				duration = 730
+			if = {
+				limit = {
+					NOT = { religion = tengri_pagan_reformed }
+					is_reformation_center = no
+					NOT = { owner = { religion = tengri_pagan_reformed } }
+				}
+				change_religion = tengri_pagan_reformed
+				add_province_modifier = {
+					name = "forced_conversion"
+					duration = 730
+				}
 			}
 		}
 		# Third Odyssey
-		to_on_rebels_siege_province_land_share = { religion = pantheon_worship }
+		to_on_rebels_siege_province_land_share = { religion = tengri_pagan_reformed }
 	}
 	
 	# Country scope
@@ -168,7 +173,7 @@ pantheon_worship_rebels = {
 	}
 	
 	# Localisation for their demands
-	demands_description = "pantheon_worship_rebels_demand"
+	demands_description = "tengri_pagan_reformed_rebels_demand"
 	
 	# Country Scope	
 	demands_enforced_effect = {
@@ -199,7 +204,7 @@ pantheon_worship_rebels = {
 		}
 		else_if = {
 			limit = {
-				religion = pantheon_worship
+				religion = tengri_pagan_reformed
 			}
 			add_country_modifier = {
 				name = "religious_intolerance_enforced"
@@ -208,19 +213,15 @@ pantheon_worship_rebels = {
 		}
 		else_if = {
 			limit = {
-				NOT = { religion = pantheon_worship }
-				OR = {
-					religion_group = pagan
-					dominant_religion = pantheon_worship
-				}
+				dominant_religion = tengri_pagan_reformed
+				NOT = { religion = tengri_pagan_reformed }
 			}
-			change_religion = pantheon_worship
+			change_religion = tengri_pagan_reformed
 			force_converted = yes
 		}
 		else_if = {
 			limit = {
-				NOT = { religion = pantheon_worship }
-				NOT = { dominant_religion = pantheon_worship }
+				NOT = { religion = tengri_pagan_reformed }
 				religion_group = pagan
 				NOT = { has_country_modifier = heretic_tolerance }
 			}
@@ -229,10 +230,9 @@ pantheon_worship_rebels = {
 				duration = 3650
 			}
 		}
-		else = { add_stability = -1 }
+		else = { add_stability = -1 } #Should probably never get here
 
 		# Third Odyssey
-		to_on_rebels_enforce_demands_land_share = { religion = pantheon_worship }
+		to_on_rebels_enforce_demands_land_share = { religion = tengri_pagan_reformed }
 	}
 }
-

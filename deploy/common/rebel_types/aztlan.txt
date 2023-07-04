@@ -125,29 +125,31 @@ aztlan_worship_rebels = {
 		}
  	}
 	siege_won_effect = {
-		if = {
-			limit = {
-				OR = {
-					religion = aztlan_worship
-					is_reformation_center = yes
-					owner = { religion = aztlan_worship }
+		custom_tooltip = religious_rebels_seige_effect_tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						religion = aztlan_worship
+						is_reformation_center = yes
+						owner = { religion = aztlan_worship }
+					}
+				}
+				add_province_modifier = {
+					name = "religious_violence"
+					duration = 730
 				}
 			}
-			add_province_modifier = {
-				name = "religious_violence"
-				duration = 730
+			else = {
+				change_religion = aztlan_worship
+				add_province_modifier = {
+					name = "forced_conversion"
+					duration = 730
+				}
 			}
 		}
-		if = {
-			limit = {
-				NOT = { religion = aztlan_worship }
-			}
-			change_religion = aztlan_worship
-			add_province_modifier = {
-				name = "forced_conversion"
-				duration = 730
-			}
-		}
+		# Third Odyssey
+		to_on_rebels_siege_province_land_share = { religion = aztlan_worship }
 	}
 	
 	# Country scope
@@ -225,28 +227,6 @@ aztlan_worship_rebels = {
 		}
 		else = { add_stability = -1 }
 
-
-		if = {
-			limit = {
-				religion = aztlan_worship
-				has_estate = estate_church
-				NOT = {
-					has_estate_influence_modifier = {
-						estate = estate_church
-						modifier = EST_VAL_RELIGIOUS_ZEALOTS_TRIUMPH
-					}
-				}
-			}
-			add_estate_influence_modifier = {
-				estate = estate_church
-				desc = EST_VAL_RELIGIOUS_ZEALOTS_TRIUMPH
-				duration = 3650
-				influence = 15
-			}
-			change_estate_land_share = {
-				estate = estate_church
-				share = 10.0
-			}
-		}
+		to_on_rebels_enforce_demands_land_share = { religion = aztlan_worship }
 	}
 }
