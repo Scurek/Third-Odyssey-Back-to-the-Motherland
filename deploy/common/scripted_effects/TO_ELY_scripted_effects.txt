@@ -9413,6 +9413,12 @@ to_nhs_remove_all_clergy_privileges = {
 			}
 			remove_estate_privilege = estate_church_donation_right
 		}
+		if = {
+			limit = {
+				has_estate_privilege = estate_church_nhs_inquisition_privilege
+			}
+			remove_estate_privilege = estate_church_nhs_inquisition_privilege
+		}
 
 		remove_country_modifier = new_world_missions
 	}
@@ -9467,11 +9473,10 @@ nhs_set_clergy_loyalty_to_80 = {
 	}
 }
 
-to_compute_zealous_heir_stats = {
+to_compute_zealous_ruler_heir_stats = {
 	if = {
 		limit = {
 			NOT = { has_country_flag = to_computed_zealous_heir_stats }
-			has_heir = yes
 		}
 		set_country_flag = to_computed_zealous_heir_stats
 		export_to_variable = {
@@ -9812,6 +9817,95 @@ to_nhs_spawn_inquisition_revolt = {
 			}
 		}
 	}
+	[[EVENT_TARGET_2]
+	if = {
+		limit = {
+			has_saved_event_target = $EVENT_TARGET_2$
+			event_target:$EVENT_TARGET_2$ = {
+				owned_by = ROOT
+			}
+		}
+		event_target:$EVENT_TARGET_2$ = {
+			spawn_rebels = {
+				type = to_inquisition_mob_rebels
+				size = 2
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				is_capital = no
+				NOT = { has_province_modifier = nhs_hcd_Pagan_minority }
+				religion = orthodox
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				NOT = { has_province_modifier = nhs_hcd_Pagan_minority }
+				religion = orthodox
+			}
+			spawn_rebels = {
+				type = to_inquisition_mob_rebels
+				size = 2
+			}
+		}
+	}
+	else = {
+		capital_scope = {
+			spawn_rebels = {
+				type = to_inquisition_mob_rebels
+				size = 2
+			}
+		}
+	}
+	]
+
+	[[EVENT_TARGET_3]
+	if = {
+		limit = {
+			has_saved_event_target = $EVENT_TARGET_3$
+			event_target:$EVENT_TARGET_3$ = {
+				owned_by = ROOT
+			}
+		}
+		event_target:$EVENT_TARGET_3$ = {
+			spawn_rebels = {
+				type = to_inquisition_mob_rebels
+				size = 1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				is_capital = no
+				NOT = { has_province_modifier = nhs_hcd_Pagan_minority }
+				religion = orthodox
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				NOT = { has_province_modifier = nhs_hcd_Pagan_minority }
+				religion = orthodox
+			}
+			spawn_rebels = {
+				type = to_inquisition_mob_rebels
+				size = 1
+			}
+		}
+	}
+	else = {
+		capital_scope = {
+			spawn_rebels = {
+				type = to_inquisition_mob_rebels
+				size = 1
+			}
+		}
+	}
+	]
 }
 
 to_nhs_spawn_inquisition_revolt_disaster = {
@@ -9839,7 +9933,15 @@ to_nhs_spawn_inquisition_revolt_disaster = {
 			
 		# }
 		remove_estate_privilege = estate_church_nhs_inquisition_privilege
-		to_nhs_spawn_inquisition_revolt = { EVENT_TARGET = $EVENT_TARGET$ }
+		to_nhs_spawn_inquisition_revolt = { 
+			EVENT_TARGET = $EVENT_TARGET$
+			[[EVENT_TARGET_2]
+			EVENT_TARGET_2 = $EVENT_TARGET_2$
+			]
+			[[EVENT_TARGET_3]
+			EVENT_TARGET_3 = $EVENT_TARGET_3$
+			]
+		}
 		[[DOTTED_LINE]
 		custom_tooltip = nhs_dotted_line_tt
 		]

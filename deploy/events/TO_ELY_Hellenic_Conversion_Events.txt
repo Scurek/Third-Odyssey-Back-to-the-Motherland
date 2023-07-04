@@ -1705,7 +1705,7 @@ country_event = {
 				type = advisor
 				scope = ROOT
 			}
-			to_compute_zealous_heir_stats = {
+			to_compute_zealous_ruler_heir_stats = {
 				SOURCE_ADM = heir_adm
 				SOURCE_DIP = heir_dip
 				SOURCE_MIL = heir_mil
@@ -1901,6 +1901,7 @@ country_event = {
 country_event = {
 	id = nhs_hellenicconversion.8
 	title = nhs_hellenicconversion.8.t
+	# Award for the most dynamic event description?
 	desc = {
 		trigger = {
 			ruler_religion = pantheon_worship
@@ -1919,7 +1920,7 @@ country_event = {
 				religion = pantheon_worship
 			}
 		}
-		desc = nhs_hellenicconversion.8.da
+		desc = nhs_hellenicconversion.8.db
 	}
 	desc = {
 		trigger = {
@@ -1964,7 +1965,16 @@ country_event = {
 		desc = nhs_hellenicconversion.8.df
 	}
 	desc = {
+		trigger = {
+			has_country_modifier = nhs_hrv_loyal_orthodox
+			any_owned_province = {
+				religion = pantheon_worship
+			}
+		}
 		desc = nhs_hellenicconversion.8.dg
+	}
+	desc = {
+		desc = nhs_hellenicconversion.8.dh
 	}
 	picture = BYZANTINE_EMPEROR_eventPicture
 
@@ -2025,14 +2035,14 @@ country_event = {
 					limit = {
 						has_heir = yes
 					}
-					to_compute_zealous_heir_stats = {
+					to_compute_zealous_ruler_heir_stats = {
 						SOURCE_ADM = heir_adm
 						SOURCE_DIP = heir_dip
 						SOURCE_MIL = heir_mil
 					}
 				}
 				else = {
-					to_compute_zealous_heir_stats = {
+					to_compute_zealous_ruler_heir_stats = {
 						SOURCE_ADM = adm
 						SOURCE_DIP = dip
 						SOURCE_MIL = mil
@@ -2106,10 +2116,20 @@ country_event = {
 		add_country_modifier = {
 			name = nhs_hrv_tolerance
 			duration = 29200
-			desc = "END_OF_ELY_RELIGIOUS_WARS"
 		}
-		to_nhs_spawn_inquisition_revolt_disaster = {
-			EVENT_TARGET = to_orthodox_revolt_province_1
+		if = {
+			limit = {
+				has_estate_privilege = estate_church_nhs_inquisition_privilege
+			}
+			to_nhs_spawn_inquisition_revolt_disaster = {
+				EVENT_TARGET = to_orthodox_revolt_province_1
+			}
+		}
+		else = {
+			to_orthodox_spawn_revolt_in_potential_province = {
+				EVENT_TARGET = to_orthodox_revolt_province_1
+				SIZE = 1
+			}
 		}
 	}
 
@@ -2193,16 +2213,9 @@ country_event = {
 				}
 				to_nhs_spawn_inquisition_revolt = {
 					EVENT_TARGET = to_orthodox_revolt_province_1
+					EVENT_TARGET_3 = to_orthodox_revolt_province_2
 				}
-				if = {
-					limit = {
-						has_saved_event_target = to_orthodox_revolt_province_2
-					}
-					to_orthodox_spawn_revolt_in_potential_province = {
-						EVENT_TARGET = to_orthodox_revolt_province_2
-						SIZE = 1
-					}
-				}
+				clr_country_flag = to_has_inquisition
 			}
 			else = {
 				if = {
@@ -2252,16 +2265,9 @@ country_event = {
 				}
 				to_nhs_spawn_inquisition_revolt = {
 					EVENT_TARGET = to_orthodox_revolt_province_1
+					EVENT_TARGET_2 = to_orthodox_revolt_province_2
 				}
-				if = {
-					limit = {
-						has_saved_event_target = to_orthodox_revolt_province_2
-					}
-					to_orthodox_spawn_revolt_in_potential_province = {
-						EVENT_TARGET = to_orthodox_revolt_province_2
-						SIZE = 1
-					}
-				}
+				clr_country_flag = to_has_inquisition
 			}
 			else = {
 				if = {
@@ -3913,14 +3919,14 @@ country_event = {
 					limit = {
 						has_heir = yes
 					}
-					to_compute_zealous_heir_stats = {
+					to_compute_zealous_ruler_heir_stats = {
 						SOURCE_ADM = heir_adm
 						SOURCE_DIP = heir_dip
 						SOURCE_MIL = heir_mil
 					}
 				}
 				else = {
-					to_compute_zealous_heir_stats = {
+					to_compute_zealous_ruler_heir_stats = {
 						SOURCE_ADM = adm
 						SOURCE_DIP = dip
 						SOURCE_MIL = mil
@@ -4403,14 +4409,14 @@ country_event = {
 					limit = {
 						has_heir = yes
 					}
-					to_compute_zealous_heir_stats = {
+					to_compute_zealous_ruler_heir_stats = {
 						SOURCE_ADM = heir_adm
 						SOURCE_DIP = heir_dip
 						SOURCE_MIL = heir_mil
 					}
 				}
 				else = {
-					to_compute_zealous_heir_stats = {
+					to_compute_zealous_ruler_heir_stats = {
 						SOURCE_ADM = adm
 						SOURCE_DIP = dip
 						SOURCE_MIL = mil
