@@ -244,6 +244,12 @@ country_event = {
 		name = nhs_hcd_hellenicrevolt.1.a
 		ai_chance = { factor = 50 }
 		custom_tooltip = to_side_with_moderates_tt
+		if = {
+			limit = {
+				NOT = { ruler_religion = ROOT }
+			}
+			set_ruler_religion = ROOT
+		}
 		custom_tooltip = nhs_new_line_tt
 		set_country_flag = nhs_hcd_supported_moderates
 		add_estate_loyalty = {
@@ -320,6 +326,7 @@ country_event = {
 		to_nhs_spawn_inquisition_revolt_disaster = {
 			EVENT_TARGET = nhs_hcd_target_province
 			REDUCE_LOYALTY = yes
+			DOTTED_LINE = yes
 		}
 
 		to_nhs_remove_pre_hellenic_disaster_country_modifiers = yes
@@ -373,11 +380,56 @@ country_event = {
 		}
 	}
 
-	option = { 
+	option = {
 		# Side with church
 		name = nhs_hcd_hellenicrevolt.1.b
 		ai_chance = { factor = 0 }
-		custom_tooltip = to_side_with_zealots_tt
+		if = {
+			limit = {
+				ruler_religion = pantheon_worship
+			}
+			custom_tooltip = to_side_with_zealots_conversion_tt
+			set_ruler_religion = ROOT
+		}
+		else = {
+			custom_tooltip = to_side_with_zealots_tt
+			if = {
+				limit = {
+					NOT = { ruler_religion = ROOT }
+				}
+				set_ruler_religion = ROOT
+			}
+		}
+		clr_ruler_flag = to_heir_practices_hellenism_in_secret
+		if = {
+			limit = {
+				has_dlc = "Rights of Man"
+			}
+			if = {
+				limit = {
+					ruler_has_personality = tolerant_personality
+				}
+				remove_ruler_personality = tolerant_personality
+			}
+			if = {
+				limit = {
+					NOT = { ruler_has_personality = zealot_personality }
+					OR = {
+						ruler_has_personality = tolerant_personality
+						ruler_has_personality = kind_hearted_personality
+						NOT = { num_of_ruler_traits = { amount = 3 } }
+					}
+				}
+				if = {
+					limit = {
+						NOT = { ruler_has_personality = tolerant_personality }
+						num_of_ruler_traits = { amount = 3 }
+					}
+					remove_ruler_personality = kind_hearted_personality
+				}
+				add_ruler_personality = zealot_personality
+			}
+		}
 		custom_tooltip = nhs_new_line_tt
 		set_country_flag = nhs_hcd_supported_zealots
 		if = {
@@ -491,6 +543,27 @@ country_event = {
 		}
 		if = {
 			limit = {
+				has_heir_flag = to_heir_lost_claim_hellenic_minor
+			}
+			clr_heir_flag = to_heir_lost_claim_hellenic_minor
+			add_heir_claim = 20
+		}
+		else_if = {
+			limit = {
+				has_heir_flag = to_heir_lost_claim_hellenic
+			}
+			clr_heir_flag = to_heir_lost_claim_hellenic
+			add_heir_claim = 50
+		}
+		else_if = {
+			limit = {
+				has_heir_flag = to_heir_lost_claim_hellenic_major
+			}
+			clr_heir_flag = to_heir_lost_claim_hellenic_major
+			add_heir_claim = 100
+		}
+		if = {
+			limit = {
 				has_spawned_rebels = pantheon_worship_rebels
 			}
 			disband_rebels = pantheon_worship_rebels
@@ -499,7 +572,7 @@ country_event = {
 			nhs_set_clergy_loyalty_to_50 = yes
 			to_nhs_remove_all_clergy_privileges = yes
 			add_country_modifier = {
-				name= nhs_hcd_pagan_loyalty
+				name = nhs_hcd_pagan_loyalty
 				duration = -1
 				desc = "END_OF_ELY_RELIGIOUS_WARS"
 			}
@@ -552,6 +625,7 @@ country_event = {
 
 		to_nhs_spawn_inquisition_revolt_disaster = {
 			EVENT_TARGET = nhs_hcd_target_province
+			DOTTED_LINE = yes
 		}
 
 		hidden_effect = {
@@ -660,31 +734,71 @@ country_event = {
 				name = nhs_hrv_shaky_faith
 				duration = 18250
 			}
+			hidden_effect = {
+				if = {
+					limit = {
+						has_heir_flag = to_heir_practices_hellenism_in_secret
+					}
+					set_heir_religion = pantheon_worship
+				}
+				else_if = {
+					limit = {
+						heir_religion = orthodox
+					}
+					kill_heir = { allow_new_heir = no }
+				}
+			}
+			if = {
+				limit = {
+					has_ruler_flag = to_heir_practices_hellenism_in_secret
+				}
+				set_ruler_religion = pantheon_worship
+			}
+			else_if = {
+				limit = {
+					ruler_religion = orthodox
+				}
+				kill_ruler = yes
+			}
+			tooltip = {
+				if = {
+					limit = {
+						has_heir_flag = to_heir_practices_hellenism_in_secret
+					}
+					set_heir_religion = pantheon_worship
+				}
+				else_if = {
+					limit = {
+						heir_religion = orthodox
+					}
+					kill_heir = { allow_new_heir = no }
+				}
+			}
 		}
 		else_if = { # If moderate and ended the disaster with a non state religion province
 			limit = {
 				has_country_flag = nhs_hcd_supported_moderates
-				any_owned_province = {
-					religion = pantheon_worship
-				}
 			}
 			add_country_modifier = {
 				name = nhs_hrv_tolerance
 				duration = 36500
 			}
-		}
-		else_if = { # If moderate and ended the disaster with all province of the correct faith
-			limit = {
-				has_country_flag = nhs_hcd_supported_moderates
-				NOT = {
-					any_owned_province = {
-						religion = pantheon_worship
-					}
-				}
+			set_country_flag = nhs_enable_semi_tolerated_minority
+			hidden_effect = {
+				to_nhs_handle_post_disaster_tolerance_modifier_all_provinces = yes
 			}
-			add_country_modifier = {
-				name = nhs_hrv_loyal_orthodox
-				duration = 18250
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = {
+					religion = orthodox
+				}
+				custom_tooltip = nhs_semi_tolerated_minority_hellenic_in_the_future_tt
+			}
+			else_if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				custom_tooltip = nhs_semi_tolerated_minority_orthodox_in_the_future_tt
 			}
 		}
 		else_if = { # If hellenic and stayed hellenic
@@ -706,7 +820,7 @@ country_event = {
 			}
 			add_country_modifier = {
 				name = nhs_hrv_loyal_hellenic
-				duration = 18250
+				duration = 36500
 			}
 			# if = {
 			# 	limit = {
@@ -732,6 +846,35 @@ country_event = {
 				NOT = { religion = pantheon_worship }
 			}
 			add_prestige = -50
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							heir_religion = pantheon_worship
+							has_heir_flag = to_heir_practices_hellenism_in_secret
+						}
+					}
+					kill_heir = { allow_new_heir = no }
+				}
+				clr_ruler_flag = to_heir_practices_hellenism_in_secret
+			}
+			if = {
+				limit = {
+					ruler_religion = pantheon_worship
+				}
+				kill_ruler = yes
+			}
+			tooltip = {
+				if = {
+					limit = {
+						OR = {
+							heir_religion = pantheon_worship
+							has_ruler_flag = to_heir_practices_hellenism_in_secret
+						}
+					}
+					kill_heir = { allow_new_heir = no }
+				}
+			}
 		}
 	}
 
@@ -751,6 +894,209 @@ country_event = {
 	}
 }
 
+
+# (Secretly) Hellenic Ruler Ascends
+country_event = {
+	id = nhs_hcd_hellenicrevolt.2
+	title = nhs_hcd_hellenicrevolt.2.t
+	desc = {
+		trigger = {
+			ruler_religion = pantheon_worship
+			has_country_flag = nhs_hcd_supported_zealots
+		}
+		desc = nhs_hcd_hellenicrevolt.2.da
+	}
+	desc = {
+		trigger = {
+			ruler_religion = pantheon_worship
+		}
+		desc = nhs_hcd_hellenicrevolt.2.da
+	}
+	desc = {
+		trigger = {
+			has_country_flag = nhs_hcd_supported_zealots
+		}
+		desc = nhs_hcd_hellenicrevolt.2.dc
+	}
+	desc = {
+		trigger = {
+			ruler_religion = pantheon_worship
+		}
+		desc = nhs_hcd_hellenicrevolt.2.dd
+	}
+	picture = BYZANTINE_EMPEROR_eventPicture
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		has_disaster = nhs_hcd_hellenic_crisis
+		OR = {
+			has_country_flag = nhs_hcd_supported_zealots
+			has_country_flag = nhs_hcd_supported_moderates
+		}
+		OR = {
+			ruler_religion = pantheon_worship
+			has_ruler_flag = to_heir_practices_hellenism_in_secret
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = to_determine_religion_event_active
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			clr_ruler_flag = to_heir_practices_hellenism_in_secret
+			clr_country_flag = to_determine_religion_event_active
+		}
+	}
+
+	option = {
+		# There is no fighting the inevitable
+		trigger = {
+			has_country_flag = nhs_hcd_supported_zealots
+		}
+		name = nhs_hcd_hellenicrevolt.2.a
+		add_ruler_modifier = {
+			name = to_reanounced_beliefs
+			duration = -1
+		}
+		if = {
+			limit = {
+				NOT = { ruler_religion = ROOT }
+			}
+			set_ruler_religion = ROOT
+		}
+		if = {
+			limit = {
+				heir_religion = pantheon_worship
+			}
+			set_heir_religion = ROOT
+		}
+		if = {
+			limit = {
+				ruler_has_personality = tolerant_personality
+			}
+			remove_ruler_personality = tolerant_personality
+		}
+	}
+
+	option = {
+		# Curtain Clergy
+		name = nhs_hcd_hellenicrevolt.2.b
+		trigger = {
+			has_country_flag = nhs_hcd_supported_zealots
+		}
+		if = {
+			limit = {
+				NOT = { ruler_religion = ROOT }
+			}
+			set_ruler_religion = ROOT
+		}
+		if = {
+			limit = {
+				heir_religion = pantheon_worship
+			}
+			set_heir_religion = ROOT
+		}
+		if = {
+			limit = {
+				ruler_has_personality = zealot_personality
+			}
+			remove_ruler_personality = zealot_personality
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -30
+		}
+		custom_tooltip = nhs_new_line_tt
+		clr_country_flag = nhs_hcd_supported_zealots
+		set_country_flag = nhs_hcd_supported_moderates
+		remove_country_modifier = nhs_hcd_church_loyalty
+		add_country_modifier = {
+			name = nhs_hcd_tolerant_approach
+			duration = -1
+			desc = "END_OF_ELY_RELIGIOUS_WARS"
+		}
+		to_nhs_spawn_inquisition_revolt_disaster = {
+			EVENT_TARGET = nhs_hcd_target_province
+		}
+	}
+
+	option = {
+		# Reanouce beliefs (Continue the moderate policies)
+		name = nhs_hcd_hellenicrevolt.2.b
+		trigger = {
+			NOT = { has_country_flag = nhs_hcd_supported_zealots }
+		}
+		if = {
+			limit = {
+				NOT = { ruler_religion = ROOT }
+			}
+			set_ruler_religion = ROOT
+		}
+		if = {
+			limit = {
+				heir_religion = pantheon_worship
+			}
+			set_heir_religion = ROOT
+		}
+		if = {
+			limit = {
+				ruler_has_personality = zealot_personality
+			}
+			remove_ruler_personality = zealot_personality
+		}
+	}
+
+	option = {
+		# Hellenic tolerant path?
+		name = nhs_hcd_hellenicrevolt.2.c
+		trigger = {
+			NOT = { has_country_flag = nhs_hcd_supported_zealots }
+		}
+		change_religion = pantheon_worship
+		nhs_set_clergy_loyalty_to_50 = yes
+		to_nhs_remove_all_clergy_privileges = yes
+		custom_tooltip = nhs_new_line_tt
+		to_spawn_orthodox_revolt = { SIZE = 1 }
+	}
+
+	option = {
+		# Hellenic path
+		name = nhs_hcd_hellenicrevolt.2.e
+		clr_country_flag = nhs_hcd_supported_zealots
+		clr_country_flag = nhs_hcd_supported_moderates
+		set_country_flag = nhs_hcd_converted_to_hellenic
+		change_religion = pantheon_worship
+		nhs_set_clergy_loyalty_to_50 = yes
+		to_nhs_remove_all_clergy_privileges = yes
+		remove_country_modifier = nhs_hcd_tolerant_approach
+		remove_country_modifier = nhs_hcd_church_loyalty
+		add_country_modifier = {
+			name = nhs_hcd_pagan_loyalty
+			duration = -1
+			desc = "END_OF_ELY_RELIGIOUS_WARS"
+		}
+		if = {
+			limit = {
+				has_spawned_rebels = pantheon_worship_rebels
+			}
+			disband_rebels = pantheon_worship_rebels
+			custom_tooltip = nhs_new_line_tt
+		}
+		to_spawn_orthodox_revolt = { SIZE = 2 }
+		custom_tooltip = nhs_new_line_tt
+		to_nhs_remove_pre_hellenic_disaster_anti_hellenic_province_modifiers = yes
+		custom_tooltip = nhs_new_line_tt
+		to_nhs_spawn_inquisition_revolt_disaster = {
+			EVENT_TARGET = nhs_hcd_target_province
+		}
+	}
+}
 
 ##################################
 # Events for siding with zealots #
@@ -1418,11 +1764,15 @@ country_event = {
 
 	trigger = {
 		has_disaster = nhs_hcd_hellenic_crisis
-		religion = orthodox
+		# religion = orthodox
 		has_country_flag = nhs_hcd_supported_moderates
 		any_owned_province = {
 			is_city = yes
 			culture_group = ROOT
+			OR = {
+				religion = pantheon_worship
+				religion = orthodox
+			}
 			NOT = {
 				has_province_modifier = nhs_hrv_rampaging_zealots
 			}
@@ -1435,7 +1785,11 @@ country_event = {
 				limit = {
 					is_city = yes
 					culture_group = ROOT
-					religion = pantheon_worship
+					OR = {
+						religion = pantheon_worship
+						religion = orthodox
+					}
+					has_owner_religion = no
 					NOT = {
 						has_province_modifier = nhs_hrv_rampaging_zealots
 					}
@@ -1450,6 +1804,10 @@ country_event = {
 					limit = {
 						is_city = yes
 						culture_group = ROOT
+						OR = {
+							religion = pantheon_worship
+							religion = orthodox
+						}
 						NOT = {
 							has_province_modifier = nhs_hrv_rampaging_zealots
 						}
@@ -1464,14 +1822,12 @@ country_event = {
 	option = {
 		# Intervene
 		name = nhs_hcd_hellenicrevolt.30.a
-
 		add_mil_power = -25
 	}
 
 	option = {
 		# Do not intervene
 		name = nhs_hcd_hellenicrevolt.30.b
-
 		event_target:nhs_hcd_target_province = {
 			add_unrest = 10
 			add_devastation = 10
@@ -1513,14 +1869,24 @@ country_event = {
 	id = nhs_hcd_hellenicrevolt.31
 	title = nhs_hcd_hellenicrevolt31.t
 	desc = nhs_hcd_hellenicrevolt31.d
+	desc = {
+		trigger = {
+			NOT = { religion = pantheon_worship }
+		}
+		desc = nhs_hcd_hellenicrevolt31.da
+	}
+	desc = {
+		desc = nhs_hcd_hellenicrevolt31.db
+	}
 	picture = p_ANGRY_SHAMANS_eventPicture
 
 	is_triggered_only = yes
 
 	trigger = {
 		has_disaster = nhs_hcd_hellenic_crisis
-		religion = orthodox
+		# religion = orthodox
 		has_country_flag = nhs_hcd_supported_moderates
+		NOT = { has_country_modifier = to_hcd_people_turn_to_fanaticism }
 		AND = {
 			any_owned_province = {
 				is_capital = no
@@ -1582,14 +1948,11 @@ country_event = {
 	option = {
 		# No debates
 		name = nhs_hcd_hellenicrevolt.31.b
-
-		add_prestige = -10
-		# random_owned_province = {
-		# 	limit = {
-		# 		NOT = { has_owner_religion = yes }
-		# 	}
-		# 	add_unrest = 3
-		# }
+		add_disaster_modifier = {
+			name = to_hcd_people_turn_to_fanaticism
+			duration = 365
+			disaster = nhs_hcd_hellenic_crisis
+		}
 	}
 }
 
@@ -1598,7 +1961,15 @@ country_event = {
 country_event = {
 	id = nhs_hcd_hellenicrevolt.32
 	title = nhs_hcd_hellenicrevolt32.t
-	desc = nhs_hcd_hellenicrevolt32.d
+	desc = {
+		trigger = {
+			NOT = { religion = pantheon_worship }
+		}
+		desc = nhs_hcd_hellenicrevolt32.da
+	}
+	desc = {
+		desc = nhs_hcd_hellenicrevolt32.db
+	}
 	picture = PANTHEON_eventPicture
 
 	is_triggered_only = yes
@@ -1606,11 +1977,14 @@ country_event = {
 
 	trigger = {
 		has_disaster = nhs_hcd_hellenic_crisis
-		religion = orthodox
+		# religion = orthodox
 		has_country_flag = nhs_hcd_supported_moderates
 		any_owned_province = {
 			has_missionary = yes
-			religion = pantheon_worship
+			OR = {
+				religion = pantheon_worship
+				religion = orthodox
+			}
 			culture_group = ROOT
 			NOT = { has_province_modifier = nhs_hrv_no_missionary }
 		}

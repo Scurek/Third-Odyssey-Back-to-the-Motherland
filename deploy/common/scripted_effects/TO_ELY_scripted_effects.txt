@@ -8814,7 +8814,10 @@ to_nhs_handle_post_disaster_tolerance_modifier = {
 		limit = {
 			is_empty = no
 			owner = {
-				has_country_flag = nhs_enable_tolerated_minority
+				OR = {
+					has_country_flag = nhs_enable_semi_tolerated_minority
+					has_country_flag = nhs_enable_tolerated_minority
+				}
 				culture_group = PREV
 			}
 			OR = {
@@ -8854,55 +8857,46 @@ to_nhs_handle_post_disaster_tolerance_modifier = {
 		}
 		if = {
 			limit = {
-				religion = pantheon_worship
+				owner = {
+					has_country_flag = nhs_enable_tolerated_minority
+				}
 			}
-			add_province_modifier = {
-				name = nhs_tolerated_minority
-				duration = -1
-				desc = "NHS_TOLERANCE_HELLENIC_DESC"
+			if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				add_province_modifier = {
+					name = nhs_tolerated_minority
+					duration = -1
+					desc = "NHS_TOLERANCE_HELLENIC_DESC"
+				}
+			}
+			else = {
+				add_province_modifier = {
+					name = nhs_tolerated_minority
+					duration = -1
+					desc = "NHS_TOLERANCE_ORTHODOX_DESC"
+				}
 			}
 		}
 		else = {
-			add_province_modifier = {
-				name = nhs_tolerated_minority
-				duration = -1
-				desc = "NHS_TOLERANCE_ORTHODOX_DESC"
-			}
-		}
-	}
-	else_if = {
-		limit = {
-			is_empty = no
-			owner = {
-				has_country_flag = nhs_enable_semi_tolerated_minority
-				culture_group = PREV
-			}
-			religion = pantheon_worship
-			OR = {
-				NOT = {
-					OR = {
-						culture = greek
-						culture = pontic_greek
-					}
+			if = {
+				limit = {
+					religion = pantheon_worship
 				}
-				owner = {
-					OR = {
-						primary_culture = greek
-						primary_culture = pontic_greek
-					}
+				add_province_modifier = {
+					name = nhs_semi_tolerated_minority
+					duration = -1
+					desc = "NHS_TOLERANCE_HELLENIC_DESC"
 				}
 			}
-			owner = {
-				OR = {
-					religion = orthodox
-					religion = elysian_orthodoxy
+			else = {
+				add_province_modifier = {
+					name = nhs_semi_tolerated_minority
+					duration = -1
+					desc = "NHS_TOLERANCE_ORTHODOX_DESC"
 				}
 			}
-		}
-		add_province_modifier = {
-			name = nhs_semi_tolerated_minority
-			duration = -1
-			desc = "NHS_TOLERANCE_HELLENIC_DESC"
 		}
 	}
 	else_if = {
@@ -8960,20 +8954,9 @@ to_nhs_handle_post_disaster_tolerance_modifier_culture_integration = {
 		limit = {
 			is_empty = no
 			owner = {
-				has_country_flag = nhs_enable_tolerated_minority
-			}
-			if = {
-				limit = {
-					OR = {
-						culture = greek
-						culture = pontic_greek
-					}
-				}
-				owner = {
-					OR = {
-						primary_culture = greek
-						primary_culture = pontic_greek
-					}
+				OR = {
+					has_country_flag = nhs_enable_semi_tolerated_minority
+					has_country_flag = nhs_enable_tolerated_minority
 				}
 			}
 			OR = {
@@ -8999,54 +8982,46 @@ to_nhs_handle_post_disaster_tolerance_modifier_culture_integration = {
 		}
 		if = {
 			limit = {
-				religion = pantheon_worship
+				owner = {
+					has_country_flag = nhs_enable_tolerated_minority
+				}
 			}
-			add_province_modifier = {
-				name = nhs_tolerated_minority
-				duration = -1
-				desc = "NHS_TOLERANCE_HELLENIC_DESC"
+			if = {
+				limit = {
+					religion = pantheon_worship
+				}
+				add_province_modifier = {
+					name = nhs_tolerated_minority
+					duration = -1
+					desc = "NHS_TOLERANCE_HELLENIC_DESC"
+				}
+			}
+			else = {
+				add_province_modifier = {
+					name = nhs_tolerated_minority
+					duration = -1
+					desc = "NHS_TOLERANCE_ORTHODOX_DESC"
+				}
 			}
 		}
 		else = {
-			add_province_modifier = {
-				name = nhs_tolerated_minority
-				duration = -1
-				desc = "NHS_TOLERANCE_ORTHODOX_DESC"
-			}
-		}
-	}
-	else_if = {
-		limit = {
-			is_empty = no
-			owner = {
-				has_country_flag = nhs_enable_semi_tolerated_minority
-			}
-			religion = pantheon_worship
 			if = {
 				limit = {
-					OR = {
-						culture = greek
-						culture = pontic_greek
-					}
+					religion = pantheon_worship
 				}
-				owner = {
-					OR = {
-						primary_culture = greek
-						primary_culture = pontic_greek
-					}
+				add_province_modifier = {
+					name = nhs_semi_tolerated_minority
+					duration = -1
+					desc = "NHS_TOLERANCE_HELLENIC_DESC"
 				}
 			}
-			owner = {
-				OR = {
-					religion = orthodox
-					religion = elysian_orthodoxy
+			else = {
+				add_province_modifier = {
+					name = nhs_semi_tolerated_minority
+					duration = -1
+					desc = "NHS_TOLERANCE_ORTHODOX_DESC"
 				}
 			}
-		}
-		add_province_modifier = {
-			name = nhs_semi_tolerated_minority
-			duration = -1
-			desc = "NHS_TOLERANCE_HELLENIC_DESC"
 		}
 	}
 }
@@ -9063,17 +9038,31 @@ to_nhs_remove_pre_hellenic_disaster_country_modifiers = {
 }
 
 to_nhs_remove_pre_hellenic_disaster_anti_hellenic_province_modifiers = {
-	every_owned_province = {
+	if = {
 		limit = {
-			has_province_modifier = nhs_hcd_Pagan_taxes
+			any_owned_province = {
+				has_province_modifier = nhs_hcd_Pagan_taxes
+			}
 		}
-		remove_province_modifier = nhs_hcd_Pagan_taxes
+		every_owned_province = {
+			limit = {
+				has_province_modifier = nhs_hcd_Pagan_taxes
+			}
+			remove_province_modifier = nhs_hcd_Pagan_taxes
+		}
 	}
-	every_owned_province = {
+	if = {
 		limit = {
-			has_province_modifier = nhs_hcd_Pagan_persecution
+			any_owned_province = {
+				has_province_modifier = nhs_hcd_Pagan_persecution
+			}
 		}
-		remove_province_modifier = nhs_hcd_Pagan_persecution
+		every_owned_province = {
+			limit = {
+				has_province_modifier = nhs_hcd_Pagan_persecution
+			}
+			remove_province_modifier = nhs_hcd_Pagan_persecution
+		}
 	}
 }
 
@@ -9302,7 +9291,6 @@ to_nhs_remove_all_clergy_privileges = {
 				share = -10
 			}
 		}
-	
 		if = {
 			limit = {
 				has_estate_privilege = estate_church_independent_inquisition
@@ -9461,6 +9449,20 @@ nhs_set_clergy_loyalty_to_50 = {
 		add_estate_loyalty = {
 			estate = estate_church
 			loyalty = -50
+		}
+	}
+}
+
+nhs_set_clergy_loyalty_to_80 = {
+	custom_tooltip = nhs_set_clergy_loyalty_to_80_tt
+	hidden_effect = {
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 100
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -20
 		}
 	}
 }
@@ -9723,9 +9725,11 @@ to_restore_heir_claim_hellenic = {
 			limit = {
 				has_heir_flag = to_heir_lost_claim_hellenic
 			}
+			clr_heir_flag = to_heir_lost_claim_hellenic
 			add_heir_claim = 33
 		}
 		else = {
+			clr_heir_flag = to_heir_lost_claim_hellenic_minor
 			add_heir_claim = 10
 		}
 	}
@@ -9733,6 +9737,7 @@ to_restore_heir_claim_hellenic = {
 		limit = {
 			has_heir_flag = to_heir_lost_claim_hellenic_major
 		}
+		clr_heir_flag = to_heir_lost_claim_hellenic_major
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = to_restore_lost_heir_claim_hellenic_major_tt
 		add_heir_claim = 75
@@ -9740,6 +9745,7 @@ to_restore_heir_claim_hellenic = {
 }
 
 to_nhs_spawn_inquisition_revolt = {
+	set_country_flag = nhs_hcd_inquisition_revolt
 	capital_scope = {
 		spawn_rebels = {
 			type = to_inquisition_mob_rebels
@@ -9830,7 +9836,9 @@ to_nhs_spawn_inquisition_revolt_disaster = {
 		# }
 		remove_estate_privilege = estate_church_nhs_inquisition_privilege
 		to_nhs_spawn_inquisition_revolt = { EVENT_TARGET = $EVENT_TARGET$ }
+		[[DOTTED_LINE]
 		custom_tooltip = nhs_dotted_line_tt
+		]
 	}
 }
 
@@ -10148,6 +10156,359 @@ to_nhs_spawn_hellenic_disaster_revolt_moderate = {
 		custom_tooltip = to_nhs_consequences_moderate_friendly_$RELIGION$_tt
 		tooltip = {
 			disband_rebels = $RELIGION$_rebels
+		}
+	}
+}
+
+to_spawn_orthodox_revolt = {
+	if = {
+		limit = {
+			any_owned_province = {
+				is_capital = no
+				religion = orthodox
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				religion = orthodox
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+			spawn_rebels = {
+				size = $SIZE$
+				type = orthodox_rebels
+				win = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				is_capital = no
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+			spawn_rebels = {
+				size = $SIZE$
+				type = orthodox_rebels
+				win = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+			spawn_rebels = {
+				size = $SIZE$
+				type = orthodox_rebels
+				win = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				culture_group = ROOT
+			}
+		}
+		random_owned_province = {
+			limit = {
+				culture_group = ROOT
+			}
+			spawn_rebels = {
+				size = $SIZE$
+				type = orthodox_rebels
+				win = yes
+			}
+		}
+	}
+	else = {
+		random_owned_province = {
+			spawn_rebels = {
+				size = $SIZE$
+				type = orthodox_rebels
+				win = yes
+			}
+		}
+	}
+}
+
+to_orthodox_revolt_potential_province = {
+	if = {
+		limit = {
+			any_owned_province = {
+				is_capital = no
+				religion = orthodox
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+				[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$
+				]
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				religion = orthodox
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+				[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$
+				]
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				is_capital = no
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+				[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$
+				]
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+				[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$
+				]
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+				[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$
+				]
+			}
+		}
+		random_owned_province = {
+			limit = {
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+				[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$
+				]
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				culture_group = ROOT
+				[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$
+				]
+			}
+		}
+		random_owned_province = {
+			limit = {
+				culture_group = ROOT
+				[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$
+				]
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+	else = {
+		random_owned_province = {
+			limit = {
+				[[ADDITIONAL_TRIGGER]
+				$ADDITIONAL_TRIGGER$
+				]
+			}
+			save_event_target_as = $EVENT_TARGET$
+		}
+	}
+}
+
+to_orthodox_spawn_revolt_in_potential_province = {
+	if = {
+		limit = {
+			event_target:$EVENT_TARGET$ = {
+				owned_by = ROOT
+			}
+		}
+		event_target:$EVENT_TARGET$ = {
+			spawn_rebels = {
+				size = $SIZE$
+				type = orthodox_rebels
+				win = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				is_capital = no
+				religion = orthodox
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				religion = orthodox
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+			spawn_rebels = {
+				size = $SIZE$
+				type = orthodox_rebels
+				win = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				is_capital = no
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+			spawn_rebels = {
+				size = $SIZE$
+				type = orthodox_rebels
+				win = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				culture_group = ROOT
+				OR = {
+					controlled_by = ROOT
+					has_rebel_faction = orthodox_rebels
+				}
+			}
+			spawn_rebels = {
+				size = $SIZE$
+				type = orthodox_rebels
+				win = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_province = {
+				culture_group = ROOT
+			}
+		}
+		random_owned_province = {
+			limit = {
+				culture_group = ROOT
+			}
+			spawn_rebels = {
+				size = $SIZE$
+				type = orthodox_rebels
+				win = yes
+			}
+		}
+	}
+	else = {
+		random_owned_province = {
+			spawn_rebels = {
+				size = $SIZE$
+				type = orthodox_rebels
+				win = yes
+			}
 		}
 	}
 }
