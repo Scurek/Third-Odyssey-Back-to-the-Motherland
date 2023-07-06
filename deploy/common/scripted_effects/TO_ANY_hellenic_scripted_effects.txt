@@ -422,19 +422,96 @@ to_check_greek_religion_approach = {
 to_check_greek_religion_approach_on_owner_religion_change = {
 	if = {
 		limit = {
-			NOT = { religion = pantheon_worship }
-			OR = {
-				has_country_flag = to_greek_religion_humanist
-				has_country_flag = to_greek_religion_moderate
-				has_country_flag = to_greek_religion_militarist
-				has_country_flag = to_greek_religion_purist
+			has_or_overlord_has = {
+				TRIGGER = "
+				OR = {
+					has_country_flag = to_greek_religion_humanist
+					has_country_flag = to_greek_religion_moderate
+					has_country_flag = to_greek_religion_militarist
+					has_country_flag = to_greek_religion_purist
+				}
+				"
 			}
 		}
-		every_owned_province = {
-			remove_province_modifier = to_humanist_approach
-			remove_province_modifier = to_moderate_approach
-			remove_province_modifier = to_militarist_approach
-			remove_province_modifier = to_purist_approach
+		if = {
+			limit = {
+				NOT = { religion = pantheon_worship }
+			}
+			every_owned_province = {
+				remove_province_modifier = to_humanist_approach
+				remove_province_modifier = to_moderate_approach
+				remove_province_modifier = to_militarist_approach
+				remove_province_modifier = to_purist_approach
+			}
+		}
+		else_if = {
+			limit = {
+				has_or_overlord_has = { TRIGGER = "has_country_flag = to_greek_religion_humanist" }
+			}
+			every_owned_province = {
+				limit = {
+					OR = {
+						culture = greek
+						culture = pontic_greek
+					}
+					NOT = { religion = pantheon_worship }
+				}
+				add_province_modifier = {
+					name = to_humanist_approach
+					duration = -1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_or_overlord_has = { TRIGGER = "has_country_flag = to_greek_religion_moderate" }
+			}
+			every_owned_province = {
+				limit = {
+					OR = {
+						culture = greek
+						culture = pontic_greek
+					}
+					NOT = { religion = pantheon_worship }
+				}
+				add_province_modifier = {
+					name = to_moderate_approach
+					duration = -1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_or_overlord_has = { TRIGGER = "has_country_flag = to_greek_religion_militarist" }
+			}
+			every_owned_province = {
+				limit = {
+					OR = {
+						culture = greek
+						culture = pontic_greek
+					}
+					NOT = { religion = pantheon_worship }
+				}
+				add_province_modifier = {
+					name = to_militarist_approach
+					duration = -1
+				}
+			}
+		}
+		else = {
+			every_owned_province = {
+				limit = {
+					OR = {
+						culture = greek
+						culture = pontic_greek
+					}
+					NOT = { religion = pantheon_worship }
+				}
+				add_province_modifier = {
+					name = to_purist_approach
+					duration = -1
+				}
+			}
 		}
 	}
 }
