@@ -760,6 +760,209 @@ country_decisions = {
 		}
 	}
 
+	to_make_portugal_exarch = {
+		potential = {
+			has_global_flag = to_portugal_hates_colonizers
+			has_country_modifier = nhs2_ely_por_trade
+			NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
+			NOT = { has_country_flag = to_block_deal_break_decisions }
+			any_country = {
+				ai = yes
+				is_subject = no
+				has_country_modifier = nhs2_por_ely_trade
+			}
+		}
+
+		major = yes
+
+		allow = {
+			mission_completed = to_the_eagle_rises_mission
+			# custom_trigger_tooltip = {
+			# 	tooltip = to_can_make_portugal_exarch_dev_tt
+			# 	any_country = {
+			# 		has_country_modifier = nhs2_por_ely_trade
+			# 		variable_arithmetic_trigger = {
+			# 			# export_to_variable = {
+			# 			# 	variable_name = nhs_my_total_dev
+			# 			# 	value = trigger_value:total_own_and_non_tributary_subject_development
+			# 			# 	who = ROOT
+			# 			# }
+			# 			# export_to_variable = {
+			# 			# 	variable_name = their_total_dev
+			# 			# 	value = total_development
+			# 			# 	who = THIS
+			# 			# }
+			# 			# multiply_variable = {
+			# 			# 	which = their_total_dev
+			# 			# 	value = 3
+			# 			# }
+			# 			check_variable = {
+			# 				which = nhs_my_total_dev
+			# 				which = their_total_dev
+			# 			}
+			# 		}
+			# 	}
+			# }
+			if = {
+				limit = {
+					226 = {
+						has_province_flag = nhs_exarch_province_exemption
+					}
+				}
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 5
+					OR = {
+						owned_by = ROOT
+						owner = {
+							is_subject_of_type = elysian_subject
+						}
+					}
+					nhs_EEH_province = yes
+					NOT = { is_state_core = ROOT }
+					NOT = { has_construction = core }
+					is_owned_by_trade_company = no
+					NOT = { province_id = 226 }
+				    NOT = { has_province_modifier = nhs2_supply_lines_tm }
+				}
+			}
+			else = {
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 5
+					OR = {
+						owned_by = ROOT
+						owner = {
+							is_subject_of_type = elysian_subject
+						}
+					}
+					nhs_EEH_province = yes
+					NOT = { is_state_core = ROOT }
+					NOT = { has_construction = core }
+					is_owned_by_trade_company = no
+				    NOT = { has_province_modifier = nhs2_supply_lines_tm }
+				}
+			}
+		}
+
+		effect = {
+			random_country = {
+				limit = {
+					has_country_modifier = nhs2_por_ely_trade
+				}
+				if = {
+					limit = {
+						exists = EEH
+					}
+					inherit = EEH
+				}
+				hidden_effect = {
+					change_tag = EEH
+					override_country_name = TO_PORTUGAL_EXARCH
+					change_country_color = { country = POR }
+				}
+				custom_tooltip = to_country_changes_to_portugal_exarch_tt
+				to_transfer_provinces_to_exarch = { TAG = EEH }
+				if = {
+					limit = {
+						NOT = {
+							capital_scope = {
+								nhs_EEH_province = yes
+							}
+						}
+						any_province = {
+							nhs_EEH_province = yes
+							OR = {
+								owned_by = PREV
+								owned_by = EEH
+								AND = {
+									OR = {
+										owned_by = ROOT
+										owner = {
+											is_subject_of_type = elysian_subject
+										}
+									}
+									nhs_EEH_province = yes
+									NOT = { is_state_core = ROOT }
+									NOT = { has_construction = core }
+									is_owned_by_trade_company = no
+									NOT = { has_province_modifier = nhs2_supply_lines_tm }
+								}
+							}
+						}
+					}
+					if = {
+						limit = {
+							227 = {
+								OR = {
+									owned_by = PREV
+									owned_by = EEH
+									AND = {
+										OR = {
+											owned_by = ROOT
+											owner = {
+												is_subject_of_type = elysian_subject
+											}
+										}
+										nhs_EEH_province = yes
+										NOT = { is_state_core = ROOT }
+										NOT = { has_construction = core }
+										is_owned_by_trade_company = no
+										NOT = { has_province_modifier = nhs2_supply_lines_tm }
+									}
+								}
+							}
+						}
+						set_capital = 227
+					}
+					else = {
+						random_province = {
+							limit = {
+								nhs_EEH_province = yes
+								OR = {
+									owned_by = PREV
+									owned_by = EEH
+									AND = {
+										OR = {
+											owned_by = ROOT
+											owner = {
+												is_subject_of_type = elysian_subject
+											}
+										}
+										nhs_EEH_province = yes
+										NOT = { is_state_core = ROOT }
+										NOT = { has_construction = core }
+										is_owned_by_trade_company = no
+										NOT = { has_province_modifier = nhs2_supply_lines_tm }
+									}
+								}
+							}
+							PREV = {
+								set_capital = PREV
+							}
+						}
+					}
+				}
+				custom_tooltip = to_create_portuguese_exarch_tt
+				hidden_effect = {
+					create_subject = {
+						subject_type = elysian_subject
+						subject = EEH
+					}
+				}
+				if = {
+					limit = {
+						NOT = { exists = EEH }
+					}
+					custom_tooltip = nhs_new_line_tt
+					custom_tooltip = nhs_exarchate_starting_tt
+					custom_tooltip = nhs_exarchate_setting_desc_tt
+					custom_tooltip = to_exarchate_modifiers_tt
+					custom_tooltip = nhs_exarch_bonus_merchant_eeh_tt
+					custom_tooltip = nhs_new_line_tt
+				}
+			}
+		}
+	}
+
     # Code generated by exarch_formation_decisions.py
     # Armenia
     to_form_exarch_armenia = {
