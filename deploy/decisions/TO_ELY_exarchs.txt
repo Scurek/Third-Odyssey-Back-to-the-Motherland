@@ -768,7 +768,13 @@ country_decisions = {
 			NOT = { has_country_flag = to_block_deal_break_decisions }
 			any_country = {
 				ai = yes
-				is_subject = no
+				OR = {
+					is_subject = no
+					AND = {
+						is_subject_of = ROOT
+						NOT = { is_subject_of_type = elysian_subject }
+					}
+				}
 				has_country_modifier = nhs2_por_ely_trade
 			}
 		}
@@ -855,8 +861,23 @@ country_decisions = {
 					inherit = EEH
 				}
 				hidden_effect = {
-					change_tag = EEH
+					every_province = {
+						limit = {
+							has_province_flag = to_former_colonial_owner@PREV
+						}
+						clr_province_flag = to_former_colonial_owner@PREV
+						set_province_flag = to_former_colonial_ownerEEH
+					}
+					every_country = {
+						limit = {
+							has_country_flag = to_former_overlord@PREV
+						}
+						clr_country_flag = to_former_overlord@PREV
+						set_country_flag = to_former_overlordEEH
+					}
+
 					override_country_name = TO_PORTUGAL_EXARCH
+					change_tag = EEH
 					change_country_color = { country = POR }
 				}
 				custom_tooltip = to_country_changes_to_portugal_exarch_tt
@@ -943,9 +964,11 @@ country_decisions = {
 				}
 				custom_tooltip = to_create_portuguese_exarch_tt
 				hidden_effect = {
-					create_subject = {
-						subject_type = elysian_subject
-						subject = EEH
+					ROOT = {
+						create_subject = {
+							subject_type = elysian_subject
+							subject = PREV
+						}
 					}
 				}
 				if = {

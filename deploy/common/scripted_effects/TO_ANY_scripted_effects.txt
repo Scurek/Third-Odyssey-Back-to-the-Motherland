@@ -1210,9 +1210,7 @@ to_correct_colony_culture = {
 	if = {
 		limit = {
 			is_colonial_nation = yes
-			NOT = { has_country_flag = to_colony_culture_corrected }
 		}
-		set_country_flag = to_colony_culture_corrected
 		overlord = {
 			if = {
 				limit = {
@@ -3103,6 +3101,208 @@ to_native_undiscover_provinces_outside_of_capital_region_if_annexed = {
 				undiscover_country = PREV
 			}
 		}
+	}
+}
+
+to_transfer_colonial_nation = {
+	if = {
+		limit = {
+			is_subject_of_type = crown_colony
+		}
+		$OVERLORD_SCOPE$ = {
+			create_subject = {
+				subject_type = crown_colony
+				subject = $COLONY_SCOPE$
+				keep_liberty_desire = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			is_subject_of_type = private_enterprise
+		}
+		$OVERLORD_SCOPE$ = {
+			create_subject = {
+				subject_type = private_enterprise
+				subject = $COLONY_SCOPE$
+				keep_liberty_desire = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			is_subject_of_type = self_governing_colony
+		}
+		$OVERLORD_SCOPE$ = {
+			create_subject = {
+				subject_type = self_governing_colony
+				subject = $COLONY_SCOPE$
+				keep_liberty_desire = yes
+			}
+		}
+	}
+	else = {
+		$OVERLORD_SCOPE$ = {
+			create_subject = {
+				subject_type = colony
+				subject = $COLONY_SCOPE$
+				keep_liberty_desire = yes
+			}
+		}
+	}
+}
+
+to_handle_subject_colonial_nations_on_becoming_dependancy = {
+	if = {
+		limit = {
+			NOT = { is_subject_of_type = tributary_state }
+			colony = 1
+		}
+		save_event_target_as = to_overlord
+		overlord = {
+			save_event_target_as = to_overlord_overlord
+		}
+		every_subject_country = {
+			limit = {
+				is_colonial_nation = yes
+			}
+			# set_country_flag = to_has_former_overlord
+			set_country_flag = to_former_overlord@FROM
+			every_owned_province = {
+				set_province_flag = to_former_colonial_owner@FROM
+			}
+			to_transfer_colonial_nation = {
+				OVERLORD_SCOPE = event_target:to_overlord_overlord
+				COLONY_SCOPE = PREV
+			}
+			country_event = { id = nhs2_test.6 }
+		}
+	}
+}
+
+to_handle_subject_colonial_nations_on_losing_dependancy = {
+	if = {
+		limit = {
+			exists = yes
+			ROOT = {
+				colony = 1
+			}
+		}
+		ROOT = {
+			every_subject_country = {
+				limit = {
+					is_colonial_nation = yes
+					has_country_flag = to_former_overlord@FROM
+				}
+				clr_country_flag = to_former_overlord@FROM
+				to_transfer_colonial_nation = {
+					OVERLORD_SCOPE = FROM
+					COLONY_SCOPE = PREV
+				}
+				every_owned_province = {
+					if = {
+						limit = {
+							NOT = { has_province_flag = to_former_colonial_owner@FROM }
+						}
+						if = {
+							limit = {
+								is_state_core = PREV
+							}
+							add_core = ROOT
+						}
+						else_if = {
+							limit = {
+								is_territorial_core = PREV
+							}
+							add_territorial_core = ROOT
+						}
+						cede_province = ROOT
+					}
+					clr_province_flag = to_former_colonial_owner@FROM
+				}
+			}
+		}
+	}
+}
+
+to_handle_subject_gaining_colonial_nation = {
+	if = {
+		limit = {
+			is_colonial_nation = yes
+			overlord = {
+				is_subject = yes
+			}
+		}
+		save_event_target_as = to_colony
+		overlord = {
+			save_event_target_as = to_overlord
+			overlord = {
+				save_event_target_as = to_overlord_overlord
+			}
+		}
+		set_country_flag = to_former_overlord@event_target:to_overlord
+		every_owned_province = {
+			set_province_flag = to_former_colonial_owner@event_target:to_overlord
+		}
+		to_transfer_colonial_nation = {
+			OVERLORD_SCOPE = event_target:to_overlord_overlord
+			COLONY_SCOPE = PREV
+		}
+		country_event = { id = nhs2_test.6 }
+	}
+}
+
+to_check_province_transfer_to_overlord_colony = {
+	owner = {
+		save_event_target_as = to_owner
+	}
+	if = {
+		limit = {
+			is_overseas = yes
+			to_in_colonial_region = yes
+			owner = {
+				is_subject = yes
+				NOT = { has_country_flag = no_colonial_nations }
+				NOT = {
+					capital_scope = {
+						to_in_colonial_region = yes
+					}
+				}
+				overlord = {
+					any_subject_country = {
+						has_country_flag = to_former_overlord@event_target:to_owner
+						capital_scope = {
+							colonial_region = ROOT
+						}
+					}
+				}
+			}
+		}
+		owner = {
+			overlord = {
+				random_subject_country = {
+					limit = {
+						has_country_flag = to_former_overlord@event_target:to_owner
+						capital_scope = {
+							colonial_region = ROOT
+						}
+					}
+					ROOT = {
+						cede_province = PREV
+						set_province_flag = to_former_colonial_owner@event_target:to_owner
+					}
+				}
+			}
+		}
+	}
+}
+
+to_remove_former_colonial_owner = {
+	every_province = {
+		clr_province_flag = to_former_colonial_owner@PREV
+	}
+	every_country = {
+		clr_country_flag = to_former_overlord@PREV
 	}
 }
 
