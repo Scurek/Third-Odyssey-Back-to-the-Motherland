@@ -1,7 +1,7 @@
-version="1.0.0"
+version="1.0.2"
 name="Third Odyssey: Elysian Units"
 tags={
 	"Graphics"
 }
-supported_version="1.35.4.*"
+supported_version="1.35.6.*"
 picture="thumbnail.png"
