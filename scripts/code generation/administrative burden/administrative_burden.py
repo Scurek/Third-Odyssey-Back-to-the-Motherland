@@ -32,9 +32,9 @@ def btree_tuple(lst, form, body):
 
 MAX_MODIFIER = 10
 
-MAX_COST = 200
+MAX_COST = 150
 MIN_COST = 50
-INTERVALS = 25
+INTERVALS = 10
 
 cond = 'check_variable={which=$VARIABLE$ value=%s}'
 body = 'if = {limit={NOT={has_country_modifier=$MODIFIER_BASE$_%s}} ' \
