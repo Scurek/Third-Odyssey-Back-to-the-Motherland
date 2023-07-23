@@ -288,22 +288,47 @@ nhs_grant_all_local_land = {
 				limit = {
 					nhs_exarch_land = { SCOPE = FROM }
 				}
-				cede_province = FROM
 				if = {
 					limit = {
-						is_core = ROOT
+						is_state_core = ROOT
 					}
-					add_core = FROM
-					hidden_effect = {
-						remove_core = ROOT
+					remove_core = ROOT
+					cede_province = FROM
+					if = {
+						limit = {
+							NOT = { is_state_core = FROM }
+						}
+						add_core = FROM
 					}
 				}
-				if = {
+				else_if = {
 					limit = {
 						is_territorial_core = ROOT
 					}
+					remove_core = ROOT
+					cede_province = FROM
 					add_territorial_core = FROM
 				}
+				else_if = {
+					limit = {
+						is_permanent_claim = ROOT
+					}
+					remove_claim = ROOT
+					cede_province = FROM
+					add_permanent_claim = FROM
+				}
+				else_if = {
+					limit = {
+						is_claim = ROOT
+					}
+					remove_claim = ROOT
+					cede_province = FROM
+					add_claim = FROM
+				}
+				else = {
+					cede_province = FROM
+				}
+				remove_claim = ROOT
 				if = {
 					limit = { culture_group = FROM }
 					add_nationalism = -10
