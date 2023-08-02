@@ -24,10 +24,10 @@ exarchs = [
     },
     {
         "tag": 'EEC',
-        "name": 'scandza',
+        "name": 'skanza',
         "culture_group": 'scandinavian',
         "primary_culture": 'danish',
-        "desc": 'Skandza was far beyond the borders of the ancient Roman Empire; however, the fearsome Vikings that '
+        "desc": 'Skanza was far beyond the borders of the ancient Roman Empire; however, the fearsome Vikings that '
                 'resided there would raid Western Europe for centuries before their conversion to Christianity. Now that we have conquered the region, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite.'
     },
     {
@@ -96,10 +96,10 @@ exarchs = [
 
     {
         "tag": 'EEL',
-        "name": 'rhousiya',
+        "name": 'rhosia',
         "culture_group": 'east_slavic',
         "primary_culture": 'russian',
-        "desc": "Rhousiya was once home to the Kievan Rus, a people to which we gave the gift of the written word through the creation of the Cyrillic alphabet. Now that we have returned, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite."
+        "desc": "Rhosia was once home to the Kievan Rus, a people to which we gave the gift of the written word through the creation of the Cyrillic alphabet. Now that we have returned, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite."
     },
     {
         "tag": 'EEM',
