@@ -54,11 +54,11 @@ exarchs = [
 
     {
         "tag": 'EEF',
-        "name": 'afrika',
+        "name": 'aphrike',
         "culture_group": 'maghrebi',
         "primary_culture": 'tunisian',
         "check_supply_lines": True,
-        "desc": "Mauretania was once the homeland of the hated Carthaginian Empire and was one of the few provinces that were retaken in Justinian's reconquests. Now that it has been retaken, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite."
+        "desc": "Afrika was once the homeland of the hated Carthaginian Empire and was one of the few provinces that were retaken in Justinian's reconquests. Now that it has been retaken, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite."
     },
     {
         "tag": 'EEG',
