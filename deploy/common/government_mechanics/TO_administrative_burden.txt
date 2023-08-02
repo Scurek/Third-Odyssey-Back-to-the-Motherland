@@ -2,12 +2,12 @@ to_administrative_burden_mechanic = {
 	alert_icon_gfx = GFX_to_administrative_burden_alert_icon
 	alert_icon_index = 1
 	available = {
+		has_country_flag = to_enables_overburdened_administration
 	}
 
 	powers = {
 		to_administrative_burden = {
 			gui = to_administrative_burden_gov_mech
-			show_before_interactions = yes
 			max = 100
 			default = 20
 			reset_on_new_ruler = no
@@ -79,15 +79,15 @@ to_administrative_burden_mechanic = {
 					limit = {
 						check_variable = {
 							which = to_ab_expand_bureaucracy_cost
-							value = 150
+							value = 100
 						}
 					}
-					add_adm_power = -150
+					add_adm_power = -100
 				}
 				else = {
 					custom_tooltip = to_ab_expand_bureaucracy_cost_tt
 				}
-				add_manpower = -0.5
+				add_manpower = -0.25
 				custom_tooltip = nhs_new_line_tt
 				hidden_effect = {
 					if = {
@@ -117,7 +117,7 @@ to_administrative_burden_mechanic = {
 						NOT = {
 							check_variable = {
 								which = to_ab_expand_bureaucracy_cost
-								value = 150
+								value = 100
 							}
 						}
 					}
@@ -140,6 +140,7 @@ to_administrative_burden_mechanic = {
 			gui = to_administrative_burden_gov_mech_interaction
 			icon = GFX_to_administrative_burden_empower_estates
 			trigger = {
+				has_any_estates = yes
 				custom_trigger_tooltip = {
 					tooltip = to_has_not_seized_land_in_5_years_tt
 					OR = {
@@ -185,62 +186,29 @@ to_administrative_burden_mechanic = {
 			}
 		}
 
-		# to_administrative_burden_raise_militia = {
-		# 	gui = to_administrative_burden_gov_mech_interaction
-		# 	icon = GFX_to_administrative_burden_raise_militia
-		# 	trigger = {
-		# 		NOT = {
-		# 			has_government_power = {
-		# 				mechanic_type = to_administrative_burden_mechanic
-		# 				power_type = to_administrative_burden
-		# 				value = 90
-		# 			}
-		# 		}
-		# 		is_at_war = yes
-		# 		any_owned_province = {
-		# 			controlled_by = ROOT
-		# 		}
-		# 	}
-		# 	effect = {
-		# 		add_government_power = {
-		# 			mechanic_type = to_administrative_burden_mechanic
-		# 			power_type = to_administrative_burden
-		# 			value = 10
-		# 		}
-		# 		custom_tooltip = nhs_new_line_tt
-		# 		if = {
-		# 			limit = {
-		# 				capital_scope = {
-		# 					controlled_by = ROOT
-		# 				}
-		# 			}
-		# 			capital_scope = {
-		# 				infantry = ROOT
-		# 				infantry = ROOT
-		# 				infantry = ROOT
-		# 				infantry = ROOT
-		# 				infantry = ROOT
-		# 			}
-		# 		}
-		# 		else = {
-		# 			random_owned_province = {
-		# 				limit = {
-		# 					controlled_by = ROOT  
-		# 				}
-		# 				infantry = ROOT
-		# 				infantry = ROOT
-		# 				infantry = ROOT
-		# 				infantry = ROOT
-		# 				infantry = ROOT
-		# 			}
-		# 		}
-		# 		add_country_modifier = {
-		# 			name = "nhs_drafted_militia"
-		# 			duration = 7300
-		# 		}
-		# 	}
-		# 	cooldown_years = 20
-		# }
+		to_administrative_burden_grant_autonomy = {
+			gui = to_administrative_burden_gov_mech_interaction
+			icon = GFX_to_administrative_burden_grant_autonomy
+			trigger = {
+				if = {
+					limit = {
+						ai = yes
+					}
+					NOT = { has_country_flag = to_block_ai_ab_interactions }
+				}
+				num_of_cities = 2
+			}
+			effect = {
+				add_country_modifier = {
+					name = to_grant_autonomy_ab
+					duration = 3650
+				}
+			}
+			cooldown_years = 10
+			ai_chance = {
+				factor = 10
+			}
+		}
 
 		to_administrative_burden_raise_tax = {
 			gui = to_administrative_burden_gov_mech_interaction
@@ -253,6 +221,7 @@ to_administrative_burden_mechanic = {
 						value = 85
 					}
 				}
+				NOT = { has_reform = senatorial_empire }
 				if = {
 					limit = {
 						ai = yes
@@ -336,6 +305,83 @@ to_administrative_burden_mechanic = {
 			cooldown_years = 20
 			ai_chance = {
 				factor = 0
+			}
+		}
+
+		to_administrative_burden_raise_militia = {
+			gui = to_administrative_burden_gov_mech_interaction
+			icon = GFX_to_administrative_burden_raise_militia
+			trigger = {
+				NOT = {
+					has_government_power = {
+						mechanic_type = to_administrative_burden_mechanic
+						power_type = to_administrative_burden
+						value = 85
+					}
+				}
+				NOT = { has_reform = senatorial_empire }
+				if = {
+					limit = {
+						ai = yes
+					}
+					NOT = { has_country_flag = to_block_ai_ab_interactions }
+				}
+			}
+			effect = {
+				add_government_power = {
+					mechanic_type = to_administrative_burden_mechanic
+					power_type = to_administrative_burden
+					value = 15
+				}
+				custom_tooltip = nhs_new_line_tt
+				add_yearly_manpower = 1
+				add_owned_provinces_development_manpower = {
+					custom_tooltip = to_from_provinces_of_culture_group_tt
+					trigger = {
+						owner = {
+							culture_group = PREV
+						}
+					}
+					multiplier = 0.03
+					age_multiplier = 1
+				}
+			}
+			cooldown_years = 20
+		}
+
+		to_administrative_burden_colonial_offices = {
+			gui = to_administrative_burden_gov_mech_interaction
+			icon = GFX_to_administrative_burden_colonial_offices
+			trigger = {
+				NOT = {
+					has_government_power = {
+						mechanic_type = to_administrative_burden_mechanic
+						power_type = to_administrative_burden
+						value = 85
+					}
+				}
+				if = {
+					limit = {
+						ai = yes
+					}
+					NOT = { has_country_flag = to_block_ai_ab_interactions }
+				}
+			}
+			effect = {
+				add_government_power = {
+					mechanic_type = to_administrative_burden_mechanic
+					power_type = to_administrative_burden
+					value = 15
+				}
+				custom_tooltip = nhs_new_line_tt
+				add_country_modifier = {
+					name = to_colonial_offices_ab
+					duration = 3650
+				}
+			}
+			cooldown_years = 20
+			ai_chance = {
+				factor = 20
 			}
 		}
 	}
