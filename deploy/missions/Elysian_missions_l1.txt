@@ -2898,6 +2898,7 @@ nhs_centre_start = {
 		}
 		effect = {
 			add_navy_tradition = 20
+			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = to_nhs_pytheas_departs_tt
 			set_country_flag = nhs_the_explorer_went
 			if = {
@@ -2907,6 +2908,16 @@ nhs_centre_start = {
 				}
 				custom_tooltip = nhs_new_line_tt
 				custom_tooltip = to_discover_europeans_warning_tt
+			}
+			hidden_effect = {
+				export_to_variable = {
+					which = to_pytheas_return
+					value = trigger_value:is_year
+				}
+				change_variable = {
+					which = to_pytheas_return
+					value = 3
+				}
 			}
 		}
 	}
@@ -2925,9 +2936,28 @@ nhs_centre_start = {
 				}
 				stability = 1
 			}
-			custom_trigger_tooltip = {
-				tooltip = to_pytheas_has_returned_tt
-				has_global_flag = nhs_europe_discovered
+			if = {
+				limit = {
+					OR = {
+						mission_completed = to_a_new_age_mission
+						NOT = {
+							check_variable = {
+								which = to_pytheas_return
+								value = 1
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = to_pytheas_has_returned_tt
+					has_global_flag = nhs_europe_discovered
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = to_pytheas_has_returned_year_tt
+					has_global_flag = nhs_europe_discovered
+				}
 			}
 			OR = {
 				custom_trigger_tooltip = {
