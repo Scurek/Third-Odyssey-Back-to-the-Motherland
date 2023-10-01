@@ -32,12 +32,12 @@ decisions_template = Template('''{% for exarch in exarchs %}
 		allow = {
 		    if = {
 		        limit = {
-		            has_country_flag = to_annexed_exarch@{{ exarch['tag'] }}
+		            has_country_flag = to_annexed_exarch{{ exarch['tag'] }}
 		        }
 		        custom_trigger_tooltip = {
                     tooltip = to_has_not_annexed_exarch_in_5_years_{{ exarch['tag'] }}_tt
                     had_country_flag = {
-                        flag = to_annexed_exarch@{{ exarch['tag'] }}
+                        flag = to_annexed_exarch{{ exarch['tag'] }}
                         days = 1825
                     }
                 }
