@@ -1524,62 +1524,59 @@ to_assign_provinces_to_exarch = {
 
 to_transfer_provinces_to_exarch = {
 	hidden_effect = {
-		if = {
+		every_province = {
 			limit = {
-				any_province = {
-					nhs_$TAG$_province = yes
-					NOT = { has_province_flag = nhs_exarch_province_exemption }
-					NOT = { has_province_modifier = to_varangian_headquarters }
-					NOT = { is_core = ROOT }
-					NOT = { is_territorial_core = ROOT }
-					NOT = { has_construction = core }
-					NOT = { has_construction = missionary }
-					is_owned_by_trade_company = no
-					OR = {
-						owned_by = ROOT
-						owner = {
-							tag = ELG
-							is_subject_of = ROOT
-						}
+				nhs_$TAG$_province = yes
+				NOT = { has_province_flag = nhs_exarch_province_exemption }
+				NOT = { has_province_modifier = to_varangian_headquarters }
+				NOT = { is_core = ROOT }
+				NOT = { is_territorial_core = ROOT }
+				NOT = { has_construction = core }
+				NOT = { has_construction = missionary }
+				is_owned_by_trade_company = no
+				OR = {
+					owned_by = ROOT
+					owner = {
+						tag = ELG
+						is_subject_of = ROOT
 					}
-					NOT = { has_province_modifier = nhs2_supply_lines_tm }
 				}
+				NOT = { has_province_modifier = nhs2_supply_lines_tm }
 			}
-			every_province = {
+			if = {
 				limit = {
-					nhs_$TAG$_province = yes
-					NOT = { has_province_flag = nhs_exarch_province_exemption }
-					NOT = { has_province_modifier = to_varangian_headquarters }
-					NOT = { is_core = ROOT }
-					NOT = { is_territorial_core = ROOT }
-					NOT = { has_construction = core }
-					NOT = { has_construction = missionary }
-					is_owned_by_trade_company = no
-					OR = {
-						owned_by = ROOT
-						owner = {
-							tag = ELG
-							is_subject_of = ROOT
+					owner = {
+						PREV = {
+							is_permanent_claim = PREV
 						}
 					}
-					NOT = { has_province_modifier = nhs2_supply_lines_tm }
+				}
+				owner = {
+					PREV = {
+						remove_claim = PREV
+					}
 				}
 				cede_province = $TAG$
-				if = {
-					limit = {
-						is_core = ROOT
+				add_permanent_claim = $TAG$
+			}
+			else_if = {
+				limit = {
+					owner = {
+						PREV = {
+							is_claim = PREV
+						}
 					}
-					hidden_effect = {
-						remove_core = ROOT
-					}
-					add_core = ROOT
 				}
-				if = {
-					limit = {
-						is_territorial_core = ROOT
+				owner = {
+					PREV = {
+						remove_claim = PREV
 					}
-					add_territorial_core = ROOT
 				}
+				cede_province = $TAG$
+				add_claim = $TAG$
+			}
+			else = {
+				cede_province = $TAG$
 			}
 		}
 	}
@@ -1590,7 +1587,20 @@ to_add_core_and_release_exarch = {
 		cede_province = $TAG$
 	}
 	add_core = $TAG$
-	remove_core = ROOT
+	if = {
+		limit = {
+			is_core = ROOT
+		}
+		remove_core = ROOT
+	}
+	hidden_effect = {
+		if = {
+			limit = {
+				is_claim = ROOT
+			}
+			remove_claim = ROOT
+		}
+	}
 	hidden_effect = {
 		# set_province_flag = to_ignore_triumph_check
 		ROOT = {
@@ -1652,14 +1662,14 @@ to_initialize_exarch = {
 				}
 				add_manpower = 5
 			}
-			capital_scope = {
-				area = {
-					limit = {
-						owned_by = $EXARCH_TAG$
-					}
-					add_core = $EXARCH_TAG$
-				}
-			}
+			# capital_scope = {
+			# 	area = {
+			# 		limit = {
+			# 			owned_by = $EXARCH_TAG$
+			# 		}
+			# 		add_core = $EXARCH_TAG$
+			# 	}
+			# }
 		}
 	}
 }
