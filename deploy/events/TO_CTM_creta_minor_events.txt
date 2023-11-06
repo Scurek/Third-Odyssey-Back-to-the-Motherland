@@ -258,6 +258,17 @@ country_event = {
 			}
 		}
 		set_country_flag = vov_varangian_has_heir
+		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						has_ruler_flag = to_ruler_loukas
+						has_ruler_flag = to_ruler_loukas_descendant
+					}
+				}
+				set_heir_flag = to_ruler_loukas_descendant
+			}
+		}
 	}
 	option = {
 		name = "oth_ctm_events.1.be"	# Landed Nobility Elected
@@ -804,144 +815,158 @@ country_event = {
 			}
 		}
 	}
-	
-	after = {
+	option = {
+		name = "oth_ctm_events.2.a"
+		if = {
+			limit = {
+				has_country_flag = ctm_council_choose_your
+			}
+			custom_tooltip = oth_ctm_events.2.tt.a
+			custom_tooltip = nhs_new_line_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							has_ruler_flag = to_ruler_loukas
+							has_ruler_flag = to_ruler_loukas_descendant
+						}
+					}
+					set_country_flag = to_ruler_loukas_descendant_remember
+				}
+			}
+			if = {
+				limit = { has_active_policy = mandatory_service }
+				define_ruler = {
+					change_adm = 1
+					change_dip = 1
+					change_mil = 1
+					min_age = 30
+					max_age = 60
+					random_gender = yes # Allows random gender for republics
+				}
+			}
+			else = {
+				define_ruler = {
+					change_adm = 1
+					change_dip = 1
+					change_mil = 1
+					min_age = 30
+					max_age = 60
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						has_country_flag = to_ruler_loukas_descendant_remember
+					}
+					clr_country_flag = to_ruler_loukas_descendant_remember
+					set_ruler_flag = to_ruler_loukas_descendant
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = ctm_council_choose_adm
+			}
+			custom_tooltip = oth_ctm_events.2.tt.b
+			if = {
+				limit = { 
+					has_faction = ctm_dynatoi
+				}
+				add_faction_influence = {
+					faction = ctm_dynatoi
+					influence = 20
+				}				
+			}
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = { has_active_policy = mandatory_service }
+				define_ruler = {
+					change_adm = 1
+					max_random_dip = 3
+					min_age = 30
+					max_age = 50
+					random_gender = yes
+				}
+			}
+			else = {
+				define_ruler = {
+					change_adm = 1
+					max_random_dip = 3
+					min_age = 30
+					max_age = 50
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = ctm_council_choose_dip
+			}
+			custom_tooltip = oth_ctm_events.2.tt.c
+			if = {
+				limit = { 
+					has_faction = ctm_patrikioi
+				}
+				add_faction_influence = {
+					faction = ctm_patrikioi
+					influence = 20
+				}				
+			}
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = { has_active_policy = mandatory_service }
+				define_ruler = {
+					change_dip = 1
+					max_random_mil = 3
+					min_age = 20
+					max_age = 40
+					random_gender = yes
+				}
+			}
+			else = {
+				define_ruler = {
+					change_dip = 1
+					max_random_mil = 3
+					min_age = 20
+					max_age = 40
+				}
+			}
+		}
+		else = {
+			custom_tooltip = oth_ctm_events.2.tt.d
+			if = {
+				limit = { 
+					has_faction = ctm_admiralty
+				}
+				add_faction_influence = {
+					faction = ctm_admiralty
+					influence = 20
+				}				
+			}
+			custom_tooltip = nhs_new_line_tt
+			if = {
+				limit = { has_active_policy = mandatory_service }
+				define_ruler = {
+					change_mil = 1
+					max_random_adm = 3
+					min_age = 30
+					max_age = 50
+					random_gender = yes
+				}
+			}
+			else = {
+				define_ruler = {
+					change_mil = 1
+					max_random_adm = 3
+					min_age = 30
+					max_age = 50
+				}
+			}
+		}
 		clr_country_flag = ctm_council_choose_adm
 		clr_country_flag = ctm_council_choose_dip
 		clr_country_flag = ctm_council_choose_mil
 		clr_country_flag = ctm_council_choose_your
-	}
-
-	option = {
-		name = "oth_ctm_events.2.a"
-		ai_chance = { factor = 40 }
-		trigger = {
-			has_country_flag = ctm_council_choose_your
-		}
-		if = {
-			limit = { has_active_policy = mandatory_service }
-			define_ruler = {
-				change_adm = 1
-				change_dip = 1
-				change_mil = 1
-				min_age = 30
-				max_age = 60
-				random_gender = yes # Allows random gender for republics
-			}
-		}
-		else = {
-			define_ruler = {
-				change_adm = 1
-				change_dip = 1
-				change_mil = 1
-				min_age = 30
-				max_age = 60
-			}
-		}
-	}
-	option = {
-		name = "oth_ctm_events.1.be"	# Landed Nobility Elected
-		ai_chance = {
-			factor = 40
-		}
-		trigger = {
-			has_country_flag = ctm_council_choose_adm
-		}
-		if = {
-			limit = { has_active_policy = mandatory_service }
-			define_ruler = {
-				change_adm = 1
-				max_random_dip = 3
-				min_age = 30
-				max_age = 50
-				random_gender = yes
-			}
-		}
-		else = {
-			define_ruler = {
-				change_adm = 1
-				max_random_dip = 3
-				min_age = 30
-				max_age = 50
-			}
-		}
-		if = {
-			limit = { 
-				has_faction = ctm_dynatoi
-			}
-			add_faction_influence = {
-				faction = ctm_dynatoi
-				influence = 20
-			}				
-		}
-	}
-	option = {
-		name = "oth_ctm_events.1.ce"	# Merchant Nobility Elected
-		ai_chance = { factor = 40 }
-		trigger = {
-			has_country_flag = ctm_council_choose_dip
-		}
-		if = {
-			limit = { has_active_policy = mandatory_service }
-			define_ruler = {
-				change_dip = 1
-				max_random_mil = 3
-				min_age = 20
-				max_age = 40
-				random_gender = yes
-			}
-		}
-		else = {
-			define_ruler = {
-				change_dip = 1
-				max_random_mil = 3
-				min_age = 20
-				max_age = 40
-			}
-		}
-		if = {
-			limit = { 
-				has_faction = ctm_patrikioi
-			}
-			add_faction_influence = {
-				faction = ctm_patrikioi
-				influence = 20
-			}				
-		}
-	}
-	option = {
-		name = "oth_ctm_events.1.ee"	# Admirality Elected
-		trigger = {
-			has_country_flag = ctm_council_choose_mil
-		}
-		ai_chance = { factor = 40 }
-		if = {
-			limit = { has_active_policy = mandatory_service }
-			define_ruler = {
-				change_mil = 1
-				max_random_adm = 3
-				min_age = 30
-				max_age = 50
-				random_gender = yes
-			}
-		}
-		else = {
-			define_ruler = {
-				change_mil = 1
-				max_random_adm = 3
-				min_age = 30
-				max_age = 50
-			}
-		}
-		if = {
-			limit = { 
-				has_faction = ctm_admiralty
-			}
-			add_faction_influence = {
-				faction = ctm_admiralty
-				influence = 20
-			}				
-		}
 	}
 }
 
