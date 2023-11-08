@@ -43,6 +43,15 @@ marketplace = {
 			type = production
 			value = 1
 		}
+		if = {
+			limit = {
+				FROM = { 
+					has_dlc = "Mandate of Heaven"
+					has_country_flag = mam_trade_building_prosperity_flag
+				}
+			}
+			add_prosperity = 5
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = marketplace }
@@ -52,15 +61,20 @@ marketplace = {
 			type = production
 			value = 1
 		}
+		if = {
+			limit = {
+				FROM = { 
+					has_dlc = "Mandate of Heaven"
+					has_country_flag = mam_trade_building_prosperity_flag
+				}
+				
+			}
+			add_prosperity = -5
+		}
 	}
- 	# Fires when you start the construction,  ROOT - Province FROM - Country that started
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = marketplace }
-	}
-	# Fires when you cancel the construction, ROOT - Province FROM - Country that canceled
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = marketplace }
-	}
+
+	on_construction_started = { } #Fires when you start the construction,  ROOT - Province FROM - Country that started
+	on_construction_canceled = { } #Fires when you cancel the construction, ROOT - Province FROM - Country that canceled
 
 	on_obsolete = {
 	}
@@ -76,14 +90,6 @@ workshop = {
 	modifier = {
 		local_production_efficiency = 0.5
 	}
-	
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = workshop }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = workshop }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = workshop }
@@ -119,18 +125,11 @@ temple = {
 	modifier = {
 		local_tax_modifier = 0.4
 	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = temple }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = temple }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = temple }
 		# TO END
+		on_built_tax_building_effect = yes
 		on_province_tax_building_built_estate_privileges_effect = yes
 		add_development_from_building = {
 			building = temple
@@ -158,6 +157,28 @@ temple = {
 				duration = -1
 			}
 		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = mosque_local_unrest_flag
+				}
+			}
+			add_province_modifier = {
+				name = turkoman_peaceful_worshipping
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				FROM = { has_country_modifier = mam_mosque_great_mosque_generates_crown_land_modifier }
+			}
+			FROM = {
+				change_estate_land_share = {
+					estate = all
+					share = -0.25
+				}
+			}
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = temple }
@@ -167,6 +188,14 @@ temple = {
 			building = temple
 			type = tax
 			value = 1
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = mosque_local_unrest_flag
+				}
+			}
+			remove_province_modifier = turkoman_peaceful_worshipping
 		}
 		if = {
 			limit = {
@@ -180,6 +209,17 @@ temple = {
 			}
 		}
 		remove_province_modifier = gov_expanded_temple_rights_mod
+		if = {
+			limit = {
+				FROM = { has_country_modifier = mam_mosque_great_mosque_generates_crown_land_modifier }
+			}
+			FROM = {
+				change_estate_land_share = {
+					estate = all
+					share = 0.25
+				}
+			}
+		}
 	}
 	on_obsolete = {
 	}
@@ -194,14 +234,6 @@ barracks = {
 	modifier = {
 		local_manpower_modifier = 0.5
 	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = barracks }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = barracks }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = barracks }
@@ -332,14 +364,6 @@ shipyard = {
 		local_has_man_of_war = yes
 		local_has_galleass = yes
 	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = shipyard }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = shipyard }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = shipyard }
@@ -384,13 +408,6 @@ fort_15th = {
 	time = 30
 	modifier = {
 		fort_level = 2
-	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = fort_15th }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = fort_15th }
 	}
 
 	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
@@ -530,14 +547,6 @@ courthouse = {
 		local_governing_cost = -0.25
 		allowed_num_of_buildings = 1
 	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = courthouse }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = courthouse }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = courthouse }
@@ -641,13 +650,6 @@ dock = {
 		local_has_man_of_war = yes
 		local_has_galleass = yes
 	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = dock }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = dock }
-	}
 	
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
@@ -750,13 +752,6 @@ regimental_camp = {
 		land_forcelimit = 1
 	}
 
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = regimental_camp }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = regimental_camp }
-	}
-
 #	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
 #	on_built = {
 #		FROM = {
@@ -848,13 +843,6 @@ fort_16th = {
 	make_obsolete = fort_15th
 	modifier = {
 		fort_level = 4
-	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = fort_16th }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = fort_16th }
 	}
 
 	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
@@ -997,19 +985,12 @@ cathedral = {
 		local_missionary_strength = 0.03
 		local_tax_modifier = 0.6
 	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = cathedral }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = cathedral }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = cathedral }
 		nhs_building_counter_effect_add_with_obsolete = { ADDITIONAL_TRIGGER = nhs_homelands_building_counter_trigger FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = cathedral OLD_BUILDING = temple }
 		# TO END
+		on_built_tax_building_effect = yes
 		on_province_tax_building_built_estate_privileges_effect = yes
 		add_development_from_upgrading_or_building = {
 			building = cathedral
@@ -1039,6 +1020,28 @@ cathedral = {
 				duration = -1
 			}
 		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = mosque_local_unrest_flag
+				}
+			}
+			add_province_modifier = {
+				name = turkoman_peaceful_worshipping
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				FROM = { has_country_modifier = mam_mosque_great_mosque_generates_crown_land_modifier }
+			}
+			FROM = {
+				change_estate_land_share = {
+					estate = all
+					share = -0.25
+				}
+			}
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = cathedral }
@@ -1052,6 +1055,14 @@ cathedral = {
 		}
 		if = {
 			limit = {
+				FROM = {
+					has_country_flag = mosque_local_unrest_flag
+				}
+			}
+			remove_province_modifier = turkoman_peaceful_worshipping
+		}
+		if = {
+			limit = {
 				FROM = { has_government_attribute = on_church_built_clergy_loyalty }
 			}
 			FROM = {
@@ -1062,6 +1073,17 @@ cathedral = {
 			}
 		}
 		remove_province_modifier = gov_expanded_temple_rights_mod
+		if = {
+			limit = {
+				FROM = { has_country_modifier = mam_mosque_great_mosque_generates_crown_land_modifier }
+			}
+			FROM = {
+				change_estate_land_share = {
+					estate = all
+					share = 0.25
+				}
+			}
+		}
 	}
 	on_obsolete = {
 	}
@@ -1078,13 +1100,6 @@ university = {
 	modifier = {
 		local_development_cost = -0.20
 		allowed_num_of_buildings = 1
-	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = university }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = university }
 	}
 
 	on_built = {
@@ -1188,13 +1203,6 @@ trade_depot = {
 		province_trade_power_modifier = 1
 	}
 
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = trade_depot }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = trade_depot }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = trade_depot }
@@ -1258,13 +1266,6 @@ grand_shipyard = {
 		local_ship_repair = 0.50
 		local_has_man_of_war = yes
 		local_has_galleass = yes
-	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = grand_shipyard }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = grand_shipyard }
 	}
 
 	on_built = {
@@ -1341,13 +1342,6 @@ training_fields = {
 
 	modifier = {
 		local_manpower_modifier = 1
-	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = training_fields }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = training_fields }
 	}
 	
 	on_built = {
@@ -1440,13 +1434,6 @@ fort_17th = {
 
 	modifier = {
 		fort_level = 6
-	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = fort_17th }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = fort_17th }
 	}
 
 	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
@@ -1554,13 +1541,6 @@ stock_exchange = {
 		province_trade_power_modifier = 1.25
 	}
 
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = stock_exchange }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = stock_exchange }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add_with_obsolete = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = stock_exchange OLD_BUILDING = trade_depot }
@@ -1625,13 +1605,6 @@ counting_house = {
 		local_production_efficiency = 1
 	}
 
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = counting_house }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = counting_house }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = counting_house }
@@ -1679,13 +1652,6 @@ town_hall = {
 		local_autonomy = -0.2
 		local_governing_cost = -0.5
 		allowed_num_of_buildings = 1
-	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = town_hall }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = town_hall }
 	}
 
 	on_built = {
@@ -1804,13 +1770,6 @@ drydock = {
 		local_has_man_of_war = yes
 		local_has_galleass = yes
 	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = drydock }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = drydock }
-	}
 	
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
@@ -1900,14 +1859,6 @@ conscription_center = {
 	modifier = {
 		land_forcelimit = 2
 	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = conscription_center }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = conscription_center }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = conscription_center }
@@ -1986,13 +1937,6 @@ fort_18th = {
 
 	modifier = {
 		fort_level = 8
-	}
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = fort_18th }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = fort_18th }
 	}
 
 	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
@@ -2106,14 +2050,6 @@ wharf = {
 		salt
 	}
 	onmap = yes
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = manufactory }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = manufactory }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
@@ -2185,14 +2121,6 @@ weapons = {
 		iron
 	}
 	onmap = yes
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = manufactory }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = manufactory }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
@@ -2242,14 +2170,6 @@ textile = {
 		skoros_silk
 	}
 	onmap = yes
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = manufactory }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = manufactory }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
@@ -2299,14 +2219,6 @@ plantations = {
 		cocoa
 	}
 	onmap = yes
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = manufactory }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = manufactory }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
@@ -2356,14 +2268,6 @@ tradecompany = {
 		incense
 	}
 	onmap = yes
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = manufactory }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = manufactory }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
@@ -2411,14 +2315,6 @@ farm_estate = {
 		norse_mead
 	}
 	onmap = yes
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = manufactory }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = manufactory }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
@@ -2434,6 +2330,14 @@ farm_estate = {
 			type = production 
 			value = 1
 		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = geo_wine_manufactory_flag
+				}
+			}
+			add_base_production = 1
+		}
 	}
 	on_destroyed = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
@@ -2448,6 +2352,14 @@ farm_estate = {
 			building = manufactory 
 			type = production 
 			value = 1
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = geo_wine_manufactory_flag
+				}
+			}
+			add_base_production = -1
 		}
 	}
 	on_obsolete = {
@@ -2467,14 +2379,6 @@ mills = {
 		chinaware
 	}
 	onmap = yes
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = manufactory }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = manufactory }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
@@ -2529,14 +2433,6 @@ furnace = {
 	}
 	onmap = yes
 	show_separate = yes # Means as a manufactory it will be shown according to the old way
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = manufactory }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = manufactory }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = manufactory }
@@ -2581,13 +2477,6 @@ ramparts = {
 	}
 	onmap = no
 	show_separate = yes # Means as a manufactory it will be shown according to the old way
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = ramparts }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = ramparts }
-	}
 	
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
@@ -2617,6 +2506,10 @@ ramparts = {
 		nhs_building_counter_effect_sub = { FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = ramparts }
 		nhs_building_counter_effect_sub = { FLAG = nhs_homelands_build_counter VAR = nhs_HomelandsBuildingCount BUILDING = ramparts }
 		# TO END
+		if = {
+			limit = { has_province_modifier = per_reinforced_defenses }
+			remove_province_modifier = per_reinforced_defenses
+		}
 		remove_dev_from_building = {
 			building = manufactory 
 			type = manpower 
@@ -2631,6 +2524,18 @@ ramparts = {
 	}
 	ai_will_do = {
 		factor = 1
+		modifier = {
+			factor = 0
+			from = { num_of_loans = 3 }
+		}
+		modifier = {
+			factor = 20
+			has_terrain = mountain
+		}
+		modifier = {
+			factor = 0
+			from = { personality = ai_militarist }
+		}
 	}
 }
 
@@ -2654,14 +2559,6 @@ soldier_households = {
 	}
 	onmap = no
 	show_separate = yes # Means as a manufactory it will be shown according to the old way
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = soldier_households }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = soldier_households }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = soldier_households }
@@ -2746,14 +2643,6 @@ impressment_offices = {
 	}
 	onmap = no
 	show_separate = yes # Means as a manufactory it will be shown according to the old way
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = impressment_offices }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = impressment_offices }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = impressment_offices }
@@ -2849,14 +2738,6 @@ state_house = {
 	}
 	onmap = no
 	show_separate = yes # Means as a manufactory it will be shown according to the old way
-
-	on_construction_started = {
-		# to_on_construction_started = { BUILDING = state_house }
-	}
-	on_construction_canceled = {
-		# to_on_construction_canceled = { BUILDING = state_house }
-	}
-
 	on_built = {
 		to_add_administrative_burden_building_construction = yes
 		nhs_building_counter_effect_add = { ADDITIONAL_TRIGGER = nhs_hightier_building_counter_trigger FLAG = nhs_high_tier_building_counter VAR = nhs_HighTierBuildingCount BUILDING = state_house }

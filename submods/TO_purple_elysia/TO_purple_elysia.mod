@@ -6,6 +6,6 @@ tags={
 	"Graphics"
 }
 picture="thumbnail.png"
-supported_version="1.35.6.*"
+supported_version="1.36.0.*"
 path="C:/Users/Uros/Documents/Paradox Interactive/Europa Universalis IV/mod/Third-Odyssey-Development/submods/TO_purple_elysia"
 remote_file_id="2795530832"

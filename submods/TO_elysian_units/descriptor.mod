@@ -3,5 +3,5 @@ name="Third Odyssey: Elysian Units"
 tags={
 	"Graphics"
 }
-supported_version="1.35.6.*"
+supported_version="1.36.0.*"
 picture="thumbnail.png"
