@@ -1,0 +1,176 @@
+country_decisions = {
+
+	georgia_nation = {
+		major = yes
+		potential = {
+			normal_or_historical_nations = yes
+			was_never_end_game_tag_trigger = yes
+			NOT = { has_country_flag = formed_georgia_flag }
+			OR = {
+				ai = no
+				is_playing_custom_nation = no
+			}
+			OR = {
+				is_free_or_tributary_trigger = yes
+				ai = no
+			}
+			NOT = { tag = GEO }
+			OR = {
+				ai = no
+				AND = {
+					NOT = { exists = GEO }
+					num_of_cities = 3 #Carnage
+				}
+			}
+			NOT = { tag = HLR }
+			NOT = { tag = PAP }
+			primary_culture = georgian
+			is_colonial_nation = no
+			OR = {
+				is_former_colonial_nation = no
+				AND = {
+					is_former_colonial_nation = yes
+					ai = no
+				}
+			}
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 422	# Imereti
+				province_id = 423	# Tblisi
+				province_id = 2203	# Kahketi
+				province_id = 2204	# Lomsia
+				province_id = 4301	# Kartli
+				AND = {
+                    province_id = 462
+                    ROOT = { NOT = { owns_core_province = 2196 } }
+                    ROOT = { NOT = { owns_core_province = 4303 } }
+                }
+				AND = {
+                    province_id = 2196
+                    ROOT = { NOT = { owns_core_province = 462 } }
+                    ROOT = { NOT = { owns_core_province = 4303 } }
+                }
+				AND = {
+                    province_id = 4303
+                    ROOT = { NOT = { owns_core_province = 2196 } }
+                    ROOT = { NOT = { owns_core_province = 462 } }
+                }
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		allow = {
+			NOT = { exists = GEO }
+			is_at_war = no
+			is_free_or_tributary_trigger = yes
+			is_nomad = no
+			owns_core_province = 422	# Imereti
+			owns_core_province = 423	# Tblisi
+			owns_core_province = 2203	# Kahketi
+			owns_core_province = 2204	# Lomsia
+			owns_core_province = 4301	# Kartli
+			OR = {
+				owns_core_province = 462 #Mingrelia
+				owns_core_province = 2196 #Guria
+				owns_core_province = 4303 #Tao
+			}
+		}
+		effect = {
+			change_tag = GEO
+			on_change_tag_effect = yes
+			remove_non_electors_emperors_from_empire_effect = yes
+			if = {
+				limit = { NOT = { government_rank = 2 } }
+				set_government_rank = 2
+			}
+			kartli_kakheti_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = GEO
+			}
+			samtskhe_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = GEO
+			}
+			imereti_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = GEO
+			}
+			add_country_modifier = {
+				name = "centralization_modifier"
+				duration = 7300
+			}
+			add_prestige = 25
+			if = {
+				limit = {
+					has_custom_ideas = no
+					NOT = { has_idea_group = GEO_ideas }
+				}
+				country_event = { id = ideagroups.1 } #Swap Ideas
+			}
+			set_country_flag = formed_georgia_flag
+			if = {
+				limit = { has_dlc = "King of Kings" }
+				swap_non_generic_missions = yes
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+		ai_importance = 400 #
+	}
+	
+	georgia_constantinople = {
+		major = yes
+		potential = {
+			OR = {
+				tag = GEO
+				was_tag = GEO
+			}
+			normal_or_historical_nations = yes
+			NOT = { has_country_flag = geo_capital_constantinople }
+			has_country_flag = geo_move_capital_flag
+		}
+		allow = {
+			is_core = 151
+			owns = 151
+			NOT = { capital = 151 }
+			is_at_war = no
+		}
+		provinces_to_highlight = {
+			province_id = 151
+		}
+		effect = {
+			set_country_flag = geo_capital_constantinople
+			151 = {
+				move_capital_effect = yes
+			}
+			151 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			151 = {
+				add_province_modifier = {
+					name = "geo_city_world_desire"
+					duration = 7300
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+}
