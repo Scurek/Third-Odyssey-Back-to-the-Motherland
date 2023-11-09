@@ -1935,6 +1935,7 @@ nhs_right_start = {
 			custom_trigger_tooltip = {
 				tooltip = to_standardize_currency_mission_gold_province_tt
 				any_owned_province = {
+					is_city = yes
 					to_ely_high_income_mission_is_gold_province = yes
 				}
 			}
@@ -2007,76 +2008,22 @@ nhs_right_start = {
 		}
 		effect = {
 			add_inflation = -5
-			if = {
-				limit = {
-					any_owned_province = {
-						NOT = { trade_goods = gold }
-						to_ely_high_income_mission_is_gold_province = yes
-					}
-				}
-				random_owned_province = {
-					limit = {
-						to_ely_high_income_mission_is_gold_province = yes
-						NOT = { trade_goods = gold }
-					}
-					change_trade_goods = gold
-				}
-			}
-			else = {
-				custom_tooltip = to_standardize_currency_mission_change_to_gold_tt
-			}
-			custom_tooltip = nhs_new_line_tt
 			add_country_modifier = {
 				name = "strong_treasury"
 				duration = 9125 #25 years
 			}
-			# If owns one of the target provinces spawn gold, otherwise spawn gold when acquired
-			# if = {
-			# 	limit = {
-			# 		gold = 1
-			# 	}
-			# 	add_treasury = 500
-			# }
-			# else_if = {
-			# 	limit = {
-			# 		owns = 4879
-			# 	}
-			# 	4879 = {
-			# 		change_trade_goods = gold
-			# 	}
-			# }
-			# else_if = {
-			# 	limit = {
-			# 		owns = 935
-			# 	}
-			# 	935 = {
-			# 		change_trade_goods = gold
-			# 	}
-			# }
-			# else_if = {
-			# 	limit = {
-			# 		owns = 2527
-			# 	}
-			# 	2527 = {
-			# 		change_trade_goods = gold
-			# 	}
-			# }
-			# else_if = {
-			# 	limit = {
-			# 		owns = 2563
-			# 	}
-			# 	2563 = {
-			# 		change_trade_goods = gold
-			# 	}
-			# }
-			# else_if = {
-			# 	limit = {
-			# 		owns = 2548
-			# 	}
-			# 	2548 = {
-			# 		change_trade_goods = gold
-			# 	}
-			# }
+			custom_tooltip = to_standardize_currency_mission_change_to_gold_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						any_owned_province = {
+							to_ely_high_income_mission_is_gold_province = yes
+							NOT = { trade_goods = gold }
+						}
+					}
+					country_event = { id = nhs2_countryevents.14 }
+				}
+			}
 		}
 	}
 }
