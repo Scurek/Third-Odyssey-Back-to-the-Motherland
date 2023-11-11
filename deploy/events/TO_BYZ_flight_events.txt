@@ -18,6 +18,9 @@ country_event = {
 	
 	immediate = {
 		hidden_effect = {
+			add_manpower = -1000
+			add_sailors = -10000
+			nhs_unitus_deletus = yes
 			add_country_modifier = {
 				name = "byz_flight"
 				duration = -1
@@ -41,6 +44,14 @@ country_event = {
 				}
 				add_treasury = -1
 			}
+			add_ruler_modifier = {
+				name = to_byz_dont_die
+				duration = -1
+				hidden = yes
+			}
+			set_ruler_flag = civil_war_exempt
+			set_heir_flag = civil_war_exempt
+			set_heir_flag = to_is_konstantinos
 		}
 	}
 
@@ -1681,40 +1692,54 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = {
-					has_country_flag = nhs_new_flightevents_lose_stats_storm
+					has_ruler_modifier = to_byz_dont_die
+					NOT = { has_heir_flag = to_is_konstantinos }
 				}
-				define_heir = {
-					name = "Konstantinos"
-					dynasty = "Palaeologus"
-					monarch_name = "Konstantinos XI"
-					adm = 5
-					dip = 2
-					mil = 5
-					birth_date = 1405.2.8
-					culture = greek
-					religion = orthodox
+				if = {
+					limit = {
+						has_country_flag = nhs_new_flightevents_lose_stats_storm
+					}
+					define_heir = {
+						name = "Konstantinos"
+						dynasty = "Palaeologus"
+						monarch_name = "Konstantinos XI"
+						adm = 5
+						dip = 2
+						mil = 5
+						birth_date = 1405.2.8
+						culture = greek
+						religion = orthodox
+					}
+				}
+				else = {
+					define_heir = {
+						name = "Konstantinos"
+						dynasty = "Palaeologus"
+						monarch_name = "Konstantinos XI"
+						adm = 6
+						dip = 3
+						mil = 5
+						birth_date = 1405.2.8
+						culture = greek
+						religion = orthodox
+					}
 				}
 			}
-			else = {
-				define_heir = {
-					name = "Konstantinos"
-					dynasty = "Palaeologus"
-					monarch_name = "Konstantinos XI"
-					adm = 6
-					dip = 3
-					mil = 5
-					birth_date = 1405.2.8
-					culture = greek
-					religion = orthodox
+		}
+		if = {
+			limit = {
+				OR = {
+					has_ruler_modifier = to_byz_dont_die
+					has_heir_flag = to_is_konstantinos
 				}
 			}
+			kill_ruler = yes
 		}
 		add_ruler_modifier = {
 			name = to_byz_dont_die
 			duration = -1
 			hidden = yes
 		}
-		kill_ruler = yes
 		define_heir = {
 			name = "Theophilos"
 			dynasty = "Palaeologus"
