@@ -2796,9 +2796,10 @@ chinese_kingdoms_3 = {
 				if = {
 					limit = { 
 						is_in_war = {
-							attacker_leader = ROOT 
+							attacker_leader = ROOT
+							defender_leader = MNG
 							casus_belli = cb_independence_war
-							war_score = 25 
+							war_score = 25
 						}
 					}
 					add_mil_tech = 1 
@@ -5091,6 +5092,7 @@ ming_missions_4_dynamic_1 = {
 		} 
 		
 		trigger = { 
+			not_in_mission_preview_mode = { key = MNG }
 			OR = { 
 				has_reform = mercantilistic_approach_reform
 				dip = 6 
@@ -5189,6 +5191,7 @@ ming_missions_4_dynamic_2 = {
 		}
 		
 		trigger = { 
+			not_in_mission_preview_mode = { key = MNG }
 			OR = { 
 				full_idea_group = trade_ideas 
 				dip = 6 
@@ -6949,42 +6952,42 @@ DOM_Qing_Missions_5_dynamic_b = {
 		}
 		
 		effect = {
-			tooltip = { swap_non_generic_missions = yes } 
-			custom_tooltip = qng_free_trade_reward_tt
-			tooltip = {
-				add_country_modifier = {
-					name = qng_free_trade_modifier
-					duration = 9125 
+			if = {
+				limit = {
+					ai = yes
 				}
-			}
-			
-			custom_tooltip = qng_mercantilism_reawrd_tt
-			tooltip = {
-				add_country_modifier = {
-					name = qng_mercantilism_modifier
-					duration = -1 
+				hidden_effect = {
+					random_list = {
+						50 = {
+							set_country_flag = qng_open_ports_flag
+							clr_country_flag = qng_close_ports_flag
+						}
+						50 = {
+							set_country_flag = qng_close_ports_flag
+							clr_country_flag = qng_open_ports_flag
+						}
+					}
 				}
+				swap_non_generic_missions = yes 
 			}
-			
-			hidden_effect = {
-				if = { 
-					limit = { has_reform = free_trade_reform }
+			else = {
+				enable_branching_mission_review_without_ai = {
+					key = QNG
+				}
+				custom_tooltip = qng_free_trade_reward_tt
+				tooltip = {
 					add_country_modifier = {
 						name = qng_free_trade_modifier
 						duration = 9125 
 					}
-					set_country_flag = qng_open_ports_flag
-					clr_country_flag = qng_close_ports_flag
-					swap_non_generic_missions = yes 
 				}
-				else = {
+				
+				custom_tooltip = qng_mercantilism_reawrd_tt
+				tooltip = {
 					add_country_modifier = {
 						name = qng_mercantilism_modifier
 						duration = -1 
 					}
-					set_country_flag = qng_close_ports_flag
-					clr_country_flag = qng_open_ports_flag
-					swap_non_generic_missions = yes 
 				}
 			}
 		}
@@ -7136,6 +7139,7 @@ DOM_Qing_Missions_5_a = {
 		position = 11
 		
 		trigger = {
+			not_in_mission_preview_mode = { key = QNG }
 			calc_true_if = {
 				all_subject_country = {
 					is_colonial_nation_of = ROOT 
@@ -7164,6 +7168,7 @@ DOM_Qing_Missions_5_a = {
 		required_missions = { qng_allow_foreign_exchanges qng_high_qing_era }
 		position = 13
 		trigger = {
+			not_in_mission_preview_mode = { key = QNG }
 			if = {
 				limit = { 
 					has_dlc = "Rule Britannia" 
@@ -7231,6 +7236,7 @@ DOM_Qing_Missions_5_b = {
 			}
 		}
 		trigger = {
+			not_in_mission_preview_mode = { key = QNG }
 			num_of_owned_provinces_with = {
 				trade_goods = chinaware
 				has_manufactory_trigger = yes 
@@ -7263,6 +7269,7 @@ DOM_Qing_Missions_5_b = {
 		position = 13
 		
 		trigger = {
+			not_in_mission_preview_mode = { key = QNG }
 			4233 = {
 				trade_share = {
 					country = ROOT 

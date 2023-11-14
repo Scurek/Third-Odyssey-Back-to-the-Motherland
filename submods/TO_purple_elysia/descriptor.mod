@@ -6,4 +6,4 @@ tags={
 	"Graphics"
 }
 picture="thumbnail.png"
-supported_version="1.36.0.*"
+supported_version="1.36.1.*"
