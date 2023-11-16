@@ -3823,10 +3823,10 @@ nhs_pantheon_syncretic = {
 	}
 }
 
-akrotirion = {
+to_akrotirion = {
 	# start = 492 #Puerto Rico
 	date = 9999.01.01	#1589.01.01
-	time = { months = 0 }
+	time = { months = 1 }
 	build_cost = 0
 	can_be_moved = no
 	move_days_per_unit_distance = 10
@@ -3834,43 +3834,60 @@ akrotirion = {
 	type = canal
 
 	build_trigger = {
-		region = carribeans_region
-		NOT = { has_global_flag = to_akrotirion_build2 }
-		FROM = {
-			OR = {
-				mission_completed = to_gateway_to_elysium_mission
-				overlord = {
-					mission_completed = to_gateway_to_elysium_mission
-				}
-			}
-		}
-		NOT = {
-			any_province = {
-				region = carribeans_region
-				has_construction = canal
-			}
-		}
+		has_province_flag = to_enable_akrotirion
 	}
 
 	on_built = {
-		set_global_flag = to_akrotirion_build2
-		every_province = {
-			limit = {
-				region = carribeans_region
-				has_construction = canal
-				NOT = { province_id = PREV }
-			}
-			cancel_construction = yes
-		}
+		save_global_event_target_as = to_akrotirion_province
 	}
 
 	on_destroyed = {
 	}
 
 	can_use_modifiers_trigger = {
+		if = {
+			limit = {
+				owner = {
+					is_subject = yes
+				}
+			}
+			owner = {
+				OR = {
+					mission_completed = to_gateway_to_elysium_mission
+					overlord = {
+						mission_completed = to_gateway_to_elysium_mission
+					}
+				}
+			}
+		}
+		else = {
+			owner = {
+				mission_completed = to_gateway_to_elysium_mission
+			}
+		}
 	}
 
 	can_upgrade_trigger = {
+		if = {
+			limit = {
+				owner = {
+					is_subject = yes
+				}
+			}
+			owner = {
+				OR = {
+					mission_completed = to_gateway_to_elysium_mission
+					overlord = {
+						mission_completed = to_gateway_to_elysium_mission
+					}
+				}
+			}
+		}
+		else = {
+			owner = {
+				mission_completed = to_gateway_to_elysium_mission
+			}
+		}
 	}
 
 	keep_trigger = {
@@ -3965,7 +3982,7 @@ akrotirion = {
 
 to_elysian_highways_project = {
 	date = 9999.01.01	#0001.01.01
-	time = { months = 0 }
+	time = { months = 1 }
 	build_cost = 0
 	can_be_moved = no
 	move_days_per_unit_distance = 10
@@ -3973,99 +3990,59 @@ to_elysian_highways_project = {
 	type = canal
 
 	build_trigger = {
-		to_has_elysian_highway_modifier = yes
-		NOT = { has_global_flag = to_elysian_highways_project_build2 }
-		FROM = {
-			mission_completed = to_beyond_the_apaleisians_mission
-		}
-		OR = {
-			to_elysian_highway_north_apaleisian_province_trigger = { TRIGGER = province_id }
-			to_elysian_highway_south_apaleisian_province_trigger = { TRIGGER = province_id }
-		}
-		NOT = {
-			OR = {
-				to_elysian_highway_north_apaleisian_trigger = { ANY = yes TRIGGER = "has_construction = canal" }
-				to_elysian_highway_south_apaleisian_trigger = { ANY = yes TRIGGER = "has_construction = canal" }
-			}
-		}
+		has_province_flag = to_enable_elysian_highways
 	}
 
 	on_built = {
-		set_global_flag = to_elysian_highways_project_build2
-		every_province = {
-			limit = {
-				OR = {
-					to_elysian_highway_north_apaleisian_province_trigger = { TRIGGER = province_id }
-					to_elysian_highway_south_apaleisian_province_trigger = { TRIGGER = province_id }
-				}
-				to_has_elysian_highway_modifier = yes
-				has_construction = canal
-				NOT = { province_id = PREV }
-			}
-			cancel_construction = yes
-		}
-		# if = {
-		# 	limit = {
-		# 		has_global_flag = to_elysian_highways_project_tier_3
-		# 		NOT = {
-		# 			has_great_project = {
-		# 				type = to_elysian_highways_project
-		# 				tier = 3
-		# 			}
-		# 		}
-		# 	}
-		# 	add_great_project_tier = {
-		# 		type = to_elysian_highways_project
-		# 		tier = 3
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		has_global_flag = to_elysian_highways_project_tier_2
-		# 		NOT = {
-		# 			has_great_project = {
-		# 				type = to_elysian_highways_project
-		# 				tier = 1
-		# 			}
-		# 		}
-		# 	}
-		# 	add_great_project_tier = {
-		# 		type = to_elysian_highways_project
-		# 		tier = 2
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		OR = {
-		# 			has_global_flag = to_elysian_highways_project_tier_1
-		# 			has_global_flag = to_elysian_highways_project_tier_2
-		# 		}
-		# 		NOT = {
-		# 			has_great_project = {
-		# 				type = to_elysian_highways_project
-		# 				tier = 1
-		# 			}
-		# 		}
-		# 	}
-		# 	add_great_project_tier = {
-		# 		type = to_elysian_highways_project
-		# 		tier = 1
-		# 	}
-		# }
+		save_global_event_target_as = to_elysian_highways_province
 	}
 
 	on_destroyed = {
 	}
 
 	can_use_modifiers_trigger = {
-		FROM = {
-			nhs_eligible_for_elysian_monument = yes
+		if = {
+			limit = {
+				owner = {
+					is_subject = yes
+				}
+			}
+			owner = {
+				OR = {
+					mission_completed = to_beyond_the_apaleisians_mission
+					overlord = {
+						mission_completed = to_beyond_the_apaleisians_mission
+					}
+				}
+			}
+		}
+		else = {
+			owner = {
+				mission_completed = to_beyond_the_apaleisians_mission
+			}
 		}
 	}
 
 	can_upgrade_trigger = {
-		FROM = {
-			nhs_eligible_for_elysian_monument = yes
+		if = {
+			limit = {
+				owner = {
+					is_subject = yes
+				}
+			}
+			owner = {
+				OR = {
+					mission_completed = to_beyond_the_apaleisians_mission
+					overlord = {
+						mission_completed = to_beyond_the_apaleisians_mission
+					}
+				}
+			}
+		}
+		else = {
+			owner = {
+				mission_completed = to_beyond_the_apaleisians_mission
+			}
 		}
 	}
 
