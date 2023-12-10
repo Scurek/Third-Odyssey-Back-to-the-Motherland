@@ -10,6 +10,21 @@ age_of_discovery = {
 	
 
 	objectives = {
+		# Third Odyssey
+		obj_to_well_advised = {
+			# Replaces obj_two_continents
+			allow = {
+				OR = {
+					nhs_check_all_elysian_tags = { CONDITION = tag }
+					nhs_check_all_spartan = { CONDITION = tag }	
+				}
+			}
+			has_adm_advisor_2 = yes
+			has_dip_advisor_2 = yes
+			has_mil_advisor_2 = yes
+		}
+		# TO END
+
 		obj_discover_america = {
 			allow = {
 				capital_scope = {
@@ -81,18 +96,29 @@ age_of_discovery = {
 		obj_two_unions = {
 			allow = {
 				religion_group = christian
+				# Third Odyssey
+				NOT = { nhs_exiles_tech = yes }
 			}
 			personal_union  = 2
 		}
 		
 		obj_many_vassals = {
 			allow = {
-				NOT = { religion_group = christian }
+				OR = {
+					NOT = { religion_group = christian }
+					# Third Odyssey
+					nhs_exiles_tech = yes
+				}
 			}
 			vassal = 5
 		}		
 	
 		obj_two_continents = {
+			allow = {
+				# Third Odyssey
+				NOT = { nhs_check_all_elysian_tags = { CONDITION = tag } }
+				NOT = { nhs_check_all_spartan = { CONDITION = tag } }
+			}
 			num_of_continents = 2
 		}
 	
@@ -256,7 +282,124 @@ age_of_reformation = {
 	papacy = 1.25
 	
 	objectives = {
+		# Third Odyssey
+		obj_to_revered_court = {
+			# Replaces obj_convert_10_provinces
+			allow = {
+				OR = {
+					nhs_exiles_tech = yes
+					capital_scope = {
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+					}
+				}
+				NOT = { uses_republican_tradition = yes }
+				NOT = { uses_horde_unity = yes }
+				NOT = { uses_devotion = yes }
+			}
+			prestige = 95
+			if = {
+				limit = {
+					NOT = { uses_meritocracy = yes }
+				}
+				legitimacy = 95
+			}
+			NOT = { corruption = 1 }
+		}
+
+		obj_to_revered_court_rep_tradition = {
+			# Replaces obj_convert_10_provinces
+			allow = {
+				OR = {
+					nhs_exiles_tech = yes
+					capital_scope = {
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+					}
+				}
+				uses_republican_tradition = yes
+			}
+			prestige = 95
+			republican_tradition = 90
+			NOT = { corruption = 1 }
+		}
+
+		obj_to_revered_court_horde_unity = {
+			# Replaces obj_convert_10_provinces
+			allow = {
+				OR = {
+					nhs_exiles_tech = yes
+					capital_scope = {
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+					}
+				}
+				uses_horde_unity = yes
+			}
+			prestige = 95
+			horde_unity = 80
+			NOT = { corruption = 1 }
+		}
+
+		obj_to_revered_court_devotion = {
+			# Replaces obj_convert_10_provinces
+			allow = {
+				OR = {
+					nhs_exiles_tech = yes
+					capital_scope = {
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+					}
+				}
+				uses_devotion = yes 
+			}
+			prestige = 95
+			devotion = 95
+			NOT = { corruption = 1 }
+		}
+
+		obj_to_modernize = {
+			# Replaces obj_christian_convert
+			allow = {
+				OR = {
+					nhs_exiles_tech = yes
+					NOT = { religion_group = christian }
+				}
+			}
+			calc_true_if = {
+				amount = 2
+				to_is_ahead_of_time = { TECH = adm }
+				to_is_ahead_of_time = { TECH = dip }
+				to_is_ahead_of_time = { TECH = mil }
+			}
+		}
+
+		obj_to_cultural_resurgence = {
+			# Replaces obj_unify_culture
+			allow = {
+				nhs_exiles_tech = yes
+			}
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 75
+				culture_group = ROOT
+			}
+		}
+		# TO END
+
 		obj_christian_convert = {
+			allow = {
+				# Third Odyssey
+				religion_group = christian
+				NOT = { nhs_exiles_tech = yes }
+			}
 			OR = {
 				religion = protestant
 				religion = reformed
@@ -273,6 +416,18 @@ age_of_reformation = {
 		}
 		
 		obj_convert_10_provinces = {
+			allow = {
+				# Third Odyssey
+				NOT = { nhs_exiles_tech = yes }
+				NOT = {
+					capital_scope = {
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+					}
+				}
+			}
 			custom_trigger_tooltip = {
 				tooltip = obj_convert_10_provinces_tooltip
 				check_variable = { which = num_converted_religion value = 10 }
@@ -280,8 +435,61 @@ age_of_reformation = {
 		}
 		
 		obj_colonial_empire = {
+			allow = {
+				NOT = { nhs_check_all_elysian_tags = { CONDITION = tag } }
+				NOT = {
+					capital_scope = {
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+					}
+				}
+			}
 			colony = 5
 		}
+		
+		# Third Odyssey
+		obj_to_colonial_empire_na = {
+			allow = {
+				OR = {
+					nhs_check_all_elysian_tags = { CONDITION = tag }
+					capital_scope = {
+						continent = north_america
+					}
+				}
+			}	
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 50
+				OR = {
+					continent = south_america
+					superregion = southern_africa_superregion
+					superregion = india_superregion
+					superregion = east_indies_superregion
+					superregion = oceania_superregion
+				}
+			}
+		}
+
+		obj_to_colonial_empire_sa = {
+			allow = {
+				NOT = { nhs_check_all_elysian_tags = { CONDITION = tag } }
+				capital_scope = {
+					continent = south_america
+				}
+			}	
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 50
+				OR = {
+					continent = north_america
+					superregion = southern_africa_superregion
+					superregion = india_superregion
+					superregion = east_indies_superregion
+					superregion = oceania_superregion
+				}
+			}
+		}
+		# TO END
 		
 		obj_force_converted = {
 			custom_trigger_tooltip = {
@@ -321,7 +529,11 @@ age_of_reformation = {
 		
 		}
 		
-		obj_unify_culture = {	
+		obj_unify_culture = {
+			allow = {
+				# Third Odyssey
+				NOT = { nhs_exiles_tech = yes }
+			}
 			is_subject = no
 			has_unified_culture_group = yes
 		}
@@ -563,9 +775,64 @@ age_of_absolutism = {
 	}
 		
 	objectives = {
-		obj_3_trade_companies = {
-			num_of_trade_companies = 3
+		# Third Odyssey
+
+		obj_to_one_path_ends_green = {
+			# Replaces obj_emperor_of_china
+			allow = {
+				# Third Odyssey
+				OR = {
+					tag = ELY
+					tag = ER1
+				}
+			}
+			OR = {
+				mission_completed = to_the_promised_land_mission
+				mission_completed = to_elysia_ascendant_mission
+				mission_completed = to_koine_glossa_mission
+			}
 		}
+
+		obj_to_one_path_ends_purple = {
+			# Replaces obj_emperor_of_china
+			allow = {
+				# Third Odyssey
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+				NOT = {
+					OR = {
+						tag = ELY
+						tag = ER1
+					}
+				}
+			}
+			OR = {
+				mission_completed = to_the_promised_land_mission
+				mission_completed = to_rome_restored_mission
+				mission_completed = to_koine_glossa_mission
+			}
+		}
+
+		obj_to_control_trade = {
+			# Replaces obj_3_trade_companies
+			calc_true_if = {
+				amount = 6
+				custom_trigger_tooltip = {
+					tooltip = to_nodes_with_50_trade_share_tt
+					all_trade_node = {
+						# is_strongest_trade_power = ROOT
+						trade_share = {
+							country = ROOT
+							share = 50
+						}
+					}
+				}
+			}
+		}
+
+		# obj_3_trade_companies = {
+		# 	num_of_trade_companies = 3
+		# }
+		# TO END
 		
 		obj_universities = {
 			num_of_owned_provinces_with = {
@@ -583,6 +850,10 @@ age_of_absolutism = {
 		}
 		
 		obj_emperor_of_china = {
+			allow = {
+				# Third Odyssey
+				NOT = { nhs_check_all_elysian_tags = { CONDITION = tag } }
+			}
 			is_emperor_of_china = yes
 			imperial_mandate = 50
 		}
