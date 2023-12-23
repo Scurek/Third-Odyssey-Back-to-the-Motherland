@@ -52,43 +52,33 @@ nhs_cothon = {
 
 	#can our country upgrade it?
 	can_upgrade_trigger = {
-		# Rehiring advisors is not that fun
-		# if = {
-		# 	limit = {
-		# 		FROM = {
-		# 			ai = no
-		# 		}
-		# 		has_great_project = {
-		# 			type = nhs_cothon
-		# 			tier = 1
-		# 		}
-		# 	}
-		# 	FROM = {
-		# 		OR = {
-		# 			fortification_expert = 2
-		# 			naval_reformer = 2
-		# 			dip = 5
-		# 		}
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		FROM = {
-		# 			ai = no
-		# 		}
-		# 		has_great_project = {
-		# 			type = nhs_cothon
-		# 			tier = 2
-		# 		}
-		# 	}
-		# 	FROM = {
-		# 		OR = {
-		# 			fortification_expert = 3
-		# 			naval_reformer = 3
-		# 			dip = 5
-		# 		}
-		# 	}
-		# }
+		if = {
+			limit = {
+				has_great_project = {
+					type = nhs_cothon
+					tier = 2
+				}
+			}
+			to_cothon_tier_3_trigger = yes
+		}
+		else_if = {
+			limit = {
+				has_great_project = {
+					type = nhs_cothon
+					tier = 1
+				}
+			}
+			to_cothon_tier_2_trigger = yes
+		}
+		else_if = {
+			limit = {
+				has_great_project = {
+					type = nhs_cothon
+					tier = 0
+				}
+			}
+			to_cothon_tier_1_trigger = yes
+		}
 		FROM = {
 			nhs_eligible_for_elysian_monument = yes
 		}
@@ -151,6 +141,7 @@ nhs_cothon = {
 			naval_forcelimit = 5
 			province_trade_power_value = 10
 			local_sailors = 500
+			trade_goods_size = 1
 		}
 
 		#what modifiers are added to the provinces in the map area when we have this project here on this tier
@@ -165,6 +156,9 @@ nhs_cothon = {
 		#what effects happen when this tier is achieved
 		on_upgraded = {
 			custom_tooltip = to_when_upgraded_tt
+			FROM = {
+				add_dip_power = -100
+			}
 			if = {
 				limit = {
 					NOT = { has_province_flag = to_got_cothon_tier_1_dev_boost }
@@ -178,6 +172,8 @@ nhs_cothon = {
 				}
 			}
 			to_nhs_despotate_monument_mod_transfer = yes
+			custom_tooltip = to_upgrade_requirements_tt
+			custom_tooltip = to_cothon_tier_1_upgrade_requirement_tt
 		}
 	}
 
@@ -203,6 +199,7 @@ nhs_cothon = {
 			province_trade_power_value = 15
 			local_sailors = 1000
 			naval_forcelimit = 10
+			trade_goods_size = 2
 		}
 
 		#what modifiers are added to the provinces in the map area when we have this project here on this tier
@@ -231,6 +228,8 @@ nhs_cothon = {
 				}
 			}
 			to_nhs_despotate_monument_mod_transfer = yes
+			custom_tooltip = to_upgrade_requirements_tt
+			custom_tooltip = to_cothon_tier_2_upgrade_requirement_tt
 		}
 	}
 
@@ -256,6 +255,8 @@ nhs_cothon = {
 			province_trade_power_value = 30
 			local_sailors = 2000
 			naval_forcelimit = 20
+			trade_goods_size = 2
+			trade_value_modifier = 0.2
 		}
 
 		#what modifiers are added to the provinces in the map area when we have this project here on this tier
@@ -277,14 +278,18 @@ nhs_cothon = {
 					NOT = { has_province_flag = to_got_cothon_tier_3_dev_boost }
 				}
 				set_province_flag = to_got_cothon_tier_3_dev_boost
-				add_base_production = 2
+				add_base_tax = 1
+				add_base_manpower = 1
 			}
 			else = {
 				tooltip = {
-					add_base_production = 2
+					add_base_tax = 1
+					add_base_manpower = 1
 				}
 			}
 			to_nhs_despotate_monument_mod_transfer = yes
+			custom_tooltip = to_upgrade_requirements_tt
+			custom_tooltip = to_cothon_tier_3_upgrade_requirement_tt
 		}
 	}
 }
@@ -343,26 +348,36 @@ nhs_alexandrian_library = {
 
 	#can our country upgrade it?
 	can_upgrade_trigger = {
+		if = {
+			limit = {
+				has_great_project = {
+					type = nhs_alexandrian_library
+					tier = 2
+				}
+			}
+			to_library_tier_3_trigger = yes
+		}
+		else_if = {
+			limit = {
+				has_great_project = {
+					type = nhs_alexandrian_library
+					tier = 1
+				}
+			}
+			to_library_tier_2_trigger = yes
+		}
+		else_if = {
+			limit = {
+				has_great_project = {
+					type = nhs_alexandrian_library
+					tier = 0
+				}
+			}
+			to_library_tier_1_trigger = yes
+		}
 		FROM = {
 			nhs_eligible_for_elysian_monument = yes
 		}
-		# if = {
-		# 	limit = {
-		# 		has_great_project = {
-		# 			type = nhs_alexandrian_library
-		# 			tier = 2
-		# 		}
-		# 		FROM = {
-		# 			NOT = {
-		# 				has_country_modifier = nhs_secrets_books
-		# 			}
-		# 		}
-		# 	}
-		# 	custom_trigger_tooltip = {
-		# 		tooltip = nhs_alexandrian_library_tier_3_restriction_tt
-		# 		always = no
-		# 	}
-		# }
 	}
 
 	#can our country keep it or is it destroyed when we get hold of it?
@@ -447,9 +462,39 @@ nhs_alexandrian_library = {
 		on_upgraded = {
 			if = {
 				limit = {
+					FROM = {
+						has_country_modifier = nhs_secrets_books
+					}
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = nhs_alexandrian_library_books_discount_tt
+				custom_tooltip = to_alexandrian_library_upgrade_cost_reduction_tier_1_tt
+			}
+			custom_tooltip = to_when_upgraded_tt
+			if = {
+				limit = {
+					FROM = {
+						has_country_modifier = nhs_secrets_books
+					}
+				}
+				FROM = {
+					add_adm_power = -50
+					add_dip_power = -50
+					add_mil_power = -50	
+				}
+			}
+			else = {
+				FROM = {
+					add_adm_power = -100
+					add_dip_power = -100
+					add_mil_power = -100	
+				}
+			}
+			if = {
+				limit = {
 					NOT = { trade_goods = paper }
 				}
-				custom_tooltip = to_when_upgraded_tt
 				if = {
 					limit = {
 						owner = {
@@ -463,6 +508,18 @@ nhs_alexandrian_library = {
 				}
 			}
 			to_nhs_despotate_monument_mod_transfer = yes
+			custom_tooltip = to_upgrade_requirements_tt
+			if = {
+				limit = {
+					FROM = {
+						has_country_modifier = nhs_secrets_books
+					}
+				}
+				custom_tooltip = to_library_tier_1_upgrade_requirement_books_tt
+			}
+			else = {
+				custom_tooltip = to_library_tier_1_upgrade_requirement_tt
+			}
 		}
 	}
 
@@ -515,6 +572,17 @@ nhs_alexandrian_library = {
 		on_upgraded = {
 			if = {
 				limit = {
+					FROM = {
+						has_country_modifier = nhs_secrets_books
+					}
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = nhs_alexandrian_library_books_discount_tt
+				custom_tooltip = to_alexandrian_library_upgrade_cost_reduction_tier_2_tt
+			}
+			if = {
+				limit = {
 					NOT = { trade_goods = paper }
 				}
 				custom_tooltip = to_when_upgraded_tt
@@ -531,6 +599,16 @@ nhs_alexandrian_library = {
 				}
 			}
 			to_nhs_despotate_monument_mod_transfer = yes
+			custom_tooltip = to_upgrade_requirements_tt
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+				}
+				custom_tooltip = to_library_tier_2_upgrade_requirement_tt
+			}
+			else = {
+				custom_tooltip = to_library_tier_2_upgrade_requirement_nodlc_tt
+			}
 		}
 	}
 
@@ -585,8 +663,11 @@ nhs_alexandrian_library = {
 				else = {
 					custom_tooltip = nhs_alexandrian_paper_tt
 				}
+				custom_tooltip = nhs_new_line_tt
 			}
 			to_nhs_despotate_monument_mod_transfer = yes
+			custom_tooltip = to_upgrade_requirements_tt
+			custom_tooltip = to_library_tier_3_upgrade_requirement_tt
 		}
 	}
 }
@@ -896,6 +977,24 @@ nhs_elysian_arsenal = {
 
 	#can our country upgrade it?
 	can_upgrade_trigger = {
+		if = {
+			limit = {
+				has_great_project = {
+					type = nhs_elysian_arsenal
+					tier = 2
+				}
+			}
+			to_arsenal_tier_3_trigger = yes
+		}
+		else_if = {
+			limit = {
+				has_great_project = {
+					type = nhs_elysian_arsenal
+					tier = 1
+				}
+			}
+			to_arsenal_tier_2_trigger = yes
+		}
 		FROM = {
 			nhs_eligible_for_elysian_monument = yes
 		}
@@ -939,13 +1038,6 @@ nhs_elysian_arsenal = {
 		#time to upgrade to this level (0 for tier 0)
 		upgrade_time = {
 			months = 60
-			modifier = {
-				factor = 0.8
-				OR = {
-					has_building = shipyard
-					has_building = grand_shipyard
-				}
-			}
 		}
 
 		#cost to upgrade to this level (0 for tier 0)
@@ -957,20 +1049,12 @@ nhs_elysian_arsenal = {
 					ai = yes
 				}
 			}
-			modifier = {
-				factor = 0.9
-				has_building = shipyard
-			}
-			modifier = {
-				factor = 0.8
-				has_building = grand_shipyard
-			}
 		}
 
 		#what modifiers are added to the province when we have this project here on this tier
 		province_modifiers = {
-			ship_recruit_speed = -0.75
-			local_ship_repair = 0.75
+			ship_recruit_speed = -0.50
+			local_ship_repair = 0.50
 			local_ship_cost = -0.1
 			naval_forcelimit = 4
 		}
@@ -1003,13 +1087,25 @@ nhs_elysian_arsenal = {
 				limit = {
 					has_building = shipyard
 				}
-				remove_building = shipyard
+				custom_tooltip = to_recompensate_shipyard_tt
+				hidden_effect = {
+					remove_building = shipyard
+					FROM = {
+						add_treasury = 100
+					}
+				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					has_building = grand_shipyard
 				}
-				remove_building = grand_shipyard
+				custom_tooltip = to_recompensate_grand_shipyard_tt
+				hidden_effect = {
+					remove_building = grand_shipyard
+					FROM = {
+						add_treasury = 300
+					}
+				}
 			}
 			custom_tooltip = nhs_can_no_longer_build_shipyard_tt
 			to_nhs_despotate_monument_mod_transfer = yes
@@ -1047,7 +1143,7 @@ nhs_elysian_arsenal = {
 
 		#what modifiers are added to the country when we have this project here on this tier
 		country_modifiers = {
-			global_ship_cost = -0.10
+			global_ship_cost = -0.05
 			ship_durability = 0.05
 		}
 
@@ -1066,6 +1162,8 @@ nhs_elysian_arsenal = {
 				}
 			}
 			to_nhs_despotate_monument_mod_transfer = yes
+			custom_tooltip = to_upgrade_requirements_tt
+			custom_tooltip = to_arsenal_tier_2_upgrade_requirement_tt
 		}
 	}
 
@@ -1100,14 +1198,113 @@ nhs_elysian_arsenal = {
 
 		#what modifiers are added to the country when we have this project here on this tier
 		country_modifiers = {
-			global_ship_cost = -0.15
+			# global_ship_cost = -0.15
 			ship_durability = 0.05
 			siege_blockade_progress = 1
 			# naval_forcelimit = 30
 		}
 
+		# Code generated by great project power/arsenal.py
+		conditional_modifier = {
+			tooltip_potential = { always = no }
+			trigger = {
+				to_owner_has_development_in_province_with_wharf = { VALUE = 50 }
+			}
+			modifier = { global_ship_cost = -0.03 artillery_cost = -0.01 }
+		}
+
+		conditional_modifier = {
+			tooltip_potential = { always = no }
+			trigger = {
+				to_owner_has_development_in_province_with_wharf = { VALUE = 100 }
+			}
+			modifier = { global_ship_cost = -0.06 artillery_cost = -0.02 }
+		}
+
+		conditional_modifier = {
+			tooltip_potential = { always = no }
+			trigger = {
+				to_owner_has_development_in_province_with_wharf = { VALUE = 150 }
+			}
+			modifier = { global_ship_cost = -0.09 artillery_cost = -0.03 }
+		}
+
+		conditional_modifier = {
+			tooltip_potential = { always = no }
+			trigger = {
+				to_owner_has_development_in_province_with_wharf = { VALUE = 200 }
+			}
+			modifier = { global_ship_cost = -0.12 artillery_cost = -0.04 }
+		}
+
+		conditional_modifier = {
+			tooltip_potential = { always = no }
+			trigger = {
+				to_owner_has_development_in_province_with_wharf = { VALUE = 250 }
+			}
+			modifier = { global_ship_cost = -0.15 artillery_cost = -0.05 }
+		}
+
+		conditional_modifier = {
+			tooltip_potential = { always = no }
+			trigger = {
+				to_owner_has_development_in_province_with_wharf = { VALUE = 300 }
+			}
+			modifier = { global_ship_cost = -0.18 artillery_cost = -0.06 }
+		}
+
+		conditional_modifier = {
+			tooltip_potential = { always = no }
+			trigger = {
+				to_owner_has_development_in_province_with_wharf = { VALUE = 350 }
+			}
+			modifier = { global_ship_cost = -0.21 artillery_cost = -0.07 }
+		}
+
+		conditional_modifier = {
+			tooltip_potential = { always = no }
+			trigger = {
+				to_owner_has_development_in_province_with_wharf = { VALUE = 400 }
+			}
+			modifier = { global_ship_cost = -0.24 artillery_cost = -0.08 }
+		}
+
+		conditional_modifier = {
+			tooltip_potential = { always = no }
+			trigger = {
+				to_owner_has_development_in_province_with_wharf = { VALUE = 450 }
+			}
+			modifier = { global_ship_cost = -0.27 artillery_cost = -0.09 }
+		}
+
+		conditional_modifier = {
+			tooltip_potential = { always = no }
+			trigger = {
+				to_owner_has_development_in_province_with_wharf = { VALUE = 500 }
+			}
+			modifier = {
+				global_ship_cost = -0.3
+				artillery_cost = -0.1
+				global_naval_barrage_cost = -0.33
+				number_of_cannons_modifier = 0.1
+			}
+		}
+
 		#what effects happen when this tier is achieved
 		on_upgraded = {
+			if = {
+				limit = {
+					has_great_project = {
+						type = nhs_elysian_arsenal
+						tier = 3
+					}
+				}
+				to_arsenal_power_display_effect = yes
+			}
+			else = {
+				custom_tooltip = to_enable_arsenal_efficiency_mechanic_tt
+			}
+
 			custom_tooltip = to_when_upgraded_tt
 			if = {
 				limit = {
@@ -1121,15 +1318,39 @@ nhs_elysian_arsenal = {
 					add_base_production = 3
 				}
 			}
-
-			remove_shipyards_in_province = { PROVINCE = 952 }
-			remove_shipyards_in_province = { PROVINCE = 2550 }
-			remove_shipyards_in_province = { PROVINCE = 953 }
-			remove_shipyards_in_province = { PROVINCE = 2554 }
-			remove_shipyards_in_province = { PROVINCE = 957 }
+			every_province = {
+				limit = {
+					owned_by = FROM
+					area = ROOT
+				}
+				# remove_building = shipyard
+				# remove_building = grand_shipyard
+				if = {
+					limit = {
+						has_building = shipyard
+					}
+					custom_tooltip = to_recompensate_shipyard_tt
+					hidden_effect = {
+						remove_building = shipyard
+						add_treasury = 100
+					}
+				}
+				else_if = {
+					limit = {
+						has_building = grand_shipyard
+					}
+					custom_tooltip = to_recompensate_grand_shipyard_tt
+					hidden_effect = {
+						remove_building = grand_shipyard
+						add_treasury = 300
+					}
+				}
+			}
 			custom_tooltip = nhs_area_can_no_longer_build_shipyard_tt
 
 			to_nhs_despotate_monument_mod_transfer = yes
+			custom_tooltip = to_upgrade_requirements_tt
+			custom_tooltip = to_arsenal_tier_3_upgrade_requirement_tt
 		}
 	}
 }
@@ -4085,7 +4306,7 @@ to_elysian_highways_project = {
 			set_global_flag = to_elysian_highways_project_tier_1
 			if = {
 				limit = {
-					953 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					953 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = FROM } }
 				}
 				custom_tooltip = to_begin_construction_of_elysian_highway_in_elysia_tt
 			}
@@ -4094,7 +4315,7 @@ to_elysian_highways_project = {
 			}
 			if = {
 				limit = {
-					917 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = ROOT } }
+					917 = { country_or_subject_or_ally_or_ally_subject_holds = { TAG = FROM } }
 				}
 				custom_tooltip = to_begin_construction_of_elysian_highway_in_cahokia_tt
 			}

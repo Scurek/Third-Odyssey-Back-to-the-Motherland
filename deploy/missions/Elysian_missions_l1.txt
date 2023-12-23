@@ -194,25 +194,12 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 		}
 		effect = {
 			# custom_tooltip = nhs_reduce_native_raids_tt
-			define_advisor = {
-				type = fortification_expert
-				skill = 3
-				cost_multiplier = 0.25
-			}
-			custom_tooltip = nhs_new_line_tt
-			# add_country_modifier = {
-			# 	name = nhs_cheaper_fortifications
-			# 	duration = 9125
+			# define_advisor = {
+			# 	type = fortification_expert
+			# 	skill = 3
+			# 	cost_multiplier = 0.25
 			# }
-			# if = {
-			# 	limit = {
-			# 		has_dlc = "Mandate of Heaven"
-			# 	}
-			# 	chesapeake_area = {
-			# 		add_devastation = -100
-			# 		add_prosperity = 100
-			# 	}
-			# }
+			# custom_tooltip = nhs_new_line_tt
 			custom_tooltip = to_para_bellum_cheaper_forts_tt
 			custom_tooltip = nhs_new_line_tt
 			northeast_america_region = {
@@ -226,6 +213,32 @@ nhs_left_mid_start = { #Series name is displayed over the slot?
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					OR = {
+						953 = {
+							NOT = { has_province_flag = nhs_enable_hippodrome }
+						}
+						mission_completed = to_para_bellum_mission
+					}
+				}
+				custom_tooltip = nhs_new_line_tt
+				if = {
+					limit = {
+						953 = {
+							OR = {
+								is_empty = yes
+								owned_by = ROOT
+							}
+						}
+					}
+					country_event = { id = nhs_monuments.2 tooltip = to_trigger_hippodrome_event_tt }
+				}
+				else = {
+					set_country_flag = nhs_enable_hippodrome_decision
+					custom_tooltip = to_enable_hippodrome_decision_tt
+				}
 			}
 			custom_tooltip = nhs_new_line_tt
 			to_ely_true_nation_mission_trigger_reduce = yes
@@ -1079,7 +1092,7 @@ nhs_right_mid_start = {
 			#to_a_true_nation_mission
 			to_apaleisian_aqueducts_mission
 		}
-		#icon = mission_rb_college_of_justice
+		# icon = mission_rb_college_of_justice
 		# icon = mission_early_game_buildings
 		icon = brest_dockyards
 		position = 3
@@ -1179,35 +1192,34 @@ nhs_right_mid_start = {
 				if = {
 					limit = {
 						OR = {
-							# has_province_modifier = nhs_carthaginian_design_harbour_tm
-							to_has_great_project_at_least_at_tier_1 = {
-								TYPE = nhs_cothon
-							}
-							to_has_great_project_at_least_at_tier_1 = {
-								TYPE = nhs_elysian_arsenal
+							NOT = { has_province_flag = nhs_enable_cothon }
+							ROOT = {
+								mission_completed = to_infrastructure_projects_mission
 							}
 						}
 					}
-					tooltip = {
-						add_province_modifier = {
-							name = nhs2_ivos_naval_supplies_boost
-							duration = -1
+					if = {
+						limit = {
+							950 = {
+								OR = {
+									is_empty = yes
+									owned_by = ROOT
+								}
+							}
+						}
+						tooltip = {
+							country_event = { id = nhs_monuments.7 tooltip = to_trigger_cothon_event_tt }
+						}
+						hidden_effect = {
+							ROOT = {
+								country_event = { id = nhs_monuments.7 tooltip = to_trigger_cothon_event_tt }
+							}
 						}
 					}
-				}
-				else_if = {
-					limit = {
-						ROOT = {
-							has_country_flag = nhs_new_flight_taken_venetians
-						}
+					else = {
+						set_country_flag = nhs_enable_carthaginian_harbour_decision
+						custom_tooltip = to_enable_cothon_decision_tt
 					}
-					custom_tooltip = nhs_naval_supplies_boost_with_harbour_ven_tt
-				}
-				else = {
-					custom_tooltip = nhs_naval_supplies_boost_with_harbour_tt
-				}
-				hidden_effect = {
-					add_province_triggered_modifier = nhs2_ivos_naval_supplies_boost_tm
 				}
 			}
 			if = {
@@ -1224,9 +1236,6 @@ nhs_right_mid_start = {
 					change_trade_goods = paper
 				}
 			}
-			# hidden_effect = {
-			# 	nhs_end_homelands_building_counter = yes
-			# }
 			custom_tooltip = nhs_new_line_tt
 			to_ely_true_nation_mission_trigger_reduce = yes
 		}
@@ -1643,15 +1652,6 @@ nhs_left_start = {
 		icon = mission_asian_trader # mission_rb_control_the_hansa
 		position = 3
 		trigger = {
-			# adm_power = 50
-			# dip_power = 50
-			# mil_power = 50
-			if = {
-				limit = {
-					ai = no
-				}
-				
-			}
 			if = {
 				limit = {
 					has_government_mechanic = to_administrative_burden_mechanic
@@ -1698,9 +1698,6 @@ nhs_left_start = {
 			}
 		}
 		effect = {
-			# add_adm_power = -50
-			# add_dip_power = -50
-			# add_mil_power = -50
 			if = {
 				limit = {
 					OR = {
@@ -1754,6 +1751,33 @@ nhs_left_start = {
 				regenerate_government_mechanics = yes
 			}
 			custom_tooltip = nhs_cs_to_oe_tt
+			
+			if = {
+				limit = {
+					OR = {
+						2554 = {
+							NOT = { has_province_flag = nhs_enable_alexandrian_library }
+						}
+						mission_completed = to_form_colonial_institution_mission
+					}
+				}
+				custom_tooltip = nhs_new_line_tt
+				if = {
+					limit = {
+						2554 = {
+							OR = {
+								is_empty = yes
+								owned_by = ROOT
+							}
+						}
+					}
+					country_event = { id = nhs_monuments.9 tooltip = to_trigger_library_event_tt }
+				}
+				else = {
+					set_country_flag = nhs_enable_alexandrian_library_decision
+					custom_tooltip = to_enable_library_decision_tt
+				}
+			}
 			hidden_effect = {
 				remove_country_modifier = nhs_constrained_resources
 				add_country_modifier = {
