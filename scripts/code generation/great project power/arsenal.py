@@ -27,8 +27,8 @@ with open(output_file_cm, 'w') as f:
             f.write(f"\t\t\tmodifier = {{\n"
                     f"\t\t\t\tglobal_ship_cost = -{ship_cost}\n"
                     f"\t\t\t\tartillery_cost = -{arty_maintenance}\n"
-                    f"\t\t\t\tglobal_naval_barrage_cost = -0.33\n"
                     f"\t\t\t\tnumber_of_cannons_modifier = 0.1\n"
+                    f"\t\t\t\tmax_flagships = 1\n"
                     f"\t\t\t}}\n")
         f.write("\t\t}\n")
         f.write("\n")
@@ -65,6 +65,6 @@ with open(output_file_localisation, 'w') as f:
                 f"Ship Cost: §{color}-{100 * ship_cost:.1f}%§! from §YArsenal Efficiency§!\\n"
                 f"Artillery Cost: §{color}-{100 * arty_maintenance:.1f}%§! from §YArsenal Efficiency§!")
         if dev == MAX_DEV:
-            f.write(f"\\nShip Cannons §G+10.0%§! from §YArsenal Efficiency§!\\n"
-                    f"Naval Barrage cost: §G-33.0%§! from §YArsenal Efficiency§!")
+            f.write(f"\\nShip Cannons §G+10.0%§! from §YArsenal Efficiency§!"
+                    f"[AdditionalFlagshipFromArsenal]")
         f.write(f"\"\n")
