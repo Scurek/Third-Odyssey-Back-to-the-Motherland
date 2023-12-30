@@ -447,6 +447,178 @@ country_event = {
 	}
 }
 
+# Trade Expedition Finished
+country_event = {
+	id = nhs_monuments.10
+	title = nhs_monuments.10.t
+	desc = nhs_monuments.10.d
+	picture = ELYSIAN_HARBOUR_eventPicture
+
+	goto = to_trade_expedition_target
+
+    trigger = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		to_unlocked_trade_expeditions = yes
+		had_country_flag = {
+			flag = to_send_trade_expedition
+			days = 7300
+		}
+		NOT = { has_country_flag = to_has_trade_expedition_finished_event }
+	}
+
+	immediate = {
+		set_country_flag = to_has_trade_expedition_finished_event
+	}
+
+	after = {
+		clr_country_flag = to_has_trade_expedition_finished_event
+	}
+
+	option = {
+		name = nhs_monuments.10.a
+		custom_tooltip = to_choose_new_operations_target_tt
+	}
+	
+	option = {
+		name = nhs_monuments.10.b
+		custom_tooltip = to_maintain_trade_expedition_tt
+		event_target:to_trade_expedition_target = {
+			add_trade_modifier = {
+				who = ROOT
+				duration = 7300
+				power = 50
+				key = TO_TRADE_EXPEDITION_TRADE_MOD
+			}
+		}
+        if = {
+            limit = {
+                any_country = {
+                    home_trade_node = {
+                        same_trade_node_as = event_target:to_trade_expedition_target
+                    }
+                    NOT = { tag = ROOT }
+                    ROOT = {
+                        knows_country = PREV
+                    }
+                }
+            }
+			custom_tooltip = nhs_new_line_tt
+            every_country = {
+                limit = {
+                    home_trade_node = {
+                        same_trade_node_as = event_target:to_trade_expedition_target
+                    }
+                    NOT = { tag = ROOT }
+                    ROOT = {
+                        knows_country = PREV
+                    }
+                }
+                custom_tooltip = to_add_trade_expedition_opinion_of_tt
+                hidden_effect = {
+					if = {
+						limit = {
+							NOT = { trade_embargoing = ROOT }
+						}
+						add_opinion = {
+							who = ROOT
+							modifier = to_trade_expedition_opinion
+						}
+					}
+                }
+            }
+        }
+		custom_tooltip = nhs_new_line_tt
+        custom_tooltip = to_add_trade_expedition_modifiers_target_tt
+        hidden_effect = {
+            every_province = {
+                limit = {
+                    same_trade_node_as = event_target:to_trade_expedition_target
+                    NOT = { country_or_non_sovereign_subject_holds = ROOT }
+                    owner = {
+                        NOT = { trade_embargoing = ROOT }
+                    }
+                }
+                add_permanent_province_modifier = {
+                    name = to_trade_expedition_province_modifier
+                    duration = 7300
+                }
+            }
+        }
+	}
+}
+
+# Trade Expedition Event Sender
+country_event = {
+	id = nhs_monuments.11
+	title = nhs2_hidden.t
+	desc = nhs2_hidden.d
+	picture = MERCHANTS_TALKING_eventPicture
+
+	hidden = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			limit = {
+				any_owned_province = {
+					same_trade_node_as = FROM
+				}
+				NOT = { trade_embargoing = ROOT }
+				NOT = { tag = ROOT }
+				ROOT = {
+					knows_country = PREV
+				}
+			}
+			country_event = { id = nhs_monuments.12 }
+		}
+	}
+
+	option = {
+		name = nhs2_hidden.a
+	}
+}
+
+# Trade Expedition Arrives
+country_event = {
+	id = nhs_monuments.12
+	title = nhs_monuments.12.t
+	desc = nhs_monuments.12.d
+	picture = MERCHANTS_TALKING_eventPicture
+
+	goto = FROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = nhs_monuments.12.a
+		tooltip = {
+			event_target:to_trade_expedition_target = {
+				add_trade_modifier = {
+					who = FROM
+					duration = 7300
+					power = 50
+					key = TO_TRADE_EXPEDITION_TRADE_MOD
+				}
+			}
+			if = {
+				limit = {
+					home_trade_node = {
+						same_trade_node_as = event_target:to_trade_expedition_target
+					}
+				}
+				custom_tooltip = nhs_new_line_tt
+				add_opinion = {
+					who = FROM
+					modifier = to_trade_expedition_opinion
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_add_trade_expedition_modifier_in_own_provinces_tt
+		}
+	}
+}
+
 # VENETIAN ARSENAL
 country_event = {
 	id = nhs_monuments.8
