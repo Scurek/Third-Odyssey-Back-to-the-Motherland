@@ -16770,6 +16770,103 @@ to_arsenal_power_display_effect = {
 	}	
 }
 
+to_trade_expedition_effect = {
+	$COUNTRY_SCOPE$ = {
+		clr_country_flag = to_send_trade_expedition
+		set_country_flag = to_send_trade_expedition
+	}
+	custom_tooltip = to_add_trade_expedition_trade_power_$COUNTRY_SCOPE$_tt
+	hidden_effect = {
+		$NODE_SCOPE$ = {
+			add_trade_modifier = {
+				who = $COUNTRY_SCOPE$
+				duration = 7300
+				power = 50
+				key = TO_TRADE_EXPEDITION_TRADE_MOD
+			}
+		}
+	}
+	custom_tooltip = nhs_new_line_tt
+	every_country = {
+		limit = {
+			home_trade_node = {
+				same_trade_node_as = $NODE_SCOPE$
+			}
+			NOT = { tag = $COUNTRY_SCOPE$ }
+			$COUNTRY_SCOPE$ = {
+				knows_country = PREV
+			}
+			NOT = { trade_embargoing = $COUNTRY_SCOPE$ }
+			NOT = { isolationism = 4 }
+		}
+		custom_tooltip = to_add_trade_expedition_opinion_$COUNTRY_SCOPE$_tt
+		custom_tooltip = nhs_new_line_tt
+		hidden_effect = {
+			add_opinion = {
+				who = $COUNTRY_SCOPE$
+				modifier = to_trade_expedition_opinion
+			}
+			reverse_add_opinion = {
+				who = $COUNTRY_SCOPE$
+				modifier = to_trade_expedition_opinion
+			}
+		}
+	}
+	every_country = {
+		limit = {
+			home_trade_node = {
+				same_trade_node_as = $NODE_SCOPE$
+			}
+			NOT = { tag = $COUNTRY_SCOPE$ }
+			$COUNTRY_SCOPE$ = {
+				knows_country = PREV
+			}
+			trade_embargoing = $COUNTRY_SCOPE$
+			NOT = { isolationism = 4 }
+		}
+		custom_tooltip = to_trade_expedition_opinion_embargo_$COUNTRY_SCOPE$_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+	every_country = {
+		limit = {
+			home_trade_node = {
+				same_trade_node_as = $NODE_SCOPE$
+			}
+			NOT = { tag = $COUNTRY_SCOPE$ }
+			$COUNTRY_SCOPE$ = {
+				knows_country = PREV
+			}
+			isolationism = 4
+		}
+		custom_tooltip = to_trade_expedition_opinion_isolationism_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+	custom_tooltip = to_add_trade_expedition_modifiers_$COUNTRY_SCOPE$_tt
+	hidden_effect = {
+		every_province = {
+			limit = {
+				same_trade_node_as = $NODE_SCOPE$
+				NOT = { country_or_non_sovereign_subject_holds = $COUNTRY_SCOPE$ }
+				owner = {
+					NOT = { trade_embargoing = $COUNTRY_SCOPE$ }
+				}
+			}
+			add_permanent_province_modifier = {
+				name = to_trade_expedition_province_modifier
+				duration = 7300
+			}
+		}
+
+		$COUNTRY_SCOPE$ = {
+			country_event = { id = nhs_monuments.11 }
+			country_event = {
+				id = nhs_monuments.10
+				days = 7300
+			}
+		}
+	}
+}
+
 ###################################
 # Roman Janissaries
 ###################################
