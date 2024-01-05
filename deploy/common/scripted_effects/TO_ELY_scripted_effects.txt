@@ -11647,49 +11647,49 @@ to_colony_monument_mod_transfer = {
 }
 
 to_nhs_despotate_monument_mod_transfer = {
-	if = {
-		limit = {
-			owner = {
-				mission_completed = to_basileus_basileon_mission
-				nhs_check_all_elysian_tags = { CONDITION = tag }
-			}
-		}
-		custom_tooltip = to_nhs_despotate_monument_mod_transfer_tt
-	}
-	else_if = {
-		limit = {
-			owner = {
-				is_subject_of_type = to_elysian_governor
-				nhs_check_all_elysian_tags = { CONDITION = is_subject_of }
-			}
-		}
-		custom_tooltip = to_nhs_despotate_monument_mod_transfer_subject_tt
-	}
+	# if = {
+	# 	limit = {
+	# 		owner = {
+	# 			mission_completed = to_basileus_basileon_mission
+	# 			nhs_check_all_elysian_tags = { CONDITION = tag }
+	# 		}
+	# 	}
+	# 	custom_tooltip = to_nhs_despotate_monument_mod_transfer_tt
+	# }
+	# else_if = {
+	# 	limit = {
+	# 		owner = {
+	# 			is_subject_of_type = to_elysian_governor
+	# 			nhs_check_all_elysian_tags = { CONDITION = is_subject_of }
+	# 		}
+	# 	}
+	# 	custom_tooltip = to_nhs_despotate_monument_mod_transfer_subject_tt
+	# }
 }
 
 to_requires_control_andronika_mission_for_despotate_monument_mod_transfer = {
-	if = {
-		limit = {
-			owner = {
-				mission_completed = to_basileus_basileon_mission
-				NOT = { mission_completed = to_control_andronika_mission }
-				nhs_check_all_elysian_tags = { CONDITION = tag }
-			}
-		}
-		custom_tooltip = to_requires_control_andronika_mission_for_despotate_monument_mod_transfer_tt
-	}
-	else_if = {
-		limit = {
-			owner = {
-				is_subject_of_type = to_elysian_governor
-				nhs_check_all_elysian_tags = { CONDITION = is_subject_of }
-				overlord = {
-					NOT = { mission_completed = to_control_andronika_mission }
-				}
-			}
-		}
-		custom_tooltip = to_requires_control_andronika_mission_for_despotate_monument_mod_transfer_overlord_tt
-	}
+	# if = {
+	# 	limit = {
+	# 		owner = {
+	# 			mission_completed = to_basileus_basileon_mission
+	# 			NOT = { mission_completed = to_control_andronika_mission }
+	# 			nhs_check_all_elysian_tags = { CONDITION = tag }
+	# 		}
+	# 	}
+	# 	custom_tooltip = to_requires_control_andronika_mission_for_despotate_monument_mod_transfer_tt
+	# }
+	# else_if = {
+	# 	limit = {
+	# 		owner = {
+	# 			is_subject_of_type = to_elysian_governor
+	# 			nhs_check_all_elysian_tags = { CONDITION = is_subject_of }
+	# 			overlord = {
+	# 				NOT = { mission_completed = to_control_andronika_mission }
+	# 			}
+	# 		}
+	# 	}
+	# 	custom_tooltip = to_requires_control_andronika_mission_for_despotate_monument_mod_transfer_overlord_tt
+	# }
 }
 
 to_advance_world_empire_reward_tier = {
@@ -16768,6 +16768,117 @@ to_arsenal_power_display_effect = {
 	else = {
 		custom_tooltip = to_arsenal_power_effect_0_tt
 	}	
+}
+
+to_add_units_killed_in_won_battles = {
+	if = {
+		limit = {
+			# nhs_check_all_elysian_tags = { CONDITION = tag }
+			FROM = {
+				NOT = {
+					OR = {
+						tag = NAT
+						tag = REB
+					}
+				}
+			}
+		}
+		set_variable = {
+			which = to_land_units_killed_rounded
+			which = land_units_killed
+		}
+		to_round_down_variable = { VARIABLE = to_land_units_killed_rounded }
+		change_variable = {
+			which = to_land_units_killed_in_won_battles
+			which = to_land_units_killed_rounded
+		}
+	}
+}
+
+to_increase_triumph_progress = {
+	if = {
+		limit = {
+			to_unlocked_hold_triumph_mechanic = yes
+			FROM = {
+				NOT = {
+					OR = {
+						tag = NAT
+						tag = REB
+					}
+				}
+			}
+		}
+		change_variable = {
+			which = to_glory
+			which = land_units_killed
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = to_glory
+					value = 50000
+				}
+			}
+			set_variable = {
+				which = to_glory
+				value = 50000
+			}
+		}
+		to_set_glory_display_value = yes
+	}
+}
+
+# root = winning country, from = loser country
+to_trigger_triumph_peace_notifications = {
+	country_event = { id = nhs_monuments.13 }
+	FROM = { country_event = { id = nhs_monuments.13 } }
+}
+
+to_set_glory_display_value = {
+	set_variable = {
+		which = to_glory_display
+		which = to_glory
+	}
+	multiply_variable = {
+		which = to_glory_display
+		value = 0.002
+	}
+}
+
+to_enable_triumph_effect = {
+	custom_tooltip = to_lose_all_glory_tt
+	hidden_effect = {
+		set_variable = {
+			which = to_glory
+			value = 0
+		}
+		to_set_glory_display_value = yes
+	}
+	#set_country_flag = to_triumph_active
+	if = {
+		limit = {
+			is_at_war = yes
+		}
+		set_country_flag = to_triumph_war_timer
+		custom_tooltip = to_triumph_effect_war_tt
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_triumph_war
+				duration = 720
+				hidden = yes
+			}
+		}
+	}
+	else = {
+		custom_tooltip = to_triumph_effect_peace_tt
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_triumph_peace
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
 }
 
 to_trade_expedition_effect = {

@@ -84,10 +84,8 @@ PixelShader =
 		float4 main( VS_OUTPUT v ) : PDX_COLOR
 		{
 		    float4 OutColor = tex2D( MapTexture, v.vTexCoord );
-		    float Grey = dot( OutColor.rgb, float3( 0.212671f, 0.715160f, 0.072169f ) ); 
-		    OutColor.rgb = float3(Grey, Grey, Grey);
 			OutColor *= Color;
-		    return OutColor;
+			return OutColor;
 		}
 	]]
 

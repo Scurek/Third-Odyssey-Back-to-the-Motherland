@@ -3355,6 +3355,36 @@ to_library_tier_3_trigger = {
 	}
 }
 
+to_hippodrome_tier_1_trigger = {
+	FROM = {
+		mil_power = 100
+	}
+}
+
+to_hippodrome_tier_2_trigger = {
+	FROM = {
+		custom_trigger_tooltip = {
+			tooltip = to_total_land_units_killed_in_won_battles_hippodrome_tier_2_tt
+			check_variable = {
+				which = to_land_units_killed_in_won_battles
+				value = 50000
+			}
+		}
+	}
+}
+
+to_hippodrome_tier_3_trigger = {
+	FROM = {
+		custom_trigger_tooltip = {
+			tooltip = to_total_land_units_killed_in_won_battles_hippodrome_tier_3_tt
+			check_variable = {
+				which = to_land_units_killed_in_won_battles
+				value = 200000
+			}
+		}
+	}
+}
+
 to_unlocked_trade_expeditions = {
 	nhs_check_all_elysian_tags = { CONDITION = tag }
 	ai = no
@@ -3364,6 +3394,84 @@ to_unlocked_trade_expeditions = {
 			type = nhs_cothon
 			tier = 3
 		}
+	}
+}
+
+to_unlocked_hold_triumph_mechanic = {
+	# nhs_check_all_elysian_tags = { CONDITION = tag }
+	953 = {
+		owned_by = PREV
+		has_great_project = {
+			type = nhs_hippodrome
+			tier = 3
+		}
+	}
+}
+
+to_can_see_hold_triumph_gui = {
+	to_unlocked_hold_triumph_mechanic = yes
+	ai = no
+	NOT = { has_country_flag = to_hide_hold_triumph_gui }
+}
+
+to_has_glory_to_hold_triumph = {
+	check_variable = {
+		which = to_glory
+		value = 50000
+	}
+}
+
+to_can_hold_triumph = {
+	custom_trigger_tooltip = {
+		tooltip = to_full_glory_tt
+		to_has_glory_to_hold_triumph = yes
+	}
+	OR = {
+		is_at_war = no
+		custom_trigger_tooltip = {
+			tooltip = to_in_war_for_less_than_3_months_tt
+			NOT = {
+				is_in_war = {
+					duration = 93 #183
+				}
+			}
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = to_does_not_have_active_triumph_tt
+		NOT = { to_is_triumph_active = yes }
+	}
+	if = {
+		limit = {
+			has_country_flag = to_has_hold_triumph_event
+		}
+		custom_trigger_tooltip = {
+			tooltip = to_does_not_have_triumph_event_active_tt
+			always = no
+		}
+	}
+}
+
+to_is_triumph_active = {
+	OR = {
+		has_country_modifier = to_triumph_peace
+		has_country_modifier = to_triumph_war
+	}
+}
+
+to_has_hold_triumph_peace_modifiers = {
+	#is_at_war = no
+	#has_country_flag = to_triumph_active
+	has_country_modifier = to_triumph_peace
+}
+
+to_has_hold_triumph_war_modifiers = {
+	OR = {
+		AND = {
+			is_at_war = yes
+			has_country_modifier = to_triumph_peace
+		}
+		has_country_modifier = to_triumph_war
 	}
 }
 

@@ -26,6 +26,7 @@ to_on_startup = {
 		1501 = {
 			add_province_triggered_modifier = to_yearly_event_pulse
 			add_province_triggered_modifier = to_monthly_event_pulse
+			add_province_triggered_modifier = to_hold_triumph_war_activator
 		}
 		to_dynamic_cot_setup = yes
 		set_global_flag = to_setup_done
@@ -465,6 +466,8 @@ to_on_battle_won_country = {
 		}
 		FROM = { set_country_flag = to_natives_won_battle }
 	}
+	to_add_units_killed_in_won_battles = yes
+	to_increase_triumph_progress = yes
 }
 
 # province
@@ -487,6 +490,16 @@ to_on_battle_won_unit = {
 # country
 # root = winning country, from = loser country
 to_on_war_won = {
+	# Not quite sure if this will 100% handle all the cases correctly
+	ROOT = {
+		clr_country_flag = to_last_war_lost
+		set_country_flag = to_last_war_won
+	}
+	FROM = {
+		clr_country_flag = to_last_war_won
+		set_country_flag = to_last_war_lost
+	}
+
 	ROOT = {
 		if = {
 			limit = {
@@ -522,6 +535,8 @@ to_on_war_won = {
 	clr_country_flag = to_gives_defender_of_faith_credit
 	clr_country_flag = to_gives_defender_of_faith_great_power_credit
 	clr_country_flag = to_gives_defender_of_faith_minor_credit
+
+	to_trigger_triumph_peace_notifications = yes
 }
 
 on_main_war_won = {
