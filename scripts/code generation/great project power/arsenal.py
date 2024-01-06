@@ -1,7 +1,7 @@
 import os
 
-MAX_PRODUCTION = 100
-MAX_PRODUCTION_NON_DLC = 80
+MAX_PRODUCTION = 50
+MAX_PRODUCTION_NON_DLC = 40
 STEPS = 10
 
 SHIP_COST_MOD = 0.30
@@ -27,7 +27,12 @@ with open(output_file_cm, 'w') as f:
         f.write("\t\tconditional_modifier = {\n")
         f.write("\t\t\ttooltip_potential = { always = no }\n")
         f.write("\t\t\ttrigger = {\n")
-        f.write(f"\t\t\t\tto_owner_has_naval_supplies_production = {{ VALUE = {dlc_prod} NON_DLC_VALUE = {non_dlc_prod} }}\n")
+        f.write(f"\t\t\t\tto_owner_has_naval_supplies_production = "
+                f"{{ VALUE = {dlc_prod} NON_DLC_VALUE = {non_dlc_prod} }}\n")
+        if dlc_prod != MAX_PRODUCTION:
+            f.write(
+                f"\t\t\t\tNOT = {{ to_owner_has_naval_supplies_production = "
+                f"{{ VALUE = {dlc_prod + dlc_step} NON_DLC_VALUE = {non_dlc_prod + non_dlc_step} }} }}\n")
         f.write("\t\t\t}\n")
         if dlc_prod != MAX_PRODUCTION:
             f.write(f"\t\t\tmodifier = {{ global_ship_cost = -{ship_cost} artillery_cost = -{arty_maintenance} }}\n")
