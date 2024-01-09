@@ -153,3 +153,69 @@ custom_button = {
         country_event = { id = to_hellenic_events.31 }
     }
 }
+
+## Potential CoT
+
+# Without a transparent buckground building button in the background remains clickable if the button isn't active
+custom_icon = {
+    name = to_upgrade_potential_cot_bg
+    potential = {
+        has_province_modifier = to_dynamic_cot
+    }
+}
+
+custom_button = {
+    name = to_upgrade_potential_cot
+    tooltip = to_upgrade_potential_cot_tt
+    potential = {
+        has_province_modifier = to_dynamic_cot
+    }
+    trigger = {
+        hidden_trigger = {
+            owner = {
+                NOT = { has_country_flag = to_dynamic_cot_event_open }
+            }
+            country_or_subject_holds = FROM
+        }
+        base_production = 6
+        development = 15
+        custom_trigger_tooltip = {
+            tooltip = to_has_marketplace_or_upgrades_tt
+            OR = {
+                has_building = marketplace
+                has_building = trade_depot
+                has_building = stock_exchange
+            }
+        }
+    }
+    effect = {
+        hidden_effect = {
+            remove_province_modifier = to_dynamic_cot
+        }
+        custom_tooltip = to_upgrade_potential_cot_effect_tt
+        if = {
+			limit = {
+                owner = {
+                    NOT = { has_country_flag = to_dynamic_cot_event_open }
+                }
+				NOT = { province_has_center_of_trade_of_level = 1 }
+                base_production = 6
+                development = 15
+                custom_trigger_tooltip = {
+                    tooltip = to_has_marketplace_or_upgrades_tt
+                    OR = {
+                        has_building = marketplace
+                        has_building = trade_depot
+                        has_building = stock_exchange
+                    }
+                }
+			}
+            custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_click_to_create_cot_tt
+			hidden_effect = {
+                center_of_trade = 1
+				to_check_trade_center_modifiers_from_privileges = yes
+			}
+		}
+    }
+}
