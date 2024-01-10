@@ -8904,6 +8904,99 @@ to_ely_true_nation_mission_trigger_reduce = {
 	}
 }
 
+to_eternal_empire_mission_effect = {
+	if = {
+		limit = {
+			any_country = {
+				NOT = { tag = ROOT }
+				exists = yes
+				is_hegemon = yes
+			}
+		}
+		every_country = {
+			limit = {
+				is_hegemon = yes
+			}
+			remove_hegemon = yes
+		}
+		custom_tooltip = nhs_new_line_tt
+	}
+	add_power_projection = {
+		type = 50_permanent_power_projection
+		amount = 50
+	}
+	if = {
+		limit = { has_dlc = "Mandate of Heaven" }
+		add_splendor = 3000
+		if = {
+			limit = { has_had_golden_age = yes }
+			custom_tooltip = nhs_new_line_tt
+			reset_golden_age = yes
+			custom_tooltip = to_next_golden_age_lasts_forever_tt
+		}
+		else_if = {
+			limit = { in_golden_age = yes }
+			custom_tooltip = to_extends_golden_age_until_the_end_tt
+			hidden_effect = {
+				extend_golden_age = 182500
+				set_country_flag = to_extended_golden_era
+			}
+		}
+		else = {
+			custom_tooltip = to_next_golden_age_lasts_forever_tt
+		}
+		custom_tooltip = nhs_new_line_tt
+	}
+	else = {
+		add_country_modifier = {
+			name = to_golden_age
+			duration = -1 
+		}
+	}
+	if = {
+		limit = {
+			has_dlc = "Emperor"
+		}
+		if = {
+			limit = {
+				NOT = { is_hegemon_of_type = economic_hegemon }
+			}
+			add_country_modifier = {
+				name = to_economic_hegemon
+				duration = -1
+				desc = TO_NO_ECONOMIC_HEGEMON
+			}
+		}
+		if = {
+			limit = {
+				NOT = { is_hegemon_of_type = naval_hegemon }
+			}
+			add_country_modifier = {
+				name = to_naval_hegemon
+				duration = -1
+				desc = TO_NO_NAVAL_HEGEMON
+			}
+		}
+		if = {
+			limit = {
+				NOT = { is_hegemon_of_type = military_hegemon }
+			}
+			add_country_modifier = {
+				name = to_military_hegemon
+				duration = -1
+				desc = TO_NO_MILITARY_HEGEMON
+			}
+		}
+		# custom_tooltip = to_no_other_country_can_claim_hegemony_tt
+	}
+	else = {
+		add_country_modifier = {
+			name = to_global_hegemon
+			duration = -1
+		}
+	}
+}
+
 to_nhs_spawn_pre_disaster_hellenic_rebels = {
 	if = {
 		limit = {
