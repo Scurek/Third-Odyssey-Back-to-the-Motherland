@@ -1045,12 +1045,17 @@ nhs2_lantent_coal_deactivate_tm = {
 
 nhs2_steam_engine_tm = {
 	trigger = {
-		owner = {
-			any_owned_province = {
-				controlled_by = ROOT
-				has_building = furnace
-				has_province_modifier = nhs2_great_mine_tm
+		if = {
+			limit = {
+				has_saved_global_event_target = to_great_mine_tm_province
 			}
+			event_target:to_great_mine_tm_province = {
+				owned_by = ROOT
+				has_building = furnace
+			}
+		}
+		else = {
+			always = no
 		}
 	}
 	
@@ -1064,11 +1069,16 @@ nhs2_steam_engine_tm = {
 nhs2_great_mine_tm = {
 	trigger = {
 		has_building = furnace
-		owner = {
-			any_owned_province = {
-				controlled_by = ROOT
-				has_province_modifier = nhs2_steam_engine_tm
+		if = {
+			limit = {
+				has_saved_global_event_target = to_steam_engine_tm_province
 			}
+			event_target:to_steam_engine_tm_province = {
+				owned_by = ROOT
+			}
+		}
+		else = {
+			always = no
 		}
 	}
 	trade_goods_size = 5
