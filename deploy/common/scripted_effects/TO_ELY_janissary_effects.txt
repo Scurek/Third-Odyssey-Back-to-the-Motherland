@@ -1,0 +1,1487 @@
+
+###################################
+# Roman Janissaries
+###################################
+
+to_roman_janissaries_check = {
+	nhs_effect_for_existing_elysian_tag = {
+		EFFECT = "to_roman_janissaries_maintenance = { CHANGE_POWER = yes }"
+	}
+}
+
+to_roman_janissaries_maintenance = {
+	if = {
+		limit = {
+			has_government_mechanic = to_roman_janissary_mechanic
+		}
+
+		set_variable = {
+			which = to_janissary_regiments_change
+			value = 225
+		}
+
+		# Num of Janissary Regiments
+		export_to_variable = {
+			which = to_num_of_janissaries
+			value = trigger_value:num_of_janissaries
+		}
+
+		multiply_variable = {
+			which = to_num_of_janissaries
+			value = -100
+		}
+
+		change_variable = {
+			which = to_janissary_regiments_change
+			which = to_num_of_janissaries
+		}
+
+		if = {
+			limit = {
+				has_country_modifier = to_janissary_child_levy
+			}
+			set_variable = {
+				which = to_janissary_regiments_child_levy
+				value = 0
+			}
+
+			if = {
+				limit = {
+					to_has_abrahamic_religion = yes
+				}
+				every_owned_province = {
+					limit = {
+						has_owner_culture = no
+						NOT = { religion_group = PREV }
+						is_state = yes
+					}
+					PREV = {
+						export_to_variable = {
+							which = to_local_development
+							value = trigger_value:development
+							who = PREV
+						}
+						change_variable = {
+							which = to_janissary_regiments_child_levy
+							which = to_local_development
+						}
+					}
+				}
+			}
+			else = {
+				every_owned_province = {
+					limit = {
+						has_owner_culture = no
+						has_owner_religion = no
+						is_state = yes
+					}
+					PREV = {
+						export_to_variable = {
+							which = to_local_development
+							value = trigger_value:development
+							who = PREV
+						}
+						change_variable = {
+							which = to_janissary_regiments_child_levy
+							which = to_local_development
+						}
+					}
+				}
+			}
+			
+			multiply_variable = {
+				which = to_janissary_regiments_child_levy
+				value = 10
+			}
+		}
+
+		if = {
+			limit = {
+				has_country_modifier = to_janissaries_from_true_faith
+			}
+			set_variable = {
+				which = to_janissary_regiments_from_true_faith
+				value = 0
+			}
+
+			if = {
+				limit = {
+					to_has_abrahamic_religion = yes
+				}
+				every_owned_province = {
+					limit = {
+						OR = {
+							NOT = { culture_group = PREV }
+							culture = elysameric
+						}
+						religion_group = PREV
+						is_state = yes
+					}
+					PREV = {
+						export_to_variable = {
+							which = to_local_development
+							value = trigger_value:development
+							who = PREV
+						}
+						change_variable = {
+							which = to_janissary_regiments_from_true_faith
+							which = to_local_development
+						}
+					}
+				}
+			}
+			else = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							NOT = { culture_group = PREV }
+							culture = elysameric
+						}
+						has_owner_religion = yes
+						is_state = yes
+					}
+					PREV = {
+						export_to_variable = {
+							which = to_local_development
+							value = trigger_value:development
+							who = PREV
+						}
+						change_variable = {
+							which = to_janissary_regiments_from_true_faith
+							which = to_local_development
+						}
+					}
+				}
+			}
+			
+			multiply_variable = {
+				which = to_janissary_regiments_from_true_faith
+				value = 5
+			}
+		}
+
+		if = {
+			limit = {
+				has_country_modifier = to_janissary_recruitment_quotas
+			}
+			set_variable = {
+				which = to_janissary_regiments_recruitment_quotas
+				which = to_janissary_regiments_child_levy
+			}
+			multiply_variable = {
+				which = to_janissary_regiments_recruitment_quotas
+				value = 1.50
+			}
+			change_variable = {
+				which = to_janissary_regiments_change
+				which = to_janissary_regiments_recruitment_quotas
+			}
+			subtract_variable = {
+				which = to_janissary_regiments_recruitment_quotas
+				which = to_janissary_regiments_child_levy
+			}
+			
+			if = {
+				limit = {
+					has_country_modifier = to_janissaries_from_true_faith
+				}
+				set_variable = {
+					which = to_janissary_regiments_recruitment_quotas_from_true_faith
+					which = to_janissary_regiments_from_true_faith
+				}
+				multiply_variable = {
+					which = to_janissary_regiments_recruitment_quotas_from_true_faith
+					value = 1.25
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					which = to_janissary_regiments_recruitment_quotas_from_true_faith
+				}
+				subtract_variable = {
+					which = to_janissary_regiments_recruitment_quotas_from_true_faith
+					which = to_janissary_regiments_from_true_faith
+				}
+				change_variable = {
+					which = to_janissary_regiments_recruitment_quotas
+					which = to_janissary_regiments_recruitment_quotas_from_true_faith
+				}
+			}
+		}
+		else = {
+			change_variable = {
+				which = to_janissary_regiments_change
+				which = to_janissary_regiments_child_levy
+			}
+			if = {
+				limit = {
+					has_country_modifier = to_janissaries_from_true_faith
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					which = to_janissary_regiments_from_true_faith
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				has_country_modifier = to_janissary_open_recruitment
+			}
+			set_variable = {
+				which = to_janissary_regiments_open_recruitment
+				value = 0
+			}
+
+			every_owned_province = {
+				limit = {
+					#culture_group = PREV
+					#has_owner_culture = yes
+					has_owner_religion = yes
+					is_state = yes
+				}
+				PREV = {
+					export_to_variable = {
+						which = to_local_development
+						value = trigger_value:development
+						who = PREV
+					}
+					if = {
+						limit = {
+							culture_group = PREV
+						}
+						multiply_variable = {
+							which = to_local_development
+							value = 2
+						}
+					}
+					change_variable = {
+						which = to_janissary_regiments_open_recruitment
+						which = to_local_development
+					}
+				}
+			}
+			
+			multiply_variable = {
+				which = to_janissary_regiments_open_recruitment
+				value = 1
+			}
+
+			change_variable = {
+				which = to_janissary_regiments_change
+				which = to_janissary_regiments_open_recruitment
+			}
+		}
+
+		to_roman_janissaries_maintenance_subjects = yes
+
+		set_variable = {
+			which = to_janissary_regiments_change_tooltip
+			which = to_janissary_regiments_change
+		}
+
+		[[CHANGE_POWER]
+		while = {
+			limit = {
+				check_variable = {
+					which = to_janissary_regiments_change
+					value = 0.001
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = to_janissary_regiments_change
+						value = 1000
+					}
+				}
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = 1000
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					value = -1000
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = to_janissary_regiments_change
+						value = 100
+					}
+				}
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = 100
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					value = -100
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = to_janissary_regiments_change
+						value = 10
+					}
+				}
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = 10
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					value = -10
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = to_janissary_regiments_change
+						value = 1
+					}
+				}
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = 1
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					value = -1
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = to_janissary_regiments_change
+						value = 0.1
+					}
+				}
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = 0.1
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					value = -0.1
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = to_janissary_regiments_change
+						value = 0.01
+					}
+				}
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = 0.01
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					value = -0.01
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = to_janissary_regiments_change
+						value = 0.001
+					}
+				}
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = 0.001
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					value = -0.001
+				}
+			}
+		}
+
+		multiply_variable = {
+			which = to_janissary_regiments_change
+			value = -1
+		}
+
+		while = {
+			limit = {
+				check_variable = {
+					which = to_janissary_regiments_change
+					value = 0.001
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = to_janissary_regiments_change
+						value = 1
+					}
+				}
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = -1
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					value = -1
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = to_janissary_regiments_change
+						value = 0.1
+					}
+				}
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = -0.1
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					value = -0.1
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = to_janissary_regiments_change
+						value = 0.01
+					}
+				}
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = -0.01
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					value = -0.01
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = to_janissary_regiments_change
+						value = 0.001
+					}
+				}
+				add_government_power = {
+					mechanic_type = to_roman_janissary_mechanic
+					power_type = to_janissary_regiments
+					value = -0.001
+				}
+				change_variable = {
+					which = to_janissary_regiments_change
+					value = -0.001
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				NOT = {
+					has_government_power = {
+						mechanic_type = to_roman_janissary_mechanic
+						power_type = to_janissary_regiments
+						value = 0.001
+					}
+				}
+			}
+			add_country_modifier = {
+				name = to_janissary_low_reserve
+				duration = -1
+				hidden = yes
+			}
+		}
+		else = {
+			remove_country_modifier = to_janissary_low_reserve
+		}
+		
+		]
+	}
+}
+
+to_roman_janissaries_maintenance_subjects = {
+	if = {
+		limit = {
+			has_country_modifier = to_janissary_child_levy
+		}
+		save_event_target_as = to_blood_tax_overlord
+		set_variable = {
+			which = to_janissary_regiments_blood_tax
+			value = 0
+		}
+		every_subject_country = {
+			to_calculate_janissary_reserve_potential_subject = yes
+			if = {
+				limit = {
+					OR = {
+						has_country_modifier = to_blood_tax
+						has_country_modifier = to_blood_tax_true_faith
+					}
+				}
+				if = {
+					limit = {
+						PREV = { has_country_modifier = to_janissaries_from_true_faith }
+					}
+					PREV = {
+						set_variable = {
+							which = to_blood_tax_from_true_faith_potential
+							which = PREV
+						}
+						change_variable = {
+							which = to_janissary_regiments_blood_tax
+							which = to_blood_tax_from_true_faith_potential
+						}
+					}
+				}
+				else = {
+					PREV = {
+						set_variable = {
+							which = to_blood_tax_potential
+							which = PREV
+						}
+						change_variable = {
+							which = to_janissary_regiments_blood_tax
+							which = to_blood_tax_potential
+						}
+					}
+				}
+			}
+		}
+		change_variable = {
+			which = to_janissary_regiments_change
+			which = to_janissary_regiments_blood_tax
+		}
+	}
+}
+
+to_switch_janissary_law_event = {
+	hidden_effect = {
+		country_event = { id = to_janissary_events.6 }
+	}
+}
+
+to_switch_janissary_law_event_2 = {
+	hidden_effect = {
+		country_event = { id = to_janissary_events.5 }
+	}
+}
+
+to_consider_child_levy = {
+	custom_tooltip = to_child_levy_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_child_levy_enact_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_child_levy_gain_tt
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_child_levy
+		}
+		clr_country_flag = to_consider_child_levy
+	}
+	else = {
+		set_country_flag = to_consider_child_levy
+	}
+}
+
+to_consider_revoke_child_levy = {
+	custom_tooltip = to_child_levy_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_child_levy_revoke_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_child_levy_loss_tt
+	if = {
+		limit = {
+			has_country_flag = to_consider_revoke_child_levy
+		}
+		clr_country_flag = to_consider_revoke_child_levy
+	}
+	else = {
+		set_country_flag = to_consider_revoke_child_levy
+	}
+
+	if = {
+		limit = {
+			has_country_flag = to_janissary_from_subjects
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_from_subjects_revoke_tt
+	}
+
+	if = {
+		limit = {
+			has_country_modifier = to_janissaries_from_true_faith
+		}
+		custom_tooltip = to_from_true_faith_revoke_tt
+	}
+}
+
+to_consider_from_true_faith = {
+	custom_tooltip = to_from_true_faith_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_from_true_faith_enact_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_from_true_faith_gain_tt
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_from_true_faith
+		}
+		clr_country_flag = to_consider_from_true_faith
+	}
+	else = {
+		set_country_flag = to_consider_from_true_faith
+	}
+}
+
+to_consider_revoke_from_true_faith = {
+	custom_tooltip = to_from_true_faith_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_from_true_faith_revoke_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_from_true_faith_loss_tt
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_revoke_from_true_faith
+		}
+		clr_country_flag = to_consider_revoke_from_true_faith
+	}
+	else = {
+		set_country_flag = to_consider_revoke_from_true_faith
+	}
+}
+
+to_consider_recruitment_quotas = {
+	custom_tooltip = to_recruitment_quotas_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_recruitment_quotas_enact_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_recruitment_quotas_gain_tt
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_recruitment_quotas
+		}
+		clr_country_flag = to_consider_recruitment_quotas
+	}
+	else = {
+		set_country_flag = to_consider_recruitment_quotas
+	}
+}
+
+to_consider_revoke_recruitment_quotas = {
+	custom_tooltip = to_recruitment_quotas_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_recruitment_quotas_revoke_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_recruitment_quotas_loss_tt
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_revoke_recruitment_quotas
+		}
+		clr_country_flag = to_consider_revoke_recruitment_quotas
+	}
+	else = {
+		set_country_flag = to_consider_revoke_recruitment_quotas
+	}
+}
+
+to_consider_open_recruitment = {
+	custom_tooltip = to_open_recruitment_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_open_recruitment_enact_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_open_recruitment_gain_tt
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_open_recruitment
+		}
+		clr_country_flag = to_consider_open_recruitment
+	}
+	else = {
+		set_country_flag = to_consider_open_recruitment
+	}
+}
+
+to_consider_revoke_open_recruitment = {
+	custom_tooltip = to_open_recruitment_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_open_recruitment_revoke_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_open_recruitment_loss_tt
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_revoke_open_recruitment
+		}
+		clr_country_flag = to_consider_revoke_open_recruitment
+	}
+	else = {
+		set_country_flag = to_consider_revoke_open_recruitment
+	}
+}
+
+to_consider_increase_compensation = {
+	custom_tooltip = to_increase_compensation_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_increase_compensation_enact_tt
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_increase_compensation
+		}
+		clr_country_flag = to_consider_increase_compensation
+	}
+	else = {
+		set_country_flag = to_consider_increase_compensation
+	}
+}
+
+to_consider_revoke_increase_compensation = {
+	custom_tooltip = to_increase_compensation_flavor_tt
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_increase_compensation_revoke_tt
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_revoke_increase_compensation
+		}
+		clr_country_flag = to_consider_revoke_increase_compensation
+	}
+	else = {
+		set_country_flag = to_consider_revoke_increase_compensation
+	}
+}
+
+to_enact_janissary_law_changes = {
+	if = {
+		limit = {
+			has_country_flag = to_consider_child_levy
+		}
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_janissary_child_levy
+				duration = -1
+				hidden = yes
+			}
+			to_calculate_janissary_reserve_potential_all_subjects = yes
+		}
+		custom_tooltip = to_child_levy_enact_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+	else_if = {
+		limit = {
+			has_country_flag = to_consider_revoke_child_levy
+		}
+		hidden_effect = {
+			remove_country_modifier = to_janissary_child_levy
+			every_subject_country = {
+				remove_country_modifier = to_blood_tax
+				remove_country_modifier = to_blood_tax_true_faith
+				clr_country_flag = to_has_blood_tax
+			}
+		}
+		custom_tooltip = to_child_levy_revoke_tt
+
+		if = {
+			limit = {
+				has_country_modifier = to_janissaries_from_true_faith
+			}
+			clr_country_flag = to_consider_from_true_faith
+			clr_country_flag = to_consider_revoke_from_true_faith
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_from_subjects_revoke_tt
+			hidden_effect = {
+				remove_country_modifier = to_janissaries_from_true_faith
+				every_subject_country = {
+					remove_country_modifier = to_blood_tax_true_faith
+					clr_country_flag = to_has_blood_tax
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				has_country_modifier = to_janissary_recruitment_quotas
+			}
+			clr_country_flag = to_consider_recruitment_quotas
+			clr_country_flag = to_consider_revoke_recruitment_quotas
+			custom_tooltip = nhs_new_line_tt
+			custom_tooltip = to_recruitment_quotas_revoke_tt
+			hidden_effect = {
+				remove_country_modifier = to_janissary_recruitment_quotas
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+	}
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_from_true_faith
+			OR = {
+				has_country_modifier = to_janissary_child_levy
+				has_country_flag = to_consider_child_levy
+			}
+		}
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_janissaries_from_true_faith
+				duration = -1
+				hidden = yes
+			}
+			every_subject_country = {
+				limit = {
+					has_country_modifier = to_blood_tax
+					OR = {
+						religion = ROOT
+						AND = {
+							to_has_abrahamic_religion = yes
+							religion_group = ROOT
+						}
+					}
+				}
+				remove_country_modifier = to_blood_tax
+				add_country_modifier = {
+					name = to_blood_tax_true_faith
+					duration = -1
+				}
+			}
+		}
+		custom_tooltip = to_from_true_faith_enact_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+	else_if = {
+		limit = {
+			has_country_flag = to_consider_revoke_from_true_faith
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
+		}
+		hidden_effect = {
+			remove_country_modifier = to_janissaries_from_true_faith
+			every_subject_country = {
+				remove_country_modifier = to_blood_tax_true_faith
+				clr_country_flag = to_has_blood_tax
+			}
+		}
+		custom_tooltip = to_from_true_faith_revoke_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_recruitment_quotas
+			OR = {
+				has_country_modifier = to_janissary_child_levy
+				has_country_flag = to_consider_child_levy
+			}
+		}
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_janissary_recruitment_quotas
+				duration = -1
+				hidden = yes
+			}
+		}
+		custom_tooltip = to_recruitment_quotas_enact_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+	else_if = {
+		limit = {
+			has_country_flag = to_consider_revoke_recruitment_quotas
+			NOT = { has_country_flag = to_consider_revoke_child_levy }
+		}
+		hidden_effect = {
+			remove_country_modifier = to_janissary_recruitment_quotas
+		}
+		custom_tooltip = to_recruitment_quotas_revoke_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_open_recruitment
+		}
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_janissary_open_recruitment
+				duration = -1
+				hidden = yes
+			}
+		}
+		custom_tooltip = to_open_recruitment_enact_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+	else_if = {
+		limit = {
+			has_country_flag = to_consider_revoke_open_recruitment
+		}
+		hidden_effect = {
+			remove_country_modifier = to_janissary_open_recruitment
+		}
+		custom_tooltip = to_open_recruitment_revoke_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+
+	if = {
+		limit = {
+			has_country_flag = to_consider_increase_compensation
+		}
+		hidden_effect = {
+			add_country_modifier = {
+				name = to_janissary_increase_compensation
+				duration = -1
+				hidden = yes
+			}
+			add_country_modifier = {
+				name = to_janissary_increase_compensation_regiments
+				duration = -1
+				hidden = yes
+			}
+		}
+		custom_tooltip = to_increase_compensation_enact_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+	else_if = {
+		limit = {
+			has_country_flag = to_consider_revoke_increase_compensation
+		}
+		hidden_effect = {
+			remove_country_modifier = to_janissary_increase_compensation
+			remove_country_modifier = to_janissary_increase_compensation_regiments
+		}
+		custom_tooltip = to_increase_compensation_revoke_tt
+		custom_tooltip = nhs_new_line_tt
+	}
+
+	custom_tooltip = to_add_recently_changed_law_tt
+	hidden_effect = {
+		add_country_modifier = {
+			name = to_recent_janissary_law
+			duration = 7300
+		}
+	}
+}
+
+to_on_janissary_law_open = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = to_janissary_laws_menu_open }
+		}
+		set_country_flag = to_janissary_laws_menu_open
+
+		clr_country_flag = to_consider_child_levy
+		clr_country_flag = to_consider_revoke_child_levy
+		clr_country_flag = to_consider_from_true_faith
+		clr_country_flag = to_consider_revoke_from_true_faith
+		clr_country_flag = to_consider_recruitment_quotas
+		clr_country_flag = to_consider_revoke_recruitment_quotas
+		clr_country_flag = to_consider_open_recruitment
+		clr_country_flag = to_consider_revoke_open_recruitment
+		clr_country_flag = to_consider_increase_compensation
+		clr_country_flag = to_consider_revoke_increase_compensation
+
+		set_variable = {
+			which = to_child_levy_potential
+			value = 0
+		}
+		if = {
+			limit = {
+				to_has_abrahamic_religion = yes
+			}
+			every_owned_province = {
+				limit = {
+					has_owner_culture = no
+					NOT = { religion_group = PREV }
+					is_state = yes
+				}
+				PREV = {
+					export_to_variable = {
+						which = to_local_development
+						value = trigger_value:development
+						who = PREV
+					}
+					change_variable = {
+						which = to_child_levy_potential
+						which = to_local_development
+					}
+				}
+			}
+		}
+		else = {
+			every_owned_province = {
+				limit = {
+					has_owner_culture = no
+					has_owner_religion = no
+					is_state = yes
+				}
+				PREV = {
+					export_to_variable = {
+						which = to_local_development
+						value = trigger_value:development
+						who = PREV
+					}
+					change_variable = {
+						which = to_child_levy_potential
+						which = to_local_development
+					}
+				}
+			}
+		}
+		multiply_variable = {
+			which = to_child_levy_potential
+			value = 10
+		}
+		####
+		set_variable = {
+			which = to_from_true_faith_potential
+			value = 0
+		}
+		if = {
+			limit = {
+				to_has_abrahamic_religion = yes
+			}
+			every_owned_province = {
+				limit = {
+					OR = {
+						NOT = { culture_group = PREV }
+						culture = elysameric
+					}
+					religion_group = PREV
+					is_state = yes
+				}
+				PREV = {
+					export_to_variable = {
+						which = to_local_development
+						value = trigger_value:development
+						who = PREV
+					}
+					change_variable = {
+						which = to_from_true_faith_potential
+						which = to_local_development
+					}
+				}
+			}
+		}
+		else = {
+			every_owned_province = {
+				limit = {
+					OR = {
+						NOT = { culture_group = PREV }
+						culture = elysameric
+					}
+					has_owner_religion = yes
+					is_state = yes
+				}
+				PREV = {
+					export_to_variable = {
+						which = to_local_development
+						value = trigger_value:development
+						who = PREV
+					}
+					change_variable = {
+						which = to_from_true_faith_potential
+						which = to_local_development
+					}
+				}
+			}
+		}
+		multiply_variable = {
+			which = to_from_true_faith_potential
+			value = 5
+		}
+
+		set_variable = {
+			which = to_recruitment_quotas_potential
+			which = to_child_levy_potential
+		}
+		multiply_variable = {
+			which = to_recruitment_quotas_potential
+			value = 1.50
+		}
+		set_variable = {
+			which = to_recruitment_quotas_potential_with_from_true_faith
+			which = to_from_true_faith_potential
+		}
+		multiply_variable = {
+			which = to_recruitment_quotas_potential_with_from_true_faith
+			value = 1.25
+		}
+		change_variable = {
+			which = to_recruitment_quotas_potential_with_from_true_faith
+			which = to_recruitment_quotas_potential
+		}
+		subtract_variable = {
+			which = to_recruitment_quotas_potential
+			which = to_child_levy_potential
+		}
+		subtract_variable = {
+			which = to_recruitment_quotas_potential_with_from_true_faith
+			which = to_child_levy_potential
+		}
+		subtract_variable = {
+			which = to_recruitment_quotas_potential_with_from_true_faith
+			which = to_from_true_faith_potential
+		}
+		####
+		# Blood Tax
+		every_subject_country = {
+			limit = {
+				OR = {
+					has_country_modifier = to_blood_tax
+					has_country_modifier = to_blood_tax_true_faith
+				}
+			}
+			PREV = {
+				set_variable = {
+					which = to_blood_tax_potential
+					which = PREV
+				}
+				change_variable = {
+					which = to_child_levy_potential
+					which = to_blood_tax_potential
+				}
+			}
+			PREV = {
+				set_variable = {
+					which = to_blood_tax_from_true_faith_potential
+					which = PREV
+				}
+				subtract_variable = {
+					which = to_blood_tax_from_true_faith_potential
+					which = to_blood_tax_potential
+				}
+				change_variable = {
+					which = to_from_true_faith_potential
+					which = to_blood_tax_from_true_faith_potential
+				}
+			}
+		}
+		####
+		# Child Levy full potential
+		if = {
+			limit = {
+				has_country_modifier = to_janissary_child_levy
+			}
+			set_variable = {
+				which = to_child_levy_full_potential
+				which = to_child_levy_potential
+			}
+			if = {
+				limit = {
+					has_country_modifier = to_janissaries_from_true_faith
+				}
+				change_variable = {
+					which = to_child_levy_full_potential
+					which = to_from_true_faith_potential
+				}
+			}
+			if = {
+				limit = {
+					has_country_modifier = to_janissaries_from_true_faith
+					has_country_modifier = to_janissary_recruitment_quotas
+				}
+				change_variable = {
+					which = to_child_levy_full_potential
+					which = to_recruitment_quotas_potential_with_from_true_faith
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						has_country_modifier = to_janissary_recruitment_quotas
+					}
+					change_variable = {
+						which = to_child_levy_full_potential
+						which = to_recruitment_quotas_potential
+					}
+				}
+			}
+		}
+		####
+		set_variable = {
+			which = to_open_recruitment_potential
+			value = 0
+		}
+
+		every_owned_province = {
+			limit = {
+				has_owner_religion = yes
+				is_state = yes
+			}
+			PREV = {
+				export_to_variable = {
+					which = to_local_development
+					value = trigger_value:development
+					who = PREV
+				}
+				if = {
+					limit = {
+						culture_group = PREV
+					}
+					multiply_variable = {
+						which = to_local_development
+						value = 2
+					}
+				}
+				change_variable = {
+					which = to_open_recruitment_potential
+					which = to_local_development
+				}
+			}
+		}
+		
+		multiply_variable = {
+			which = to_open_recruitment_potential
+			value = 1
+		}
+	}
+}
+
+to_calculate_janissary_reserve_potential_all_subjects = {
+	every_subject_country = {
+		to_calculate_janissary_reserve_potential_subject = yes
+	}
+}
+
+to_calculate_janissary_reserve_potential_subject = {
+	overlord = {
+		save_event_target_as = to_blood_tax_overlord
+	}
+	set_variable = {
+		which = to_child_levy_potential
+		value = 0
+	}
+	if = {
+		limit = {
+			event_target:to_blood_tax_overlord = {
+				to_has_abrahamic_religion = yes
+			}
+		}
+		every_owned_province = {
+			limit = {
+				event_target:to_blood_tax_overlord = {
+					NOT = { primary_culture = PREV }
+					NOT = { religion_group = PREV }
+				}
+				is_state = yes
+			}
+			PREV = {
+				export_to_variable = {
+					which = to_local_development
+					value = trigger_value:development
+					who = PREV
+				}
+				change_variable = {
+					which = to_child_levy_potential
+					which = to_local_development
+				}
+			}
+		}
+	}
+	else = {
+		every_owned_province = {
+			limit = {
+				event_target:to_blood_tax_overlord = {
+					NOT = { primary_culture = PREV }
+					NOT = { religion = PREV }
+				}
+				is_state = yes
+			}
+			PREV = {
+				export_to_variable = {
+					which = to_local_development
+					value = trigger_value:development
+					who = PREV
+				}
+				change_variable = {
+					which = to_child_levy_potential
+					which = to_local_development
+				}
+			}
+		}
+	}
+	multiply_variable = {
+		which = to_child_levy_potential
+		value = 6
+	}
+	####
+	set_variable = {
+		which = to_from_true_faith_potential
+		value = 0
+	}
+	if = {
+		limit = {
+			event_target:to_blood_tax_overlord = {
+				has_country_modifier = to_janissaries_from_true_faith
+				to_has_abrahamic_religion = yes
+			}
+		}
+		every_owned_province = {
+			limit = {
+				event_target:to_blood_tax_overlord = {
+					OR = {
+						NOT = { culture_group = PREV }
+						culture = elysameric
+					}
+					religion_group = PREV
+				}
+				is_state = yes
+			}
+			PREV = {
+				export_to_variable = {
+					which = to_local_development
+					value = trigger_value:development
+					who = PREV
+				}
+				change_variable = {
+					which = to_from_true_faith_potential
+					which = to_local_development
+				}
+			}
+		}
+	}
+	else = {
+		every_owned_province = {
+			limit = {
+				event_target:to_blood_tax_overlord = {
+					OR = {
+						NOT = { culture_group = PREV }
+						culture = elysameric
+					}
+					religion = PREV
+				}
+				is_state = yes
+			}
+			PREV = {
+				export_to_variable = {
+					which = to_local_development
+					value = trigger_value:development
+					who = PREV
+				}
+				change_variable = {
+					which = to_from_true_faith_potential
+					which = to_local_development
+				}
+			}
+		}
+	}
+	multiply_variable = {
+		which = to_from_true_faith_potential
+		value = 3
+	}
+
+	set_variable = {
+		which = to_blood_tax_potential
+		which = to_child_levy_potential
+	}
+
+	set_variable = {
+		which = to_blood_tax_from_true_faith_potential
+		which = to_blood_tax_potential
+	}
+	change_variable = {
+		which = to_blood_tax_from_true_faith_potential
+		which = to_from_true_faith_potential
+	}
+}
+
+to_janissaries_on_become_subject = {
+	if = {
+		limit = {
+			overlord = {
+				has_country_modifier = to_janissary_child_levy
+			}
+		}
+		to_calculate_janissary_reserve_potential_subject = yes
+	}
+}
+
+to_janissaries_on_independence_subject = {
+	remove_country_modifier = to_blood_tax
+	remove_country_modifier = to_blood_tax_true_faith
+	clr_country_flag = to_has_blood_tax
+}
+
+to_roman_janissaries_on_religion_change = {
+	if = {
+		limit = {
+			has_government_mechanic = to_roman_janissary_mechanic
+		}
+		every_subject_country = {
+			limit = {
+				has_country_modifier = to_blood_tax
+				OR = {
+					religion = ROOT
+					AND = {
+						to_has_abrahamic_religion = yes
+						religion_group = ROOT
+					}
+				}
+			}
+			remove_country_modifier = to_blood_tax
+			add_country_modifier = {
+				name = to_blood_tax_true_faith
+				duration = -1
+			}
+		}
+		every_subject_country = {
+			limit = {
+				has_country_modifier = to_blood_tax_true_faith
+				NOT = {
+					OR = {
+						religion = ROOT
+						AND = {
+							to_has_abrahamic_religion = yes
+							religion_group = ROOT
+						}
+					}
+				}
+			}
+			remove_country_modifier = to_blood_tax_true_faith
+			add_country_modifier = {
+				name = to_blood_tax
+				duration = -1
+			}
+		}
+	}
+}
+
+to_spawn_janissary_regiments = {
+	if = {
+		limit = {
+			OR = {
+				has_dlc = "Cradle of Civilization"
+				has_dlc = "Domination"
+			}
+		}
+		custom_tooltip = to_spawn_janissary_regiments_tt
+		hidden_effect = {
+			janissary_infantry = ROOT
+			janissary_infantry = ROOT
+		}
+		custom_tooltip = nhs_new_line_tt
+	}
+	[[INFANTRY_WITHOUT_DLC]
+	else = {
+		infantry = ROOT
+		infantry = ROOT
+	}
+	]
+}
