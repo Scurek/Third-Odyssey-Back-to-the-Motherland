@@ -17070,3 +17070,88 @@ to_trade_expedition_effect = {
 		}
 	}
 }
+
+to_compute_gateway_to_elysium_trade_share = {
+	if = {
+		limit = {
+			nhs_check_all_elysian_tags = { CONDITION = exists }
+		}
+		nhs_effect_for_existing_elysian_tag = {
+			EFFECT = "to_compute_gateway_to_elysium_trade_share_effect = yes"
+		}
+	}
+}
+
+to_compute_gateway_to_elysium_trade_share_effect = {
+	set_variable = {
+		which = to_kykladia_trade_share_total
+		value = 0
+	}
+	set_variable = {
+		which = to_kykladia_trade_share
+		value = 0
+	}
+	if = {
+		limit = {
+			1516 = {
+				trade_share = {
+					country = PREV
+					share = 1
+				}
+			}
+		}
+		to_export_trade_share = {
+			TRADE_NODE = 1516
+			COUNTRY_SCOPE = PREV
+			VARIABLE = to_kykladia_trade_share
+		}
+	}
+	change_variable = {
+		which = to_kykladia_trade_share_total
+		which = to_kykladia_trade_share
+	}
+	every_subject_country = {
+		limit = {
+			1516 = {
+				trade_share = {
+					country = PREV
+					share = 1
+				}
+			}
+		}
+		save_event_target_as = to_kykladia_trade_share_target
+		PREV = {
+			to_export_trade_share = {
+				TRADE_NODE = 1516
+				COUNTRY_SCOPE = event_target:to_kykladia_trade_share_target
+				VARIABLE = to_kykladia_trade_share
+			}
+			change_variable = {
+				which = to_kykladia_trade_share_total
+				which = to_kykladia_trade_share
+			}
+		}
+	}
+	every_ally = {
+		limit = {
+			1516 = {
+				trade_share = {
+					country = PREV
+					share = 1
+				}
+			}
+		}
+		save_event_target_as = to_kykladia_trade_share_target
+		PREV = {
+			to_export_trade_share = {
+				TRADE_NODE = 1516
+				COUNTRY_SCOPE = event_target:to_kykladia_trade_share_target
+				VARIABLE = to_kykladia_trade_share
+			}
+			change_variable = {
+				which = to_kykladia_trade_share_total
+				which = to_kykladia_trade_share
+			}
+		}
+	}
+}
