@@ -3761,3 +3761,399 @@ country_event = {
 		}
 	}
 }
+
+###################################
+#Conquest of Venice
+###################################
+# The Lion of the Adriatic
+country_event = {
+	id = nhs2_mainlandevents.42
+	title = nhs2_mainlandevents.42.t
+	
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = nhs_new_flight_taken_venetians }
+		}
+		desc = nhs2_mainlandevents.42.da
+	}
+	desc = {
+		desc = nhs2_mainlandevents.42.db
+	}
+	picture = TO_VENICE_eventPicture
+	
+	fire_only_once = yes
+
+	goto = 112
+
+	trigger = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		owns_or_subject_of = 112
+	}
+
+	immediate = {
+		hidden_effect = {
+			112 = {
+				to_compute_venice_building_worth = yes
+
+				# set_province_flag = to_prevent_modify_development
+				
+				export_to_variable = {
+					which = to_removed_base_tax
+					value = trigger_value:base_tax
+				}
+				multiply_variable = {
+					which = to_removed_base_tax
+					value = 0.8
+				}
+				to_round_up_variable = { VARIABLE = to_removed_base_tax }
+	
+				export_to_variable = {
+					which = to_removed_base_production
+					value = trigger_value:base_production
+				}
+				multiply_variable = {
+					which = to_removed_base_production
+					value = 0.50
+				}
+				to_round_up_variable = { VARIABLE = to_removed_base_production }
+	
+				export_to_variable = {
+					which = to_removed_base_manpower
+					value = trigger_value:base_manpower
+				}
+				multiply_variable = {
+					which = to_removed_base_manpower
+					value = 0.8
+				}
+				to_round_up_variable = { VARIABLE = to_removed_base_manpower }
+
+				set_variable = {
+					which = to_cash_from_removed_dev
+					which = to_removed_base_tax
+				}
+				change_variable = {
+					which = to_cash_from_removed_dev
+					which = to_removed_base_production
+				}
+				change_variable = {
+					which = to_cash_from_removed_dev
+					which = to_removed_base_manpower
+				}
+				multiply_variable = {
+					which = to_cash_from_removed_dev
+					value = 100
+				}
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			112 = {
+				set_variable = {
+					which = to_venice_building_worth
+					value = 0
+				}
+				clr_province_flag = to_prevent_modify_development_conquest_of_rome
+				set_variable = {
+					which = to_removed_base_tax
+					value = 0
+				}
+				set_variable = {
+					which = to_removed_base_production
+					value = 0
+				}
+				set_variable = {
+					which = to_removed_base_manpower
+					value = 0
+				}
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_mainlandevents.42.a
+		trigger = {
+			NOT = { has_country_flag = nhs_new_flight_taken_venetians }
+		}
+		add_prestige = 20
+		add_dip_power = 50
+		custom_tooltip = nhs_new_line_tt
+		tooltip = {
+			112 = {
+				add_province_modifier = {
+					name = to_control_of_venice
+					duration = -1
+				}
+			}
+		}
+		hidden_effect = {
+			112 = {
+				add_province_triggered_modifier = to_control_of_venice_tm
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_mainlandevents.42.b
+		highlight = yes
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = to_has_taken_venetians_return_tt
+				has_country_flag = nhs_new_flight_taken_venetians
+			}
+		}
+		add_prestige = 20
+		add_dip_power = 100
+		if = {
+			limit = {
+				VEN = {
+					is_subject_of = ROOT
+				}
+			}
+			VEN = {
+				add_liberty_desire = -25
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		112 = {
+			add_nationalism = -20
+		}
+		custom_tooltip = to_reduce_nationalism_in_vanice_tt
+		tooltip = {
+			112 = {
+				if = {
+					limit = {
+						has_dlc = "Domination"
+					}
+					add_province_modifier = {
+						name = to_control_of_venice_upgraded
+						duration = -1
+					}
+	
+				}
+				else = {
+					add_province_modifier = {
+						name = to_control_of_venice_upgraded_nodlc
+						duration = -1
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			112 = {
+				if = {
+					limit = {
+						has_dlc = "Domination"
+					}
+					add_province_triggered_modifier = to_control_of_venice_upgraded_tm
+				}
+				else = {
+					add_province_triggered_modifier = to_control_of_venice_upgraded_nodlc_tm
+				}
+			}
+		}
+	}
+
+	option = {
+		name = nhs2_mainlandevents.42.c
+		add_power_projection = {
+			type = mission_rewards_power_projection
+			amount = 25
+		}
+		# add_treasury = 3000
+		add_prestige = 20
+		if = {
+			limit = {
+				NOT = { has_country_flag = nhs_new_flight_taken_venetians }
+			}
+			add_legitimacy = 50
+		}
+		add_mil_power = 200
+		custom_tooltip = nhs_new_line_tt
+		if = {
+			limit = {
+				exists = VEN
+			}
+			if = {
+				limit = {
+					VEN = { is_subject_of = ROOT }
+				}
+				VEN = {
+					add_liberty_desire = 150
+				}
+			}
+			VEN = {
+				add_opinion = {
+					who = ROOT
+					modifier = to_burned_venice_ven_om
+				}
+			}
+			every_country = {
+				limit = {
+					NOT = { tag = ROOT }
+					is_enemy = VEN
+					# OR = {
+					# 	AND = {
+					# 		tag = GEN
+					# 		GEN = {
+					# 			NOT = { alliance_with = VEN }
+					# 			NOT = { is_core = 112 }
+					# 		}
+					# 	}
+					# 	is_enemy = VEN
+					# }
+				}
+				custom_tooltip = to_add_25_opinion_tt
+				hidden_effect = {
+					add_opinion = {
+						who = ROOT
+						modifier = to_burned_venice_om
+					}
+				}
+			}
+			custom_tooltip = nhs_new_line_tt
+		}
+		custom_tooltip = to_decrease_western_opinion_venice_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					technology_group = western
+					NOT = { is_enemy = VEN }
+				}
+				if = {
+					limit = {
+						culture_group = latin
+					}
+					add_aggressive_expansion = {
+						who = ROOT
+						value = 20
+						apply_calc = no
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = to_burned_venice_neg_severe_om
+					}
+				}
+				else = {
+					add_aggressive_expansion = {
+						who = ROOT
+						value = 10
+						apply_calc = no
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = to_burned_venice_neg_om
+					}
+				}
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_get_separatism_in_latin_provinces_tt
+		hidden_effect = {
+			set_country_flag = to_get_separatism_in_latin_provinces
+			every_province = {
+				limit = {
+					country_or_subject_holds = ROOT
+					culture_group = latin
+				}
+				add_nationalism = 10
+			}
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_gain_80_devastation_and_remova_all_loot_tt
+		custom_tooltip = to_reduce_venice_base_tax_tt
+		custom_tooltip = to_reduce_venice_base_production_tt
+		custom_tooltip = to_reduce_venice_base_manpower_tt
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_cash_from_removed_development_venice_tt
+		custom_tooltip = to_remove_all_buildings_in_venice_tt
+		hidden_effect = {
+			112 = {
+				to_remove_all_buildings_from_venice = yes
+				add_devastation = 80
+				remove_loot = {
+					who = ROOT
+					amount = 1000
+				}
+				for_variable_amount = {
+					variable = to_removed_base_tax
+					effect = "add_base_tax = -1"
+				}
+				for_variable_amount = {
+					variable = to_removed_base_production
+					effect = "add_base_production = -1"
+				}
+				for_variable_amount = {
+					variable = to_removed_base_manpower
+					effect = "add_base_manpower = -1"
+				}
+
+				to_remove_all_buildings_from_venice = yes
+			}
+		}
+		if = {
+			limit = {
+				has_dlc = "Leviathan"
+				112 = {
+					has_great_project = {
+						type = doges_palace
+						tier = 1
+					}
+				}
+			}
+			if = {
+				limit = {
+					112 = {
+						has_great_project = {
+							type = doges_palace
+							tier = 3
+						}
+					}
+				}
+				custom_tooltip = to_sack_doges_palace_3_tt
+				hidden_effect = {
+					add_treasury = 9000
+					112 = {
+						add_great_project_tier = {
+							type = doges_palace
+							tier = -3
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					112 = {
+						has_great_project = {
+							type = doges_palace
+							tier = 2
+						}
+					}
+				}
+				custom_tooltip = to_sack_doges_palace_2_tt
+				hidden_effect = {
+					add_treasury = 4000
+					112 = {
+						add_great_project_tier = {
+							type = doges_palace
+							tier = -2
+						}
+					}
+				}
+			}
+			else = {
+				custom_tooltip = to_sack_doges_palace_1_tt
+				hidden_effect = {
+					add_treasury = 1500
+					112 = {
+						add_great_project_tier = {
+							type = doges_palace
+							tier = -1
+						}
+					}
+				}
+			}
+		}
+	}
+}
