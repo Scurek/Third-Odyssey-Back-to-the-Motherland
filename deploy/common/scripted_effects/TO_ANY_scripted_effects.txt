@@ -1893,6 +1893,569 @@ to_effect_if_building_exists = {
 	}
 }
 
+to_building_on_build_effect = {
+	to_building_on_build_effect_ely = { BUILDING = $BUILDING$ }
+}
+
+to_building_on_build_with_obsolete_effect = {
+	to_building_on_build_with_obsolete_effect_ely = {
+		BUILDING = $BUILDING$
+		OLD_BUILDING = $OLD_BUILDING$
+	}
+}
+
+to_building_on_build_with_two_obsolete_effect = {
+	to_building_on_build_with_two_obsolete_effect_ely = {
+		BUILDING = $BUILDING$
+		OLD_BUILDING = $OLD_BUILDING$
+		OLD_BUILDING_2 = $OLD_BUILDING_2$
+	}
+}
+
+to_building_on_build_with_three_obsolete_effect = {
+	to_building_on_build_with_three_obsolete_effect_ely = {
+		BUILDING = $BUILDING$
+		OLD_BUILDING = $OLD_BUILDING$
+		OLD_BUILDING_2 = $OLD_BUILDING_2$
+		OLD_BUILDING_3 = $OLD_BUILDING_3$
+	}
+}
+
+to_manufactory_on_build_effect = {
+	to_manufactory_on_build_effect_ely = { BUILDING = $BUILDING$ }
+}
+
+to_building_on_destroyed = {
+	to_building_on_destroyed_effect_ely = {
+		BUILDING = $BUILDING$
+		[[TIER_1] TIER_1 = yes ]
+		[[TIER_2] TIER_2 = yes ]
+		[[TIER_3] TIER_3 = yes ]
+		[[TIER_4] TIER_4 = yes ]
+	}
+}
+
+##################################################
+# Building counters
+##################################################
+
+to_building_counter_clear_flag = {
+	clr_province_flag = $FLAG$_$BUILDING$
+}
+to_building_counter_set_flag = {
+	set_province_flag = $FLAG$_$BUILDING$
+}
+to_building_counter_effect_add = {
+	if = {
+		limit = {
+			[[TRIGGER]
+				$TRIGGER$ = yes
+			]
+			NOT = {
+				to_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $BUILDING$ 
+				}
+			}
+		}
+		to_building_counter_set_flag = { 
+			FLAG = $FLAG$ 
+			BUILDING = $BUILDING$ 
+		}
+		owner = {
+			change_variable = {
+				which = $VAR$
+				value = $VALUE$
+			}
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				change_variable = {
+					which = $VAR$_$BUILDING$
+					value = 1
+				}
+			}
+			]
+		}
+		
+	}
+}
+to_building_counter_effect_sub = {
+	if = {
+		limit = {
+			[[TRIGGER]
+				$TRIGGER$ = yes
+			]
+			to_building_counter_had_building = {
+				FLAG = $FLAG$ 
+				BUILDING = $BUILDING$ 
+			}
+		}
+		to_building_counter_clear_flag = {
+			FLAG = $FLAG$ 
+			BUILDING = $BUILDING$ 
+		}
+		owner = {
+			subtract_variable = {
+				which = $VAR$
+				value = $VALUE$
+			}
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				subtract_variable = {
+					which = $VAR$_$BUILDING$
+					value = 1
+				}
+			}
+			]
+		}
+	}
+}
+to_building_counter_effect_add_with_obsolete = {
+	if = {
+		limit = {
+			[[TRIGGER]
+				$TRIGGER$ = yes
+			]
+			NOT = {
+				to_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $BUILDING$ 
+				}
+			}
+		}
+		[[COUNT_BUILDING]
+		hidden_effect = {
+			owner = {
+				change_variable = {
+					which = $VAR$_$BUILDING$
+					value = 1
+				}
+			}
+		}
+		]
+		if = {
+			limit = {
+				NOT = {
+					to_building_counter_had_building = { 
+						FLAG = $FLAG$ 
+						BUILDING = $OLD_BUILDING$ 
+					}
+				}
+			}
+			to_building_counter_set_flag = { 
+				FLAG = $FLAG$ 
+				BUILDING = $BUILDING$ 
+			}
+			owner = {
+				change_variable = {
+					which = $VAR$ # nhs_HighTierBuildingCount
+					value = $VALUE$
+				}
+			}
+		}
+		else = {
+			to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING$ }
+			to_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+			[[OLD_DIF_VALUE]
+			owner = {
+				change_variable = {
+					which = $VAR$ # nhs_HighTierBuildingCount
+					value = $OLD_DIF_VALUE$
+				}
+			}
+			]
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				owner = {
+					subtract_variable = {
+						which = $VAR$_$OLD_BUILDING$
+						value = 1
+					}
+				}
+			}
+			]
+		}
+	}
+}
+to_building_counter_effect_add_with_two_obsolete = {
+	if = {
+		limit = {
+			[[TRIGGER]
+				$TRIGGER$ = yes
+			]
+			NOT = {
+				to_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $BUILDING$ 
+				}
+			}
+		}
+		[[COUNT_BUILDING]
+		hidden_effect = {
+			owner = {
+				change_variable = {
+					which = $VAR$_$BUILDING$
+					value = 1
+				}
+			}
+		}
+		]
+		if = {
+			limit = {
+				to_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $OLD_BUILDING$ 
+				}
+			}
+			to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING$ }
+			to_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+			[[OLD_DIF_VALUE]
+			owner = {
+				change_variable = {
+					which = $VAR$ # nhs_HighTierBuildingCount
+					value = $OLD_DIF_VALUE$
+				}
+			}
+			]
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				owner = {
+					subtract_variable = {
+						which = $VAR$_$OLD_BUILDING$
+						value = 1
+					}
+				}
+			}
+			]
+		}
+		else_if = {
+			limit = {
+				to_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $OLD_BUILDING_2$ 
+				}
+			}
+			to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING_2$ }
+			to_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+			[[OLD_DIF_VALUE_2]
+			owner = {
+				change_variable = {
+					which = $VAR$ # nhs_HighTierBuildingCount
+					value = $OLD_DIF_VALUE_2$
+				}
+			}
+			]
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				owner = {
+					subtract_variable = {
+						which = $VAR$_$OLD_BUILDING_2$
+						value = 1
+					}
+				}
+			}
+			]
+		}
+		else = {
+			to_building_counter_set_flag = { 
+				FLAG = $FLAG$ 
+				BUILDING = $BUILDING$ 
+			}
+			owner = {
+				change_variable = {
+					which = $VAR$
+					value = $VALUE$
+				}
+			}
+		}
+	}
+}
+to_building_counter_effect_add_with_three_obsolete = {
+	if = {
+		limit = {
+			[[TRIGGER]
+				$TRIGGER$ = yes
+			]
+			NOT = {
+				to_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $BUILDING$ 
+				}
+			}
+		}
+		[[COUNT_BUILDING]
+		hidden_effect = {
+			owner = {
+				subtract_variable = {
+					which = $VAR$_$BUILDING$
+					value = 1
+				}
+			}
+		}
+		]
+		if = {
+			limit = {
+				to_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $OLD_BUILDING$ 
+				}
+			}
+			to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING$ }
+			to_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+			[[OLD_DIF_VALUE]
+			owner = {
+				change_variable = {
+					which = $VAR$ # nhs_HighTierBuildingCount
+					value = $OLD_DIF_VALUE$
+				}
+			}
+			]
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				owner = {
+					subtract_variable = {
+						which = $VAR$_$OLD_BUILDING$
+						value = 1
+					}
+				}
+			}
+			]
+		}
+		else_if = {
+			limit = {
+				to_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $OLD_BUILDING_2$ 
+				}
+			}
+			to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING_2$ }
+			to_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+			[[OLD_DIF_VALUE_2]
+			owner = {
+				change_variable = {
+					which = $VAR$ # nhs_HighTierBuildingCount
+					value = $OLD_DIF_VALUE_2$
+				}
+			}
+			]
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				owner = {
+					subtract_variable = {
+						which = $VAR$_$OLD_BUILDING_2$
+						value = 1
+					}
+				}
+			}
+			]
+		}
+		else_if = {
+			limit = {
+				to_building_counter_had_building = { 
+					FLAG = $FLAG$ 
+					BUILDING = $OLD_BUILDING_3$ 
+				}
+			}
+			to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = $OLD_BUILDING_3$ }
+			to_building_counter_set_flag = { FLAG = $FLAG$ BUILDING = $BUILDING$ }
+			[[OLD_DIF_VALUE_3]
+			owner = {
+				change_variable = {
+					which = $VAR$ # nhs_HighTierBuildingCount
+					value = $OLD_DIF_VALUE_3$
+				}
+			}
+			]
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				owner = {
+					subtract_variable = {
+						which = $VAR$_$OLD_BUILDING_3$
+						value = 1
+					}
+				}
+			}
+			]
+		}
+		else = {
+			to_building_counter_set_flag = { 
+				FLAG = $FLAG$ 
+				BUILDING = $BUILDING$ 
+			}
+			owner = {
+				change_variable = {
+					which = $VAR$
+					value = $VALUE$
+				}
+			}
+		}
+	}
+}
+
+to_building_counter_local_province_check_building = {
+	if = {
+		limit = {
+			has_building = $BUILDING$
+			NOT = {
+				to_building_counter_had_building = { 
+					FLAG = $FLAG$
+					BUILDING = $BUILDING$
+				} 
+			}
+		}
+		to_building_counter_set_flag = {
+			FLAG = $FLAG$
+			BUILDING = $BUILDING$
+		}
+		owner = {
+			change_variable = {
+				which = $VAR$
+				value = $VALUE$
+			}
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				change_variable = {
+					which = $VAR$_$BUILDING$
+					value = 1
+				}
+			}
+			]
+		}
+	}
+}
+to_building_counter_local_province_check_manufactory = {
+	if = {
+		limit = {
+			has_building = $BUILDING$
+			NOT = {
+				to_building_counter_had_building = { 
+					FLAG = $FLAG$
+					BUILDING = manufactory
+				} 
+			}
+		}
+		to_building_counter_set_flag = {
+			FLAG = $FLAG$
+			BUILDING = manufactory
+		}
+		owner = {
+			change_variable = {
+				which = $VAR$
+				value = $VALUE$
+			}
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				change_variable = {
+					which = $VAR$_manufactory
+					value = 1
+				}
+			}
+			]
+		}
+	}
+}
+to_building_counter_former_province_check_building = {
+	if = {
+		limit = {
+			to_building_counter_had_building = { 
+				FLAG = $FLAG$
+				BUILDING = $BUILDING$
+			} 
+		}
+		to_building_counter_clear_flag = {
+			FLAG = $FLAG$
+			BUILDING = $BUILDING$  
+		}
+		FROM = {
+			subtract_variable = {
+				which = $VAR$
+				value = $VALUE$
+			}
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				subtract_variable = {
+					which = $VAR$_$BUILDING$
+					value = 1
+				}
+			}
+			]
+		}
+	}
+}
+to_building_counter_former_province_check_manufactory = {
+	if = {
+		limit = {
+			to_building_counter_had_building = { 
+				FLAG = $FLAG$
+				BUILDING = manufactory
+			} 
+		}
+		to_building_counter_clear_flag = {
+			FLAG = $FLAG$
+			BUILDING = manufactory
+		}
+		FROM = {
+			subtract_variable = {
+				which = $VAR$
+				value = $VALUE$
+			}
+			[[COUNT_BUILDING]
+			hidden_effect = {
+				subtract_variable = {
+					which = $VAR$_manufactory
+					value = 1
+				}
+			}
+			]
+		}
+	}
+}
+
+# UNUSED
+to_building_counter_clear_flags = {
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = marketplace }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = workshop }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = temple }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = barracks }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = shipyard }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = fort_15th }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = coastal_defence }
+
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = courthouse }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = dock }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = regimental_camp }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = fort_16th }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = naval_battery }
+
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = cathedral }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = university }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = trade_depot }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = grand_shipyard }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = training_fields }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = fort_17th }
+
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = stock_exchange }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = counting_house }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = town_hall }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = drydock }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = conscription_center }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = fort_18th }
+
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = wharf }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = weapons }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = textile }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = plantations }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = tradecompany }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = farm_estate }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = mills }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = furnace }
+
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = ramparts }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = soldier_households }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = impressment_offices }
+	to_building_counter_clear_flag = { FLAG = $FLAG$ BUILDING = state_house }
+}
+
 ##################################################
 # Missionary Strength from battles mechanic
 ##################################################
