@@ -4801,37 +4801,42 @@ country_event = {
 		}
 		desc = nhs2_countryevents.77.da
 	}
-	desc = {
-		trigger = {
-			country_or_subject_holds = 151
-		}
-		desc = nhs2_countryevents.77.db
-	}
+	desc = nhs2_countryevents.77.db
 	picture = FAMINE_eventPicture
 	
+	goto = nhs_wine_target
 	fire_only_once = yes
 
 	trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
-		any_province = {
+		any_owned_province = {
 			OR = {
 				area = central_valley_area
 				province_id = 2478
 			}
 		}
 	}
+	
+	immediate = {
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					OR = {
+						area = central_valley_area
+						province_id = 2478
+					}
+				}
+				save_event_target_as = nhs_wine_target
+			}			
+		}
+	}
 
 	option = {
 		name = "nhs2_countryevents.77.a"
 		set_country_flag = had_event_nhs2_countryevents_77
-		any_owned_province = {
-			limit = {
-				OR = {
-					area = central_valley_area
-					province_id = 2478
-				}
-			}
-			change_trade_goods = grapes
+		custom_tooltip = nhs_enable_wineries_tt
+		event_target:nhs_wine_target = {
+			change_trade_goods = wine
 		}
 	}
 }
