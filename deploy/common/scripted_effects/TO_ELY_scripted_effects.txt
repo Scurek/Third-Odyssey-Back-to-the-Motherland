@@ -1,20 +1,35 @@
 to_handle_wineries = {
 	if = {
 		limit = {
-			has_country_flag = to_enacted_wineries_decision
 			OR = {
-				area = central_valley_area
-				province_id = 2478
-			}
-			NOT = {
-				trade_goods = wine
-				has_province_modifier = nhs_hesperidian_wineries
+				has_province_modifier = to_hesperidian_wineries
+				has_province_modifier = to_hesperidian_wineries_disabled
 			}
 		}
-		change_trade_goods = wine
-		add_province_modifier = {
-			name = nhs_hesperidian_wineries
-			duration = -1
+		if = {
+			limit = {
+				has_country_flag = to_enacted_wineries_decision
+			}
+			remove_province_modifier = to_hesperidian_wineries_disabled
+			add_province_modifier = {
+				name = to_hesperidian_wineries
+				duration = -1
+			}
+			if = {
+				limit = {
+					NOT = {
+						trade_goods = wine
+					}
+				}
+				change_trade_goods = wine
+			}
+		}
+		else = {
+			remove_province_modifier = to_hesperidian_wineries
+			add_province_modifier = {
+				name = to_hesperidian_wineries_disabled
+				duration = -1
+			}
 		}
 	}
 }

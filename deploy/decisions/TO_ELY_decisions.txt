@@ -7119,7 +7119,7 @@ country_decisions = {
 		ai_importance = 300
 	}
 	
-	nhs_wineries = {
+	to_wineries = {
 		major = yes
 		provinces_to_highlight = {
 			OR = {
@@ -7132,44 +7132,62 @@ country_decisions = {
 			has_country_flag = had_event_nhs2_countryevents_77
 			}
 		allow = {
-			development_in_provinces = {
-				area = central_valley_area
-				province_id = 2478
-				if = { 
-					limit = {
-						ai = yes
+			if = {
+				limit = {
+					ai = yes
+				}
+				development_in_provinces = {
+					custom_trigger_tooltip = {
+						tooltip = to_allow_wineries
+						OR = {
+							area = central_valley_area
+							province_id = 2478
+						}
 					}
 					value = 20
 				}
-				else = {
+			}
+			else = {
+				development_in_provinces = {
+					custom_trigger_tooltip = {
+						tooltip = to_allow_wineries
+						OR = {
+							area = central_valley_area
+							province_id = 2478
+						}
+					}
 					value = 40
 				}
 			}
 		}
 		effect = {
-			every_owned_province = {
-				limit =  {
-					area = central_valley_area
-					province_id = 2478
-				}
-				change_trade_goods = wine
-				add_province_modifier = {
-					name = nhs_hesperidian_wineries
-					duration = -1
-				}
-			}
-			if = {
-				limit = {
-					NOT = {
-						owns_all_provinces = {
-							OR = {
-								area = central_valley_area
-								province_id = 2478
-							}
+			set_country_flag = to_enacted_wineries_decision
+			custom_tooltip = to_wineries_tt
+			hidden_effect = {
+				every_province = {
+					limit = {
+						OR = {
+						area = central_valley_area
+						province_id = 2478
+						}
+					}
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						change_trade_goods = wine
+						add_province_modifier = {
+							name = to_hesperidian_wineries
+							duration = -1
+						}	
+					}
+					else = {
+						add_province_modifier = {
+							name = to_hesperidian_wineries_disabled
+							duration = -1
 						}
 					}
 				}
-				custom_tooltip = nhs_wineries_tt
 			}
 		}
 		ai_will_do = {
