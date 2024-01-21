@@ -3476,7 +3476,7 @@ to_owner_has_naval_supplies_production = {
 
 to_arsenal_tier_2_trigger = {
 	FROM = {
-		wharf = 5
+		wharf = 1
 	}
 }
 
@@ -3508,16 +3508,34 @@ to_cothon_tier_1_trigger = {
 
 to_cothon_tier_2_trigger = {
 	FROM = {
-		calc_true_if = {
-			amount = 8
-			custom_trigger_tooltip = {
-				tooltip = to_owned_or_subject_subject_owned_cots_tt
-				all_province = {
-					OR = {
-						province_has_center_of_trade_of_level = 2
-						province_has_center_of_trade_of_level = 3
+		if = {
+			limit = {
+				has_dlc = "Dharma"
+			}
+			calc_true_if = {
+				amount = 8
+				custom_trigger_tooltip = {
+					tooltip = to_owned_or_subject_subject_owned_level_2_cots_tt
+					all_province = {
+						OR = {
+							province_has_center_of_trade_of_level = 2
+							province_has_center_of_trade_of_level = 3
+						}
+						to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
 					}
-					to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
+				}
+			}
+		}
+		else = {
+			calc_true_if = {
+				amount = 8
+				custom_trigger_tooltip = {
+					tooltip = to_owned_or_subject_subject_owned_cots_10_dev_tt
+					all_province = {
+						province_has_center_of_trade_of_level = 1
+						development = 10
+						to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
+					}
 				}
 			}
 		}
