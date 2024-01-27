@@ -2985,23 +2985,50 @@ to_change_manpower_by_VARIABLE = {
 to_check_culture_after_conversion = {
 	if = {
 		limit = {
-			has_province_flag = to_check_culture_after_conversion
-			
+			OR = {
+				has_province_flag = to_check_culture_after_conversion
+				AND = {
+					has_owner_culture = yes
+					to_has_promoted_local_culture = { LAKONIAN_DELAYED_CHECK = yes }
+				}
+			}
 		}
 		clr_province_flag = to_check_culture_after_conversion
 		if = {
 			limit = {
 				owner = {
-					nhs_post_fragmentation_culturally_elysian = yes
+					OR = {
+						to_pre_romaic_greek_primary = yes
+						nhs_post_fragmentation_culturally_elysian = yes
+					}
 				}
 			}
 			if = {
 				limit = {
+					owner = {
+						nhs_post_fragmentation_culturally_elysian = yes
+					}
 					culture = greek
 					continent = north_america
 				}
-				change_culture = romaic
-				to_ely_province_culture_check = {}
+				owner = {
+					PREV = {
+						change_culture = PREV
+					}
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_province_flag = to_has_lakonian_culture_potential
+						AND = {
+							has_province_flag = to_has_lakonian_culture_potential_ping
+							NOT = { had_province_flag = { flag = to_has_lakonian_culture_potential_ping days = 1 } }
+						}
+					}
+					to_has_promoted_local_culture_flag = { CULTURE = lakonian }
+				}
+				change_culture = lakonian
 			}
 			else = {
 				to_ely_province_culture_check = {}

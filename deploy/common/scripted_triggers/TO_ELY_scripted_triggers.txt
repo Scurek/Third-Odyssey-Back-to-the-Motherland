@@ -1,3 +1,100 @@
+to_has_promoted_local_culture_flag = {
+	owner = {
+		has_country_flag = to_promoted_local_culture_$CULTURE$
+	}
+}
+
+to_has_promoted_local_culture = {
+	if = {
+		limit = {
+			OR = {
+				has_province_flag = to_has_lakonian_culture_potential
+				[[LAKONIAN_DELAYED_CHECK]
+				AND = {
+					has_province_flag = to_has_lakonian_culture_potential_ping
+					NOT = { had_province_flag = { flag = to_has_lakonian_culture_potential_ping days = 1 } }
+				}
+				]
+			}
+		}
+		NOT = { culture = lakonian }
+		to_has_promoted_local_culture_flag = { CULTURE = lakonian }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_borealians_appeared_country
+			}
+			nhs_borealian_province = yes
+		}
+		NOT = { culture = borealian }
+		to_has_promoted_local_culture_flag = { CULTURE = borealian }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_hyperborealians_appeared_country
+			}
+			nhs_hyperborealian_province = yes
+		}
+		NOT = { culture = hyperborealian }
+		to_has_promoted_local_culture_flag = { CULTURE = hyperborealian }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_hesperidians_appeared_country
+			}
+			nhs_hesperidian_province = yes
+		}
+		NOT = { culture = hesperidian }
+		to_has_promoted_local_culture_flag = { CULTURE = hesperidian }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_kykladian_appeared_country
+			}
+			nhs_kykladian_province = yes
+		}
+		NOT = { culture = kykladian }
+		to_has_promoted_local_culture_flag = { CULTURE = kykladian }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_elyric_appeared_country
+			}
+			nhs_elyric_province = yes
+		}
+		NOT = { culture = elyric }
+		to_has_promoted_local_culture_flag = { CULTURE = elyric }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_arkadians_appeared_country
+			}
+			nhs_arkadian_province = yes
+		}
+		NOT = { culture = arkadian }
+		to_has_promoted_local_culture_flag = { CULTURE = arkadian }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_eleutheroi_appeared_country
+			}
+			nhs_eleutheroi_province = yes
+		}
+		NOT = { culture = eleutheroi }
+		to_has_promoted_local_culture_flag = { CULTURE = eleutheroi }
+	}
+	else = {
+		always = no
+	}
+}
+
 to_does_not_have_flight_mod = {
 	if = {
 		limit = {
@@ -68,15 +165,13 @@ nhs_hyperborealian_areas = {
 nhs_hesperidian_areas = {
 	OR = {
 		nhs_hesperidian_atlas = yes
-		region = mexico_region
-		# AND = {
-		# 	region = mexico_region
-		# 	NOT = { province_group = mesoamerica_pgroup }
-		# 	OR = {
-		# 		area = nayarit_area
-		# 		NOT = { has_port = yes }
-		# 	}
-		# }
+		AND = {
+			region = mexico_region
+			OR = {
+				has_province_modifier = to_nat_tribal_development
+				has_province_modifier = to_nat_had_tribal_development
+			}
+		}
 		area = chihuahua_area
 		region = california_region
 		nhs_hesperidian_thoulea = yes
@@ -177,6 +272,10 @@ to_has_incorrect_ely_dynamic_culture = {
 	owner = {
 		culture_group = byzantine
 	}
+	to_potential_ely_dynamic_culture = yes
+}
+
+to_potential_ely_dynamic_culture = {
 	OR = {
 		AND = {
 			owner = {
@@ -395,11 +494,20 @@ to_gets_autonomy_kykladian = {
 	NOT = { capital_scope = { region = carribeans_region } }
 }
 
+nhs_lakonian_province = {
+	OR = {
+		to_spartan_assimilation_province = yes
+		to_mesoamerican_assimilation_province = yes
+	}
+}
+
 nhs_borealian_province = {
 	OR = {
 		nhs_borealian_areas = yes
 		AND = {
-			NOT = { has_global_flag = nhs_hyperborealians_appeared }
+			owner = {
+				NOT = { has_country_flag = nhs_hyperborealians_appeared_country }
+			}
 			nhs_hyperborealian_areas = yes
 		}	
 	}
@@ -413,7 +521,9 @@ to_gets_autonomy_borealian = {
 			OR = {
 				nhs_borealian_areas = yes
 				AND = {
-					NOT = { has_global_flag = nhs_hyperborealians_appeared }
+					owner = {
+						NOT = { has_country_flag = nhs_hyperborealians_appeared_country }
+					}
 					nhs_hyperborealian_areas = yes
 				}
 			}
