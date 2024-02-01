@@ -28,6 +28,21 @@ decisions_template = Template('''{% for exarch in exarchs %}
 				NOT = { has_province_flag = nhs_exarch_province_exemption }
 			}
 		}
+		
+		provinces_to_highlight = {
+		    nhs_{{ exarch['tag'] }}_province = yes
+		    OR = {
+		        NOT = { owned_by = ROOT }
+		        AND = {
+		        	NOT = { is_state_core = ROOT }
+                    NOT = { has_construction = core }
+                    is_owned_by_trade_company = no
+                    {%- if 'check_supply_lines' in exarch %}
+                    NOT = { has_province_modifier = nhs2_supply_lines_tm }
+                    {%- endif %}    
+		        }
+		    }
+		}
 
 		allow = {
 		    if = {
@@ -63,7 +78,10 @@ decisions_template = Template('''{% for exarch in exarchs %}
 			else = {
 				any_owned_province = {
 					nhs_{{ exarch['tag'] }}_province = yes
-					NOT = { is_state_core = ROOT }
+					custom_trigger_tooltip = {
+					    tooltip = to_is_not_state_core_of_ROOT_tt
+					    NOT = { is_state_core = ROOT }
+					}
 					NOT = { has_construction = core }
 					is_owned_by_trade_company = no
 					{%- if 'check_supply_lines' in exarch %}

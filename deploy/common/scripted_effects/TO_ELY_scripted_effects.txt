@@ -11149,6 +11149,16 @@ nhs_reset_elysian_sprites = {
 	# }
 }
 
+to_trigger_exarch_ownership_events = {
+	every_country = {
+		limit = {
+			is_subject_of_type = elysian_subject
+		}
+		country_event = { id = nhs2_ely_marches.3 days = 14 }
+		country_event = { id = nhs2_ely_marches.5 days = 20 }
+	}
+}
+
 to_nhs_remove_exarch_cores = {
 	if = {
 		limit = {
@@ -11162,45 +11172,45 @@ to_nhs_remove_exarch_cores = {
 to_cede_province_to_exarch = {
 	if = {
 		limit = {
-			is_state_core = event_target:to_exarch_overlord
+			is_state_core = $CURRENT_OWNER$
 		}
-		remove_core = event_target:to_exarch_overlord
-		cede_province = ROOT
+		remove_core = $CURRENT_OWNER$
+		cede_province = $NEW_OWNER$
 		if = {
 			limit = {
-				NOT = { is_state_core = ROOT }
+				NOT = { is_state_core = $NEW_OWNER$ }
 			}
-			add_core = ROOT
+			add_core = $NEW_OWNER$
 		}
 	}
 	else_if = {
 		limit = {
-			is_territorial_core = event_target:to_exarch_overlord
+			is_territorial_core = $CURRENT_OWNER$
 		}
-		remove_core = event_target:to_exarch_overlord
-		cede_province = ROOT
-		add_territorial_core = ROOT
+		remove_core = $CURRENT_OWNER$
+		cede_province = $NEW_OWNER$
+		add_territorial_core = $NEW_OWNER$
 	}
 	else_if = {
 		limit = {
-			is_permanent_claim = event_target:to_exarch_overlord
+			is_permanent_claim = $CURRENT_OWNER$
 		}
-		remove_claim = event_target:to_exarch_overlord
-		cede_province = ROOT
-		add_permanent_claim = ROOT
+		remove_claim = $CURRENT_OWNER$
+		cede_province = $NEW_OWNER$
+		add_permanent_claim = $NEW_OWNER$
 	}
 	else_if = {
 		limit = {
-			is_claim = event_target:to_exarch_overlord
+			is_claim = $CURRENT_OWNER$
 		}
-		remove_claim = event_target:to_exarch_overlord
-		cede_province = ROOT
-		add_claim = ROOT
+		remove_claim = $CURRENT_OWNER$
+		cede_province = $NEW_OWNER$
+		add_claim = $NEW_OWNER$
 	}
 	else = {
-		cede_province = ROOT
+		cede_province = $NEW_OWNER$
 	}
-	remove_claim = event_target:to_exarch_overlord
+	remove_claim = $CURRENT_OWNER$
 	if = {
 		limit = {
 			culture_group = ROOT

@@ -7,71 +7,79 @@ country_event = {
 	desc = nhs2_ely_marches.3.d
 	picture = BYZANTINE_EMPEROR_eventPicture
 	
+	is_triggered_only = yes
 	hidden = yes
 
 	trigger = {
 		is_subject_of_type = elysian_subject
-		OR = {
-			AND = {
+		if = {
+			limit = {
 				has_country_flag = nhs_ely_march_all
-				OR = {
-					overlord = {
-						any_owned_province = {
-							nhs_ely_march_all_province = yes
-						}
+			}
+			OR = {
+				overlord = {
+					any_owned_province = {
+						nhs_ely_march_all_province = yes
 					}
-					ELG = {
-						exists = yes
-						NOT = { tag = ROOT }
-						overlord = {
-							overlord_of = ROOT
-						}
-						any_owned_province = {
-							nhs_ely_march_all_province = yes
-						}
+				}
+				ELG = {
+					exists = yes
+					NOT = { tag = ROOT }
+					overlord = {
+						overlord_of = ROOT
+					}
+					any_owned_province = {
+						nhs_ely_march_all_province = yes
 					}
 				}
 			}
-			AND = {
+		}
+		else_if = {
+			limit = {
 				has_country_flag = nhs_ely_march_territory
-				OR = {
-					overlord = {
-						any_owned_province = {
-							nhs_ely_march_territory_province = yes
-						}
+			}
+			OR = {
+				overlord = {
+					any_owned_province = {
+						nhs_ely_march_territory_province = yes
 					}
-					ELG = {
-						exists = yes
-						NOT = { tag = ROOT }
-						overlord = {
-							overlord_of = ROOT
-						}
-						any_owned_province = {
-							nhs_ely_march_territory_province = yes
-						}
+				}
+				ELG = {
+					exists = yes
+					NOT = { tag = ROOT }
+					overlord = {
+						overlord_of = ROOT
+					}
+					any_owned_province = {
+						nhs_ely_march_territory_province = yes
 					}
 				}
 			}
-			AND = {
+		}
+		else_if = {
+			limit = {
 				has_country_flag = nhs_ely_march_no_core
-				OR = {
-					overlord = {
-						any_owned_province = {
-							nhs_ely_march_no_core_province = yes
-						}
+			}
+			OR = {
+				overlord = {
+					any_owned_province = {
+						nhs_ely_march_no_core_province = yes
 					}
-					ELG = {
-						exists = yes
-						NOT = { tag = ROOT }
-						overlord = {
-							overlord_of = ROOT
-						}
-						any_owned_province = {
-							nhs_ely_march_no_core_province = yes
-						}
+				}
+				ELG = {
+					exists = yes
+					NOT = { tag = ROOT }
+					overlord = {
+						overlord_of = ROOT
+					}
+					any_owned_province = {
+						nhs_ely_march_no_core_province = yes
 					}
 				}
 			}
+		}
+		else = {
+			always = no
 		}
 	}
 	
@@ -88,7 +96,10 @@ country_event = {
 					limit = {
 						nhs_ely_march_all_province = yes
 					}
-					to_cede_province_to_exarch = yes
+					to_cede_province_to_exarch = {
+						CURRENT_OWNER = event_target:to_exarch_overlord
+						NEW_OWNER = ROOT
+					}
 				}
 			}
 			if = {
@@ -106,7 +117,10 @@ country_event = {
 						limit = {
 							nhs_ely_march_all_province = yes
 						}
-						to_cede_province_to_exarch = yes
+						to_cede_province_to_exarch = {
+							CURRENT_OWNER = ELG
+							NEW_OWNER = ROOT
+						}
 					}
 				}
 			}
@@ -120,7 +134,10 @@ country_event = {
 					limit = {
 						nhs_ely_march_territory_province = yes
 					}
-					to_cede_province_to_exarch = yes
+					to_cede_province_to_exarch = {
+						CURRENT_OWNER = event_target:to_exarch_overlord
+						NEW_OWNER = ROOT
+					}
 				}
 			}
 			if = {
@@ -138,7 +155,10 @@ country_event = {
 						limit = {
 							nhs_ely_march_territory_province = yes
 						}
-						to_cede_province_to_exarch = yes
+						to_cede_province_to_exarch = {
+							CURRENT_OWNER = ELG
+							NEW_OWNER = ROOT
+						}
 					}
 				}
 			}
@@ -152,7 +172,10 @@ country_event = {
 					limit = {
 						nhs_ely_march_no_core_province = yes
 					}
-					to_cede_province_to_exarch = yes
+					to_cede_province_to_exarch = {
+						CURRENT_OWNER = event_target:to_exarch_overlord
+						NEW_OWNER = ROOT
+					}
 				}
 			}
 			if = {
@@ -170,41 +193,13 @@ country_event = {
 						limit = {
 							nhs_ely_march_no_core_province = yes
 						}
-						to_cede_province_to_exarch = yes
+						to_cede_province_to_exarch = {
+							CURRENT_OWNER = ELG
+							NEW_OWNER = ROOT
+						}
 					}
 				}
 			}
-		}
-		if = {
-			limit = {
-				any_owned_province = {
-					culture_group = byzantine
-					ROOT = {
-						NOT = { accepted_culture = PREV }
-					}
-				}
-			}
-			every_owned_province = {
-				limit = {
-					culture_group = byzantine
-					ROOT = {
-						NOT = { accepted_culture = PREV }
-					}
-				}
-				ROOT = {
-					add_accepted_culture = PREV
-				}
-			}
-		}
-		if = {
-			limit = {
-				tag = EET
-				any_owned_province = {
-					culture = wallonian
-				}
-				NOT = { accepted_culture = wallonian }
-			}
-			add_accepted_culture = wallonian
 		}
 	}
 	
@@ -248,6 +243,7 @@ country_event = {
 	desc = nhs2_ely_marches.5.d
 	picture = BYZANTINE_EMPEROR_eventPicture
 	
+	is_triggered_only = yes
 	hidden = yes
 	
 	trigger = {

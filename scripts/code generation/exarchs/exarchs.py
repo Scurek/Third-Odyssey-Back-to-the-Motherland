@@ -181,7 +181,7 @@ exarchs = [
     },
     {
         "tag": 'EEQ',
-        "name": 'aravia',
+        "name": 'arabia',
         "culture_group": 'turko_semitic',
         "primary_culture": 'hejazi_culture',
         "desc": "The deserts of the Arabian Peninsula once unleashed an army that conquered half our empire in a holy fury. Now, however, we have a foothold in this land, the birthplace of Islam. Now that we are in control, we find that it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite."
