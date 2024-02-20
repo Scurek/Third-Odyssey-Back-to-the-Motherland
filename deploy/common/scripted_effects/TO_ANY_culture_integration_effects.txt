@@ -62,10 +62,7 @@ to_culture_integrated_on_culture_change = {
 			to_has_culture_integrated = yes
 		}
 		clr_province_flag = to_culture_integrated_flag
-		remove_province_modifier = to_culture_integrated
-		remove_province_modifier = to_culture_integrated_culture_group
-		remove_province_modifier = to_culture_integrated_unaccepted_republic
-		remove_province_modifier = to_culture_integrated_unaccepted
+		to_remove_culture_integration_modifiers = yes
 	}
 }
 
@@ -88,6 +85,39 @@ to_culture_integrated_on_owner_change = {
 				duration = -1
 			}
 		}
+	}
+}
+
+to_imperial_integration_country_check = {
+	if = {
+		limit = {
+			to_enabled_european_culture_integration = yes
+		}
+		every_owned_province = {
+			limit = {
+				to_has_culture_integrated = yes
+			}
+			to_remove_culture_integration_modifiers = yes
+			to_add_appropriate_culture_integration_modifier = yes
+		}
+	}
+}
+
+to_imperial_integration_on_primary_culture_changed = {
+	if = {
+		limit = {
+			NOT = { has_reform = to_exarch_reform }
+		}
+		to_imperial_integration_country_check = yes
+	}
+}
+
+to_imperial_integration_on_culture_promoted_demoted = {
+	if = {
+		limit = {
+			NOT = { has_reform = to_exarch_reform }
+		}
+		to_imperial_integration_country_check = yes
 	}
 }
 
@@ -1799,6 +1829,17 @@ to_trigger_culture_adaptation_events = {
 to_add_appropriate_culture_integration_modifier = {
 	if = {
 		limit = {
+			owner = {
+				has_reform = to_exarch_reform
+			}
+		}
+		add_province_modifier = {
+			name = to_culture_integrated_exarch
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
 			OR = {
 				has_owner_culture = yes
 				has_owner_accepted_culture = yes
@@ -1835,6 +1876,14 @@ to_add_appropriate_culture_integration_modifier = {
 			duration = -1
 		}
 	}
+}
+
+to_remove_culture_integration_modifiers = {
+	remove_province_modifier = to_culture_integrated
+	remove_province_modifier = to_culture_integrated_exarch
+	remove_province_modifier = to_culture_integrated_culture_group
+	remove_province_modifier = to_culture_integrated_unaccepted_republic
+	remove_province_modifier = to_culture_integrated_unaccepted
 }
 
 to_remove_inactive_culture_adaptation_modifiers = {

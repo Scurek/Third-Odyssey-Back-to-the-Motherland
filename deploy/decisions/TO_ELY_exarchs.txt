@@ -53,9 +53,6 @@ country_decisions = {
 					subject = ELG
 				}
 			}
-			custom_tooltip = nhs_exarchate_modifiers_desc_elg_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_elg_tt
-			custom_tooltip = nhs_new_line_tt
 			custom_tooltip = nhs_konstantinia_provinces_decision_tt
 			if = {
 				limit = {
@@ -67,8 +64,8 @@ country_decisions = {
 				}
 				custom_tooltip = nhs_konstantinia_provinces_during_invasion_tt
 			}
-			# custom_tooltip = nhs_new_line_tt
-			# custom_tooltip = nhs_exarchate_setting_desc_elg_tt
+			custom_tooltip = nhs_new_line_tt
+			
 			set_country_flag = nhs_formed_greek
 			hidden_effect = {
 				if = {
@@ -226,6 +223,36 @@ country_decisions = {
 					set_country_flag = nhs_ely_march_no_core
 				}
 			}
+
+			ELG = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_elg_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
 			factor = 1
@@ -767,15 +794,8 @@ country_decisions = {
 			has_country_modifier = nhs2_ely_por_trade
 			NOT = { has_country_flag = to_portuguese_deal_ended_event_active }
 			NOT = { has_country_flag = to_block_deal_break_decisions }
-			any_country = {
-				ai = yes
-				OR = {
-					is_subject = no
-					AND = {
-						is_subject_of = ROOT
-						NOT = { is_subject_of_type = elysian_subject }
-					}
-				}
+			has_saved_global_event_target = to_portugal_secret_target
+			event_target:to_portugal_secret_target = {
 				has_country_modifier = nhs2_por_ely_trade
 			}
 		}
@@ -851,10 +871,7 @@ country_decisions = {
 		}
 
 		effect = {
-			random_country = {
-				limit = {
-					has_country_modifier = nhs2_por_ely_trade
-				}
+			event_target:to_portugal_secret_target = {
 				if = {
 					limit = {
 						exists = EEH
@@ -964,7 +981,6 @@ country_decisions = {
 						}
 					}
 				}
-				custom_tooltip = to_create_portuguese_exarch_tt
 				hidden_effect = {
 					ROOT = {
 						create_subject = {
@@ -972,18 +988,78 @@ country_decisions = {
 							subject = PREV
 						}
 					}
-				}
-				if = {
-					limit = {
-						NOT = { exists = EEH }
+					if = {
+						limit = {
+							government = monarchy
+						}
+						add_government_reform = to_exarch_reform_monarchy
 					}
-					custom_tooltip = nhs_new_line_tt
-					custom_tooltip = nhs_exarchate_starting_tt
-					custom_tooltip = nhs_exarchate_setting_desc_tt
-					custom_tooltip = to_exarchate_modifiers_tt
-					custom_tooltip = nhs_exarch_bonus_merchant_eeh_tt
-					custom_tooltip = nhs_new_line_tt
+					else = {
+						change_government = republic
+						add_government_reform = to_exarch_reform
+					}
 				}
+			}
+
+			custom_tooltip = to_create_portuguese_exarch_tt
+			
+			if = {
+				limit = {
+					NOT = { exists = EEH }
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = to_exarchate_starting_land_EEH_tt
+				custom_tooltip = to_exarchate_starting_exclusions_tt
+				custom_tooltip = nhs_new_line_tt
+				
+				custom_tooltip = nhs_exarchate_setting_desc_tt
+			}
+			custom_tooltip = nhs_new_line_tt
+			
+			event_target:to_portugal_secret_target = {
+				custom_tooltip = to_set_exarch_reform_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_eeh_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			if = {
+				limit = {
+					government = monarchy
+					OR = {
+						has_dlc = "Common Sense"
+						has_dlc = "Domination"
+					}
+				}
+				custom_tooltip = to_reform_government_attributes_tt
+				custom_tooltip = mechanic_has_parliament_yes
+			}
+			else_if = {
+				limit = {
+					NOT = { government = monarchy }
+				}
+				custom_tooltip = to_reform_government_attributes_tt
+				custom_tooltip = to_exarch_reform_government_attributes_tt
 			}
 		}
 	}
@@ -1034,17 +1110,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEA_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEA
-                CULTURE_GROUP = caucasian
-                PRIMARY_CULTURE = georgian
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEA }
+			custom_tooltip = nhs_new_line_tt
+			EEA = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1096,17 +1199,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEB_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEB
-                CULTURE_GROUP = british
-                PRIMARY_CULTURE = english
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEB }
+			custom_tooltip = nhs_new_line_tt
+			EEB = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1158,17 +1288,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEC_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEC
-                CULTURE_GROUP = scandinavian
-                PRIMARY_CULTURE = danish
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEC }
+			custom_tooltip = nhs_new_line_tt
+			EEC = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1220,17 +1377,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EED_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EED
-                CULTURE_GROUP = carpathian
-                PRIMARY_CULTURE = hungarian
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EED }
+			custom_tooltip = nhs_new_line_tt
+			EED = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1282,22 +1466,50 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEE_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEE
-                CULTURE_GROUP = turko_semitic
-                PRIMARY_CULTURE = al_misr_arabic
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEE }
 			if = {
 				limit = { mission_completed = to_in_alexios_footsteps_mission }
 				custom_tooltip = nhs_new_line_tt
 				to_add_old_world_exarch_claim = { TERRITORY = egypt_region TAG = EEE }
+				custom_tooltip = nhs_new_line_tt
 			}
+			custom_tooltip = nhs_new_line_tt
+			EEE = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1351,17 +1563,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEF_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEF
-                CULTURE_GROUP = maghrebi
-                PRIMARY_CULTURE = tunisian
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEF }
+			custom_tooltip = nhs_new_line_tt
+			EEF = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1413,17 +1652,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEG_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEG
-                CULTURE_GROUP = french
-                PRIMARY_CULTURE = occitain
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEG }
+			custom_tooltip = nhs_new_line_tt
+			EEG = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1497,17 +1763,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_eeh_tt
+		    custom_tooltip = to_exarch_starting_land_EEH_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEH
-                CULTURE_GROUP = iberian
-                PRIMARY_CULTURE = catalan
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEH }
+			custom_tooltip = nhs_new_line_tt
+			EEH = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_eeh_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1559,17 +1852,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEI_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEI
-                CULTURE_GROUP = germanic
-                PRIMARY_CULTURE = austrian
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEI }
+			custom_tooltip = nhs_new_line_tt
+			EEI = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1621,17 +1941,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEJ_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEJ
-                CULTURE_GROUP = baltic
-                PRIMARY_CULTURE = lithuanian
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEJ }
+			custom_tooltip = nhs_new_line_tt
+			EEJ = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1683,25 +2030,52 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEL_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEL
-                CULTURE_GROUP = east_slavic
-                PRIMARY_CULTURE = russian
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEL }
+			custom_tooltip = nhs_new_line_tt
+			EEL = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
         }
 	}
 
-    # Sarmatia
-    to_form_exarch_sarmatia = {
+    # Antaia
+    to_form_exarch_antaia = {
 		potential = {
 			nhs_check_all_elysian_tags = { CONDITION = tag }
 			NOT = { exists = EEM }
@@ -1745,17 +2119,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEM_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEM
-                CULTURE_GROUP = east_slavic
-                PRIMARY_CULTURE = ruthenian
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEM }
+			custom_tooltip = nhs_new_line_tt
+			EEM = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1807,17 +2208,14 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEO_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEO
-                CULTURE_GROUP = turko_semitic
-                PRIMARY_CULTURE = al_suryah_arabic
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEO }
 			if = {
 				limit = { mission_completed = to_in_alexios_footsteps_mission }
 				custom_tooltip = nhs_new_line_tt
@@ -1826,7 +2224,38 @@ country_decisions = {
 				to_add_old_world_exarch_claim = { TERRITORY = palestine_area TAG = EEO }
 				to_add_old_world_exarch_claim = { TERRITORY = syrian_desert_area TAG = EEO }
 				to_add_old_world_exarch_claim = { TERRITORY = trans_jordan_area TAG = EEO }
+				custom_tooltip = nhs_new_line_tt
 			}
+			custom_tooltip = nhs_new_line_tt
+			EEO = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1898,23 +2327,50 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
+		    custom_tooltip = to_exarch_starting_land_EER_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
+			custom_tooltip = nhs_new_line_tt
+			
 			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EER }
+			custom_tooltip = nhs_new_line_tt
+			EER = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
 			if = {
-				limit = { VGD = { is_subject_of = ROOT is_subject_of_type = elysian_subject_varangian } }
-				custom_tooltip = nhs_exarch_bonus_merchant_eer_tt
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
 			}
 			else = {
-				custom_tooltip = nhs_exarch_bonus_merchant_tt
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			if = {
+				limit = { VGD = { is_subject_of = ROOT is_subject_of_type = elysian_subject_varangian } }
+				custom_tooltip = to_exarch_bonus_merchant_eer_tt
+			}
+			else = {
+				custom_tooltip = to_exarch_bonus_merchant_tt
 			}
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EER
-                CULTURE_GROUP = latin
-                PRIMARY_CULTURE = umbrian
-            }
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -1966,17 +2422,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EES_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EES
-                CULTURE_GROUP = tartar
-                PRIMARY_CULTURE = crimean
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EES }
+			custom_tooltip = nhs_new_line_tt
+			EES = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -2028,17 +2511,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EET_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EET
-                CULTURE_GROUP = germanic
-                PRIMARY_CULTURE = dutch
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EET }
+			custom_tooltip = nhs_new_line_tt
+			EET = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -2090,25 +2600,52 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEU_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEU
-                CULTURE_GROUP = germanic
-                PRIMARY_CULTURE = saxon
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEU }
+			custom_tooltip = nhs_new_line_tt
+			EEU = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
         }
 	}
 
-    # Venedai
-    to_form_exarch_venedai = {
+    # Vendia
+    to_form_exarch_vendia = {
 		potential = {
 			nhs_check_all_elysian_tags = { CONDITION = tag }
 			NOT = { exists = EEV }
@@ -2152,17 +2689,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEV_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEV
-                CULTURE_GROUP = west_slavic
-                PRIMARY_CULTURE = polish
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEV }
+			custom_tooltip = nhs_new_line_tt
+			EEV = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -2214,17 +2778,44 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEQ_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEQ
-                CULTURE_GROUP = turko_semitic
-                PRIMARY_CULTURE = hejazi_culture
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEQ }
+			custom_tooltip = nhs_new_line_tt
+			EEQ = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
@@ -2276,24 +2867,50 @@ country_decisions = {
 		}
 
 		effect = {
-			custom_tooltip = nhs_exarchate_starting_tt
-			custom_tooltip = nhs_exarchate_setting_desc_tt
-			custom_tooltip = to_exarchate_modifiers_tt
-			custom_tooltip = nhs_exarch_bonus_merchant_tt
+		    custom_tooltip = to_exarch_starting_land_EEP_tt
+			custom_tooltip = to_exarchate_starting_exclusions_tt
 			custom_tooltip = nhs_new_line_tt
 			
-			to_initialize_exarch = {
-                EXARCH_TAG = EEP
-                CULTURE_GROUP = iranian
-                PRIMARY_CULTURE = persian
-            }
+			custom_tooltip = nhs_exarchate_setting_desc_tt
+			custom_tooltip = nhs_new_line_tt
+						
+			to_initialize_exarch = { EXARCH_TAG = EEP }
+			custom_tooltip = nhs_new_line_tt
+			EEP = {
+				custom_tooltip = to_set_exarch_reform_republic_tt
+			}
+			custom_tooltip = to_reform_effects_for_overlord_tt
+			if = {
+			    limit = {
+			        mission_completed = to_the_eagle_rises_mission
+			    }
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			}
+			else = {
+			    custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			    custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			}
+			custom_tooltip = to_exarch_bonus_merchant_tt
+			custom_tooltip = nhs_new_line_tt
+			
+			custom_tooltip = to_reform_effects_tt
+			custom_tooltip = to_automatically_accepts_culture_tt
+			custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_modifiers_tt
+			custom_tooltip = to_exarch_reform_modifiers_tt
+			custom_tooltip = nhs_new_line_tt
+
+			custom_tooltip = to_reform_government_attributes_tt
+			custom_tooltip = to_exarch_reform_government_attributes_tt
 		}
 		ai_will_do = {
             factor = 1
         }
 	}
 
-	
 	move_capital_to_EEA = {
         potential = {
             tag = EEA 
