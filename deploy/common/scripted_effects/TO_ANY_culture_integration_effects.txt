@@ -22,7 +22,7 @@ to_culture_adaptation_on_culture_change = {
 				which = to_assimilation_progress_display
 				value = 50
 			}
-			to_set_culture_adaptation_modifier = yes
+			set_province_flag = to_assimilation_active
 		}
 		else_if = {
 			limit = {
@@ -128,6 +128,8 @@ to_start_culture_adaptation = {
 		}
 		to_generic_adaptation_types_effect = {
 			EFFECT = "
+			set_province_flag = to_assimilation_active
+			set_province_flag = to_block_culture_integration_completion
 			if = {
 				limit = {
 					is_variable_equal = {
@@ -139,24 +141,45 @@ to_start_culture_adaptation = {
 					which = to_assimilation_progress
 					value = 0
 				}
+			}
+			set_variable = {
+				which = to_assimilation_progress_stored
+				which = to_assimilation_progress
+			}
+			"
+			ASSIMIATION_EFFECT_INCREASING = "
+			to_increase_culture_adaptation_progress_general = { 
+				OWNER_TARGET = to_culture_assimilation_owner
+				SPECIFIC_PROGRESS_INCREASE = to_culture_assimilation_progress
 			}"
-			EFFECT_INCREASING = "to_set_culture_adaptation_modifier = yes"
-			ASSIMIATION_EFFECT_NOT_INCREASING = "
-			to_culture_adaptation_inactive_setup = {
-				VARIANT = to_inactive_setup_assimilation
+			GREEK_INTEGRATION_EFFECT_INCREASING = "
+			to_increase_culture_adaptation_progress_general = { 
+				OWNER_TARGET = to_culture_assimilation_owner
+				SPECIFIC_PROGRESS_INCREASE = to_greek_integration_progress
 			}"
-			GREEK_INTEGRATION_EFFECT_NOT_INCREASING = "
-			to_culture_adaptation_inactive_setup = {
-				VARIANT = to_inactive_setup_european_integration
+			EUROPEAN_INTEGRATION_EFFECT_INCREASING = "
+			to_increase_culture_adaptation_progress_general = { 
+				OWNER_TARGET = to_culture_assimilation_owner
+				SPECIFIC_PROGRESS_INCREASE = to_culture_integration_progress
 			}"
-			EUROPEAN_INTEGRATION_EFFECT_NOT_INCREASING = "
-			to_culture_adaptation_inactive_setup = {
-				VARIANT = to_inactive_setup_european_integration
+			TRIBAL_INTEGRATION_EFFECT_INCREASING = "
+			to_increase_culture_adaptation_progress_general = { 
+				OWNER_TARGET = to_culture_assimilation_owner
+				SPECIFIC_PROGRESS_INCREASE = to_tribal_integration_progress
 			}"
-			TRIBAL_INTEGRATION_EFFECT_NOT_INCREASING = "
-			to_culture_adaptation_inactive_setup = {
-				VARIANT = to_inactive_setup_tribal_integration
-			}"
+			EFFECT_NOT_INCREASING = "to_culture_adaptation_inactive_setup = yes"
+			EFFECT_AFTER = "
+			set_variable = {
+				which = to_assimilation_progress
+				which = to_assimilation_progress_stored
+			}
+			set_variable = {
+				which = to_assimilation_progress_display
+				which = to_assimilation_progress
+			}
+			to_round_down_variable_one_decimal = { VARIABLE = to_assimilation_progress_display }
+			clr_province_flag = to_block_culture_integration_completion
+			"
 		}
 	}
 }
@@ -170,9 +193,7 @@ to_generic_adaptation_types_effect = {
 		[[ASSIMIATION_EFFECT]$ASSIMIATION_EFFECT$]
 		if = {
 			limit = {
-				[[EFFECT_INCREASING]
 				to_culture_assimilation_increasing = yes
-				]
 			}
 			[[EFFECT_INCREASING]$EFFECT_INCREASING$]
 			[[ASSIMIATION_EFFECT_INCREASING]$ASSIMIATION_EFFECT_INCREASING$]
@@ -191,9 +212,7 @@ to_generic_adaptation_types_effect = {
 		[[GREEK_INTEGRATION_EFFECT]$GREEK_INTEGRATION_EFFECT$]
 		if = {
 			limit = {
-				[[EFFECT_INCREASING]
 				to_greek_integration_increasing = yes
-				]
 			}
 			[[EFFECT_INCREASING]$EFFECT_INCREASING$]
 			[[GREEK_INTEGRATION_EFFECT_INCREASING]$GREEK_INTEGRATION_EFFECT_INCREASING$]
@@ -212,9 +231,7 @@ to_generic_adaptation_types_effect = {
 		[[EUROPEAN_INTEGRATION_EFFECT]$EUROPEAN_INTEGRATION_EFFECT$]
 		if = {
 			limit = {
-				[[EFFECT_INCREASING]
 				to_culture_integration_increasing = yes
-				]
 			}
 			[[EFFECT_INCREASING]$EFFECT_INCREASING$]
 			[[EUROPEAN_INTEGRATION_EFFECT_INCREASING]$EUROPEAN_INTEGRATION_EFFECT_INCREASING$]
@@ -233,9 +250,7 @@ to_generic_adaptation_types_effect = {
 		[[TRIBAL_INTEGRATION_EFFECT]$TRIBAL_INTEGRATION_EFFECT$]
 		if = {
 			limit = {
-				[[EFFECT_INCREASING]
 				to_culture_assimilation_increasing = yes
-				]
 			}
 			[[EFFECT_INCREASING]$EFFECT_INCREASING$]
 			[[TRIBAL_INTEGRATION_EFFECT_INCREASING]$TRIBAL_INTEGRATION_EFFECT_INCREASING$]
@@ -255,17 +270,17 @@ to_culture_adaptation_progress_routine = {
 			# 	to_has_culture_adaptation_potential = yes
 			# }
 			# This should filter out most countries
-			OR = {
-				to_enabled_european_culture_integration = yes
-				to_enabled_greek_integration = yes
-				any_owned_province = {
-					is_city = yes
-					OR = {
-						continent = north_america
-						continent = south_america
-					}
-				}
-			}
+			# OR = {
+			# 	to_enabled_european_culture_integration = yes
+			# 	to_enabled_greek_integration = yes
+			# 	any_owned_province = {
+			# 		is_city = yes
+			# 		OR = {
+			# 			continent = north_america
+			# 			continent = south_america
+			# 		}
+			# 	}
+			# }
 		}
 		save_event_target_as = to_culture_assimilation_owner
 		every_owned_province = {
@@ -273,7 +288,7 @@ to_culture_adaptation_progress_routine = {
 				to_has_culture_adaptation_potential = yes
 			}
 			to_generic_adaptation_types_effect = {
-				EFFECT_INCREASING = ""
+				EFFECT = "set_province_flag = to_assimilation_active"
 				ASSIMIATION_EFFECT_INCREASING = "
 				to_increase_culture_adaptation_progress_general = { 
 					OWNER_TARGET = to_culture_assimilation_owner
@@ -294,22 +309,7 @@ to_culture_adaptation_progress_routine = {
 					OWNER_TARGET = to_culture_assimilation_owner
 					SPECIFIC_PROGRESS_INCREASE = to_tribal_integration_progress
 				}"
-				ASSIMIATION_EFFECT_NOT_INCREASING = "
-				to_culture_adaptation_inactive_setup = {
-					VARIANT = to_inactive_setup_assimilation
-				}"
-				GREEK_INTEGRATION_EFFECT_NOT_INCREASING = "
-				to_culture_adaptation_inactive_setup = {
-					VARIANT = to_inactive_setup_european_integration
-				}"
-				EUROPEAN_INTEGRATION_EFFECT_NOT_INCREASING = "
-				to_culture_adaptation_inactive_setup = {
-					VARIANT = to_inactive_setup_european_integration
-				}"
-				TRIBAL_INTEGRATION_EFFECT_NOT_INCREASING = "
-				to_culture_adaptation_inactive_setup = {
-					VARIANT = to_inactive_setup_tribal_integration
-				}"
+				EFFECT_NOT_INCREASING = "to_culture_adaptation_inactive_setup = yes"
 				EFFECT_AFTER = "to_trigger_culture_adaptation_events = yes"
 			}
 		}
@@ -330,90 +330,9 @@ to_culture_adaptation_inactive_setup = {
 		}
 	}
 	clr_province_flag = to_assimilation_progressing
-	to_remove_culture_adaptation_modifiers = yes
-
-	$VARIANT$ = yes
-}
-
-to_inactive_setup_assimilation = {
-	if = {
-		limit = {
-			culture = elysameric
-			owner = {
-				culture_group = byzantine
-			}
-		}
-		if = {
-			limit = {
-				NOT = { has_province_modifier = to_culture_assimilation_roman_inactive }
-			}
-			to_remove_inactive_culture_adaptation_modifiers = yes
-			add_province_modifier = {
-				name = to_culture_assimilation_roman_inactive
-				duration = -1
-			}
-		}
-	}
-	else_if = {
-		limit = {
-			culture = skraeling
-			owner = {
-				culture_group = norse_g
-			}
-		}
-		if = {
-			limit = {
-				NOT = { has_province_modifier = to_culture_assimilation_norse_inactive }
-			}
-			to_remove_inactive_culture_adaptation_modifiers = yes
-			add_province_modifier = {
-				name = to_culture_assimilation_norse_inactive
-				duration = -1
-			}
-		}
-	}
-	else = {
-		if = {
-			limit = {
-				NOT = { has_province_modifier = to_culture_assimilation_inactive }
-			}
-			to_remove_inactive_culture_adaptation_modifiers = yes
-			add_province_modifier = {
-				name = to_culture_assimilation_inactive
-				duration = -1
-			}
-		}
-	}
-}
-
-to_inactive_setup_european_integration = {
-	if = {
-		limit = {
-			NOT = { has_province_modifier = to_culture_integration_inactive }
-		}
-		to_remove_inactive_culture_adaptation_modifiers = yes
-		add_province_modifier = {
-			name = to_culture_integration_inactive
-			duration = -1
-		}
-	}
-}
-
-to_inactive_setup_tribal_integration = {
-	if = {
-		limit = {
-			NOT = { has_province_modifier = to_tribal_integration_inactive }
-		}
-		to_remove_inactive_culture_adaptation_modifiers = yes
-		add_province_modifier = {
-			name = to_tribal_integration_inactive
-			duration = -1
-		}
-	}
 }
 
 to_increase_culture_adaptation_progress_general = {
-	to_remove_inactive_culture_adaptation_modifiers = yes
 	set_variable = {
 		which = to_assimilation_flat_increase
 		value = 0
@@ -425,6 +344,10 @@ to_increase_culture_adaptation_progress_general = {
 	
 	$SPECIFIC_PROGRESS_INCREASE$ = { OWNER_TARGET = $OWNER_TARGET$ }
 
+	set_variable = {
+		which = to_assimilation_base_total
+		which = to_assimilation_flat_increase
+	}
 	divide_variable = {
 		which = to_assimilation_flat_increase
 		value = 12
@@ -478,6 +401,7 @@ to_increase_culture_adaptation_progress_general = {
 				which = to_assimilation_progress
 				value = 100
 			}
+			NOT = { has_province_flag = to_block_culture_integration_completion }
 		}
 		to_adapt_province_culture = { OWNER_TARGET = $OWNER_TARGET$ }
 	}
@@ -537,7 +461,7 @@ to_increase_culture_adaptation_progress_general = {
 			which = to_assimilation_modifier
 			value = 100
 		}
-		to_set_culture_adaptation_modifier = yes
+		set_province_flag = to_assimilation_active
 	}
 }
 
@@ -831,7 +755,7 @@ to_greek_integration_progress = {
 	}
 	multiply_variable = {
 		which = to_assimilation_development
-		value = -0.01
+		value = -0.025
 	}
 	if = {
 		limit = {
@@ -1163,7 +1087,7 @@ to_culture_integration_progress = {
 		PREV = {
 			change_variable = {
 				which = to_assimilation_neighboring_provinces
-				value = 0.20
+				value = 0.15
 			}
 		}
 	}
@@ -1886,23 +1810,14 @@ to_remove_culture_integration_modifiers = {
 	remove_province_modifier = to_culture_integrated_unaccepted
 }
 
-to_remove_inactive_culture_adaptation_modifiers = {
-	remove_province_modifier = to_culture_assimilation_inactive
-	remove_province_modifier = to_tribal_integration_inactive
-	remove_province_modifier = to_culture_assimilation_roman_inactive
-	remove_province_modifier = to_culture_assimilation_norse_inactive
-	remove_province_modifier = to_culture_integration_inactive
-}
-
 to_remove_culture_adaptation_variables = {
-	to_remove_inactive_culture_adaptation_modifiers = yes
-	to_remove_culture_adaptation_modifiers = yes
 	clr_province_flag = to_tribal_assimilation_native_estate_modifiers
 	clr_province_flag = to_tribal_assimilation_settlers_enabled
 	clr_province_flag = to_tribal_assimilation_service_enabled
 	clr_province_flag = to_tribal_assimilation_officials_enabled
 	clr_province_flag = to_tribal_assimilation_citizenship_enabled
 	clr_province_flag = to_tribal_assimilation_native_assimilation_enabled
+	clr_province_flag = to_assimilation_active
 	clr_province_flag = to_assimilation_progressing
 	clr_province_flag = to_culture_integration_triumph_completed
 	clr_province_flag = to_a_new_hope_completed
@@ -1964,6 +1879,10 @@ to_remove_culture_adaptation_variables = {
 		value = 0
 	}
 	set_variable = {
+		which = to_assimilation_base_total
+		value = 0
+	}
+	set_variable = {
 		which = to_assimilation_development
 		value = 0
 	}
@@ -1977,194 +1896,152 @@ to_remove_culture_adaptation_variables = {
 	}
 }
 
-to_set_culture_adaptation_modifier = {
-	if = {
-		limit = {
-			culture = elysameric
-			owner = {
-				culture_group = byzantine
-			}
-		}
-		to_set_correct_culture_adaptation_modifier = { MODIFIER_BASE_NAME = to_culture_assimilation_roman }
-	}
-	else_if = {
-		limit = {
-			culture = skraeling
-			owner = {
-				culture_group = norse_g
-			}
-		}
-		to_set_correct_culture_adaptation_modifier = { MODIFIER_BASE_NAME = to_culture_assimilation_norse }
-	}
-	else_if = {
-		limit = {
-			to_has_culture_assimilation = yes
-		}
-		to_set_correct_culture_adaptation_modifier = { MODIFIER_BASE_NAME = to_culture_assimilation }
-	}
-	else_if = {
-		limit = {
-			OR = {
-				to_has_greek_integration = yes
-				to_has_european_culture_integration = yes
-			}
-		}
-		to_set_correct_culture_adaptation_modifier = { MODIFIER_BASE_NAME = to_culture_integration }
-	}
-	else = {
-		to_set_correct_culture_adaptation_modifier = { MODIFIER_BASE_NAME = to_tribal_integration }
-	}
-}
+## TODO Remove on the next major update
 
 to_remove_culture_adaptation_modifiers = {
-	remove_province_modifier = to_culture_assimilation_0
-	remove_province_modifier = to_culture_assimilation_3
-	remove_province_modifier = to_culture_assimilation_6
-	remove_province_modifier = to_culture_assimilation_10
-	remove_province_modifier = to_culture_assimilation_13
-	remove_province_modifier = to_culture_assimilation_17
-	remove_province_modifier = to_culture_assimilation_20
-	remove_province_modifier = to_culture_assimilation_24
-	remove_province_modifier = to_culture_assimilation_27
-	remove_province_modifier = to_culture_assimilation_31
-	remove_province_modifier = to_culture_assimilation_34
-	remove_province_modifier = to_culture_assimilation_37
-	remove_province_modifier = to_culture_assimilation_41
-	remove_province_modifier = to_culture_assimilation_44
-	remove_province_modifier = to_culture_assimilation_48
-	remove_province_modifier = to_culture_assimilation_51
-	remove_province_modifier = to_culture_assimilation_55
-	remove_province_modifier = to_culture_assimilation_58
-	remove_province_modifier = to_culture_assimilation_62
-	remove_province_modifier = to_culture_assimilation_65
-	remove_province_modifier = to_culture_assimilation_68
-	remove_province_modifier = to_culture_assimilation_72
-	remove_province_modifier = to_culture_assimilation_75
-	remove_province_modifier = to_culture_assimilation_79
-	remove_province_modifier = to_culture_assimilation_82
-	remove_province_modifier = to_culture_assimilation_86
-	remove_province_modifier = to_culture_assimilation_89
-	remove_province_modifier = to_culture_assimilation_93
-	remove_province_modifier = to_culture_assimilation_96
-	remove_province_modifier = to_tribal_integration_0
-	remove_province_modifier = to_tribal_integration_3
-	remove_province_modifier = to_tribal_integration_6
-	remove_province_modifier = to_tribal_integration_10
-	remove_province_modifier = to_tribal_integration_13
-	remove_province_modifier = to_tribal_integration_17
-	remove_province_modifier = to_tribal_integration_20
-	remove_province_modifier = to_tribal_integration_24
-	remove_province_modifier = to_tribal_integration_27
-	remove_province_modifier = to_tribal_integration_31
-	remove_province_modifier = to_tribal_integration_34
-	remove_province_modifier = to_tribal_integration_37
-	remove_province_modifier = to_tribal_integration_41
-	remove_province_modifier = to_tribal_integration_44
-	remove_province_modifier = to_tribal_integration_48
-	remove_province_modifier = to_tribal_integration_51
-	remove_province_modifier = to_tribal_integration_55
-	remove_province_modifier = to_tribal_integration_58
-	remove_province_modifier = to_tribal_integration_62
-	remove_province_modifier = to_tribal_integration_65
-	remove_province_modifier = to_tribal_integration_68
-	remove_province_modifier = to_tribal_integration_72
-	remove_province_modifier = to_tribal_integration_75
-	remove_province_modifier = to_tribal_integration_79
-	remove_province_modifier = to_tribal_integration_82
-	remove_province_modifier = to_tribal_integration_86
-	remove_province_modifier = to_tribal_integration_89
-	remove_province_modifier = to_tribal_integration_93
-	remove_province_modifier = to_tribal_integration_96
-	remove_province_modifier = to_culture_assimilation_roman_0
-	remove_province_modifier = to_culture_assimilation_roman_3
-	remove_province_modifier = to_culture_assimilation_roman_6
-	remove_province_modifier = to_culture_assimilation_roman_10
-	remove_province_modifier = to_culture_assimilation_roman_13
-	remove_province_modifier = to_culture_assimilation_roman_17
-	remove_province_modifier = to_culture_assimilation_roman_20
-	remove_province_modifier = to_culture_assimilation_roman_24
-	remove_province_modifier = to_culture_assimilation_roman_27
-	remove_province_modifier = to_culture_assimilation_roman_31
-	remove_province_modifier = to_culture_assimilation_roman_34
-	remove_province_modifier = to_culture_assimilation_roman_37
-	remove_province_modifier = to_culture_assimilation_roman_41
-	remove_province_modifier = to_culture_assimilation_roman_44
-	remove_province_modifier = to_culture_assimilation_roman_48
-	remove_province_modifier = to_culture_assimilation_roman_51
-	remove_province_modifier = to_culture_assimilation_roman_55
-	remove_province_modifier = to_culture_assimilation_roman_58
-	remove_province_modifier = to_culture_assimilation_roman_62
-	remove_province_modifier = to_culture_assimilation_roman_65
-	remove_province_modifier = to_culture_assimilation_roman_68
-	remove_province_modifier = to_culture_assimilation_roman_72
-	remove_province_modifier = to_culture_assimilation_roman_75
-	remove_province_modifier = to_culture_assimilation_roman_79
-	remove_province_modifier = to_culture_assimilation_roman_82
-	remove_province_modifier = to_culture_assimilation_roman_86
-	remove_province_modifier = to_culture_assimilation_roman_89
-	remove_province_modifier = to_culture_assimilation_roman_93
-	remove_province_modifier = to_culture_assimilation_roman_96
-	remove_province_modifier = to_culture_assimilation_norse_0
-	remove_province_modifier = to_culture_assimilation_norse_3
-	remove_province_modifier = to_culture_assimilation_norse_6
-	remove_province_modifier = to_culture_assimilation_norse_10
-	remove_province_modifier = to_culture_assimilation_norse_13
-	remove_province_modifier = to_culture_assimilation_norse_17
-	remove_province_modifier = to_culture_assimilation_norse_20
-	remove_province_modifier = to_culture_assimilation_norse_24
-	remove_province_modifier = to_culture_assimilation_norse_27
-	remove_province_modifier = to_culture_assimilation_norse_31
-	remove_province_modifier = to_culture_assimilation_norse_34
-	remove_province_modifier = to_culture_assimilation_norse_37
-	remove_province_modifier = to_culture_assimilation_norse_41
-	remove_province_modifier = to_culture_assimilation_norse_44
-	remove_province_modifier = to_culture_assimilation_norse_48
-	remove_province_modifier = to_culture_assimilation_norse_51
-	remove_province_modifier = to_culture_assimilation_norse_55
-	remove_province_modifier = to_culture_assimilation_norse_58
-	remove_province_modifier = to_culture_assimilation_norse_62
-	remove_province_modifier = to_culture_assimilation_norse_65
-	remove_province_modifier = to_culture_assimilation_norse_68
-	remove_province_modifier = to_culture_assimilation_norse_72
-	remove_province_modifier = to_culture_assimilation_norse_75
-	remove_province_modifier = to_culture_assimilation_norse_79
-	remove_province_modifier = to_culture_assimilation_norse_82
-	remove_province_modifier = to_culture_assimilation_norse_86
-	remove_province_modifier = to_culture_assimilation_norse_89
-	remove_province_modifier = to_culture_assimilation_norse_93
-	remove_province_modifier = to_culture_assimilation_norse_96
-	remove_province_modifier = to_culture_integration_0
-	remove_province_modifier = to_culture_integration_3
-	remove_province_modifier = to_culture_integration_6
-	remove_province_modifier = to_culture_integration_10
-	remove_province_modifier = to_culture_integration_13
-	remove_province_modifier = to_culture_integration_17
-	remove_province_modifier = to_culture_integration_20
-	remove_province_modifier = to_culture_integration_24
-	remove_province_modifier = to_culture_integration_27
-	remove_province_modifier = to_culture_integration_31
-	remove_province_modifier = to_culture_integration_34
-	remove_province_modifier = to_culture_integration_37
-	remove_province_modifier = to_culture_integration_41
-	remove_province_modifier = to_culture_integration_44
-	remove_province_modifier = to_culture_integration_48
-	remove_province_modifier = to_culture_integration_51
-	remove_province_modifier = to_culture_integration_55
-	remove_province_modifier = to_culture_integration_58
-	remove_province_modifier = to_culture_integration_62
-	remove_province_modifier = to_culture_integration_65
-	remove_province_modifier = to_culture_integration_68
-	remove_province_modifier = to_culture_integration_72
-	remove_province_modifier = to_culture_integration_75
-	remove_province_modifier = to_culture_integration_79
-	remove_province_modifier = to_culture_integration_82
-	remove_province_modifier = to_culture_integration_86
-	remove_province_modifier = to_culture_integration_89
-	remove_province_modifier = to_culture_integration_93
-	remove_province_modifier = to_culture_integration_96
-}
-
-# Binary chain of if statements, effectively similar to 30 or so if else statements but more efficient.
-to_set_correct_culture_adaptation_modifier = {
-	if={limit={check_variable={which=to_assimilation_progress value=48}}if={limit={check_variable={which=to_assimilation_progress value=72}}if={limit={check_variable={which=to_assimilation_progress value=86}}if={limit={check_variable={which=to_assimilation_progress value=93}}if={limit={check_variable={which=to_assimilation_progress value=96}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_96}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_96 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_93}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_93 duration=-1} }}}else={if={limit={check_variable={which=to_assimilation_progress value=89}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_89}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_89 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_86}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_86 duration=-1} }}}}else={if={limit={check_variable={which=to_assimilation_progress value=79}}if={limit={check_variable={which=to_assimilation_progress value=82}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_82}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_82 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_79}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_79 duration=-1} }}}else={if={limit={check_variable={which=to_assimilation_progress value=75}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_75}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_75 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_72}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_72 duration=-1} }}}}}else={if={limit={check_variable={which=to_assimilation_progress value=58}}if={limit={check_variable={which=to_assimilation_progress value=65}}if={limit={check_variable={which=to_assimilation_progress value=68}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_68}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_68 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_65}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_65 duration=-1} }}}else={if={limit={check_variable={which=to_assimilation_progress value=62}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_62}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_62 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_58}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_58 duration=-1} }}}}else={if={limit={check_variable={which=to_assimilation_progress value=51}}if={limit={check_variable={which=to_assimilation_progress value=55}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_55}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_55 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_51}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_51 duration=-1} }}}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_48}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_48 duration=-1} }}}}}else={if={limit={check_variable={which=to_assimilation_progress value=24}}if={limit={check_variable={which=to_assimilation_progress value=34}}if={limit={check_variable={which=to_assimilation_progress value=41}}if={limit={check_variable={which=to_assimilation_progress value=44}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_44}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_44 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_41}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_41 duration=-1} }}}else={if={limit={check_variable={which=to_assimilation_progress value=37}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_37}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_37 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_34}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_34 duration=-1} }}}}else={if={limit={check_variable={which=to_assimilation_progress value=27}}if={limit={check_variable={which=to_assimilation_progress value=31}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_31}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_31 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_27}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_27 duration=-1} }}}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_24}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_24 duration=-1} }}}}else={if={limit={check_variable={which=to_assimilation_progress value=10}}if={limit={check_variable={which=to_assimilation_progress value=17}}if={limit={check_variable={which=to_assimilation_progress value=20}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_20}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_20 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_17}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_17 duration=-1} }}}else={if={limit={check_variable={which=to_assimilation_progress value=13}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_13}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_13 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_10}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_10 duration=-1} }}}}else={if={limit={check_variable={which=to_assimilation_progress value=3}}if={limit={check_variable={which=to_assimilation_progress value=6}}if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_6}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_6 duration=-1} }}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_3}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_3 duration=-1} }}}else={if = {limit={NOT={has_province_modifier=$MODIFIER_BASE_NAME$_0}} to_remove_culture_adaptation_modifiers=yes add_province_modifier={name=$MODIFIER_BASE_NAME$_0 duration=-1} }}}}}
+    remove_province_modifier = to_culture_assimilation_0
+    remove_province_modifier = to_culture_assimilation_3
+    remove_province_modifier = to_culture_assimilation_6
+    remove_province_modifier = to_culture_assimilation_10
+    remove_province_modifier = to_culture_assimilation_13
+    remove_province_modifier = to_culture_assimilation_17
+    remove_province_modifier = to_culture_assimilation_20
+    remove_province_modifier = to_culture_assimilation_24
+    remove_province_modifier = to_culture_assimilation_27
+    remove_province_modifier = to_culture_assimilation_31
+    remove_province_modifier = to_culture_assimilation_34
+    remove_province_modifier = to_culture_assimilation_37
+    remove_province_modifier = to_culture_assimilation_41
+    remove_province_modifier = to_culture_assimilation_44
+    remove_province_modifier = to_culture_assimilation_48
+    remove_province_modifier = to_culture_assimilation_51
+    remove_province_modifier = to_culture_assimilation_55
+    remove_province_modifier = to_culture_assimilation_58
+    remove_province_modifier = to_culture_assimilation_62
+    remove_province_modifier = to_culture_assimilation_65
+    remove_province_modifier = to_culture_assimilation_68
+    remove_province_modifier = to_culture_assimilation_72
+    remove_province_modifier = to_culture_assimilation_75
+    remove_province_modifier = to_culture_assimilation_79
+    remove_province_modifier = to_culture_assimilation_82
+    remove_province_modifier = to_culture_assimilation_86
+    remove_province_modifier = to_culture_assimilation_89
+    remove_province_modifier = to_culture_assimilation_93
+    remove_province_modifier = to_culture_assimilation_96
+    remove_province_modifier = to_tribal_integration_0
+    remove_province_modifier = to_tribal_integration_3
+    remove_province_modifier = to_tribal_integration_6
+    remove_province_modifier = to_tribal_integration_10
+    remove_province_modifier = to_tribal_integration_13
+    remove_province_modifier = to_tribal_integration_17
+    remove_province_modifier = to_tribal_integration_20
+    remove_province_modifier = to_tribal_integration_24
+    remove_province_modifier = to_tribal_integration_27
+    remove_province_modifier = to_tribal_integration_31
+    remove_province_modifier = to_tribal_integration_34
+    remove_province_modifier = to_tribal_integration_37
+    remove_province_modifier = to_tribal_integration_41
+    remove_province_modifier = to_tribal_integration_44
+    remove_province_modifier = to_tribal_integration_48
+    remove_province_modifier = to_tribal_integration_51
+    remove_province_modifier = to_tribal_integration_55
+    remove_province_modifier = to_tribal_integration_58
+    remove_province_modifier = to_tribal_integration_62
+    remove_province_modifier = to_tribal_integration_65
+    remove_province_modifier = to_tribal_integration_68
+    remove_province_modifier = to_tribal_integration_72
+    remove_province_modifier = to_tribal_integration_75
+    remove_province_modifier = to_tribal_integration_79
+    remove_province_modifier = to_tribal_integration_82
+    remove_province_modifier = to_tribal_integration_86
+    remove_province_modifier = to_tribal_integration_89
+    remove_province_modifier = to_tribal_integration_93
+    remove_province_modifier = to_tribal_integration_96
+    remove_province_modifier = to_culture_assimilation_roman_0
+    remove_province_modifier = to_culture_assimilation_roman_3
+    remove_province_modifier = to_culture_assimilation_roman_6
+    remove_province_modifier = to_culture_assimilation_roman_10
+    remove_province_modifier = to_culture_assimilation_roman_13
+    remove_province_modifier = to_culture_assimilation_roman_17
+    remove_province_modifier = to_culture_assimilation_roman_20
+    remove_province_modifier = to_culture_assimilation_roman_24
+    remove_province_modifier = to_culture_assimilation_roman_27
+    remove_province_modifier = to_culture_assimilation_roman_31
+    remove_province_modifier = to_culture_assimilation_roman_34
+    remove_province_modifier = to_culture_assimilation_roman_37
+    remove_province_modifier = to_culture_assimilation_roman_41
+    remove_province_modifier = to_culture_assimilation_roman_44
+    remove_province_modifier = to_culture_assimilation_roman_48
+    remove_province_modifier = to_culture_assimilation_roman_51
+    remove_province_modifier = to_culture_assimilation_roman_55
+    remove_province_modifier = to_culture_assimilation_roman_58
+    remove_province_modifier = to_culture_assimilation_roman_62
+    remove_province_modifier = to_culture_assimilation_roman_65
+    remove_province_modifier = to_culture_assimilation_roman_68
+    remove_province_modifier = to_culture_assimilation_roman_72
+    remove_province_modifier = to_culture_assimilation_roman_75
+    remove_province_modifier = to_culture_assimilation_roman_79
+    remove_province_modifier = to_culture_assimilation_roman_82
+    remove_province_modifier = to_culture_assimilation_roman_86
+    remove_province_modifier = to_culture_assimilation_roman_89
+    remove_province_modifier = to_culture_assimilation_roman_93
+    remove_province_modifier = to_culture_assimilation_roman_96
+    remove_province_modifier = to_culture_assimilation_norse_0
+    remove_province_modifier = to_culture_assimilation_norse_3
+    remove_province_modifier = to_culture_assimilation_norse_6
+    remove_province_modifier = to_culture_assimilation_norse_10
+    remove_province_modifier = to_culture_assimilation_norse_13
+    remove_province_modifier = to_culture_assimilation_norse_17
+    remove_province_modifier = to_culture_assimilation_norse_20
+    remove_province_modifier = to_culture_assimilation_norse_24
+    remove_province_modifier = to_culture_assimilation_norse_27
+    remove_province_modifier = to_culture_assimilation_norse_31
+    remove_province_modifier = to_culture_assimilation_norse_34
+    remove_province_modifier = to_culture_assimilation_norse_37
+    remove_province_modifier = to_culture_assimilation_norse_41
+    remove_province_modifier = to_culture_assimilation_norse_44
+    remove_province_modifier = to_culture_assimilation_norse_48
+    remove_province_modifier = to_culture_assimilation_norse_51
+    remove_province_modifier = to_culture_assimilation_norse_55
+    remove_province_modifier = to_culture_assimilation_norse_58
+    remove_province_modifier = to_culture_assimilation_norse_62
+    remove_province_modifier = to_culture_assimilation_norse_65
+    remove_province_modifier = to_culture_assimilation_norse_68
+    remove_province_modifier = to_culture_assimilation_norse_72
+    remove_province_modifier = to_culture_assimilation_norse_75
+    remove_province_modifier = to_culture_assimilation_norse_79
+    remove_province_modifier = to_culture_assimilation_norse_82
+    remove_province_modifier = to_culture_assimilation_norse_86
+    remove_province_modifier = to_culture_assimilation_norse_89
+    remove_province_modifier = to_culture_assimilation_norse_93
+    remove_province_modifier = to_culture_assimilation_norse_96
+    remove_province_modifier = to_culture_integration_0
+    remove_province_modifier = to_culture_integration_3
+    remove_province_modifier = to_culture_integration_6
+    remove_province_modifier = to_culture_integration_10
+    remove_province_modifier = to_culture_integration_13
+    remove_province_modifier = to_culture_integration_17
+    remove_province_modifier = to_culture_integration_20
+    remove_province_modifier = to_culture_integration_24
+    remove_province_modifier = to_culture_integration_27
+    remove_province_modifier = to_culture_integration_31
+    remove_province_modifier = to_culture_integration_34
+    remove_province_modifier = to_culture_integration_37
+    remove_province_modifier = to_culture_integration_41
+    remove_province_modifier = to_culture_integration_44
+    remove_province_modifier = to_culture_integration_48
+    remove_province_modifier = to_culture_integration_51
+    remove_province_modifier = to_culture_integration_55
+    remove_province_modifier = to_culture_integration_58
+    remove_province_modifier = to_culture_integration_62
+    remove_province_modifier = to_culture_integration_65
+    remove_province_modifier = to_culture_integration_68
+    remove_province_modifier = to_culture_integration_72
+    remove_province_modifier = to_culture_integration_75
+    remove_province_modifier = to_culture_integration_79
+    remove_province_modifier = to_culture_integration_82
+    remove_province_modifier = to_culture_integration_86
+    remove_province_modifier = to_culture_integration_89
+    remove_province_modifier = to_culture_integration_93
+    remove_province_modifier = to_culture_integration_96
 }
