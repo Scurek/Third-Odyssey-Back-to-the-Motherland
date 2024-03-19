@@ -1,10 +1,5 @@
 exarchs = [
     {
-        "tag": 'ELG',
-        "special": True
-    },
-
-    {
         "tag": 'EEA',
         "name": 'armenia',
         "culture_group": 'caucasian',
@@ -258,5 +253,9 @@ exarchs = [
                 "an [Root.GetAdjective]-led Exarch to govern the land in cooperation with the local elite.",
         "land": "[H][429.GetRegionName][!H] and [H][446.GetRegionName][!H] regions and [H][440.GetAreaName][!H], "
                 "[H][442.GetAreaName][!H], [H][1968.GetAreaName][!H], [H][437.GetAreaName][!H] areas"
+    },
+    {
+        "tag": 'ELG',
+        "special": True
     }
 ]

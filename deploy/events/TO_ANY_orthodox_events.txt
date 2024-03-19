@@ -4744,8 +4744,27 @@ country_event = {
 		is_core = 151
 		religion = elysian_orthodoxy
 		is_at_war = no
-		any_owned_province = {
-			nhs_is_ecumenical = yes
+		is_subject = no
+		if = {
+			limit = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+				NOT = { has_country_flag = to_integrated_greeks }
+			}
+			NOT = { has_country_flag = to_question_of_religion_event_active }
+			OR = {
+				had_country_flag = { flag =  to_question_of_religion_christian_intolerant days = 365 }
+				had_country_flag = { flag =  to_question_of_religion_christian_tolerant days = 365 }
+			}
+		}
+		num_of_provinces_owned_or_owned_by_subjects_with = {
+			value = 18
+			OR = {
+				area = macedonia_area
+				area = northern_greece_area
+				area = morea_area
+				area = aegean_archipelago_area
+				area = thrace_area
+			}
 		}
 	}
 	
@@ -4850,6 +4869,13 @@ country_event = {
 						NOT = { province_id = 151 }
 						NOT = { province_id = 142 }
 						NOT = { province_id = 4698 }
+						OR = {
+							area = macedonia_area
+							area = northern_greece_area
+							area = morea_area
+							area = aegean_archipelago_area
+							area = thrace_area
+						}
 					}
 					save_event_target_as = trad_patriarch_seat
 				}
@@ -4865,6 +4891,53 @@ country_event = {
 						NOT = { province_id = 151 }
 						NOT = { province_id = 142 }
 						NOT = { province_id = 4698 }
+						OR = {
+							area = macedonia_area
+							area = northern_greece_area
+							area = morea_area
+							area = aegean_archipelago_area
+							area = thrace_area
+						}
+					}
+					save_event_target_as = trad_patriarch_seat
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = trad_patriarch_seat }
+				}
+				random_province = {
+					limit = {
+						country_or_subject_holds = ROOT
+						NOT = { province_id = 151 }
+						NOT = { province_id = 142 }
+						NOT = { province_id = 4698 }
+						OR = {
+							area = macedonia_area
+							area = northern_greece_area
+							area = morea_area
+							area = aegean_archipelago_area
+							area = thrace_area
+						}
+					}
+					save_event_target_as = trad_patriarch_seat
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_saved_event_target = trad_patriarch_seat }
+				}
+				random_province = {
+					limit = {
+						country_or_subject_holds = ROOT
+						NOT = { province_id = 151 }
+						OR = {
+							area = macedonia_area
+							area = northern_greece_area
+							area = morea_area
+							area = aegean_archipelago_area
+							area = thrace_area
+						}
 					}
 					save_event_target_as = trad_patriarch_seat
 				}
@@ -4882,35 +4955,21 @@ country_event = {
 	
 	option = {		# Establish the new patriarchate of Constantinople
 		name = nhs2_orthodoxevents.14.a
-		ai_chance = { factor = 50 }
-		set_global_flag = nhs_elysian_o_greece
-		set_global_flag = nhs_elysian_o_greece_new
-		if = {
-			limit = {
-				NOT = { nhs_is_elysian_patriarchy = yes }
+		ai_chance = {
+			factor = 20
+			modifier = {
+				ruler_has_personality = zealot_personality
+				NOT = { has_country_flag = to_question_of_religion_christian_intolerant }
+				factor = 0
 			}
-			add_adm_power = -50
+			modifier = {
+				has_country_flag = to_question_of_religion_christian_tolerant
+				factor = 0
+			}
 		}
-		add_prestige = 10
+		set_global_flag = nhs_elysian_o_greece_new
 		add_patriarch_authority = 0.10
-		# if = {
-		# 	limit = {
-		# 		has_global_flag = ottomans_closed_patriarchate
-		# 	}
-		# 	country_event = {
-		# 		id = nhs2_shock_events.52
-		# 		days = 90
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		has_global_flag = ottomans_tolerated_patriarchate
-		# 	}
-		# 	country_event = {
-		# 		id = nhs2_shock_events.51
-		# 		days = 90
-		# 	}
-		# }
+
 		if = {
 			limit = {
 				ELG = {
@@ -4920,9 +4979,12 @@ country_event = {
 				}
 			}
 			ELG = {
+				add_liberty_desire = 25
 				change_religion = elysian_orthodoxy
 			}
+			custom_tooltip = nhs_new_line_tt
 		}
+
 		151 = {
 			if = {
 				limit = {
@@ -4936,39 +4998,40 @@ country_event = {
 			}
 		}
 
-		# every_country = {
-		# 	limit = {
-		# 		religion = orthodox
-		# 		OR = {
-		# 			culture_group = byzantine
-		# 			culture_group = south_slavic
-		# 		}
-		# 		OR = {
-		# 			NOT = { num_of_cities = 20 }
-		# 			any_country = {
-		# 				religion = elysian_orthodoxy
-		# 				overlord_of	= ROOT
-		# 			}
-		# 			has_global_flag = nhs_fourth_reform
-		# 		}
-		# 		NOT = { has_country_flag = nhs_patriarch_question }
-		# 	}
-		# 	country_event = { id = nhs2_orthodoxevents.16 days = 1 }
-		# }
-
 		custom_tooltip = nhs_new_patri_greek_tooltip
+		if = {
+			limit = {
+				has_country_flag = to_question_of_religion_christian_tolerant
+			}
+			custom_tooltip = to_remove_greek_freedom_of_religion_christian_tt
+		}
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = nhs_new_greek_conv_tooltip
-		hidden_effect = { 
-			to_add_new_patriarch_modifier_all_provinces = yes 
+		hidden_effect = {
+			every_province = {
+				to_handle_new_patriarch_modifier = yes
+			}
 		}
-
+		
 		if = {
 			limit = {
 				to_has_cultureshock_country = yes
 			}
-			custom_tooltip = nhs_new_line_tt
-			to_cultureshock_increase = yes
+			if = {
+				limit = {
+					has_country_flag = to_question_of_religion_christian_tolerant
+				}
+				custom_tooltip = nhs_new_line_tt
+				custom_tooltip = to_revoked_tolerance_from_question_of_religion_tt
+				to_cultureshock_big_increase = yes
+			}
+			else_if = {
+				limit = {
+					NOT = { has_country_flag = to_question_of_religion_christian_intolerant }
+				}
+				custom_tooltip = nhs_new_line_tt
+				to_cultureshock_increase = yes
+			}
 		}
 
 		custom_tooltip = nhs_dotted_line_tt
@@ -5013,18 +5076,39 @@ country_event = {
 		ai_chance = {
 			factor = 20
 			modifier = {
-				nhs_is_elysian_patriarchy = yes
+				ruler_has_personality = zealot_personality
+				NOT = { has_country_flag = to_question_of_religion_christian_tolerant }
+				factor = 0
+			}
+			modifier = {
+				has_country_flag = to_question_of_religion_christian_intolerant
 				factor = 0
 			}
 		}
+		add_prestige = -10
+		add_patriarch_authority = -0.1
+
 		if = {
 			limit = {
-				nhs_is_elysian_patriarchy = yes
+				ELG = {
+					exists = yes
+					is_subject_of = ROOT
+					religion = elysian_orthodoxy
+				}
 			}
-			add_prestige = -10
-			add_adm_power = -50
+			ELG = {
+				add_liberty_desire = -25
+				change_religion = orthodox
+			}
+			custom_tooltip = nhs_new_line_tt
 		}
-		add_patriarch_authority = -0.1
+		else_if = {
+			limit = {
+				NOT = { has_country_flag = to_question_of_religion_christian_tolerant }
+			}
+			custom_tooltip = to_elg_will_start_orthodox_tt
+			custom_tooltip = nhs_new_line_tt
+		}
 
 		151 = {
 			if = {
@@ -5064,8 +5148,16 @@ country_event = {
 		custom_tooltip = nhs_dotted_line_tt
 
 		custom_tooltip = nhs_new_trad_greek_tooltip
+		if = {
+			limit = {
+				has_country_flag = to_question_of_religion_christian_tolerant
+			}
+			custom_tooltip = to_remove_greek_freedom_of_religion_christian_tt
+		}
 		hidden_effect = {
-			to_add_traditional_patriarch_modifier_all_provinces = yes
+			every_province = {
+				to_handle_traditional_patriarch_modifier = yes
+			}
 		}
 
 		custom_tooltip = nhs_dotted_line_tt
@@ -5108,263 +5200,263 @@ country_event = {
 }
 
 # Orthodox state recognises of new patriarch
-country_event = {
-	id = nhs2_orthodoxevents.16
-	title = nhs2_orthodoxevents.16.t
-	desc = nhs2_orthodoxevents.16.d
-	picture = Elysian_Orthodoxy_event_picture
-	
-	trigger = {
-		OR = {
-			AND = {
-				culture_group = byzantine
-				NOT = { culture = turkish }
-			}
-			culture_group = south_slavic
-		}
-		OR = {
-			NOT = { num_of_cities = 20 }
-			any_country = {
-				religion = elysian_orthodoxy
-				overlord_of	= ROOT
-			}
-			has_global_flag = nhs_fourth_reform
-		}
-		religion = orthodox
-		any_country = {
-			religion = elysian_orthodoxy
-			owns_or_vassal_of = 151
-			any_owned_province  = {
-				nhs_is_ecumenical = yes
-			}
-			NOT = { war_with = ROOT }
-		}
-		has_global_flag = nhs_elysian_o_greece
-		NOT = { has_country_flag = nhs_patriarch_question }
-	}
-	
-	mean_time_to_happen = {
-		years = 5
-		modifier = {
-			factor = 0.0001
-			any_country = {
-				religion = elysian_orthodoxy
-				overlord_of	= ROOT
-			}
-		}
-		modifier = {
-			factor = 0.0001
-			has_global_flag = nhs_fourth_reform
-		}
-		modifier = {
-			factor = 0.8
-			NOT = { num_of_cities = 3 }
-		}
-		modifier = {
-			factor = 1.5
-			num_of_cities = 10
-		}
-		modifier = {
-			factor = 3
-			num_of_cities = 20
-		}
-		modifier = {
-			factor = 10
-			is_subject = yes
-			overlord = {
-				religion = orthodox
-			}
-		}
-	}
-	
-	immediate = {
-		set_country_flag = nhs_patriarch_question
-	}
-	
-	option = {	#Accept
-		ai_chance = {
-			factor = 60
-			modifier = {
-				factor = 0.5
-				patriarch_authority = 0.95
-			}
-			modifier = {
-				factor = 1.5
-				has_global_flag = nhs_elysian_o_greece_new
-			}
-			modifier = {
-				factor = 0.75
-				NOT = { patriarch_authority = 0.95 }
-				patriarch_authority = 0.8
-			}
-			modifier = {
-				factor = 0.9
-				NOT = { patriarch_authority = 0.8 }
-				patriarch_authority = 0.6
-			}
-			modifier = {
-				factor = 0.8
-				num_of_cities = 10
-			}
-			modifier = {
-				factor = 0.6
-				num_of_cities = 15
-			}
-			modifier = {
-				factor = 2
-				NOT = { num_of_cities = 5 }
-			}
-			modifier = {
-				factor = 5
-				NOT = { num_of_cities = 3 }
-			}
-			modifier = {
-				factor = 2
-				any_neighbor_country = {
-					religion = elysian_orthodoxy
-					num_of_cities = 10
-				}
-				NOT = { num_of_cities = 10 }
-			}
-			modifier = {
-				factor = 0.1
-				NOT = {
-					any_country = {
-						religion = elysian_orthodoxy
-						owns_or_vassal_of = 151
-						any_owned_province  = {
-							nhs_is_ecumenical = yes
-						}
-						reverse_has_opinion = { who = ROOT value = -100 }
-					}
-				}
-			}
-			modifier = {
-				factor = 1.2
-				any_country = {
-					religion = elysian_orthodoxy
-					owns_or_vassal_of = 151
-					any_owned_province  = {
-						nhs_is_ecumenical = yes
-					}
-					reverse_has_opinion = { who = ROOT value = 50 }
-				}
-			}
-			modifier = {
-				factor = 1.5
-				any_country = {
-					religion = elysian_orthodoxy
-					owns_or_vassal_of = 151
-					any_owned_province  = {
-						nhs_is_ecumenical = yes
-					}
-					reverse_has_opinion = { who = ROOT value = 100 }
-				}
-			}
-			modifier = {
-				factor = 3
-				any_country = {
-					religion = elysian_orthodoxy
-					owns_or_vassal_of = 151
-					any_owned_province  = {
-						nhs_is_ecumenical = yes
-					}
-					reverse_has_opinion = { who = ROOT value = 200 }
-				}
-			}
-		}
-		name = "nhs2_orthodoxevents.16.a"
-		change_religion = elysian_orthodoxy
-		capital_scope = {
-			change_religion = ROOT
-		}
-		random_owned_province = {
-			limit = {
-				religion = orthodox
-				OR = {
-					AND = {
-						culture_group = byzantine
-						NOT = { culture = turkish }
-					}
-					culture_group = south_slavic
-				}
-			}
-			change_religion = ROOT
-		}
-		hidden_effect = {
-			every_country = {
-				limit = {
-					religion = elysian_orthodoxy
-					owns_or_vassal_of = 151
-					any_owned_province  = {
-						nhs_is_ecumenical = yes
-					}
-				}
-				add_opinion = {
-					who = ROOT
-					modifier = nhs_recognised_patriarch_o
-				}
-				country_event = { id = nhs2_orthodoxevents.17 }
-			}
-		}
-	}
-	
-	option = { #Deny
-		ai_chance = {
-			factor = 40
-			modifier = {
-				factor = 5
-				NOT = {
-					any_country = {
-						religion = elysian_orthodoxy
-						owns_or_vassal_of = 151
-						any_owned_province  = {
-							nhs_is_ecumenical = yes
-						}
-						reverse_has_opinion = { who = ROOT value = -100 }
-					}
-				}
-			}
-			modifier = {
-				factor = 1.2
-				num_of_cities = 10
-			}
-			modifier = {
-				factor = 3
-				num_of_cities = 17
-			}
-			modifier = {
-				factor = 0
-				has_global_flag = nhs_fourth_reform
-			}
-		}
-		name = "nhs2_orthodoxevents.16.b"
-	}
-}
+# DISABLED
+# country_event = {
+# 	id = nhs2_orthodoxevents.16
+# 	title = nhs2_orthodoxevents.16.t
+# 	desc = nhs2_orthodoxevents.16.d
+# 	picture = Elysian_Orthodoxy_event_picture
 
-# Orthodox state recognises of new patriarch for Elysia
-country_event = {
-	id = nhs2_orthodoxevents.17
-	title = nhs2_orthodoxevents.17.t
-	desc = nhs2_orthodoxevents.17.d
-	picture = Elysian_Orthodoxy_event_picture
+# 	is_triggered_only = yes
 	
-	is_triggered_only = yes
+# 	trigger = {
+# 		OR = {
+# 			culture_group = byzantine
+# 			culture_group = south_slavic
+# 		}
+# 		OR = {
+# 			NOT = { num_of_cities = 20 }
+# 			any_country = {
+# 				religion = elysian_orthodoxy
+# 				overlord_of	= ROOT
+# 			}
+# 			has_global_flag = nhs_fourth_reform
+# 		}
+# 		religion = orthodox
+# 		any_country = {
+# 			religion = elysian_orthodoxy
+# 			owns_or_vassal_of = 151
+# 			any_owned_province  = {
+# 				nhs_is_ecumenical = yes
+# 			}
+# 			NOT = { war_with = ROOT }
+# 		}
+# 		has_global_flag = nhs_elysian_o_greece_new
+# 		NOT = { has_country_flag = nhs_patriarch_question }
+# 	}
 	
-	option = {	#Nice
-		name = "nhs2_orthodoxevents.17.a"
-		add_prestige = 5
-		add_patriarch_authority = 0.01
-		reverse_add_opinion = {
-			who = FROM
-			modifier = nhs_recognised_patriarch_o
-		}
-		add_country_modifier = {
-			name = missionary_zeal
-			duration = 1825
-		}
-	}
-}
+# 	mean_time_to_happen = {
+# 		years = 5
+# 		modifier = {
+# 			factor = 0.0001
+# 			any_country = {
+# 				religion = elysian_orthodoxy
+# 				overlord_of	= ROOT
+# 			}
+# 		}
+# 		modifier = {
+# 			factor = 0.0001
+# 			has_global_flag = nhs_fourth_reform
+# 		}
+# 		modifier = {
+# 			factor = 0.8
+# 			NOT = { num_of_cities = 3 }
+# 		}
+# 		modifier = {
+# 			factor = 1.5
+# 			num_of_cities = 10
+# 		}
+# 		modifier = {
+# 			factor = 3
+# 			num_of_cities = 20
+# 		}
+# 		modifier = {
+# 			factor = 10
+# 			is_subject = yes
+# 			overlord = {
+# 				religion = orthodox
+# 			}
+# 		}
+# 	}
+	
+# 	immediate = {
+# 		set_country_flag = nhs_patriarch_question
+# 	}
+	
+# 	option = {	#Accept
+# 		ai_chance = {
+# 			factor = 60
+# 			modifier = {
+# 				factor = 0.5
+# 				patriarch_authority = 0.95
+# 			}
+# 			modifier = {
+# 				factor = 1.5
+# 				has_global_flag = nhs_elysian_o_greece_new
+# 			}
+# 			modifier = {
+# 				factor = 0.75
+# 				NOT = { patriarch_authority = 0.95 }
+# 				patriarch_authority = 0.8
+# 			}
+# 			modifier = {
+# 				factor = 0.9
+# 				NOT = { patriarch_authority = 0.8 }
+# 				patriarch_authority = 0.6
+# 			}
+# 			modifier = {
+# 				factor = 0.8
+# 				num_of_cities = 10
+# 			}
+# 			modifier = {
+# 				factor = 0.6
+# 				num_of_cities = 15
+# 			}
+# 			modifier = {
+# 				factor = 2
+# 				NOT = { num_of_cities = 5 }
+# 			}
+# 			modifier = {
+# 				factor = 5
+# 				NOT = { num_of_cities = 3 }
+# 			}
+# 			modifier = {
+# 				factor = 2
+# 				any_neighbor_country = {
+# 					religion = elysian_orthodoxy
+# 					num_of_cities = 10
+# 				}
+# 				NOT = { num_of_cities = 10 }
+# 			}
+# 			modifier = {
+# 				factor = 0.1
+# 				NOT = {
+# 					any_country = {
+# 						religion = elysian_orthodoxy
+# 						owns_or_vassal_of = 151
+# 						any_owned_province  = {
+# 							nhs_is_ecumenical = yes
+# 						}
+# 						reverse_has_opinion = { who = ROOT value = -100 }
+# 					}
+# 				}
+# 			}
+# 			modifier = {
+# 				factor = 1.2
+# 				any_country = {
+# 					religion = elysian_orthodoxy
+# 					owns_or_vassal_of = 151
+# 					any_owned_province  = {
+# 						nhs_is_ecumenical = yes
+# 					}
+# 					reverse_has_opinion = { who = ROOT value = 50 }
+# 				}
+# 			}
+# 			modifier = {
+# 				factor = 1.5
+# 				any_country = {
+# 					religion = elysian_orthodoxy
+# 					owns_or_vassal_of = 151
+# 					any_owned_province  = {
+# 						nhs_is_ecumenical = yes
+# 					}
+# 					reverse_has_opinion = { who = ROOT value = 100 }
+# 				}
+# 			}
+# 			modifier = {
+# 				factor = 3
+# 				any_country = {
+# 					religion = elysian_orthodoxy
+# 					owns_or_vassal_of = 151
+# 					any_owned_province  = {
+# 						nhs_is_ecumenical = yes
+# 					}
+# 					reverse_has_opinion = { who = ROOT value = 200 }
+# 				}
+# 			}
+# 		}
+# 		name = "nhs2_orthodoxevents.16.a"
+# 		change_religion = elysian_orthodoxy
+# 		capital_scope = {
+# 			change_religion = ROOT
+# 		}
+# 		random_owned_province = {
+# 			limit = {
+# 				religion = orthodox
+# 				OR = {
+# 					AND = {
+# 						culture_group = byzantine
+# 						NOT = { culture = turkish }
+# 					}
+# 					culture_group = south_slavic
+# 				}
+# 			}
+# 			change_religion = ROOT
+# 		}
+# 		hidden_effect = {
+# 			every_country = {
+# 				limit = {
+# 					religion = elysian_orthodoxy
+# 					owns_or_vassal_of = 151
+# 					any_owned_province  = {
+# 						nhs_is_ecumenical = yes
+# 					}
+# 				}
+# 				add_opinion = {
+# 					who = ROOT
+# 					modifier = nhs_recognised_patriarch_o
+# 				}
+# 				country_event = { id = nhs2_orthodoxevents.17 }
+# 			}
+# 		}
+# 	}
+	
+# 	option = { #Deny
+# 		ai_chance = {
+# 			factor = 40
+# 			modifier = {
+# 				factor = 5
+# 				NOT = {
+# 					any_country = {
+# 						religion = elysian_orthodoxy
+# 						owns_or_vassal_of = 151
+# 						any_owned_province  = {
+# 							nhs_is_ecumenical = yes
+# 						}
+# 						reverse_has_opinion = { who = ROOT value = -100 }
+# 					}
+# 				}
+# 			}
+# 			modifier = {
+# 				factor = 1.2
+# 				num_of_cities = 10
+# 			}
+# 			modifier = {
+# 				factor = 3
+# 				num_of_cities = 17
+# 			}
+# 			modifier = {
+# 				factor = 0
+# 				has_global_flag = nhs_fourth_reform
+# 			}
+# 		}
+# 		name = "nhs2_orthodoxevents.16.b"
+# 	}
+# }
+
+# # Orthodox state recognises of new patriarch for Elysia
+# country_event = {
+# 	id = nhs2_orthodoxevents.17
+# 	title = nhs2_orthodoxevents.17.t
+# 	desc = nhs2_orthodoxevents.17.d
+# 	picture = Elysian_Orthodoxy_event_picture
+	
+# 	is_triggered_only = yes
+	
+# 	option = {	#Nice
+# 		name = "nhs2_orthodoxevents.17.a"
+# 		add_prestige = 5
+# 		add_patriarch_authority = 0.01
+# 		reverse_add_opinion = {
+# 			who = FROM
+# 			modifier = nhs_recognised_patriarch_o
+# 		}
+# 		add_country_modifier = {
+# 			name = missionary_zeal
+# 			duration = 1825
+# 		}
+# 	}
+# }
 
 # Orthodox state applies for protection
 country_event = {

@@ -1,5 +1,47 @@
 namespace = nhs2_ely_marches
 
+# Introduction event
+country_event = {
+	id = nhs2_ely_marches.1
+	title = nhs2_ely_marches.1.t
+	desc = nhs2_ely_marches.1.d
+	picture = BYZANTINE_EMPEROR_eventPicture
+
+	goto = to_potential_exarch_province
+	
+	fire_only_once = yes
+
+	trigger = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		any_owned_province = {
+			to_potential_exarch_province = yes
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = to_enable_exarch_click_here_box }
+				}
+				set_country_flag = to_enable_exarch_click_here_box
+			}
+			random_owned_province = {
+				limit = {
+					to_potential_exarch_province = yes
+				}
+				save_event_target_as = to_potential_exarch_province
+			}
+		}
+	}
+	
+	option = {
+		name = nhs2_ely_marches.1.a
+		clr_country_flag = to_enable_exarch_click_here_box
+		custom_tooltip = nhs2_ely_marches.1.tt
+	}
+}
+
 # Transfer provinces hidden event
 country_event = {
 	id = nhs2_ely_marches.3
@@ -19,6 +61,7 @@ country_event = {
 			OR = {
 				overlord = {
 					any_owned_province = {
+						nhs_exarch_land = { SCOPE = ROOT }
 						nhs_ely_march_all_province = yes
 					}
 				}
@@ -29,6 +72,7 @@ country_event = {
 						overlord_of = ROOT
 					}
 					any_owned_province = {
+						nhs_exarch_land = { SCOPE = ROOT }
 						nhs_ely_march_all_province = yes
 					}
 				}
@@ -41,6 +85,7 @@ country_event = {
 			OR = {
 				overlord = {
 					any_owned_province = {
+						nhs_exarch_land = { SCOPE = ROOT }
 						nhs_ely_march_territory_province = yes
 					}
 				}
@@ -51,6 +96,7 @@ country_event = {
 						overlord_of = ROOT
 					}
 					any_owned_province = {
+						nhs_exarch_land = { SCOPE = ROOT }
 						nhs_ely_march_territory_province = yes
 					}
 				}
@@ -63,6 +109,7 @@ country_event = {
 			OR = {
 				overlord = {
 					any_owned_province = {
+						nhs_exarch_land = { SCOPE = ROOT }
 						nhs_ely_march_no_core_province = yes
 					}
 				}
@@ -73,6 +120,7 @@ country_event = {
 						overlord_of = ROOT
 					}
 					any_owned_province = {
+						nhs_exarch_land = { SCOPE = ROOT }
 						nhs_ely_march_no_core_province = yes
 					}
 				}
@@ -87,119 +135,10 @@ country_event = {
 		overlord = {
 			save_event_target_as = to_exarch_overlord
 		}
-		if = {
-			limit = {
-				has_country_flag = nhs_ely_march_all
-			}
-			overlord = {
-				every_owned_province = {
-					limit = {
-						nhs_ely_march_all_province = yes
-					}
-					to_cede_province_to_exarch = {
-						CURRENT_OWNER = event_target:to_exarch_overlord
-						NEW_OWNER = ROOT
-					}
-				}
-			}
-			if = {
-				limit = {
-					ELG = {
-						exists = yes
-						NOT = { tag = ROOT }
-						overlord = {
-							overlord_of = ROOT
-						}
-					}
-				}
-				ELG = {
-					every_owned_province = {
-						limit = {
-							nhs_ely_march_all_province = yes
-						}
-						to_cede_province_to_exarch = {
-							CURRENT_OWNER = ELG
-							NEW_OWNER = ROOT
-						}
-					}
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				has_country_flag = nhs_ely_march_territory
-			}
-			overlord = {
-				every_owned_province = {
-					limit = {
-						nhs_ely_march_territory_province = yes
-					}
-					to_cede_province_to_exarch = {
-						CURRENT_OWNER = event_target:to_exarch_overlord
-						NEW_OWNER = ROOT
-					}
-				}
-			}
-			if = {
-				limit = {
-					ELG = {
-						exists = yes
-						NOT = { tag = ROOT }
-						overlord = {
-							overlord_of = ROOT
-						}
-					}
-				}
-				ELG = {
-					every_owned_province = {
-						limit = {
-							nhs_ely_march_territory_province = yes
-						}
-						to_cede_province_to_exarch = {
-							CURRENT_OWNER = ELG
-							NEW_OWNER = ROOT
-						}
-					}
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				has_country_flag = nhs_ely_march_no_core
-			}
-			overlord = {
-				every_owned_province = {
-					limit = {
-						nhs_ely_march_no_core_province = yes
-					}
-					to_cede_province_to_exarch = {
-						CURRENT_OWNER = event_target:to_exarch_overlord
-						NEW_OWNER = ROOT
-					}
-				}
-			}
-			if = {
-				limit = {
-					ELG = {
-						exists = yes
-						NOT = { tag = ROOT }
-						overlord = {
-							overlord_of = ROOT
-						}
-					}
-				}
-				ELG = {
-					every_owned_province = {
-						limit = {
-							nhs_ely_march_no_core_province = yes
-						}
-						to_cede_province_to_exarch = {
-							CURRENT_OWNER = ELG
-							NEW_OWNER = ROOT
-						}
-					}
-				}
-			}
+		to_transfer_exarch_provinces = {
+			EXARCH_SCOPE = ROOT
+			PROVINCE_TRIGGER = "nhs_exarch_land = { SCOPE = ROOT }"
+			OVERLORD_SCOPE = event_target:to_exarch_overlord
 		}
 	}
 	
@@ -233,127 +172,5 @@ country_event = {
 	
 	option = { # They get nothing
 		name = "nhs2_ely_marches.4.e"
-	}
-}
-
-# Transfer land hidden event
-country_event = {
-	id = nhs2_ely_marches.5
-	title = nhs2_ely_marches.5.t
-	desc = nhs2_ely_marches.5.d
-	picture = BYZANTINE_EMPEROR_eventPicture
-	
-	is_triggered_only = yes
-	hidden = yes
-	
-	trigger = {
-		OR = {
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = ELG }
-			
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEA }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEB }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEC }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EED }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEE }
-
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEF }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEG }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEH }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEI }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEJ }
-
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEL }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEM }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEO }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EER }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EES }
-
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EET }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEU }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEV }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEP }
-			nhs_exarch_owns_incorrect_province = { EXARCH_TAG = EEQ }
-		}
-	}
-	
-	immediate = {
-		overlord = {
-			save_event_target_as = nhs_exarch_overlord
-		}
-		every_owned_province = {
-			limit = {
-				OR = {
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = ELG }
-
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEA }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEB }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEC }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EED }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEE }
-		
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEF }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEG }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEH }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEI }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEJ }
-		
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEL }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEM }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEO }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EER }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EES }
-		
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EET }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEU }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEV }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEP }
-					nhs_exarch_province_owned_incorrectly = { EXARCH_TAG = EEQ }
-				}
-			}
-			if = {
-				limit = {
-					is_state_core = ROOT
-				}
-				remove_core = ROOT
-				cede_province = event_target:nhs_exarch_overlord
-				if = {
-					limit = {
-						NOT = { is_state_core = event_target:nhs_exarch_overlord }
-					}
-					add_core = event_target:nhs_exarch_overlord
-				}
-			}
-			else_if = {
-				limit = {
-					is_territorial_core = ROOT
-				}
-				remove_core = ROOT
-				cede_province = event_target:nhs_exarch_overlord
-				add_territorial_core = event_target:nhs_exarch_overlord
-			}
-			else_if = {
-				limit = {
-					is_permanent_claim = ROOT
-				}
-				remove_claim = ROOT
-				cede_province = event_target:nhs_exarch_overlord
-				add_permanent_claim = event_target:nhs_exarch_overlord
-			}
-			else_if = {
-				limit = {
-					is_claim = ROOT
-				}
-				remove_claim = ROOT
-				cede_province = event_target:nhs_exarch_overlord
-				add_claim = event_target:nhs_exarch_overlord
-			}
-			else = {
-				cede_province = event_target:nhs_exarch_overlord
-			}
-		}
-	}
-	
-	option = { # They get nothing
-		name = "nhs2_ely_marches.5.e"
 	}
 }
