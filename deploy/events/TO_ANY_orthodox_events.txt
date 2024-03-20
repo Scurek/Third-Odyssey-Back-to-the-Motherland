@@ -3592,6 +3592,7 @@ country_event = {
 						NOT = { to_has_patriarch_land = yes }
 						NOT = { to_has_patriarch_land_capital = yes }
 						area_for_scope_province = {
+							owned_by = ROOT
 							OR = {
 								has_province_modifier = nhs2_orthodox_patriarchate
 								has_province_modifier = patriarchate_of_the_west
@@ -3649,35 +3650,41 @@ country_event = {
 				}
 			}
 			tooltip = { add_patriarch_authority = 0.05 }
+			# This is done due to the tooltip being generated from the first province defined in map/areas for the area when using area scope.
+			# So if that province already has a modifier then the tooltip will be
 			if = {
 				limit = {
-					has_estate_privilege = to_estate_church_patriarchal_dominance
+					NOT = {
+						event_target:nhs_patriarchate_land = {
+							area_for_scope_province = {
+								owned_by = ROOT
+								OR = {
+									to_has_patriarch_land = yes
+									to_has_patriarch_land_capital = yes
+								}
+							}
+						}
+					}
 				}
 				event_target:nhs_patriarchate_land = {
 					area = {
 						limit = {
+							owned_by = ROOT
 							NOT = { to_has_patriarch_land = yes }
 							NOT = { to_has_patriarch_land_capital = yes }
 						}
-						add_province_modifier = {
-							name = nhs2_patriarchate_land_reduced
-							duration = -1
-						}
+						to_add_correct_patriarchate_land_modifier = yes
 					}
 				}
 			}
 			else = {
-				event_target:nhs_patriarchate_land = {
-					area = {
-						limit = {
-							NOT = { to_has_patriarch_land = yes }
-							NOT = { to_has_patriarch_land_capital = yes }
-						}
-						add_province_modifier = {
-							name = nhs2_patriarchate_land
-							duration = -1
-						}
+				every_owned_province = {
+					limit = {
+						area = event_target:nhs_patriarchate_land
+						NOT = { to_has_patriarch_land = yes }
+						NOT = { to_has_patriarch_land_capital = yes }
 					}
+					to_add_correct_patriarchate_land_modifier = yes
 				}
 			}
 			nhs_for_patriarch = yes
@@ -3689,7 +3696,75 @@ country_event = {
 					is_capital = no
 					NOT = { to_has_patriarch_land = yes }
 					NOT = { to_has_patriarch_land_capital = yes }
+					OR = {
+						has_province_modifier = nhs2_orthodox_patriarchate
+						has_province_modifier = patriarchate_of_the_west
+						has_province_modifier = patriarchate_of_the_south
+						has_province_modifier = patriarchate_of_the_far_west
+						has_province_modifier = patriarchate_of_the_north
+					}
+				}
+			}
+			tooltip = { add_patriarch_authority = 0.05 }
+
+			random_owned_province = {
+				limit = {
+					is_capital = no
+					NOT = { to_has_patriarch_land = yes }
+					NOT = { to_has_patriarch_land_capital = yes }
+					OR = {
+						has_province_modifier = nhs2_orthodox_patriarchate
+						has_province_modifier = patriarchate_of_the_west
+						has_province_modifier = patriarchate_of_the_south
+						has_province_modifier = patriarchate_of_the_far_west
+						has_province_modifier = patriarchate_of_the_north
+					}
+				}
+				if = {
+					limit = {
+						NOT = {
+							area_for_scope_province = {
+								owned_by = ROOT
+								OR = {
+									to_has_patriarch_land = yes
+									to_has_patriarch_land_capital = yes
+								}
+							}
+						}
+					}
+					area = {
+						limit = {
+							owned_by = ROOT
+							NOT = { to_has_patriarch_land = yes }
+							NOT = { to_has_patriarch_land_capital = yes }
+						}
+						to_add_correct_patriarchate_land_modifier = yes
+					}
+				}
+				else = {
+					every_province = {
+						limit = {
+							owned_by = ROOT
+							area = PREV
+							NOT = { to_has_patriarch_land = yes }
+							NOT = { to_has_patriarch_land_capital = yes }
+						}
+						to_add_correct_patriarchate_land_modifier = yes
+					}
+				}
+			}
+
+			nhs_for_patriarch = yes
+			hidden_effect = { add_patriarch_authority = 0.05 }
+		}
+		else_if = {
+			limit = {
+				any_owned_province = {
+					is_capital = no
+					NOT = { to_has_patriarch_land = yes }
+					NOT = { to_has_patriarch_land_capital = yes }
 					area_for_scope_province = {
+						owned_by = ROOT
 						OR = {
 							has_province_modifier = nhs2_orthodox_patriarchate
 							has_province_modifier = patriarchate_of_the_west
@@ -3701,12 +3776,14 @@ country_event = {
 				}
 			}
 			tooltip = { add_patriarch_authority = 0.05 }
-			if = {
+
+			random_owned_province = {
 				limit = {
-					any_owned_province = {
-						is_capital = no
-						NOT = { to_has_patriarch_land = yes }
-						NOT = { to_has_patriarch_land_capital = yes }
+					is_capital = no
+					NOT = { to_has_patriarch_land = yes }
+					NOT = { to_has_patriarch_land_capital = yes }
+					area_for_scope_province = {
+						owned_by = ROOT
 						OR = {
 							has_province_modifier = nhs2_orthodox_patriarchate
 							has_province_modifier = patriarchate_of_the_west
@@ -3718,81 +3795,38 @@ country_event = {
 				}
 				if = {
 					limit = {
-						ROOT = {
-							has_estate_privilege = to_estate_church_patriarchal_dominance
+						NOT = {
+							area_for_scope_province = {
+								owned_by = ROOT
+								OR = {
+									to_has_patriarch_land = yes
+									to_has_patriarch_land_capital = yes
+								}
+							}
 						}
 					}
 					area = {
 						limit = {
+							owned_by = ROOT
 							NOT = { to_has_patriarch_land = yes }
 							NOT = { to_has_patriarch_land_capital = yes }
 						}
-						add_province_modifier = {
-							name = nhs2_patriarchate_land_reduced
-							duration = -1
-						}
+						to_add_correct_patriarchate_land_modifier = yes
 					}
 				}
 				else = {
-					area = {
+					every_province = {
 						limit = {
+							owned_by = ROOT
+							area = PREV
 							NOT = { to_has_patriarch_land = yes }
 							NOT = { to_has_patriarch_land_capital = yes }
 						}
-						add_province_modifier = {
-							name = nhs2_patriarchate_land
-							duration = -1
-						}
+						to_add_correct_patriarchate_land_modifier = yes
 					}
 				}
 			}
-			else = {
-				random_owned_province = {
-					limit = {
-						is_capital = no
-						NOT = { to_has_patriarch_land = yes }
-						NOT = { to_has_patriarch_land_capital = yes }
-						area_for_scope_province = {
-							OR = {
-								has_province_modifier = nhs2_orthodox_patriarchate
-								has_province_modifier = patriarchate_of_the_west
-								has_province_modifier = patriarchate_of_the_south
-								has_province_modifier = patriarchate_of_the_far_west
-								has_province_modifier = patriarchate_of_the_north
-							}
-						}
-					}
-					if = {
-						limit = {
-							ROOT = {
-								has_estate_privilege = to_estate_church_patriarchal_dominance
-							}
-						}
-						area = {
-							limit = {
-								NOT = { to_has_patriarch_land = yes }
-								NOT = { to_has_patriarch_land_capital = yes }
-							}
-							add_province_modifier = {
-								name = nhs2_patriarchate_land_reduced
-								duration = -1
-							}
-						}
-					}
-					else = {
-						area = {
-							limit = {
-								NOT = { to_has_patriarch_land = yes }
-								NOT = { to_has_patriarch_land_capital = yes }
-							}
-							add_province_modifier = {
-								name = nhs2_patriarchate_land
-								duration = -1
-							}
-						}
-					}
-				}
-			}
+			
 			nhs_for_patriarch = yes
 			hidden_effect = { add_patriarch_authority = 0.05 }
 		}
