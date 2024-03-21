@@ -210,6 +210,50 @@ to_ongoing_fixes = {
 
 	if = {
 		limit = {
+			nhs_check_all_elysian_tags = { CONDITION = tag }
+			NOT = { has_global_flag = to_vinland_deal_fix }
+		}
+		set_global_flag = to_vinland_deal_fix
+		if = {
+			limit = {
+				NOT = { has_country_modifier = nhs_vov_vinland_deal }
+				NOT = { has_country_modifier = nhs_vov_vinland_deal_after }
+				NOT = { has_country_flag = to_vinland_formed_event_active }
+				VIN = {
+					exists = yes
+					has_country_modifier = nhs_vov_trade_deal
+					NOT = { war_with = PREV }
+				}
+			}
+			clr_global_flag = nhs_vov_no_deal
+			if = {
+				limit = {
+					NOT = { has_global_flag = nhs_vov_trade_reduced }
+				}
+				nhs_effect_for_existing_elysian_tag = {
+					EFFECT = "
+						add_country_modifier = {
+							name = nhs_vov_vinland_deal
+							duration = -1
+						}
+					"
+				}
+			}
+			else = {
+				nhs_effect_for_existing_elysian_tag = {
+					EFFECT = "
+						add_country_modifier = {
+							name = nhs_vov_vinland_deal_after
+							duration = -1
+						}
+					"
+				}
+			}
+		}
+	}
+
+	if = {
+		limit = {
 			NOT = { has_global_flag = to_has_set_lakonian_culture_potential }
 		}
 		to_set_lakonian_culture_potential = yes
