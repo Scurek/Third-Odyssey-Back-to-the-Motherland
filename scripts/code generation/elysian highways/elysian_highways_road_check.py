@@ -98,6 +98,8 @@ defined_text = {
 
 templateCurrentTarget = Template('''defined_text = {
 	name = GetHighwayConstructionTarget
+	random = no
+	
 	{%- for road in roads %}
 	{%- if "flag_override" not in road and "has_mission_trigger" not in road %}
 	text = {
