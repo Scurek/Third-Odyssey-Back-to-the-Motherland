@@ -4,5 +4,5 @@ tags={
 }
 name="Third Odyssey: Music"
 picture="thumbnail.png"
-supported_version="1.36.*"
+supported_version="v1.37.*"
 remote_file_id="1443509847"

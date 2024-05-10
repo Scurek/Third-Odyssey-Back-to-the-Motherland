@@ -6,6 +6,6 @@ tags={
 	"Graphics"
 }
 picture="thumbnail.png"
-supported_version="1.36.*"
+supported_version="v1.37.*"
 path="mod/Third-Odyssey-Development/submods/TO_purple_elysia"
 remote_file_id="2795530832"
