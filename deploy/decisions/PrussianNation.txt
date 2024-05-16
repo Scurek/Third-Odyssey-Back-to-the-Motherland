@@ -267,17 +267,25 @@ country_decisions = {
 			NOT = { exists = PRU }
 			adm_tech = 10
 			is_at_war = no
-			OR = {
-				religion = protestant
-				religion = reformed
-				religion = hussite
-				religion = anglican
-				if = {
-					limit = { has_dlc = "Lions of the North" }
+			if = {
+				limit = { has_dlc = "Lions of the North" }
+				OR = {
 					custom_trigger_tooltip = {
-						tooltip = teu_kingdom_prussia_path_ct
+						tooltip = teu_prussia_path_ct
 						has_country_flag = teu_prussian_path
 					}
+					religion = protestant
+					religion = reformed
+					religion = hussite
+					religion = anglican
+				}
+			}
+			else = {
+				OR = {
+					religion = protestant
+					religion = reformed
+					religion = hussite
+					religion = anglican
 				}
 			}
 			owns_core_province = 41 # Königsberg
@@ -292,6 +300,24 @@ country_decisions = {
 			to_change_tag = { TAG = PRU }
 			restore_country_name_effect = yes
 			swap_non_generic_missions = yes
+			if = {
+				limit = {
+					has_dlc = "Lions of the North"
+					has_mission = teu_defeat_the_poles
+					NOT = { mission_completed = teu_defeat_the_poles }
+				}
+				custom_tooltip = teu_select_automatically_prussian_path_tt
+				hidden_effect = {
+					complete_mission = teu_defeat_the_poles
+					add_power_projection = {
+						type = mission_rewards_power_projection
+						amount = 25
+					}
+					set_country_flag = teu_prussian_path
+					clr_country_flag = teu_crusader_path
+					swap_non_generic_missions = yes
+				}
+			}
 			east_prussia_area = {
 				limit = {
 					NOT = { owned_by = ROOT }

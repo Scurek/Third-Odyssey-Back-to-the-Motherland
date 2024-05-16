@@ -496,7 +496,12 @@ on_battle_won_country = {
 			}
 			from = {
 				war_with = root
-				NOT = { has_country_flag = hun_uniqe_defeated_country }
+				NOT = {
+					check_variable = {
+						which = hun_uniqe_defeated_country
+						value = 3
+					}
+				}
 			}
 		}
 		set_country_flag = hun_won_battle
@@ -799,7 +804,21 @@ on_battle_won_unit = {
 			random_war_enemy_country = {
 				limit = { has_country_flag = hun_lost_battle }
 				clr_country_flag = hun_lost_battle
-				set_country_flag = hun_uniqe_defeated_country
+				if = {
+					limit = {
+						NOT = { check_variable = { which = hun_uniqe_defeated_country value = 1 } }
+					}
+					set_variable = {
+						which = hun_uniqe_defeated_country
+						value = 1
+					}
+				}
+				else = {
+					change_variable = {
+						which = hun_uniqe_defeated_country
+						value = 1
+					}
+				}
 			}
 		}
 	}
@@ -1795,6 +1814,13 @@ on_annexed = {
 		else = {
 			add_dip_power = 100
 		}
+	}
+	if = {
+		limit = {
+			FROM = { tag = TUR }
+			HUN = { has_country_modifier = hun_avenge_varna }
+		}
+		HUN = { remove_country_modifier = hun_avenge_varna }
 	}
 	# Third Odyssey
 	to_on_annexed = yes
@@ -5035,6 +5061,54 @@ on_province_owner_change = {
         }
 		remove_province_modifier = estate_nobles_vegvar_system_modifier
 	}
+	if = {
+		limit = {
+			FROM = {
+				has_estate_privilege = estate_nobles_vegvar_system
+			}
+		}
+		if = {
+			limit = {
+				any_neighbor_province = {
+					owned_by = FROM
+				}
+				FROM = {
+					has_estate_privilege = estate_nobles_vegvar_system
+				}
+			}
+			every_neighbor_province = {
+				limit = {
+					owned_by = FROM
+					has_fort_building_trigger = yes
+					NOT = {
+						has_province_modifier = estate_nobles_vegvar_system_modifier
+					}
+				}
+				add_province_modifier = {
+					name = estate_nobles_vegvar_system_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	if = {
+        limit = {
+			NOT = {
+				has_province_modifier = estate_nobles_vegvar_system_modifier
+			}
+			owner = {
+				has_estate_privilege = estate_nobles_vegvar_system
+			}
+			has_fort_building_trigger = yes
+			any_neighbor_province = {
+				NOT = { owned_by = ROOT }
+			}
+        }
+        add_province_modifier = {
+            name = estate_nobles_vegvar_system_modifier
+            duration = -1
+        }
+	}
 	#Third Odyssey
 	to_on_province_owner_change = yes
 	#TO End
@@ -5607,6 +5681,13 @@ on_dependency_lost = {
 # ROOT = New vassal, FROM = Overlord
 on_create_vassal = {
 	on_religion_change_estate_privileges_effect = yes
+	if = {
+		limit = {
+			tag = TUR
+			HUN = { has_country_modifier = hun_avenge_varna }
+		}
+		HUN = { remove_country_modifier = hun_avenge_varna }
+	}
 	if = {
 		limit = {
 			ai = no
@@ -6252,7 +6333,17 @@ on_expanded_infrastructure = {
 			owner = {
 				has_country_flag = boh_expand_infrastructure_prague_flag
 			}
+			NOT = {
+				check_variable = {
+					which = boh_expanded_infrastructure_prague
+					value = 3
+				}
+			}
 		}
+        change_variable = {
+            which = boh_expanded_infrastructure_prague
+            value = 1
+        }
 		add_base_tax = 1
 		add_base_production = 1
 		add_base_manpower = 1
