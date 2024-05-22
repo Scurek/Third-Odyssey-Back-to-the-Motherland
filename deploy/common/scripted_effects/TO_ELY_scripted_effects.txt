@@ -1637,17 +1637,17 @@ to_handle_exarch_change_capital = {
 	}
 }
 
-to_initialize_exarch = {
-	to_assign_provinces_to_exarch = { TAG = $EXARCH_TAG$ }
-	to_initialize_exarch_government = { EXARCH_TAG = $EXARCH_TAG$ }
-}
+# to_initialize_exarch = {
+# 	to_assign_provinces_to_exarch = { TAG = $EXARCH_TAG$ }
+# 	to_initialize_exarch_government = { EXARCH_TAG = $EXARCH_TAG$ }
+# }
 
 to_initialize_exarch_government = {
 	hidden_effect = {
 		$EXARCH_TAG$ = {
 			change_government = republic
 			add_government_reform = to_exarch_reform
-			change_religion = ROOT
+			change_religion = $CURRENT_OWNER$
 			to_set_unit_type = yes
 			swap_free_idea_group = yes
 
@@ -1656,20 +1656,6 @@ to_initialize_exarch_government = {
 				PREV = {
 					set_ruler_culture = PREV
 				}
-			}
-			
-			if = {
-				limit = {
-					NOT = {
-						OR = {
-							has_country_flag = nhs_ely_march_all
-							has_country_flag = nhs_ely_march_territory
-							has_country_flag = nhs_ely_march_no_core
-							has_country_flag = nhs_ely_march_no
-						}
-					}
-				}
-				set_country_flag = nhs_ely_march_no_core
 			}
 
 			add_republican_tradition = 100
@@ -1823,140 +1809,18 @@ to_transfer_province_or_create_exarch = {
 				add_claim = $EXARCH_TAG$
 			}
 
-			to_initialize_exarch_government = { EXARCH_TAG = $EXARCH_TAG$ }
+			to_initialize_exarch_government = { EXARCH_TAG = $EXARCH_TAG$ CURRENT_OWNER = $CURRENT_OWNER$ }
 
 			to_transfer_exarch_provinces = {
 				EXARCH_SCOPE = $EXARCH_TAG$
 				EXARCH_TAG = $EXARCH_TAG$
 				OVERLORD_SCOPE = FROM
 			}
-
-			# every_province = {
-			# 	limit = {
-			# 		nhs_$EXARCH_TAG$_province = yes
-			# 		NOT = { has_province_flag = nhs_exarch_province_exemption }
-			# 		NOT = { has_province_modifier = to_varangian_headquarters }
-			# 		NOT = {
-			# 			AND = {
-			# 				owned_by = $CURRENT_OWNER$
-			# 				OR = {
-			# 					is_core = $CURRENT_OWNER$
-			# 					is_territorial_core = $CURRENT_OWNER$
-			# 					has_construction = core
-			# 					has_construction = missionary
-			# 					is_owned_by_trade_company = no
-			# 				}
-			# 			}
-			# 		}
-			# 		OR = {
-			# 			owned_by = $CURRENT_OWNER$
-			# 			owner = {
-			# 				tag = ELG
-			# 				is_subject_of = $CURRENT_OWNER$
-			# 			}
-			# 		}
-			# 		NOT = { has_province_modifier = nhs2_supply_lines_tm }
-			# 	}
-			# 	if = {
-			# 		limit = {
-			# 			owner = {
-			# 				PREV = {
-			# 					is_state_core = PREV
-			# 				}
-			# 			}
-			# 		}
-			# 		remove_core = $CURRENT_OWNER$
-			# 		cede_province = $EXARCH_TAG$
-			# 		if = {
-			# 			limit = {
-			# 				NOT = { is_state_core = $EXARCH_TAG$ }
-			# 			}
-			# 			add_core = $EXARCH_TAG$
-			# 		}
-			# 	}
-			# 	else_if = {
-			# 		limit = {
-			# 			owner = {
-			# 				PREV = {
-			# 					is_territorial_core = PREV
-			# 				}
-			# 			}
-			# 		}
-			# 		remove_core = $CURRENT_OWNER$
-			# 		cede_province = $EXARCH_TAG$
-			# 		add_territorial_core = $EXARCH_TAG$
-			# 	}
-			# 	else_if = {
-			# 		limit = {
-			# 			owner = {
-			# 				PREV = {
-			# 					is_permanent_claim = PREV
-			# 				}
-			# 			}
-			# 		}
-			# 		remove_claim = $CURRENT_OWNER$
-			# 		cede_province = $EXARCH_TAG$
-			# 		add_permanent_claim = $EXARCH_TAG$
-			# 	}
-			# 	else_if = {
-			# 		limit = {
-			# 			owner = {
-			# 				PREV = {
-			# 					is_claim = PREV
-			# 				}
-			# 			}
-			# 		}
-			# 		remove_claim = $CURRENT_OWNER$
-			# 		cede_province = $EXARCH_TAG$
-			# 		add_claim = $EXARCH_TAG$
-			# 	}
-			# 	else = {
-			# 		cede_province = $EXARCH_TAG$
-			# 	}
-			# }
 		}
 
 		custom_tooltip = to_exarch_starting_land_$EXARCH_TAG$_tt
-		# custom_tooltip = to_exarchate_starting_exclusions_tt
-		if = {
-			limit = {
-				$EXARCH_TAG$ = {
-					has_country_flag = nhs_ely_march_all
-				}
-			}
-			custom_tooltip = to_exarch_creation_full_land_privileges_tt
-		}
-		else_if = {
-			limit = {
-				$EXARCH_TAG$ = {
-					has_country_flag = nhs_ely_march_territory
-				}
-			}
-			custom_tooltip = to_exarch_creation_extensive_land_privileges_tt
-		}
-		else_if = {
-			limit = {
-				$EXARCH_TAG$ = {
-					has_country_flag = nhs_ely_march_no_core
-				}
-			}
-			custom_tooltip = to_exarch_creation_limited_land_privileges_tt
-		}
-		else_if = {
-			limit = {
-				$EXARCH_TAG$ = {
-					has_country_flag = nhs_ely_march_no
-				}
-			}
-			custom_tooltip = to_exarch_creation_no_land_privileges_tt
-		}
-		else = {
-			custom_tooltip = to_exarch_creation_limited_land_privileges_tt
-		}
+		custom_tooltip = to_exarch_creation_starting_land_limits_tt
 		custom_tooltip = nhs_new_line_tt
-
-		# custom_tooltip = nhs_exarchate_setting_desc_tt
-		# custom_tooltip = nhs_new_line_tt
 		
 		$EXARCH_TAG$ = {
 			custom_tooltip = to_set_exarch_reform_republic_tt
@@ -2035,11 +1899,34 @@ to_check_exarch_incorrect_province = {
 
 to_transfer_exarch_provinces = {
 	$EXARCH_SCOPE$ = {
+		overlord = {
+			every_owned_province = {
+				limit = {
+					[[PROVINCE_TRIGGER]
+					$PROVINCE_TRIGGER$
+					]
+					[[EXARCH_TAG]
+					nhs_$EXARCH_TAG$_province = yes
+					]
+					to_exarch_can_get_province = yes
+				}
+				to_cede_province_to_exarch = {
+					CURRENT_OWNER = $OVERLORD_SCOPE$
+					NEW_OWNER = $EXARCH_SCOPE$
+				}
+			}
+		}
 		if = {
 			limit = {
-				has_country_flag = nhs_ely_march_all
+				ELG = {
+					exists = yes
+					NOT = { tag = $EXARCH_SCOPE$ }
+					overlord = {
+						overlord_of = $EXARCH_SCOPE$
+					}
+				}
 			}
-			overlord = {
+			ELG = {
 				every_owned_province = {
 					limit = {
 						[[PROVINCE_TRIGGER]
@@ -2048,139 +1935,11 @@ to_transfer_exarch_provinces = {
 						[[EXARCH_TAG]
 						nhs_$EXARCH_TAG$_province = yes
 						]
-						nhs_ely_march_all_province = yes
+						to_exarch_can_get_province = yes
 					}
 					to_cede_province_to_exarch = {
-						CURRENT_OWNER = $OVERLORD_SCOPE$
+						CURRENT_OWNER = ELG
 						NEW_OWNER = $EXARCH_SCOPE$
-					}
-				}
-			}
-			if = {
-				limit = {
-					ELG = {
-						exists = yes
-						NOT = { tag = $EXARCH_SCOPE$ }
-						overlord = {
-							overlord_of = $EXARCH_SCOPE$
-						}
-					}
-				}
-				ELG = {
-					every_owned_province = {
-						limit = {
-							[[PROVINCE_TRIGGER]
-							$PROVINCE_TRIGGER$
-							]
-							[[EXARCH_TAG]
-							nhs_$EXARCH_TAG$_province = yes
-							]
-							nhs_ely_march_all_province = yes
-						}
-						to_cede_province_to_exarch = {
-							CURRENT_OWNER = ELG
-							NEW_OWNER = $EXARCH_SCOPE$
-						}
-					}
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				has_country_flag = nhs_ely_march_territory
-			}
-			overlord = {
-				every_owned_province = {
-					limit = {
-						[[PROVINCE_TRIGGER]
-						$PROVINCE_TRIGGER$
-						]
-						[[EXARCH_TAG]
-						nhs_$EXARCH_TAG$_province = yes
-						]
-						nhs_ely_march_territory_province = yes
-					}
-					to_cede_province_to_exarch = {
-						CURRENT_OWNER = $OVERLORD_SCOPE$
-						NEW_OWNER = $EXARCH_SCOPE$
-					}
-				}
-			}
-			if = {
-				limit = {
-					ELG = {
-						exists = yes
-						NOT = { tag = $EXARCH_SCOPE$ }
-						overlord = {
-							overlord_of = $EXARCH_SCOPE$
-						}
-					}
-				}
-				ELG = {
-					every_owned_province = {
-						limit = {
-							[[PROVINCE_TRIGGER]
-							$PROVINCE_TRIGGER$
-							]
-							[[EXARCH_TAG]
-							nhs_$EXARCH_TAG$_province = yes
-							]
-							nhs_ely_march_territory_province = yes
-						}
-						to_cede_province_to_exarch = {
-							CURRENT_OWNER = ELG
-							NEW_OWNER = $EXARCH_SCOPE$
-						}
-					}
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				has_country_flag = nhs_ely_march_no_core
-			}
-			overlord = {
-				every_owned_province = {
-					limit = {
-						[[PROVINCE_TRIGGER]
-						$PROVINCE_TRIGGER$
-						]
-						[[EXARCH_TAG]
-						nhs_$EXARCH_TAG$_province = yes
-						]
-						nhs_ely_march_no_core_province = yes
-					}
-					to_cede_province_to_exarch = {
-						CURRENT_OWNER = $OVERLORD_SCOPE$
-						NEW_OWNER = $EXARCH_SCOPE$
-					}
-				}
-			}
-			if = {
-				limit = {
-					ELG = {
-						exists = yes
-						NOT = { tag = $EXARCH_SCOPE$ }
-						overlord = {
-							overlord_of = $EXARCH_SCOPE$
-						}
-					}
-				}
-				ELG = {
-					every_owned_province = {
-						limit = {
-							[[PROVINCE_TRIGGER]
-							$PROVINCE_TRIGGER$
-							]
-							[[EXARCH_TAG]
-							nhs_$EXARCH_TAG$_province = yes
-							]
-							nhs_ely_march_no_core_province = yes
-						}
-						to_cede_province_to_exarch = {
-							CURRENT_OWNER = ELG
-							NEW_OWNER = $EXARCH_SCOPE$
-						}
 					}
 				}
 			}
