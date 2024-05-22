@@ -256,6 +256,11 @@ exarchs = [
     },
     {
         "tag": 'ELG',
-        "special": True
+        "name": 'Konstantinia',
+        "land": "[H][145.GetAreaName][!H], [H][147.GetAreaName][!H], [H][148.GetAreaName][!H], "
+                "[H][151.GetAreaName][!H], [H][164.GetAreaName][!H], [H][150.GetAreaName][!H], "
+                "[H][159.GetAreaName][!H] areas and provinces in [H][151.GetRegionName][!H] and "
+                "[H][317.GetRegionName][!H] regions with [H]Greek[!H] or [H]Pontic[!H] culture. They will NOT "
+                "receive [H][151.GetCapitalName][!H] itself"
     }
 ]

@@ -707,7 +707,7 @@ nhs_greek_areas = {
 			OR = {
 				region = balkan_region
 				region = anatolia_region
-				region = crimea_region
+				# region = crimea_region
 			}
 		}
 	}
@@ -1046,10 +1046,7 @@ nhs_EEP_province = {
 }
 
 nhs_ELG_province = {
-	# continent = europe
 	NOT = { province_id = 151 }
-	NOT = { has_province_modifier = nhs2_supply_lines_tm }
-	NOT = { has_province_modifier = nhs2_base_of_operations_tm }
 	OR = {
 		nhs_greek_areas = yes
 		AND = {
@@ -1065,10 +1062,7 @@ nhs_ELG_province = {
 
 to_potential_exarch_province = {
 	OR = {
-		AND = {
-			exists = ELG
-			nhs_ELG_province = yes
-		}
+		nhs_ELG_province = yes
 		nhs_EEA_province = yes
 		nhs_EEB_province = yes
 		nhs_EEC_province = yes
@@ -1219,6 +1213,16 @@ nhs_exarch_province_owned_incorrectly = {
 
 to_exarch_trigger_from_province = {
 	if = {
+		limit = {
+			owner = {
+				is_subject_of_type = elysian_subject
+			}
+		}
+		owner = {
+			$TRIGGER$
+		}
+	}
+	else_if = {
 		limit = {
 			nhs_EEA_province = yes
 		}
@@ -1380,7 +1384,6 @@ to_exarch_trigger_from_province = {
 	}
 	else_if = {
 		limit = {
-			exists = ELG
 			nhs_ELG_province = yes
 		}
 		ELG = {
