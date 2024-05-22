@@ -23,9 +23,9 @@ class Region:
 
 
 regions = [
-    Region("balkan_region", 50, "Illyrikon", 136, [150, 136]),  # Total 57, 29 outside Greece
-    Region("anatolia_region", 30, "Anatolia", 316, [318, 317]),  # Total 48
-    Region("mashriq_region", 20, "Syria", 379, [2313]),  # Total 30
+    Region("balkan_region", 55, "Illyrikon", 136, [150, 136]),  # Total 62, 29 outside Greece
+    Region("anatolia_region", 25, "Anatolia", 316, [318, 317]),  # Total 35
+    Region("mashriq_region", 25, "Syria", 379, [2313]),  # Total 34
     Region("egypt_region", 20, "Aigyptos", 358, [358]),  # Total 29
     Region("maghreb_region", 30, "Afrika", 343, [341]),  # Total 63
     Region("iberia_region", 40, "Spania", 217, [225, 213]),  # Total 62 | 218, 220
