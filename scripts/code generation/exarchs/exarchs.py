@@ -255,8 +255,16 @@ exarchs = [
                 "[H][442.GetAreaName][!H], [H][1968.GetAreaName][!H], [H][437.GetAreaName][!H] areas"
     },
     {
+        "tag": 'EEY',
+        "name": 'illyris',
+        "land": "[H][145.GetRegionName][!H] region, except for the following areas: [A][145.GetAreaName][!A], "
+                "[A][147.GetAreaName][!A], [A][148.GetAreaName][!A], "
+                "[A][151.GetAreaName][!A], [A][164.GetAreaName][!A], [A][150.GetAreaName][!A], "
+                "[A][159.GetAreaName][!A]"
+    },
+    {
         "tag": 'ELG',
-        "name": 'Konstantinia',
+        "name": 'konstantinia',
         "land": "[H][145.GetAreaName][!H], [H][147.GetAreaName][!H], [H][148.GetAreaName][!H], "
                 "[H][151.GetAreaName][!H], [H][164.GetAreaName][!H], [H][150.GetAreaName][!H], "
                 "[H][159.GetAreaName][!H] areas and provinces in [H][151.GetRegionName][!H] and "
