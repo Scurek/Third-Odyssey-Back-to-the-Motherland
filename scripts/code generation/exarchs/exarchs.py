@@ -137,7 +137,7 @@ exarchs = [
                 " Undeterred by intermittent invasions of steppe peoples, their descendants still govern those fertile"
                 " lands. Now that we that our Empire claims sovereignty over those territories, the people would be "
                 "undoubtedly better managed by [Root.GetAdjective]-led Exarch in cooperation with the local elite.",
-        "land": "[H][280.GetRegionName][!H] region and [1940.GetAreaName] area"
+        "land": "[H][280.GetRegionName][!H] region and [H][1940.GetAreaName][!H] area"
     },
     {
         "tag": 'EEO',
@@ -269,6 +269,9 @@ exarchs = [
                 "[H][151.GetAreaName][!H], [H][164.GetAreaName][!H], [H][150.GetAreaName][!H], "
                 "[H][159.GetAreaName][!H] areas and provinces in [H][151.GetRegionName][!H] and "
                 "[H][317.GetRegionName][!H] regions with [H]Greek[!H] or [H]Pontic[!H] culture. They will NOT "
-                "receive [H][151.GetCapitalName][!H] itself"
+                "receive [H][151.GetCapitalName][!H] itself",
+        "merchant_land": "[H][145.GetAreaName][!H], [H][147.GetAreaName][!H], [H][148.GetAreaName][!H], "
+                "[H][151.GetAreaName][!H], [H][164.GetAreaName][!H], [H][150.GetAreaName][!H], "
+                "[H][159.GetAreaName][!H] areas, except for [A][151.GetCapitalName][!A] itself"
     }
 ]
