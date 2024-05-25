@@ -16,6 +16,7 @@ custom_window = {
 custom_icon = {
     name = to_eic_background
     potential = {
+        NOT = { to_has_extended_eic_background = yes }
     }
 }
 
@@ -184,6 +185,128 @@ custom_icon = {
 
 custom_text_box = {
     name = to_eic_liberty_desire_from_absolutism
+}
+
+custom_window = {
+    name = to_eic_window_extended
+
+    potential = {
+        to_has_extended_eic_background = yes
+    }
+}
+
+custom_icon = {
+    name = to_eic_background_extended
+}
+
+custom_button = {
+    name = to_eic_seize_peripheral_territories
+    tooltip = to_eic_seize_peripheral_territories_tooltip
+    potential = {        
+    }
+    trigger = {
+        custom_trigger_tooltip = {
+            tooltip = to_exarch_has_permanently_owned_land_tt
+            any_owned_province = {
+                has_province_flag = to_exarch_permanently_owned_land_@ROOT
+            }
+        }
+        is_at_war = no
+        NOT = { liberty_desire = 20 }
+        custom_trigger_tooltip = {
+            tooltip = to_has_been_subject_for_20_years_tt
+            had_country_flag = { flag = to_became_a_subject days = 7300 }
+        }
+        FROM = {
+            is_at_war = no
+            custom_trigger_tooltip = {
+                tooltip = to_has_custom_exarch_province_cost_dip_tt
+                ROOT = {
+                    variable_arithmetic_trigger = {
+                        custom_tooltip = to_has_custom_exarch_province_cost_dip_tt
+                        export_to_variable = {
+                            which = to_from_dip_power
+                            value = trigger_value:dip_power
+                            who = FROM
+                        }
+                        check_variable = {
+                            which = to_from_dip_power
+                            which = to_custom_exarch_province_cost
+                        }
+                    }
+                }
+            }
+        }
+    }
+    effect = {
+        add_liberty_desire = 50
+        custom_tooltip = to_lose_custom_exarch_province_cost_dip_tt
+        hidden_effect = {
+            for_variable_amount = {
+                variable = to_custom_exarch_province_cost
+				effect = "FROM = { add_dip_power = -1 }"
+            }
+        }
+        custom_tooltip = to_seize_custom_exarch_land_tt
+        hidden_effect = {
+            every_owned_province = {
+                limit = {
+                    has_province_flag = to_exarch_permanently_owned_land_@ROOT
+                }
+                clr_province_flag = to_exarch_permanently_owned_land_@ROOT
+                if = {
+                    limit = {
+                        is_state_core = owner
+                    }
+                    remove_core = owner
+                    cede_province = FROM
+                    if = {
+                        limit = {
+                            NOT = { is_state_core = FROM }
+                        }
+                        add_core = FROM
+                    }
+                }
+                else_if = {
+                    limit = {
+                        is_territorial_core = owner
+                    }
+                    remove_core = owner
+                    cede_province = FROM
+                    add_territorial_core = FROM
+                }
+                else_if = {
+                    limit = {
+                        is_permanent_claim = owner
+                    }
+                    remove_claim = owner
+                    cede_province = FROM
+                    add_permanent_claim = FROM
+                }
+                else_if = {
+                    limit = {
+                        is_claim = owner
+                    }
+                    remove_claim = owner
+                    cede_province = FROM
+                    add_claim = FROM
+                }
+                else = {
+                    cede_province = FROM
+                }
+            }
+            every_core_province = {
+                limit = {
+                    owner = {
+                        NOT = { tag = ROOT }
+                        NOT = { tag = FROM }
+                    }
+                }
+                remove_core = ROOT
+                add_permanent_claim = FROM
+            }
+        }
+    }
 }
 
 #########################
@@ -518,6 +641,20 @@ custom_button = {
             num_of_cities = 5
             is_subject_of_type = elysian_subject
         }
+        if = {
+            limit = {
+                owner = {
+                    has_country_flag = to_custom_exarch
+                    PREV = {
+                        has_province_flag = to_exarch_permanently_owned_land_@PREV
+                    }
+                }
+            }
+            custom_trigger_tooltip = {
+                tooltip = to_exarch_permanently_owned_land_tt
+                always = no
+            }
+        }
     }
     effect = {
         set_province_flag = nhs_exarch_province_exemption
@@ -695,7 +832,7 @@ custom_icon = {
     frame = {
         number = 2
         trigger = {
-            has_province_flag = to_exarch_always_count_for_merchant
+            to_province_always_counts_for_exarch_merchant = yes
         }
     }
     frame = {
