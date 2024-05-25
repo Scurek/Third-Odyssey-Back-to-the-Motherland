@@ -1,4 +1,192 @@
 #########################
+#### COUNTRY
+#########################
+
+custom_window = {
+    name = to_eic_window
+    potential = {
+        is_subject_of_type = elysian_subject
+        FROM = {
+            overlord_of = ROOT
+        }
+    }
+}
+
+
+custom_icon = {
+    name = to_eic_background
+    potential = {
+    }
+}
+
+custom_icon = {
+    name = to_eic_overlord_penalties_icon
+    tooltip = to_eic_overlord_penalties_icon_tooltip
+}
+
+custom_text_box = {
+    name = to_eic_overlord_penalties
+}
+
+custom_button = {
+    name = to_eic_give_all_land
+    tooltip = to_eic_give_all_land_tooltip
+    potential = {
+    }
+    trigger = {
+        custom_trigger_tooltip = {
+            tooltip = to_owns_exarch_province_tt
+            FROM = {
+                any_owned_province = {
+                    nhs_exarch_land = { SCOPE = ROOT }
+                }
+            }
+        }
+    }
+    effect = {
+        custom_tooltip = to_eic_give_all_land_effect_tt
+        hidden_effect = {
+            FROM = {
+                every_owned_province = {
+                    limit = {
+                        nhs_exarch_land = { SCOPE = ROOT }
+                    }
+                    if = {
+                        limit = {
+                            is_state_core = FROM
+                        }
+                        remove_core = FROM
+                        cede_province = ROOT
+                        if = {
+                            limit = {
+                                NOT = { is_state_core = ROOT }
+                            }
+                            add_core = ROOT
+                        }
+                    }
+                    else_if = {
+                        limit = {
+                            is_territorial_core = FROM
+                        }
+                        remove_core = FROM
+                        cede_province = ROOT
+                        add_territorial_core = ROOT
+                    }
+                    else_if = {
+                        limit = {
+                            is_permanent_claim = FROM
+                        }
+                        remove_claim = FROM
+                        cede_province = ROOT
+                        add_permanent_claim = ROOT
+                    }
+                    else_if = {
+                        limit = {
+                            is_claim = FROM
+                        }
+                        remove_claim = FROM
+                        cede_province = ROOT
+                        add_claim = ROOT
+                    }
+                    else = {
+                        cede_province = ROOT
+                    }
+                    remove_claim = FROM
+                }
+            }
+		}
+    }
+}
+
+custom_button = {
+    name = to_eic_annex_exarch
+    tooltip = to_eic_annex_exarch_tooltip
+    potential = {
+    }
+    trigger = {
+        is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+        FROM = {
+            OR = {
+                AND = {
+                    adm_power = 150
+                    dip_power = 150
+                }
+                custom_trigger_tooltip = {
+                    tooltip = to_has_moved_capital_back_to_europe_tt
+                    mission_completed = to_basileus_basileon_mission
+                    capital = 151
+                }
+            }
+        }
+    }
+    effect = {
+        tooltip = {
+            FROM = {
+                inherit = ROOT
+            }
+        }
+        FROM = {
+            if = {
+                limit = {
+                    NOT = {
+                        AND = {
+                            mission_completed = to_basileus_basileon_mission
+                            capital = 151
+                        }
+                    }
+                }
+                add_adm_power = -150
+                add_dip_power = -150
+            }
+        }
+        hidden_effect = {
+            FROM = {
+                inherit = ROOT
+                set_country_flag = to_annexed_exarch@ROOT
+            }
+            every_province = {
+                limit = {
+                    is_core = ROOT
+                }
+                remove_core = ROOT
+            }
+        }
+    }
+}
+
+# custom_text_box = {
+#     name = to_eic_merchant_provinces
+# }
+
+custom_icon = {
+    name = to_eic_merchant
+    tooltip = to_eic_merchant_tooltip
+
+    frame = {
+        number = 1
+        trigger = {
+            has_country_flag = to_exarch_gives_merchant
+        }
+    }
+    frame = {
+        number = 2
+        trigger = {}
+    }
+}
+
+custom_icon = {
+    name = to_eic_liberty_desire_from_absolutism_icon
+    tooltip = to_eic_liberty_desire_from_absolutism_icon_tooltip
+}
+
+custom_text_box = {
+    name = to_eic_liberty_desire_from_absolutism
+}
+
+#########################
 #### PROVINCE
 #########################
 
