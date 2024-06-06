@@ -1660,7 +1660,7 @@ to_handle_exarch_autonomy_modifier = {
 	if = {
 		limit = {
 			owner = {
-				has_reform = to_exarch_reform
+				to_has_exarch_government_reform = yes
 			}
 			NOT = { culture_group = byzantine }
 		}
@@ -1676,7 +1676,7 @@ to_handle_exarch_change_capital = {
 	if = {
 		limit = {
 			owner = {
-				has_reform = to_exarch_reform
+				to_has_exarch_government_reform = yes
 				NOT = { primary_culture = PREV }
 			}
 		}
@@ -1691,16 +1691,50 @@ to_handle_exarch_change_capital = {
 # 	to_initialize_exarch_government = { EXARCH_TAG = $EXARCH_TAG$ }
 # }
 
+to_setup_anatolia_exarch = {
+	if = {
+		limit = {
+			has_global_flag = to_orhans_descendant_rules_anatolia
+		}
+		change_government = monarchy
+		define_ruler = {
+			dynasty = "Osmanoglu"
+			male = yes
+			culture = turkish
+			hide_skills = yes
+			claim = 95
+		}
+		add_government_reform = to_exarch_reform_monarchy_locked_dynasty
+	}
+	else = {
+		change_government = republic
+		add_government_reform = to_exarch_reform
+	}
+}
+
+to_setup_anatolia_exarch_tooltip = {
+	if = {
+		limit = {
+			has_global_flag = to_orhans_descendant_rules_anatolia
+		}
+		custom_tooltip = to_set_exarch_reform_monarchy_keep_dynasty_tt
+	}
+	else = {
+		custom_tooltip = to_set_exarch_reform_republic_tt
+	}
+}
+
 to_initialize_exarch_government = {
 	hidden_effect = {
 		$EXARCH_TAG$ = {
-			change_government = republic
-			add_government_reform = to_exarch_reform
-			change_religion = $CURRENT_OWNER$
+			change_religion = $OVERLORD$
 			to_set_unit_type = yes
 			swap_free_idea_group = yes
+			
+			change_primary_culture = $PRIMARY_CULTURE$
 
-			change_primary_culture = CAPITAL
+			$ON_CREATED_EFFECT$
+
 			capital_scope = {
 				PREV = {
 					set_ruler_culture = PREV
@@ -1858,7 +1892,12 @@ to_transfer_province_or_create_exarch = {
 				add_claim = $EXARCH_TAG$
 			}
 
-			to_initialize_exarch_government = { EXARCH_TAG = $EXARCH_TAG$ CURRENT_OWNER = $CURRENT_OWNER$ }
+			to_initialize_exarch_government = {
+				EXARCH_TAG = $EXARCH_TAG$
+				OVERLORD = $CURRENT_OWNER$
+				PRIMARY_CULTURE = $PRIMARY_CULTURE$
+				ON_CREATED_EFFECT = $ON_CREATED_EFFECT$
+			}
 
 			to_transfer_exarch_provinces = {
 				EXARCH_SCOPE = $EXARCH_TAG$
@@ -1871,9 +1910,8 @@ to_transfer_province_or_create_exarch = {
 		custom_tooltip = to_exarch_creation_starting_land_limits_tt
 		custom_tooltip = nhs_new_line_tt
 		
-		$EXARCH_TAG$ = {
-			custom_tooltip = to_set_exarch_reform_republic_tt
-		}
+		$ON_CREATED_TOOLTIP$
+
 		custom_tooltip = to_reform_effects_for_overlord_tt
 		if = {
 			limit = {
@@ -11770,6 +11808,10 @@ to_exarch_effect = {
 		EEY = { $EFFECT$ }
 	}
 	if = {
+		limit = { exists = EEN }
+		EEN = { $EFFECT$ }
+	}
+	if = {
 		limit = { exists = ELG }
 		ELG = { $EFFECT$ }
 	}
@@ -11860,6 +11902,10 @@ to_exarch_effect_from_province = {
 	else_if = {
 		limit = { nhs_EEY_province = yes }
 		EEY = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEN_province = yes }
+		EEN = { $EFFECT$ }
 	}
 	else_if = {
 		limit = { nhs_ELG_province = yes }

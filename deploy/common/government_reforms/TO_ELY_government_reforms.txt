@@ -365,6 +365,7 @@ to_exarch_reform = {
 	allow_normal_conversion = no
 	potential = {
 		is_subject_of_type = elysian_subject
+		has_reform = to_exarch_reform
 	}
 	trigger = {
 		is_subject_of_type = elysian_subject
@@ -454,6 +455,7 @@ to_exarch_reform_monarchy = {
 	allow_normal_conversion = no
 	potential = {
 		is_subject_of_type = elysian_subject
+		has_reform = to_exarch_reform_monarchy
 	}
 	trigger = {
 		is_subject_of_type = elysian_subject
@@ -477,6 +479,80 @@ to_exarch_reform_monarchy = {
 	custom_attributes = {
 		locked_government_type = yes
 		to_prefers_humanist_ideas = yes
+	}
+	conditional = {
+		allow = {
+			OR = {
+				has_dlc = "Common Sense"
+				has_dlc = "Domination"
+			}
+		}
+		has_parliament = yes
+	}
+	effect = {
+		custom_tooltip = to_reform_effects_for_overlord_tt
+		if = {
+			limit = {
+				overlord = {
+					mission_completed = to_the_eagle_rises_mission
+				}
+			}
+			custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+		}
+		else = {
+			custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+		}
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_reform_effects_tt
+		custom_tooltip = to_automatically_accepts_culture_tt
+		custom_tooltip = to_min_autonomy_exarch_modifier_tt
+		hidden_effect = {
+			every_owned_province = {
+				to_handle_exarch_autonomy_modifier = yes
+			}
+		}
+		custom_tooltip = to_forced_new_line_tt
+	}
+	removed_effect = {
+		hidden_effect = {
+			every_owned_province = {
+				remove_province_modifier = to_exarch_autonomy_penalty
+			}
+		}
+	}
+}
+
+to_exarch_reform_monarchy_locked_dynasty = {
+	icon = "parliament"
+	allow_normal_conversion = no
+	potential = {
+		is_subject_of_type = elysian_subject
+		has_reform = to_exarch_reform_monarchy_locked_dynasty
+	}
+	trigger = {
+		is_subject_of_type = elysian_subject
+	}
+
+	lock_level_when_selected = yes
+	valid_for_new_country = no
+	
+	maintain_dynasty = yes
+	can_change_primary_culture = no
+
+	modifiers = {
+		num_accepted_cultures = 100
+		promote_culture_cost = -2
+		culture_conversion_cost = 0.33
+		land_forcelimit_modifier = -0.50
+		naval_forcelimit_modifier = -0.50
+		religious_unity = 0.25
+		governing_capacity_modifier = 0.20
+		max_absolutism = -20
+	}
+	custom_attributes = {
+		locked_government_type = yes
 	}
 	conditional = {
 		allow = {

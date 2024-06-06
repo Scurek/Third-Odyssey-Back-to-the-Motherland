@@ -3,7 +3,7 @@ exarchs = [
         "tag": 'EEA',
         "name": 'armenia',
         "culture_group": 'caucasian',
-        "primary_culture": 'georgian',
+        "default_culture": 'georgian',
         "desc": "Armenia was a nominally independent client kingdom often divided between "
                 "and (fought over) by the Ancient Roman and Persian Empires. Now that it has "
                 "been retaken, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation with "
@@ -14,7 +14,7 @@ exarchs = [
         "tag": 'EEB',
         "name": 'anglia',
         "culture_group": 'british',
-        "primary_culture": 'english',
+        "default_culture": 'english',
         "desc": "Anglia or Britannia was one of Ancient Rome's most troublesome provinces and was among the first to be "
                 "abandoned as the Western Empire collapsed. Now that it has been retaken, it would be better managed "
                 "under an [Root.GetAdjective]-led Exarch in cooperation with the local elite.",
@@ -24,7 +24,7 @@ exarchs = [
         "tag": 'EEC',
         "name": 'skanza',
         "culture_group": 'scandinavian',
-        "primary_culture": 'danish',
+        "default_culture": 'danish',
         "desc": 'Skanza was far beyond the borders of the ancient Roman Empire; however, the fearsome Vikings that '
                 'resided there would raid Western Europe for centuries before their conversion to Christianity. '
                 'Now that we have conquered the region, it would be better managed under an [Root.GetAdjective]-led '
@@ -35,7 +35,7 @@ exarchs = [
         "tag": 'EED',
         "name": 'pannonia',
         "culture_group": 'carpathian',
-        "primary_culture": 'hungarian',
+        "default_culture": 'hungarian',
         "desc": "Once at the forefront of Trajan's conquests, this area was gradually abandoned over the centuries as "
                 "raids and invasions took their toll. Now that it has been retaken, it would be better managed under "
                 "an [Root.GetAdjective]-led Exarch in cooperation with the local elite.",
@@ -45,7 +45,7 @@ exarchs = [
         "tag": 'EEE',
         "name": 'aigyptos',
         "culture_group": 'turko_semitic',
-        "primary_culture": 'al_misr_arabic',
+        "default_culture": 'al_misr_arabic',
         "additional_effects":
             "if = {\n"
             "				limit = { mission_completed = to_in_alexios_footsteps_mission }\n"
@@ -63,7 +63,7 @@ exarchs = [
         "tag": 'EEF',
         "name": 'aphrike',
         "culture_group": 'maghrebi',
-        "primary_culture": 'tunisian',
+        "default_culture": 'tunisian',
         "check_supply_lines": True,
         "desc": "Afrika was once the homeland of the hated Carthaginian Empire and was one of the few provinces that "
                 "were retaken in Justinian's reconquests. Now that it has been retaken, it would be better managed "
@@ -74,7 +74,7 @@ exarchs = [
         "tag": 'EEG',
         "name": 'frankia',
         "culture_group": 'french',
-        "primary_culture": 'occitain',
+        "default_culture": 'occitain',
         "desc": "Gallia, once the heartland of the Western Empire, and the last bastion in the west to fall "
                 "to the Franks. What remains of the formidable power would be better "
                 "managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite.",
@@ -84,7 +84,7 @@ exarchs = [
         "tag": 'EEH',
         "name": 'spania',
         "culture_group": 'iberian',
-        "primary_culture": 'catalan',
+        "default_culture": 'catalan',
         "check_supply_lines": True,
         "gibraltar_check": True,
         "merchant_tooltip_overwrite": "custom_tooltip = to_exarch_bonus_merchant_eeh_tt",
@@ -98,7 +98,7 @@ exarchs = [
         "tag": 'EEI',
         "name": 'ano_germania',
         "culture_group": 'germanic',
-        "primary_culture": 'austrian',
+        "default_culture": 'austrian',
         "desc": "Comprising mainly the land between the Italian Alps and the Danubian frontier, this land was one of "
                 "the borders of the ancient empire. Now that it has been retaken, it would be better managed under "
                 "an [Root.GetAdjective]-led Exarch in cooperation with the local elite.",
@@ -108,7 +108,7 @@ exarchs = [
         "tag": 'EEJ',
         "name": 'baltikos',
         "culture_group": 'baltic',
-        "primary_culture": 'lithuanian',
+        "default_culture": 'lithuanian',
         "desc": "Baltikos was far from the borders of the Ancient Romans, with the area being largely unknown to them. "
                 "Now that we have conquered the region, it would be better managed under an [Root.GetAdjective]-led "
                 "Exarch in cooperation with the local elite.",
@@ -119,7 +119,7 @@ exarchs = [
         "tag": 'EEL',
         "name": 'rhosia',
         "culture_group": 'east_slavic',
-        "primary_culture": 'russian',
+        "default_culture": 'russian',
         "desc": "Rhosia was once home to the Kievan Rus, a people to which we gave the gift of the written word "
                 "through the creation of the Cyrillic alphabet. Now that we have returned, it would be better managed "
                 "under an [Root.GetAdjective]-led Exarch in cooperation with the local elite.",
@@ -131,7 +131,7 @@ exarchs = [
         "tag": 'EEM',
         "name": 'antaia',
         "culture_group": 'east_slavic',
-        "primary_culture": 'ruthenian',
+        "default_culture": 'ruthenian',
         "desc": "Ever since the fall of the Western Empire, the lands north of the Pontic steppe came to be mostly "
                 "inhabited by Anteans, Slavic people, who were at different times our enemies, allies and subjects."
                 " Undeterred by intermittent invasions of steppe peoples, their descendants still govern those fertile"
@@ -143,7 +143,7 @@ exarchs = [
         "tag": 'EEO',
         "name": 'syria',
         "culture_group": 'turko_semitic',
-        "primary_culture": 'al_suryah_arabic',
+        "default_culture": 'al_suryah_arabic',
         "additional_effects":
             "if = {\n"
             "				limit = { mission_completed = to_in_alexios_footsteps_mission }\n"
@@ -164,7 +164,7 @@ exarchs = [
         "tag": 'EER',
         "name": 'italia',
         "culture_group": 'latin',
-        "primary_culture": 'umbrian',
+        "default_culture": 'umbrian',
         "check_supply_lines": True,
         "varangians_check": True,
         "merchant_tooltip_overwrite": "if = {\n"
@@ -187,7 +187,7 @@ exarchs = [
         "tag": 'EES',
         "name": 'megale_kimmeria',
         "culture_group": 'tartar',
-        "primary_culture": 'crimean',
+        "default_culture": 'crimean',
         "desc": "The corridor that presented a starting point for every invasion by the horsemen of the steppes, "
                 "from the Huns "
                 "themselves to the Avars, the Magyars, the Khazars, the Pechenegs, all the way to the Mongols. "
@@ -202,7 +202,7 @@ exarchs = [
         "tag": 'EET',
         "name": 'kato_germania',
         "culture_group": 'germanic',
-        "primary_culture": 'dutch',
+        "default_culture": 'dutch',
         "desc": "Germania Inferior or Kato Germania was an important border province during the time of the Ancient "
                 "Roman Empire before falling to Germanic conquest. Now that it has been retaken, it would be better "
                 "managed under an [Root.GetAdjective]-led Exarch in cooperation with the local elite.",
@@ -212,7 +212,7 @@ exarchs = [
         "tag": 'EEU',
         "name": 'megali_germania',
         "culture_group": 'germanic',
-        "primary_culture": 'saxon',
+        "default_culture": 'saxon',
         "desc": "Magna Germania or Megali Germania was once inhabited by the most fearsome of the Germanic tribes, "
                 "many of whom eventually settled in the lands of the former Western Roman Empire. Now that it has been "
                 "finally taken over, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation "
@@ -224,7 +224,7 @@ exarchs = [
         "tag": 'EEV',
         "name": 'vendia',
         "culture_group": 'west_slavic',
-        "primary_culture": 'polish',
+        "default_culture": 'polish',
         "desc": "Vendia was a dangerous land far from the borders of the Roman Empire in which monsters and monster "
                 "slayers were said to have fought an ever losing battle against the march of time. Now that it has "
                 "been taken over, it would be better managed under an [Root.GetAdjective]-led Exarch in cooperation "
@@ -236,7 +236,7 @@ exarchs = [
         "tag": 'EEQ',
         "name": 'arabia',
         "culture_group": 'turko_semitic',
-        "primary_culture": 'hejazi_culture',
+        "default_culture": 'hejazi_culture',
         "desc": "The deserts of the Arabian Peninsula once unleashed an army that conquered half our empire in a holy "
                 "fury. Now, however, we have a foothold in this land, the birthplace of Islam. Now that we are in "
                 "control, we find that it would be better managed under an [Root.GetAdjective]-led Exarch in "
@@ -247,7 +247,7 @@ exarchs = [
         "tag": 'EEP',
         "name": 'perses',
         "culture_group": 'iranian',
-        "primary_culture": 'persian',
+        "default_culture": 'persian',
         "desc": "Persia, our most ancient foe, falters at our spears. This land, lying once beyond our farthest "
                 "borders, is now within our dominion. To lessen the threat of rebellion, we should appoint "
                 "an [Root.GetAdjective]-led Exarch to govern the land in cooperation with the local elite.",
@@ -263,15 +263,26 @@ exarchs = [
                 "[A][159.GetAreaName][!A]"
     },
     {
+        "tag": 'EEN',
+        "name": 'anatolia',
+        "primary_culture": "turkish",
+        "monarchy_keep_dynasty": True,
+        "on_created_effect": "to_setup_anatolia_exarch = yes",
+        "on_created_tooltip": "to_setup_anatolia_exarch_tooltip = yes",
+        "land": "[H][317.GetRegionName][!H] region, except for the province of [A][321.GetName][!A]"
+    },
+    {
         "tag": 'ELG',
         "name": 'konstantinia',
+        "primary_culture": "greek",
         "land": "[H][145.GetAreaName][!H], [H][147.GetAreaName][!H], [H][148.GetAreaName][!H], "
                 "[H][151.GetAreaName][!H], [H][164.GetAreaName][!H], [H][150.GetAreaName][!H], "
-                "[H][159.GetAreaName][!H] areas and provinces in [H][151.GetRegionName][!H] and "
+                "[H][159.GetAreaName][!H] areas, [H][321.GetName][!H] and provinces in [H][151.GetRegionName][!H] and "
                 "[H][317.GetRegionName][!H] regions with [H]Greek[!H] or [H]Pontic[!H] culture. They will NOT "
                 "receive [H][151.GetCapitalName][!H] itself",
         "merchant_land": "[H][145.GetAreaName][!H], [H][147.GetAreaName][!H], [H][148.GetAreaName][!H], "
                 "[H][151.GetAreaName][!H], [H][164.GetAreaName][!H], [H][150.GetAreaName][!H], "
-                "[H][159.GetAreaName][!H] areas, except for [A][151.GetCapitalName][!A] itself"
+                "[H][159.GetAreaName][!H] areas and [H][321.GetName][!H] province, "
+                "except for [A][151.GetCapitalName][!A] itself"
     }
 ]
