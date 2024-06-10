@@ -24,7 +24,7 @@ decisions_template = Template('''{% for exarch in exarchs %}
     to_form_exarch_{{ exarch['name'] }} = {
 		potential = {
 			nhs_check_all_elysian_tags = { CONDITION = tag }
-			NOT = { exists = {{ exarch['tag'] }} }
+			NOT = { exists = {{ exarch['reference_target'] }} }
 			any_owned_province = {
 				nhs_{{ exarch['tag'] }}_province = yes
 				NOT = { has_province_flag = nhs_exarch_province_exemption }
@@ -142,12 +142,12 @@ decisions_template = Template('''{% for exarch in exarchs %}
 			custom_tooltip = nhs_exarchate_setting_desc_tt
 			custom_tooltip = nhs_new_line_tt
 						
-			to_initialize_exarch = { EXARCH_TAG = {{ exarch['tag'] }} }
+			to_initialize_exarch = { EXARCH_TAG = {{ exarch['reference_target'] }} }
 			{%- if 'additional_effects' in exarch %}
 			{{ exarch["additional_effects"]}}
 			{%- endif %}
 			custom_tooltip = nhs_new_line_tt
-			{{ exarch['tag'] }} = {
+			{{ exarch['reference_target'] }} = {
 				custom_tooltip = to_set_exarch_reform_republic_tt
 			}
 			custom_tooltip = to_reform_effects_for_overlord_tt
@@ -230,6 +230,8 @@ for exarch in exarchs_filtered:
         f.write(f" to_exarch_merchant_land_{exarch['tag']}_tt:0 \"{merchant_land}\"\n")
     else:
         f.write(f" to_exarch_merchant_land_{exarch['tag']}_tt:0 \"{land_string}\"\n")
+
+    f.write(f" to_{exarch['tag']}_name_tt:0 \"[{exarch['tag']}.GetName]\"\n")
 f.close()
 
 f = open(output_cl, "w", encoding="utf-8")
@@ -240,7 +242,7 @@ f.write("	name = GetExarchLand\n"
 for exarch in exarchs_filtered:
     f.write(f"	text = {{\n"
             f"		localisation_key = to_exarch_land_{exarch['tag']}_tt\n"
-            f"		trigger = {{ tag = {exarch['tag']} }}\n"
+            f"		trigger = {{ tag = {exarch['reference_target']} }}\n"
             f"	}}\n")
 f.write("}\n\n")
 
@@ -252,7 +254,7 @@ f.write("	name = GetExarchLandFrom\n"
 for exarch in exarchs_filtered:
     f.write(f"	text = {{\n"
             f"		localisation_key = to_exarch_land_{exarch['tag']}_tt\n"
-            f"		trigger = {{ FROM = {{ tag = {exarch['tag']} }} }}\n"
+            f"		trigger = {{ FROM = {{ tag = {exarch['reference_target']} }} }}\n"
             f"	}}\n")
 f.write("}\n\n")
 f.write("defined_text = {\n")
@@ -292,7 +294,8 @@ for i in range(len(exarchs_filtered)):
     f.write(f"			limit = {{ nhs_{exarch['tag']}_province = yes }}\n"
             f"			to_transfer_province_or_create_exarch = {{\n"
             f"				CURRENT_OWNER = FROM\n"
-            f"				EXARCH_TAG = {exarch['tag']}\n")
+            f"				EXARCH_TAG = {exarch['tag']}\n"
+            f"				EXARCH_SCOPE = {exarch['reference_target']}\n")
     # if "monarchy_keep_dynasty" in exarch:
     #     f.write(f"				MONARCHY_KEEP_DYNASTY = yes\n")
     # else:

@@ -1,6 +1,7 @@
 exarchs = [
     {
         "tag": 'EEA',
+        "reference_target": 'EEA',
         "name": 'armenia',
         "culture_group": 'caucasian',
         "default_culture": 'georgian',
@@ -12,6 +13,7 @@ exarchs = [
     },
     {
         "tag": 'EEB',
+        "reference_target": 'EEB',
         "name": 'anglia',
         "culture_group": 'british',
         "default_culture": 'english',
@@ -22,6 +24,7 @@ exarchs = [
     },
     {
         "tag": 'EEC',
+        "reference_target": 'EEC',
         "name": 'skanza',
         "culture_group": 'scandinavian',
         "default_culture": 'danish',
@@ -33,6 +36,7 @@ exarchs = [
     },
     {
         "tag": 'EED',
+        "reference_target": 'EED',
         "name": 'pannonia',
         "culture_group": 'carpathian',
         "default_culture": 'hungarian',
@@ -43,6 +47,7 @@ exarchs = [
     },
     {
         "tag": 'EEE',
+        "reference_target": 'EEE',
         "name": 'aigyptos',
         "culture_group": 'turko_semitic',
         "default_culture": 'al_misr_arabic',
@@ -61,6 +66,7 @@ exarchs = [
 
     {
         "tag": 'EEF',
+        "reference_target": 'EEF',
         "name": 'aphrike',
         "culture_group": 'maghrebi',
         "default_culture": 'tunisian',
@@ -72,6 +78,7 @@ exarchs = [
     },
     {
         "tag": 'EEG',
+        "reference_target": 'EEG',
         "name": 'frankia',
         "culture_group": 'french',
         "default_culture": 'occitain',
@@ -82,6 +89,10 @@ exarchs = [
     },
     {
         "tag": 'EEH',
+        "reference_target": 'event_target:to_EEH_target',
+        "subtags": [
+            "EEK"
+        ],
         "name": 'spania',
         "culture_group": 'iberian',
         "default_culture": 'catalan',
@@ -96,6 +107,7 @@ exarchs = [
     },
     {
         "tag": 'EEI',
+        "reference_target": 'EEI',
         "name": 'ano_germania',
         "culture_group": 'germanic',
         "default_culture": 'austrian',
@@ -106,6 +118,7 @@ exarchs = [
     },
     {
         "tag": 'EEJ',
+        "reference_target": 'EEJ',
         "name": 'baltikos',
         "culture_group": 'baltic',
         "default_culture": 'lithuanian',
@@ -117,6 +130,7 @@ exarchs = [
 
     {
         "tag": 'EEL',
+        "reference_target": 'EEL',
         "name": 'rhosia',
         "culture_group": 'east_slavic',
         "default_culture": 'russian',
@@ -129,6 +143,7 @@ exarchs = [
     },
     {
         "tag": 'EEM',
+        "reference_target": 'EEM',
         "name": 'antaia',
         "culture_group": 'east_slavic',
         "default_culture": 'ruthenian',
@@ -141,6 +156,7 @@ exarchs = [
     },
     {
         "tag": 'EEO',
+        "reference_target": 'EEO',
         "name": 'syria',
         "culture_group": 'turko_semitic',
         "default_culture": 'al_suryah_arabic',
@@ -162,6 +178,7 @@ exarchs = [
     },
     {
         "tag": 'EER',
+        "reference_target": 'EER',
         "name": 'italia',
         "culture_group": 'latin',
         "default_culture": 'umbrian',
@@ -185,6 +202,7 @@ exarchs = [
     },
     {
         "tag": 'EES',
+        "reference_target": 'EES',
         "name": 'megale_kimmeria',
         "culture_group": 'tartar',
         "default_culture": 'crimean',
@@ -200,6 +218,7 @@ exarchs = [
 
     {
         "tag": 'EET',
+        "reference_target": 'EET',
         "name": 'kato_germania',
         "culture_group": 'germanic',
         "default_culture": 'dutch',
@@ -210,6 +229,7 @@ exarchs = [
     },
     {
         "tag": 'EEU',
+        "reference_target": 'EEU',
         "name": 'megali_germania',
         "culture_group": 'germanic',
         "default_culture": 'saxon',
@@ -222,6 +242,7 @@ exarchs = [
     },
     {
         "tag": 'EEV',
+        "reference_target": 'EEV',
         "name": 'vendia',
         "culture_group": 'west_slavic',
         "default_culture": 'polish',
@@ -234,6 +255,7 @@ exarchs = [
     },
     {
         "tag": 'EEQ',
+        "reference_target": 'EEQ',
         "name": 'arabia',
         "culture_group": 'turko_semitic',
         "default_culture": 'hejazi_culture',
@@ -245,6 +267,7 @@ exarchs = [
     },
     {
         "tag": 'EEP',
+        "reference_target": 'EEP',
         "name": 'perses',
         "culture_group": 'iranian',
         "default_culture": 'persian',
@@ -256,6 +279,7 @@ exarchs = [
     },
     {
         "tag": 'EEY',
+        "reference_target": 'EEY',
         "name": 'illyris',
         "land": "[H][145.GetRegionName][!H] region, except for the following areas: [A][145.GetAreaName][!A], "
                 "[A][147.GetAreaName][!A], [A][148.GetAreaName][!A], "
@@ -264,6 +288,7 @@ exarchs = [
     },
     {
         "tag": 'EEN',
+        "reference_target": 'EEN',
         "name": 'anatolia',
         "primary_culture": "turkish",
         "monarchy_keep_dynasty": True,
@@ -273,6 +298,7 @@ exarchs = [
     },
     {
         "tag": 'ELG',
+        "reference_target": 'ELG',
         "name": 'konstantinia',
         "primary_culture": "greek",
         "land": "[H][145.GetAreaName][!H], [H][147.GetAreaName][!H], [H][148.GetAreaName][!H], "
