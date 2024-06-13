@@ -1,3 +1,117 @@
+to_set_varangian_headquarters = {
+	add_province_modifier = {
+		name = to_varangian_headquarters
+		duration = -1
+	}
+	set_province_flag = to_varangian_headquarters_flag
+	to_exarch_effect_from_province = {
+		EFFECT = "
+		if = {
+			limit = {
+				PREV = {
+					has_province_flag = to_was_counted_for_exarch_merchant
+				}
+			}
+			clr_province_flag = to_was_counted_for_exarch_merchant
+			change_variable = {
+				which = to_exarch_owned_provinces_for_merchant
+				value = -1
+			}
+		}
+		change_variable = {
+			which = to_exarch_needed_provinces_for_merchant
+			value = -1
+		}
+		"
+	}
+}
+
+to_on_varangian_headquarters_removed = {
+	if = {
+		limit = {
+			has_province_flag = to_varangian_headquarters_flag
+		}
+		clr_province_flag = to_varangian_headquarters_flag
+		remove_province_modifier = to_varangian_headquarters
+		to_exarch_effect_from_province = {
+			EFFECT = "
+			change_variable = {
+				which = to_exarch_needed_provinces_for_merchant
+				value = 1
+			}
+			"
+		}
+	}
+}
+
+to_set_supply_lines_province = {
+	tooltip = {
+		add_province_modifier = {
+			name = nhs2_supply_lines
+			duration = -1
+			desc = "END_OF_INVASION"
+		}
+	}
+	hidden_effect = {
+		add_province_triggered_modifier = nhs2_supply_lines_tm
+		save_global_event_target_as = nhs_supply_lines_province
+		to_exarch_effect_from_province = {
+			EFFECT = "
+			if = {
+				limit = {
+					PREV = {
+						has_province_flag = to_was_counted_for_exarch_merchant
+					}
+				}
+				clr_province_flag = to_was_counted_for_exarch_merchant
+				change_variable = {
+					which = to_exarch_owned_provinces_for_merchant
+					value = -1
+				}
+			}
+			change_variable = {
+				which = to_exarch_needed_provinces_for_merchant
+				value = -1
+			}
+			"
+		}
+	}
+}
+
+to_set_base_of_operations_province = {
+	tooltip = {
+		add_province_modifier = {
+			name = nhs2_base_of_operations
+			duration = -1
+			desc = "END_OF_INVASION"
+		}
+	}
+	hidden_effect = {
+		add_province_triggered_modifier = nhs2_base_of_operations_tm
+		save_global_event_target_as = nhs_base_of_operations_province
+		to_exarch_effect_from_province = {
+			EFFECT = "
+			if = {
+				limit = {
+					PREV = {
+						has_province_flag = to_was_counted_for_exarch_merchant
+					}
+				}
+				clr_province_flag = to_was_counted_for_exarch_merchant
+				change_variable = {
+					which = to_exarch_owned_provinces_for_merchant
+					value = -1
+				}
+			}
+			change_variable = {
+				which = to_exarch_needed_provinces_for_merchant
+				value = -1
+			}
+			"
+		}
+	}
+}
+
 to_check_arsenal_efficiency = {
 	if = {
 		limit = {
@@ -12008,10 +12122,7 @@ to_nhs_set_up_varangians_in_province = {
 			has_country_flag = nhs_varangian_guard_integrated
 		}
 		$PROVINCE_ID$ = {
-			add_province_modifier = {
-				name = to_varangian_headquarters
-				duration = -1
-			}
+			to_set_varangian_headquarters = yes
 			[[EXTRA_DEVELOPMENT]
 			add_base_manpower = 3
 			]
