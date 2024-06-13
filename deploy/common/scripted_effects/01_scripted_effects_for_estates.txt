@@ -2059,7 +2059,46 @@ on_province_owner_change_estate_privileges_effect = {
 			}
 		}
 	}
-	
+	if = {
+		limit = {
+			owner = { has_estate_privilege = estate_burghers_INC_mountain_development }
+		}
+        if = {
+            limit = { owner = { has_country_flag = INC_upgrade_mountain_development_privilege_flag } }
+            if = {
+                limit = { has_terrain = mountain }
+                add_province_modifier = { name = estate_burghers_mountain_expansion_upgrade_mountains duration = -1 }
+            }
+            else_if = {
+                limit = { has_terrain = highlands }
+                add_province_modifier = { name = estate_burghers_mountain_expansion_upgrade_highlands duration = -1 }
+            }
+            else_if = {
+                limit = { has_terrain = hills }
+                add_province_modifier = { name = estate_burghers_mountain_expansion_upgrade_hills duration = -1 }
+            }
+            else = { 
+                add_province_modifier = { name = estate_burghers_mountain_expansion_penalty duration = -1 }
+            }
+        }
+        else = {
+            if = {
+                limit = { has_terrain = mountain }
+                add_province_modifier = { name = estate_burghers_mountain_expansion_mountains duration = -1 }
+            }
+            else_if = {
+                limit = { has_terrain = highlands }
+                add_province_modifier = { name = estate_burghers_mountain_expansion_highlands duration = -1 }
+            }
+            else_if = {
+                limit = { has_terrain = hills }
+                add_province_modifier = { name = estate_burghers_mountain_expansion_hills duration = -1 }
+            }
+            else = { 
+                add_province_modifier = { name = estate_burghers_mountain_expansion_penalty duration = -1 }
+            }
+        }
+	}
 	if = {
 		limit = {
 			owner = {
@@ -4297,6 +4336,16 @@ seize_land_estate_effect = {
 	take_estate_land_share_massive = { estate = $estate$ }
 	if = {
 		limit = {
+			has_country_flag = ned_lands_generality_flag
+		}
+		add_estate_loyalty = {
+			estate = $estate$
+			loyalty = -10
+			short = yes
+		}
+	}
+	else_if = {
+		limit = {
 			has_government_attribute = seizing_land_loyalty
 		}
 		add_estate_loyalty = {
@@ -4311,7 +4360,7 @@ seize_land_estate_effect = {
 			loyalty = -20
 			short = yes
 		}
-	}
+	} 
 	if = {
 		limit = { NOT = { has_government_attribute = seizing_land_no_rebels } }
 		custom_tooltip = seize_land_rebels_tt

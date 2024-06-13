@@ -748,7 +748,7 @@ country_event = {
 	title = "innovativeness_events.15.t"
 	desc = "innovativeness_events.15.d"
 	picture = CHAMBER_OF_CURIOSITIES_eventPicture
-	
+	goto = target_province
 	is_triggered_only = yes
 	
 	trigger = {
@@ -758,6 +758,22 @@ country_event = {
 	}
 	mean_time_to_happen = {
 		days = 1
+	}
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					NOT = {
+						has_building = temple
+					}
+					NOT = {
+						has_building = cathedral
+					}
+					num_free_building_slots = 1
+				}
+				save_event_target_as = target_province
+			}
+		}
 	}
 	option = { # create a collection for the monarch
 		name = "innovativeness_events.15.a"
@@ -771,16 +787,7 @@ country_event = {
 	option = { # this is silly. build a church instead
 		name = "innovativeness_events.15.b"
 		add_estate_church_loyalty_effect = yes
-		random_owned_province = {
-			limit = {
-				NOT = {
-					has_building = temple
-				}
-				NOT = {
-					has_building = cathedral
-				}
-				num_free_building_slots = 1
-			}
+		event_target:target_province = {
 			add_building = temple
 		}
 	}

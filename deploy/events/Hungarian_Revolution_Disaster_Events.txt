@@ -174,11 +174,9 @@ country_event = {
 		if = {
 			limit = {
 				primary_culture = austrian
-				NOT = {
-					accepted_culture = hungarian
-				}
+				NOT = { accepted_culture = hungarian }
 			}
-			add_accepted_culture = hungarian
+			add_accepted_culture_or_dip_power = { culture = hungarian }
 		}
 		set_estate_privilege = estate_nobles_hungarian_nobility_privileges
 	}
@@ -237,16 +235,12 @@ country_event = {
 	
 	option = {
 		name = hungarian_revolt_events.3.dd
-		
 		trigger = {
 			NOT = {
 				num_of_rebel_armies = 1
 				num_of_rebel_controlled_provinces = 1
 			}
-			NOT = {
-				exists = HUN
-				has_country_flag = hab_chose_compromise
-			}
+			NOT = { has_country_flag = hab_chose_compromise }
 		}
 		
 		restore_country_name_effect = yes
@@ -259,11 +253,25 @@ country_event = {
 		if = {
 			limit = {
 				primary_culture = austrian
-				NOT = {
-					accepted_culture = hungarian
+				NOT = { accepted_culture = hungarian }
+			}
+			add_accepted_culture_or_dip_power = { culture = hungarian } 
+		}
+		if = {
+			limit = {
+				exists = HUN
+				HUN = {
+					is_subject = yes
+					NOT = { is_subject_of = ROOT }
 				}
 			}
-			add_accepted_culture = hungarian
+			HUN = {
+				overlord = {
+					country_event = {
+						id = hungarian_revolt_events.8
+					}
+				}
+			}
 		}
 	}
 
@@ -372,5 +380,85 @@ country_event = {
 		name = hungarian_revolt_events.7.a
 		
 		add_stability = -1
+	}
+}
+
+#The Hungarian subject breaks away!
+country_event = {
+	id = hungarian_revolt_events.8
+	title = hungarian_revolt_events.8.t
+	desc = hungarian_revolt_events.8.d
+	picture = REVOLUTION_eventPicture
+	
+	is_triggered_only = yes
+	#War!
+	option = {
+		name = hungarian_revolt_events.8.a
+		tooltip = {
+			FROM = {
+				inherit = HUN
+				declare_war_with_cb = {
+					casus_belli = cb_insult
+					who = ROOT
+				}
+			}
+		}
+		hidden_effect = {
+			FROM = {
+				country_event = {
+					id = hungarian_revolt_events.9
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+	#Oof
+	option = {
+		name = hungarian_revolt_events.8.b
+		tooltip = {
+			FROM = { inherit = HUN }
+		}
+		hidden_effect = {
+			FROM = {
+				country_event = {
+					id = hungarian_revolt_events.10
+				}
+			}
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#The Hungarian vassal joins us, but war happens!
+country_event = {
+	id = hungarian_revolt_events.9
+	title = hungarian_revolt_events.9.t
+	desc = hungarian_revolt_events.9.d
+	picture = REVOLUTION_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = hungarian_revolt_events.9.a
+		inherit = HUN
+		declare_war_with_cb = {
+			casus_belli = cb_insult
+			who = FROM
+		}
+	}
+}
+
+#The Hungarian vassal joins us, but war happens!
+country_event = {
+	id = hungarian_revolt_events.10
+	title = hungarian_revolt_events.10.t
+	desc = hungarian_revolt_events.10.d
+	picture = REVOLUTION_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = hungarian_revolt_events.10.a
+		inherit = HUN
 	}
 }
