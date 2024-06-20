@@ -315,7 +315,7 @@ for i in range(len(exarchs_filtered)):
     if "on_created_effect" in exarch:
         f.write(f"				ON_CREATED_EFFECT = \"\\\"{exarch["on_created_effect"]}\\\"\"\n")
     else:
-        f.write(f"				ON_CREATED_EFFECT = \"\\\"to_setup_exarch = yes\\\"\"\n")
+        f.write(f"				ON_CREATED_EFFECT = \"\\\"to_setup_exarch = {{}}\\\"\"\n")
 
     if "on_created_tooltip" in exarch:
         f.write(f"				ON_CREATED_TOOLTIP = \"\\\"{exarch["on_created_tooltip"]}\\\"\"\n")

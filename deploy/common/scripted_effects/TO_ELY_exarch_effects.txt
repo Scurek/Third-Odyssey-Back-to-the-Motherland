@@ -1,3 +1,52 @@
+to_exarch_reform_effect = {
+	custom_tooltip = to_reform_effects_for_overlord_tt
+	if = {
+		limit = {
+			overlord = {
+				mission_completed = to_the_eagle_rises_mission
+			}
+		}
+		custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+		custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+	}
+	else = {
+		custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+		custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+	}
+	custom_tooltip = nhs_new_line_tt
+	custom_tooltip = to_reform_effects_tt
+	custom_tooltip = to_automatically_accepts_culture_tt
+	custom_tooltip = to_min_autonomy_exarch_modifier_tt
+	hidden_effect = {
+		every_owned_province = {
+			to_handle_exarch_autonomy_modifier = yes
+			if = {
+				limit = {
+					PREV = {
+						NOT = { accepted_culture = PREV }
+					}
+				}
+				PREV = {
+					add_accepted_culture = PREV
+				}
+			}
+		}
+	}
+	custom_tooltip = to_forced_new_line_tt
+	hidden_effect = {
+		to_imperial_integration_country_check = yes
+	}
+}
+
+to_exarch_reform_removed_effect = {
+	hidden_effect = {
+		to_imperial_integration_country_check = yes
+		every_owned_province = {
+			remove_province_modifier = to_exarch_autonomy_penalty
+		}
+	}
+}
+
 to_set_initial_exarch_targets = {
 	EEH = { save_global_event_target_as = to_EEH_target }
 	EEY = { save_global_event_target_as = to_EEY_target }	
@@ -45,7 +94,9 @@ to_set_exarch_always_count_for_merchant = {
 					has_province_flag = to_was_counted_for_exarch_merchant
 				}
 			}
-			clr_province_flag = to_was_counted_for_exarch_merchant
+			PREV = {
+				clr_province_flag = to_was_counted_for_exarch_merchant
+			}
 			change_variable = {
 				which = to_exarch_owned_provinces_for_merchant
 				value = -1
@@ -114,6 +165,33 @@ to_setup_exarch_merchant_counters = {
 	}
 }
 
+to_check_exarch_merchant_counter_all_owned_provinces = {
+	if = {
+		limit = {
+			is_subject_of_type = elysian_subject
+		}
+		set_variable = {
+			which = to_exarch_owned_provinces_for_merchant
+			value = 0
+		}
+		every_owned_province = {
+			limit = {
+				NOT = { to_province_always_counts_for_exarch_merchant = yes }
+				to_exarch_land = {
+					SCOPE = "owner"
+				}
+			}
+			set_province_flag = to_was_counted_for_exarch_merchant
+			PREV = {
+				change_variable = {
+					which = to_exarch_owned_provinces_for_merchant
+					value = 1
+				}
+			}
+		}
+	}
+}
+
 to_check_exarch_merchant_counter = {
 	if = {
 		limit = {
@@ -130,31 +208,27 @@ to_check_exarch_merchant_counter = {
 				}
 			}
 			set_province_flag = to_was_counted_for_exarch_merchant
-			to_exarch_effect_from_province = {
-				EFFECT = "
+			owner = {
 				change_variable = {
 					which = to_exarch_owned_provinces_for_merchant
 					value = 1
 				}
-				"
 			}
 		}
 	}
 	else_if = {
 		limit = {
-			PREV = {
+			FROM = {
 				is_subject_of_type = elysian_subject
 			}
 			has_province_flag = to_was_counted_for_exarch_merchant
 		}
 		clr_province_flag = to_was_counted_for_exarch_merchant
-		to_exarch_effect_from_province = {
-			EFFECT = "
+		FROM = {
 			change_variable = {
 				which = to_exarch_owned_provinces_for_merchant
 				value = -1
 			}
-			"
 		}
 	}
 }
@@ -645,18 +719,25 @@ to_handle_exarch_change_capital = {
 	}
 }
 
-# to_initialize_exarch = {
-# 	to_assign_provinces_to_exarch = { TAG = $EXARCH_TAG$ }
-# 	to_initialize_exarch_government = { EXARCH_TAG = $EXARCH_TAG$ }
-# }
-
 to_setup_exarch = {
 	change_government = republic
 	add_government_reform = to_exarch_reform
+	if = {
+		limit = {
+			always = yes
+			[[DO_NOT_SET_PRIMARY_CULTURE] always = no ]
+		}
+		capital_scope = {
+			PREV = {
+				change_primary_culture = PREV
+			}
+		}
+	}
 }
 
 to_setup_greek_exarch = {
-	to_setup_exarch = yes
+	to_setup_exarch = { DO_NOT_SET_PRIMARY_CULTURE = yes }
+	change_primary_culture = greek
 }
 
 to_setup_anatolia_exarch = {
@@ -665,6 +746,7 @@ to_setup_anatolia_exarch = {
 			has_global_flag = to_orhans_descendant_rules_anatolia
 		}
 		change_government = monarchy
+		change_primary_culture = turkish
 		define_ruler = {
 			dynasty = "Osmanoglu"
 			male = yes
@@ -675,7 +757,8 @@ to_setup_anatolia_exarch = {
 		add_government_reform = to_exarch_reform_monarchy_locked_dynasty
 	}
 	else = {
-		to_setup_exarch = yes
+		to_setup_exarch = { DO_NOT_SET_PRIMARY_CULTURE = yes }
+		change_primary_culture = turkish
 	}
 }
 
@@ -697,31 +780,18 @@ to_setup_illyris_exarch = {
 			has_global_flag = to_kastrioti_rule_albania
 		}
 		change_government = monarchy
-		if = {
-			limit = {
-				has_global_flag = nhs_shqiperi_into_elysian
-			}
-			define_ruler = {
-				dynasty = "Kastrioti"
-				male = yes
-				culture = shqipproi
-				hide_skills = yes
-				claim = 95
-			}
-		}
-		else = {
-			define_ruler = {
-				dynasty = "Kastrioti"
-				male = yes
-				culture = shqiperi
-				hide_skills = yes
-				claim = 95
-			}
+		change_primary_culture = shqipproi
+		define_ruler = {
+			dynasty = "Kastrioti"
+			male = yes
+			culture = shqipproi
+			hide_skills = yes
+			claim = 95
 		}
 		add_government_reform = to_exarch_reform_monarchy_locked_dynasty
 	}
 	else = {
-		to_setup_exarch = yes
+		to_setup_exarch = {}
 	}
 }
 
@@ -735,10 +805,6 @@ to_setup_illyris_exarch_tooltip = {
 	else = {
 		custom_tooltip = to_set_exarch_reform_republic_tt
 	}
-}
-
-to_initialize_exarch_government = {
-	
 }
 
 to_transfer_province_or_create_exarch = {
@@ -886,11 +952,7 @@ to_setup_exarch_government_and_transfer_provinces = {
 			
 			$ON_CREATED_EFFECT$
 
-			capital_scope = {
-				PREV = {
-					set_ruler_culture = PREV
-				}
-			}
+			set_ruler_culture = THIS
 
 			add_republican_tradition = 100
 			add_republican_tradition = -20

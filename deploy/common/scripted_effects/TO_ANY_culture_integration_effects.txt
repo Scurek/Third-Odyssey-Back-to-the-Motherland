@@ -70,21 +70,11 @@ to_culture_integrated_on_owner_change = {
 	if = {
 		limit = {
 			to_has_culture_integrated = yes
-		}
-		if = {
-			limit = {
-				owner = {
-					to_enabled_european_culture_integration = yes
-				}
-			}
-			to_add_appropriate_culture_integration_modifier = yes
-		}
-		else = {
-			add_province_modifier = {
-				name = to_culture_integrated_inactive
-				duration = -1
+			owner = {
+				to_enabled_european_culture_integration = yes
 			}
 		}
+		to_add_appropriate_culture_integration_modifier = yes
 	}
 }
 
@@ -498,7 +488,9 @@ to_culture_assimilation_progress = {
 		limit = {
 			is_city = yes
 			# country_or_subject_holds = event_target:$OWNER_TARGET$
-			culture_group = event_target:$OWNER_TARGET$
+			event_target:$OWNER_TARGET$ = {
+				culture_group = PREV
+			}
 		}
 		PREV = {
 			change_variable = {
@@ -518,6 +510,7 @@ to_culture_assimilation_progress = {
 	clr_province_flag = to_tribal_assimilation_citizenship_enabled
 	clr_province_flag = to_tribal_assimilation_native_assimilation_enabled
 	clr_province_flag = to_culture_assimilation_recruitment_quotas_enabled
+	clr_province_flag = to_assimilation_culture_accepted
 	set_variable = {
 		which = to_assimilation_development
 		value = 0
@@ -668,14 +661,8 @@ to_culture_assimilation_progress = {
 	if = {
 		limit = {
 			owner = {
-				has_or_overlord_has = {
-					TRIGGER = "accepted_culture = event_target:to_assimilation_province" 
-				}
-				NOT = {
-					has_or_overlord_has = {
-						TRIGGER = "culture_group = event_target:to_assimilation_province" 
-					}
-				}
+				accepted_culture = event_target:to_assimilation_province
+				NOT = { culture_group = event_target:to_assimilation_province }
 			}
 		}
 		set_province_flag = to_assimilation_culture_accepted
@@ -1089,6 +1076,8 @@ to_culture_integration_progress = {
 
 	clr_province_flag = to_culture_integration_triumph_completed
 	clr_province_flag = to_culture_assimilation_recruitment_quotas_enabled
+	clr_province_flag = to_assimilation_culture_accepted
+	clr_province_flag = to_assimilation_culture_accepted_overlord
 	every_neighbor_province = {
 		limit = {
 			is_city = yes
@@ -1179,15 +1168,42 @@ to_culture_integration_progress = {
 	if = {
 		limit = {
 			owner = {
-				has_or_overlord_has = { 
-					TRIGGER = "accepted_culture = event_target:to_assimilation_province" 
-				}
+				to_enabled_european_culture_integration_specific = yes
 			}
 		}
-		set_province_flag = to_assimilation_culture_accepted
-		change_variable = {
-			which = to_assimilation_modifier
-			value = 0.25
+		if = {
+			limit = {
+				owner = {
+					accepted_culture = event_target:to_assimilation_province
+				}
+			}
+			set_province_flag = to_assimilation_culture_accepted
+			change_variable = {
+				which = to_assimilation_modifier
+				value = 0.25
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			owner = {
+				is_subject = yes
+			}
+		}
+		set_province_flag = to_assimilation_culture_accepted_overlord
+		if = {
+			limit = {
+				owner = {
+					overlord = {
+						accepted_culture = event_target:to_assimilation_province
+					}
+				}
+			}
+			set_province_flag = to_assimilation_culture_accepted
+			change_variable = {
+				which = to_assimilation_modifier
+				value = 0.25
+			}
 		}
 	}
 	# Recruitment Quotas
@@ -1810,7 +1826,9 @@ to_add_appropriate_culture_integration_modifier = {
 	}
 	else_if = {
 		limit = {
-			government = republic
+			owner = {
+				government = republic
+			}
 		}
 		add_province_modifier = {
 			name = to_culture_integrated_unaccepted_republic
@@ -1844,6 +1862,8 @@ to_remove_culture_adaptation_variables = {
 	clr_province_flag = to_assimilation_progressing
 	clr_province_flag = to_assimilation_progressing_tribal
 	clr_province_flag = to_culture_integration_triumph_completed
+	clr_province_flag = to_assimilation_culture_accepted
+	clr_province_flag = to_assimilation_culture_accepted_overlord
 	clr_province_flag = to_a_new_hope_completed
 	clr_province_flag = to_culture_adaptation_heathen
 	clr_province_flag = to_culture_adaptation_heathen_overlord
