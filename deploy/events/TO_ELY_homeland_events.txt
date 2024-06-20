@@ -1898,6 +1898,441 @@ country_event = {
 	}
 }
 
+# A Kastrioti Homecoming
+country_event = {
+	id = nhs2_mainlandevents.2
+	title = nhs2_mainlandevents.2.t
+	desc = nhs2_mainlandevents.2.d
+	picture = ALBANIAN_EAGLE_eventPicture
+	
+	trigger = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		OR = {
+			NOT = { exists = EEY }
+			EEY = {
+				is_subject_of = ROOT
+			}
+		}
+		owns_or_subject_of = 151
+		has_country_flag = nhs_new_flight_taken_albanians
+		has_global_flag = nhs_shqiperi_into_elysian
+		albania_area = {
+			owner = {
+				OR = {
+					tag = ROOT
+					AND = {
+						is_subject_of = ROOT
+						is_subject_of_type = elysian_subject
+					}
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 12
+	}
+	
+	option = {
+		name = "nhs2_mainlandevents.2.a"
+
+		clr_global_flag = to_elg_got_albania
+		set_global_flag = to_kastrioti_rule_albania
+
+		custom_tooltip = to_add_kastrioti_dominion_modifier_tt
+		custom_tooltip = nhs_new_line_tt
+
+		if = {
+			limit = {
+				exists = EEY
+				EEY = {
+					is_subject_of = ROOT
+				}
+			}
+			custom_tooltip = to_make_illyria_exarch_albanian_tt
+			EEY = {
+				custom_tooltip = to_set_exarch_reform_monarchy_keep_dynasty_short_tt
+			}
+			custom_tooltip = to_exarch_cannot_be_annexed_for_the_next_50_years_tt
+			
+			# custom_tooltip = to_create_illyria_exarch_albanian_tt
+			# custom_tooltip = to_exarch_cannot_be_annexed_for_the_next_50_years_tt
+			# custom_tooltip = to_exarch_starting_land_EEY_tt
+			# custom_tooltip = to_exarch_creation_starting_land_limits_tt
+			# custom_tooltip = nhs_new_line_tt
+
+			# EEY = {
+			# 	custom_tooltip = to_set_exarch_reform_monarchy_keep_dynasty_tt
+			# }
+			# custom_tooltip = to_reform_effects_for_overlord_tt
+			# if = {
+			# 	limit = {
+			# 		$CURRENT_OWNER$ = {
+			# 			mission_completed = to_the_eagle_rises_mission
+			# 		}
+			# 	}
+			# 	custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+			# 	custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
+			# }
+			# else = {
+			# 	custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+			# 	custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
+			# }
+			# custom_tooltip = to_exarch_bonus_merchant_tt
+			# custom_tooltip = nhs_new_line_tt
+
+			# custom_tooltip = to_reform_effects_tt
+			# custom_tooltip = to_automatically_accepts_culture_tt
+			# custom_tooltip = to_min_autonomy_exarch_modifier_tt
+			# custom_tooltip = nhs_new_line_tt
+
+			# custom_tooltip = to_reform_modifiers_tt
+			# custom_tooltip = to_exarch_reform_modifiers_tt
+			# custom_tooltip = nhs_new_line_tt
+
+			# custom_tooltip = to_reform_government_attributes_tt
+			# custom_tooltip = to_exarch_reform_government_attributes_tt
+			hidden_effect = {
+				EEY = {
+					if = {
+						limit = {
+							owns = 4175
+						}
+						4175 = {
+							move_capital_effect = yes
+						}
+					}
+					else_if = {
+						limit = {
+							capital_scope = {
+								NOT = { culture = albanian }
+							}
+							any_owned_province = {
+								culture = albanian
+							}
+						}
+						random_owned_province = {
+							limit = {
+								culture = albanian
+							}
+							move_capital_effect = yes
+						}
+					}
+					to_change_tag = { TAG = EEW }
+					to_swap_exarch_dynamic_tag = {
+						BASE_TAG = EEY
+						CURRENT_TAG = EEY
+						NEW_TAG = EEW
+						NEW_NAME = EEW
+					}
+					change_government = monarchy
+					if = {
+						limit = {
+							has_global_flag = nhs_shqiperi_into_elysian
+						}
+						change_primary_culture = shqipproi
+						define_ruler = {
+							dynasty = "Kastrioti"
+							male = yes
+							culture = shqipproi
+							hide_skills = yes
+							claim = 95
+						}
+					}
+					else = {
+						change_primary_culture = shqiperi
+						define_ruler = {
+							dynasty = "Kastrioti"
+							male = yes
+							culture = shqiperi
+							hide_skills = yes
+							claim = 95
+						}
+					}
+					add_government_reform = to_exarch_reform_monarchy_locked_dynasty
+					to_handle_subject_annexation_date = yes
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				4175 = {
+					owned_by = ROOT
+				}
+			}
+			if = {
+				limit = {
+					4175 = {
+						NOT = { culture = albanian }
+						NOT = { culture = shqipproi }
+					}
+				}
+				4175 = {
+					change_culture = albanian
+				}
+			}
+			to_swap_exarch_dynamic_tag = {
+				BASE_TAG = EEY
+				CURRENT_TAG = EEY
+				NEW_TAG = EEW
+				NEW_NAME = EEW
+			}
+			
+			4175 = {
+				to_release_exarch_from_province = {
+					EXARCH_SCOPE = EEW
+					CURRENT_OWNER = ROOT
+				}
+			}
+	
+			to_setup_exarch_government_and_transfer_provinces = {
+				EXARCH_SCOPE = EEW
+				EXARCH_TAG = EEY
+				OVERLORD = ROOT
+				ON_CREATED_EFFECT = "to_setup_illyris_exarch = yes custom_tooltip = to_exarch_cannot_be_annexed_for_the_next_50_years_tt"
+				ON_CREATED_TOOLTIP = "to_setup_illyris_exarch_tooltip = yes"
+			}
+		}
+		else_if = {
+			limit = {
+				albania_area = {
+					owned_by = ROOT
+					culture = albanian
+				}
+			}
+			to_swap_exarch_dynamic_tag = {
+				BASE_TAG = EEY
+				CURRENT_TAG = EEY
+				NEW_TAG = EEW
+				NEW_NAME = EEW
+			}
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						owned_by = ROOT
+						culture = albanian
+					}
+					to_release_exarch_from_province = {
+						EXARCH_SCOPE = EEW
+						CURRENT_OWNER = ROOT
+					}
+				}
+			}
+
+			to_setup_exarch_government_and_transfer_provinces = {
+				EXARCH_SCOPE = EEW
+				EXARCH_TAG = EEY
+				OVERLORD = ROOT
+				ON_CREATED_EFFECT = "to_setup_illyris_exarch = yes custom_tooltip = to_exarch_cannot_be_annexed_for_the_next_50_years_tt"
+				ON_CREATED_TOOLTIP = "to_setup_illyris_exarch_tooltip = yes"
+			}
+		}
+		else_if = {
+			limit = {
+				albania_area = {
+					owned_by = ROOT
+				}
+			}
+			to_swap_exarch_dynamic_tag = {
+				BASE_TAG = EEY
+				CURRENT_TAG = EEY
+				NEW_TAG = EEW
+				NEW_NAME = EEW
+			}
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						owned_by = ROOT
+					}
+					to_release_exarch_from_province = {
+						EXARCH_SCOPE = EEW
+						CURRENT_OWNER = ROOT
+					}
+				}
+			}
+
+			to_setup_exarch_government_and_transfer_provinces = {
+				EXARCH_SCOPE = EEW
+				EXARCH_TAG = EEY
+				OVERLORD = ROOT
+				ON_CREATED_EFFECT = "to_setup_illyris_exarch = yes custom_tooltip = to_exarch_cannot_be_annexed_for_the_next_50_years_tt"
+				ON_CREATED_TOOLTIP = "to_setup_illyris_exarch_tooltip = yes"
+			}
+		}
+
+		hidden_effect = {
+			set_country_flag = to_kastrioti_dominion
+			EEW = {
+				set_country_flag = to_kastrioti_dominion_penalty
+			}
+
+			every_province = {
+				limit = {
+					culture = albanian
+					owner = {
+						has_or_overlord_has = { 
+							TRIGGER = "has_country_flag = to_kastrioti_dominion" 
+						}
+					}
+				}
+				add_province_modifier = {
+					name = to_kastrioti_dominion
+					duration = -1
+				}
+				to_start_culture_adaptation = yes
+			}
+
+			every_province = {
+				limit = {
+					culture = shqipproi
+					owner = {
+						has_or_overlord_has = { 
+							TRIGGER = "has_country_flag = to_kastrioti_dominion" 
+						}
+					}
+				}
+				add_province_modifier = {
+					name = to_kastrioti_dominion_boosted
+					duration = -1
+				}
+			}
+
+			if = {
+				limit = {
+					exists = EEW
+					EEW = {
+						is_subject_of = ROOT
+					}
+				}
+				EEW = {
+					set_country_flag = to_50_year_cooldown_on_exarch_annex
+					every_owned_province = {
+						limit = {
+							NOT = { culture = albanian }
+							NOT = { culture = shqipproi }
+							NOT = { culture = shqiperi }
+						}
+						add_nationalism = 10
+						add_province_modifier = {
+							name = to_kastrioti_dominion_penalty
+							duration = -1
+						}
+					}
+				}
+				albania_area = {
+					set_province_flag = to_exarch_province_reserved
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						to_cede_province_to_exarch = {
+							CURRENT_OWNER = ROOT
+							NEW_OWNER = EEW
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_mainlandevents.2.b"
+
+		clr_global_flag = to_kastrioti_rule_albania
+		clr_global_flag = to_elg_got_albania
+		set_country_flag = to_familiar_administration_in_albania
+
+		custom_tooltip = to_add_familiar_administration_in_albania_modifier_tt
+
+		hidden_effect = {
+			every_province = {
+				limit = {
+					culture = albanian
+					owner = {
+						has_or_overlord_has = { 
+							TRIGGER = "has_country_flag = to_familiar_administration_in_albania" 
+						}
+					}
+				}
+				add_province_modifier = {
+					name = to_familiar_administration_in_albania
+					duration = -1
+				}
+				to_start_culture_adaptation = yes
+			}
+		}
+	}
+
+	option = {
+		name = "nhs2_mainlandevents.2.c"
+
+		clr_global_flag = to_kastrioti_rule_albania
+		set_global_flag = to_elg_got_albania
+
+		set_country_flag = to_has_unraised_dynatoi_army_tt
+		custom_tooltip = to_unlock_dynatoi_army_tt
+		custom_tooltip = nhs_new_line_tt
+		
+		change_estate_land_share = {
+			estate = estate_nhs_nobles
+			share = 1
+		}
+		add_estate_loyalty = {
+			estate = estate_nhs_nobles
+			loyalty = 15
+		}
+
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_albania_to_elg_tt
+
+		hidden_effect = {
+			if = {
+				limit = {
+					ELG = {
+						exists = yes
+						is_subject_of = ROOT
+						is_subject_of_type = elysian_subject
+					}
+				}
+				every_owned_province = {
+					limit = {
+						area = albania_area
+						to_exarch_can_get_province_passive = yes	
+					}
+					to_cede_province_to_exarch = {
+						CURRENT_OWNER = ROOT
+						NEW_OWNER = ELG
+					}
+				}
+			}
+		}
+
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = to_betrayed_the_kastrioti_penalty_tt
+
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					culture = shqipproi
+				}
+				add_nationalism = 25
+			}
+		}
+
+		if = {
+			limit = {
+				SHQ = {
+					exists = yes
+					is_subject_of = ROOT
+				}
+			}
+			SHQ = {
+				add_liberty_desire = 50
+			}
+		}
+	}
+}
+
 ###################################
 #HRE Events
 ###################################

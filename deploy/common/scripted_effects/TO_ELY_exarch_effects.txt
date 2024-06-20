@@ -1,26 +1,33 @@
+to_set_initial_exarch_targets = {
+	EEH = { save_global_event_target_as = to_EEH_target }
+	EEY = { save_global_event_target_as = to_EEY_target }	
+}
+
 to_swap_exarch_dynamic_tag = {
-	$NEW_TAG$ = {
-		save_global_event_target_as = to_EEH_target
-	}
-	$BASE_TAG$ = {
-		override_country_name = TO_PORTUGAL_EXARCH
-	}
-	$CURRENT_TAG$ = {
+	hidden_effect = {
 		$NEW_TAG$ = {
-			set_variable = {
-				which = to_exarch_needed_provinces_for_merchant
-				which = PREV
-			}
-			every_owned_province = {
-				limit = {
-					nhs_$NEW_TAG$_province = yes
-					NOT = { to_province_always_counts_for_exarch_merchant = yes }
+			save_global_event_target_as = to_$BASE_TAG$_target
+		}
+		$BASE_TAG$ = {
+			override_country_name = $NEW_NAME$
+		}
+		$CURRENT_TAG$ = {
+			$NEW_TAG$ = {
+				set_variable = {
+					which = to_exarch_needed_provinces_for_merchant
+					which = PREV
 				}
-				set_province_flag = to_was_counted_for_exarch_merchant
-				PREV = {
-					change_variable = {
-						which = to_exarch_owned_provinces_for_merchant
-						value = 1
+				every_owned_province = {
+					limit = {
+						nhs_$NEW_TAG$_province = yes
+						NOT = { to_province_always_counts_for_exarch_merchant = yes }
+					}
+					set_province_flag = to_was_counted_for_exarch_merchant
+					PREV = {
+						change_variable = {
+							which = to_exarch_owned_provinces_for_merchant
+							value = 1
+						}
 					}
 				}
 			}
@@ -118,7 +125,7 @@ to_check_exarch_merchant_counter = {
 		if = {
 			limit = {
 				NOT = { to_province_always_counts_for_exarch_merchant = yes }
-				nhs_exarch_land = {
+				to_exarch_land = {
 					SCOPE = "owner"
 				}
 			}
@@ -643,6 +650,15 @@ to_handle_exarch_change_capital = {
 # 	to_initialize_exarch_government = { EXARCH_TAG = $EXARCH_TAG$ }
 # }
 
+to_setup_exarch = {
+	change_government = republic
+	add_government_reform = to_exarch_reform
+}
+
+to_setup_greek_exarch = {
+	to_setup_exarch = yes
+}
+
 to_setup_anatolia_exarch = {
 	if = {
 		limit = {
@@ -659,8 +675,7 @@ to_setup_anatolia_exarch = {
 		add_government_reform = to_exarch_reform_monarchy_locked_dynasty
 	}
 	else = {
-		change_government = republic
-		add_government_reform = to_exarch_reform
+		to_setup_exarch = yes
 	}
 }
 
@@ -676,15 +691,199 @@ to_setup_anatolia_exarch_tooltip = {
 	}
 }
 
+to_setup_illyris_exarch = {
+	if = {
+		limit = {
+			has_global_flag = to_kastrioti_rule_albania
+		}
+		change_government = monarchy
+		if = {
+			limit = {
+				has_global_flag = nhs_shqiperi_into_elysian
+			}
+			define_ruler = {
+				dynasty = "Kastrioti"
+				male = yes
+				culture = shqipproi
+				hide_skills = yes
+				claim = 95
+			}
+		}
+		else = {
+			define_ruler = {
+				dynasty = "Kastrioti"
+				male = yes
+				culture = shqiperi
+				hide_skills = yes
+				claim = 95
+			}
+		}
+		add_government_reform = to_exarch_reform_monarchy_locked_dynasty
+	}
+	else = {
+		to_setup_exarch = yes
+	}
+}
+
+to_setup_illyris_exarch_tooltip = {
+	if = {
+		limit = {
+			has_global_flag = to_kastrioti_rule_albania
+		}
+		custom_tooltip = to_set_exarch_reform_monarchy_keep_dynasty_tt
+	}
+	else = {
+		custom_tooltip = to_set_exarch_reform_republic_tt
+	}
+}
+
 to_initialize_exarch_government = {
+	
+}
+
+to_transfer_province_or_create_exarch = {
+	if = {
+		limit = {
+			$EXARCH_SCOPE$ = {
+				exists = yes
+			}
+		}
+		to_cede_province_to_exarch = {
+			CURRENT_OWNER = $CURRENT_OWNER$
+			NEW_OWNER = $EXARCH_SCOPE$
+		}
+	}
+	else = {
+		to_release_exarch_from_province = {
+			EXARCH_SCOPE = $EXARCH_SCOPE$
+			CURRENT_OWNER = $CURRENT_OWNER$
+		}
+
+		to_setup_exarch_government_and_transfer_provinces = {
+			EXARCH_SCOPE = $EXARCH_SCOPE$
+			EXARCH_TAG = $EXARCH_TAG$
+			OVERLORD = $CURRENT_OWNER$
+			ON_CREATED_EFFECT = $ON_CREATED_EFFECT$
+			ON_CREATED_TOOLTIP = $ON_CREATED_TOOLTIP$
+		}
+	}
+}
+
+to_release_exarch_from_province = {
+	hidden_effect = {
+		if = {
+			limit = {
+				is_part_of_hre = yes
+			}
+			set_in_empire = no
+		}
+
+		if = {
+			limit = {
+				owner = {
+					PREV = {
+						is_state_core = PREV
+					}
+				}
+			}
+			remove_core = $CURRENT_OWNER$
+			if = {
+				limit = {
+					NOT = { is_state_core = $EXARCH_SCOPE$ }
+				}
+				add_core = $EXARCH_SCOPE$
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					PREV = {
+						is_territorial_core = PREV
+					}
+				}
+			}
+			remove_core = $CURRENT_OWNER$
+			set_province_flag = to_add_territorial_core
+		}
+		else_if = {
+			limit = {
+				owner = {
+					PREV = {
+						is_permanent_claim = PREV
+					}
+				}
+			}
+			remove_claim = $CURRENT_OWNER$
+			set_province_flag = to_add_permanent_claim
+		}
+		else_if = {
+			limit = {
+				owner = {
+					PREV = {
+						is_claim = PREV
+					}
+				}
+			}
+			remove_claim = $CURRENT_OWNER$
+			set_province_flag = to_add_claim
+		}
+
+		if = {
+			limit = {
+				NOT = { is_core = $CURRENT_OWNER$ }
+				NOT = { is_core = $EXARCH_SCOPE$ }
+			}
+			set_province_flag = to_temp_core
+			add_core = $EXARCH_SCOPE$
+		}
+		
+		$CURRENT_OWNER$ = {
+			release = $EXARCH_SCOPE$
+			create_subject = {
+				subject_type = elysian_subject
+				subject = $EXARCH_SCOPE$
+			}
+		}
+
+		if = {
+			limit = {
+				has_province_flag = to_temp_core
+			}
+			clr_province_flag = to_temp_core
+			remove_core = $EXARCH_SCOPE$
+		}
+
+		if = {
+			limit = {
+				has_province_flag = to_add_territorial_core
+			}
+			clr_province_flag = to_add_territorial_core
+			add_territorial_core = $EXARCH_SCOPE$
+		}
+		else_if = {
+			limit = {
+				has_province_flag = to_add_permanent_claim
+			}
+			clr_province_flag = to_add_permanent_claim
+			add_permanent_claim = $EXARCH_SCOPE$
+		}
+		else_if = {
+			limit = {
+				has_province_flag = to_add_claim
+			}
+			clr_province_flag = to_add_claim
+			add_claim = $EXARCH_SCOPE$
+		}
+	}
+}
+
+to_setup_exarch_government_and_transfer_provinces = {
 	hidden_effect = {
 		$EXARCH_SCOPE$ = {
 			change_religion = $OVERLORD$
 			to_set_unit_type = yes
 			swap_free_idea_group = yes
 			
-			change_primary_culture = $PRIMARY_CULTURE$
-
 			$ON_CREATED_EFFECT$
 
 			capital_scope = {
@@ -716,185 +915,51 @@ to_initialize_exarch_government = {
 				}
 				add_manpower = 5
 			}
-			# capital_scope = {
-			# 	area = {
-			# 		limit = {
-			# 			owned_by = $EXARCH_TAG$
-			# 		}
-			# 		add_core = $EXARCH_TAG$
-			# 	}
-			# }
+		}
+	
+		to_transfer_exarch_provinces = {
+			EXARCH_SCOPE = $EXARCH_SCOPE$
+			EXARCH_TAG = $EXARCH_TAG$
+			OVERLORD_SCOPE = $OVERLORD$
 		}
 	}
-}
+	
+	custom_tooltip = to_exarch_starting_land_$EXARCH_TAG$_tt
+	custom_tooltip = to_exarch_creation_starting_land_limits_tt
+	custom_tooltip = nhs_new_line_tt
+	
+	$EXARCH_SCOPE$ = {
+		$ON_CREATED_TOOLTIP$
+	}
 
-to_transfer_province_or_create_exarch = {
+	custom_tooltip = to_reform_effects_for_overlord_tt
 	if = {
 		limit = {
-			$EXARCH_SCOPE$ = {
-				exists = yes
+			$OVERLORD$ = {
+				mission_completed = to_the_eagle_rises_mission
 			}
 		}
-		to_cede_province_to_exarch = {
-			CURRENT_OWNER = $CURRENT_OWNER$
-			NEW_OWNER = $EXARCH_SCOPE$
-		}
+		custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
+		custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
 	}
 	else = {
-		hidden_effect = {
-			if = {
-				limit = {
-					is_part_of_hre = yes
-				}
-				set_in_empire = no
-			}
-
-			if = {
-				limit = {
-					owner = {
-						PREV = {
-							is_state_core = PREV
-						}
-					}
-				}
-				remove_core = $CURRENT_OWNER$
-				if = {
-					limit = {
-						NOT = { is_state_core = $EXARCH_SCOPE$ }
-					}
-					add_core = $EXARCH_SCOPE$
-				}
-			}
-			else_if = {
-				limit = {
-					owner = {
-						PREV = {
-							is_territorial_core = PREV
-						}
-					}
-				}
-				remove_core = $CURRENT_OWNER$
-				set_province_flag = to_add_territorial_core
-			}
-			else_if = {
-				limit = {
-					owner = {
-						PREV = {
-							is_permanent_claim = PREV
-						}
-					}
-				}
-				remove_claim = $CURRENT_OWNER$
-				set_province_flag = to_add_permanent_claim
-			}
-			else_if = {
-				limit = {
-					owner = {
-						PREV = {
-							is_claim = PREV
-						}
-					}
-				}
-				remove_claim = $CURRENT_OWNER$
-				set_province_flag = to_add_claim
-			}
-
-			if = {
-				limit = {
-					NOT = { is_core = $CURRENT_OWNER$ }
-					NOT = { is_core = $EXARCH_SCOPE$ }
-				}
-				set_province_flag = to_temp_core
-				add_core = $EXARCH_SCOPE$
-			}
-			
-			$CURRENT_OWNER$ = {
-				release = $EXARCH_SCOPE$
-				create_subject = {
-					subject_type = elysian_subject
-					subject = $EXARCH_SCOPE$
-				}
-			}
-
-			if = {
-				limit = {
-					has_province_flag = to_temp_core
-				}
-				clr_province_flag = to_temp_core
-				remove_core = $EXARCH_SCOPE$
-			}
-
-			if = {
-				limit = {
-					has_province_flag = to_add_territorial_core
-				}
-				clr_province_flag = to_add_territorial_core
-				add_territorial_core = $EXARCH_SCOPE$
-			}
-			else_if = {
-				limit = {
-					has_province_flag = to_add_permanent_claim
-				}
-				clr_province_flag = to_add_permanent_claim
-				add_permanent_claim = $EXARCH_SCOPE$
-			}
-			else_if = {
-				limit = {
-					has_province_flag = to_add_claim
-				}
-				clr_province_flag = to_add_claim
-				add_claim = $EXARCH_SCOPE$
-			}
-
-			to_initialize_exarch_government = {
-				EXARCH_SCOPE = $EXARCH_SCOPE$
-				OVERLORD = $CURRENT_OWNER$
-				PRIMARY_CULTURE = $PRIMARY_CULTURE$
-				ON_CREATED_EFFECT = $ON_CREATED_EFFECT$
-			}
-
-			to_transfer_exarch_provinces = {
-				EXARCH_SCOPE = $EXARCH_SCOPE$
-				EXARCH_TAG = $EXARCH_TAG$
-				OVERLORD_SCOPE = FROM
-			}
-		}
-
-		custom_tooltip = to_exarch_starting_land_$EXARCH_TAG$_tt
-		custom_tooltip = to_exarch_creation_starting_land_limits_tt
-		custom_tooltip = nhs_new_line_tt
-		
-		$ON_CREATED_TOOLTIP$
-
-		custom_tooltip = to_reform_effects_for_overlord_tt
-		if = {
-			limit = {
-				$CURRENT_OWNER$ = {
-					mission_completed = to_the_eagle_rises_mission
-				}
-			}
-			custom_tooltip = to_reduce_overlord_govcap_exarch_reduced_tt
-			custom_tooltip = to_reduce_overlord_forcelimit_exarch_reduced_tt
-		}
-		else = {
-			custom_tooltip = to_reduce_overlord_govcap_exarch_tt
-			custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
-		}
-		custom_tooltip = to_exarch_bonus_merchant_tt
-		custom_tooltip = nhs_new_line_tt
-
-		custom_tooltip = to_reform_effects_tt
-		custom_tooltip = to_automatically_accepts_culture_tt
-		custom_tooltip = to_min_autonomy_exarch_modifier_tt
-		custom_tooltip = nhs_new_line_tt
-
-		custom_tooltip = to_reform_modifiers_tt
-		custom_tooltip = to_exarch_reform_modifiers_tt
-		custom_tooltip = nhs_new_line_tt
-
-		custom_tooltip = to_reform_government_attributes_tt
-		custom_tooltip = to_exarch_reform_government_attributes_tt
+		custom_tooltip = to_reduce_overlord_govcap_exarch_tt
+		custom_tooltip = to_reduce_overlord_forcelimit_exarch_tt
 	}
+	custom_tooltip = to_exarch_bonus_merchant_tt
+	custom_tooltip = nhs_new_line_tt
+
+	custom_tooltip = to_reform_effects_tt
+	custom_tooltip = to_automatically_accepts_culture_tt
+	custom_tooltip = to_min_autonomy_exarch_modifier_tt
+	custom_tooltip = nhs_new_line_tt
+
+	custom_tooltip = to_reform_modifiers_tt
+	custom_tooltip = to_exarch_reform_modifiers_tt
+	custom_tooltip = nhs_new_line_tt
+
+	custom_tooltip = to_reform_government_attributes_tt
+	custom_tooltip = to_exarch_reform_government_attributes_tt
 }
 
 to_check_exarch_incorrect_province = {
@@ -951,7 +1016,7 @@ to_transfer_exarch_provinces = {
 					[[EXARCH_TAG]
 					nhs_$EXARCH_TAG$_province = yes
 					]
-					to_exarch_can_get_province = yes
+					to_exarch_can_get_province_passive = yes
 				}
 				to_cede_province_to_exarch = {
 					CURRENT_OWNER = $OVERLORD_SCOPE$
@@ -978,7 +1043,7 @@ to_transfer_exarch_provinces = {
 						[[EXARCH_TAG]
 						nhs_$EXARCH_TAG$_province = yes
 						]
-						to_exarch_can_get_province = yes
+						to_exarch_can_get_province_passive = yes
 					}
 					to_cede_province_to_exarch = {
 						CURRENT_OWNER = ELG
@@ -1001,6 +1066,13 @@ to_remove_exarch_cores = {
 }
 
 to_cede_province_to_exarch = {
+	if = {
+		limit = {
+			is_part_of_hre = yes
+		}
+		set_in_empire = no
+	}
+	clr_province_flag = nhs_exarch_province_exemption
 	if = {
 		limit = {
 			is_state_core = $CURRENT_OWNER$
@@ -1136,8 +1208,8 @@ to_exarch_effect = {
 		EEP = { $EFFECT$ }
 	}
 	if = {
-		limit = { exists = EEY }
-		EEY = { $EFFECT$ }
+		limit = { exists = event_target:to_EEY_target }
+		event_target:to_EEY_target = { $EFFECT$ }
 	}
 	if = {
 		limit = { exists = EEN }
@@ -1171,7 +1243,7 @@ to_exarch_effect_including_inactive = {
 	EEV = { $EFFECT$ }
 	EEQ = { $EFFECT$ }
 	EEP = { $EFFECT$ }
-	EEY = { $EFFECT$ }
+	event_target:to_EEY_target = { $EFFECT$ }
 	EEN = { $EFFECT$ }
 	ELG = { $EFFECT$ }
 }
@@ -1260,7 +1332,7 @@ to_exarch_effect_from_province = {
 	}
 	else_if = {
 		limit = { nhs_EEY_province = yes }
-		EEY = { $EFFECT$ }
+		event_target:to_EEY_target = { $EFFECT$ }
 	}
 	else_if = {
 		limit = { nhs_EEN_province = yes }

@@ -279,8 +279,13 @@ exarchs = [
     },
     {
         "tag": 'EEY',
-        "reference_target": 'EEY',
+        "reference_target": 'event_target:to_EEY_target',
+        "subtags": [
+            "EEW"
+        ],
         "name": 'illyris',
+        "on_created_effect": "to_setup_illyris_exarch = yes",
+        "on_created_tooltip": "to_setup_illyris_exarch_tooltip = yes",
         "land": "[H][145.GetRegionName][!H] region, except for the following areas: [A][145.GetAreaName][!A], "
                 "[A][147.GetAreaName][!A], [A][148.GetAreaName][!A], "
                 "[A][151.GetAreaName][!A], [A][164.GetAreaName][!A], [A][150.GetAreaName][!A], "
@@ -301,6 +306,7 @@ exarchs = [
         "reference_target": 'ELG',
         "name": 'konstantinia',
         "primary_culture": "greek",
+        "on_created_effect": "to_setup_greek_exarch = yes",
         "land": "[H][145.GetAreaName][!H], [H][147.GetAreaName][!H], [H][148.GetAreaName][!H], "
                 "[H][151.GetAreaName][!H], [H][164.GetAreaName][!H], [H][150.GetAreaName][!H], "
                 "[H][159.GetAreaName][!H] areas, [H][321.GetName][!H] and provinces in [H][151.GetRegionName][!H] and "

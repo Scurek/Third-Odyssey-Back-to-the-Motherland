@@ -315,18 +315,17 @@ for i in range(len(exarchs_filtered)):
     if "on_created_effect" in exarch:
         f.write(f"				ON_CREATED_EFFECT = \"\\\"{exarch["on_created_effect"]}\\\"\"\n")
     else:
-        f.write(f"				ON_CREATED_EFFECT = \"\\\"change_government = republic "
-                f"add_government_reform = to_exarch_reform\\\"\"\n")
+        f.write(f"				ON_CREATED_EFFECT = \"\\\"to_setup_exarch = yes\\\"\"\n")
 
     if "on_created_tooltip" in exarch:
-        f.write(f"				ON_CREATED_TOOLTIP = \"{exarch["on_created_tooltip"]}\"\n")
+        f.write(f"				ON_CREATED_TOOLTIP = \"\\\"{exarch["on_created_tooltip"]}\\\"\"\n")
     else:
-        f.write(f"				ON_CREATED_TOOLTIP = \"custom_tooltip = to_set_exarch_reform_republic_tt\"\n")
+        f.write(f"				ON_CREATED_TOOLTIP = \"\\\"custom_tooltip = to_set_exarch_reform_republic_tt\\\"\"\n")
 
-    if "primary_culture" in exarch:
-        f.write(f"				PRIMARY_CULTURE = {exarch["primary_culture"]}\n")
-    else:
-        f.write(f"				PRIMARY_CULTURE = CAPITAL\n")
+    # if "primary_culture" in exarch:
+    #     f.write(f"				PRIMARY_CULTURE = {exarch["primary_culture"]}\n")
+    # else:
+    #     f.write(f"				PRIMARY_CULTURE = CAPITAL\n")
     f.write(f"			}}\n"
             f"		}}\n")
 f.close()
