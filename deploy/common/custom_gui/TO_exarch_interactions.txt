@@ -167,6 +167,315 @@ custom_text_box = {
     name = to_eic_liberty_desire_from_absolutism
 }
 
+custom_button = {
+    name = to_eic_bolster_administration
+    tooltip = to_eic_bolster_administration_tooltip
+    potential = {
+    }
+    trigger = {
+        FROM = {
+            dip_power = 100
+        }
+        any_owned_province = {
+            NOT = { is_core = ROOT }
+            controlled_by = ROOT
+            has_siege = no
+            has_any_ongoing_construction = no
+            OR = {
+                is_in_capital_area = yes
+                has_port = yes
+                any_neighbor_province = {
+                    is_core = ROOT
+                }
+            }
+        }
+    }
+    effect = {
+        FROM = {
+            add_dip_power = -100
+        }
+        ROOT = {
+            custom_tooltip = to_gain_100_adm_power
+            custom_tooltip = to_from_attempts_to_core_all_provinces_tt    
+        }
+        hidden_effect = {
+            add_adm_power = 100
+            every_owned_province = {
+                limit = {
+                    ROOT = {
+                        adm_power = 1
+                    }
+                    NOT = { is_core = ROOT }
+                    controlled_by = ROOT
+                    has_siege = no
+                    has_any_ongoing_construction = no
+                    OR = {
+                        has_port = yes
+                        custom_trigger_tooltip = {
+                            tooltip = to_is_in_capital_area_from_tt
+                            is_in_capital_area = yes
+                        }
+                        any_neighbor_province = {
+                            is_core = ROOT
+                        }
+                    }
+                }
+                ROOT = {
+                    export_to_variable = {
+                        which = to_current_admin
+                        value = trigger_value:adm_power
+                    }
+                }
+                add_core_construction = {
+                    speed = 1
+                    cost = 1
+                }
+                if = {
+                    limit = {
+                        ROOT = {
+                            NOT = { adm_power = 0 }
+                        }
+                    }
+                    cancel_construction = yes
+                    ROOT = {
+                        export_to_variable = {
+                            which = to_new_admin
+                            value = trigger_value:adm_power
+                        }
+                        subtract_variable = {
+                            which = to_current_admin
+                            which = to_new_admin
+                        }
+                        while = {
+                            limit = {
+                                check_variable = {
+                                    which = to_current_admin
+                                    value = 100
+                                }
+                            }
+                            add_adm_power = 100
+                            subtract_variable = {
+                                which = to_current_admin
+                                value = 100
+                            }
+                        }
+                        while = {
+                            limit = {
+                                check_variable = {
+                                    which = to_current_admin
+                                    value = 10
+                                }
+                            }
+                            add_adm_power = 10
+                            subtract_variable = {
+                                which = to_current_admin
+                                value = 10
+                            }
+                        }
+                        while = {
+                            limit = {
+                                check_variable = {
+                                    which = to_current_admin
+                                    value = 1
+                                }
+                            }
+                            add_adm_power = 1
+                            subtract_variable = {
+                                which = to_current_admin
+                                value = 1
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+custom_button = {
+    name = to_eic_offer_military_assistance
+    tooltip = to_eic_offer_military_assistance_tooltip
+    potential = {
+    }
+    trigger = {
+        NOT = { stability = 3 }
+        if = {
+            limit = {
+                stability = 2
+            }
+            FROM = {
+                mil_power = 200
+            }
+        }
+        else_if = {
+            limit = {
+                stability = 1
+            }
+            FROM = {
+                mil_power = 150
+            }
+        }
+        else = {
+            FROM = {
+                mil_power = 100
+            }
+        }
+    }
+    effect = {
+        if = {
+            limit = {
+                stability = 2
+            }
+            FROM = {
+                add_mil_power = -200
+            }
+        }
+        else_if = {
+            limit = {
+                stability = 1
+            }
+            FROM = {
+                add_mil_power = -200
+            }
+        }
+        else = {
+            FROM = {
+                add_mil_power = -200
+            }
+        }
+        add_stability = 1
+        add_liberty_desire = -10
+    }
+}
+
+custom_icon = {
+    name = to_eic_send_aid_highlight
+    potential = {
+        has_country_modifier = to_exarch_aid
+    }
+}
+
+custom_button = {
+    name = to_eic_send_aid
+    tooltip = to_eic_send_aid_tooltip
+    potential = {
+    }
+    trigger = {
+        if = {
+            limit = {
+                has_country_flag = to_recently_removed_exarch_aid
+            }
+            custom_trigger_tooltip = {
+                tooltip = to_exarch_intraction_cooldown_tt
+                had_country_flag = {
+                    flag = to_recently_removed_exarch_aid
+                    days = 365
+                }
+            }
+        }
+    }
+    effect = {
+        custom_tooltip = to_for_as_long_as_the_edict_is_in_effect_tt
+        custom_tooltip = to_exarch_send_aid_penalties_tt
+        custom_tooltip = to_exarch_send_aid_benefits_tt
+        if = {
+            limit = {
+                has_country_modifier = to_exarch_aid
+            }
+            hidden_effect = {
+                remove_country_modifier = to_exarch_aid
+                set_country_flag = to_recently_removed_exarch_aid
+            }
+            custom_tooltip = nhs_new_line_tt
+            custom_tooltip = to_exarch_interaction_removed_warning_tt
+        }
+        else = {
+            hidden_effect = {
+                add_country_modifier = {
+                    name = to_exarch_aid
+                    duration = -1
+                }
+            }
+        }
+    }
+}
+
+custom_icon = {
+    name = to_eic_crack_down_on_heresy_highlight
+    potential = {
+        has_country_modifier = to_crack_down_on_heresy
+    }
+}
+
+custom_button = {
+    name = to_eic_crack_down_on_heresy
+    tooltip = to_eic_crack_down_on_heresy_tooltip
+    potential = {
+    }
+    trigger = {
+        religion = FROM
+        stability = 0
+        NOT = { overextension_percentage = 0.5 }
+        any_owned_province = {
+            custom_trigger_tooltip = {
+                tooltip = to_religion_in_province_not_from_tt
+                NOT = { religion = FROM }
+            }
+        }
+        FROM = {
+            NOT = { has_reform = to_beacon_of_liberty }
+        }
+        if = {
+            limit = {
+                tag = ELG
+                FROM = {
+                    has_country_flag = to_greek_religion_humanist
+                }
+            }
+            custom_trigger_tooltip = {
+                tooltip = to_has_not_chosen_to_work_with_humanists_tt
+                always = no
+            }
+        }
+        if = {
+            limit = {
+                has_country_flag = to_recently_removed_crack_down_on_heresy
+            }
+            custom_trigger_tooltip = {
+                tooltip = to_exarch_intraction_cooldown_tt
+                had_country_flag = {
+                    flag = to_recently_removed_crack_down_on_heresy
+                    days = 365
+                }
+            }
+        }
+    }
+    effect = {
+        custom_tooltip = to_for_as_long_as_the_edict_is_in_effect_tt
+        custom_tooltip = to_crack_down_on_heresy_penalties_tt
+        custom_tooltip = to_crack_down_on_heresy_benefits_tt
+        if = {
+            limit = {
+                has_country_modifier = to_crack_down_on_heresy
+            }
+            hidden_effect = {
+                remove_country_modifier = to_crack_down_on_heresy
+                set_country_flag = to_recently_removed_crack_down_on_heresy
+            }
+            custom_tooltip = nhs_new_line_tt
+            custom_tooltip = to_exarch_interaction_removed_warning_tt
+        }
+        else = {
+            hidden_effect = {
+                add_country_modifier = {
+                    name = to_crack_down_on_heresy
+                    duration = -1
+                }
+            }
+        }
+    }
+}
+
 custom_window = {
     name = to_eic_window_extended
 

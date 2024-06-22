@@ -1,3 +1,57 @@
+to_remove_exarch_edict_modifiers = {
+	remove_country_modifier = to_crack_down_on_heresy
+	remove_country_modifier = to_exarch_aid
+}
+
+to_check_crack_down_on_heresy_validity = {
+	$SCOPE$ = {
+		if = {
+			limit = {
+				is_subject_of_type = elysian_subject
+				has_country_modifier = to_crack_down_on_heresy
+				NOT = {
+					any_owned_province = {
+						NOT = { religion = ROOT }
+					}
+				}
+			}
+			remove_country_modifier = to_crack_down_on_heresy
+		}
+	}
+}
+
+to_check_exarch_aid_cost = {
+	$SCOPE$ = {
+		if = {
+			limit = {
+				is_subject_of_type = elysian_subject
+			}
+			export_to_variable = {
+				which = to_exarch_send_aid_cost
+				value = trigger_value:num_of_cities
+			}
+			[[ADJUST]
+				change_variable = {
+					which = to_exarch_send_aid_cost
+					value = $ADJUST$
+				}
+			]
+			divide_variable = {
+				which = to_exarch_send_aid_cost
+				value = 5
+			}
+			change_variable = {
+				which = to_exarch_send_aid_cost
+				value = 0.001
+			}
+			round_variable = {
+				which = to_exarch_send_aid_cost
+				value = 1
+			}
+		}
+	}
+}
+
 to_exarch_reform_effect = {
 	custom_tooltip = to_reform_effects_for_overlord_tt
 	if = {
