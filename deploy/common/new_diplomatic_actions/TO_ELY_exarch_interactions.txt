@@ -153,3 +153,168 @@ to_fabricate_exarch_claim = {
 		always = no
 	}
 }
+
+to_offer_exarch_to_vassal = {
+	category = influence
+	require_acceptance = yes
+	is_visible = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		FROM = {
+			NOT = { is_subject_of_type = elysian_subject }
+			capital_scope = {
+				to_potential_exarch_province = yes
+			}
+		}
+	}
+
+	is_allowed = {
+		dip_power = 100
+		FROM = {
+			is_subject_of = ROOT
+			OR = {
+				is_subject_of_type = vassal
+				is_subject_of_type = march
+				is_subject_of_type = client_vassal
+				is_subject_of_type = client_march
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = to_no_exarch_in_the_capital_region_tt
+			FROM = {
+				capital_scope = {
+					to_exarch_trigger_from_province = {
+						TRIGGER = "exists = no"
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					capital_scope = {
+						to_exarch_trigger_from_province = {
+							TRIGGER = "
+							OR = {
+								tag = EEW
+								tag = EEK
+								AND = {
+									has_global_flag = to_orhans_descendant_rules_anatolia
+									tag = EEN
+								}
+							}"
+						}
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = to_local_exarch_cannot_be_created_from_a_vassal_tt
+				always = no
+			}
+		}
+	}
+
+	on_accept = {
+		add_dip_power = -100
+		FROM = {
+			to_change_tag_to_local_exarch = yes
+			hidden_effect = {
+				save_event_target_as = to_new_exarch
+			}
+		}
+		tooltip = {
+			create_subject = {
+				subject_type = elysian_subject
+				subject = FROM
+				keep_liberty_desire = yes
+			}
+		}
+		hidden_effect = {
+			create_subject = {
+				subject_type = elysian_subject
+				subject = event_target:to_new_exarch
+				keep_liberty_desire = yes
+			}
+			event_target:to_new_exarch = {
+				add_liberty_desire = -50
+				to_setup_exarch_merchant_counter = yes
+				set_country_flag = to_custom_exarch
+				set_country_flag = to_50_year_cooldown_on_exarch_annex
+				every_owned_province = {
+					limit = {
+						to_exarch_land = { SCOPE = event_target:to_new_exarch }
+					}
+					to_make_exarch_province_reserved = yes
+				}
+				to_initialize_custom_exarch_peripheral_territories = { PROVINCE_TRIGGER = "NOT = { to_exarch_land = { SCOPE = event_target:to_new_exarch } }" }
+
+				if = {
+					limit = {
+						government = monarchy
+					}
+					add_government_reform = to_exarch_reform_monarchy
+				}
+				else = {
+					change_government = republic
+					add_government_reform = to_exarch_reform
+				}
+			}
+		}
+	}
+
+	ai_acceptance = {
+		add_entry = {
+			name = BASE_RELUCTANCE
+			export_to_variable = {
+				variable_name = ai_value
+				value = stability
+			}
+			set_variable = {
+				which = ai_value
+				value = -5
+			}
+		}
+		add_entry = {
+			name = liberty_desire
+			export_to_variable = {
+				variable_name = ai_value
+				value = trigger_value:liberty_desire
+				who = FROM
+			}
+			multiply_variable = {
+				which = ai_value
+				value = -0.5
+			}
+		}
+		add_entry = {
+            name = DIPLO_OPPINION
+			export_to_variable = {
+				variable_name = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			multiply_variable = {
+				which = ai_value 
+				value = 0.25
+			}
+        }
+		add_entry = {
+			name = AI_DIPLOMATIC_REPUTATION
+			limit = {
+				diplomatic_reputation = 0
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = trigger_value:diplomatic_reputation
+			}
+			multiply_variable = {
+				which = ai_value
+				value = 3
+			}
+		}
+	}
+
+	ai_will_do = {
+		always = no
+	}
+}

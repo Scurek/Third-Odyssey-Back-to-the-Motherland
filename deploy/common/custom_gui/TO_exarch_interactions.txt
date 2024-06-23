@@ -101,6 +101,7 @@ custom_button = {
         }
     }
     effect = {
+        set_country_flag = to_annexed_exarch@ROOT
         tooltip = {
             FROM = {
                 inherit = ROOT
@@ -335,12 +336,12 @@ custom_button = {
                 stability = 1
             }
             FROM = {
-                add_mil_power = -200
+                add_mil_power = -150
             }
         }
         else = {
             FROM = {
-                add_mil_power = -200
+                add_mil_power = -100
             }
         }
         add_stability = 1
@@ -411,6 +412,7 @@ custom_button = {
     name = to_eic_crack_down_on_heresy
     tooltip = to_eic_crack_down_on_heresy_tooltip
     potential = {
+        religion = FROM
     }
     trigger = {
         religion = FROM
@@ -476,6 +478,22 @@ custom_button = {
     }
 }
 
+custom_button = {
+    name = to_eic_enforce_religion
+    tooltip = to_eic_enforce_religion_tooltip
+    potential = {
+        NOT = { religion = FROM }
+    }
+    trigger = {
+        NOT = { religion = FROM }
+        NOT = { liberty_desire = 50 }
+    }
+    effect = {
+        add_liberty_desire = 50
+        change_religion = FROM
+    }
+}
+
 custom_window = {
     name = to_eic_window_extended
 
@@ -538,11 +556,20 @@ custom_button = {
         }
         custom_tooltip = to_seize_custom_exarch_land_tt
         hidden_effect = {
-            every_owned_province = {
+            every_province = {
                 limit = {
+                    owned_by = PREV
                     has_province_flag = to_exarch_permanently_owned_land_@ROOT
                 }
                 clr_province_flag = to_exarch_permanently_owned_land_@ROOT
+                to_exarch_effect_from_province = {
+                    EFFECT = "
+                    change_variable = {
+                        which = to_exarch_needed_provinces_for_merchant
+                        value = 1
+                    }
+                    "
+                }
                 if = {
                     limit = {
                         is_state_core = owner
