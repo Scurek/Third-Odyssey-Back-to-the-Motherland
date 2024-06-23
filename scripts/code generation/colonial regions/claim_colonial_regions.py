@@ -21,7 +21,7 @@ colonial_treaties = [
         "region": "colonial_eastern_america",
         "name": "Col. Elysian Coast",
         "full_name": "Colonial Elysian Coast",
-        "additional_provinces": [953],
+        # "additional_provinces": [953],
         "base_cost": 20,
         "cost_reduction_with": "to_cheaper_use_pt_colonial_treaties = yes",
         "cost_reduction": 0.5,
@@ -67,7 +67,7 @@ colonial_treaties = [
         "region": "colonial_canada",
         "name": "Colonial Vinland",
         "full_name": "Colonial Vinland",
-        "additional_provinces": [980, 997, 994],
+        # "additional_provinces": [980, 997, 994],
         "base_cost": 20,
         "cost_reduction_with": "to_cheaper_use_pt_colonial_treaties = yes",
         "cost_reduction": 0.5,
@@ -210,45 +210,21 @@ to_pt_colonial_treaty_{{ treaty["region"] }} = {
 			{%- if "additional_provinces" in treaty %}
             OR = {
                 {{ treaty["region"] }} = {
-                    is_empty = yes
-                    range = FROM
                     OR = {
-                        has_port = yes
-                        to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
-                        any_neighbor_province = {
-                            is_colony = no
-                            OR = {
-                                country_or_subject_holds = FROM
-                                owner = {
-                                    is_subject = yes
-                                    overlord = {
-                                        is_subject_of = FROM
-                                        NOT = { is_subject_of_type = tributary_state }
-                                    }
-                                }
-                            }
+                        is_empty = yes
+                        AND = {
+                            is_colony = yes
+                            to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
                         }
                     }
                 }
                 {%- for province in treaty["additional_provinces"] %}
                 {{ province }} = {
-                    is_empty = yes
-                    range = FROM
                     OR = {
-                        has_port = yes
-                        to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
-                        any_neighbor_province = {
-                            is_colony = no
-                            OR = {
-                                country_or_subject_holds = FROM
-                                owner = {
-                                    is_subject = yes
-                                    overlord = {
-                                        is_subject_of = FROM
-                                        NOT = { is_subject_of_type = tributary_state }
-                                    }
-                                }
-                            }
+                        is_empty = yes
+                        AND = {
+                            is_colony = yes
+                            to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
                         }
                     }
                 }
@@ -256,25 +232,13 @@ to_pt_colonial_treaty_{{ treaty["region"] }} = {
             }
             {%- else %}
             {{ treaty["region"] }} = {
-				is_empty = yes
-				range = FROM
 				OR = {
-					has_port = yes
-					to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
-					any_neighbor_province = {
-						is_colony = no
-						OR = {
-							country_or_subject_holds = FROM
-							owner = {
-								is_subject = yes
-								overlord = {
-									is_subject_of = FROM
-									NOT = { is_subject_of_type = tributary_state }
-								}
-							}
-						}
-					}
-				}
+                    is_empty = yes
+                    AND = {
+                        is_colony = yes
+                        to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
+                    }
+                }
 			}
             {%- endif %}
 		}
@@ -396,45 +360,21 @@ to_pt_colonial_treaty_{{ treaty["region"] }}_cheaper = {
 			{%- if "additional_provinces" in treaty %}
             OR = {
                 {{ treaty["region"] }} = {
-                    is_empty = yes
-                    range = FROM
                     OR = {
-                        has_port = yes
-                        to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
-                        any_neighbor_province = {
-                            is_colony = no
-                            OR = {
-                                country_or_subject_holds = FROM
-                                owner = {
-                                    is_subject = yes
-                                    overlord = {
-                                        is_subject_of = FROM
-                                        NOT = { is_subject_of_type = tributary_state }
-                                    }
-                                }
-                            }
+                        is_empty = yes
+                        AND = {
+                            is_colony = yes
+                            to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
                         }
                     }
                 }
                 {%- for province in treaty["additional_provinces"] %}
                 {{ province }} = {
-                    is_empty = yes
-                    range = FROM
                     OR = {
-                        has_port = yes
-                        to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
-                        any_neighbor_province = {
-                            is_colony = no
-                            OR = {
-                                country_or_subject_holds = FROM
-                                owner = {
-                                    is_subject = yes
-                                    overlord = {
-                                        is_subject_of = FROM
-                                        NOT = { is_subject_of_type = tributary_state }
-                                    }
-                                }
-                            }
+                        is_empty = yes
+                        AND = {
+                            is_colony = yes
+                            to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
                         }
                     }
                 }
@@ -442,25 +382,13 @@ to_pt_colonial_treaty_{{ treaty["region"] }}_cheaper = {
             }
             {%- else %}
             {{ treaty["region"] }} = {
-				is_empty = yes
-				range = FROM
 				OR = {
-					has_port = yes
-					to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
-					any_neighbor_province = {
-						is_colony = no
-						OR = {
-							country_or_subject_holds = FROM
-							owner = {
-								is_subject = yes
-								overlord = {
-									is_subject_of = FROM
-									NOT = { is_subject_of_type = tributary_state }
-								}
-							}
-						}
-					}
-				}
+                    is_empty = yes
+                    AND = {
+                        is_colony = yes
+                        to_country_or_subject_or_subject_of_subject_holds = { TAG = FROM }
+                    }
+                }
 			}
             {%- endif %}
 		}
