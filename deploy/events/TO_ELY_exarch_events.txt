@@ -118,3 +118,59 @@ country_event = {
 		name = "nhs2_ely_marches.4.e"
 	}
 }
+
+# Transfer provinces hidden event
+province_event = {
+	id = nhs2_ely_marches.5
+	title = nhs2_ely_marches.5.t
+	desc = nhs2_ely_marches.5.d
+	picture = BYZANTINE_EMPEROR_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_province_flag = to_separatism_restore_pending }
+			}
+			remove_province_modifier = to_ignore_separatism
+		}
+		else = {
+			owner = {
+				every_owned_province = {
+					limit = {
+						has_province_flag = to_separatism_restore_pending
+					}
+					clr_province_flag = to_separatism_restore_pending
+					if = {
+						limit = {
+							is_state_core = owner
+						}
+						remove_core = owner
+						to_load_years_of_nationalism = yes
+						add_core = owner
+					}
+					else_if = {
+						limit = {
+							is_territorial_core = owner
+						}
+						remove_core = owner
+						to_load_years_of_nationalism = yes
+						add_territorial_core = owner
+					}
+					else = {
+						to_load_years_of_nationalism = yes
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "nhs2_ely_marches.3.a"
+	}
+}

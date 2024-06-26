@@ -883,12 +883,16 @@ to_transfer_province_or_create_exarch = {
 			NEW_OWNER = $EXARCH_SCOPE$
 		}
 	}
-	else = {
+	if = {
+		limit = {
+			$EXARCH_SCOPE$ = {
+				exists = no
+			}
+		}
 		to_release_exarch_from_province = {
 			EXARCH_SCOPE = $EXARCH_SCOPE$
 			CURRENT_OWNER = $CURRENT_OWNER$
 		}
-
 		to_setup_exarch_government_and_transfer_provinces = {
 			EXARCH_SCOPE = $EXARCH_SCOPE$
 			EXARCH_TAG = $EXARCH_TAG$
@@ -901,6 +905,7 @@ to_transfer_province_or_create_exarch = {
 
 to_release_exarch_from_province = {
 	hidden_effect = {
+		to_save_years_of_nationalism = yes
 		if = {
 			limit = {
 				is_part_of_hre = yes
@@ -961,7 +966,6 @@ to_release_exarch_from_province = {
 
 		if = {
 			limit = {
-				NOT = { is_core = $CURRENT_OWNER$ }
 				NOT = { is_core = $EXARCH_SCOPE$ }
 			}
 			set_province_flag = to_temp_core
@@ -1005,6 +1009,8 @@ to_release_exarch_from_province = {
 			clr_province_flag = to_add_claim
 			add_claim = $EXARCH_SCOPE$
 		}
+		set_province_flag = to_separatism_restore_pending
+		province_event = { id = nhs2_ely_marches.5 days = 1 }
 	}
 }
 
@@ -1135,8 +1141,9 @@ to_check_exarch_incorrect_province = {
 to_transfer_exarch_provinces = {
 	$EXARCH_SCOPE$ = {
 		overlord = {
-			every_owned_province = {
+			every_province = {
 				limit = {
+					owned_by = PREV
 					[[PROVINCE_TRIGGER]
 					$PROVINCE_TRIGGER$
 					]
@@ -1162,8 +1169,9 @@ to_transfer_exarch_provinces = {
 				}
 			}
 			ELG = {
-				every_owned_province = {
+				every_province = {
 					limit = {
+						owned_by = PREV
 						[[PROVINCE_TRIGGER]
 						$PROVINCE_TRIGGER$
 						]
@@ -1200,6 +1208,7 @@ to_cede_province_to_exarch = {
 		set_in_empire = no
 	}
 	clr_province_flag = nhs_exarch_province_exemption
+	to_save_years_of_nationalism = yes
 	if = {
 		limit = {
 			is_state_core = $CURRENT_OWNER$
@@ -1240,6 +1249,24 @@ to_cede_province_to_exarch = {
 	else = {
 		cede_province = $NEW_OWNER$
 	}
+	hidden_effect = {
+		# Province can have a core and a claim at the same time, but it would look weird in the tooltip
+		if = {
+			limit = {
+				is_permanent_claim = $CURRENT_OWNER$
+			}
+			remove_claim = $CURRENT_OWNER$
+			add_permanent_claim = $NEW_OWNER$
+		}
+		else_if = {
+			limit = {
+				is_claim = $CURRENT_OWNER$
+			}
+			remove_claim = $CURRENT_OWNER$
+			add_claim = $NEW_OWNER$
+		}
+	}
+	# cede_province = $NEW_OWNER$
 	if = {
 		limit = {
 			$NEW_OWNER$ = {
@@ -1250,6 +1277,8 @@ to_cede_province_to_exarch = {
 			add_accepted_culture = PREV
 		}
 	}
+	set_province_flag = to_separatism_restore_pending
+	province_event = { id = nhs2_ely_marches.5 days = 1 }
 }
 
 to_exarch_effect = {
