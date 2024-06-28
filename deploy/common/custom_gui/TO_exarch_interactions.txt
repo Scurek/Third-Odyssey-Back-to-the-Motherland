@@ -564,53 +564,43 @@ custom_button = {
                     has_province_flag = to_exarch_permanently_owned_land_@ROOT
                 }
                 clr_province_flag = to_exarch_permanently_owned_land_@ROOT
-                to_exarch_effect_from_province = {
-                    EFFECT = "
-                    change_variable = {
-                        which = to_exarch_needed_provinces_for_merchant
-                        value = 1
-                    }
-                    "
+                FROM = {
+                    save_event_target_as = to_exarch_province_receiver
                 }
                 if = {
                     limit = {
-                        is_state_core = owner
+                        to_potential_exarch_province = yes
+                        NOT = { has_province_flag = nhs_exarch_province_exemption }
                     }
-                    remove_core = owner
-                    cede_province = FROM
-                    if = {
-                        limit = {
-                            NOT = { is_state_core = FROM }
+                    to_exarch_effect_from_province = {
+                        EFFECT = "
+                        change_variable = {
+                            which = to_exarch_needed_provinces_for_merchant
+                            value = 1
                         }
-                        add_core = FROM
+                        save_event_target_as = to_exarch_province_receiver
+                        "
                     }
                 }
-                else_if = {
+
+                if = {
                     limit = {
-                        is_territorial_core = owner
+                        has_saved_event_target = to_exarch_province_receiver
+                        event_target:to_exarch_province_receiver = {
+                            is_subject_of = FROM
+                            is_subject_of_type = elysian_subject
+                        }
                     }
-                    remove_core = owner
-                    cede_province = FROM
-                    add_territorial_core = FROM
-                }
-                else_if = {
-                    limit = {
-                        is_permanent_claim = owner
+                    to_cede_province_to_exarch = {
+                        CURRENT_OWNER = owner
+						NEW_OWNER = event_target:to_exarch_province_receiver
                     }
-                    remove_claim = owner
-                    cede_province = FROM
-                    add_permanent_claim = FROM
-                }
-                else_if = {
-                    limit = {
-                        is_claim = owner
-                    }
-                    remove_claim = owner
-                    cede_province = FROM
-                    add_claim = FROM
                 }
                 else = {
-                    cede_province = FROM
+                    to_cede_province_to_exarch_overlord = {
+                        CURRENT_OWNER = owner
+                        NEW_OWNER = FROM
+                    }
                 }
             }
             every_core_province = {
@@ -1094,66 +1084,16 @@ custom_button = {
         if = {
             limit = {
                 owner = {
+                    is_subject_of = FROM
                     is_subject_of_type = elysian_subject
                 }
             }
-            to_save_years_of_nationalism = yes
-            if = {
-                limit = {
-                    is_state_core = owner
-                }
-                remove_core = owner
-                if = {
-                    limit = {
-                        NOT = { is_state_core = FROM }
-                    }
-                    add_core = FROM
-                }
+            to_cede_province_to_exarch_overlord = {
+                CURRENT_OWNER = owner
+                NEW_OWNER = FROM
             }
-            else_if = {
-                limit = {
-                    is_territorial_core = owner
-                }
-                remove_core = owner
-                add_territorial_core = FROM
-            }
-            else_if = {
-                limit = {
-                    is_permanent_claim = owner
-                }
-                remove_claim = owner
-                add_permanent_claim = FROM
-            }
-            else_if = {
-                limit = {
-                    is_claim = owner
-                }
-                remove_claim = owner
-                add_claim = FROM
-            }
-            hidden_effect = {
-                # Province can have a core and a claim at the same time, but it would look weird in the tooltip
-                if = {
-                    limit = {
-                        is_permanent_claim = owner
-                    }
-                    remove_claim = owner
-                    add_permanent_claim = FROM
-                }
-                else_if = {
-                    limit = {
-                        is_claim = owner
-                    }
-                    remove_claim = owner
-                    add_claim = FROM
-                }
-            }
-            cede_province = FROM
-            set_province_flag = to_separatism_restore_pending
-            province_event = { id = nhs2_ely_marches.5 days = 1 }
         }
         else = {
-            cede_province = FROM
             custom_tooltip = to_cede_root_to_from_tt
         }
     }

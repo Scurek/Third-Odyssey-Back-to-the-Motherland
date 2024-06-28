@@ -1266,7 +1266,6 @@ to_cede_province_to_exarch = {
 			add_claim = $NEW_OWNER$
 		}
 	}
-	# cede_province = $NEW_OWNER$
 	if = {
 		limit = {
 			$NEW_OWNER$ = {
@@ -1278,7 +1277,75 @@ to_cede_province_to_exarch = {
 		}
 	}
 	set_province_flag = to_separatism_restore_pending
-	province_event = { id = nhs2_ely_marches.5 days = 1 }
+	hidden_effect = {
+		province_event = { id = nhs2_ely_marches.5 days = 1 }
+	}
+}
+
+to_cede_province_to_exarch_overlord = {
+	set_province_flag = nhs_exarch_province_exemption
+	to_save_years_of_nationalism = yes
+	if = {
+		limit = {
+			is_state_core = $CURRENT_OWNER$
+		}
+		remove_core = $CURRENT_OWNER$
+		cede_province = $NEW_OWNER$
+		if = {
+			limit = {
+				NOT = { is_state_core = $NEW_OWNER$ }
+			}
+			add_core = $NEW_OWNER$
+		}
+	}
+	else_if = {
+		limit = {
+			is_territorial_core = $CURRENT_OWNER$
+		}
+		remove_core = $CURRENT_OWNER$
+		cede_province = $NEW_OWNER$
+		add_territorial_core = $NEW_OWNER$
+	}
+	else_if = {
+		limit = {
+			is_permanent_claim = $CURRENT_OWNER$
+		}
+		remove_claim = $CURRENT_OWNER$
+		cede_province = $NEW_OWNER$
+		add_permanent_claim = $NEW_OWNER$
+	}
+	else_if = {
+		limit = {
+			is_claim = $CURRENT_OWNER$
+		}
+		remove_claim = $CURRENT_OWNER$
+		cede_province = $NEW_OWNER$
+		add_claim = $NEW_OWNER$
+	}
+	else = {
+		cede_province = $NEW_OWNER$
+	}
+	hidden_effect = {
+		# Province can have a core and a claim at the same time, but it would look weird in the tooltip
+		if = {
+			limit = {
+				is_permanent_claim = $CURRENT_OWNER$
+			}
+			remove_claim = $CURRENT_OWNER$
+			add_permanent_claim = $NEW_OWNER$
+		}
+		else_if = {
+			limit = {
+				is_claim = $CURRENT_OWNER$
+			}
+			remove_claim = $CURRENT_OWNER$
+			add_claim = $NEW_OWNER$
+		}
+	}
+	set_province_flag = to_separatism_restore_pending
+	hidden_effect = {
+		province_event = { id = nhs2_ely_marches.5 days = 1 }
+	}
 }
 
 to_exarch_effect = {
