@@ -11,7 +11,11 @@ to_save_years_of_nationalism = {
 			}
 			export_to_variable = {
 				which = to_saved_years_of_nationalism
-				value = trigger_value:nationalism_debug
+				value = trigger_value:nationalism
+			}
+			subtract_variable = {
+				which = to_saved_years_of_nationalism
+				value = 2
 			}
 			if = {
 				limit = {
@@ -23,161 +27,20 @@ to_save_years_of_nationalism = {
 				}
 			}
 		}
-		add_permanent_province_modifier = {
-			name = to_ignore_separatism
-			duration = -1
-			hidden = yes
-		}
 	}
 }
 
 to_load_years_of_nationalism = {
 	hidden_effect = {
-		remove_province_modifier = to_ignore_separatism
 		add_nationalism = -100
 		if = {
 			limit = {
 				check_variable = {
-					which = to_new_years_of_nationalism
-					value = 0
-				}
-			}
-			set_variable = {
-				which = to_new_years_of_nationalism
-				which = to_saved_years_of_nationalism
-			}
-			export_to_variable = {
-				which = current_separatism
-				value = trigger_value:nationalism
-			}
-			set_variable = {
-				which = to_separatism_max_loops
-				value = 200
-			}
-			while = {
-				limit = {
-					check_variable = {
-						which = to_separatism_max_loops
-						value = 0
-					}
-					NOT = {
-						check_variable = {
-							which = current_separatism
-							which = to_new_years_of_nationalism
-						}
-					}
-				}
-				add_nationalism = 1
-				export_to_variable = {
-					which = current_separatism
-					value = trigger_value:nationalism
-				}
-				subtract_variable = {
-					which = to_separatism_max_loops
+					which = to_saved_years_of_nationalism
 					value = 1
 				}
 			}
-			# for_variable_amount = {
-			# 	variable = to_new_years_of_nationalism
-			# 	effect = "add_nationalism = 1"
-			# }
-		}
-	}
-}
-
-# Save and load years of separatism accounting for the modifiers -- issue is that once it goes under 0 it cannot be restored after some time.
-to_save_years_of_nationalism_v0 = {
-	hidden_effect = {
-		if = {
-			limit = {
-				nationalism = 1
-			}
-			export_to_variable = {
-				which = to_saved_years_of_nationalism
-				value = trigger_value:nationalism
-			}
-			export_to_variable = {
-				which = to_local_years_of_nationalism
-				value = modifier:local_years_of_nationalism
-			}
-			export_to_variable = {
-				which = to_global_years_of_nationalism
-				value = modifier:years_of_nationalism
-				who = owner
-			}
-		
-			subtract_variable = {
-				which = to_saved_years_of_nationalism
-				which = to_local_years_of_nationalism
-			}
-		
-			subtract_variable = {
-				which = to_saved_years_of_nationalism
-				which = to_global_years_of_nationalism
-			}
-	
-			if = {
-				limit = {
-					NOT = {
-						check_variable = {
-							which = to_saved_years_of_nationalism
-							value = 0
-						}
-					}
-				}
-				set_variable = {
-					which = to_saved_years_of_nationalism
-					value = 0
-				}
-			}
-		}
-	}
-}
-
-to_load_years_of_nationalism_v0 = {
-	hidden_effect = {
-		add_nationalism = -1000
-		if = {
-			limit = {
-				check_variable = {
-					which = to_new_years_of_nationalism
-					value = 0
-				}
-			}
-			set_variable = {
-				which = to_new_years_of_nationalism
-				which = to_saved_years_of_nationalism
-			}
-			export_to_variable = {
-				which = to_new_local_years_of_nationalism
-				value = modifier:local_years_of_nationalism
-			}
-			export_to_variable = {
-				which = to_new_global_years_of_nationalism
-				value = modifier:years_of_nationalism
-				who = owner
-			}
-
-			change_variable = {
-				which = to_new_years_of_nationalism
-				which = to_new_local_years_of_nationalism
-			}
-			change_variable = {
-				which = to_new_years_of_nationalism
-				which = to_new_global_years_of_nationalism
-			}
-			if = {
-				limit = {
-					check_variable = {
-						which = to_new_years_of_nationalism
-						value = 0
-					}
-				}
-				for_variable_amount = {
-					variable = to_new_years_of_nationalism
-					effect = "add_nationalism = 1"
-				}
-			}
+			to_add_correct_exarch_local_nationalism_modifier = yes
 		}
 	}
 }

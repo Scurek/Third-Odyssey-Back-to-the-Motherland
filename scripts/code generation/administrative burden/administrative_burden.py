@@ -1,7 +1,7 @@
 import os
 
 def btree(lst, form, body):
-    if   len(lst):
+    if not len(lst):
         return ''
     elif len(lst) == 1:
         return body % (lst[0], lst[0])
