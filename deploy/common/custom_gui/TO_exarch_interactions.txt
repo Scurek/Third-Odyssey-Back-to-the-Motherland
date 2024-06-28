@@ -182,7 +182,7 @@ custom_button = {
             NOT = { is_core = ROOT }
             controlled_by = ROOT
             has_siege = no
-            has_any_ongoing_construction = no
+            NOT = { has_any_ongoing_construction = yes }
             OR = {
                 is_in_capital_area = yes
                 has_port = yes
@@ -210,7 +210,7 @@ custom_button = {
                     NOT = { is_core = ROOT }
                     controlled_by = ROOT
                     has_siege = no
-                    has_any_ongoing_construction = no
+                    NOT = { has_any_ongoing_construction = yes }
                     OR = {
                         has_port = yes
                         custom_trigger_tooltip = {
@@ -668,6 +668,7 @@ custom_button = {
                     set_country_flag = to_show_exarch_menu
                 }
                 clr_country_flag = to_enable_exarch_click_here_box
+                set_country_flag = to_has_seen_exarch_ui
             }
         }
     }
@@ -1105,7 +1106,11 @@ custom_button = {
     potential = {
     }
     trigger = {
-        owned_by = FROM
+        NOT = {
+            owner = {
+                to_is_an_SCOPE_exarchate = { SCOPE = FROM }
+            }
+        }
         if = {
             limit = {
                 has_province_flag = to_exarch_province_reserved
@@ -1169,6 +1174,25 @@ custom_button = {
                         which = to_accepted_cultures
                         which = to_possible_accepted_cultures
                     }
+                }
+            }
+        }
+        if = {
+            limit = {
+                NOT = {
+                    OR = {
+                        owned_by = FROM
+                        owner = {
+                            is_subject_of = FROM
+                            is_subject_of_type = elysian_subject
+                        }
+                    }
+                }
+            }
+            OR = {
+                owned_by = FROM
+                owner = {
+                    to_is_an_SCOPE_exarchate = { SCOPE = FROM }
                 }
             }
         }

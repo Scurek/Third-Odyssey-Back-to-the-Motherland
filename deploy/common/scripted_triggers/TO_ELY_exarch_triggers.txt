@@ -1,3 +1,11 @@
+to_is_an_SCOPE_exarchate = {
+	custom_trigger_tooltip = {
+		tooltip = to_is_an_exarchate_of_$SCOPE$_tt
+		is_subject_of = $SCOPE$
+    	is_subject_of_type = elysian_subject
+	}
+}
+
 nhs_EEA_province = {
 	region = caucasia_region
 }
@@ -441,17 +449,8 @@ nhs_exarch_province_owned_incorrectly = {
 to_can_see_exarch_province_ui_baseline = {
 	to_potential_exarch_province = yes
 	is_city = yes
-	owner = {
-		OR = {
-			AND = {
-				is_subject_of = FROM
-				is_subject_of_type = elysian_subject
-			}
-			AND = {
-				tag = FROM
-				nhs_check_all_elysian_tags = { CONDITION = tag }
-			}
-		}
+	FROM = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
 	}
 }
 
@@ -735,6 +734,7 @@ to_province_always_counts_for_exarch_merchant = {
 
 to_exarch_can_get_province_active = {
 	has_siege = no
+	NOT = { has_any_ongoing_construction = yes }
 	NOT = { has_province_modifier = nhs2_supply_lines_tm }
 	NOT = { has_province_modifier = nhs2_base_of_operations_tm }
 	NOT = { has_province_modifier = to_varangian_headquarters }
@@ -742,6 +742,7 @@ to_exarch_can_get_province_active = {
 
 to_exarch_can_get_province_active_with_if = {
 	has_siege = no
+	NOT = { has_any_ongoing_construction = yes }
 	if = {
 		limit = {
 			has_province_modifier = nhs2_supply_lines_tm
@@ -764,9 +765,6 @@ to_exarch_can_get_province_active_with_if = {
 
 to_exarch_can_get_province_passive = {
 	to_exarch_can_get_province_active = yes
-
-	NOT = { has_construction = core }
-	NOT = { has_construction = missionary }
 	NOT = { has_province_flag = nhs_exarch_province_exemption }
 	is_owned_by_trade_company = no
 	owner = {
@@ -779,9 +777,6 @@ to_exarch_can_get_province_passive = {
 
 to_exarch_can_get_province_passive_with_if = {
 	to_exarch_can_get_province_active_with_if = yes
-
-	NOT = { has_construction = core }
-	NOT = { has_construction = missionary }
 	custom_trigger_tooltip = {
 		tooltip = to_has_not_claimed_province_tt
 		NOT = { has_province_flag = nhs_exarch_province_exemption }
