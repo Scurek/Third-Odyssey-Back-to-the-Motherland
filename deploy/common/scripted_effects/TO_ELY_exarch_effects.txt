@@ -169,6 +169,10 @@ to_swap_exarch_dynamic_tag = {
 					which = to_exarch_needed_provinces_for_merchant
 					which = PREV
 				}
+				set_variable = {
+					which = to_exarch_owned_provinces_for_merchant
+					value = 0
+				}
 				every_owned_province = {
 					limit = {
 						nhs_$NEW_TAG$_province = yes
@@ -182,34 +186,136 @@ to_swap_exarch_dynamic_tag = {
 						}
 					}
 				}
+				if = {
+					limit = {
+						PREV = { has_country_flag = to_exarch_two_merchants }
+					}
+					set_country_flag = to_exarch_two_merchants
+					set_variable = {
+						which = to_exarch_needed_provinces_for_merchant_2
+						which = PREV
+					}
+					set_variable = {
+						which = to_exarch_owned_provinces_for_merchant_2
+						value = 0
+					}
+					every_owned_province = {
+						limit = {
+							nhs_$NEW_TAG$_province = yes
+							NOT = { to_province_always_counts_for_exarch_merchant = yes }
+						}
+						set_province_flag = to_was_counted_for_exarch_merchant
+						PREV = {
+							change_variable = {
+								which = to_exarch_owned_provinces_for_merchant_2
+								value = 1
+							}
+						}
+					}
+				}
+				else = {
+					clr_country_flag = to_exarch_two_merchants
+				}
 			}
 		}
 	}
 }
 
-to_set_exarch_always_count_for_merchant = {
-	set_province_flag = to_exarch_always_count_for_merchant
-	to_exarch_effect_from_province = {
-		EFFECT = "
-		if = {
-			limit = {
-				PREV = {
-					has_province_flag = to_was_counted_for_exarch_merchant
-				}
-			}
+to_set_exarch_always_count_for_merchant_province = {
+	if = {
+		limit = {
 			PREV = {
-				clr_province_flag = to_was_counted_for_exarch_merchant
+				has_province_flag = to_was_counted_for_exarch_merchant
 			}
-			change_variable = {
-				which = to_exarch_owned_provinces_for_merchant
-				value = -1
-			}
+		}
+		PREV = {
+			clr_province_flag = to_was_counted_for_exarch_merchant
 		}
 		change_variable = {
-			which = to_exarch_needed_provinces_for_merchant
+			which = to_exarch_owned_provinces_for_merchant
 			value = -1
 		}
+	}
+	change_variable = {
+		which = to_exarch_needed_provinces_for_merchant
+		value = -1
+	}
+}
+
+to_set_exarch_always_count_for_merchant_2_province = {
+	if = {
+		limit = {
+			PREV = {
+				has_province_flag = to_was_counted_for_exarch_merchant
+			}
+		}
+		PREV = {
+			clr_province_flag = to_was_counted_for_exarch_merchant
+		}
+		change_variable = {
+			which = to_exarch_owned_provinces_for_merchant_2
+			value = -1
+		}
+	}
+	change_variable = {
+		which = to_exarch_needed_provinces_for_merchant_2
+		value = -1
+	}
+}
+
+to_set_exarch_always_count_for_merchant = {
+	set_province_flag = to_exarch_always_count_for_merchant
+	to_exarch_merchant_effect_from_province = {
+		EFFECT = "
+		to_set_exarch_always_count_for_merchant_province = yes
 		"
+	}
+	to_exarch_merchant_2_effect_from_province = {
+		EFFECT = "
+		to_set_exarch_always_count_for_merchant_2_province = yes
+		"
+	}
+}
+
+to_setup_exarch_merchant_counters_province = {
+	change_variable = {
+		which = to_exarch_needed_provinces_for_merchant
+		value = 1
+	}
+	if = {
+		limit = {
+			PREV = {
+				owned_by = PREV
+			}
+		}
+		PREV = {
+			set_province_flag = to_was_counted_for_exarch_merchant
+		}
+		change_variable = {
+			which = to_exarch_owned_provinces_for_merchant
+			value = 1
+		}
+	}
+}
+
+to_setup_exarch_merchant_2_counters_province = {
+	change_variable = {
+		which = to_exarch_needed_provinces_for_merchant_2
+		value = 1
+	}
+	if = {
+		limit = {
+			PREV = {
+				owned_by = PREV
+			}
+		}
+		PREV = {
+			set_province_flag = to_was_counted_for_exarch_merchant
+		}
+		change_variable = {
+			which = to_exarch_owned_provinces_for_merchant_2
+			value = 1
+		}
 	}
 }
 
@@ -229,6 +335,14 @@ to_setup_exarch_merchant_counters = {
 					which = to_exarch_owned_provinces_for_merchant
 					value = 0
 				}
+				set_variable = {
+					which = to_exarch_needed_provinces_for_merchant_2
+					value = 0
+				}
+				change_variable = {
+					which = to_exarch_owned_provinces_for_merchant_2
+					value = 0
+				}
 				"
 		}
 		every_province = {
@@ -242,26 +356,14 @@ to_setup_exarch_merchant_counters = {
 				}
 				NOT = { to_province_always_counts_for_exarch_merchant = yes }
 			}
-			to_exarch_effect_from_province = {
+			to_exarch_merchant_effect_from_province = {
 				EFFECT = "
-				change_variable = {
-					which = to_exarch_needed_provinces_for_merchant
-					value = 1
-				}
-				if = {
-					limit = {
-						PREV = {
-							owned_by = PREV
-						}
-					}
-					PREV = {
-						set_province_flag = to_was_counted_for_exarch_merchant
-					}
-					change_variable = {
-						which = to_exarch_owned_provinces_for_merchant
-						value = 1
-					}
-				}
+				to_setup_exarch_merchant_counters_province = yes
+				"
+			}
+			to_exarch_merchant_2_effect_from_province = {
+				EFFECT = "
+				to_setup_exarch_merchant_2_counters_province = yes
 				"
 			}
 		}
@@ -273,13 +375,13 @@ to_setup_exarch_merchant_counter = {
 		which = to_exarch_needed_provinces_for_merchant
 		value = 0
 	}
-	change_variable = {
+	set_variable = {
 		which = to_exarch_owned_provinces_for_merchant
 		value = 0
 	}
 	every_province = {
 		limit = {
-			to_exarch_land = {
+			to_exarch_merchant_land = {
 				SCOPE = "PREV"
 			}
 		}
@@ -302,6 +404,44 @@ to_setup_exarch_merchant_counter = {
 			}
 		}
 	}
+	if = {
+		limit = {
+			to_exarch_has_merchant_land_2 = yes
+		}
+		set_variable = {
+			which = to_exarch_needed_provinces_for_merchant_2
+			value = 0
+		}
+		set_variable = {
+			which = to_exarch_owned_provinces_for_merchant_2
+			value = 0
+		}
+		every_province = {
+			limit = {
+				to_exarch_merchant_land_2 = {
+					SCOPE = "PREV"
+				}
+			}
+			PREV = {
+				change_variable = {
+					which = to_exarch_needed_provinces_for_merchant_2
+					value = 1
+				}
+				if = {
+					limit = {
+						owns = PREV
+					}
+					PREV = {
+						set_province_flag = to_was_counted_for_exarch_merchant
+					}
+					change_variable = {
+						which = to_exarch_owned_provinces_for_merchant_2
+						value = 1
+					}
+				}
+			}
+		}
+	}
 }
 
 to_check_exarch_merchant_counter_all_owned_provinces = {
@@ -316,7 +456,7 @@ to_check_exarch_merchant_counter_all_owned_provinces = {
 		every_owned_province = {
 			limit = {
 				NOT = { to_province_always_counts_for_exarch_merchant = yes }
-				to_exarch_land = {
+				to_exarch_merchant_land = {
 					SCOPE = "owner"
 				}
 			}
@@ -325,6 +465,26 @@ to_check_exarch_merchant_counter_all_owned_provinces = {
 				change_variable = {
 					which = to_exarch_owned_provinces_for_merchant
 					value = 1
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = to_exarch_two_merchants
+			}
+			every_owned_province = {
+				limit = {
+					NOT = { to_province_always_counts_for_exarch_merchant = yes }
+					to_exarch_merchant_land_2 = {
+						SCOPE = "owner"
+					}
+				}
+				set_province_flag = to_was_counted_for_exarch_merchant
+				PREV = {
+					change_variable = {
+						which = to_exarch_owned_provinces_for_merchant_2
+						value = 1
+					}
 				}
 			}
 		}
@@ -342,15 +502,36 @@ to_check_exarch_merchant_counter = {
 		if = {
 			limit = {
 				NOT = { to_province_always_counts_for_exarch_merchant = yes }
-				to_exarch_land = {
-					SCOPE = "owner"
+			}
+			if = {
+				limit = {
+					to_exarch_merchant_land = {
+						SCOPE = "owner"
+					}
+				}
+				set_province_flag = to_was_counted_for_exarch_merchant
+				owner = {
+					change_variable = {
+						which = to_exarch_owned_provinces_for_merchant
+						value = 1
+					}
 				}
 			}
-			set_province_flag = to_was_counted_for_exarch_merchant
-			owner = {
-				change_variable = {
-					which = to_exarch_owned_provinces_for_merchant
-					value = 1
+			else_if = {
+				limit = {
+					owner = {
+						has_country_flag = to_exarch_two_merchants
+					}
+					to_exarch_merchant_land_2 = {
+						SCOPE = "owner"
+					}
+				}
+				set_province_flag = to_was_counted_for_exarch_merchant
+				owner = {
+					change_variable = {
+						which = to_exarch_owned_provinces_for_merchant_2
+						value = 1
+					}
 				}
 			}
 		}
@@ -363,10 +544,26 @@ to_check_exarch_merchant_counter = {
 			has_province_flag = to_was_counted_for_exarch_merchant
 		}
 		clr_province_flag = to_was_counted_for_exarch_merchant
-		FROM = {
-			change_variable = {
-				which = to_exarch_owned_provinces_for_merchant
-				value = -1
+		if = {
+			limit = {
+				FROM = { has_country_flag = to_exarch_two_merchants }
+				to_exarch_merchant_land_2 = {
+					SCOPE = "FROM"
+				}
+			}
+			FROM = {
+				change_variable = {
+					which = to_exarch_owned_provinces_for_merchant_2
+					value = -1
+				}
+			}
+		}
+		else = {
+			FROM = {
+				change_variable = {
+					which = to_exarch_owned_provinces_for_merchant
+					value = -1
+				}
 			}
 		}
 	}
@@ -1634,6 +1831,110 @@ to_exarch_effect_from_province = {
 	}
 }
 
+to_exarch_merchant_effect_from_province = {
+	# Code generated by exarchs/exarch_generation.py
+	if = {
+		limit = { nhs_EEA_province = yes }
+		EEA = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEB_province = yes }
+		EEB = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEC_province = yes }
+		EEC = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EED_province = yes }
+		EED = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEE_province = yes }
+		EEE = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEF_province = yes }
+		EEF = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEG_province = yes }
+		EEG = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEH_province = yes }
+		event_target:to_EEH_target = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEI_province = yes }
+		EEI = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEJ_province = yes }
+		EEJ = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEL_province = yes }
+		EEL = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEM_province = yes }
+		EEM = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEO_province = yes }
+		EEO = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EER_province = yes }
+		EER = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EES_province = yes }
+		EES = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EET_province = yes }
+		EET = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEU_province = yes }
+		EEU = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEV_province = yes }
+		EEV = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEQ_province = yes }
+		EEQ = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEP_province = yes }
+		EEP = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEY_province = yes }
+		event_target:to_EEY_target = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_EEN_province = yes }
+		EEN = { $EFFECT$ }
+	}
+	else_if = {
+		limit = { nhs_ELG_merchant_land_1 = yes }
+		ELG = { $EFFECT$ }
+	}
+}
+
+to_exarch_merchant_2_effect_from_province = {
+	# Code generated by exarchs/exarch_generation.py
+	if = {
+		limit = { nhs_ELG_merchant_land_2 = yes }
+		ELG = { $EFFECT$ }
+	}
+}
+
 to_change_tag_to_local_exarch = {
 	# Code generated by exarchs/exarch_generation.py
 	if = {
@@ -1845,10 +2146,18 @@ to_initialize_custom_exarch_peripheral_territories = {
 			}
 		}
 		else = {
-			to_exarch_effect_from_province = {
+			to_exarch_merchant_effect_from_province = {
 				EFFECT = "
 				change_variable = {
 					which = to_exarch_needed_provinces_for_merchant
+					value = -1
+				}
+				"
+			}
+			to_exarch_merchant_2_effect_from_province = {
+				EFFECT = "
+				change_variable = {
+					which = to_exarch_needed_provinces_for_merchant_2
 					value = -1
 				}
 				"

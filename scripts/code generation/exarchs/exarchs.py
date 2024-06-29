@@ -315,6 +315,7 @@ exarchs = [
         "merchant_land": "[H][145.GetAreaName][!H], [H][147.GetAreaName][!H], [H][148.GetAreaName][!H], "
                 "[H][151.GetAreaName][!H], [H][164.GetAreaName][!H], [H][150.GetAreaName][!H], "
                 "[H][159.GetAreaName][!H] areas and [H][321.GetName][!H] province, "
-                "except for [A][151.GetCapitalName][!A] itself"
+                "except for [A][151.GetCapitalName][!A] itself",
+        "merchant_land2": "[H][317.GetRegionName][!H] region, except for the province of [A][321.GetName][!A]",
     }
 ]
