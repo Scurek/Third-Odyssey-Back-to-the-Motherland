@@ -36,7 +36,7 @@ MAX_LOCAL_MODIFIER = 100
 
 cond_local = 'check_variable={which=to_saved_years_of_nationalism value=%s}'
 body_local = 'if = {limit={NOT={has_province_modifier=to_exarch_local_nationalism_%s}} ' \
-       'to_remove_exarch_local_nationalism_modifiers=yes add_province_modifier={' \
+       'add_province_modifier={' \
        'name=to_exarch_local_nationalism_%s duration=-1 hidden = yes} }'
 form_local = 'if={limit={%s}%s}else={%s}' % (cond_local, '%s', '%s')
 

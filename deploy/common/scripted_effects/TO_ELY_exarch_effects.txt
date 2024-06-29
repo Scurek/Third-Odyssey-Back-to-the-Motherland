@@ -136,7 +136,7 @@ to_exarch_reform_effect = {
 	custom_tooltip = to_forced_new_line_tt
 	hidden_effect = {
 		to_imperial_integration_country_check = yes
-		to_check_exarch_nationalism = { MODIFY = 5 }
+		to_check_exarch_nationalism = {}
 	}
 }
 
@@ -2230,45 +2230,90 @@ to_exarch_kleisoura_monument_mod_transfer = {
 	}
 }
 
+to_monthly_exarch_nationalism_check = {
+	nhs_effect_for_existing_elysian_tag = {
+		EFFECT = "
+		to_check_exarch_nationalism_all_subjects = {}
+		"
+	}
+}
+
 to_check_exarch_nationalism_all_subjects = {
-	every_subject_country = {
-		limit = {
-			to_has_exarch_government_reform = yes
+	hidden_effect = {
+		every_subject_country = {
+			limit = {
+				to_has_exarch_government_reform = yes
+			}
+			to_check_exarch_nationalism = {
+				[[MODIFY]
+				MODIFY = $MODIFY$
+				]
+			}
 		}
-		to_check_exarch_nationalism = {}
 	}
 }
 
 to_check_exarch_nationalism = {
-	if = {
-		limit = {
-			is_subject_of_type = elysian_subject
-			to_has_exarch_government_reform = yes
-		}
-		overlord = {
-			PREV = {
-				export_to_variable = {
+	hidden_effect = {
+		if = {
+			limit = {
+				is_subject_of_type = elysian_subject
+				to_has_exarch_government_reform = yes
+			}
+			overlord = {
+				PREV = {
+					export_to_variable = {
+						which = to_exarch_nationalism_diff
+						value = modifier:years_of_nationalism
+						who = PREV
+					}
+				}
+			}
+			export_to_variable = {
+				which = to_exarch_nationalism
+				value = modifier:years_of_nationalism
+			}
+			if = {
+				limit = {
+					NOT = {
+						is_variable_equal = {
+							which = to_exarch_nationalism_diff_previous
+							value = 0
+						}
+					}
+				}
+				subtract_variable = {
+					which = to_exarch_nationalism
+					which = to_exarch_nationalism_diff_previous
+				}
+			}
+			subtract_variable = {
+				which = to_exarch_nationalism_diff
+				which = to_exarch_nationalism
+			}
+			[[MODIFY]
+			subtract_variable = {
+				which = to_exarch_nationalism_diff
+				value = $MODIFY$
+			}
+			]
+			if = {
+				limit = {
+					NOT = {
+						is_variable_equal = {
+							which = to_exarch_nationalism_diff
+							which = to_exarch_nationalism_diff_previous
+						}
+					}
+				}
+				to_remove_exarch_nationalism_modifiers = yes
+				to_add_correct_exarch_nationalism_modifier = yes
+				set_variable = {
+					which = to_exarch_nationalism_diff_previous
 					which = to_exarch_nationalism_diff
-					value = modifier:years_of_nationalism
-					who = PREV
 				}
 			}
 		}
-		export_to_variable = {
-			which = to_exarch_nationalism
-			value = modifier:years_of_nationalism
-		}
-		subtract_variable = {
-			which = to_exarch_nationalism_diff
-			which = to_exarch_nationalism
-		}
-		[[MODIFY]
-		change_variable = {
-			which = to_exarch_nationalism_diff
-			value = $MODIFY$
-		}
-		]
-		to_add_correct_exarch_nationalism_modifier = yes
 	}
 }
 
