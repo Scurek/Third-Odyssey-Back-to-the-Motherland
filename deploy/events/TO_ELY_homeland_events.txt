@@ -2242,10 +2242,40 @@ country_event = {
 		custom_tooltip = to_albania_to_elg_tt
 
 		hidden_effect = {
+			albania_area = {
+				ELG = {
+					change_variable = {
+						which = to_exarch_needed_provinces_for_merchant
+						value = 1
+					}
+				}
+				event_target:to_EEY_target = {
+					change_variable = {
+						which = to_exarch_needed_provinces_for_merchant
+						value = -1
+					}
+				}
+			}
+			if = {
+				limit = {
+					event_target:to_EEY_target = {
+						is_subject_of = ROOT
+						is_subject_of_type = elysian_subject
+					}
+				}
+				albania_area = {
+					limit = {
+						owned_by = event_target:to_EEY_target
+					}
+					to_cede_province_to_exarch_overlord = {
+						CURRENT_OWNER = owner
+						NEW_OWNER = ROOT
+					}
+				}
+			}
 			if = {
 				limit = {
 					ELG = {
-						exists = yes
 						is_subject_of = ROOT
 						is_subject_of_type = elysian_subject
 					}
@@ -2256,7 +2286,7 @@ country_event = {
 						to_exarch_can_get_province_passive = yes	
 					}
 					to_cede_province_to_exarch = {
-						CURRENT_OWNER = ROOT
+						CURRENT_OWNER = owner
 						NEW_OWNER = ELG
 					}
 				}
