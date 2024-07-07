@@ -135,6 +135,7 @@ to_exarch_reform_effect = {
 	}
 	custom_tooltip = to_forced_new_line_tt
 	hidden_effect = {
+		to_setup_exarch_merchant_counter = yes
 		to_imperial_integration_country_check = yes
 		to_check_exarch_nationalism = {}
 		to_check_kastrioti_dominion_modifier_all_provinces = yes
@@ -166,53 +167,11 @@ to_swap_exarch_dynamic_tag = {
 		}
 		$CURRENT_TAG$ = {
 			$NEW_TAG$ = {
-				set_variable = {
-					which = to_exarch_needed_provinces_for_merchant
-					which = PREV
-				}
-				set_variable = {
-					which = to_exarch_owned_provinces_for_merchant
-					value = 0
-				}
-				every_owned_province = {
-					limit = {
-						nhs_$NEW_TAG$_province = yes
-						NOT = { to_province_always_counts_for_exarch_merchant = yes }
-					}
-					set_province_flag = to_was_counted_for_exarch_merchant
-					PREV = {
-						change_variable = {
-							which = to_exarch_owned_provinces_for_merchant
-							value = 1
-						}
-					}
-				}
 				if = {
 					limit = {
 						PREV = { has_country_flag = to_exarch_two_merchants }
 					}
 					set_country_flag = to_exarch_two_merchants
-					set_variable = {
-						which = to_exarch_needed_provinces_for_merchant_2
-						which = PREV
-					}
-					set_variable = {
-						which = to_exarch_owned_provinces_for_merchant_2
-						value = 0
-					}
-					every_owned_province = {
-						limit = {
-							nhs_$NEW_TAG$_province = yes
-							NOT = { to_province_always_counts_for_exarch_merchant = yes }
-						}
-						set_province_flag = to_was_counted_for_exarch_merchant
-						PREV = {
-							change_variable = {
-								which = to_exarch_owned_provinces_for_merchant_2
-								value = 1
-							}
-						}
-					}
 				}
 				else = {
 					clr_country_flag = to_exarch_two_merchants
@@ -323,7 +282,7 @@ to_setup_exarch_merchant_2_counters_province = {
 to_setup_exarch_merchant_counters = {
 	if = {
 		limit = {
-			NOT = { has_global_flag = to_setup_exarch_merchant_provinces }
+			# NOT = { has_global_flag = to_setup_exarch_merchant_provinces }
 		}
 		set_global_flag = to_setup_exarch_merchant_provinces
 		to_exarch_effect_including_inactive = {
@@ -332,7 +291,7 @@ to_setup_exarch_merchant_counters = {
 					which = to_exarch_needed_provinces_for_merchant
 					value = 0
 				}
-				change_variable = {
+				set_variable = {
 					which = to_exarch_owned_provinces_for_merchant
 					value = 0
 				}
@@ -340,7 +299,7 @@ to_setup_exarch_merchant_counters = {
 					which = to_exarch_needed_provinces_for_merchant_2
 					value = 0
 				}
-				change_variable = {
+				set_variable = {
 					which = to_exarch_owned_provinces_for_merchant_2
 					value = 0
 				}
