@@ -2308,6 +2308,7 @@ country_event = {
 	
 	immediate = {
 		hidden_effect = {
+			set_country_flag = to_of_romans_and_rumites_event_active
 			to_turkish_emigration_predict_lost_dev = {
 				VARIABLE = to_total_lost_dev_10p
 				FRACTION = 0.1
@@ -2323,6 +2324,7 @@ country_event = {
 
 	after = {
 		hidden_effect = {
+			clr_country_flag = to_of_romans_and_rumites_event_active
 			set_variable = {
 				which = to_total_lost_dev_10p
 				value = 0
@@ -2351,17 +2353,6 @@ country_event = {
 			}
 		}
 		custom_tooltip = to_anatolia_goes_to_konstantinia_tt
-		hidden_effect = {
-			ELG = {
-				set_country_flag = to_exarch_two_merchants
-				if = {
-					limit = {
-						exists = yes
-					}
-					to_check_exarch_merchant_counter_all_owned_provinces = yes
-				}
-			}
-		}
 		custom_tooltip = nhs_new_line_tt
 
 		clr_country_flag = to_favored_turks_in_anatolia_partial
@@ -2512,13 +2503,6 @@ country_event = {
 				to_remove_culture_adaptation_variables = yes
 				change_original_culture = greek
 			}
-			every_owned_province = {
-				limit = {
-					region = anatolia_region
-					NOT = { province_id = 321 }
-				}
-				set_province_flag = nhs_exarch_province_exemption
-			}
 			clr_country_flag = to_turkish_provinces_change_to_own_religion
 		}
 		custom_tooltip = nhs_new_line_tt
@@ -2596,6 +2580,26 @@ country_event = {
 			duration = 27375
 		}
 		hidden_effect = {
+			ELG = {
+				if = {
+					limit = {
+						is_subject_of = ROOT
+						is_subject_of_type = elysian_subject
+					}
+					every_province = {
+						limit = {
+							owned_by = ELG
+							nhs_EEN_province = yes
+						}
+						to_cede_province_to_exarch_overlord = {
+							CURRENT_OWNER = ELG
+							NEW_OWNER = ROOT
+						}
+						clr_province_flag = nhs_exarch_province_exemption
+					}
+				}
+				set_country_flag = to_block_exarch_second_merchant
+			}
 			to_check_exarch_nationalism_all_subjects = {}
 		}
 	}
@@ -2619,13 +2623,36 @@ country_event = {
 				}
 			}
 		}
+		hidden_effect = {
+			ELG = {
+				set_country_flag = to_block_exarch_second_merchant
+			}
+		}
 		clr_country_flag = to_favored_turks_in_anatolia_partial
 		set_country_flag = to_favored_turks_in_anatolia
 		clr_global_flag = to_elg_got_anatolia
 		set_global_flag = to_een_got_anatolia
 		set_global_flag = to_orhans_descendant_rules_anatolia
 
-		custom_tooltip = to_enable_anatolia_exarch_orhan_tt
+		if = {
+			limit = {
+				any_province = {
+					nhs_EEN_province_no_flag_check = yes
+					OR = {
+						owned_by = ELG
+						AND = {
+							owned_by = ROOT
+							to_exarch_can_get_province_active = yes
+						}
+					}
+				}
+			}
+			custom_tooltip = to_enable_anatolia_exarch_orhan_immediate_tt
+		}
+		else = {
+			custom_tooltip = to_enable_anatolia_exarch_orhan_tt
+		}
+		
 		custom_tooltip = nhs_new_line_tt
 		
 		add_country_modifier = {
@@ -2643,6 +2670,110 @@ country_event = {
 		custom_tooltip = nhs_new_line_tt
 		custom_tooltip = to_turkish_province_boost_tt
 		hidden_effect = {
+			ELG = {
+				if = {
+					limit = {
+						is_subject_of = ROOT
+						is_subject_of_type = elysian_subject
+					}
+					every_province = {
+						limit = {
+							owned_by = ELG
+							nhs_EEN_province = yes
+						}
+						to_cede_province_to_exarch_overlord = {
+							CURRENT_OWNER = ELG
+							NEW_OWNER = ROOT
+						}
+						clr_province_flag = nhs_exarch_province_exemption
+					}
+				}
+				set_country_flag = to_block_exarch_second_merchant
+			}
+			if = {
+				limit = {
+					317 = {
+						owned_by = ROOT
+						culture = turkish
+						to_exarch_can_get_province_active = yes
+					}
+				}
+				317 = {
+					to_release_exarch_from_province = {
+						EXARCH_SCOPE = EEN
+						CURRENT_OWNER = ROOT
+					}
+				}
+				to_setup_exarch_government_and_transfer_provinces = {
+					EXARCH_SCOPE = EEN
+					EXARCH_TAG = EEN
+					OVERLORD = ROOT
+					ON_CREATED_EFFECT = "to_setup_anatolia_exarch = yes"
+					ON_CREATED_TOOLTIP = "to_setup_anatolia_exarch_tooltip = yes"
+				}
+				EEN = {
+					set_country_flag = to_50_year_cooldown_on_exarch_annex
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_province = {
+						nhs_EEN_province = yes
+						culture = turkish
+						to_exarch_can_get_province_active = yes
+					}
+				}
+				random_owned_province = {
+					limit = {
+						nhs_EEN_province = yes
+						culture = turkish
+						to_exarch_can_get_province_active = yes
+					}
+					to_release_exarch_from_province = {
+						EXARCH_SCOPE = EEN
+						CURRENT_OWNER = ROOT
+					}
+				}
+				to_setup_exarch_government_and_transfer_provinces = {
+					EXARCH_SCOPE = EEN
+					EXARCH_TAG = EEN
+					OVERLORD = ROOT
+					ON_CREATED_EFFECT = "to_setup_anatolia_exarch = yes"
+					ON_CREATED_TOOLTIP = "to_setup_anatolia_exarch_tooltip = yes"
+				}
+				EEN = {
+					set_country_flag = to_50_year_cooldown_on_exarch_annex
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_province = {
+						nhs_EEN_province = yes
+						to_exarch_can_get_province_active = yes
+					}
+				}
+				random_owned_province = {
+					limit = {
+						nhs_EEN_province = yes
+						to_exarch_can_get_province_active = yes
+					}
+					change_culture = turkish
+					to_release_exarch_from_province = {
+						EXARCH_SCOPE = EEN
+						CURRENT_OWNER = ROOT
+					}
+				}
+				to_setup_exarch_government_and_transfer_provinces = {
+					EXARCH_SCOPE = EEN
+					EXARCH_TAG = EEN
+					OVERLORD = ROOT
+					ON_CREATED_EFFECT = "to_setup_anatolia_exarch = yes"
+					ON_CREATED_TOOLTIP = "to_setup_anatolia_exarch_tooltip = yes"
+				}
+				EEN = {
+					set_country_flag = to_50_year_cooldown_on_exarch_annex
+				}
+			}
 			every_province = {
 				limit = {
 					country_or_subject_holds = ROOT
