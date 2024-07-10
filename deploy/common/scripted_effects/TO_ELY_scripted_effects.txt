@@ -154,6 +154,71 @@ to_set_supply_lines_province = {
 }
 
 to_remove_supply_lines_province = {
+	if = {
+		limit = {
+			any_province = {
+				has_province_modifier = nhs2_supply_lines_tm
+			}
+		}
+		if = {
+			limit = {
+				any_province = {
+					has_province_modifier = nhs2_supply_lines_tm
+					owned_by = PREV
+					to_exarch_can_get_province_passive = yes
+					to_exarch_trigger_from_province = {
+						TRIGGER = "
+						is_subject_of_type = elysian_subject
+						"
+					}
+				}
+			}
+			custom_tooltip = to_remove_supply_lines_with_exarch_tt
+		}
+		else = {
+			custom_tooltip = to_remove_supply_lines_tt
+		}
+		random_province = {
+			limit = {
+				has_province_modifier = nhs2_supply_lines_tm
+			}
+			nhs_set_center_of_trade_2 = yes
+			to_remove_supply_lines_from_province = yes
+			hidden_effect = {
+				if = {
+					limit = {
+						owned_by = PREV
+						to_exarch_can_get_province_passive = yes
+					}
+					to_exarch_effect_from_province = {
+						EFFECT = "
+						if = {
+							limit = {
+								is_subject_of_type = elysian_subject
+							}
+							save_event_target_as = to_exarch_province_recipient
+						}
+						"
+					}
+					if = {
+						limit = {
+							has_saved_event_target = to_exarch_province_recipient
+							event_target:to_exarch_province_recipient = {
+								is_subject_of_type = elysian_subject
+							}
+						}
+						to_cede_province_to_exarch = {
+							CURRENT_OWNER = owner
+							NEW_OWNER = event_target:to_exarch_province_recipient
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+to_remove_supply_lines_from_province = {
 	hidden_effect = {
 		remove_province_triggered_modifier = nhs2_supply_lines_tm
 		clear_global_event_target = nhs_supply_lines_province
@@ -201,6 +266,72 @@ to_set_base_of_operations_province = {
 }
 
 to_remove_base_of_operations_province = {
+	if = {
+		limit = {
+			any_province = {
+				has_province_modifier = nhs2_base_of_operations_tm
+			}
+		}
+		if = {
+			limit = {
+				any_province = {
+					has_province_modifier = nhs2_base_of_operations_tm
+					owned_by = PREV
+					to_exarch_can_get_province_passive = yes
+					to_exarch_trigger_from_province = {
+						TRIGGER = "
+						is_subject_of_type = elysian_subject
+						"
+					}
+				}
+			}
+			custom_tooltip = to_remove_base_of_operations_with_exarch_tt
+		}
+		else = {
+			custom_tooltip = to_remove_base_of_operations_tt
+		}
+		hidden_effect = {
+			every_province = {
+				limit = {
+					has_province_modifier = nhs2_base_of_operations_tm
+				}
+				to_remove_base_of_operations_from_province = yes
+				hidden_effect = {
+					if = {
+						limit = {
+							owned_by = PREV
+							to_exarch_can_get_province_passive = yes
+						}
+						to_exarch_effect_from_province = {
+							EFFECT = "
+							if = {
+								limit = {
+									is_subject_of_type = elysian_subject
+								}
+								save_event_target_as = to_exarch_province_recipient
+							}
+							"
+						}
+						if = {
+							limit = {
+								has_saved_event_target = to_exarch_province_recipient
+								event_target:to_exarch_province_recipient = {
+									is_subject_of_type = elysian_subject
+								}
+							}
+							to_cede_province_to_exarch = {
+								CURRENT_OWNER = owner
+								NEW_OWNER = event_target:to_exarch_province_recipient
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+to_remove_base_of_operations_from_province = {
 	hidden_effect = {
 		remove_province_triggered_modifier = nhs2_base_of_operations_tm
 		clear_global_event_target = nhs_base_of_operations_province
@@ -3131,7 +3262,7 @@ nhs_improve_portuguese_enclave_from_small = {
 	}
 }
 
-# RECIPIENT - country that provinces are ceeded to
+# RECIPIENT - country that provinces are ceded to
 nhs_cede_elysian_brazilian_settlements = {
 	if = {
 		limit = {
