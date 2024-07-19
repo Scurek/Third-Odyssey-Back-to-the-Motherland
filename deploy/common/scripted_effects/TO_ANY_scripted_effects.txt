@@ -1,3 +1,58 @@
+to_setup_non_hellenic_pagan_provinces = {
+	every_province = {
+		limit = {
+			religion_group = pagan
+			NOT = { religion = pantheon_worship }
+		}
+		set_province_flag = to_non_hellenic_pagan_religion
+	}
+}
+
+to_check_non_hellenic_pagan_provinces_manual_conversion = {
+	if = {
+		limit = {
+			has_province_flag = to_non_hellenic_pagan_religion
+			OR = {
+				religion = pantheon_worship
+				NOT = { religion_group = pagan }
+			}
+		}
+		clr_province_flag = to_non_hellenic_pagan_religion
+		if = {
+			limit = {
+				religion = pantheon_worship
+				owner = {
+					religion = pantheon_worship
+				}
+			}
+			owner = {
+				set_country_flag = to_converted_heretics_as_hellenic
+			}
+		}
+	}
+}
+
+to_check_non_hellenic_pagan_provinces = {
+	if = {
+		limit = {
+			has_province_flag = to_non_hellenic_pagan_religion
+			OR = {
+				religion = pantheon_worship
+				NOT = { religion_group = pagan }
+			}
+		}
+		clr_province_flag = to_non_hellenic_pagan_religion
+	}
+	else_if = {
+		limit = {
+			NOT = { has_province_flag = to_non_hellenic_pagan_religion }
+			religion_group = pagan
+			NOT = { religion = pantheon_worship }
+		}
+		set_province_flag = to_non_hellenic_pagan_religion
+	}
+}
+
 to_save_years_of_nationalism = {
 	hidden_effect = {
 		set_variable = {

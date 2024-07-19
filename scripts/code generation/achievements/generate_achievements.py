@@ -2,8 +2,14 @@ import json
 import os
 
 gui_file = open("TO_achievements.txt", "w")
-loc_file = open("to_achievement_localisation.txt", "w")
+loc_file = open("to_achievement_localisation.txt", "w", encoding="utf-8")
 interface_file = open("to_achievement_interface.txt", "w")
+completion_file = open("to_achievement_completion.txt", "w")
+gfx_file = open("z_TO_achievements.gfx", "w")
+cl_file = open("TO_ANY_achievements_customizable_localization.txt", "w")
+events_file = open("to_achievement_events.txt", "w")
+scripted_triggers_file = open("to_achievement_scripted_triggers.txt", "w")
+scripted_effects_file = open("to_achievement_scripted_effects.txt", "w")
 
 window_gui = """custom_window = {
 \tname = to_achievement_window
@@ -12,11 +18,64 @@ window_gui = """custom_window = {
 \t}
 }
 
+custom_button = {
+\tname = to_achievements_button_open
+\ttooltip = to_achievements_button_open_tooltip
+\teffect = {
+\t\tif = {
+\t\t\tlimit = { has_country_flag = to_achievement_window_open }
+\t\t\tclr_country_flag = to_achievement_window_open
+\t\t}
+\t\telse = {
+\t\t\tset_country_flag = to_achievement_window_open
+\t\t}
+\t}
+}
+
+custom_button = {
+\tname = to_achievement_close_button
+\teffect = {
+\t\tclr_country_flag = to_achievement_window_open
+\t}
+}
+
 custom_window = {
 \tname = to_achievement_window_elysia
 \tpotential = {
 \t\tto_achievement_window_elysia_visible = yes
 \t}
+}
+
+custom_window = {
+\tname = to_show_achievements
+\tpotential = {
+\t\tto_show_achievements = yes
+\t}
+}
+
+custom_text_box = {
+\tname = to_achievements_old_patch
+\tpotential = {
+\t\tNOT = { to_show_achievements = yes }
+\t}
+}
+
+# Unused, but if those aren't here error.log keeps throwing false positive errors. Thanks Paradox.
+custom_button = {
+\tname = to_achievement_elysia_title
+}
+################
+
+custom_text_box = {
+\tname = to_achievement_elysia_title
+}
+
+custom_text_box = {
+\tname = to_achievement_completed
+}
+
+custom_text_box = {
+\tname = to_achievement_completed_close_text
 }
 
 """
@@ -35,40 +94,244 @@ window_interface = """\t\twindowType = {
 
 """
 
-y_spacing = 100
-x_spacing = 383
-top_margin = 115
-left_margin = 15
+gfx_entries = """\tspriteType = {
+\t\tname = "GFX_to_achievement_entry_easy"
+\t\ttexturefile = "gfx//interface//TO_achievements//achievement_entry_easy.dds"
+\t}
 
-status_offset_x = 310
-status_offset_y = 32
+\tspriteType = {
+\t\tname = "GFX_to_achievement_entry_medium"
+\t\ttexturefile = "gfx//interface//TO_achievements//achievement_entry_medium.dds"
+\t}
 
-title_offset_x = 160
-title_offset_y = 12
+\tspriteType = {
+\t\tname = "GFX_to_achievement_entry_hard"
+\t\ttexturefile = "gfx//interface//TO_achievements//achievement_entry_hard.dds"
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_to_achievement_status_background"
+\t\ttexturefile = "gfx//interface//TO_achievements//status_background.dds"
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_to_achievement_status_icons"
+\t\ttexturefile = "gfx//interface//TO_achievements//status_icons.dds"
+\t\tnoOfFrames = 3
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_to_province_decision_button"
+\t\ttexturefile = "gfx//interface//TO_achievements//province_decision_button.dds"
+\t}
+
+\tframeAnimatedSpriteType = {
+\t\tname = "GFX_to_province_decision_button_highlight"
+\t\ttexturefile = "gfx//interface//TO_achievements//province_decision_button_highlight.dds"
+\t\tnoOfFrames = 40
+\t\ttransparencecheck = yes
+\t\tanimation_rate_fps = 20
+\t\tlooping = yes
+\t\tplay_on_show = yes
+\t\talwaystransparent = yes
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_to_achievement_completed_window_easy"
+\t\ttexturefile = "gfx//interface//TO_achievements//achievement_complete_window_easy.dds"
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_to_achievement_completed_window_medium"
+\t\ttexturefile = "gfx//interface//TO_achievements//achievement_complete_window_medium.dds"
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_to_achievement_completed_window_hard"
+\t\ttexturefile = "gfx//interface//TO_achievements//achievement_complete_window_hard.dds"
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_achievement_complete_image_frame"
+\t\ttexturefile = "gfx//interface//TO_achievements//achievement_complete_image_frame.dds"
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_achievement_complete_image_frame_133x133"
+\t\ttexturefile = "gfx//interface//TO_achievements//achievement_complete_image_frame_133x133.dds"
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_to_button_achievements_elysia"
+\t\ttexturefile = "gfx//interface//TO_achievements//button_achievements_elysia.dds"
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_to_achievement_background_elysia"
+\t\ttexturefile = "gfx//interface//TO_achievements//background_elysia_large.dds"
+\t}
+
+"""
+cl_entries = """defined_text = {
+    name = ToAchievements_to_did_not_start_on_ironman
+    random = no
+    text = {
+        localisation_key = to_red_y_icon_tt
+        trigger = {
+            to_did_not_start_on_ironman = yes
+        }
+    }
+    text = {
+        localisation_key = to_green_x_icon_tt
+    }
+}
+
+"""
+
+ignored_fail_conditions = ["to_started_on_the_old_patch", "to_not_started_in_ironman"]
+
+y_spacing = 87
+x_spacing = 358  #383
+top_margin = 108
+left_margin = 12
+
+icon_offset_x = 7
+icon_offset_y = 6
+
+status_background_offset_x = 292
+status_background_offset_y = 22
+status_background_offset_x_low_diff = 0
+status_background_offset_y_low_diff = 14
+
+status_offset_x = 300
+status_offset_y = 22
+status_offset_x_low_diff = 0
+status_offset_y_low_diff = 14
+
+province_decision_offset_x = 316
+province_decision_offset_y = 8
+
+title_offset_x = 84
+title_offset_y = 8
 title_width = 185
 title_font = "vic_22"
 
-description_offset_x = 160
-description_offset_y = 20
-description_width = 185
+description_offset_x = 84
+description_offset_y = 30
+description_width = 200
 description_font = "vic_18"
+
+completed_icon_offset_x = 154
+completed_icon_offset_y = 145
+
+completed_title_text_offset_x = 135
+completed_title_text_offset_y = 99
+completed_title_text_font = "vic_22"
+completed_title_text_width = 270
+
+completed_title_offset_x = 100
+completed_title_offset_y = 120
+completed_title_font = "vic_18"
+completed_title_width = 330
+
+completed_description_offset_x = 63
+completed_description_offset_y = 296
+completed_description_font = "vic_18"
+completed_description_width = 400
+completed_description_height = 83
+
+completed_close_offset_x = 210
+completed_close_offset_y = 387
+
+completed_close_text_offset_x = 235
+completed_close_text_offset_y = 393
+completed_close_text_font = "vic_18"
+completed_close_text_width = 60
+
+events_starting_id = 100
+events_namespace = "to_achievements"
+
+
+def has_province_decision(achievement):
+    return "has_province_decision" in achievement and achievement["has_province_decision"]
+
 
 with open("achievement_definitions.json") as file:
     data = json.load(file)
     loc_file.write(f"# Code generated by {os.path.basename(os.getcwd())}/{os.path.basename(__file__)}\n")
     gui_file.write(f"# Code generated by {os.path.basename(os.getcwd())}/{os.path.basename(__file__)}\n")
     gui_file.write(window_gui)
-    interface_file.write(f"\t\t# Third Odyssey\n")
-    interface_file.write(f"\t\t# Code generated by {os.path.basename(os.getcwd())}/{os.path.basename(__file__)}\n")
-    interface_file.write(window_interface)
+    # interface_file.write(f"\t\t# Third Odyssey\n")
+    interface_file.write(
+        f"\t\t\t\t\t# Code generated by {os.path.basename(os.getcwd())}/{os.path.basename(__file__)}\n")
+    completion_file.write(
+        f"\t\t# Code generated by {os.path.basename(os.getcwd())}/{os.path.basename(__file__)}\n")
+    # interface_file.write(window_interface)
+    gfx_file.write(f"# Code generated by {os.path.basename(os.getcwd())}/{os.path.basename(__file__)}\n")
+    gfx_file.write("spriteTypes = {\n")
+    gfx_file.write(gfx_entries)
+    cl_file.write(cl_entries)
+    events_file.write(f"# Code generated by {os.path.basename(os.getcwd())}/{os.path.basename(__file__)}\n")
+    scripted_triggers_file.write(f"# Code generated by {os.path.basename(os.getcwd())}/{os.path.basename(__file__)}\n")
+    scripted_effects_file.write(f"# Code generated by {os.path.basename(os.getcwd())}/{os.path.basename(__file__)}\n")
 
-    for i, entry in enumerate(data):
-        gui_file.write(f"custom_icon = {{\n"
-                       f"\tname = to_achievement_{entry["name"]}_icon\n"
+    true_index = -1
+
+    for entry in data:
+        if "removed" in entry:
+            continue
+        true_index += 1
+        # gui_file.write(f"custom_icon = {{\n"
+        #                f"\tname = to_achievement_{entry["name"]}_icon\n"
+        #                f"}}\n\n")
+
+        # Attempt to fix error.log
+        gui_file.write("# Unused, but if those aren't here error.log keeps throwing false positive errors. "
+                       "Thanks Paradox.\n")
+        gui_file.write(f"custom_button = {{\n"
+                       f"\tname = to_achievement_{entry["name"]}_title\n"
                        f"}}\n\n")
-        gui_file.write(f"custom_icon = {{\n"
+        gui_file.write(f"custom_button = {{\n"
+                       f"\tname = to_achievement_{entry["name"]}_background\n"
+                       f"\ttooltip = to_achievement_{entry["name"]}_long_description\n"
+                       f"}}\n\n")
+        gui_file.write(f"custom_text_box = {{\n"
                        f"\tname = to_achievement_{entry["name"]}_background\n"
                        f"}}\n\n")
+        gui_file.write(f"custom_button = {{\n"
+                       f"\tname = to_achievement_{entry["name"]}_description\n"
+                       f"}}\n\n")
+        gui_file.write(f"custom_button = {{\n"
+                       f"\tname = to_achievement_{entry["name"]}_status\n"
+                       f"}}\n\n")
+        gui_file.write(f"custom_text_box = {{\n"
+                       f"\tname = to_achievement_{entry["name"]}_status\n"
+                       f"}}\n")
+        gui_file.write(f"custom_button = {{\n"
+                       f"\tname = to_achievement_completed_{entry["name"]}_description\n"
+                       f"}}\n")
+        # if has_province_decision(entry):
+        #     gui_file.write(f"custom_button = {{\n"
+        #                    f"\tname = to_achievement_{entry["name"]}_province_decision_button_highlight\n"
+        #                    f"\tpotential = {{ to_achievement_province_decision_shown = {{ ACHIEVEMENT = {entry["name"]} }} }}\n"
+        #                    f"}}\n")
+        gui_file.write("#########\n\n")
+        ####
+
+        gui_file.write(f"custom_icon = {{\n"
+                       f"\tname = to_achievement_{entry["name"]}_background\n"
+                       f"\ttooltip = to_achievement_{entry["name"]}_long_description\n"
+                       f"}}\n\n")
+        # gui_file.write(f"custom_button = {{\n"
+        #                f"\tname = to_achievement_{entry["name"]}_background\n"
+        #                f"\ttooltip = to_achievement_{entry["name"]}_long_description\n"
+        #                f"\teffect = {{\n"
+        #                f"\t\tif = {{\n"
+        #                f"\t\t\tlimit = {{ to_achievement_status_completed = {{ ACHIEVEMENT = {entry["name"]} }} }}\n"
+        #                f"\t\t\tto_open_achievement_completed_window = yes\n"
+        #                f"\t\t}}\n"
+        #                f"\t}}\n"
+        #                f"}}\n\n")
         gui_file.write(f"custom_text_box = {{\n"
                        f"\tname = to_achievement_{entry["name"]}_title\n"
                        f"}}\n\n")
@@ -78,36 +341,139 @@ with open("achievement_definitions.json") as file:
         gui_file.write(f"custom_icon = {{\n"
                        f"\tname = to_achievement_{entry["name"]}_status\n"
                        f"\tframe = {{\n"
-                       f"\t\tnumber = 1\n"
-                       f"\t\ttrigger = {{ to_achievement_{entry["name"]}_status_complete = yes }}\n"
-                       f"\t}}\n"
-                       f"\tframe = {{\n"
                        f"\t\tnumber = 2\n"
-                       f"\t\ttrigger = {{ to_achievement_{entry["name"]}_status_failed = yes }}\n"
+                       f"\t\ttrigger = {{ to_achievement_status_completed = {{ ACHIEVEMENT = {entry["name"]} }} }}\n"
                        f"\t}}\n"
                        f"\tframe = {{\n"
                        f"\t\tnumber = 3\n"
+                       f"\t\ttrigger = {{ to_achievement_{entry["name"]}_status_failed = yes }}\n"
+                       f"\t}}\n"
+                       f"\tframe = {{\n"
+                       f"\t\tnumber = 1\n"
                        f"\t\ttrigger = {{}}\n"
                        f"\t}}\n"
                        f"}}\n\n")
+        if has_province_decision(entry):
+            gui_file.write(f"custom_button = {{\n"
+                           f"\tname = to_achievement_{entry["name"]}_province_decision_button\n"
+                           f"\ttooltip = to_achievement_{entry["name"]}_province_decision_button_tooltip\n"
+                           f"\teffect = {{ to_enable_achievement_province_decision = {{ ACHIEVEMENT = {entry["name"]} }} }}\n"
+                           f"}}\n")
+            gui_file.write(f"custom_icon = {{\n"
+                           f"\tname = to_achievement_{entry["name"]}_province_decision_button_highlight\n"
+                           f"\tpotential = {{ to_achievement_province_decision_shown = {{ ACHIEVEMENT = {entry["name"]} }} }}\n"
+                           f"}}\n")
+
+        gui_file.write(f"custom_window = {{\n"
+                       f"\tname = to_achievement_completed_{entry["name"]}\n"
+                       f"\tpotential = {{ to_achievement_completed_window_visible = {{ ACHIEVEMENT = {entry["name"]} }} }}\n"
+                       f"}}\n\n")
+        gui_file.write(f"custom_text_box = {{\n"
+                       f"\tname = to_achievement_completed_{entry["name"]}_description\n"
+                       f"}}\n\n")
+        gui_file.write(f"custom_button = {{\n"
+                       f"\tname = to_achievement_completed_{entry["name"]}_close\n"
+                       f"\teffect = {{\n"
+                       f"\t\tto_close_achievement_completed_window = {{ ACHIEVEMENT = {entry["name"]} }}\n"
+                       f"\t}}\n"
+                       f"}}\n\n")
+
+        gfx_file.write(f"\tspriteType = {{\n"
+                       f"\t\tname = \"GFX_to_achievement_{entry["name"]}_icon\"\n"
+                       f"\t\ttexturefile = \"gfx//interface//TO_achievements//icons//{entry["name"]}.dds\"\n"
+                       f"\t}}\n\n")
+
+        gfx_file.write(f"\tspriteType = {{\n"
+                       f"\t\tname = \"GFX_to_achievement_{entry["name"]}_icon_big\"\n"
+                       f"\t\ttexturefile = \"gfx//interface//TO_achievements//icons//{entry["name"]}__big.dds\"\n"
+                       f"\t}}\n\n")
 
         loc_file.write(f" to_achievement_{entry["name"]}_title:0 \"{entry["title"]}\"\n"
-                       f" to_achievement_{entry["name"]}_description:0 \"{entry["trigger_description"]}\"\n")
+                       f" to_achievement_{entry["name"]}_description:0 \"{entry["trigger_description"]}\"\n"
+                       f" to_achievement_completed_{entry["name"]}_description:0 \"§g{entry["description"]}§!\"\n")
+        loc_file.write(f" to_achievement_{entry["name"]}_long_description:0 \"")
+        loc_file.write(
+            f"§RWe will no longer be able to complete the achievement if any of the following is true:§!\\n")
+        loc_file.write(f"[Root.ToAchievements_to_did_not_start_on_ironman]Did NOT start the game on Ironman mode.\\n")
+        if "fail_conditions" in entry:
+            for condition in entry["fail_conditions"]:
+                loc_file.write(f"[Root.ToAchievements_{condition["trigger"]}]{condition["text"]}\\n")
+        loc_file.write("\\n")
+        loc_file.write(f"§GThe achievement will be completed once all of the following is true:§!\\n")
+        for index, condition in enumerate(entry["success_conditions"]):
+            loc_file.write(f"[Root.ToAchievements_{condition["trigger"]}]{condition["text"]}")
+            if index != len(entry["success_conditions"]) - 1:
+                loc_file.write("\\n")
+        loc_file.write("\"\n")
+        if has_province_decision(entry):
+            loc_file.write(f" to_show_achievement_provinces_decision_{entry["name"]}_tt:0 \""
+                           f"Enables §Y£icon_achievement£{entry["title"]} Status§! decision, which we can use to "
+                           f"highlight the provinces still required to complete the achievement.\"\n")
+            loc_file.write(f" to_hide_achievement_provinces_decision_{entry["name"]}_tt:0 \""
+                           f"Disables §Y£icon_achievement£{entry["title"]} Status§! decision.\"\n")
+            loc_file.write(f" to_achievement_provinces_decision_{entry["name"]}_title:0 \""
+                           f"£icon_achievement£{entry["title"]} Status\"\n")
+            loc_file.write(f" to_achievement_provinces_decision_{entry["name"]}_desc:0 \""
+                           f"Province highlight shows the provinces that don't yet meet the conditions for "
+                           f"§Y{entry["title"]}§! achievement.\"\n")
+            loc_file.write(f" to_achievement_{entry["name"]}_province_decision_button_tooltip:0 \""
+                           f"[Root.ToAchievements_show_province_decision_tooltip_{entry["name"]}]\"\n")
+            cl_file.write(f"defined_text = {{\n"
+                          f"    name = ToAchievements_show_province_decision_tooltip_{entry["name"]}\n"
+                          f"    text = {{\n"
+                          f"        trigger = {{ to_achievement_province_decision_shown = {{ ACHIEVEMENT = {entry["name"]} }} }}\n"
+                          f"        localisation_key = to_hide_achievement_provinces_decision_{entry["name"]}_tt\n"
+                          f"    }}\n"
+                          f"    text = {{\n"
+                          f"        localisation_key = to_show_achievement_provinces_decision_{entry["name"]}_tt\n"
+                          f"    }}\n"
+                          f"}}\n\n")
 
-        if i % 2 == 0:
+        if "fail_conditions" in entry:
+            for condition in entry["fail_conditions"]:
+                cl_file.write(f"defined_text = {{\n"
+                              f"    name = ToAchievements_{condition["trigger"]}\n"
+                              f"    text = {{\n"
+                              f"        trigger = {{ {condition["trigger"]} = yes }}\n"
+                              f"        localisation_key = to_red_y_icon_tt\n"
+                              f"    }}\n")
+                cl_file.write(f"    text = {{\n"
+                              f"        localisation_key = to_green_x_icon_tt\n"
+                              f"    }}\n"
+                              f"}}\n\n")
+
+        for condition in entry["success_conditions"]:
+            cl_file.write(f"defined_text = {{\n"
+                          f"    name = ToAchievements_{condition["trigger"]}\n"
+                          f"    text = {{\n"
+                          f"        trigger = {{ {condition["trigger"]} = yes }}\n"
+                          f"        localisation_key = to_y_icon_tt\n"
+                          f"    }}\n")
+            if "partial_trigger" in condition:
+                cl_file.write(f"    text = {{\n"
+                              f"        trigger = {{ {condition["partial_trigger"]} = yes }}\n"
+                              f"        localisation_key = to_yellow_y_icon_tt\n"
+                              f"    }}\n")
+            cl_file.write(f"    text = {{\n"
+                          f"        localisation_key = to_x_icon_tt\n"
+                          f"    }}\n"
+                          f"}}\n\n")
+
+        if true_index % 2 == 0:
             x = left_margin
         else:
             x = left_margin + x_spacing
-        y = top_margin + i // 2 * y_spacing
+        y = top_margin + true_index // 2 * y_spacing
 
-        indentation1 = "\t\t\t\t"
-        indentation2 = "\t\t\t\t\t"
+        indentation1 = "\t\t\t\t\t"
+        indentation2 = "\t\t\t\t\t\t"
 
         interface_file.write(f"{indentation1}iconType = {{\n"
                              f"{indentation2}name = \"to_achievement_{entry["name"]}_icon\"\n"
-                             f"{indentation2}position = {{ x = {x} y = {y} }}\n"
+                             f"{indentation2}position = {{ x = {x + icon_offset_x} y = {y + icon_offset_y} }}\n"
                              f"{indentation2}quadTextureSprite = \"GFX_to_achievement_{entry["name"]}_icon\"\n"
-                             f"{indentation2}scripted = yes\n"
+                             f"{indentation2}alwaystransparent = yes\n"
+                             # f"{indentation2}scripted = yes\n"
                              f"{indentation1}}}\n\n")
 
         interface_file.write(f"{indentation1}iconType = {{\n"
@@ -117,6 +483,13 @@ with open("achievement_definitions.json") as file:
                              f"{indentation2}scripted = yes\n"
                              f"{indentation1}}}\n\n")
 
+        # interface_file.write(f"{indentation1}guiButtonType = {{\n"
+        #                      f"{indentation2}name = \"to_achievement_{entry["name"]}_background\"\n"
+        #                      f"{indentation2}position = {{ x = {x} y = {y} }}\n"
+        #                      f"{indentation2}quadTextureSprite = \"GFX_to_achievement_entry_{entry["difficulty"]}\"\n"
+        #                      f"{indentation2}scripted = yes\n"
+        #                      f"{indentation1}}}\n\n")
+
         interface_file.write(f"{indentation1}instantTextBoxType = {{\n"
                              f"{indentation2}name = \"to_achievement_{entry["name"]}_title\"\n"
                              f"{indentation2}position = {{ x = {x + title_offset_x} y = {y + title_offset_y} }}\n"
@@ -125,27 +498,203 @@ with open("achievement_definitions.json") as file:
                              f"{indentation2}maxHeight = 22\n"
                              f"{indentation2}fixedsize = yes\n"
                              f"{indentation2}scripted = yes\n"
+                             f"{indentation2}alwaystransparent = yes\n"
                              f"{indentation1}}}\n\n")
 
         interface_file.write(f"{indentation1}instantTextBoxType = {{\n"
                              f"{indentation2}name = \"to_achievement_{entry["name"]}_description\"\n"
                              f"{indentation2}position = {{ x = {x + description_offset_x} y = {y + description_offset_y} }}\n"
                              f"{indentation2}font = \"{description_font}\"\n"
-                             f"{indentation2}maxWidth = {description_width}\n"
-                             f"{indentation2}maxHeight = 22\n"
+                             f"{indentation2}maxWidth = {entry["desc_width"] if "desc_width" in entry else description_width}\n"
+                             f"{indentation2}maxHeight = 70\n"
                              f"{indentation2}fixedsize = yes\n"
                              f"{indentation2}scripted = yes\n"
+                             f"{indentation2}alwaystransparent = yes\n"
+                             f"{indentation1}}}\n\n")
+
+        interface_file.write(f"{indentation1}iconType = {{\n"
+                             f"{indentation2}name = \"to_achievement_{entry["name"]}_status_background\"\n"
+                             f"{indentation2}position = {{ "
+                             f"x = {x + status_background_offset_x + (status_background_offset_x_low_diff if has_province_decision(entry) else 0)} "
+                             f"y = {y + status_background_offset_y + (status_background_offset_y_low_diff if has_province_decision(entry) else 0)} "
+                             f"}}\n"
+                             f"{indentation2}quadTextureSprite = \"GFX_to_achievement_status_background\"\n"
+                             f"{indentation2}alwaystransparent = yes\n"
                              f"{indentation1}}}\n\n")
 
         interface_file.write(f"{indentation1}iconType = {{\n"
                              f"{indentation2}name = \"to_achievement_{entry["name"]}_status\"\n"
-                             f"{indentation2}position = {{ x = {x + status_offset_x} y = {y + status_offset_y} }}\n"
+                             f"{indentation2}position = {{ "
+                             f"x = {x + status_offset_x + (status_offset_x_low_diff if has_province_decision(entry) else 0)} "
+                             f"y = {y + status_offset_y + (status_offset_y_low_diff if has_province_decision(entry) else 0)} "
+                             f"}}\n"
                              f"{indentation2}quadTextureSprite = \"GFX_to_achievement_status_icons\"\n"
                              f"{indentation2}scripted = yes\n"
+                             f"{indentation2}alwaystransparent = yes\n"
                              f"{indentation1}}}\n\n")
-    interface_file.write("\t\t\t}\n")
-    interface_file.write("\t\t}\n")
+
+        if has_province_decision(entry):
+            province_decision_button_x = x + province_decision_offset_x
+            province_decision_button_y = y + province_decision_offset_y
+            interface_file.write(f"{indentation1}guiButtonType = {{\n"
+                                 f"{indentation2}name = \"to_achievement_{entry["name"]}_province_decision_button\"\n"
+                                 f"{indentation2}position = {{ x = {province_decision_button_x} y = {province_decision_button_y} }}\n"
+                                 f"{indentation2}quadTextureSprite = \"GFX_to_province_decision_button\"\n"
+                                 f"{indentation2}scripted = yes\n"
+                                 f"{indentation1}}}\n\n")
+
+            interface_file.write(f"{indentation1}iconType = {{\n"
+                                 f"{indentation2}name = \"to_achievement_{entry["name"]}_province_decision_button_highlight\"\n"
+                                 f"{indentation2}position = {{ x = {province_decision_button_x} y = {province_decision_button_y} }}\n"
+                                 f"{indentation2}quadTextureSprite = \"GFX_to_province_decision_button_highlight\"\n"
+                                 f"{indentation2}alwaystransparent = yes\n"
+                                 f"{indentation2}scripted = yes\n"
+                                 f"{indentation1}}}\n\n")
+
+        indentation0 = "\t\t"
+        indentation1 = "\t\t\t"
+        indentation2 = "\t\t\t\t"
+
+        completion_file.write(f"{indentation0}windowType = {{\n"
+                              f"{indentation1}name = \"to_achievement_completed_{entry["name"]}\"\n"
+                              f"{indentation1}position = {{ x = -265 y = -225 }}\n"
+                              f"{indentation1}Orientation = \"CENTER\"\n"
+                              f"{indentation1}scripted = yes\n\n")
+
+        completion_file.write(f"{indentation1}iconType = {{\n"
+                              f"{indentation2}name = \"to_achievement_completed_{entry["name"]}_background\"\n"
+                              f"{indentation2}position = {{ x = 0 y = 0 }}\n"
+                              f"{indentation2}quadTextureSprite = \"GFX_to_achievement_completed_window_{entry["difficulty"]}\"\n"
+                              f"{indentation1}}}\n\n")
+
+        completed_icon_offset = {"x": completed_icon_offset_x, "y": completed_icon_offset_y}
+        if "frame_size" in entry:
+            completed_icon_offset["x"] += int((224 - entry["frame_size"][0]) / 2)
+            completed_icon_offset["y"] += int((133 - entry["frame_size"][1]) / 2)
+
+        completion_file.write(f"{indentation1}iconType = {{\n"
+                              f"{indentation2}name = \"to_achievement_{entry["name"]}_icon_big\"\n"
+                              f"{indentation2}position = {{ x = {completed_icon_offset["x"]} y = {completed_icon_offset["y"]} }}\n"
+                              f"{indentation2}quadTextureSprite = \"GFX_to_achievement_{entry["name"]}_icon_big\"\n"
+                              f"{indentation1}}}\n\n")
+
+        frame_texture = "GFX_achievement_complete_image_frame"
+        if "frame_size" in entry:
+            frame_texture = f"GFX_achievement_complete_image_frame_{entry["frame_size"][0]}x{entry["frame_size"][1]}"
+
+        completion_file.write(f"{indentation1}iconType = {{\n"
+                              f"{indentation2}name = \"to_achievement_completed_image_frame\"\n"
+                              f"{indentation2}position = {{ x = 0 y = 0 }}\n"
+                              f"{indentation2}quadTextureSprite = \"{frame_texture}\"\n"
+                              f"{indentation1}}}\n\n")
+
+        completion_file.write(f"{indentation1}instantTextBoxType = {{\n"
+                              f"{indentation2}name = \"to_achievement_completed\"\n"
+                              f"{indentation2}position = {{ x = {completed_title_text_offset_x} y = {completed_title_text_offset_y} }}\n"
+                              f"{indentation2}font = \"{completed_title_text_font}\"\n"
+                              f"{indentation2}maxWidth = {completed_title_text_width}\n"
+                              f"{indentation2}maxHeight = 22\n"
+                              f"{indentation2}fixedsize = yes\n"
+                              f"{indentation2}format = center\n"
+                              f"{indentation2}scripted = yes\n"
+                              f"{indentation1}}}\n\n")
+
+        completion_file.write(f"{indentation1}instantTextBoxType = {{\n"
+                              f"{indentation2}name = \"to_achievement_{entry["name"]}_title\"\n"
+                              f"{indentation2}position = {{ x = {completed_title_offset_x} y = {completed_title_offset_y} }}\n"
+                              f"{indentation2}font = \"{completed_title_font}\"\n"
+                              f"{indentation2}maxWidth = {completed_title_width}\n"
+                              f"{indentation2}maxHeight = 22\n"
+                              f"{indentation2}fixedsize = yes\n"
+                              f"{indentation2}format = center\n"
+                              f"{indentation2}scripted = yes\n"
+                              f"{indentation1}}}\n\n")
+
+        completion_file.write(f"{indentation1}instantTextBoxType = {{\n"
+                              f"{indentation2}name = \"to_achievement_completed_{entry["name"]}_description\"\n"
+                              f"{indentation2}position = {{ x = {completed_description_offset_x} y = {completed_description_offset_y} }}\n"
+                              f"{indentation2}font = \"{completed_description_font}\"\n"
+                              f"{indentation2}maxWidth = {completed_description_width}\n"
+                              f"{indentation2}maxHeight = {completed_description_height}\n"
+                              f"{indentation2}scrollbartype = \"standardtext_slider\"\n"
+                              f"{indentation2}scripted = yes\n"
+                              f"{indentation1}}}\n\n")
+
+        completion_file.write(f"{indentation1}guiButtonType = {{\n"
+                              f"{indentation2}name = \"to_achievement_completed_{entry["name"]}_close\"\n"
+                              f"{indentation2}position = {{ x = {completed_close_offset_x} y = {completed_close_offset_y} }}\n"
+                              f"{indentation2}quadTextureSprite = \"button_type_9\"\n"
+                              f"{indentation2}scripted = yes\n"
+                              f"{indentation1}}}\n\n")
+
+        completion_file.write(f"{indentation1}instantTextBoxType = {{\n"
+                              f"{indentation2}name = \"to_achievement_completed_close_text\"\n"
+                              f"{indentation2}position = {{ x = {completed_close_text_offset_x} y = {completed_close_text_offset_y} }}\n"
+                              f"{indentation2}font = \"{completed_close_text_font}\"\n"
+                              f"{indentation2}maxWidth = {completed_close_text_width}\n"
+                              f"{indentation2}maxHeight = 22\n"
+                              f"{indentation2}fixedsize = yes\n"
+                              f"{indentation2}format = center\n"
+                              f"{indentation2}alwaystransparent = yes\n"
+                              f"{indentation2}scripted = yes\n"
+                              f"{indentation1}}}\n\n")
+
+        completion_file.write(f"{indentation0}}}\n\n")
+
+        if "generate_event" in entry and entry["generate_event"] is True:
+            events_file.write(f"country_event = {{\n"
+                              f"\tid = {events_namespace}.{events_starting_id}\n"
+                              f"\ttitle = nhs2_hidden.t\n"
+                              f"\tdesc = nhs2_hidden.d\n"
+                              f"\tpicture = ADVISOR_eventPicture\n"
+                              f"\n"
+                              f"\thidden = yes\n"
+                              f"\n"
+                              f"\ttrigger = {{\n"
+                              f"\t\tto_achievement_window_elysia_visible = yes\n"
+                              f"\t\tNOT = {{ to_achievement_status_completed = {{ ACHIEVEMENT = {entry["name"]} }} }}\n"
+                              f"\t\tNOT = {{ to_achievement_{entry["name"]}_status_failed = yes }}\n"
+                              f"\t\tto_achievement_{entry["name"]}_can_be_completed = yes\n"
+                              f"\t}}\n"
+                              f"\n"
+                              f"\timmediate = {{\n"
+                              f"\t\tto_complete_achievement = {{ ACHIEVEMENT = {entry["name"]} }}\n"
+                              f"\t}}\n"
+                              f"\n"
+                              f"\toption = {{\n"
+                              f"\t\tname = nhs2_hidden.a\n"
+                              f"\t}}\n"
+                              f"}}\n\n")
+            events_starting_id += 1
+
+        scripted_triggers_file.write(f"to_achievement_{entry["name"]}_can_be_completed = {{\n")
+        for condition in entry["success_conditions"]:
+            scripted_triggers_file.write(f"\t{condition["trigger"]} = yes\n")
+        scripted_triggers_file.write("}\n\n")
+
+        if "generate_check" in entry and entry["generate_check"] is True:
+            scripted_effects_file.write(f"to_achievement_{entry["name"]}_check = {{\n"
+                                        f"\thidden_effect = {{\n"
+                                        f"\t\tif = {{\n"
+                                        f"\t\t\tlimit = {{\n"
+                                        f"\t\t\t\tNOT = {{ to_achievement_status_completed = {{ ACHIEVEMENT = {entry["name"]} }} }}\n"
+                                        f"\t\t\t\tNOT = {{ to_achievement_{entry["name"]}_status_failed = yes }}\n"
+                                        f"\t\t\t\tto_achievement_{entry["name"]}_can_be_completed = yes\n"
+                                        f"\t\t\t}}\n"
+                                        f"\t\t\tto_complete_achievement = {{ ACHIEVEMENT = {entry["name"]} }}\n"
+                                        f"\t\t}}\n"
+                                        f"\t}}\n"
+                                        f"}}\n\n")
+
+    # interface_file.write("\t\t\t}\n")
+    # interface_file.write("\t\t}\n")
+    gfx_file.write("}")
 
 gui_file.close()
 loc_file.close()
 interface_file.close()
+completion_file.close()
+gfx_file.close()
+cl_file.close()
+events_file.close()
+scripted_triggers_file.close()
