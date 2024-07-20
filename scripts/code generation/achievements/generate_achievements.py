@@ -60,6 +60,17 @@ custom_text_box = {
 \t}
 }
 
+custom_window = {
+\tname = to_achievement_ironman_error
+\tpotential = {
+\t\tironman = no
+\t}
+}
+
+custom_text_box = {
+\tname = to_ironman_error_not_enabled
+}
+
 # Unused, but if those aren't here error.log keeps throwing false positive errors. Thanks Paradox.
 custom_button = {
 \tname = to_achievement_elysia_title
@@ -152,6 +163,16 @@ gfx_entries = """\tspriteType = {
 \t}
 
 \tspriteType = {
+\t\tname = "GFX_to_ironman_error_bg"
+\t\ttexturefile = "gfx//interface//TO_achievements//ironman_error_bg.dds"
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_to_no_ironman_icon"
+\t\ttexturefile = "gfx//interface//TO_achievements//no_ironman_icon.dds"
+\t}
+
+\tspriteType = {
 \t\tname = "GFX_achievement_complete_image_frame"
 \t\ttexturefile = "gfx//interface//TO_achievements//achievement_complete_image_frame.dds"
 \t}
@@ -172,23 +193,37 @@ gfx_entries = """\tspriteType = {
 \t}
 
 """
+
+# cl_entries = """defined_text = {
+#     name = ToAchievements_to_did_not_start_on_ironman
+#     random = no
+#     text = {
+#         localisation_key = to_red_y_icon_tt
+#         trigger = {
+#             to_did_not_start_on_ironman = yes
+#         }
+#     }
+#     text = {
+#         localisation_key = to_green_x_icon_tt
+#     }
+# }
+#
+# """
 cl_entries = """defined_text = {
-    name = ToAchievements_to_did_not_start_on_ironman
+    name = ToAchievements_checkIronman
     random = no
     text = {
-        localisation_key = to_red_y_icon_tt
+        localisation_key = to_achievement_warning_ironman_tt
         trigger = {
-            to_did_not_start_on_ironman = yes
+            ironman = no
         }
     }
     text = {
-        localisation_key = to_green_x_icon_tt
+        localisation_key = to_empty_string_tt
     }
 }
 
 """
-
-ignored_fail_conditions = ["to_started_on_the_old_patch", "to_not_started_in_ironman"]
 
 y_spacing = 87
 x_spacing = 358  #383
@@ -392,13 +427,16 @@ with open("achievement_definitions.json") as file:
                        f" to_achievement_{entry["name"]}_description:0 \"{entry["trigger_description"]}\"\n"
                        f" to_achievement_completed_{entry["name"]}_description:0 \"§g{entry["description"]}§!\"\n")
         loc_file.write(f" to_achievement_{entry["name"]}_long_description:0 \"")
-        loc_file.write(
-            f"§RWe will no longer be able to complete the achievement if any of the following is true:§!\\n")
-        loc_file.write(f"[Root.ToAchievements_to_did_not_start_on_ironman]Did NOT start the game on Ironman mode.\\n")
-        if "fail_conditions" in entry:
+        # loc_file.write(
+        #     f"§RWe will no longer be able to complete the achievement if any of the following is true:§!\\n")
+        # loc_file.write(f"[Root.ToAchievements_to_did_not_start_on_ironman]Did NOT start the game on Ironman mode.\\n")
+        loc_file.write("[Root.ToAchievements_checkIronman]")
+        if "fail_conditions" in entry and len(entry["fail_conditions"]) > 0:
+            loc_file.write(
+                f"§RWe will no longer be able to complete the achievement if any of the following is true:§!\\n")
             for condition in entry["fail_conditions"]:
                 loc_file.write(f"[Root.ToAchievements_{condition["trigger"]}]{condition["text"]}\\n")
-        loc_file.write("\\n")
+            loc_file.write("\\n")
         loc_file.write(f"§GThe achievement will be completed once all of the following is true:§!\\n")
         for index, condition in enumerate(entry["success_conditions"]):
             loc_file.write(f"[Root.ToAchievements_{condition["trigger"]}]{condition["text"]}")
