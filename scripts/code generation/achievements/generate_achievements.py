@@ -21,6 +21,9 @@ window_gui = """custom_window = {
 custom_button = {
 \tname = to_achievements_button_open
 \ttooltip = to_achievements_button_open_tooltip
+\ttrigger = {
+\t\tto_has_achievements = yes
+\t}
 \teffect = {
 \t\tif = {
 \t\t\tlimit = { has_country_flag = to_achievement_window_open }
@@ -42,7 +45,7 @@ custom_button = {
 custom_window = {
 \tname = to_achievement_window_elysia
 \tpotential = {
-\t\tto_achievement_window_elysia_visible = yes
+\t\tto_has_elysian_achievements = yes
 \t}
 }
 
@@ -67,15 +70,19 @@ custom_window = {
 \t}
 }
 
-custom_text_box = {
-\tname = to_ironman_error_not_enabled
-}
-
 # Unused, but if those aren't here error.log keeps throwing false positive errors. Thanks Paradox.
 custom_button = {
 \tname = to_achievement_elysia_title
 }
+custom_button = {
+\tname = to_ironman_error_not_enabled
+}
 ################
+
+custom_text_box = {
+\tname = to_ironman_error_not_enabled
+}
+
 
 custom_text_box = {
 \tname = to_achievement_elysia_title
@@ -689,7 +696,7 @@ with open("achievement_definitions.json") as file:
                               f"\thidden = yes\n"
                               f"\n"
                               f"\ttrigger = {{\n"
-                              f"\t\tto_achievement_window_elysia_visible = yes\n"
+                              f"\t\tto_has_elysian_achievements = yes\n"
                               f"\t\tNOT = {{ to_achievement_status_completed = {{ ACHIEVEMENT = {entry["name"]} }} }}\n"
                               f"\t\tNOT = {{ to_achievement_{entry["name"]}_status_failed = yes }}\n"
                               f"\t\tto_achievement_{entry["name"]}_can_be_completed = yes\n"
