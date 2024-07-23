@@ -330,3 +330,73 @@ to_offer_exarch_to_vassal = {
 		always = no
 	}
 }
+
+to_grant_independance_and_play_as = {
+	category = influence
+	require_acceptance = no
+
+	is_visible = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		FROM = {
+			is_subject_of_type = elysian_subject
+		}
+	}
+
+	is_allowed = {
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+			is_subject_of_type = elysian_subject
+		}
+	}
+
+	on_accept = {
+		FROM = {
+			grant_independence = yes
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					FROM = {
+						has_reform = to_exarch_reform_monarchy_locked_dynasty
+					}
+				}
+				add_government_reform = to_exarch_reform_monarchy_locked_dynasty
+			}
+			else_if = {
+				limit = {
+					FROM = {
+						has_reform = to_exarch_reform_monarchy
+					}
+				}
+				add_government_reform = to_exarch_reform_monarchy_independant
+			}
+			else = {
+				add_government_reform = to_exarch_reform_independant
+			}
+			FROM = {
+				if = {
+					limit = {
+						government = republic
+					}
+					to_remove_republican_gov_reforms = yes
+				}
+				else_if = {
+					limit = {
+						government = monarchy
+					}
+					to_remove_monarchy_gov_reforms = yes
+				}
+			}
+			transfer_achievement_completion = {
+				ORIGIN = ROOT
+				TARGET = FROM
+			}
+		}
+		switch_tag = FROM
+	}
+
+	ai_will_do = {
+		always = no
+	}
+}
