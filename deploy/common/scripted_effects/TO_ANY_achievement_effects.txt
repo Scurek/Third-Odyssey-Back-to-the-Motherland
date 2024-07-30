@@ -20,6 +20,9 @@ to_complete_achievement = {
 		to_set_achievement_completed_flag = { ACHIEVEMENT = $ACHIEVEMENT$ }
 		to_open_achievement_completed_window = { ACHIEVEMENT = $ACHIEVEMENT$ }
 		play_sound = to_achievement_completed
+		[[ADDITIONAL_EFFECT]
+		$ADDITIONAL_EFFECT$
+		]
 	}
 }
 
@@ -33,6 +36,51 @@ to_open_achievement_completed_window = {
 
 to_close_achievement_completed_window = {
 	clr_country_flag = to_show_achievement_window_$ACHIEVEMENT$
+}
+
+to_compute_achievement_score_from_development = {
+	set_variable = {
+		which = to_achievement_$ACHIEVEMENT$_score
+		value = 0
+	}
+	to_compute_non_colonial_development = {
+		VARIABLE = to_achievement_$ACHIEVEMENT$_score_total_development
+	}
+	change_variable = {
+		which = to_achievement_$ACHIEVEMENT$_score
+		which = to_achievement_$ACHIEVEMENT$_score_total_development
+	}
+	set_variable = {
+		which = to_$ACHIEVEMENT$_score_subject_development
+		value = 0
+	}
+	every_subject_country = {
+		to_compute_non_colonial_development = {
+			VARIABLE = to_subject_development
+		}
+		PREV = {
+			set_variable = {
+				which = to_subject_development
+				which = PREV
+			}
+			change_variable = {
+				which = to_$ACHIEVEMENT$_score_subject_development
+				which = to_subject_development
+			}
+		}
+	}
+	divide_variable = {
+		which = to_$ACHIEVEMENT$_score_subject_development
+		value = 2
+	}
+	round_variable = {
+		which = to_$ACHIEVEMENT$_score_subject_development
+		value = -1
+	}
+	change_variable = {
+		which = to_achievement_$ACHIEVEMENT$_score
+		which = to_$ACHIEVEMENT$_score_subject_development
+	}
 }
 
 to_enable_achievement_province_decision = {
@@ -98,7 +146,10 @@ to_yearly_achievement_check = {
 					NOT = { to_achievement_the_only_colonizer_failed_no_date = yes }
 					to_achievement_the_only_colonizer_can_be_completed = yes
 				}
-				to_complete_achievement = { ACHIEVEMENT = the_only_colonizer }
+				to_complete_achievement = {
+					ACHIEVEMENT = the_only_colonizer
+					ADDITIONAL_EFFECT = "to_compute_achievement_score_from_development = { ACHIEVEMENT = the_only_colonizer }"
+				}
 			}
 		}
 		if = {
@@ -129,11 +180,21 @@ to_monthly_achievement_check = {
 		every_country = {
 			limit = {
 				to_has_elysian_achievements = yes
+				to_achievement_status_completed = { ACHIEVEMENT = veni_vidi_vici }
+			}
+			to_compute_achievement_score_from_development = { ACHIEVEMENT = veni_vidi_vici }
+		}
+		every_country = {
+			limit = {
+				to_has_elysian_achievements = yes
 				NOT = { to_achievement_status_completed = { ACHIEVEMENT = veni_vidi_vici } }
 				NOT = { to_achievement_veni_vidi_vici_failed_no_date = yes }
 				to_achievement_veni_vidi_vici_can_be_completed = yes
 			}
-			to_complete_achievement = { ACHIEVEMENT = veni_vidi_vici }
+			to_complete_achievement = {
+				ACHIEVEMENT = veni_vidi_vici
+				to_compute_achievement_score_from_development = { ACHIEVEMENT = veni_vidi_vici }
+			}
 		}
 	}
 }

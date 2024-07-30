@@ -282,6 +282,11 @@ completed_description_font = "vic_18"
 completed_description_width = 400
 completed_description_height = 83
 
+completed_score_offset_x = 65
+completed_score_offset_y = 347
+completed_score_font = "vic_18"
+completed_score_width = 400
+
 completed_close_offset_x = 210
 completed_close_offset_y = 387
 
@@ -313,9 +318,12 @@ def has_always_visible_fail_condition(fail_conditions):
     return False
 
 
+def has_development_score(entry):
+    return "score" in entry and entry["score"] == "development"
+
+
 loc_entries_added = set()
 cl_entries_added = set()
-
 
 with open("achievement_definitions.json") as file:
     data = json.load(file)
@@ -449,6 +457,11 @@ with open("achievement_definitions.json") as file:
                        f"\t\tto_close_achievement_completed_window = {{ ACHIEVEMENT = {entry["name"]} }}\n"
                        f"\t}}\n"
                        f"}}\n\n")
+        if has_development_score(entry):
+            gui_file.write(f"custom_text_box = {{\n"
+                           f"\tname = to_achievement_completed_{entry["name"]}_score\n"
+                           f"\tpotential = {{ check_variable = {{ which = to_achievement_{entry["name"]}_score value = 1 }} }}\n"
+                           f"}}\n\n")
 
         gfx_file.write(f"\tspriteType = {{\n"
                        f"\t\tname = \"GFX_to_achievement_{entry["name"]}_icon\"\n"
@@ -463,6 +476,16 @@ with open("achievement_definitions.json") as file:
         loc_file.write(f" to_achievement_{entry["name"]}_title:0 \"{entry["title"]}\"\n"
                        f" to_achievement_{entry["name"]}_description:0 \"{entry["trigger_description"]}\"\n"
                        f" to_achievement_completed_{entry["name"]}_description:0 \"§g{entry["description"]}§!\"\n")
+        if has_development_score(entry):
+            loc_file.write(f" to_achievement_completed_{entry["name"]}_score:0 "
+                           f"\"Achievement Score: §Y[Root.to_achievement_{entry["name"]}_score.GetValue]§!\\n"
+                           f"(From Development: §Y[Root.to_achievement_{entry["name"]}_score_total_development.GetValue]§!, "
+                           f"From Subject Development: §Y[Root.to_{entry["name"]}_score_subject_development.GetValue]§!)\"\n")
+            loc_file.write(f" to_achievement_completed_{entry["name"]}_score_entry:0 "
+                           f"\"Achievement Score: §Y[Root.to_achievement_{entry["name"]}_score.GetValue]§!\\n"
+                           f"-From Development: §Y[Root.to_achievement_{entry["name"]}_score_total_development.GetValue]§!\\n"
+                           f"-From Subject Development: §Y[Root.to_{entry["name"]}_score_subject_development.GetValue]§!\"\n")
+
         if "fail_conditions" in entry:
             for condition in entry["fail_conditions"]:
                 if condition_only_shown_when_true(condition):
@@ -470,6 +493,7 @@ with open("achievement_definitions.json") as file:
                         loc_entries_added.add(f"to_achievement_FullCondition_{condition["trigger"]}_tt")
                         loc_file.write(f" to_achievement_FullCondition_{condition["trigger"]}_tt:0 "
                                        f"\"[Root.ToAchievements_{condition["trigger"]}]{condition["text"]}\\n\"\n")
+
         loc_file.write(f" to_achievement_{entry["name"]}_long_description:0 \"")
         # loc_file.write(
         #     f"§RWe will no longer be able to complete the achievement if any of the following is true:§!\\n")
@@ -490,9 +514,13 @@ with open("achievement_definitions.json") as file:
         loc_file.write(f"\\n§GThe achievement will be completed once all of the following is true:§!\\n")
         for index, condition in enumerate(entry["success_conditions"]):
             loc_file.write(f"[Root.ToAchievements_{condition["trigger"]}]{condition["text"]}")
-            if index != len(entry["success_conditions"]) - 1:
-                loc_file.write("\\n")
+            # if index != len(entry["success_conditions"]) - 1:
+            loc_file.write("\\n")
+        loc_file.write("\\n")
+        if has_development_score(entry):
+            loc_file.write(f"[Root.ToAchievements_{entry["name"]}_score]")
         loc_file.write("\"\n")
+
         if has_province_decision(entry):
             loc_file.write(f" to_show_achievement_provinces_decision_{entry["name"]}_tt:0 \""
                            f"Enables §Y£icon_achievement£{entry["title"]} Status§! decision, which we can use to "
@@ -576,6 +604,17 @@ with open("achievement_definitions.json") as file:
                               f"    }}\n")
             cl_file.write(f"    text = {{\n"
                           f"        localisation_key = to_x_icon_tt\n"
+                          f"    }}\n"
+                          f"}}\n\n")
+        if has_development_score(entry):
+            cl_file.write(f"defined_text = {{\n"
+                          f"    name = ToAchievements_{entry["name"]}_score\n"
+                          f"    text = {{\n"
+                          f"        trigger = {{ check_variable = {{ which = to_achievement_{entry["name"]}_score value = 1 }} }}\n"
+                          f"        localisation_key = to_achievement_completed_{entry["name"]}_score_entry\n"
+                          f"    }}\n"
+                          f"    text = {{\n"
+                          f"        localisation_key = to_empty_string_tt\n"
                           f"    }}\n"
                           f"}}\n\n")
 
@@ -740,6 +779,18 @@ with open("achievement_definitions.json") as file:
                               f"{indentation2}scripted = yes\n"
                               f"{indentation1}}}\n\n")
 
+        if has_development_score(entry):
+            completion_file.write(f"{indentation1}instantTextBoxType = {{\n"
+                                  f"{indentation2}name = \"to_achievement_completed_{entry["name"]}_score\"\n"
+                                  f"{indentation2}position = {{ x = {completed_score_offset_x} y = {completed_score_offset_y} }}\n"
+                                  f"{indentation2}font = \"{completed_score_font}\"\n"
+                                  f"{indentation2}maxWidth = {completed_score_width}\n"
+                                  f"{indentation2}maxHeight = 80\n"
+                                  f"{indentation2}fixedsize = yes\n"
+                                  f"{indentation2}format = center\n"
+                                  f"{indentation2}scripted = yes\n"
+                                  f"{indentation1}}}\n\n")
+
         completion_file.write(f"{indentation1}guiButtonType = {{\n"
                               f"{indentation2}name = \"to_achievement_completed_{entry["name"]}_close\"\n"
                               f"{indentation2}position = {{ x = {completed_close_offset_x} y = {completed_close_offset_y} }}\n"
@@ -778,7 +829,11 @@ with open("achievement_definitions.json") as file:
                               f"\t}}\n"
                               f"\n"
                               f"\timmediate = {{\n"
-                              f"\t\tto_complete_achievement = {{ ACHIEVEMENT = {entry["name"]} }}\n"
+                              f"\t\tto_complete_achievement = {{\n"
+                              f"\t\t\tACHIEVEMENT = {entry["name"]}\n")
+            if has_development_score(entry):
+                events_file.write(f"\t\t\tADDITIONAL_EFFECT = \"to_compute_achievement_score_from_development = {{ ACHIEVEMENT = {entry["name"]} }}\"\n")
+            events_file.write(f"\t\t}}\n"
                               f"\t}}\n"
                               f"\n"
                               f"\toption = {{\n"
