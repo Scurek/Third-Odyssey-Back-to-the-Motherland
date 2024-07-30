@@ -70,6 +70,14 @@ custom_window = {
 \t}
 }
 
+custom_window = {
+\tname = to_achievement_difficulty_error
+\tpotential = {
+\t\tironman = yes
+\t\tNOT = { to_difficulty_normal_or_above = yes }
+\t}
+}
+
 # Unused, but if those aren't here error.log keeps throwing false positive errors. Thanks Paradox.
 custom_button = {
 \tname = to_achievement_elysia_title
@@ -77,10 +85,17 @@ custom_button = {
 custom_button = {
 \tname = to_ironman_error_not_enabled
 }
+custom_button = {
+\tname = to_difficulty_error_not_enabled
+}
 ################
 
 custom_text_box = {
 \tname = to_ironman_error_not_enabled
+}
+
+custom_text_box = {
+\tname = to_difficulty_error_not_enabled
 }
 
 
@@ -170,13 +185,23 @@ gfx_entries = """\tspriteType = {
 \t}
 
 \tspriteType = {
-\t\tname = "GFX_to_ironman_error_bg"
-\t\ttexturefile = "gfx//interface//TO_achievements//ironman_error_bg.dds"
+\t\tname = "GFX_to_achievement_error_bg"
+\t\ttexturefile = "gfx//interface//TO_achievements//achievement_error_bg.dds"
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_to_achievement_error_bigger_bg"
+\t\ttexturefile = "gfx//interface//TO_achievements//achievement_error_bigger_bg.dds"
 \t}
 
 \tspriteType = {
 \t\tname = "GFX_to_no_ironman_icon"
 \t\ttexturefile = "gfx//interface//TO_achievements//no_ironman_icon.dds"
+\t}
+
+\tspriteType = {
+\t\tname = "GFX_to_difficulty_error_icon"
+\t\ttexturefile = "gfx//interface//TO_achievements//difficulty_error_icon.dds"
 \t}
 
 \tspriteType = {
@@ -223,6 +248,20 @@ cl_entries = """defined_text = {
         localisation_key = to_achievement_warning_ironman_tt
         trigger = {
             ironman = no
+        }
+    }
+    text = {
+        localisation_key = to_empty_string_tt
+    }
+}
+
+defined_text = {
+    name = ToAchievements_checkDifficulty
+    random = no
+    text = {
+        localisation_key = to_achievement_warning_difficulty_tt
+        trigger = {
+            NOT = { to_difficulty_normal_or_above = yes }
         }
     }
     text = {
@@ -498,7 +537,7 @@ with open("achievement_definitions.json") as file:
         # loc_file.write(
         #     f"§RWe will no longer be able to complete the achievement if any of the following is true:§!\\n")
         # loc_file.write(f"[Root.ToAchievements_to_did_not_start_on_ironman]Did NOT start the game on Ironman mode.\\n")
-        loc_file.write("[Root.ToAchievements_checkIronman]")
+        loc_file.write("[Root.ToAchievements_checkIronman][Root.ToAchievements_checkDifficulty]")
         if "fail_conditions" in entry and len(entry["fail_conditions"]) > 0:
             if has_always_visible_fail_condition(entry["fail_conditions"]):
                 loc_file.write(
