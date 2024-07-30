@@ -253,12 +253,12 @@ status_offset_y_low_diff = 14
 province_decision_offset_x = 316
 province_decision_offset_y = 8
 
-title_offset_x = 84
+title_offset_x = 82
 title_offset_y = 8
 title_width = 185
 title_font = "vic_22"
 
-description_offset_x = 84
+description_offset_x = 82
 description_offset_y = 30
 description_width = 200
 description_font = "vic_18"
