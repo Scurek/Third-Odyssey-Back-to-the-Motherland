@@ -139,7 +139,7 @@ exarchs = [
                 "under an [Root.GetAdjective]-led Exarch in cooperation with the local elite.",
         "land": "[H][295.GetRegionName][!H] and [H][1963.GetRegionName][!H] regions, except for the following areas: "
                 "[A][302.GetAreaName][!A], [A][303.GetAreaName][!A], [A][473.GetAreaName][!A], [A][1082.GetAreaName][!A], "
-                "[A][2421.GetAreaName][!A], [A][475.GetAreaName][!A], [A][469.GetAreaName][!A], [A][465.GetAreaName][!A]"
+                "[A][2421.GetAreaName][!A], [A][475.GetAreaName][!A]"
     },
     {
         "tag": 'EEM',
