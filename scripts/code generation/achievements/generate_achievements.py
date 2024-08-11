@@ -883,7 +883,10 @@ with open("achievement_definitions.json") as file:
 
         scripted_triggers_file.write(f"to_achievement_{entry["name"]}_can_be_completed = {{\n")
         for condition in entry["success_conditions"]:
-            scripted_triggers_file.write(f"\t{condition["trigger"]} = yes\n")
+            if "partial_trigger" in condition:
+                scripted_triggers_file.write(f"\t{condition["partial_trigger"]} = yes\n")
+            else:
+                scripted_triggers_file.write(f"\t{condition["trigger"]} = yes\n")
         scripted_triggers_file.write("}\n\n")
 
         if "generate_check" in entry and entry["generate_check"] is True:
