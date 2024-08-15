@@ -70,7 +70,7 @@ CAT_VARIANTS_PREFIX_SUFFIX_MAP = {
     'common/estate_privileges': [('', '_desc')],
     'missions': [('', '_desc'), ('', '_title')],
     'common/factions': [('', '_FACTION_DESC'), ('', '_influence')],
-    'common/government_reforms': [('mechanic_', ''),('', '_desc')],
+    'common/government_reforms': [('mechanic_', ''), ('mechanic_', '_yes'), ('mechanic_', '_no'),('', '_desc')],
     'common/peace_treaties': [
         ('', '_desc'),
         ('PEACE_', ''),
@@ -93,7 +93,10 @@ CAT_VARIANTS_PREFIX_SUFFIX_MAP = {
     'common/new_diplomatic_actions': [('', '_title'), ('', '_desc'), ('', '_tooltip'), ('', '_dialog')],
     'common/flagship_modifications': [('', '_desc')],
     'common/great_projects': [('great_project_', '')],
-    'common/naval_doctrines': [('', '_desc')]
+    'common/naval_doctrines': [('', '_desc')],
+    'common/ruler_personalities': [('desc_', ''), ('', '_die_desc')],
+    'common/government_mechanics': [('', '_desc'), ('monthly_', '')],
+    'common/ages': [('', '_desc')]
 }
 
 CAT_PRIORITIES_MAP = {
