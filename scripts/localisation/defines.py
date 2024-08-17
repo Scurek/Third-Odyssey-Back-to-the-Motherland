@@ -117,10 +117,13 @@ CAT_PRIORITIES_MAP = {
     'common/governments': -73,
     'common/estates': -70,
     'common/estate_privileges': -69,
+    'common/estates_preload': -68,
     'common/disasters': -60,
     'common/triggered_modifiers': 90,  # May contain all kinds of stuff
+    'common/custom_gui': 91,  # May contain all kinds of stuff
+    'missions': 95,  # May trigger events and contain all kinds of conditions  (NOTE: are missions used as conditions?)
     'events': 100,  # May contain all kinds of stuff  (NOTE: maybe not an issue to put at latest, since event localisations != unlocalised event identifier?)
     'decisions': 110,  # May trigger events and contain all kinds of conditions
-    'missions': 120,  # May trigger events and contain all kinds of conditions  (NOTE: are missions used as conditions?)
+    'customizable_localization': 129,
     'common/on_actions': 130,  # Contains no localisation itself
 }
