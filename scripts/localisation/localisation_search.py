@@ -9,20 +9,22 @@ import sys
 if sys.version_info < (3, 9):
     sys.exit("Needs Python 3.9 or higher")
 
-import os
-import re
+import collections
+import datetime
+import functools
 import json
 import logging
 import logging.handlers
-import datetime
-import functools
-import collections
+import os
+import re
 import typing as t
 
 try:
     import defines
 except ImportError:
-    raise RuntimeError("Missing the associated `defines.py` file! Please ensure it is present in the same directory as this script.")
+    raise RuntimeError(
+        "Missing the associated `defines.py` file! Please ensure it is present in the same directory as this script."
+    )
 
 
 # -- Globals --
@@ -32,14 +34,12 @@ _LOC_SEPARATOR_RE = re.compile(r":[0-9]")
 
 # -- Logging --
 
+
 def log_setup(logs_dir: str):
     os.makedirs(logs_dir, exist_ok=True)
     timestamp = datetime.datetime.now().strftime("%Y-%m-%dT%H_%M_%S")
-    log_handler = logging.FileHandler(f'{logs_dir}/{timestamp}.log', mode='w', encoding='utf-8-sig')
-    formatter = logging.Formatter(
-        fmt='%(asctime)s | %(name)s | %(levelname)s | %(message)s',
-        datefmt='%H:%M:%S'
-    )
+    log_handler = logging.FileHandler(f"{logs_dir}/{timestamp}.log", mode="w", encoding="utf-8-sig")
+    formatter = logging.Formatter(fmt="%(asctime)s | %(name)s | %(levelname)s | %(message)s", datefmt="%H:%M:%S")
     log_handler.setFormatter(formatter)
     logger = logging.getLogger()
     logger.addHandler(log_handler)
@@ -48,12 +48,13 @@ def log_setup(logs_dir: str):
 
 # -- Classes --
 
+
 class LocId:
 
-    _VALID_VAR_CHARS = '._0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    _VALID_VAR_CHARS = "._0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     def __init__(self, identifier: str, text: str, sourcename: str):
-        """Localisation identifier utility class. """
+        """Localisation identifier utility class."""
         self.identifier = identifier
         self.text = text
         self.sourcename = sourcename
@@ -66,7 +67,9 @@ class LocId:
         :param category: content category, used to determine identifier variants
         :return: the line at which the localisation was found, or None if not found
         """
-        variants = [self.identifier, ] + self.get_varientnames(identifier=self.identifier, category=category)
+        variants = [
+            self.identifier,
+        ] + self.get_varientnames(identifier=self.identifier, category=category)
         for variant in variants:
             result = self._find_usage(identifier=variant, content=content)
             if result is not None:
@@ -85,22 +88,22 @@ class LocId:
     def _find_usage(cls, identifier: str, content: str) -> t.Optional[t.Tuple[int, int]]:
         idx = -1
         while True:
-            idx = content.find(identifier, idx+1)
+            idx = content.find(identifier, idx + 1)
             if idx == -1:
                 break  # Not found
-            before_idx, after_idx = idx-1, idx+len(identifier)
-            before = content[before_idx] if before_idx >= 0 else ' '
-            after = content[after_idx] if after_idx < len(content) else ' '
+            before_idx, after_idx = idx - 1, idx + len(identifier)
+            before = content[before_idx] if before_idx >= 0 else " "
+            after = content[after_idx] if after_idx < len(content) else " "
             if before in cls._VALID_VAR_CHARS or after in cls._VALID_VAR_CHARS:
                 continue  # Character before or after extends the identifier => not exact 'word' match
-            preceding_comment_idx = content.rfind('#', 0, idx)
-            preceding_newline_idx = content.rfind('\n', 0, idx)
+            preceding_comment_idx = content.rfind("#", 0, idx)
+            preceding_newline_idx = content.rfind("\n", 0, idx)
             if preceding_comment_idx != -1 and preceding_comment_idx > preceding_newline_idx:
                 continue  # Preceded by comment (in the same line)
-            line_nr = content.count('\n', 0, idx) + 1
-            line_start_idx = content.rfind('\n', 0, idx)
+            line_nr = content.count("\n", 0, idx) + 1
+            line_start_idx = content.rfind("\n", 0, idx)
             line_start_idx = line_start_idx if line_start_idx != -1 else 0  # For first line, line starts at 0
-            indents = content.count('\t', line_start_idx, idx)
+            indents = content.count("\t", line_start_idx, idx)
             return line_nr, indents
         return None
 
@@ -124,7 +127,7 @@ class SubjectFile:
         self.content = content
         self.category = category
 
-    def search_locids(self, locids: t.Sequence['LocId']) -> t.Generator[tuple['LocId', int, int], None, None]:
+    def search_locids(self, locids: t.Sequence["LocId"]) -> t.Generator[tuple["LocId", int, int], None, None]:
         """
         Search the file content for the presence of localisation identifiers.
 
@@ -139,17 +142,23 @@ class SubjectFile:
 
 class SearchStats:
 
-    def __init__(self, locids: list['LocId']):
-        """Localisation search statistics data class. """
+    def __init__(self, locids: list["LocId"]):
+        """Localisation search statistics data class."""
         # Internal reference data
-        self._locids_map: dict[str, 'LocId'] = {locid.identifier: locid for locid in locids}
+        self._locids_map: dict[str, "LocId"] = {locid.identifier: locid for locid in locids}
         self._sources_all_ids: dict[str, set] = collections.defaultdict(set)
         for locid in locids:
             self._sources_all_ids[locid.sourcename].add(locid.identifier)
         # Tracked stats
-        self.category_subjname_matches_map: dict[str, dict[str, dict[str, t.Tuple[int, int]]]] = collections.defaultdict(lambda: collections.defaultdict(dict))  # category -> [subjname -> [identifier -> (line_nr, indents)]]
-        self.locid_matchlist_map: dict[str, t.List[t.Tuple[str, str, int, int]]] = collections.defaultdict(list)  # identifier -> [List of (category, subjname, line_nr, indents)]
-        self.sources_finds_map: dict[str, dict[str, str]] = collections.defaultdict(dict)  # sourcename -> [identifier -> subjname]
+        self.category_subjname_matches_map: dict[str, dict[str, dict[str, t.Tuple[int, int]]]] = (
+            collections.defaultdict(lambda: collections.defaultdict(dict))
+        )  # category -> [subjname -> [identifier -> (line_nr, indents)]]
+        self.locid_matchlist_map: dict[str, t.List[t.Tuple[str, str, int, int]]] = collections.defaultdict(
+            list
+        )  # identifier -> [List of (category, subjname, line_nr, indents)]
+        self.sources_finds_map: dict[str, dict[str, str]] = collections.defaultdict(
+            dict
+        )  # sourcename -> [identifier -> subjname]
         self.found_ids: set[str] = set()
         self.missing_ids = set(self._locids_map.keys())
 
@@ -167,7 +176,7 @@ class SearchStats:
 
     # -- Public Methods --
 
-    def add(self, subjname: str, category: str, line_nr: int, indents: int, locid: 'LocId') -> None:
+    def add(self, subjname: str, category: str, line_nr: int, indents: int, locid: "LocId") -> None:
         """
         Add a found localisation.
 
@@ -188,7 +197,7 @@ class SearchStats:
         json.dump(
             obj=self.category_subjname_matches_map,
             fp=fh,
-            indent='\t',
+            indent="\t",
         )
 
     def write_sources_stats(self, fh: t.TextIO):
@@ -196,24 +205,26 @@ class SearchStats:
         locfile_stats = []
         for sourcename, all_locs in self._sources_all_ids.items():
             found_locs = self.sources_finds_map[sourcename]
-            locfile_stats.append((
-                sourcename,
-                len(found_locs)/len(all_locs),  # Usage
-                len(all_locs),  # Total identifiers
-            ))
+            locfile_stats.append(
+                (
+                    sourcename,
+                    len(found_locs) / len(all_locs),  # Usage
+                    len(all_locs),  # Total identifiers
+                )
+            )
         locfile_stats.sort(key=lambda x: x[1])  # Sort from lowest to highest usage
-        fh.write('Source\tUsage\tTotal\n')
+        fh.write("Source\tUsage\tTotal\n")
         for filename, perc_used, total in locfile_stats:
             fh.write(f"{filename}\t{perc_used:.0%}\t{total}\n")
 
     def write_unused_locs(self, fh: t.TextIO):
         """Output unused localisation in PDX YAML format to the given filehandle."""
-        fh.write('l_english:\n')
+        fh.write("l_english:\n")
         for identifier in sorted(self.missing_ids):
             text = self._locids_map[identifier].text
-            fh.write(f' {identifier}:0 {text}\n')
+            fh.write(f" {identifier}:0 {text}\n")
 
-    def write_used_locs(self, outdir: str, prefix=''):
+    def write_used_locs(self, outdir: str, prefix=""):
         """Output used localisations in PDX YAML format to various files."""
         # Get best match per localisation
         locid_best_match_map = {
@@ -228,29 +239,33 @@ class SearchStats:
             outpath_locids_map[outpath].append(identifier)
         # Output to files
         for outpath, locids in outpath_locids_map.items():
-            category = locid_best_match_map[locids[0]][0]  # Category for the entire file should be category of all localisations (?)
+            category = locid_best_match_map[locids[0]][
+                0
+            ]  # Category for the entire file should be category of all localisations (?)
             sort_by_appearance = category in defines.CAT_SORT_BY_APPEARANCE
             # Group localisations
             group_locids_map = self._group_locids(locids=locids, locid_match_map=locid_best_match_map)
             # Sort localisation groups
             for group_locids in group_locids_map.values():
-                group_locids.sort(key=lambda identifier: self._identifier_key_func(
-                    identifier=identifier, match=locid_best_match_map[identifier], by_appearance=sort_by_appearance
-                ))
+                group_locids.sort(
+                    key=lambda identifier: self._identifier_key_func(
+                        identifier=identifier, match=locid_best_match_map[identifier], by_appearance=sort_by_appearance
+                    )
+                )
             # Write all to file
-            with open(outpath, 'w', encoding='utf-8-sig') as fh:
-                fh.write('l_english:\n ')
+            with open(outpath, "w", encoding="utf-8-sig") as fh:
+                fh.write("l_english:\n ")
                 # Write ungrouped
-                for identifier in group_locids_map.pop('', []):
+                for identifier in group_locids_map.pop("", []):
                     text = self._locids_map[identifier].text
-                    fh.write(f'{identifier}:0 {text}\n ')
+                    fh.write(f"{identifier}:0 {text}\n ")
                 # Write groups alphabetically
                 for group in sorted(group_locids_map.keys()):
                     group_locids = group_locids_map[group]
                     fh.write(f"\n # {group}\n ")
                     for identifier in group_locids:
                         text = self._locids_map[identifier].text
-                        fh.write(f'{identifier}:0 {text}\n ')
+                        fh.write(f"{identifier}:0 {text}\n ")
 
     # -- Internal Methods --
 
@@ -262,14 +277,16 @@ class SearchStats:
         return match[3], defines.CAT_PRIORITIES_MAP.get(match[0], 0), match[0]
 
     @staticmethod
-    def _get_output_locfile_path(outdir: str, match: t.Tuple[str, str, int, int], prefix='') -> str:
-        """Get the localisation output file path suited for a localisation with the given match. """
+    def _get_output_locfile_path(outdir: str, match: t.Tuple[str, str, int, int], prefix="") -> str:
+        """Get the localisation output file path suited for a localisation with the given match."""
         category, subjname, line_nr, indents = match
         outpath = f"{outdir}/{prefix}{category.split('/')[-1]}_l_english.yml"
         return outpath
 
     @staticmethod
-    def _group_locids(locids: t.List[str], locid_match_map: t.Dict[str, t.Tuple[str, str, int, int]]) -> t.Dict[str, t.List[str]]:
+    def _group_locids(
+        locids: t.List[str], locid_match_map: t.Dict[str, t.Tuple[str, str, int, int]]
+    ) -> t.Dict[str, t.List[str]]:
         """Get the group to which a localisation belongs."""
         # Group by subject name
         group_locids_map = collections.defaultdict(list)
@@ -280,7 +297,7 @@ class SearchStats:
         # Dissolve small groups to the 'ungrouped' group
         dissolve_groups = [group for group, locids in group_locids_map.items() if len(locids) < defines.GROUP_MIN_SIZE]
         for group in dissolve_groups:
-            group_locids_map[''].extend(group_locids_map.pop(group))
+            group_locids_map[""].extend(group_locids_map.pop(group))
         return group_locids_map
 
     @staticmethod
@@ -288,23 +305,26 @@ class SearchStats:
         """Get the key by which to sort an identifier within an output file, the match data: category, subjname, line_nr, indent."""
         category, subjname, line_nr, indent = match
         if by_appearance:
-            return line_nr,
+            return (line_nr,)
         else:
-            all_variants = [identifier, ] + LocId.get_varientnames(identifier=identifier, category=category)
+            all_variants = [
+                identifier,
+            ] + LocId.get_varientnames(identifier=identifier, category=category)
             shortest_variant = min(all_variants, key=lambda variant: len(variant))
-            return shortest_variant,
+            return (shortest_variant,)
 
 
 # -- Public Methods --
 
-def locids_from_filepath(filepath: str, sourcename: str) -> list['LocId']:
+
+def locids_from_filepath(filepath: str, sourcename: str) -> list["LocId"]:
     """Get localisation identifiers from a source file. Logs file corruption."""
     results = []
-    with open(filepath, 'r', encoding='utf-8-sig') as fh:
+    with open(filepath, "r", encoding="utf-8-sig") as fh:
         fh.readline()  # Skip first line, which specifies language
         for line_nr, line in enumerate(fh, start=2):
             line = line.strip()
-            if not line or line.startswith('#'):
+            if not line or line.startswith("#"):
                 continue
             try:
                 identifier, text = _LOC_SEPARATOR_RE.split(line, maxsplit=1)
@@ -317,7 +337,7 @@ def locids_from_filepath(filepath: str, sourcename: str) -> list['LocId']:
     return results
 
 
-def filter_duplicate_locids(locids: list['LocId']) -> None:
+def filter_duplicate_locids(locids: list["LocId"]) -> None:
     """Remove duplicate localisation identifiers from the input. Logs every removal."""
     # Simply removing duplicates would be faster by implementing __hash__ and __eq__ and putting into a set,
     #  But we also want to report duplicates.
@@ -325,50 +345,51 @@ def filter_duplicate_locids(locids: list['LocId']) -> None:
     locids.sort(key=lambda x: x.identifier)  # Sort by identifier: fast. Duplicates will always be subsequent.
     while idx < len(locids) - 1:
         current = locids[idx]
-        while (idx < len(locids) - 1) and (locids[idx+1].identifier == current.identifier):
-            logging.warning(f"Duplicate localisation identifier: {current.identifier} ('{current.sourcename}' and '{locids[idx+1].sourcename}')")
-            locids.pop(idx+1)
+        while (idx < len(locids) - 1) and (locids[idx + 1].identifier == current.identifier):
+            logging.warning(
+                f"Duplicate localisation identifier: {current.identifier} ('{current.sourcename}' and '{locids[idx+1].sourcename}')"
+            )
+            locids.pop(idx + 1)
         idx += 1
 
 
-def subjfile_from_filepath(filepath: str, mod_dirpath: str) -> 'SubjectFile':
+def subjfile_from_filepath(filepath: str, mod_dirpath: str) -> "SubjectFile":
     """Get subject file instance from a file in the mod directory"""
     # Note: it seems PDX uses *an* ANSI type encoding (probably cp1252?), rather than UTF-8.
-    with open(filepath, 'r', encoding='cp1252') as fh:
+    with open(filepath, "r", encoding="cp1252") as fh:
         content = fh.read()
-    category = os.path.relpath(os.path.dirname(filepath), mod_dirpath).lower().replace('\\', '/')
-    return SubjectFile(
-        subjname=os.path.basename(filepath),
-        content=content,
-        category=category
-    )
+    category = os.path.relpath(os.path.dirname(filepath), mod_dirpath).lower().replace("\\", "/")
+    return SubjectFile(subjname=os.path.basename(filepath), content=content, category=category)
 
 
 # -- Run as Script --
 
-def _load_subjfiles(mod_dirpath: str, excluded_subdirs: list[str]) -> list['SubjectFile']:
+
+def _load_subjfiles(mod_dirpath: str, excluded_subdirs: list[str]) -> list["SubjectFile"]:
     """Load all subject files from the mod directory."""
     results = []
-    excluded_subdirs = {os.path.join(mod_dirpath, *subdir.lower().split('/')) for subdir in excluded_subdirs}
+    excluded_subdirs = {os.path.join(mod_dirpath, *subdir.lower().split("/")) for subdir in excluded_subdirs}
     for root, dirs, files in os.walk(mod_dirpath):
         if root in excluded_subdirs:
             dirs.clear()
             continue
-        results.extend([
-            subjfile_from_filepath(filepath=os.path.join(root, filename), mod_dirpath=mod_dirpath)
-            for filename in files
-            if filename.endswith('.txt')
-        ])
+        results.extend(
+            [
+                subjfile_from_filepath(filepath=os.path.join(root, filename), mod_dirpath=mod_dirpath)
+                for filename in files
+                if filename.endswith(".txt")
+            ]
+        )
     return results
 
 
-def _load_locids(loc_dirpath: str, excluded_locfiles: list[str]) -> list['LocId']:
+def _load_locids(loc_dirpath: str, excluded_locfiles: list[str]) -> list["LocId"]:
     """Load all localisation identifiers from the given localisations directory."""
     locids = []
     # Get locids from all english localisatino files
     for filename in os.listdir(loc_dirpath):
         filepath = os.path.join(loc_dirpath, filename)
-        if not filename.endswith('l_english.yml'):
+        if not filename.endswith("l_english.yml"):
             continue
         if filename in excluded_locfiles:
             continue
@@ -380,24 +401,32 @@ def _load_locids(loc_dirpath: str, excluded_locfiles: list[str]) -> list['LocId'
 
 def get_stats(mod_dirpath: str, subjfile_data_filepath: str, excluded_locfiles: list[str]) -> SearchStats:
     """Get stats from a stats subject file data dump and mod localisation source."""
-    locids = _load_locids(loc_dirpath=os.path.join(mod_dirpath, 'localisation'), excluded_locfiles=excluded_locfiles)
+    locids = _load_locids(loc_dirpath=os.path.join(mod_dirpath, "localisation"), excluded_locfiles=excluded_locfiles)
     locids_map = {locid.identifier: locid for locid in locids}
     logging.info(f"Localisation identifiers count: {len(locids)}")
     stats = SearchStats(locids=locids)
     # Load localisations from stats dump
-    with open(subjfile_data_filepath, 'r', encoding='utf-8-sig') as fh:
-        data: t.Mapping[str, t.Mapping[str, t.Mapping[str, t.Tuple[int, int]]]] = json.load(fh)  # Category -> [Subject name -> [identifier -> line_nr]]
+    with open(subjfile_data_filepath, "r", encoding="utf-8-sig") as fh:
+        data: t.Mapping[str, t.Mapping[str, t.Mapping[str, t.Tuple[int, int]]]] = json.load(
+            fh
+        )  # Category -> [Subject name -> [identifier -> line_nr]]
         for category, subjfile_matches_map in data.items():
             for subjname, matches_map in subjfile_matches_map.items():
                 for identifier, findings in matches_map.items():
                     line_nr, indents = findings
-                    stats.add(subjname=subjname, category=category, line_nr=line_nr, indents=indents, locid=locids_map[identifier])
+                    stats.add(
+                        subjname=subjname,
+                        category=category,
+                        line_nr=line_nr,
+                        indents=indents,
+                        locid=locids_map[identifier],
+                    )
     return stats
 
 
 def search_stats(mod_dirpath: str, excluded_subdirs: list[str], excluded_locfiles: list[str]) -> SearchStats:
     """Search for localisation data and statistics in a mod directory."""
-    locids = _load_locids(loc_dirpath=os.path.join(mod_dirpath, 'localisation'), excluded_locfiles=excluded_locfiles)
+    locids = _load_locids(loc_dirpath=os.path.join(mod_dirpath, "localisation"), excluded_locfiles=excluded_locfiles)
     logging.info(f"Localisation identifiers count: {len(locids)}")
     stats = SearchStats(locids=locids)
     # Search all localisation usage
@@ -406,47 +435,62 @@ def search_stats(mod_dirpath: str, excluded_subdirs: list[str], excluded_locfile
     logging.info(f"Searching for localisations...")
     for subjfile in subjfiles:
         for locid, line_nr, indents in subjfile.search_locids(locids=locids):
-            stats.add(subjname=subjfile.subjname, category=subjfile.category, line_nr=line_nr, indents=indents, locid=locid)
+            stats.add(
+                subjname=subjfile.subjname, category=subjfile.category, line_nr=line_nr, indents=indents, locid=locid
+            )
     return stats
 
 
-def write_stats(statsdir: str, stats: 'SearchStats'):
+def write_stats(statsdir: str, stats: "SearchStats"):
     os.makedirs(statsdir, exist_ok=True)
-    with open(f'{statsdir}/locfile_stats.tsv', 'w', encoding='utf-8-sig') as fh:
+    with open(f"{statsdir}/locfile_stats.tsv", "w", encoding="utf-8-sig") as fh:
         stats.write_sources_stats(fh=fh)
-    with open(f'{statsdir}/subjfile_data.json', 'w', encoding='utf-8-sig') as fh:
+    with open(f"{statsdir}/subjfile_data.json", "w", encoding="utf-8-sig") as fh:
         stats.write_subj_data(fh=fh)
 
 
-def write_output(outdir: str, stats: 'SearchStats', locfiles_prefix: str):
+def write_output(outdir: str, stats: "SearchStats", locfiles_prefix: str):
     os.makedirs(outdir, exist_ok=True)
-    with open(f'{outdir}/xxx_new_unsorted_l_english.yml', 'w', encoding='utf-8-sig') as fh:
-        fh.write("l_english:\n # Dump your new localisations here, they will be automatically sorted next time the localisation search is run!\n")
-    with open(f'{outdir}/xxx_unused_l_english.yml', 'w', encoding='utf-8-sig') as fh:
+    with open(f"{outdir}/xxx_new_unsorted_l_english.yml", "w", encoding="utf-8-sig") as fh:
+        fh.write(
+            "l_english:\n # Dump your new localisations here, they will be automatically sorted next time the localisation search is run!\n"
+        )
+    with open(f"{outdir}/xxx_unused_l_english.yml", "w", encoding="utf-8-sig") as fh:
         stats.write_unused_locs(fh=fh)
     stats.write_used_locs(outdir=outdir, prefix=locfiles_prefix)
 
 
 def main(from_stats=False):
+
     try:
-        with open('config.json', 'r') as fh:
+        with open("config.json", "r") as fh:
             config = json.load(fh)
     except IOError:
-        raise RuntimeError("Could not find the required `config.json`. Please ensure it is present in the same directory as this script.")
-    log_setup(logs_dir=config['logs_dir'])
+        raise RuntimeError(
+            "Could not find the required `config.json`. Please ensure it is present in the same directory as this script."
+        )
+    log_setup(logs_dir=config["logs_dir"])
     if from_stats:
         subjfile_data_filepath = f"{config['stats_dir']}/subjfile_data.json"
-        stats = get_stats(mod_dirpath=str(config['mod_dir']), subjfile_data_filepath=subjfile_data_filepath, excluded_locfiles=config['excluded_locfiles'])
+        stats = get_stats(
+            mod_dirpath=str(config["mod_dir"]),
+            subjfile_data_filepath=subjfile_data_filepath,
+            excluded_locfiles=config["excluded_locfiles"],
+        )
     else:
-        stats = search_stats(mod_dirpath=str(config['mod_dir']), excluded_subdirs=defines.EXCLUDED_SUBDIRS, excluded_locfiles=config['excluded_locfiles'])
+        stats = search_stats(
+            mod_dirpath=str(config["mod_dir"]),
+            excluded_subdirs=defines.EXCLUDED_SUBDIRS,
+            excluded_locfiles=config["excluded_locfiles"],
+        )
     logging.info(f"Found: {stats.found}/{stats.total} ({stats.found/stats.total:.0%})")
     logging.info(f"Missing: {stats.missing}/{stats.total} ({stats.missing/stats.total:.0%})")
-    write_stats(statsdir=config['stats_dir'], stats=stats)
-    write_output(outdir=config['output_dir'], stats=stats, locfiles_prefix=config['locfiles_prefix'])
+    write_stats(statsdir=config["stats_dir"], stats=stats)
+    write_output(outdir=config["output_dir"], stats=stats, locfiles_prefix=config["locfiles_prefix"])
     logging.info("Done!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(from_stats=False)
 
 
