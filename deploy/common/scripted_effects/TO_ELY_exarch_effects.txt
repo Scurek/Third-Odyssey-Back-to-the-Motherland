@@ -65,6 +65,50 @@ to_check_exarch_province = {
 	}
 }
 
+to_check_exarch_province_colony_finished = {
+	if = {
+		limit = {
+			owner = {
+				nhs_check_all_elysian_tags = { CONDITION = tag }
+			}
+			to_potential_exarch_province = yes
+			to_exarch_can_get_province_active = yes
+		}
+		owner = {
+			save_event_target_as = to_exarch_province_recipient
+		}
+		to_exarch_effect_from_province = {
+			EFFECT = "
+			if = {
+				limit = {
+					exists = yes
+					is_subject_of = event_target:to_exarch_province_recipient
+					is_subject_of_type = elysian_subject
+					NOT = { has_country_flag = to_block_exarch_province_transfer }
+				}
+				save_event_target_as = to_exarch_province_recipient
+			}
+			"
+		}
+		if = {
+			limit = {
+				owner = {
+					has_saved_event_target = to_exarch_province_recipient
+					event_target:to_exarch_province_recipient = {
+						is_subject_of = PREV
+						is_subject_of_type = elysian_subject
+						NOT = { has_country_flag = to_block_exarch_province_transfer }
+					}	
+				}
+			}
+			to_cede_province_to_exarch = {
+				CURRENT_OWNER = owner
+				NEW_OWNER = event_target:to_exarch_province_recipient
+			}
+		}
+	}
+}
+
 to_make_exarch_province_reserved = {
 	set_province_flag = to_exarch_province_reserved
 	clr_province_flag = nhs_exarch_province_exemption
