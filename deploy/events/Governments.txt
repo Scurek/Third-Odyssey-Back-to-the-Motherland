@@ -362,7 +362,13 @@ country_event = {
 			has_regency = yes
 			has_heir = yes
 		}
-		add_heir_claim = 10
+		if = {
+			limit = {
+				NOT = { is_subject_of_type = personal_union }
+				NOT = { is_subject_of_type = integrated_personal_union }
+			}
+			add_heir_claim = 10
+		}
 		ai_chance = {
 			factor = 1
 			modifier = {
@@ -401,31 +407,43 @@ country_event = {
 			has_saved_event_target = selected_biggest_country
 		}
 		if = {
-			limit = { has_government_attribute = has_improved_ruler_election }
-			define_ruler = {
-				change_adm = -1
-				change_dip = -1
-				change_mil = -1
-				dynasty = event_target:selected_biggest_country
-				culture = event_target:selected_biggest_country
-				religion = event_target:selected_biggest_country
-				claim = 75
-				hide_skills = yes
+			limit = {
+				NOT = { is_subject_of_type = personal_union }
+				NOT = { is_subject_of_type = integrated_personal_union }
+			}
+			if = {
+				limit = { has_government_attribute = has_improved_ruler_election }
+				define_ruler = {
+					change_adm = -1
+					change_dip = -1
+					change_mil = -1
+					dynasty = event_target:selected_biggest_country
+					culture = event_target:selected_biggest_country
+					religion = event_target:selected_biggest_country
+					claim = 75
+					hide_skills = yes
+				}
+			}
+			else = {
+				define_ruler = {
+					change_adm = -2
+					change_dip = -2
+					change_mil = -2
+					dynasty = event_target:selected_biggest_country
+					culture = event_target:selected_biggest_country
+					religion = event_target:selected_biggest_country
+					claim = 50
+					hide_skills = yes
+				}
+			}
+			if = {
+				limit = {
+					NOT = { is_subject_of_type = personal_union }
+					NOT = { is_subject_of_type = integrated_personal_union }
+				}
+				kill_heir = { allow_new_heir = no }
 			}
 		}
-		else = {
-			define_ruler = {
-				change_adm = -2
-				change_dip = -2
-				change_mil = -2
-				dynasty = event_target:selected_biggest_country
-				culture = event_target:selected_biggest_country
-				religion = event_target:selected_biggest_country
-				claim = 50
-				hide_skills = yes
-			}
-		}
-		kill_heir = { allow_new_heir = no }
 		
 		ai_chance = {
 			factor = 1
@@ -446,42 +464,51 @@ country_event = {
 				}
 			}
 		}
+
 		if = {
-			limit = { has_government_attribute = has_improved_ruler_election }
-			define_ruler = {
-				claim = 75
+			limit = {
+				NOT = { is_subject_of_type = personal_union }
+				NOT = { is_subject_of_type = integrated_personal_union }
 			}
-		}
-		else = {
-			define_ruler = {
-				change_adm = -1
-				change_dip = -1
-				change_mil = -1
-				claim = 50
+			if = {
+				limit = { has_government_attribute = has_improved_ruler_election }
+				define_ruler = {
+					claim = 75
+				}
 			}
-		}
-		if = {
-			limit = { to_has_nobles_estate = yes }
-			to_add_noble_estate_loyalty = {
-				loyalty = 20
+			else = {
+				define_ruler = {
+					change_adm = -1
+					change_dip = -1
+					change_mil = -1
+					claim = 50
+				}
 			}
-		}
-		else_if = {
-			limit = { has_estate = estate_maratha }
-			add_estate_loyalty = {
-				estate = estate_maratha
-				loyalty = 20
+			if = {
+				limit = { to_has_nobles_estate = yes }
+				to_add_noble_estate_loyalty = {
+					loyalty = 20
+				}
 			}
-		}
-		else_if = {
-			limit = { has_estate = estate_rajput }
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = 20
+			else_if = {
+				limit = { has_estate = estate_maratha }
+				add_estate_loyalty = {
+					estate = estate_maratha
+					loyalty = 20
+				}
 			}
+			else_if = {
+				limit = { has_estate = estate_rajput }
+				add_estate_loyalty = {
+					estate = estate_rajput
+					loyalty = 20
+				}
+			}
+			kill_heir = { allow_new_heir = no }
+			set_ruler_flag = has_elected_ruler
 		}
-		kill_heir = { allow_new_heir = no }
-		set_ruler_flag = has_elected_ruler
+
+		
 		ai_chance = {
 			factor = 1
 		}
@@ -493,26 +520,33 @@ country_event = {
 		trigger = {
 			army_size = 30
 		}
+
 		if = {
-			limit = { has_government_attribute = has_improved_ruler_election }
-			define_ruler = {
-				change_mil = 2
-				claim = 75
+			limit = {
+				NOT = { is_subject_of_type = personal_union }
+				NOT = { is_subject_of_type = integrated_personal_union }
 			}
-		}
-		else = {
-			define_ruler = {
-				change_adm = -1
-				change_dip = -1
-				change_mil = 2
-				claim = 50
+			if = {
+				limit = { has_government_attribute = has_improved_ruler_election }
+				define_ruler = {
+					change_mil = 2
+					claim = 75
+				}
 			}
-		}
-		add_army_tradition = 10
-		hidden_effect = {
-			convert_ruler_to_general = 50
-		}
-		kill_heir = { allow_new_heir = no }
+			else = {
+				define_ruler = {
+					change_adm = -1
+					change_dip = -1
+					change_mil = 2
+					claim = 50
+				}
+			}
+			add_army_tradition = 10
+			hidden_effect = {
+				convert_ruler_to_general = 50
+			}
+			kill_heir = { allow_new_heir = no }
+		}	
 		ai_chance = {
 			factor = 1
 		}
@@ -524,24 +558,32 @@ country_event = {
 		trigger = {
 			navy_size = 30
 		}
+
 		if = {
-			limit = { has_government_attribute = has_improved_ruler_election }
-			define_ruler = {
-				change_dip = 2
-				claim = 75
+			limit = {
+				NOT = { is_subject_of_type = personal_union }
+				NOT = { is_subject_of_type = integrated_personal_union }
 			}
-		}
-		else = {
-			define_ruler = {
-				change_adm = -1
-				change_dip = 2
-				change_mil = -1
-				claim = 50
+
+			if = {
+				limit = { has_government_attribute = has_improved_ruler_election }
+				define_ruler = {
+					change_dip = 2
+					claim = 75
+				}
 			}
+			else = {
+				define_ruler = {
+					change_adm = -1
+					change_dip = 2
+					change_mil = -1
+					claim = 50
+				}
+			}
+			add_navy_tradition = 10
+			convert_ruler_to_admiral = 50
+			kill_heir = { allow_new_heir = no }
 		}
-		add_navy_tradition = 10
-		convert_ruler_to_admiral = 50
-		kill_heir = { allow_new_heir = no }
 		ai_chance = {
 			factor = 1
 		}
@@ -567,22 +609,28 @@ country_event = {
 			}
 		}
 		if = {
-			limit = { has_government_attribute = has_improved_ruler_election }
-			define_ruler = {
-				change_adm = 2
-				claim = 75
+			limit = {
+				NOT = { is_subject_of_type = personal_union }
+				NOT = { is_subject_of_type = integrated_personal_union }
 			}
-		}
-		else = {
-			define_ruler = {
-				change_adm = 2
-				change_dip = -1
-				change_mil = -1
-				claim = 50
+			if = {
+				limit = { has_government_attribute = has_improved_ruler_election }
+				define_ruler = {
+					change_adm = 2
+					claim = 75
+				}
 			}
+			else = {
+				define_ruler = {
+					change_adm = 2
+					change_dip = -1
+					change_mil = -1
+					claim = 50
+				}
+			}
+			add_years_of_income = 0.1
+			kill_heir = { allow_new_heir = no }
 		}
-		add_years_of_income = 0.1
-		kill_heir = { allow_new_heir = no }
 		ai_chance = {
 			factor = 1
 		}
@@ -595,24 +643,30 @@ country_event = {
 			has_government_attribute = can_elect_from_relative
 		}
 		if = {
-			limit = { has_government_attribute = has_improved_ruler_election }
-			define_ruler = {
-				dynasty = ROOT
-				change_adm = 1
-				claim = 100
+			limit = {
+				NOT = { is_subject_of_type = personal_union }
+				NOT = { is_subject_of_type = integrated_personal_union }
 			}
-		}
-		else = {
-			define_ruler = {
-				dynasty = ROOT
-				change_adm = -1
-				change_dip = -1
-				change_mil = -1
-				claim = 75
+			if = {
+				limit = { has_government_attribute = has_improved_ruler_election }
+				define_ruler = {
+					dynasty = ROOT
+					change_adm = 1
+					claim = 100
+				}
 			}
+			else = {
+				define_ruler = {
+					dynasty = ROOT
+					change_adm = -1
+					change_dip = -1
+					change_mil = -1
+					claim = 75
+				}
+			}
+			add_prestige = 10
+			kill_heir = { allow_new_heir = no }
 		}
-		add_prestige = 10
-		kill_heir = { allow_new_heir = no }
 		ai_chance = {
 			factor = 1
 		}
