@@ -19,7 +19,8 @@ country_event = {
 		trigger = { has_dlc = "Cradle of Civilization" }
 		picture = HEIR_AND_FOREIGN_ADVISOR_eventPicture
 	}
-	
+
+	## LIMIT TO CULTURE GROUP
 	trigger = {
 		has_heir = yes
 		has_regency = no
@@ -37,6 +38,7 @@ country_event = {
 			}
 		}
 		any_owned_province = {
+			culture_group = ROOT
 			owner = {
 				employed_advisor = {
 					category = ADM
@@ -3745,11 +3747,15 @@ country_event = {
 		any_owned_province = {
 			has_owner_culture = no
 			is_colony = no
+			# Third Odyssey
+			culture_group = ROOT
 			OR = {
-				NOT = { nhs_culturally_native = yes }
-				ROOT = {
-					nhs_culturally_native_primary = yes
-				}
+				NOT = { culture = elysameric }
+				ROOT = { primary_culture = elysameric }
+			}
+			OR = {
+				NOT = { culture = skraeling }
+				ROOT = { primary_culture = skraeling }
 			}
 		}
 	}
@@ -3763,6 +3769,16 @@ country_event = {
 			random_owned_province = {
 				limit = {
 					has_owner_culture = no
+					# Third Odyssey
+					culture_group = ROOT
+					OR = {
+						NOT = { culture = elysameric }
+						ROOT = { primary_culture = elysameric }
+					}
+					OR = {
+						NOT = { culture = skraeling }
+						ROOT = { primary_culture = skraeling}
+					}
 				}
 				save_event_target_as = family_holdings
 			}
@@ -3913,6 +3929,8 @@ country_event = {
 		heir_culture = new_variable:ruler_culture
 		legitimacy = 90
 		stability = 2
+		# Third Odyssey
+		NOT = { to_has_locked_primary_culture = yes }
 	}
 	
 	mean_time_to_happen = {
