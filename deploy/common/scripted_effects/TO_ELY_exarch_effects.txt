@@ -1879,38 +1879,46 @@ to_initialize_custom_exarch_peripheral_territories = {
 			owned_by = PREV
 			$PROVINCE_TRIGGER$
 		}
-		PREV = {
-			set_country_flag = to_exarch_has_peripheral_territories
-		}
-		set_province_flag = to_exarch_permanently_owned_land_@PREV
 		if = {
 			limit = {
-				NOT = { to_potential_exarch_province = yes }
+				is_city = yes
 			}
 			PREV = {
-				change_variable = {
-					which = to_custom_exarch_province_cost
-					value = 5
+				set_country_flag = to_exarch_has_peripheral_territories
+			}
+			set_province_flag = to_exarch_permanently_owned_land_@PREV
+			if = {
+				limit = {
+					NOT = { to_potential_exarch_province = yes }
+				}
+				PREV = {
+					change_variable = {
+						which = to_custom_exarch_province_cost
+						value = 5
+					}
+				}
+			}
+			else = {
+				to_exarch_merchant_effect_from_province = {
+					EFFECT = "
+					change_variable = {
+						which = to_exarch_needed_provinces_for_merchant
+						value = -1
+					}
+					"
+				}
+				to_exarch_merchant_2_effect_from_province = {
+					EFFECT = "
+					change_variable = {
+						which = to_exarch_needed_provinces_for_merchant_2
+						value = -1
+					}
+					"
 				}
 			}
 		}
 		else = {
-			to_exarch_merchant_effect_from_province = {
-				EFFECT = "
-				change_variable = {
-					which = to_exarch_needed_provinces_for_merchant
-					value = -1
-				}
-				"
-			}
-			to_exarch_merchant_2_effect_from_province = {
-				EFFECT = "
-				change_variable = {
-					which = to_exarch_needed_provinces_for_merchant_2
-					value = -1
-				}
-				"
-			}
+			cede_province = $OVERLORD_SCOPE$
 		}
 	}
 	if = {
