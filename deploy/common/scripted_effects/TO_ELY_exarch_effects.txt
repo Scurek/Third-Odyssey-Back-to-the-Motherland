@@ -1116,7 +1116,21 @@ to_check_exarch_incorrect_province = {
 		owner = {
 			overlord = {
 				ROOT = {
-					cede_province = PREV
+					if = {
+						limit = {
+							is_city = yes
+						}
+						cede_province = PREV
+					}
+					else = {
+						# Should not happen anymore, but just in case
+						# decolonize = THIS # <-- This crashes the game
+						add_province_modifier = {
+							name = to_abandoning_colony
+							duration = -1
+							hidden = yes
+						}
+					}
 				}
 			}
 		}
@@ -1850,6 +1864,8 @@ to_fabricate_exarch_claim_effect = {
 }
 
 to_initialize_custom_exarch_peripheral_territories = {
+	to_replace_colonization_ideas_for_exarch = yes
+
 	set_variable = {
 		which = to_custom_exarch_province_cost
 		value = 0
