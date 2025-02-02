@@ -41,7 +41,7 @@ country_event = {
     id = to_compatibility_check.1
     title = to_compatibility_check.1.t
     desc = to_compatibility_check.1.d
-    picture = picture = TO_STEAM_WORKSHOP_eventPicture
+    picture = TO_STEAM_WORKSHOP_eventPicture
     
     is_triggered_only = yes
     
