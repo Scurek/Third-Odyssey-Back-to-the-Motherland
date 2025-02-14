@@ -7,3 +7,4 @@ tags={
 }
 picture="thumbnail.png"
 supported_version="v1.37.*"
+remote_file_id="2795530832"
