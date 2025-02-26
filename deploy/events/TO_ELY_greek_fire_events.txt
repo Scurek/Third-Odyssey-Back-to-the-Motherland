@@ -17,14 +17,14 @@ country_event = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 		is_year = 1453
 		NOT = { has_country_flag = nhs_searching_for_naphtha }
-		nhs_has_greek_active_modifier = yes
+		to_has_greek_active_modifier = yes
 	}
 
 	after = {
 		set_country_flag = nhs_depleting_fire
 	}
 
-	option = { ## Reserve it for Fort defense
+	option = { ## Reserve it for ships and fort defense
 		name = "nhs2_greek_fire.1.a"
 		ai_chance = {
 			factor = 90
@@ -50,7 +50,7 @@ country_event = {
 		}
 		country_event = { id = nhs2_greek_fire.2 days = 30 }
 	}
-	option = { ## Reserve it for ships
+	option = { ## Experimental weapons
 		name = "nhs2_greek_fire.1.b"
 		ai_chance = {
 			factor = 10
@@ -82,11 +82,21 @@ country_event = {
 		custom_tooltip = to_enable_greek_firethrower_unit_tt
 		custom_tooltip = to_enable_greek_firethrower_unit_warning_tt
 		custom_tooltip = nhs_new_line_tt
-		hidden_effect = {
-			# If you add a new unit type while the row is still locked you can't switch to it unless you do this
-			set_country_flag = to_got_siege_flamethrowers
+		
+		if = {
+			limit = {
+				NOT = { mil_tech = 7 }
+			}
+			if = {
+				limit = {
+					has_unit_type = nhs_greek5b_Latinkon_Infantry
+				}
+			set_country_flag = to_keep_latinkon_infantry
+			}
 			change_unit_type = western
 			change_unit_type = exiled_greek
+
+			clr_country_flag = to_keep_latinkon_infantry
 		}
 		country_event = { id = nhs2_greek_fire.2 days = 30 }
 	}
@@ -104,7 +114,7 @@ country_event = {
 	trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
 		NOT = { has_country_flag = nhs_found_the_source }
-		NOT = { nhs_has_greek_active_modifier = yes }
+		NOT = { to_has_greek_active_modifier = yes }
 		has_country_flag = to_got_siege_flamethrowers
 		NOT = { has_country_modifier = nhs2_depleted_fire_sieges }
 	}
@@ -648,7 +658,7 @@ country_event = {
 
 	trigger = {
 		nhs_check_all_elysian_tags = { CONDITION = tag }
-		nhs_has_greek_active_modifier = yes
+		to_has_greek_active_modifier = yes
 		# has_country_flag = nhs_depleting_fire_fuel
 		has_country_flag = nhs_depleting_naphta
 		NOT = { nhs_has_fire_depleting_modifier = yes }

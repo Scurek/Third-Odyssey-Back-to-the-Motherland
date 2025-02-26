@@ -13,3 +13,4 @@ NDefines.NCountry.PILLAGE_CAPITAL_DEVELOPMENT_DECREASE = 0
 NDefines.NCountry.PILLAGE_CAPITAL_MAX_DEV_PILLAGED = 0
 NDefines.NDiplomacy.PEACE_COST_PILLAGE_CAPITAL = 0
 NDefines.NMilitary.MIN_MONTHLY_MANPOWER = 0.05
+NDefines.NMilitary.UNIT_TYPE_CHANGE_MAX_MORALE = 4.0  -- So that we can switch to greek firethrowers without losing morale
