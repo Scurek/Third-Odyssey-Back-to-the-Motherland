@@ -82,79 +82,51 @@ country_event = {
 			else = {
 				set_country_flag = oth_alb_1445
 			}
+			oth_albanian_starting_province_effect = {
+				EFFECT = "save_event_target_as = to_albanian_starting_province"
+			}
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					is_capital = no
+					is_core = ROOT
+					NOT = { has_province_modifier = nhs_hcd_Pagan_minority }
+				}
+				save_event_target_as = to_albanian_starting_province_domestic
+			}
 		}
 	}
 
 	option = {
 		name = "nhs2_albania.1.a"
+		goto = to_albanian_starting_province_domestic
 		trigger = {
-			any_owned_province = {
-				has_port = yes
-				is_capital = no
-				is_core = ROOT
-				NOT = { has_province_modifier = nhs_hcd_Pagan_minority }
-			}
+			has_saved_event_target = to_albanian_starting_province_domestic
 		}
 		oth_remove_albanian_quarter = yes
 		custom_tooltip = nhs_new_line_tt
-		random_owned_province = {
+
+		if = {
 			limit = {
-				has_port = yes
-				is_capital = no
-				is_core = ROOT
-			}
-			hidden_effect = {
-				add_institution_embracement = {
-					which = "feudalism"
-					value = 100
+				event_target:to_albanian_starting_province_domestic = {
+					has_port = yes
+					is_capital = no
+					is_core = ROOT
+					NOT = { has_province_modifier = nhs_hcd_Pagan_minority }
 				}
 			}
-			change_culture = shqiperi
-			add_core = SHQ
-			custom_tooltip = nhs_new_line_tt
-			add_base_tax = 2
-			add_base_production = 1
-			add_base_manpower = 2
-			if = {
+			event_target:to_albanian_starting_province_domestic = {
+				oth_albanian_initial_colonisation_domestic = yes
+			}
+		}
+		else = {
+			random_owned_province = {
 				limit = {
-					nationalism = 1
+					has_port = yes
+					is_capital = no
+					is_core = ROOT
 				}
-				add_nationalism = -100
-			}
-			tooltip = {
-				add_permanent_province_modifier = {
-					name = nhs2_albanian_majority
-					duration = -1
-				}
-			}
-			hidden_effect = {
-				add_province_triggered_modifier = nhs2_albanian_majority_tm
-			}
-			if = {
-				limit = {
-					NOT = { religion = orthodox }
-					NOT = { owner = { has_global_flag = nhs2_patriarchate_established } }
-				}
-				change_religion = orthodox
-				add_province_modifier = {
-					name = religious_zeal_at_conv
-					duration = 14600
-				}
-			}
-			if = {
-				limit = {
-					NOT = { religion = elysian_orthodoxy }
-					owner = { has_global_flag = nhs2_patriarchate_established }
-				}
-				change_religion = elysian_orthodoxy
-				add_province_modifier = {
-					name = religious_zeal_at_conv
-					duration = 14600
-				}
-			}
-			to_nhs_handle_post_disaster_tolerance_modifier_albanians = { COUNTRY_SCOPE = ROOT CHECK_FLAG = yes }
-			hidden_effect = {
-				add_nationalism = -100
+				oth_albanian_initial_colonisation_domestic = yes
 			}
 		}
 		hidden_effect = {
@@ -169,16 +141,9 @@ country_event = {
 
 	option = {
 		name = "nhs2_albania.1.b"
+		goto = to_albanian_starting_province
 		trigger = {
-			any_province = {
-				OR = {
-					is_empty = yes
-					is_colony = yes
-				}
-				any_neighbor_province = {
-					owned_by = ROOT
-				}
-			}
+			has_saved_event_target = to_albanian_starting_province
 		}
 		oth_remove_albanian_quarter = yes
 		custom_tooltip = nhs_new_line_tt
@@ -196,90 +161,17 @@ country_event = {
 		}
 		if = {
 			limit = {
-				any_province = {
-					has_port = yes
+				event_target:to_albanian_starting_province = {
 					is_empty = yes
-					NOT = { nhs_homelands = yes }
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
 				}
 			}
-			random_province = {
-				limit = {
-					has_port = yes
-					is_empty = yes
-					NOT = { nhs_homelands = yes }
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
+			event_target:to_albanian_starting_province = {
 				oth_albanian_initial_colonisation_frontier = yes
 			}
 		}
-		else_if = {
-			limit = {
-				any_province = {
-					is_empty = yes
-					NOT = { nhs_homelands = yes }
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
-			}
-			random_province = {
-				limit = {
-					is_empty = yes
-					NOT = { nhs_homelands = yes }
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
-				oth_albanian_initial_colonisation_frontier = yes
-			}
-		}
-		else_if = {
-			limit = {
-				any_province = {
-					is_empty = yes
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
-			}
-			random_province = {
-				limit = {
-					is_empty = yes
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
-				oth_albanian_initial_colonisation_frontier = yes
-			}
-		}
-		else_if = {
-			limit = {
-				any_province = {
-					OR = {
-						is_empty = yes
-						is_colony = yes
-					}
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
-			}
-			random_province = {
-				limit = {
-					OR = {
-						is_empty = yes
-						is_colony = yes
-					}
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
-				oth_albanian_initial_colonisation_frontier = yes
+		else = {
+			oth_albanian_starting_province_effect = {
+				EFFECT = "oth_albanian_initial_colonisation_frontier = yes"
 			}
 		}
 		hidden_effect = {
@@ -294,17 +186,9 @@ country_event = {
 
 	option = {
 		name = "nhs2_albania.1.c"
+		goto = to_albanian_starting_province
 		trigger = {
-			any_province = {
-				OR = {
-					is_empty = yes
-					is_colony = yes
-				}
-				NOT = { nhs_homelands = yes }
-				any_neighbor_province = {
-					owned_by = ROOT
-				}
-			}
+			has_saved_event_target = to_albanian_starting_province
 		}
 		oth_remove_albanian_quarter = yes
 		custom_tooltip = nhs_new_line_tt
@@ -329,73 +213,18 @@ country_event = {
 		}
 		if = {
 			limit = {
-				any_province = {
-					has_port = yes
+				has_saved_event_target = to_albanian_starting_province
+				event_target:to_albanian_starting_province = {
 					is_empty = yes
-					NOT = { nhs_homelands = yes }
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
 				}
 			}
-			random_province = {
-				limit = {
-					has_port = yes
-					is_empty = yes
-					NOT = { nhs_homelands = yes }
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
+			event_target:to_albanian_starting_province = {
 				oth_albanian_initial_colonisation_vassal = yes
 			}
 		}
-		else_if = {
-			limit = {
-				any_province = {
-					is_empty = yes
-					NOT = { nhs_homelands = yes }
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
-			}
-			random_province = {
-				limit = {
-					is_empty = yes
-					NOT = { nhs_homelands = yes }
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
-				oth_albanian_initial_colonisation_vassal = yes
-			}
-		}
-		else_if = {
-			limit = {
-				any_province = {
-					OR = {
-						is_empty = yes
-						is_colony = yes
-					}
-					NOT = { nhs_homelands = yes }
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
-			}
-			random_province = {
-				limit = {
-					OR = {
-						is_empty = yes
-						is_colony = yes
-					}
-					NOT = { nhs_homelands = yes }
-					any_neighbor_province = {
-						owned_by = ROOT
-					}
-				}
-				oth_albanian_initial_colonisation_vassal = yes
+		else = {
+			oth_albanian_starting_province_effect = {
+				EFFECT = "oth_albanian_initial_colonisation_vassal = yes"
 			}
 		}
 		hidden_effect = {
@@ -1445,6 +1274,8 @@ country_event = {
 	title = nhs2_albania.8.t
 	desc = nhs2_albania.8.d
 	picture = ALBANIAN_EAGLE_eventPicture
+
+	goto = nhs_albanian_settling_target
 
 	trigger = {
 		# From 'potential'
