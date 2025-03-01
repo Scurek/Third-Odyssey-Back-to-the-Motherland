@@ -41,6 +41,7 @@ roads = [
         "name": "south",
         "tier": 1,
         "cost": 500,
+        "event": "nhs_monuments.100",
         "additional_potential": "has_global_flag = to_elysian_highways_south_apaleisian_enabled\n"
                                 "			NOT = { has_global_flag = to_elysian_highways_south_alt_enabled }",
         "provinces": [
@@ -55,6 +56,7 @@ roads = [
         "name": "south_alt",
         "tier": 1,
         "cost": 500,
+        "event": "nhs_monuments.100",
         "additional_potential": "NOT = { has_global_flag = to_elysian_highways_south_apaleisian_enabled }\n"
                                 "			NOT = { has_global_flag = to_elysian_highways_south_enabled }",
         "provinces": [
@@ -71,6 +73,7 @@ roads = [
         "tier": 2,
         "cost": 1500,
         "flag_override": "coastal",
+        "event": "nhs_monuments.101",
         "additional_potential": "has_global_flag = to_elysian_highways_south_apaleisian_enabled",
         "requires_build": [
             4887, 918, 2528, 2529, 4884
@@ -98,6 +101,7 @@ roads = [
         "name": "coastal",
         "tier": 2,
         "cost": 1500,
+        "event": "nhs_monuments.101",
         "additional_potential": "NOT = { has_global_flag = to_elysian_highways_south_apaleisian_enabled }",
         "requires_build": [
             2514, 4923, 895, 4885, 2014
@@ -126,6 +130,7 @@ roads = [
         "name": "vinlandic",
         "tier": 2,
         "cost": 1000,
+        "event": "nhs_monuments.102",
         "requires_build": [
             953
         ],
@@ -147,6 +152,7 @@ roads = [
         "name": "north",
         "tier": 1,
         "cost": 800,
+        "event": "nhs_monuments.103",
         "requires_build": [
             917
         ],
@@ -166,6 +172,7 @@ roads = [
         "name": "west",
         "tier": 3,
         "cost": 2500,
+        "event": "nhs_monuments.104",
         "additional_potential": "has_global_flag = to_elysian_highways_south_apaleisian_enabled",
         "requires_build": [
             4887, 918, 2528
@@ -201,6 +208,7 @@ roads = [
         "tier": 3,
         "cost": 2500,
         "flag_override": "west",
+        "event": "nhs_monuments.104",
         "additional_potential": "NOT = { has_global_flag = to_elysian_highways_south_apaleisian_enabled }",
         "requires_build": [
             2514, 4923, 895
@@ -234,6 +242,7 @@ roads = [
         "name": "atlas",
         "tier": 3,
         "cost": 2500,
+        "event": "nhs_monuments.105",
         "requires_build": [
             917
         ],
@@ -265,6 +274,7 @@ roads = [
         "name": "lakonia",
         "tier": 3,
         "cost": 2000,
+        "event": "nhs_monuments.106",
         "requires_build": [
             893
         ],
