@@ -316,6 +316,7 @@ declarewar = {
 	condition = {
 		# tooltip = NHS_PEACE
 		potential = {
+			NOT = { tag = TUR }
 			FROM = {
 				tag = BYZ
 				has_country_modifier = byz_flight
@@ -325,7 +326,6 @@ declarewar = {
 			FROM = {
 				NOT = { has_country_modifier = byz_flight }
 			}
-			# always = no
 		}
 	}
 	condition = {
@@ -473,6 +473,30 @@ declarewar = {
 		allow = {
 			custom_trigger_tooltip = {
 				tooltip = to_has_repelled_elysian_deal_tt
+				always = no
+			}
+		}
+	}
+	condition = {
+		potential = {
+			tag = TUR
+			BYZ = {
+				exists = yes
+				has_country_modifier = byz_flight
+			}
+			FROM = {
+				OR = {
+					tag = BYZ
+					tag = MOE
+					tag = ATH
+					tag = EPI
+					tag = ALB
+				}
+			}
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = to_recovering_from_varna_tt
 				always = no
 			}
 		}
@@ -798,6 +822,31 @@ allianceaction = {
 	effect = {
 		country_event = { id = nhs_monuments.14 }
 	}
+
+	condition = {
+		potential = {
+			tag = ALB
+			NOT = { is_year = 1447 }
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = to_uncertain_future_tt
+				always = no
+			}
+		}
+	}
+	condition = {
+		potential = {
+			FROM = { tag = ALB }
+			NOT = { is_year = 1447 }
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = to_uncertain_future_for_tt
+				always = no
+			}
+		}
+	}
 }
 
 enforce_peace = {
@@ -970,6 +1019,20 @@ guaranteeaction = {
 						}
 					}
 				}
+			}
+		}
+	}
+
+	# Third Odyssey
+	condition = {
+		potential = {
+			FROM = { tag = ALB }
+			NOT = { is_year = 1447 }
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = to_uncertain_future_for_tt
+				always = no
 			}
 		}
 	}
@@ -1679,24 +1742,14 @@ break_alliance = {
 warningaction = {
 	condition = {
 		potential = {
-			ROOT = {
-				any_neighbor_country = {
-					tag = BYZ
-				}
-			}
 			FROM = {
-				OR = {
-					NOT = { tag = BYZ }
-					is_year = 1448
-				}
+				tag = BYZ
+				has_country_modifier = byz_flight
 			}
 		}
 		allow = {
 			FROM = {
-				OR = {
-					NOT = { tag = BYZ }
-					is_year = 1448
-				}
+				NOT = { has_country_modifier = byz_flight }
 			}
 		}
 	}
