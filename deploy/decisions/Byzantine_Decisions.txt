@@ -256,41 +256,171 @@ country_decisions = {
 	BYZ_bosphorus_toll_decision = {
 		major = yes
 		potential = {
-			has_country_flag = BYZ_unlocked_bosphorus_toll
+			# Third Odyssey
+			OR = {
+				has_country_flag = BYZ_unlocked_bosphorus_toll
+				mission_completed = to_back_to_the_motherland_mission
+			}
+			151 = {
+				NOT = { has_province_modifier = BYZ_bosphorus_toll }
+			}
 		}
 		provinces_to_highlight = {
+			# Third Odyssey
 			OR = {
-				province_id = 151
-				province_id = 316
+				AND = {
+					province_id = 151
+					151 = {
+						NOT = {
+							AND = {
+								owned_by = ROOT
+								controlled_by = ROOT
+								has_shipyard_building_trigger = yes
+								development = 50
+								has_coast_defense_building_trigger = yes
+							}
+						}
+					}
+				}
+				AND = {
+					province_id = 316
+					316 = {
+						NOT = {
+							AND = {
+								country_or_subject_holds = ROOT
+								controlled_by = owner
+								has_shipyard_building_trigger = yes
+								development = 20
+								has_coast_defense_building_trigger = yes
+							}
+						}
+					}
+				}
+				AND = {
+					province_id = 4779
+					4779 = {
+						NOT = {
+							AND = {
+								country_or_subject_holds = ROOT
+								controlled_by = owner
+							}
+						}
+					}
+				}
+				AND = {
+					province_id = 317
+					317 = {
+						NOT = {
+							AND = {
+								country_or_subject_holds = ROOT
+								controlled_by = owner
+							}
+						}
+					}
+				}
+				AND = {
+					province_id = 2296
+					2296 = {
+						NOT = {
+							AND = {
+								country_or_subject_holds = ROOT
+								controlled_by = owner
+							}
+						}
+					}
+				}
 			}
 		}
 		allow = {
+			dip_power = 50
+			navy_size = 80
 			151 = {
 				owned_by = ROOT
+				controlled_by = owner
 				has_shipyard_building_trigger = yes
 				development = 50
 				has_coast_defense_building_trigger = yes
 			}
 			316 = {
-				owned_by = ROOT
+				# Third Odyssey
+				country_or_subject_holds = ROOT
+				controlled_by = owner
 				has_shipyard_building_trigger = yes
 				development = 20
 				has_coast_defense_building_trigger = yes
 			}
-			navy_size = 80
+			# Third Odyssey
+			4779 = {
+				country_or_subject_holds = ROOT
+				controlled_by = owner
+			}
+			317 = {
+				country_or_subject_holds = ROOT
+				controlled_by = owner
+			}
+			2296 = {
+				country_or_subject_holds = ROOT
+				controlled_by = owner
+			}
 		}
 		effect = {
 			clr_country_flag = BYZ_unlocked_bosphorus_toll
+			# Third Odyssey 
+			add_dip_power = -50
+			add_treasury = 2000
+			custom_tooltip = nhs_new_line_tt
+
 			151 = {
 				add_province_triggered_modifier = BYZ_bosphorus_toll
 			}
 			316 = {
 				add_province_triggered_modifier = BYZ_bosphorus_toll
 			}
-			
-			add_years_of_trade_income = {
-				years = 1
-				custom_tooltip = BYZ_add_1_years_of_trade_income
+			# Third Odyssey
+			# add_years_of_trade_income = {
+			# 	years = 1
+			# 	custom_tooltip = BYZ_add_1_years_of_trade_income
+			# }
+			if = {
+				limit = {
+					any_country = {
+						NOT = { tag = ROOT }
+						NOT = {
+							AND = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+						151 = {
+							trade_share = {
+								country = PREV
+								share = 1
+							}
+						}
+					}
+				}
+				custom_tooltip = to_add_expand_the_bosphorus_tolls_opinion_tt
+				every_country = {
+					limit = {
+						NOT = { tag = ROOT }
+						NOT = {
+							AND = {
+								is_subject_of = ROOT
+								is_subject_of_type = elysian_subject
+							}
+						}
+						1320 = {
+							trade_share = {
+								country = PREV
+								share = 1
+							}
+						}
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = to_expanded_bosphorus_toll_om
+					}
+				}
 			}
 		}
 		ai_will_do = {
