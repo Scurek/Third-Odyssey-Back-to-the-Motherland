@@ -983,7 +983,6 @@ to_release_exarch_from_province = {
 				subject_type = elysian_subject
 				subject = $EXARCH_SCOPE$
 			}
-			set_country_flag = to_created_exarch_@$EXARCH_SCOPE$
 		}
 		$EXARCH_SCOPE$ = {
 			country_event = { id = nhs2_ely_marches.6 }
@@ -1021,6 +1020,24 @@ to_release_exarch_from_province = {
 		set_province_flag = to_separatism_restore_pending
 		province_event = { id = nhs2_ely_marches.5 days = 1 }
 		to_load_years_of_nationalism = yes
+	}
+}
+
+# Fired from on_dependency_gained, ROOT = Overlord, FROM = Minor
+to_setup_exarch_flags = {
+	set_country_flag = to_created_exarch_@FROM
+}
+
+to_exarch_on_change_tag = {
+	if = {
+		limit = {
+			is_subject = yes
+			is_subject_of_type = elysian_subject
+			to_is_exarch_tag = yes
+		}
+		overlord = {
+			set_country_flag = to_created_exarch_@PREV
+		}
 	}
 }
 
