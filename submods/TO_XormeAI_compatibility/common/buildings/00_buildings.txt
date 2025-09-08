@@ -1,0 +1,4925 @@
+# Do not change tags in here without changing every other reference to them.
+# If adding new buildings, make sure they are uniquely named.
+
+# cost = x #==> cost in $ to build (subject to other modifiers)
+# time = x #==> number of months to build.
+# modifier = m # a modifier on the province that the building gives
+# trigger = t # an and trigger that needs to be fullfilled to build and keep the building
+# one_per_country = yes/no # if yes, only one of these can exist in a country
+# manufactory = { trade_good trade_good } # list of trade goods that get a production bonus
+# onmap = yes/no # show as a sprite on the map
+
+# FROM = owner
+# ROOT = province
+
+# Building AI is now mainly hard-coded. The AI will estimate how much it gains yearly from each building,
+# convert the value to ducats, and take the building with biggest yearly return as a percentage of the build cost.
+# If lower than 1%, the AI will not consider the yearly return worth it.
+# It will also require higher yearly return if the economy in not in prime shape.
+# Forts' value also get converted to a yearly return based on terrain and strategic position, as well as available budget for fort maintenance.
+
+# AI can still be modded though; it will multiply the yearly return with the value of ai_will_do.
+# If you don't want the AI to build a building at all, make ai_will_do become 0.
+# AI will consider each building to be worth 0.01 ducats per year as a base, so making ai_will_do above cost will have them build it at some point.
+# It will still check whether it can afford a building before doing so though, but may save up to it.
+
+
+################################################
+# Tier 1, 15th Century Buildings
+################################################
+marketplace = {
+	cost = 100
+	time = 12
+
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+		
+	}
+
+	modifier = {
+		province_trade_power_modifier = 0.5
+	}
+	
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_effect = { BUILDING = marketplace }
+		# TO END
+		add_development_from_building = {
+			building = marketplace
+			type = production
+			value = 1
+		}
+		if = {
+			limit = {
+				FROM = { 
+					has_dlc = "Mandate of Heaven"
+					has_country_flag = mam_trade_building_prosperity_flag
+				}
+			}
+			add_prosperity = 5
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = marketplace TIER_1 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = marketplace
+			type = production
+			value = 1
+		}
+		if = {
+			limit = {
+				FROM = { 
+					has_dlc = "Mandate of Heaven"
+					has_country_flag = mam_trade_building_prosperity_flag
+				}
+				
+			}
+			add_prosperity = -5
+		}
+	}
+
+	on_construction_started = { } #Fires when you start the construction,  ROOT - Province FROM - Country that started
+	on_construction_canceled = { } #Fires when you cancel the construction, ROOT - Province FROM - Country that canceled
+
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 1.5 # Because hard-coded AI only considers what it will gain, not what its enemies will lose.
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 10
+			province_has_center_of_trade_of_level = 1
+		}
+		modifier = {
+			factor = 20
+			province_has_center_of_trade_of_level = 2
+		}
+		modifier = {
+			factor = 30
+			province_has_center_of_trade_of_level = 3
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+	}
+}
+
+workshop = {
+	cost = 100
+	time = 12
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+		
+	}
+	modifier = {
+		local_production_efficiency = 0.5
+	}
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_effect = { BUILDING = workshop }
+		# TO END
+		add_development_from_building = {
+			building = workshop
+			type = production
+			value = 1
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = workshop TIER_1 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = workshop
+			type = production
+			value = 1
+		}
+	}
+	on_obsolete = {
+	}
+
+	allow_in_gold_provinces = no
+
+	ai_will_do = {
+		factor = 10.0
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 0.25
+			num_free_building_slots = 2
+			NOT = { xorme_has_any_manufactory_trigger = yes }
+		}
+		modifier = {
+			factor = 0.4
+			local_autonomy = 75
+		}
+		modifier = {
+			factor = 0.6
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.8
+			local_autonomy = 25
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 3.0
+			base_production = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_production = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_production = 8
+		}
+		#FROM TRADE GOODS
+		modifier = {
+			factor = 5.0
+			xorme_lowest_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 10.0
+			xorme_low_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 15.0
+			xorme_medium_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 20.0
+			xorme_high_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 25.0
+			xorme_province_with_special_goods_produced_trigger = yes
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+temple = {
+	cost = 100
+	time = 12
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		local_tax_modifier = 0.4
+	}
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_effect = { BUILDING = temple }
+		# TO END
+		on_built_tax_building_effect = yes
+		on_province_tax_building_built_estate_privileges_effect = yes
+		add_development_from_building = {
+			building = temple
+			type = tax
+			value = 1
+		}
+		if = {
+			limit = {
+				FROM = { has_government_attribute = on_church_built_clergy_loyalty }
+			}
+			FROM = {
+				add_estate_loyalty = {
+					estate = estate_church
+					loyalty = 2
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = { has_government_attribute = temples_modifier }
+				owned_by = FROM 
+			}
+			add_province_modifier = {
+				name = gov_expanded_temple_rights_mod
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = mosque_local_unrest_flag
+				}
+			}
+			add_province_modifier = {
+				name = turkoman_peaceful_worshipping
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				FROM = { has_country_modifier = mam_mosque_great_mosque_generates_crown_land_modifier }
+			}
+			FROM = {
+				change_estate_land_share = {
+					estate = all
+					share = -0.25
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = { has_government_mechanic = blood_gathering_mechanic }
+			}
+			FROM = {
+				add_government_power = {
+					mechanic_type = blood_gathering_mechanic
+					power_type = blood
+					value = 0.5
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = { has_country_flag = azt_temples_buffs_flag }
+			}
+			add_province_modifier = {
+				name = azt_religious_classes
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = temple TIER_1 = yes }
+		# TO END
+		on_province_tax_building_destroyed_estate_privileges_effect = yes
+		remove_development_from_building = {
+			building = temple
+			type = tax
+			value = 1
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = mosque_local_unrest_flag
+				}
+			}
+			remove_province_modifier = turkoman_peaceful_worshipping
+		}
+		if = {
+			limit = {
+				FROM = { has_government_attribute = on_church_built_clergy_loyalty }
+			}
+			FROM = {
+				add_estate_loyalty = {
+					estate = estate_church
+					loyalty = -2
+				}
+			}
+		}
+		remove_province_modifier = gov_expanded_temple_rights_mod
+		if = {
+			limit = {
+				FROM = { has_country_modifier = mam_mosque_great_mosque_generates_crown_land_modifier }
+			}
+			FROM = {
+				change_estate_land_share = {
+					estate = all
+					share = 0.25
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = { has_government_mechanic = blood_gathering_mechanic }
+			}
+			FROM = {
+				add_government_power = {
+					mechanic_type = blood_gathering_mechanic
+					power_type = blood
+					value = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_province_modifier = azt_religious_classes
+			}
+			remove_province_modifier = azt_religious_classes
+		}
+	}
+	on_obsolete = {
+	}
+	ai_will_do = {
+		factor = 2.5
+		modifier = {
+			factor = 0
+			OR = {
+				FROM = { num_of_loans = 1 }
+			}
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 0.05
+			OR = {
+				NOT = { num_free_building_slots = 2 }
+				xorme_has_production_buildings_trigger = no
+			}
+		}
+		modifier = {
+			factor = 0.4
+			local_autonomy = 75
+		}
+		modifier = {
+			factor = 0.6
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.8
+			local_autonomy = 25
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 3.0
+			base_tax = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_tax = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_tax = 8
+		}
+		#FROM TRADE GOODS
+		modifier = {
+			factor = 5.0
+			xorme_province_with_special_goods_produced_trigger = yes
+		}
+		modifier = {
+			factor = 10.0
+			xorme_high_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 15.0
+			xorme_medium_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 20.0
+			xorme_low_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 25.0
+			xorme_lowest_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		modifier = {
+			factor = 100.0
+			num_free_building_slots = 3
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+barracks = {
+	cost = 100
+	time = 12
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		local_manpower_modifier = 0.5
+	}
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = barracks }
+		to_building_on_build_effect = { BUILDING = barracks }
+		# TO END
+		if = {
+			limit = {
+				FROM = {
+					has_government_attribute = manpower_sailors_on_build
+				}
+			}
+			FROM = {
+				add_manpower = 1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = 0.001
+			}
+		}
+		add_development_from_building = {
+			building = barracks
+			type = manpower
+			value = 1
+		}
+		update_improved_military_buildings_modifier = {
+			building = barracks
+		}
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = azt_calpulli_houses_flag
+				}
+			}
+			add_province_modifier = {
+				name = azt_barracks_households
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
+	on_destroyed = {
+		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = barracks }
+		to_building_on_destroyed = { BUILDING = barracks TIER_1 = yes }
+		# TO END
+		if = {
+			limit = {
+				FROM = {
+					has_government_attribute = manpower_sailors_on_build
+				}
+			}
+			FROM = {
+				add_manpower = -1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = -0.001
+			}
+		}
+		remove_development_from_building = {
+			building = barracks
+			type = manpower
+			value = 1
+		}
+		update_improved_military_buildings_modifier = {
+			building = barracks
+		}
+		if = {
+			limit = {
+				has_province_modifier = azt_barracks_households
+			}
+			remove_province_modifier = azt_barracks_households
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 4.5
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 0.05
+			OR = {
+				NOT = { num_free_building_slots = 2 }
+				xorme_has_production_buildings_trigger = no
+			}
+		}
+		modifier = {
+			factor = 0.4
+			local_autonomy = 75
+		}
+		modifier = {
+			factor = 0.6
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.8
+			local_autonomy = 25
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 3.0
+			base_manpower = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_manpower = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_manpower = 8
+		}
+		#FROM TRADE GOODS
+		modifier = {
+			factor = 10.0
+			xorme_additional_manpower_goods_trigger = yes
+		}
+		#BUILDINGS
+		modifier = {
+			factor = 10.0
+			xorme_has_production_buildings_trigger = yes
+		}
+		modifier = {
+			factor = 100.0
+			num_free_building_slots = 3
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+shipyard = {
+	cost = 100
+	time = 12
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+		has_port = yes
+		# Third Odyssey
+		NOT = {
+			to_has_great_project_at_least_at_tier_1 = {
+				TYPE = nhs_elysian_arsenal
+			}
+		}
+		NOT = {
+			AND = {
+				area = chesapeake_area
+				950 = {
+					has_great_project = {
+						type = nhs_elysian_arsenal
+						tier = 3
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		naval_forcelimit = 2
+		ship_recruit_speed = -0.25
+		local_ship_repair = 0.25
+		local_has_man_of_war = yes
+		local_has_galleass = yes
+	}
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_effect = { BUILDING = shipyard }
+		# TO END
+		add_development_from_building = {
+			building = shipyard
+			type = production
+			value = 1
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = shipyard TIER_1 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = shipyard
+			type = production
+			value = 1
+		}
+		if = {
+			limit = { has_province_modifier = sca_swe_danish_shipyard }
+			remove_province_modifier = sca_swe_danish_shipyard
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 4.5
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 0
+			FROM = {
+				NOT = { navy_size_percentage = 0.9 }
+			}
+		}
+		modifier = {
+			factor = 0.05
+			OR = {
+				NOT = { num_free_building_slots = 2 }
+				xorme_has_production_buildings_trigger = no
+			}
+		}
+		modifier = {
+			factor = 0.4
+			local_autonomy = 75
+		}
+		modifier = {
+			factor = 0.6
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.8
+			local_autonomy = 25
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 3.0
+			FROM = { num_of_ports = 5 }
+		}
+		modifier = {
+			factor = 6.0
+			FROM = { num_of_ports = 10 }
+		}
+		modifier = {
+			factor = 9.0
+			FROM = { num_of_ports = 15 }
+		}
+		modifier = {
+			factor = 10.0
+			NOT = { development = 7 }
+		}
+		#BUILDINGS
+		modifier = {
+			factor = 10.0
+			xorme_has_production_buildings_trigger = yes
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		modifier = {
+			factor = 100.0
+			num_free_building_slots = 4
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+fort_15th = {
+	cost = 200
+	time = 30
+
+	build_trigger = {
+
+		if = {
+			limit = { 
+				FROM = { 
+					ai = yes 
+					NOT ={ 
+						overlord = {
+							ai = no
+						}
+					}
+				}
+			}
+			OR = {
+				is_capital_of = FROM
+				all_neighbor_province = {
+					NOT = {
+						OR = {
+							xorme_ai_is_building_fort_trigger = yes
+							xorme_ai_has_any_fort_trigger = yes
+							has_influencing_fort = yes
+						}
+					}
+				}
+			}
+		}
+	}
+
+	modifier = {
+		fort_level = 2
+	}
+
+	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 2 }
+		to_building_on_build_effect = { BUILDING = fort_15th }
+		to_handle_para_bellum_modifier_fort_build = yes
+		to_check_spared_from_greek_fire_on_fort_build = yes
+		# TO END
+		if = {
+			limit = {
+				FROM = { NOT = { mil_tech = 14 } has_government_attribute = on_fort_built_nobles_loyalty }
+			}
+			FROM = {
+				to_add_noble_estate_loyalty = {
+					loyalty = 5
+				}
+				if = {
+					limit = {
+						has_estate = estate_maratha
+					}
+					add_estate_loyalty = {
+						estate = estate_maratha
+						loyalty = 5
+					}
+				}
+				if = {
+					limit = {
+						has_estate = estate_rajput
+					}
+					add_estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 5
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_development_of_castles
+				}
+				NOT = { has_province_modifier = estate_nobles_development_of_castles_mod }
+			}
+			add_province_modifier = {
+				name = estate_nobles_development_of_castles_mod
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = orm_forts_trade_power_buff_flag
+				}
+			}
+			add_province_modifier = {
+				name = orm_forts_buff
+				duration = -1
+				hidden = yes
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = ned_buffed_forts_flag
+					NOT = {
+						full_idea_group = defensive_ideas
+					}
+				}
+				region = low_countries_region
+			}
+			add_province_modifier = {
+				name = ned_low_countries_fort_buff
+				duration = -1
+				hidden = yes
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_country_flag = ned_buffed_forts_flag
+					full_idea_group = defensive_ideas
+				}
+				region = low_countries_region
+			}
+			add_province_modifier = {
+				name = ned_low_countries_fort_buff_buffed
+				duration = -1
+				hidden = yes
+			}
+		}
+		if = {
+			limit = { 
+				owner = { has_country_flag = ven_defensive_reward_flag }
+				NOT = { has_province_modifier = ven_defensive_stance_modifier } 
+			}
+			add_province_modifier = {
+				name = ven_defensive_stance_modifier
+				duration = -1
+				hidden = yes
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_vegvar_system
+				}
+				any_neighbor_province = {
+					NOT = { owned_by = ROOT }
+				}
+			}
+			add_province_modifier = {
+				name = estate_nobles_vegvar_system_modifier
+				duration = -1
+			}
+		}
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
+	on_destroyed = {
+		nhs_fort_manpower_remove_all_modifiers = yes
+		to_building_on_destroyed = { BUILDING = fort_15th TIER_1 = yes }
+		to_handle_para_bellum_modifier_on_fort_destroyed = yes
+		to_check_spared_from_greek_fire_on_fort_destroyed = yes
+		# TO END
+		
+		if = {
+			limit = {
+				FROM = {
+					ai = yes
+				}
+			}
+			FROM = { add_treasury = 100 }
+		}
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_vegvar_system_modifier
+			}
+			remove_province_modifier = estate_nobles_vegvar_system_modifier
+		}
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_development_of_castles_mod
+			}
+			remove_province_modifier = estate_nobles_development_of_castles_mod
+		}
+		if = {
+			limit = {
+				has_province_modifier = ven_defensive_stance_modifier
+			}
+			remove_province_modifier = ven_defensive_stance_modifier
+		}
+		if = {
+			limit = {
+				has_province_modifier = orm_forts_buff
+			}
+			remove_province_modifier = orm_forts_buff
+		}
+		if = {
+			limit = {
+				has_province_modifier = ned_low_countries_fort_buff
+			}
+			remove_province_modifier = ned_low_countries_fort_buff
+		}
+		if = {
+			limit = {
+				has_province_modifier = ned_low_countries_fort_buff_buffed
+			}
+			remove_province_modifier = ned_low_countries_fort_buff_buffed
+		}
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings destroyed!
+	on_obsolete = {
+	}
+
+	onmap = yes
+	influencing_fort = yes
+
+	ai_will_do = {
+		factor = 1.2
+		modifier = {
+			factor = 1000.0
+			is_capital = yes
+		}
+		# Third Odyssey
+		modifier = {
+			factor = 0
+			owner = {
+				OR = {
+					technology_group = north_american
+					technology_group = south_american
+				}
+				NOT = { num_of_cities = 4 }
+				NOT = { mil_tech = 7 }
+			}
+		}
+	}
+}
+
+coastal_defence = {
+
+	cost = 100
+	time = 12
+	build_trigger = {
+		has_port = yes
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		blockade_force_required = 0.5
+		hostile_disembark_speed = 1.0
+		block_slave_raid = yes
+	}
+
+	on_construction_started = {
+		# to_on_construction_started = { BUILDING = coastal_defence }
+	}
+	on_construction_canceled = {
+		# to_on_construction_canceled = { BUILDING = coastal_defence }
+	}
+
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_effect = { BUILDING = coastal_defence }
+		to_handle_naval_bateries_give_defensivness_modifier_on_build = yes
+	}
+	
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = coastal_defence TIER_1 = yes }
+		to_remove_naval_bateries_give_defensivness = yes
+	}
+
+	ai_will_do = {
+		factor = 1
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = slaves_raided
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+	}
+}
+
+
+################################################
+# Tier 2, 16th Century Buildings
+################################################
+courthouse = {
+	cost = 100
+	time = 12
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		local_state_maintenance_modifier = -0.25
+		local_autonomy = -0.1
+		local_governing_cost = -0.25
+		allowed_num_of_buildings = 1
+	}
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_effect = { BUILDING = courthouse }
+		# TO END
+		add_development_from_building = {
+			building = courthouse
+			type = tax
+			value = 1
+		}
+		if = { 
+			limit = { 
+				FROM = { has_country_flag = fra_courthouse_bonus_flag }
+			}
+			add_province_modifier = {
+				name = fra_improved_court_houses_modifier
+				duration = -1 
+			}
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = courthouse TIER_1 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = courthouse
+			type = tax
+			value = 1
+		}
+		remove_province_modifier = fra_improved_court_houses_modifier
+	}
+	on_obsolete = {
+	}
+	ai_will_do = {
+		factor = 15
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0
+			area_for_scope_province = {
+				is_capital_of = FROM
+			}
+		}
+		modifier = {
+			factor = 0.25
+			num_free_building_slots = 2
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 1.5
+			local_autonomy = 25
+		}
+		modifier = {
+			factor = 3.0
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 4.5
+			local_autonomy = 75
+		}
+		#FROM GOV CAP
+		modifier = {
+			factor = 20.0
+			FROM = { governing_capacity_percentage = 0.9 }
+		}
+		modifier = {
+			factor = 30.0
+			FROM = { governing_capacity_percentage = 1.0 }
+		}
+		modifier = {
+			factor = 50.0
+			FROM = { governing_capacity_percentage = 1.1 }
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+dock = {
+	cost = 100
+	time = 12
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+		has_port = yes
+	}
+	modifier = {
+		local_sailors_modifier = 0.5
+		local_has_man_of_war = yes
+		local_has_galleass = yes
+	}
+	
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = dock }
+		to_building_on_build_effect = { BUILDING = dock }
+		# TO END
+		if = {
+			limit = {
+				FROM = {
+					has_government_attribute = manpower_sailors_on_build
+				}
+			}
+			FROM = {
+				add_sailors = 200
+			}
+		}
+		add_development_from_building = {
+			building = dock
+			type = production
+			value = 1
+		}
+	}
+	
+	on_destroyed = {
+		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = dock }
+		to_building_on_destroyed = { BUILDING = dock TIER_1 = yes }
+		# TO END
+		if = {
+			limit = {
+				FROM = {
+					has_government_attribute = manpower_sailors_on_build
+				}
+			}
+			FROM = {
+				add_sailors = -200
+			}
+		}
+		remove_development_from_building = {
+			building = dock
+			type = production
+			value = 1
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 1
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0.5
+		}
+		modifier = {
+			factor = 100.0
+			num_free_building_slots = 5
+		}
+	}
+}
+
+regimental_camp = {
+	cost = 200
+	time = 12
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	modifier = {
+		land_forcelimit = 1
+	}
+
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_effect = { BUILDING = regimental_camp }
+		# TO END
+		add_development_from_building = {
+			building = regimental_camp
+			type = manpower
+			value = 1
+		}
+		update_improved_military_buildings_modifier = {
+			building = regimental_camp
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = 0.001
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = azt_calpulli_houses_flag
+				}
+			}
+			add_province_modifier = {
+				name = azt_conscription_households
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = regimental_camp TIER_1 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = regimental_camp
+			type = manpower
+			value = 1
+		}
+		update_improved_military_buildings_modifier = {
+			building = regimental_camp
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = -0.001
+			}
+		}
+		if = {
+			limit = {
+				has_province_modifier = azt_conscription_households
+			}
+			remove_province_modifier = azt_conscription_households
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 5.5
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 0
+			FROM = {
+				NOT = { army_size_percentage = 0.9 }
+			}
+		}
+		modifier = {
+			factor = 0.05
+			OR = {
+				NOT = { num_free_building_slots = 2 }
+				xorme_has_production_buildings_trigger = no
+			}
+		}
+		modifier = {
+			factor = 0.4
+			local_autonomy = 75
+		}
+		modifier = {
+			factor = 0.6
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.8
+			local_autonomy = 25
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 3.0
+			FROM = { num_of_cities = 5 }
+		}
+		modifier = {
+			factor = 6.0
+			FROM = { num_of_cities = 10 }
+		}
+		modifier = {
+			factor = 9.0
+			FROM = { num_of_cities = 15 }
+		}
+		modifier = {
+			factor = 20.0
+			NOT = { development = 7 }
+		}
+		#BUILDINGS
+		modifier = {
+			factor = 100.0
+			xorme_has_production_buildings_trigger = yes
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		modifier = {
+			factor = 100.0
+			num_free_building_slots = 2
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+fort_16th = {
+	cost = 400
+	time = 30
+
+	build_trigger = {
+		if = {
+			limit = { 
+				FROM = { 
+					ai = yes 
+					NOT ={ 
+						overlord = {
+							ai = no
+						}
+					}
+				}
+			}
+			OR = {
+				is_capital_of = FROM
+				all_neighbor_province = {
+					NOT = {
+						OR = {
+							xorme_ai_is_building_fort_trigger = yes
+							xorme_ai_has_any_fort_trigger = yes
+							has_influencing_fort = yes
+						}
+					}
+				}	
+			}
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	make_obsolete = fort_15th
+	modifier = {
+		fort_level = 4
+	}
+
+	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 4 }
+		to_building_on_build_with_obsolete_effect = { BUILDING = fort_16th OLD_BUILDING = fort_15th }
+		to_building_on_build_effect = { BUILDING = regimental_camp }
+		to_handle_para_bellum_modifier_fort_build = yes
+		to_check_spared_from_greek_fire_on_fort_build = yes
+		# TO END
+		if = {
+			limit = {
+				FROM = { NOT = { mil_tech = 19 } has_government_attribute = on_fort_built_nobles_loyalty }
+			}
+			FROM = {
+				to_add_noble_estate_loyalty = {
+					loyalty = 5
+				}
+				if = {
+					limit = {
+						has_estate = estate_maratha
+					}
+					add_estate_loyalty = {
+						estate = estate_maratha
+						loyalty = 5
+					}
+				}
+				if = {
+					limit = {
+						has_estate = estate_rajput
+					}
+					add_estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 5
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_development_of_castles
+				}
+				NOT = { has_province_modifier = estate_nobles_development_of_castles_mod }
+			}
+			add_province_modifier = {
+				name = estate_nobles_development_of_castles_mod
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = ned_buffed_forts_flag
+					NOT = {
+						full_idea_group = defensive_ideas
+					}
+				}
+				region = low_countries_region
+			}
+			add_province_modifier = {
+				name = ned_low_countries_fort_buff
+				duration = -1
+				hidden = yes
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_country_flag = ned_buffed_forts_flag
+					full_idea_group = defensive_ideas
+				}
+				region = low_countries_region
+			}
+			add_province_modifier = {
+				name = ned_low_countries_fort_buff_buffed
+				duration = -1
+				hidden = yes
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_vegvar_system
+				}
+				any_neighbor_province = {
+					NOT = { owned_by = ROOT }
+				}
+			}
+			add_province_modifier = {
+				name = estate_nobles_vegvar_system_modifier
+				duration = -1
+			}
+		}
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
+	on_destroyed = {
+		nhs_fort_manpower_remove_all_modifiers = yes
+		to_building_on_destroyed = { BUILDING = fort_16th TIER_2 = yes }
+		to_handle_para_bellum_modifier_on_fort_destroyed = yes
+		to_check_spared_from_greek_fire_on_fort_destroyed = yes
+		# TO END
+		if = {
+			limit = {
+				FROM = {
+					ai = yes
+				}
+			}
+			FROM = { add_treasury = 200 }
+		}
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_vegvar_system_modifier
+			}
+			remove_province_modifier = estate_nobles_vegvar_system_modifier
+		}
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_development_of_castles_mod
+			}
+			remove_province_modifier = estate_nobles_development_of_castles_mod
+		}
+		if = {
+			limit = {
+				has_province_modifier = ned_low_countries_fort_buff
+			}
+			remove_province_modifier = ned_low_countries_fort_buff
+		}
+		if = {
+			limit = {
+				has_province_modifier = ned_low_countries_fort_buff_buffed
+			}
+			remove_province_modifier = ned_low_countries_fort_buff_buffed
+		}
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings destroyed!
+	on_obsolete = {
+	}
+
+	onmap = yes
+
+	influencing_fort = yes
+
+	ai_will_do = {
+		factor = 1.4
+		modifier = {
+			factor = 1000.0
+			has_building = fort_15th
+		}
+		modifier = {
+			factor = 1000.0
+			is_capital = yes
+		}
+		# Third Odyssey
+		modifier = {
+			factor = 0
+			owner = {
+				OR = {
+					technology_group = north_american
+					technology_group = south_american
+				}
+				NOT = { num_of_cities = 4 }
+				NOT = { mil_tech = 7 }
+			}
+		}
+	}
+}
+
+naval_battery = {
+
+	make_obsolete = coastal_defence
+	cost = 200
+	time = 12
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+		has_port = yes
+	}
+	modifier = {
+		blockade_force_required = 1.0
+		hostile_disembark_speed = 2.0
+		hostile_fleet_attrition = 5
+		block_slave_raid = yes
+	}
+
+	on_construction_started = {
+		# to_on_construction_started = { BUILDING = naval_battery }
+	}
+	on_construction_canceled = {
+		# to_on_construction_canceled = { BUILDING = naval_battery }
+	}
+
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_with_obsolete_effect = { BUILDING = naval_battery OLD_BUILDING = coastal_defence }
+		to_handle_naval_bateries_give_defensivness_modifier_on_build = yes
+	}
+
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = naval_battery TIER_2 = yes }
+		to_remove_naval_bateries_give_defensivness = yes
+	}
+
+	ai_will_do = {
+		factor = 1
+		modifier = {
+			factor = 100.0
+			has_province_modifier = slaves_raided
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 10
+			has_building = coastal_defence
+		}
+	}
+}
+
+################################################
+# Tier 3, 17th Century Buildings
+################################################
+cathedral = {
+	make_obsolete = temple
+
+	cost = 300
+	time = 12
+
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	modifier = {
+		local_missionary_strength = 0.03
+		local_tax_modifier = 0.6
+	}
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_with_obsolete_effect = { BUILDING = cathedral OLD_BUILDING = temple }
+		# TO END
+		on_built_tax_building_effect = yes
+		on_province_tax_building_built_estate_privileges_effect = yes
+		add_development_from_upgrading_or_building = {
+			building = cathedral
+			obsolete_building = temple
+			type = tax
+			value = 2
+			upgrade_value = 1
+		}
+		if = {
+			limit = {
+				FROM = { has_government_attribute = on_church_built_clergy_loyalty }
+			}
+			FROM = {
+				add_estate_loyalty = {
+					estate = estate_church
+					loyalty = 5
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = { has_government_attribute = temples_modifier }
+				owned_by = FROM 
+			}
+			add_province_modifier = {
+				name = gov_expanded_temple_rights_mod
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = mosque_local_unrest_flag
+				}
+			}
+			add_province_modifier = {
+				name = turkoman_peaceful_worshipping
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				FROM = { has_country_modifier = mam_mosque_great_mosque_generates_crown_land_modifier }
+			}
+			FROM = {
+				change_estate_land_share = {
+					estate = all
+					share = -0.25
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = { has_government_mechanic = blood_gathering_mechanic }
+			}
+			FROM = {
+				add_government_power = {
+					mechanic_type = blood_gathering_mechanic
+					power_type = blood
+					value = 0.5
+				}
+			}
+		}
+		add_province_modifier = {
+			name = azt_religious_classes
+			duration = -1
+			hidden = yes
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = cathedral TIER_2 = yes }
+		# TO END
+		on_province_tax_building_destroyed_estate_privileges_effect = yes
+		remove_development_from_building = {
+			building = cathedral
+			type = tax
+			value = 2
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = mosque_local_unrest_flag
+				}
+			}
+			remove_province_modifier = turkoman_peaceful_worshipping
+		}
+		if = {
+			limit = {
+				FROM = { has_government_attribute = on_church_built_clergy_loyalty }
+			}
+			FROM = {
+				add_estate_loyalty = {
+					estate = estate_church
+					loyalty = -5
+				}
+			}
+		}
+		remove_province_modifier = gov_expanded_temple_rights_mod
+		if = {
+			limit = {
+				FROM = { has_country_modifier = mam_mosque_great_mosque_generates_crown_land_modifier }
+			}
+			FROM = {
+				change_estate_land_share = {
+					estate = all
+					share = 0.25
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = { has_government_mechanic = blood_gathering_mechanic }
+			}
+			FROM = {
+				add_government_power = {
+					mechanic_type = blood_gathering_mechanic
+					power_type = blood
+					value = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_province_modifier = azt_religious_classes
+			}
+			remove_province_modifier = azt_religious_classes
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 5.0
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		#FROM BUILDINGS
+		modifier = {
+			factor = 0.05
+			OR = {
+				NOT = { num_free_building_slots = 2 }
+				xorme_has_production_buildings_trigger = no
+			}
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 0.4
+			local_autonomy = 75
+		}
+		modifier = {
+			factor = 0.6
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.8
+			local_autonomy = 25
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 3.0
+			base_tax = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_tax = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_tax = 8
+		}
+		#FROM UPGRADE
+		modifier = {
+			factor = 25.0
+			has_building = temple
+		}
+		#FROM TRADE GOODS
+		modifier = {
+			factor = 5.0
+			xorme_province_with_special_goods_produced_trigger = yes
+		}
+		modifier = {
+			factor = 10.0
+			xorme_high_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 15.0
+			xorme_medium_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 20.0
+			xorme_low_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 25.0
+			xorme_lowest_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		modifier = {
+			factor = 100.0
+			num_free_building_slots = 3
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+
+university = {
+	cost = 300
+	time = 12
+
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	modifier = {
+		local_development_cost = -0.20
+		allowed_num_of_buildings = 1
+	}
+
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_effect = { BUILDING = university }
+		# TO END
+		add_development_from_building = {
+			building = university
+			type = tax
+			value = 2
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = university TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = university
+			type = tax
+			value = 2
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		# Hard coded AI sees no value in this above the 0.01 ducats base. Let's multiply that
+		factor = 25.0 # Base of 0.01 ducats per MONTH
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0
+			is_state = no
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 0.5
+			NOT = { development = 20 }
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 0.05
+			OR = {
+				NOT = { num_free_building_slots = 2 }
+				xorme_has_production_buildings_trigger = no
+			}
+		}
+		modifier = {
+			factor = 0.4
+			local_autonomy = 75
+		}
+		modifier = {
+			factor = 0.6
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.8
+			local_autonomy = 25
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 10.0
+			development = 20
+		}
+		modifier = {
+			factor = 20.0
+			development = 30
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+trade_depot = {
+	cost = 300
+	time = 12
+
+	make_obsolete = marketplace
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	modifier = {
+		province_trade_power_modifier = 1
+	}
+
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_with_obsolete_effect = { BUILDING = trade_depot OLD_BUILDING = marketplace }
+		# TO END
+		add_development_from_upgrading_or_building = {
+			building = trade_depot
+			obsolete_building = marketplace
+			type = production
+			value = 2
+			upgrade_value = 1
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = trade_depot TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = trade_depot
+			type = production
+			value = 2
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 2.5 # Because hard-coded AI only considers what it will gain, not what its enemies will lose.
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		#FROM UPGRADE
+		modifier = {
+			factor = 25.0
+			has_building = marketplace
+		}
+		modifier = {
+			factor = 10
+			province_has_center_of_trade_of_level = 1
+		}
+		modifier = {
+			factor = 20
+			province_has_center_of_trade_of_level = 2
+		}
+		modifier = {
+			factor = 30
+			province_has_center_of_trade_of_level = 3
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+	}
+}
+
+grand_shipyard = {
+	cost = 300
+	time = 12
+
+	make_obsolete = shipyard
+
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+		has_port = yes
+		# Third Odyssey
+		NOT = {
+			to_has_great_project_at_least_at_tier_1 = {
+				TYPE = nhs_elysian_arsenal
+			}
+		}
+		NOT = {
+			AND = {
+				area = chesapeake_area
+				950 = {
+					has_great_project = {
+						type = nhs_elysian_arsenal
+						tier = 3
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		naval_forcelimit = 4
+		ship_recruit_speed = -0.50
+		local_ship_repair = 0.50
+		local_has_man_of_war = yes
+		local_has_galleass = yes
+	}
+
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_with_obsolete_effect = { BUILDING = grand_shipyard OLD_BUILDING = shipyard }
+		# TO END
+		add_development_from_upgrading_or_building = {
+			building = grand_shipyard
+			obsolete_building = shipyard
+			type = production
+			value = 2
+			upgrade_value = 1
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = grand_shipyard TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = grand_shipyard
+			type = production
+			value = 2
+		}
+		if = {
+			limit = { has_province_modifier = sca_swe_danish_shipyard }
+			remove_province_modifier = sca_swe_danish_shipyard
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 6.5
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 0
+			FROM = {
+				NOT = { navy_size_percentage = 0.9 }
+			}
+		}
+		modifier = {
+			factor = 0.05
+			OR = {
+				NOT = { num_free_building_slots = 2 }
+				xorme_has_production_buildings_trigger = no
+			}
+		}
+		modifier = {
+			factor = 0.4
+			local_autonomy = 75
+		}
+		modifier = {
+			factor = 0.6
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.8
+			local_autonomy = 25
+		}
+		#FROM UPGRADE
+		modifier = {
+			factor = 25.0
+			has_building = shipyard
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 3.0
+			FROM = { num_of_ports = 5 }
+		}
+		modifier = {
+			factor = 6.0
+			FROM = { num_of_ports = 10 }
+		}
+		modifier = {
+			factor = 9.0
+			FROM = { num_of_ports = 15 }
+		}
+		modifier = {
+			factor = 10.0
+			NOT = { development = 7 }
+		}
+		#BUILDINGS
+		modifier = {
+			factor = 10.0
+			xorme_has_production_buildings_trigger = yes
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		modifier = {
+			factor = 100.0
+			num_free_building_slots = 3
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+training_fields = {
+	cost = 300
+	time = 12
+
+	make_obsolete = barracks
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	modifier = {
+		local_manpower_modifier = 1
+	}
+	
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = training_fields REMOVE_BUILDING_MODIFIER = barracks }
+		to_building_on_build_with_obsolete_effect = { BUILDING = training_fields OLD_BUILDING = barracks }
+		# TO END
+		if = {
+			limit = {
+				FROM = {
+					has_government_attribute = manpower_sailors_on_build
+				}
+			}
+			FROM = {
+				add_manpower = 1
+			}
+		}
+		add_development_from_upgrading_or_building = {
+			building = training_fields
+			obsolete_building = barracks
+			type = manpower
+			value = 2
+			upgrade_value = 1
+		}
+		update_improved_military_buildings_modifier = {
+			building = training_fields
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = 0.001
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = azt_calpulli_houses_flag
+				}
+			}
+			add_province_modifier = {
+				name = azt_barracks_households
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
+	on_destroyed = {
+		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = training_fields }
+		to_building_on_destroyed = { BUILDING = training_fields TIER_2 = yes }
+		# TO END
+		if = {
+			limit = {
+				FROM = {
+					has_government_attribute = manpower_sailors_on_build
+				}
+			}
+			FROM = {
+				add_manpower = -1
+			}
+		}
+		update_improved_military_buildings_modifier = {
+			building = training_fields
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = -0.001
+			}
+		}
+		remove_development_from_building = {
+			building = training_fields
+			type = manpower
+			value = 2
+		}
+		if = {
+			limit = {
+				has_province_modifier = azt_barracks_households
+			}
+			remove_province_modifier = azt_barracks_households
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 3.5
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 0.05
+			OR = {
+				NOT = { num_free_building_slots = 2 }
+				xorme_has_production_buildings_trigger = no
+			}
+		}
+		modifier = {
+			factor = 0.4
+			local_autonomy = 75
+		}
+		modifier = {
+			factor = 0.6
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.8
+			local_autonomy = 25
+		}
+		#FROM UPGRADE
+		modifier = {
+			factor = 25.0
+			has_building = barracks
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 3.0
+			base_manpower = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_manpower = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_manpower = 8
+		}
+		#FROM TRADE GOODS
+		modifier = {
+			factor = 10.0
+			xorme_additional_manpower_goods_trigger = yes
+		}
+		#BUILDINGS
+		modifier = {
+			factor = 10.0
+			xorme_has_production_buildings_trigger = yes
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+fort_17th = {
+	cost = 600
+	time = 30
+
+	build_trigger = {
+		if = {
+			limit = { 
+				FROM = { 
+					ai = yes 
+					NOT ={ 
+						overlord = {
+							ai = no
+						}
+					}
+				}
+			}
+			OR = {
+				is_capital_of = FROM
+				all_neighbor_province = {
+					NOT = {
+						OR = {
+							xorme_ai_is_building_fort_trigger = yes
+							xorme_ai_has_any_fort_trigger = yes
+							has_influencing_fort = yes
+						}
+					}
+				}	
+			}
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	make_obsolete = fort_16th
+
+	modifier = {
+		fort_level = 6
+	}
+
+	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 6 }
+		to_building_on_build_with_two_obsolete_effect = { BUILDING = fort_17th OLD_BUILDING = fort_16th OLD_BUILDING_2 = fort_15th }
+		to_handle_para_bellum_modifier_fort_build = yes
+		to_check_spared_from_greek_fire_on_fort_build = yes
+		# TO END
+		if = {
+			limit = {
+				FROM = { NOT = { mil_tech = 19 } has_government_attribute = on_fort_built_nobles_loyalty }
+			}
+			FROM = {
+				to_add_noble_estate_loyalty = {
+					loyalty = 5
+				}
+				if = {
+					limit = {
+						has_estate = estate_maratha
+					}
+					add_estate_loyalty = {
+						estate = estate_maratha
+						loyalty = 5
+					}
+				}
+				if = {
+					limit = {
+						has_estate = estate_rajput
+					}
+					add_estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 5
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_development_of_castles
+				}
+				NOT = { has_province_modifier = estate_nobles_development_of_castles_mod }
+			}
+			add_province_modifier = {
+				name = estate_nobles_development_of_castles_mod
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = ned_buffed_forts_flag
+					NOT = {
+						full_idea_group = defensive_ideas
+					}
+				}
+				region = low_countries_region
+			}
+			add_province_modifier = {
+				name = ned_low_countries_fort_buff
+				duration = -1
+				hidden = yes
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_country_flag = ned_buffed_forts_flag
+					full_idea_group = defensive_ideas
+				}
+				region = low_countries_region
+			}
+			add_province_modifier = {
+				name = ned_low_countries_fort_buff_buffed
+				duration = -1
+				hidden = yes
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_vegvar_system
+				}
+				any_neighbor_province = {
+					NOT = { owned_by = ROOT }
+				}
+			}
+			add_province_modifier = {
+				name = estate_nobles_vegvar_system_modifier
+				duration = -1
+			}
+		}
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
+	on_destroyed = {
+		nhs_fort_manpower_remove_all_modifiers = yes
+		to_building_on_destroyed = { BUILDING = fort_17th TIER_3 = yes }
+		to_handle_para_bellum_modifier_on_fort_destroyed = yes
+		to_check_spared_from_greek_fire_on_fort_destroyed = yes
+		# TO END
+		if = {
+			limit = {
+				FROM = {
+					ai = yes
+				}
+			}
+			FROM = { add_treasury = 300 }
+		}
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_vegvar_system_modifier
+			}
+			remove_province_modifier = estate_nobles_vegvar_system_modifier
+		}
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_development_of_castles_mod
+			}
+			remove_province_modifier = estate_nobles_development_of_castles_mod
+		}
+		if = {
+			limit = {
+				has_province_modifier = ned_low_countries_fort_buff
+			}
+			remove_province_modifier = ned_low_countries_fort_buff
+		}
+		if = {
+			limit = {
+				has_province_modifier = ned_low_countries_fort_buff_buffed
+			}
+			remove_province_modifier = ned_low_countries_fort_buff_buffed
+		}
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings destroyed!
+	on_obsolete = {
+	}
+
+	onmap = yes
+	influencing_fort = yes
+
+	ai_will_do = {
+		factor = 1.6
+		modifier = {
+			factor = 1000.0
+			OR = {
+				has_building = fort_15th
+				has_building = fort_16th
+			}
+		}
+		modifier = {
+			factor = 1000.0
+			is_capital = yes
+		}
+		# Third Odyssey
+		modifier = {
+			factor = 0
+			owner = {
+				OR = {
+					technology_group = north_american
+					technology_group = south_american
+				}
+				NOT = { num_of_cities = 4 }
+				NOT = { mil_tech = 7 }
+			}
+		}
+	}
+}
+
+
+
+################################################
+# Tier 4, 18th Century Buildings
+################################################
+stock_exchange = {
+	cost = 400
+	time = 12
+
+	make_obsolete = trade_depot
+	
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	modifier = {
+		province_trade_power_modifier = 1.25
+	}
+
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_with_two_obsolete_effect = { BUILDING = stock_exchange OLD_BUILDING = trade_depot OLD_BUILDING_2 = marketplace }
+		# TO END
+		if = {
+			limit = {
+				has_province_flag = built_dev_trade_depot
+			}
+			add_development_from_upgrading_or_building = {
+				building = stock_exchange
+				obsolete_building = trade_depot
+				type = production
+				value = 3
+				upgrade_value = 1
+			}
+		}
+		else_if = {
+			limit = {
+				has_province_flag = built_dev_marketplace
+			}
+			add_development_from_upgrading_or_building = {
+				building = stock_exchange
+				obsolete_building = marketplace
+				type = production
+				value = 3
+				upgrade_value = 2
+			}
+		}
+		else = {
+			add_development_from_building = {
+				building = stock_exchange
+				type = production
+				value = 3
+			}
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = stock_exchange TIER_3 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = stock_exchange
+			type = production
+			value = 3
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 3.5 # Because hard-coded AI only considers what it will gain, not what its enemies will lose.
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		#FROM UPGRADE
+		modifier = {
+			factor = 25.0
+			OR = {
+				has_building = marketplace
+				has_building = trade_depot
+			}
+		}
+		modifier = {
+			factor = 10
+			province_has_center_of_trade_of_level = 1
+		}
+		modifier = {
+			factor = 20
+			province_has_center_of_trade_of_level = 2
+		}
+		modifier = {
+			factor = 30
+			province_has_center_of_trade_of_level = 3
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+	}
+}
+
+counting_house = {
+	cost = 400
+	time = 12
+
+	make_obsolete = workshop
+
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	modifier = {
+		local_production_efficiency = 1
+	}
+
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_with_obsolete_effect = { BUILDING = counting_house OLD_BUILDING = workshop }
+		# TO END
+		add_development_from_upgrading_or_building = {
+			building = counting_house
+			obsolete_building = workshop
+			type = production
+			value = 2
+			upgrade_value = 1
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = counting_house TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = counting_house
+			type = production
+			value = 2
+		}
+	}
+	on_obsolete = {
+	}
+
+	allow_in_gold_provinces = no
+
+	ai_will_do = {
+		factor = 15.0
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 0.25
+			num_free_building_slots = 2
+		}
+		modifier = {
+			factor = 0.4
+			local_autonomy = 75
+		}
+		modifier = {
+			factor = 0.6
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.8
+			local_autonomy = 25
+		}
+		#FROM UPGRADE
+		modifier = {
+			factor = 25.0
+			has_building = workshop
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 3.0
+			base_production = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_production = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_production = 8
+		}
+		#FROM TRADE GOODS
+		modifier = {
+			factor = 5.0
+			xorme_lowest_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 10.0
+			xorme_low_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 15.0
+			xorme_medium_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 20.0
+			xorme_high_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 25.0
+			xorme_province_with_special_goods_produced_trigger = yes
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+town_hall = {
+	cost = 200
+	time = 12
+
+	make_obsolete = courthouse
+
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	modifier = {
+		local_state_maintenance_modifier = -0.5
+		local_autonomy = -0.2
+		local_governing_cost = -0.5
+		allowed_num_of_buildings = 1
+	}
+
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_with_obsolete_effect = { BUILDING = town_hall OLD_BUILDING = courthouse }
+		# TO END
+		add_development_from_upgrading_or_building = {
+			building = town_hall
+			obsolete_building = courthouse
+			type = tax
+			value = 2
+			upgrade_value = 1
+		}
+		if = { 
+			limit = { 
+				FROM = { has_country_flag = fra_courthouse_bonus_flag }
+				NOT = { has_province_modifier = fra_improved_court_houses_modifier }
+			}
+			add_province_modifier = {
+				name = fra_improved_court_houses_modifier
+				duration = -1 
+			}
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = town_hall TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = town_hall
+			type = tax
+			value = 2
+		}
+		remove_province_modifier = fra_improved_court_houses_modifier 
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 25.0
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0
+			area_for_scope_province = {
+				is_capital_of = FROM
+			}
+		}
+		modifier = {
+			factor = 0.25
+			num_free_building_slots = 2
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 1.5
+			local_autonomy = 25
+		}
+		modifier = {
+			factor = 3.0
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 4.5
+			local_autonomy = 75
+		}
+		#FROM UPGRADE
+		modifier = {
+			factor = 25.0
+			has_building = courthouse
+		}
+		#FROM GOV CAP
+		modifier = {
+			factor = 5.0
+			FROM = { governing_capacity_percentage = 0.9 }
+		}
+		modifier = {
+			factor = 10.0
+			FROM = { governing_capacity_percentage = 1.0 }
+		}
+		modifier = {
+			factor = 15.0
+			FROM = { governing_capacity_percentage = 1.1 }
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+drydock = {
+	cost = 300
+	time = 12
+
+	make_obsolete = dock
+
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+		has_port = yes
+	}
+
+	modifier = {
+		local_sailors_modifier = 1.0
+		local_has_man_of_war = yes
+		local_has_galleass = yes
+	}
+	
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_assemble_an_invasion_force_mission_add_building_modifier = { BUILDING = drydock REMOVE_BUILDING_MODIFIER = dock }
+		to_building_on_build_with_obsolete_effect = { BUILDING = drydock OLD_BUILDING = dock }
+		# TO END
+		if = {
+			limit = {
+				FROM = {
+					has_government_attribute = manpower_sailors_on_build
+				}
+			}
+			FROM = {
+				add_sailors = 200
+			}
+		}
+		add_development_from_upgrading_or_building = {
+			building = drydock
+			obsolete_building = dock
+			type = production
+			value = 2
+			upgrade_value = 1
+		}
+	}
+	
+	on_destroyed = {
+		to_assemble_an_invasion_force_mission_remove_building_modifier = { BUILDING = drydock }
+		to_building_on_destroyed = { BUILDING = drydock TIER_2 = yes }
+		# TO END
+		if = {
+			limit = {
+				FROM = {
+					has_government_attribute = manpower_sailors_on_build
+				}
+			}
+			FROM = {
+				add_sailors = -200
+			}
+		}
+		remove_development_from_building = {
+			building = drydock
+			type = production
+			value = 2
+		}
+	}
+	on_obsolete = {
+	}
+
+
+	ai_will_do = {
+		factor = 1
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+	}
+}
+
+conscription_center = {
+	cost = 400
+	time = 12
+
+	make_obsolete = regimental_camp
+
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	modifier = {
+		land_forcelimit = 2
+	}
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_building_on_build_with_obsolete_effect = { BUILDING = conscription_center OLD_BUILDING = regimental_camp }
+		# TO END
+		add_development_from_upgrading_or_building = {
+			building = conscription_center
+			obsolete_building = regimental_camp
+			type = manpower
+			value = 2
+			upgrade_value = 1
+		}
+		update_improved_military_buildings_modifier = {
+			building = conscription_center
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = 0.001
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = azt_calpulli_houses_flag
+				}
+			}
+			add_province_modifier = {
+				name = azt_conscription_households
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = conscription_center TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = conscription_center
+			type = manpower
+			value = 2
+		}
+		update_improved_military_buildings_modifier = {
+			building = conscription_center
+		}
+		if = {
+			limit = {
+				FROM = {
+					mission_completed = jap_tanegashima_teppo
+					has_dlc = "Cradle of Civilization" 
+				}
+			}
+			FROM = {
+				add_army_professionalism = -0.001
+			}
+		}
+		if = {
+			limit = {
+				has_province_modifier = azt_conscription_households
+			}
+			remove_province_modifier = azt_conscription_households
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 6.5
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		#FROM AUTONOMY
+		modifier = {
+			factor = 0
+			FROM = {
+				NOT = { army_size_percentage = 0.9 }
+			}
+		}
+		modifier = {
+			factor = 0.05
+			OR = {
+				NOT = { num_free_building_slots = 2 }
+				xorme_has_production_buildings_trigger = no
+			}
+		}
+		modifier = {
+			factor = 0.4
+			local_autonomy = 75
+		}
+		modifier = {
+			factor = 0.6
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.8
+			local_autonomy = 25
+		}
+		#FROM UPGRADE
+		modifier = {
+			factor = 25.0
+			has_building = regimental_camp
+		}
+		#FROM BASE DEV
+		modifier = {
+			factor = 3.0
+			FROM = { num_of_cities = 5 }
+		}
+		modifier = {
+			factor = 6.0
+			FROM = { num_of_cities = 10 }
+		}
+		modifier = {
+			factor = 9.0
+			FROM = { num_of_cities = 15 }
+		}
+		modifier = {
+			factor = 20.0
+			NOT = { development = 7 }
+		}
+		#BUILDINGS
+		modifier = {
+			factor = 100.0
+			xorme_has_production_buildings_trigger = yes
+		}
+		modifier = {
+			factor = 100.0
+			has_province_modifier = xorme_ai_agenda_building_spot
+		}
+		#FROM CASH
+		modifier = {
+			factor = 100.0
+			FROM = {
+				treasury = 7500
+			}
+		}
+	}
+}
+
+fort_18th = {
+	cost = 800
+	time = 30
+
+	build_trigger = {
+		if = {
+			limit = { 
+				FROM = { 
+					ai = yes 
+					NOT ={ 
+						overlord = {
+							ai = no
+						}
+					}
+				}
+			}
+			OR = {
+				is_capital_of = FROM
+				all_neighbor_province = {
+					NOT = {
+						OR = {
+							xorme_ai_is_building_fort_trigger = yes
+							xorme_ai_has_any_fort_trigger = yes
+							has_influencing_fort = yes
+						}
+					}
+				}	
+			}
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	make_obsolete = fort_17th
+
+	modifier = {
+		fort_level = 8
+	}
+
+	# THIS = Province, FROM = Builder(not nessecairly owner, can be overlord)
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		nhs_fort_manpower_add_modifier = { FORT_LEVEL = 8 }
+		to_building_on_build_with_three_obsolete_effect = { BUILDING = fort_18th OLD_BUILDING = fort_17th OLD_BUILDING_2 = fort_16th OLD_BUILDING_3 = fort_15th }
+		to_handle_para_bellum_modifier_fort_build = yes
+		to_check_spared_from_greek_fire_on_fort_build = yes
+		# TO END
+		if = {
+			limit = {
+				FROM = { has_government_attribute = on_fort_built_nobles_loyalty }
+			}
+			FROM = {
+				to_add_noble_estate_loyalty = {
+					loyalty = 5
+				}
+				if = {
+					limit = {
+						has_estate = estate_maratha
+					}
+					add_estate_loyalty = {
+						estate = estate_maratha
+						loyalty = 5
+					}
+				}
+				if = {
+					limit = {
+						has_estate = estate_rajput
+					}
+					add_estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 5
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_development_of_castles
+				}
+				NOT = { has_province_modifier = estate_nobles_development_of_castles_mod }
+			}
+			add_province_modifier = {
+				name = estate_nobles_development_of_castles_mod
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = ned_buffed_forts_flag
+					NOT = {
+						full_idea_group = defensive_ideas
+					}
+				}
+				region = low_countries_region
+			}
+			add_province_modifier = {
+				name = ned_low_countries_fort_buff
+				duration = -1
+				hidden = yes
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_country_flag = ned_buffed_forts_flag
+					full_idea_group = defensive_ideas
+				}
+				region = low_countries_region
+			}
+			add_province_modifier = {
+				name = ned_low_countries_fort_buff_buffed
+				duration = -1
+				hidden = yes
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_vegvar_system
+				}
+				any_neighbor_province = {
+					NOT = { owned_by = ROOT }
+				}
+			}
+			add_province_modifier = {
+				name = estate_nobles_vegvar_system_modifier
+				duration = -1
+			}
+		}
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings made obsolete!
+	on_destroyed = {
+		nhs_fort_manpower_remove_all_modifiers = yes
+		to_building_on_destroyed = { BUILDING = fort_18th TIER_4 = yes }
+		to_handle_para_bellum_modifier_on_fort_destroyed = yes
+		to_check_spared_from_greek_fire_on_fort_destroyed = yes
+		# TO END
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_vegvar_system_modifier
+			}
+			remove_province_modifier = estate_nobles_vegvar_system_modifier
+		}
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_development_of_castles_mod
+			}
+			remove_province_modifier = estate_nobles_development_of_castles_mod
+		}
+		if = {
+			limit = {
+				has_province_modifier = ned_low_countries_fort_buff
+			}
+			remove_province_modifier = ned_low_countries_fort_buff
+		}
+		if = {
+			limit = {
+				has_province_modifier = ned_low_countries_fort_buff_buffed
+			}
+			remove_province_modifier = ned_low_countries_fort_buff_buffed
+		}
+	}
+
+	# THIS = Province, FROM = Destroyer, Will not be called on buildings destroyed!
+	on_obsolete = {
+	}
+
+	onmap = yes
+	influencing_fort = yes
+
+	ai_will_do = {
+		factor = 1.8
+		modifier = {
+			factor = 1000.0
+			OR = {
+				has_building = fort_15th
+				has_building = fort_16th
+				has_building = fort_17th
+			}
+		}
+		modifier = {
+			factor = 1000.0
+			is_capital = yes
+		}
+		# Third Odyssey
+		modifier = {
+			factor = 0
+			owner = {
+				OR = {
+					technology_group = north_american
+					technology_group = south_american
+				}
+				NOT = { num_of_cities = 4 }
+				NOT = { mil_tech = 7 }
+			}
+		}
+	}
+}
+
+################################################
+# Manufactories
+################################################
+
+manufactory = {
+	cost = 500
+	time = 60
+	modifier = {
+		trade_goods_size = 1.0
+	}
+}
+
+#If trade good assignment changes, also update scripted trigger "has_manufactory trigger"!
+
+wharf = {
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	manufactory = {
+		naval_supplies
+		fish
+		salt
+	}
+	onmap = yes
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = manufactory }
+		to_building_on_build_effect = {
+			BUILDING = marketplace
+		}
+		# TO END
+		add_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1 
+		}
+		
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = manufactory TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 1000
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0.4
+			NOT = { base_production = 3 }
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { base_production = 4 }
+		}
+		modifier = {
+			factor = 3.0
+			base_production = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_production = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_production = 8
+		}
+		modifier = {
+			factor = 10.0
+			base_production = 15
+		}
+		modifier = {
+			factor = 2.5
+			has_building = workshop
+		}
+		modifier = {
+			factor = 3.5
+			has_building = counting_house
+		}
+		modifier = {
+			factor = 10.0
+			xorme_province_with_special_goods_produced_trigger = yes
+		}
+	}
+}
+
+weapons = {
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	manufactory = {
+		copper
+		iron
+	}
+	onmap = yes
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = manufactory }
+		# TO END
+		add_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1 
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = manufactory TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 1000
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0.4
+			NOT = { base_production = 3 }
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { base_production = 4 }
+		}
+		modifier = {
+			factor = 3.0
+			base_production = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_production = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_production = 8
+		}
+		modifier = {
+			factor = 10.0
+			base_production = 15
+		}
+		modifier = {
+			factor = 2.5
+			has_building = workshop
+		}
+		modifier = {
+			factor = 3.5
+			has_building = counting_house
+		}
+		modifier = {
+			factor = 10.0
+			xorme_province_with_special_goods_produced_trigger = yes
+		}
+	}
+}
+
+textile = {
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	manufactory = {
+		wool
+		cloth
+		silk
+		dyes
+		elysian_silk
+		skoros_silk
+	}
+	onmap = yes
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = manufactory }
+		# TO END
+		add_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1 
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = manufactory TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 1000
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0.4
+			NOT = { base_production = 3 }
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { base_production = 4 }
+		}
+		modifier = {
+			factor = 3.0
+			base_production = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_production = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_production = 8
+		}
+		modifier = {
+			factor = 10.0
+			base_production = 15
+		}
+		modifier = {
+			factor = 2.5
+			has_building = workshop
+		}
+		modifier = {
+			factor = 3.5
+			has_building = counting_house
+		}
+		modifier = {
+			factor = 10.0
+			xorme_province_with_special_goods_produced_trigger = yes
+		}
+	}
+}
+
+plantations = {
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	manufactory = {
+		coffee
+		cotton
+		sugar
+		tobacco
+		tea
+		cocoa
+	}
+	onmap = yes
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = manufactory }
+		# TO END
+		add_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1 
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = manufactory TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 1000
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0.4
+			NOT = { base_production = 3 }
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { base_production = 4 }
+		}
+		modifier = {
+			factor = 3.0
+			base_production = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_production = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_production = 8
+		}
+		modifier = {
+			factor = 10.0
+			base_production = 15
+		}
+		modifier = {
+			factor = 2.5
+			has_building = workshop
+		}
+		modifier = {
+			factor = 3.5
+			has_building = counting_house
+		}
+		modifier = {
+			factor = 10.0
+			xorme_province_with_special_goods_produced_trigger = yes
+		}
+	}
+}
+
+tradecompany = {
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	manufactory = {
+		ivory
+		slaves
+		spices
+		cloves
+		fur
+		incense
+	}
+	onmap = yes
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = manufactory }
+		# TO END
+		add_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1 
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = manufactory TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 1000
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0.4
+			NOT = { base_production = 3 }
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { base_production = 4 }
+		}
+		modifier = {
+			factor = 3.0
+			base_production = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_production = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_production = 8
+		}
+		modifier = {
+			factor = 10.0
+			base_production = 15
+		}
+		modifier = {
+			factor = 2.5
+			has_building = workshop
+		}
+		modifier = {
+			factor = 3.5
+			has_building = counting_house
+		}
+		modifier = {
+			factor = 10.0
+			xorme_province_with_special_goods_produced_trigger = yes
+		}
+	}
+}
+
+farm_estate = {
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	manufactory = {
+		grain
+		livestock
+		wine
+		norse_mead
+	}
+	onmap = yes
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = manufactory }
+		# TO END
+		add_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = geo_wine_manufactory_flag
+				}
+			}
+			add_base_production = 1
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = manufactory TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = manufactory 
+			type = production 
+			value = 2 
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = geo_wine_manufactory_flag
+				}
+			}
+			add_base_production = -1
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 1000
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0.4
+			NOT = { base_production = 3 }
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { base_production = 4 }
+		}
+		modifier = {
+			factor = 3.0
+			base_production = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_production = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_production = 8
+		}
+		modifier = {
+			factor = 10.0
+			base_production = 15
+		}
+		modifier = {
+			factor = 2.5
+			has_building = workshop
+		}
+		modifier = {
+			factor = 3.5
+			has_building = counting_house
+		}
+		modifier = {
+			factor = 10.0
+			xorme_province_with_special_goods_produced_trigger = yes
+		}
+	}
+}
+
+mills = {
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	manufactory = {
+		paper
+		gems
+		tropical_wood
+		glass
+		chinaware
+	}
+	onmap = yes
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = manufactory }
+		# TO END
+		add_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1 
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = manufactory TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = production 
+			value = 1
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 1000
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0.4
+			NOT = { base_production = 3 }
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { base_production = 4 }
+		}
+		modifier = {
+			factor = 3.0
+			base_production = 4
+		}
+		modifier = {
+			factor = 6.0
+			base_production = 6
+		}
+		modifier = {
+			factor = 9.0
+			base_production = 8
+		}
+		modifier = {
+			factor = 10.0
+			base_production = 15
+		}
+		modifier = {
+			factor = 2.5
+			has_building = workshop
+		}
+		modifier = {
+			factor = 3.5
+			has_building = counting_house
+		}
+		modifier = {
+			factor = 10.0
+			xorme_province_with_special_goods_produced_trigger = yes
+		}
+	}
+}
+
+furnace = {
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	manufactory = {
+		coal
+		coal_2
+	}
+	
+	# potential = {
+		# has_dlc = "Rule Britannia"
+	# }
+
+	modifier = {
+		global_trade_goods_size_modifier = 0.05 #National Bonus
+	}
+	onmap = yes
+	show_separate = yes # Means as a manufactory it will be shown according to the old way
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = manufactory }
+		# TO END
+		add_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = manufactory TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 2000.0
+		modifier = {
+			factor = 4.0
+			development = 10
+		}
+	}
+}
+
+ramparts = {
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	manufactory = {
+		all
+	}
+
+	#build_trigger = {
+	#	is_flatland = yes
+	#}
+	modifier = {
+		local_hostile_attrition = 1
+		local_defensiveness = 0.15
+		local_defender_dice_roll_bonus = 1
+	}
+	onmap = no
+	show_separate = yes # Means as a manufactory it will be shown according to the old way
+	
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = ramparts }
+		# TO END
+		add_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1 
+		}
+		if = {
+			limit = {
+				owner = {
+					has_estate_privilege = estate_nobles_development_of_castles
+				}
+				NOT = { has_province_modifier = estate_nobles_development_of_castles_ramparts_mod }
+			}
+			add_province_modifier = {
+				name = estate_nobles_development_of_castles_ramparts_mod
+				duration = -1
+			}
+		}
+	}
+	
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = ramparts TIER_2 = yes }
+		# TO END
+		if = {
+			limit = { has_province_modifier = per_reinforced_defenses }
+			remove_province_modifier = per_reinforced_defenses
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1
+		}
+		if = {
+			limit = {
+				has_province_modifier = estate_nobles_development_of_castles_ramparts_mod
+			}
+			remove_province_modifier = estate_nobles_development_of_castles_ramparts_mod
+		}
+	}
+	ai_will_do = {
+		factor = 0
+	}
+}
+
+soldier_households = {
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+	manufactory = {
+		all
+	}
+
+	bonus_manufactory = { # Will apply an extra modifier if these goods
+		grain
+		fish
+		livestock
+		wine
+	}
+
+	modifier = {
+		local_manpower = 0.75
+	}
+	bonus_modifier = {
+		local_manpower = 0.75
+	}
+	onmap = no
+	show_separate = yes # Means as a manufactory it will be shown according to the old way
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = soldier_households }
+		# TO END
+		add_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		add_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1 
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_government_attribute = improved_military_buildings
+				}
+			}
+			add_province_modifier = {
+				name = wei_suo_system_reform_soldier_households_modifier
+				duration = -1
+			}
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = soldier_households TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = manufactory
+			type = production
+			value = 2
+		}
+		remove_dev_from_building = {
+			building = manufactory 
+			type = manpower 
+			value = 1
+		}
+		if = {
+			limit = {
+				has_province_modifier = wei_suo_system_reform_soldier_households_modifier
+			}
+			remove_province_modifier = wei_suo_system_reform_soldier_households_modifier
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 10.0
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 0.1
+			xorme_high_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 0.2
+			xorme_medium_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0.5
+			base_production = 5
+		}
+		modifier = {
+			factor = 2.5
+			base_manpower = 4
+		}
+		modifier = {
+			factor = 5.0
+			base_manpower = 8
+		}
+		modifier = {
+			factor = 7.5
+			base_manpower = 12
+		}
+		modifier = {
+			factor = 10.0
+			OR = {
+				has_building = barracks
+				has_building = training_fields
+			}
+		}
+		modifier = {
+			factor = 1000
+			xorme_additional_manpower_goods_trigger = yes
+		}
+	}
+}
+
+impressment_offices = {
+	manufactory = {
+		all
+	}
+
+	bonus_manufactory = { # Will apply an extra modifier if these goods
+		salt
+		fish
+		naval_supplies
+		tropical_wood
+	}
+
+	build_trigger = {
+		has_port = yes
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+	}
+
+	modifier = {
+		local_sailors = 250
+		ship_recruit_speed = -0.1
+		local_ship_cost = -0.05
+	}
+	bonus_modifier = {
+		local_sailors = 250
+		ship_recruit_speed = -0.1
+		local_ship_cost = -0.05
+	}
+	onmap = no
+	show_separate = yes # Means as a manufactory it will be shown according to the old way
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = impressment_offices }
+		# TO END
+		add_development_from_building = {
+			building = impressment_offices
+			type = manpower
+			value = 2
+		}
+		add_dev_from_building = {
+			building = impressment_offices 
+			type = manpower 
+			value = 1 
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = impressment_offices TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = impressment_offices
+			type = manpower
+			value = 2
+		}
+		remove_dev_from_building = {
+			building = impressment_offices 
+			type = manpower 
+			value = 1 
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 5
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 0.1
+			xorme_high_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 0.2
+			xorme_medium_quality_trade_goods_trigger = yes
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+	}
+}
+
+
+state_house = {
+	manufactory = {
+		all
+	}
+
+	bonus_manufactory = { # Will apply an extra modifier if these goods
+		paper
+		glass
+		gems
+	}
+
+	build_trigger = {
+		if = {
+			limit = { FROM = { ai = yes } }
+			FROM = { 
+				OR = {
+					NOT = { num_of_loans = 4 } 
+					overlord = {
+						ai = no
+					}
+				}
+			}
+		}
+		NOT = {
+			area_for_scope_province = {
+				FROM = {
+					tag = ROOT
+				}
+				OR = {
+					has_building = state_house
+					has_construction = state_house
+				}
+			}
+		}
+	}
+
+	keep_trigger = {
+		NOT = {
+			area_for_scope_province = {
+				NOT = { province_id = root }
+				FROM = {
+					tag = ROOT
+				}
+				OR = {
+					has_building = state_house
+					has_construction = state_house
+				}
+			}
+		}
+	}
+	modifier = {
+		statewide_governing_cost = -0.2
+		min_local_autonomy = -5
+		local_governing_cost = -0.15
+		local_governing_cost_increase = -10
+		allowed_num_of_buildings = 1
+	}
+	bonus_modifier = {
+		statewide_governing_cost = -0.2
+		min_local_autonomy = -5
+		local_governing_cost = -0.15
+		local_governing_cost_increase = -10
+	}
+	onmap = no
+	show_separate = yes # Means as a manufactory it will be shown according to the old way
+	on_built = {
+		to_add_administrative_burden_building_construction = yes
+		to_manufactory_on_build_effect_ely = { BUILDING = state_house }
+		# TO END
+		add_development_from_building = {
+			building = state_house
+			type = tax
+			value = 2
+		}
+	}
+	on_destroyed = {
+		to_building_on_destroyed = { BUILDING = state_house TIER_2 = yes }
+		# TO END
+		remove_development_from_building = {
+			building = state_house
+			type = tax
+			value = 2
+		}
+	}
+	on_obsolete = {
+	}
+
+	ai_will_do = {
+		factor = 35.0
+		modifier = {
+			factor = 0
+			FROM = { num_of_loans = 1 }
+		}
+		modifier = {
+			factor = 4.5
+			owner = { is_subject = yes }
+		}
+		modifier = {
+			factor = 100.0
+			FROM = { treasury = 10000 }
+		}
+		modifier = {
+			factor = 0
+			xorme_province_with_special_goods_produced_trigger = yes
+			NOT = { trade_goods = gold }
+		}
+		modifier = {
+			factor = 25.0
+			is_state = yes
+		}
+		modifier = {
+			factor = 25.0
+			FROM = { governing_capacity_percentage = 0.9 }
+		}
+		modifier = {
+			factor = 25.0
+			NOT = {
+				AND = {
+					base_manpower = 4
+					base_production = 4
+					base_tax = 4
+				}
+			}
+		}
+		modifier = {
+			factor = 2000
+			trade_goods = gold
+		}
+	}
+}
