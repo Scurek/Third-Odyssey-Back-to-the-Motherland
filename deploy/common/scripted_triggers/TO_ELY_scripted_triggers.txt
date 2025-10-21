@@ -102,21 +102,51 @@ to_has_promoted_local_culture_flag = {
 	}
 }
 
+to_has_potential_culture = {
+	OR = {
+		has_province_flag = to_has_$CULTURE$_culture_potential
+		[[DELAYED_CHECK]
+		AND = {
+			has_province_flag = to_has_$CULTURE$_culture_potential_ping
+			NOT = { had_province_flag = { flag = to_has_$CULTURE$_culture_potential_ping days = 1 } }
+		}
+		]
+	}
+}
+
 to_has_promoted_local_culture = {
 	if = {
 		limit = {
-			OR = {
-				has_province_flag = to_has_lakonian_culture_potential
-				[[LAKONIAN_DELAYED_CHECK]
-				AND = {
-					has_province_flag = to_has_lakonian_culture_potential_ping
-					NOT = { had_province_flag = { flag = to_has_lakonian_culture_potential_ping days = 1 } }
-				}
-				]
+			to_has_potential_culture = {
+				CULTURE = lakonian
+				[[DELAYED_CHECK] DELAYED_CHECK = yes ]
 			}
 		}
 		NOT = { culture = lakonian }
 		to_has_promoted_local_culture_flag = { CULTURE = lakonian }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_ketsoua_appeared_country
+			}
+			to_has_potential_culture = {
+				CULTURE = ketsoua
+				[[DELAYED_CHECK] DELAYED_CHECK = yes ]
+			}
+		}
+		NOT = { culture = ketsoua }
+		to_has_promoted_local_culture_flag = { CULTURE = ketsoua }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_ketsoua_psilavounoi_merged_country
+			}
+			nhs_psilavounoi_province = yes
+		}
+		NOT = { culture = ketsoua }
+		to_has_promoted_local_culture_flag = { CULTURE = ketsoua }
 	}
 	else_if = {
 		limit = {
@@ -187,6 +217,33 @@ to_has_promoted_local_culture = {
 		}
 		NOT = { culture = eleutheroi }
 		to_has_promoted_local_culture_flag = { CULTURE = eleutheroi }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_kanei_appeared_country
+			}
+		}
+		NOT = { culture = kanei }
+		to_has_promoted_local_culture_flag = { CULTURE = kanei }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_ktimiates_appeared_country
+			}
+		}
+		NOT = { culture = ktimiates }
+		to_has_promoted_local_culture_flag = { CULTURE = ktimiates }
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = nhs_psilavounoi_appeared_country
+			}
+		}
+		NOT = { culture = psilavounoi }
+		to_has_promoted_local_culture_flag = { CULTURE = psilavounoi }
 	}
 	else = {
 		always = no
@@ -265,10 +322,7 @@ nhs_hesperidian_areas = {
 		nhs_hesperidian_atlas = yes
 		AND = {
 			region = mexico_region
-			OR = {
-				has_province_modifier = to_nat_tribal_development
-				has_province_modifier = to_nat_had_tribal_development
-			}
+			to_has_or_had_tribal_development = yes
 		}
 		area = chihuahua_area
 		region = california_region
@@ -297,14 +351,169 @@ nhs_elyric_areas = {
 
 nhs_arkadian_areas = {
 	OR = {
-		continent = south_america
 		region = colombia_region
 		region = central_america_region
+		area = iquitos_area
+	}
+}
+
+nhs_ktimiates_areas = {
+	OR = {
+		# AND = {
+		# 	region = brazil_region
+		# 	NOT = { area = rio_grande_do_sol_area }
+		# }
+		region = brazil_region
+		area = beni_area
+		area = moxos_area
+	}
+}
+
+nhs_psilavounoi_areas = {
+	OR = {
+		AND = {
+			region = peru_region
+			NOT = { area = iquitos_area }
+		}
+		AND = {
+			region = upper_peru_region
+			NOT = { area = moxos_area }
+			NOT = { area = beni_area }
+			NOT = { area = paraguay_area }
+			NOT = { area = chaco_area }
+		}
+		area = central_chile_area
+		area = southern_chile_area
+		area = cuyo_area
+		area = nehuenken_area
+	}
+}
+
+nhs_ketsoua_areas = {
+	OR = {
+		culture_group = andean_group
+		culture = cara
+		culture = chachapoyan
+	}
+	OR = {
+		NOT = { to_has_or_had_tribal_development = yes }
+		owner = {
+			has_country_flag = nhs_ketsoua_appeared_country
+		}
+	}
+	# OR = {
+	# 	culture = caran
+	# 	culture = chachapoyan
+	# 	AND = {
+	# 		culture_group = andean_group
+	# 		OR = {
+	# 			NOT = { culture = diaguita }
+	# 			NOT = { to_has_or_had_tribal_development = yes }
+	# 		}
+	# 	}
+	# }
+}
+
+nhs_kanei_areas = {
+	OR = {
+		AND = {
+			region = la_plata_region
+			NOT = { area = central_chile_area }
+			NOT = { area = southern_chile_area }
+			NOT = { area = cuyo_area }
+			NOT = { area = nehuenken_area }
+		}
+		# area = rio_grande_do_sol_area
+		area = paraguay_area
+		area = chaco_area
 	}
 }
 
 nhs_eleutheroi_areas = {
 	region = great_plains_region
+}
+
+nhs_hesperidian_province = {
+	nhs_hesperidian_areas = yes
+	# is_colony = no
+	NOT = { culture = shqipproi }
+	# NOT = { culture = hesperidian }
+}
+
+nhs_kykladian_province = {
+	OR = {
+		region = carribeans_region
+		AND = {
+			owner = { primary_culture = kykladian }
+			culture = cretan_e
+		}
+	}
+	# NOT = { culture = kykladian }
+	# is_colony = no
+	NOT = { culture = shqipproi }
+	OR = {
+		owner = { primary_culture = kykladian }
+		NOT = { province_id = 481 }
+	}
+}
+
+nhs_elyric_province = {
+	nhs_elyric_areas = yes
+	NOT = { culture = shqipproi }
+}
+
+nhs_arkadian_province = {
+	nhs_arkadian_areas = yes
+	NOT = { culture = shqipproi }
+}
+
+nhs_eleutheroi_province = {
+	nhs_eleutheroi_areas = yes
+	NOT = { culture = shqipproi }
+}
+
+nhs_lakonian_province = {
+	OR = {
+		to_spartan_assimilation_province = yes
+		to_mesoamerican_assimilation_province = yes
+	}
+}
+
+nhs_borealian_province = {
+	OR = {
+		nhs_borealian_areas = yes
+		AND = {
+			owner = {
+				NOT = { has_country_flag = nhs_hyperborealians_appeared_country }
+			}
+			nhs_hyperborealian_areas = yes
+		}	
+	}
+	NOT = { culture = shqipproi }
+}
+
+nhs_hyperborealian_province = {
+	nhs_hyperborealian_areas = yes
+	NOT = { culture = shqipproi }
+}
+
+nhs_ktimiates_province = {
+	nhs_ktimiates_areas = yes
+	NOT = { culture = shqipproi }
+}
+
+nhs_ketsoua_province = {
+	nhs_ketsoua_areas = yes
+}
+
+nhs_psilavounoi_province = {
+	nhs_psilavounoi_areas = yes
+	NOT = { culture = shqipproi }
+}
+
+nhs_kanei_province = {
+	nhs_kanei_areas = yes
+	NOT = { culture = shqipproi }
 }
 
 to_has_correct_ely_dynamic_culture = {
@@ -361,6 +570,43 @@ to_has_correct_ely_dynamic_culture = {
 			}
 			nhs_eleutheroi_province = yes
 			culture = eleutheroi
+		}
+		AND = {
+			owner = {
+				has_country_flag = nhs_ketsoua_appeared_country
+			}
+			OR = {
+				nhs_ketsoua_province = yes
+				AND = {
+					owner = {
+						has_country_flag = nhs_ketsoua_psilavounoi_merged_country
+					}
+					nhs_psilavounoi_province = yes
+				}
+			}
+			culture = ketsoua
+		}
+		AND = {
+			owner = {
+				has_country_flag = nhs_kanei_appeared_country
+				NOT = { has_country_flag = nhs_ketsoua_psilavounoi_merged_country }
+			}
+			nhs_kanei_province = yes
+			culture = kanei
+		}
+		AND = {
+			owner = {
+				has_country_flag = nhs_psilavounoi_appeared_country
+			}
+			nhs_psilavounoi_province = yes
+			culture = psilavounoi
+		}
+		AND = {
+			owner = {
+				has_country_flag = nhs_ktimiates_appeared_country
+			}
+			nhs_ktimiates_province = yes
+			culture = ktimiates
 		}
 	}
 }
@@ -423,6 +669,43 @@ to_potential_ely_dynamic_culture = {
 			}
 			nhs_eleutheroi_province = yes
 			NOT = { culture = eleutheroi }
+		}
+		AND = {
+			owner = {
+				has_country_flag = nhs_ketsoua_appeared_country
+			}
+			OR = {
+				nhs_ketsoua_province = yes
+				AND = {
+					owner = {
+						has_country_flag = nhs_ketsoua_psilavounoi_merged_country
+					}
+					nhs_psilavounoi_province = yes
+				}
+			}
+			NOT = { culture = ketsoua }
+		}
+		AND = {
+			owner = {
+				has_country_flag = nhs_kanei_appeared_country
+			}
+			nhs_kanei_province = yes
+			NOT = { culture = kanei }
+		}
+		AND = {
+			owner = {
+				has_country_flag = nhs_psilavounoi_appeared_country
+				NOT = { has_country_flag = nhs_ketsoua_psilavounoi_merged_country }
+			}
+			nhs_psilavounoi_province = yes
+			NOT = { culture = psilavounoi }
+		}
+		AND = {
+			owner = {
+				has_country_flag = nhs_ktimiates_appeared_country
+			}
+			nhs_ktimiates_province = yes
+			NOT = { culture = ktimiates }
 		}
 	}
 }
@@ -541,102 +824,6 @@ nhs_not_eligible_for_elysian_improvements = {
 		tooltip = nhs_not_been_rebuild_yet_tt
 		has_province_flag = nhs_ei_$MODIFIER$_decay
 	}
-}
-
-nhs_hesperidian_province = {
-	nhs_hesperidian_areas = yes
-	# is_colony = no
-	NOT = { culture = shqipproi }
-	# NOT = { culture = hesperidian }
-}
-
-to_gets_autonomy_hesperidian = {
-	NOT = {	primary_culture = hesperidian }
-	NOT = { capital_scope = { nhs_hesperidian_areas = yes } }
-}
-
-nhs_kykladian_province = {
-	OR = {
-		region = carribeans_region
-		AND = {
-			owner = { primary_culture = kykladian }
-			culture = cretan_e
-		}
-	}
-	# NOT = { culture = kykladian }
-	# is_colony = no
-	NOT = { culture = shqipproi }
-	OR = {
-		owner = { primary_culture = kykladian }
-		NOT = { province_id = 481 }
-	}
-}
-
-nhs_elyric_province = {
-	nhs_elyric_areas = yes
-	NOT = { culture = shqipproi }
-}
-
-nhs_arkadian_province = {
-	nhs_arkadian_areas = yes
-	NOT = { culture = shqipproi }
-}
-
-nhs_eleutheroi_province = {
-	nhs_eleutheroi_areas = yes
-	NOT = { culture = shqipproi }
-}
-
-to_gets_autonomy_kykladian = {
-	NOT = {	primary_culture = kykladian }
-	NOT = { capital_scope = { region = carribeans_region } }
-}
-
-nhs_lakonian_province = {
-	OR = {
-		to_spartan_assimilation_province = yes
-		to_mesoamerican_assimilation_province = yes
-	}
-}
-
-nhs_borealian_province = {
-	OR = {
-		nhs_borealian_areas = yes
-		AND = {
-			owner = {
-				NOT = { has_country_flag = nhs_hyperborealians_appeared_country }
-			}
-			nhs_hyperborealian_areas = yes
-		}	
-	}
-	NOT = { culture = shqipproi }
-}
-
-to_gets_autonomy_borealian = {
-	NOT = { primary_culture = borealian }
-	NOT = {
-		capital_scope = {
-			OR = {
-				nhs_borealian_areas = yes
-				AND = {
-					owner = {
-						NOT = { has_country_flag = nhs_hyperborealians_appeared_country }
-					}
-					nhs_hyperborealian_areas = yes
-				}
-			}
-		}
-	}
-}
-
-nhs_hyperborealian_province = {
-	nhs_hyperborealian_areas = yes
-	NOT = { culture = shqipproi }
-}
-
-to_gets_autonomy_hyperborealian = {
-	NOT = { primary_culture = hyperborealian }
-	NOT = { capital_scope = { nhs_hyperborealian_areas = yes } }
 }
 
 nhs_gold_province_mod = {
@@ -2141,6 +2328,10 @@ to_nhs_has_dynamic_elysian_culture = {
 		culture = elyric
 		culture = arkadian
 		culture = eleutheroi
+		culture = ketsoua
+		culture = psilavounoi
+		culture = kanei
+		culture = ktimiates
 	}
 }
 
@@ -2155,6 +2346,10 @@ to_nhs_has_dynamic_elysian_primary_culture = {
 		primary_culture = elyric
 		primary_culture = arkadian
 		primary_culture = eleutheroi
+		primary_culture = ketsoua
+		primary_culture = psilavounoi
+		primary_culture = kanei
+		primary_culture = ktimiates
 	}
 }
 

@@ -4102,7 +4102,7 @@ to_check_culture_after_conversion = {
 				has_province_flag = to_check_culture_after_conversion
 				AND = {
 					has_owner_culture = yes
-					to_has_promoted_local_culture = { LAKONIAN_DELAYED_CHECK = yes }
+					to_has_promoted_local_culture = { DELAYED_CHECK = yes }
 				}
 			}
 		}
@@ -4132,16 +4132,26 @@ to_check_culture_after_conversion = {
 			}
 			if = {
 				limit = {
-					OR = {
-						has_province_flag = to_has_lakonian_culture_potential
-						AND = {
-							has_province_flag = to_has_lakonian_culture_potential_ping
-							NOT = { had_province_flag = { flag = to_has_lakonian_culture_potential_ping days = 1 } }
-						}
+					to_has_potential_culture = {
+						CULTURE = lakonian
+						DELAYED_CHECK = yes
 					}
 					to_has_promoted_local_culture_flag = { CULTURE = lakonian }
 				}
 				change_culture = lakonian
+			}
+			else_if = {
+				limit = {
+					owner = {
+						has_country_flag = nhs_ketsoua_appeared_country
+					}
+					to_has_potential_culture = {
+						CULTURE = ketsoua
+						DELAYED_CHECK = yes
+					}
+					to_has_promoted_local_culture_flag = { CULTURE = ketsoua }
+				}
+				change_culture = ketsoua
 			}
 			else = {
 				to_ely_province_culture_check = {}
