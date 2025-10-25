@@ -480,6 +480,7 @@ to_culture_assimilation_progress = {
 		which = to_assimilation_flat_increase
 		which = to_assimilation_base
 	}
+	# From Neighboring Provinces
 	set_variable = {
 		which = to_assimilation_neighboring_provinces
 		value = 0
@@ -503,6 +504,36 @@ to_culture_assimilation_progress = {
 		which = to_assimilation_flat_increase
 		which = to_assimilation_neighboring_provinces
 	}
+
+	# A country in the new world in the same culture (group has a core on the province
+	clr_province_flag = to_new_world_core
+	if = {
+		limit = {
+			OR = {
+				continent = north_america
+				continent = south_america
+			}
+			any_core_country = {
+				exists = yes
+				is_subject = no
+				NOT = { owns = PREV }
+				culture_group = PREV
+				capital_scope = {
+					OR = {
+						continent = north_america
+						continent = south_america
+					}
+				}
+			}
+		}
+		set_province_flag = to_new_world_core
+		change_variable = {
+			which = to_assimilation_flat_increase
+			value = -2
+		}
+	}
+
+	# Modifiers
 	clr_province_flag = to_tribal_assimilation_native_estate_modifiers
 	clr_province_flag = to_tribal_assimilation_settlers_enabled
 	clr_province_flag = to_tribal_assimilation_service_enabled
