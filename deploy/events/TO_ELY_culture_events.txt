@@ -672,7 +672,11 @@ country_event = {
 			nhs_post_fragmentation_culturally_elysian = yes
 		}
 		NOT = { has_country_flag = nhs_borealians_appear }
-		NOT = { has_global_flag = nhs_borealians_appeared }
+		NOT = {
+			to_has_culture_appeared = {
+				CULTURE = borealian
+			}
+		}
 		any_owned_province = {
 			nhs_borealian_areas = yes
 			is_colony = no
@@ -703,9 +707,8 @@ country_event = {
 	
     trigger = {
 		nhs_post_fragmentation_culturally_elysian = yes
-		NOT = { has_country_flag = nhs_borealians_appeared_country }
 		to_can_spawn_roman_subculture = {
-			GLOBAL_FLAG = nhs_borealians_appeared
+			CULTURE = borealian
 			COUNTRY_FLAG = nhs_borealians_appear
 			PROVINCE_TRIGGER = "nhs_borealian_areas = yes"
 		}
@@ -716,9 +719,8 @@ country_event = {
 	}
 	
 	immediate = {
-		hidden_effect = {
-			set_global_flag = nhs_borealians_appeared
-			set_country_flag = nhs_borealians_appeared_country
+		to_roman_culture_event_immediate = {
+			CULTURE = borealian
 		}
 	}
 
@@ -738,18 +740,17 @@ country_event = {
 							NOT = { has_country_flag = nhs_hyperborealians_appeared_country }
 						}
 						else = {
-							NOT = { has_global_flag = nhs_hyperborealians_appeared }
+							NOT = { has_global_flag = nhs_hyperborealian_appeared }
 						}
 					}
 					nhs_hyperborealian_areas = yes
 				}	
 			}"
 			EVENT = "nhs2_cultureevents.8"
-			COUNTRY_FLAG = nhs_borealian_appeared_country
 			CULTURE_SPAWN_TOOLTIP = "
 			if = {
 				limit = {
-					NOT = { has_country_flag = nhs_hyperborealians_appeared_country }
+					NOT = { has_global_flag = nhs_hyperborealian_appeared }
 					any_owned_province = {
 						nhs_hyperborealian_areas = yes
 					}
@@ -778,7 +779,11 @@ country_event = {
 			nhs_post_fragmentation_culturally_elysian = yes
 		}
 		NOT = { has_country_flag = nhs_hesperidians_appear }
-		NOT = { has_global_flag = nhs_hesperidians_appeared }
+		NOT = {
+			to_has_culture_appeared = {
+				CULTURE = hesperidian
+			}
+		}
 		any_owned_province = {
 			nhs_hesperidian_areas = yes
 			is_colony = no
@@ -787,7 +792,6 @@ country_event = {
 				to_nhs_has_dynamic_elysian_culture = yes
 			}
 		}
-		
 	}
 	
 	immediate = {
@@ -864,9 +868,8 @@ country_event = {
 	
     trigger = {
 		nhs_post_fragmentation_culturally_elysian = yes
-		NOT = { has_country_flag = nhs_hesperidians_appeared_country }
 		to_can_spawn_roman_subculture = {
-			GLOBAL_FLAG = nhs_hesperidians_appeared
+			CULTURE = hesperidian
 			COUNTRY_FLAG = nhs_hesperidians_appear
 			PROVINCE_TRIGGER = "nhs_hesperidian_areas = yes"
 		}
@@ -877,9 +880,8 @@ country_event = {
 	}
 	
 	immediate = {
-		hidden_effect = {
-			set_country_flag = nhs_hesperidians_appeared_country
-			set_global_flag = nhs_hesperidians_appeared
+		to_roman_culture_event_immediate = {
+			CULTURE = hesperidian
 		}
 	}
 
@@ -889,7 +891,6 @@ country_event = {
 			CULTURE = hesperidian
 			PROVINCE_TRIGGER = "nhs_hesperidian_areas = yes"
 			EVENT = "nhs2_cultureevents.10"
-			COUNTRY_FLAG = nhs_hesperidians_appeared_country
 			CULTURE_SPAWN_TOOLTIP = "custom_tooltip = nhs_spawn_hesperidian_tt"
 		}
 	}
@@ -910,7 +911,11 @@ country_event = {
 			nhs_post_fragmentation_culturally_elysian = yes
 		}
 		NOT = { has_country_flag = nhs_kykladian_appear }
-		NOT = { has_global_flag = nhs_kykladian_appeared }
+		NOT = {
+			to_has_culture_appeared = {
+				CULTURE = kykladian
+			}
+		}
 		any_owned_province = {
 			region = carribeans_region
 			OR = {
@@ -966,31 +971,27 @@ country_event = {
 
     trigger = {
 		nhs_post_fragmentation_culturally_elysian = yes
-		NOT = { has_country_flag = nhs_kykladian_appeared_country }
-		OR = {
-			has_global_flag = nhs_kykladian_appeared
-			AND = {
-				tag = KYK
-				had_country_flag = { flag = nhs_kykladian_appear days = 365 }
-				any_owned_province = {
-					region = carribeans_region
-					OR = {
-						to_nhs_has_dynamic_elysian_culture = yes
-						culture = cretan_e
-					}
-					is_colony = no
-					NOT = { province_id = 481 }
-				}
-			}
-			to_can_spawn_roman_subculture = {
-				GLOBAL_FLAG = nhs_kykladian_appeared
-				COUNTRY_FLAG = nhs_kykladian_appear
-				PROVINCE_TRIGGER = "
+		to_can_spawn_roman_subculture = {
+			CULTURE = kykladian
+			COUNTRY_FLAG = nhs_kykladian_appear
+			PROVINCE_TRIGGER = "
+			region = carribeans_region
+			NOT = { province_id = 481 }
+			"
+			ADDITIONAL_CULTURE_TRIGGER = "culture = cretan_e"
+			SPECIAL_TRIGGER = "
+			tag = KYK
+			had_country_flag = { flag = nhs_kykladian_appear days = 365 }
+			any_owned_province = {
 				region = carribeans_region
+				OR = {
+					to_nhs_has_dynamic_elysian_culture = yes
+					culture = cretan_e
+				}
+				is_colony = no
 				NOT = { province_id = 481 }
-				"
-				ADDITIONAL_CULTURE_TRIGGER = "culture = cretan_e"
 			}
+			"
 		}
 	}
 
@@ -999,9 +1000,8 @@ country_event = {
 	}
 	
 	immediate = {
-		hidden_effect = {
-			set_global_flag = nhs_kykladian_appeared
-			set_country_flag = nhs_kykladian_appeared_country
+		to_roman_culture_event_immediate = {
+			CULTURE = kykladian
 		}
 	}
 
@@ -1027,7 +1027,6 @@ country_event = {
 			NOT = { province_id = 481 }
 			"
 			EVENT = "nhs2_cultureevents.15"
-			COUNTRY_FLAG = nhs_kykladian_appeared_country
 			ADDITIONAL_CULTURE_TRIGGER = "culture = cretan_e"
 			CULTURE_SPAWN_TOOLTIP = "custom_tooltip = nhs_spawn_kykladian_tt"
 		}
@@ -1051,7 +1050,6 @@ country_event = {
 			NOT = { province_id = 481 }
 			"
 			EVENT = "nhs2_cultureevents.15"
-			COUNTRY_FLAG = nhs_kykladian_appeared_country
 			ADDITIONAL_CULTURE_TRIGGER = "culture = cretan_e"
 			CULTURE_SPAWN_TOOLTIP = "custom_tooltip = nhs_spawn_kykladian_tt"
 		}
@@ -1086,7 +1084,11 @@ country_event = {
 			nhs_post_fragmentation_culturally_elysian = yes
 		}
 		NOT = { has_country_flag = nhs_hyperborealians_appear }
-		NOT = { has_global_flag = nhs_hyperborealians_appeared }
+		NOT = {
+			to_has_culture_appeared = {
+				CULTURE = hyperborealian
+			}
+		}
 		any_owned_province = {
 			nhs_hyperborealian_areas = yes
 			is_colony = no
@@ -1118,9 +1120,8 @@ country_event = {
 
     trigger = {
 		nhs_post_fragmentation_culturally_elysian = yes
-		NOT = { has_country_flag = nhs_hyperborealians_appeared_country }
 		to_can_spawn_roman_subculture = {
-			GLOBAL_FLAG = nhs_hyperborealians_appeared
+			CULTURE = hyperborealian
 			COUNTRY_FLAG = nhs_hyperborealians_appear
 			PROVINCE_TRIGGER = "nhs_hyperborealian_areas = yes"
 		}
@@ -1131,19 +1132,17 @@ country_event = {
 	}
 	
 	immediate = {
-		hidden_effect = {
-			set_global_flag = nhs_hyperborealians_appeared
-			set_country_flag = nhs_hyperborealians_appeared_country
+		to_roman_culture_event_immediate = {
+			CULTURE = hyperborealian
 		}
 	}
 
 	option = {
 		name = "nhs2_cultureevents.17.a"
 		to_spawn_roman_subculture = {
-			CULTURE = elyric
+			CULTURE = hyperborealian
 			PROVINCE_TRIGGER = "nhs_hyperborealian_areas = yes"
 			EVENT = "nhs2_cultureevents.17"
-			COUNTRY_FLAG = nhs_hyperborealians_appeared_country
 			CULTURE_SPAWN_TOOLTIP = "custom_tooltip = nhs_spawn_thoulean_tt"
 		}
 	}
@@ -1164,7 +1163,11 @@ country_event = {
 			nhs_post_fragmentation_culturally_elysian = yes
 		}
 		NOT = { has_country_flag = nhs_elyric_appear }
-		NOT = { has_global_flag = nhs_elyric_appeared }
+		NOT = {
+			to_has_culture_appeared = {
+				CULTURE = elyric
+			}
+		}
 		any_owned_province = {
 			nhs_elyric_areas = yes
 			is_colony = no
@@ -1196,9 +1199,8 @@ country_event = {
 
     trigger = {
 		nhs_post_fragmentation_culturally_elysian = yes
-		NOT = { has_country_flag = nhs_elyric_appeared_country }
 		to_can_spawn_roman_subculture = {
-			GLOBAL_FLAG = nhs_elyric_appeared
+			CULTURE = elyric
 			COUNTRY_FLAG = nhs_elyric_appear
 			PROVINCE_TRIGGER = "nhs_elyric_areas = yes"
 		}
@@ -1209,9 +1211,8 @@ country_event = {
 	}
 	
 	immediate = {
-		hidden_effect = {
-			set_global_flag = nhs_elyric_appeared
-			set_country_flag = nhs_elyric_appeared_country
+		to_roman_culture_event_immediate = {
+			CULTURE = elyric
 		}
 	}
 
@@ -1221,7 +1222,6 @@ country_event = {
 			CULTURE = elyric
 			PROVINCE_TRIGGER = "nhs_elyric_areas = yes"
 			EVENT = "nhs2_cultureevents.19"
-			COUNTRY_FLAG = nhs_elyric_appeared_country
 			CULTURE_SPAWN_TOOLTIP = "custom_tooltip = nhs_spawn_elyric_tt"
 		}
 	}
@@ -1242,7 +1242,11 @@ country_event = {
 			nhs_post_fragmentation_culturally_elysian = yes
 		}
 		NOT = { has_country_flag = nhs_arkadians_appear }
-		NOT = { has_global_flag = nhs_arkadians_appeared }
+		NOT = {
+			to_has_culture_appeared = {
+				CULTURE = arkadian
+			}
+		}
 		any_owned_province = {
 			nhs_arkadian_areas = yes
 			is_colony = no
@@ -1273,9 +1277,8 @@ country_event = {
 
     trigger = {
 		nhs_post_fragmentation_culturally_elysian = yes
-		NOT = { has_country_flag = nhs_arkadians_appeared_country }
 		to_can_spawn_roman_subculture = {
-			GLOBAL_FLAG = nhs_arkadians_appeared
+			CULTURE = arkadian
 			COUNTRY_FLAG = nhs_arkadians_appear
 			PROVINCE_TRIGGER = "nhs_arkadian_areas = yes"
 		}
@@ -1286,9 +1289,8 @@ country_event = {
 	}
 	
 	immediate = {
-		hidden_effect = {
-			set_global_flag = nhs_arkadians_appeared
-			set_country_flag = nhs_arkadians_appeared_country
+		to_roman_culture_event_immediate = {
+			CULTURE = arkadian
 		}
 	}
 
@@ -1298,7 +1300,6 @@ country_event = {
 			CULTURE = arkadian
 			PROVINCE_TRIGGER = "nhs_arkadian_areas = yes"
 			EVENT = "nhs2_cultureevents.21"
-			COUNTRY_FLAG = nhs_arkadians_appeared_country
 			CULTURE_SPAWN_TOOLTIP = "custom_tooltip = nhs_spawn_arkadian_tt"
 		}
 	}
@@ -1319,7 +1320,11 @@ country_event = {
 			nhs_post_fragmentation_culturally_elysian = yes
 		}
 		NOT = { has_country_flag = nhs_eleutheroi_appear }
-		NOT = { has_global_flag = nhs_eleutheroi_appeared }
+		NOT = {
+			to_has_culture_appeared = {
+				CULTURE = eleutheroi
+			}
+		}
 		any_owned_province = {
 			nhs_eleutheroi_areas = yes
 			is_colony = no
@@ -1350,9 +1355,8 @@ country_event = {
 
     trigger = {
 		nhs_post_fragmentation_culturally_elysian = yes
-		NOT = { has_country_flag = nhs_eleutheroi_appeared_country }
 		to_can_spawn_roman_subculture = {
-			GLOBAL_FLAG = nhs_eleutheroi_appeared
+			CULTURE = eleutheroi
 			COUNTRY_FLAG = nhs_eleutheroi_appear
 			PROVINCE_TRIGGER = "nhs_eleutheroi_areas = yes"
 		}
@@ -1363,11 +1367,9 @@ country_event = {
 	}
 	
 	immediate = {
-		hidden_effect = {
-			set_global_flag = nhs_eleutheroi_appeared
-			set_country_flag = nhs_eleutheroi_appeared_country
+		to_roman_culture_event_immediate = {
+			CULTURE = eleutheroi
 		}
-		
 	}
 
 	option = {
@@ -1376,7 +1378,6 @@ country_event = {
 			CULTURE = eleutheroi
 			PROVINCE_TRIGGER = "nhs_eleutheroi_areas = yes"
 			EVENT = "nhs2_cultureevents.23"
-			COUNTRY_FLAG = nhs_eleutheroi_appeared_country
 			CULTURE_SPAWN_TOOLTIP = "custom_tooltip = nhs_spawn_eleutheroi_tt"
 		}
 	}
@@ -1397,7 +1398,11 @@ country_event = {
 			nhs_post_fragmentation_culturally_elysian = yes
 		}
 		NOT = { has_country_flag = nhs_ktimiates_appear }
-		NOT = { has_global_flag = nhs_ktimiates_appeared }
+		NOT = {
+			to_has_culture_appeared = {
+				CULTURE = ktimiates
+			}
+		}
 		any_owned_province = {
 			nhs_ktimiates_areas = yes
 			is_colony = no
@@ -1425,7 +1430,9 @@ country_event = {
 	title = nhs2_cultureevents.28.t
 	desc = {
 		trigger = {
-			has_global_flag = nhs_eleutheroi_appeared
+			to_has_culture_appeared = {
+				CULTURE = eleutheroi
+			}
 		}
 		desc = nhs2_cultureevents.28.da
 	}
@@ -1436,9 +1443,8 @@ country_event = {
 
     trigger = {
 		nhs_post_fragmentation_culturally_elysian = yes
-		NOT = { has_country_flag = nhs_ktimiates_appeared_country }
 		to_can_spawn_roman_subculture = {
-			GLOBAL_FLAG = nhs_ktimiates_appeared
+			CULTURE = ktimiates
 			COUNTRY_FLAG = nhs_ktimiates_appear
 			PROVINCE_TRIGGER = "nhs_ktimiates_areas = yes"
 		}
@@ -1449,9 +1455,8 @@ country_event = {
 	}
 	
 	immediate = {
-		hidden_effect = {
-			set_global_flag = nhs_ktimiates_appeared
-			set_country_flag = nhs_ktimiates_appeared_country
+		to_roman_culture_event_immediate = {
+			CULTURE = ktimiates
 		}
 	}
 
@@ -1461,7 +1466,6 @@ country_event = {
 			CULTURE = ktimiates
 			PROVINCE_TRIGGER = "nhs_ktimiates_areas = yes"
 			EVENT = "nhs2_cultureevents.28"
-			COUNTRY_FLAG = nhs_ktimiates_appeared_country
 			CULTURE_SPAWN_TOOLTIP = "custom_tooltip = nhs_spawn_ktimiates_tt"
 		}
 	}
@@ -1482,7 +1486,11 @@ country_event = {
 			nhs_post_fragmentation_culturally_elysian = yes
 		}
 		NOT = { has_country_flag = nhs_kanei_appear }
-		NOT = { has_global_flag = nhs_kanei_appeared }
+		NOT = {
+			to_has_culture_appeared = {
+				CULTURE = kanei
+			}
+		}
 		any_owned_province = {
 			nhs_kanei_areas = yes
 			is_colony = no
@@ -1513,9 +1521,8 @@ country_event = {
 
     trigger = {
 		nhs_post_fragmentation_culturally_elysian = yes
-		NOT = { has_country_flag = nhs_kanei_appeared_country }
 		to_can_spawn_roman_subculture = {
-			GLOBAL_FLAG = nhs_kanei_appeared
+			CULTURE = kanei
 			COUNTRY_FLAG = nhs_kanei_appear
 			PROVINCE_TRIGGER = "nhs_kanei_areas = yes"
 		}
@@ -1526,9 +1533,8 @@ country_event = {
 	}
 	
 	immediate = {
-		hidden_effect = {
-			set_global_flag = nhs_kanei_appeared
-			set_country_flag = nhs_kanei_appeared_country
+		to_roman_culture_event_immediate = {
+			CULTURE = kanei
 		}
 	}
 
@@ -1538,7 +1544,6 @@ country_event = {
 			CULTURE = kanei
 			PROVINCE_TRIGGER = "nhs_kanei_areas = yes"
 			EVENT = "nhs2_cultureevents.30"
-			COUNTRY_FLAG = nhs_kanei_appeared_country
 			CULTURE_SPAWN_TOOLTIP = "custom_tooltip = nhs_spawn_kanei_tt"
 		}
 	}
@@ -1559,7 +1564,11 @@ country_event = {
 			nhs_post_fragmentation_culturally_elysian = yes
 		}
 		NOT = { has_country_flag = nhs_psilavounoi_appear }
-		NOT = { has_global_flag = nhs_psilavounoi_appeared }
+		NOT = {
+			to_has_culture_appeared = {
+				CULTURE = psilavounoi
+			}
+		}
 		any_owned_province = {
 			nhs_psilavounoi_areas = yes
 			is_colony = no
@@ -1590,9 +1599,8 @@ country_event = {
 
     trigger = {
 		nhs_post_fragmentation_culturally_elysian = yes
-		NOT = { has_country_flag = nhs_psilavounoi_appeared_country }
 		to_can_spawn_roman_subculture = {
-			GLOBAL_FLAG = nhs_psilavounoi_appeared
+			CULTURE = psilavounoi
 			COUNTRY_FLAG = nhs_psilavounoi_appear
 			PROVINCE_TRIGGER = "nhs_psilavounoi_areas = yes"
 		}
@@ -1603,9 +1611,8 @@ country_event = {
 	}
 	
 	immediate = {
-		hidden_effect = {
-			set_global_flag = nhs_psilavounoi_appeared
-			set_country_flag = nhs_psilavounoi_appeared_country
+		to_roman_culture_event_immediate = {
+			CULTURE = psilavounoi
 		}
 	}
 
@@ -1615,7 +1622,6 @@ country_event = {
 			CULTURE = psilavounoi
 			PROVINCE_TRIGGER = "nhs_psilavounoi_areas = yes"
 			EVENT = "nhs2_cultureevents.32"
-			COUNTRY_FLAG = nhs_psilavounoi_appeared_country
 			CULTURE_SPAWN_TOOLTIP = "custom_tooltip = nhs_spawn_psilavounoi_tt"
 		}
 	}
@@ -1633,10 +1639,25 @@ province_event = {
 	is_triggered_only = yes
 	
 	immediate = {
+		to_set_culture_appeared_flag = {
+			CULTURE = ketsoua
+		}
 		hidden_effect = {
-			set_global_flag = nhs_ketsoua_appeared
 			owner = {
-				set_country_flag = nhs_ketsoua_appeared_country
+				if = {
+					limit = {
+						is_colonial_nation = yes
+						overlord = {
+							nhs_post_fragmentation_culturally_elysian = yes
+						}
+					}
+					overlord = {
+						save_event_target_as = to_home_target
+					}
+				}
+				else = {
+					save_event_target_as = to_home_target
+				}
 			}
 		}
 	}
@@ -1644,7 +1665,6 @@ province_event = {
 	option = {
 		name = nhs2_cultureevents.33.a
 		change_culture = ketsoua
-		custom_tooltip = nhs_spawn_ketsoua_tt
 		if = {
 			limit = {
 				owner = {
@@ -1656,27 +1676,41 @@ province_event = {
 					}
 				}
 			}
-			custom_tooltip = nhs_new_line_tt
 			owner = {
-				to_primary_culture_and_ruler_heir_consort_culture_if_primary = {
-					CULTURE = ketsoua
-					PRIMARY_CULTURE = THIS
-				}
+				add_accepted_culture = ketsoua
 			}
 		}
-		every_country = {
+		custom_tooltip = nhs_new_line_tt
+		custom_tooltip = nhs_spawn_ketsoua_tt
+		if = {
 			limit = {
-				nhs_post_fragmentation_culturally_elysian = yes
-				NOT = { has_country_flag = nhs_ketsoua_appeared_country }
-				OR = {
-					nhs_check_all_elysian_tags = { CONDITION = tag }
-					any_owned_province = {
-						nhs_ketsoua_areas = yes
-						is_colony = no
+				any_country = {
+					NOT = { tag = ROOT }
+					nhs_post_fragmentation_culturally_elysian = yes
+					OR = {
+						nhs_check_all_elysian_tags = { CONDITION = tag }
+						any_owned_province = {
+							nhs_ketsoua_areas = yes
+							is_colony = no
+						}
 					}
 				}
 			}
-			country_event = { id = nhs2_cultureevents.34 }
+			custom_tooltip = nhs_new_line_tt
+			every_country = {
+				limit = {
+					NOT = { tag = ROOT }
+					nhs_post_fragmentation_culturally_elysian = yes
+					OR = {
+						nhs_check_all_elysian_tags = { CONDITION = tag }
+						any_owned_province = {
+							nhs_ketsoua_areas = yes
+							is_colony = no
+						}
+					}
+				}
+				country_event = { id = nhs2_cultureevents.34 }
+			}
 		}
 	}
 }
@@ -1691,16 +1725,28 @@ country_event = {
 	goto = FROM
 
 	is_triggered_only = yes
-	
+
 	immediate = {
 		hidden_effect = {
-			set_country_flag = nhs_ketsoua_appeared_country
+			if = {
+				limit = {
+					is_colonial_nation = yes
+					overlord = {
+						nhs_post_fragmentation_culturally_elysian = yes
+					}
+				}
+				overlord = {
+					save_event_target_as = to_home_target
+				}
+			}
+			else = {
+				save_event_target_as = to_home_target
+			}
 		}
 	}
 
 	option = {
 		name = nhs2_cultureevents.33.a
-		custom_tooltip = nhs_spawn_ketsoua_tt
 		if = {
 			limit = {
 				capital_scope = {
@@ -1710,12 +1756,10 @@ country_event = {
 					}
 				}
 			}
+			add_accepted_culture = ketsoua
 			custom_tooltip = nhs_new_line_tt
-			to_primary_culture_and_ruler_heir_consort_culture_if_primary = {
-				CULTURE = ketsoua
-				PRIMARY_CULTURE = THIS
-			}
 		}
+		custom_tooltip = nhs_spawn_ketsoua_tt
 	}
 }
 
@@ -1728,28 +1772,13 @@ country_event = {
 
 	trigger = {
 		nhs_post_fragmentation_culturally_elysian = yes
-		NOT = { has_country_flag = nhs_ketsoua_psilavounoi_merged_country }
 		if = {
 			limit = {
-				has_global_flag = nhs_ketsoua_psilavounoi_merged
+				NOT = { has_country_flag = nhs_ketsoua_psilavounoi_merged_event_bounce }
 			}
-			OR = {
-				primary_culture = psilavounoi
-				primary_culture = ketsoua
-				nhs_check_all_elysian_tags = { CONDITION = tag }
-				any_owned_province = {
-					OR = {
-						culture = psilavounoi
-						culture = ketsoua
-						nhs_psilavounoi_province = yes
-						nhs_ketsoua_province = yes
-					}
-				}
-			}
-		}
-		else = {
-			had_country_flag = { flag = nhs_ketsoua_appeared_country days = 10950 }
-			had_country_flag = { flag = nhs_psilavounoi_appeared_country days = 10950 }
+			NOT = { has_global_flag = nhs_ketsoua_psilavounoi_merged_event_block }
+			had_global_flag = { flag = nhs_ketsoua_appeared days = 10950 }
+			had_global_flag = { flag = nhs_psilavounoi_appeared days = 10950 }
 			any_owned_province = {
 				culture = psilavounoi
 				any_neighbor_province = {
@@ -1772,13 +1801,22 @@ country_event = {
 	
 	immediate = {
 		hidden_effect = {
-			set_global_flag = nhs_ketsoua_psilavounoi_merged
-			set_country_flag = nhs_ketsoua_psilavounoi_merged_country
+			clr_country_flag = nhs_ketsoua_psilavounoi_merged_event_bounce
+			if = {
+				limit = {
+					NOT = { has_global_flag = nhs_ketsoua_psilavounoi_merged_event_block }
+				}
+				set_global_flag = nhs_ketsoua_psilavounoi_merged_event_block
+			}
 		}
 	}
 
 	option = {
 		name = nhs2_cultureevents.33.a
+		hidden_effect = {
+			set_global_flag = nhs_ketsoua_psilavounoi_merged
+			clr_global_flag = nhs_ketsoua_psilavounoi_merged_event_block
+		}
 		if = {
 			limit = {
 				primary_culture = psilavounoi
@@ -1806,7 +1844,6 @@ country_event = {
 		every_country = {
 			limit = {
 				nhs_post_fragmentation_culturally_elysian = yes
-				NOT = { has_country_flag = nhs_ketsoua_psilavounoi_merged_country }
 				OR = {
 					primary_culture = psilavounoi
 					primary_culture = ketsoua
@@ -1821,6 +1858,7 @@ country_event = {
 					}
 				}
 			}
+			set_country_flag = nhs_ketsoua_psilavounoi_merged_event_bounce
 			country_event = { id = nhs2_cultureevents.36 }
 		}
 	}

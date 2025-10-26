@@ -139,9 +139,7 @@ nhs_ketsoua_areas = {
 	}
 	OR = {
 		NOT = { to_has_or_had_tribal_development = yes }
-		owner = {
-			has_country_flag = nhs_ketsoua_appeared_country
-		}
+		to_has_culture_appeared = { CULTURE = ketsoua }
 	}
 	# OR = {
 	# 	culture = caran
@@ -225,9 +223,7 @@ nhs_borealian_province = {
 	OR = {
 		nhs_borealian_areas = yes
 		AND = {
-			owner = {
-				NOT = { has_country_flag = nhs_hyperborealians_appeared_country }
-			}
+			NOT = { to_has_culture_appeared = { CULTURE = hyperborealian } }
 			nhs_hyperborealian_areas = yes
 		}	
 	}
@@ -281,9 +277,7 @@ to_has_promoted_local_culture = {
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_ketsoua_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = ketsoua }
 			to_has_potential_culture = {
 				CULTURE = ketsoua
 				[[DELAYED_CHECK] DELAYED_CHECK = yes ]
@@ -294,9 +288,7 @@ to_has_promoted_local_culture = {
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_ketsoua_psilavounoi_merged_country
-			}
+			nhs_ketsoua_psilavounoi_merged = yes
 			nhs_psilavounoi_province = yes
 		}
 		NOT = { culture = ketsoua }
@@ -304,9 +296,7 @@ to_has_promoted_local_culture = {
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_borealians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = borealian }
 			nhs_borealian_province = yes
 		}
 		NOT = { culture = borealian }
@@ -314,9 +304,7 @@ to_has_promoted_local_culture = {
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_hyperborealians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = hyperborealian }
 			nhs_hyperborealian_province = yes
 		}
 		NOT = { culture = hyperborealian }
@@ -324,9 +312,7 @@ to_has_promoted_local_culture = {
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_hesperidians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = hesperidian }
 			nhs_hesperidian_province = yes
 		}
 		NOT = { culture = hesperidian }
@@ -334,9 +320,7 @@ to_has_promoted_local_culture = {
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_kykladian_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = kykladian }
 			nhs_kykladian_province = yes
 		}
 		NOT = { culture = kykladian }
@@ -344,9 +328,7 @@ to_has_promoted_local_culture = {
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_elyric_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = elyric }
 			nhs_elyric_province = yes
 		}
 		NOT = { culture = elyric }
@@ -354,9 +336,7 @@ to_has_promoted_local_culture = {
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_arkadians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = arkadian }
 			nhs_arkadian_province = yes
 		}
 		NOT = { culture = arkadian }
@@ -364,9 +344,7 @@ to_has_promoted_local_culture = {
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_eleutheroi_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = eleutheroi }
 			nhs_eleutheroi_province = yes
 		}
 		NOT = { culture = eleutheroi }
@@ -374,27 +352,24 @@ to_has_promoted_local_culture = {
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_kanei_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = kanei }
+			nhs_kanei_province = yes
 		}
 		NOT = { culture = kanei }
 		to_has_promoted_local_culture_flag = { CULTURE = kanei }
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_ktimiates_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = ktimiates }
+			nhs_ktimiates_province = yes
 		}
 		NOT = { culture = ktimiates }
 		to_has_promoted_local_culture_flag = { CULTURE = ktimiates }
 	}
 	else_if = {
 		limit = {
-			owner = {
-				has_country_flag = nhs_psilavounoi_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = psilavounoi }
+			nhs_psilavounoi_province = yes
 		}
 		NOT = { culture = psilavounoi }
 		to_has_promoted_local_culture_flag = { CULTURE = psilavounoi }
@@ -407,6 +382,10 @@ to_has_promoted_local_culture = {
 #############################
 ##### MISC
 #############################
+
+nhs_ketsoua_psilavounoi_merged = {
+	has_global_flag = nhs_ketsoua_psilavounoi_merged
+}
 
 to_dynamic_elysian_culture_trigger = {
 	OR = {
@@ -471,67 +450,87 @@ to_nhs_eligible_for_romaic_culture = {
 	}
 }
 
+to_has_culture_appeared = {
+	has_global_flag = nhs_$CULTURE$_appeared
+}
+
 to_can_spawn_roman_subculture = {
 	if = {
 		limit = {
-			NOT = { has_global_flag = $GLOBAL_FLAG$ }
-			NOT = { had_country_flag = { flag = $COUNTRY_FLAG$ days = 14600 } }
+			NOT = { has_country_flag = nhs_$CULTURE$_event_bounce }
 		}
-		if = {
-			limit = {
-				had_country_flag = { flag = $COUNTRY_FLAG$ days = 10950 }
+		NOT = { has_global_flag = nhs_$CULTURE$_event_block }
+		NOT = { to_has_culture_appeared = { CULTURE = $CULTURE$ } }
+		[[SPECIAL_TRIGGER]
+		OR = {
+			AND = {
+				$SPECIAL_TRIGGER$
 			}
-			num_of_owned_provinces_with = {
-				value = 3
-				$PROVINCE_TRIGGER$
-				is_colony = no
-				OR = {
-					to_nhs_has_dynamic_elysian_culture = yes
-					[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
+			
+		]
+			if = {
+				limit = {
+					NOT = { had_country_flag = { flag = $COUNTRY_FLAG$ days = 14600 } }
+				}
+				if = {
+					limit = {
+						had_country_flag = { flag = $COUNTRY_FLAG$ days = 10950 }
+					}
+					num_of_owned_provinces_with = {
+						value = 3
+						$PROVINCE_TRIGGER$
+						is_colony = no
+						OR = {
+							to_nhs_has_dynamic_elysian_culture = yes
+							[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						had_country_flag = { flag = $COUNTRY_FLAG$ days = 7300 }
+					}
+					num_of_owned_provinces_with = {
+						value = 6
+						$PROVINCE_TRIGGER$
+						is_colony = no
+						OR = {
+							to_nhs_has_dynamic_elysian_culture = yes
+							[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						had_country_flag = { flag = $COUNTRY_FLAG$ days = 3650 }
+					}
+					num_of_owned_provinces_with = {
+						value = 10
+						$PROVINCE_TRIGGER$
+						is_colony = no
+						OR = {
+							to_nhs_has_dynamic_elysian_culture = yes
+							[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
+						}
+					}
+				}
+				else = {
+					always = no
 				}
 			}
-		}
-		else_if = {
-			limit = {
-				had_country_flag = { flag = $COUNTRY_FLAG$ days = 7300 }
-			}
-			num_of_owned_provinces_with = {
-				value = 6
-				$PROVINCE_TRIGGER$
-				is_colony = no
-				OR = {
-					to_nhs_has_dynamic_elysian_culture = yes
-					[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
+			else = {
+				any_owned_province = {
+					$PROVINCE_TRIGGER$
+					is_colony = no
+					OR = {
+						to_nhs_has_dynamic_elysian_culture = yes
+						[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
+					}
 				}
 			}
+		[[SPECIAL_TRIGGER]
 		}
-		else_if = {
-			limit = {
-				had_country_flag = { flag = $COUNTRY_FLAG$ days = 3650 }
-			}
-			num_of_owned_provinces_with = {
-				value = 10
-				$PROVINCE_TRIGGER$
-				is_colony = no
-				OR = {
-					to_nhs_has_dynamic_elysian_culture = yes
-					[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
-				}
-			}
-		}
-		else = {
-			always = no
-		}
-	}
-	else = {
-		any_owned_province = {
-			$PROVINCE_TRIGGER$
-			is_colony = no
-			OR = {
-				to_nhs_has_dynamic_elysian_culture = yes
-				[[ADDITIONAL_CULTURE_TRIGGER] $ADDITIONAL_CULTURE_TRIGGER$]
-			}
-		}
+		]
 	}
 }
 
@@ -554,88 +553,64 @@ to_has_correct_ely_dynamic_culture = {
 	}
 	OR = {
 		AND = {
-			owner = {
-				has_country_flag = nhs_borealians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = borealian }
 			nhs_borealian_province = yes
 			culture = borealian
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_hyperborealians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = hyperborealian }
 			nhs_hyperborealian_province = yes
 			culture = hyperborealian
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_hesperidians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = hesperidian }
 			nhs_hesperidian_province = yes
 			culture = hesperidian
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_kykladian_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = kykladian }
 			nhs_kykladian_province = yes
 			culture = kykladian
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_elyric_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = elyric }
 			nhs_elyric_province = yes
 			culture = elyric
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_arkadians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = arkadian }
 			nhs_arkadian_province = yes
 			culture = arkadian
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_eleutheroi_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = eleutheroi }
 			nhs_eleutheroi_province = yes
 			culture = eleutheroi
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_ketsoua_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = ketsoua }
 			OR = {
 				nhs_ketsoua_province = yes
 				AND = {
-					owner = {
-						has_country_flag = nhs_ketsoua_psilavounoi_merged_country
-					}
+					nhs_ketsoua_psilavounoi_merged = yes
 					nhs_psilavounoi_province = yes
 				}
 			}
 			culture = ketsoua
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_kanei_appeared_country
-				NOT = { has_country_flag = nhs_ketsoua_psilavounoi_merged_country }
-			}
+			to_has_culture_appeared = { CULTURE = kanei }
 			nhs_kanei_province = yes
 			culture = kanei
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_psilavounoi_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = psilavounoi }
+			NOT = { nhs_ketsoua_psilavounoi_merged = yes }
 			nhs_psilavounoi_province = yes
 			culture = psilavounoi
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_ktimiates_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = ktimiates }
 			nhs_ktimiates_province = yes
 			culture = ktimiates
 		}
@@ -653,88 +628,64 @@ to_has_incorrect_ely_dynamic_culture = {
 to_potential_ely_dynamic_culture = {
 	OR = {
 		AND = {
-			owner = {
-				has_country_flag = nhs_borealians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = borealian }
 			nhs_borealian_province = yes
 			NOT = { culture = borealian }
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_hyperborealians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = hyperborealian }
 			nhs_hyperborealian_province = yes
 			NOT = { culture = hyperborealian }
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_hesperidians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = hesperidian }
 			nhs_hesperidian_province = yes
 			NOT = { culture = hesperidian }
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_kykladian_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = kykladian }
 			nhs_kykladian_province = yes
 			NOT = { culture = kykladian }
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_elyric_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = elyric }
 			nhs_elyric_province = yes
 			NOT = { culture = elyric }
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_arkadians_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = arkadian }
 			nhs_arkadian_province = yes
 			NOT = { culture = arkadian }
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_eleutheroi_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = eleutheroi }
 			nhs_eleutheroi_province = yes
 			NOT = { culture = eleutheroi }
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_ketsoua_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = ketsoua }
 			OR = {
 				nhs_ketsoua_province = yes
 				AND = {
-					owner = {
-						has_country_flag = nhs_ketsoua_psilavounoi_merged_country
-					}
+					nhs_ketsoua_psilavounoi_merged = yes
 					nhs_psilavounoi_province = yes
 				}
 			}
 			NOT = { culture = ketsoua }
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_kanei_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = kanei }
 			nhs_kanei_province = yes
 			NOT = { culture = kanei }
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_psilavounoi_appeared_country
-				NOT = { has_country_flag = nhs_ketsoua_psilavounoi_merged_country }
-			}
+			NOT = { nhs_ketsoua_psilavounoi_merged = yes }
+			to_has_culture_appeared = { CULTURE = psilavounoi }
 			nhs_psilavounoi_province = yes
 			NOT = { culture = psilavounoi }
 		}
 		AND = {
-			owner = {
-				has_country_flag = nhs_ktimiates_appeared_country
-			}
+			to_has_culture_appeared = { CULTURE = ktimiates }
 			nhs_ktimiates_province = yes
 			NOT = { culture = ktimiates }
 		}
