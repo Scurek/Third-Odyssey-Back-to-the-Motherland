@@ -246,11 +246,19 @@ nhs_ktimiates_province = {
 }
 
 nhs_ketsoua_province = {
-	nhs_ketsoua_areas = yes
+	OR = {
+		nhs_ketsoua_areas = yes
+		AND = {
+			nhs_ketsoua_psilavounoi_merged = yes
+			nhs_psilavounoi_areas = yes
+		}
+	}
 	NOT = { culture = shqipproi }
 }
 
 nhs_psilavounoi_province = {
+	NOT = { nhs_ketsoua_psilavounoi_merged = yes }
+	NOT = { culture = ketsoua }
 	nhs_psilavounoi_areas = yes
 	NOT = { culture = shqipproi }
 }
@@ -288,14 +296,6 @@ to_has_promoted_local_culture = {
 				CULTURE = ketsoua
 				[[DELAYED_CHECK] DELAYED_CHECK = yes ]
 			}
-		}
-		NOT = { culture = ketsoua }
-		to_has_promoted_local_culture_flag = { CULTURE = ketsoua }
-	}
-	else_if = {
-		limit = {
-			nhs_ketsoua_psilavounoi_merged = yes
-			nhs_psilavounoi_province = yes
 		}
 		NOT = { culture = ketsoua }
 		to_has_promoted_local_culture_flag = { CULTURE = ketsoua }
@@ -379,6 +379,130 @@ to_has_promoted_local_culture = {
 		}
 		NOT = { culture = psilavounoi }
 		to_has_promoted_local_culture_flag = { CULTURE = psilavounoi }
+	}
+	else = {
+		always = no
+	}
+}
+
+to_potential_culture_promotion = {
+	if = {
+		limit = {
+			nhs_lakonian_province = yes
+		}
+		owner = {
+			NOT = { primary_culture = lakonian }
+		}
+	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = borealian }
+			nhs_borealian_province = yes
+		}
+		NOT = { culture = borealian }
+		owner = {
+			NOT = { primary_culture = borealian }
+		}
+	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = hyperborealian }
+			nhs_hyperborealian_province = yes
+		}
+		NOT = { culture = hyperborealian }
+		owner = {
+			NOT = { primary_culture = hyperborealian }
+		}
+	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = hesperidian }
+			nhs_hesperidian_province = yes
+		}
+		NOT = { culture = hesperidian }
+		owner = {
+			NOT = { primary_culture = hesperidian }
+		}
+	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = kykladian }
+			nhs_kykladian_province = yes
+		}
+		NOT = { culture = kykladian }
+		owner = {
+			NOT = { primary_culture = kykladian }
+		}
+	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = elyric }
+			nhs_elyric_province = yes
+		}
+		NOT = { culture = elyric }
+		owner = {
+			NOT = { primary_culture = elyric }
+		}
+	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = arkadian }
+			nhs_arkadian_province = yes
+		}
+		NOT = { culture = arkadian }
+		owner = {
+			NOT = { primary_culture = arkadian }
+		}
+	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = eleutheroi }
+			nhs_eleutheroi_province = yes
+		}
+		NOT = { culture = eleutheroi }
+		owner = {
+			NOT = { primary_culture = eleutheroi }
+		}
+	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = ketsoua }
+			nhs_ketsoua_province = yes
+		}
+		NOT = { culture = ketsoua }
+		owner = {
+			NOT = { primary_culture = ketsoua }
+		}
+	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = kanei }
+			nhs_kanei_province = yes
+		}
+		NOT = { culture = kanei }
+		owner = {
+			NOT = { primary_culture = kanei }
+		}
+	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = ktimiates }
+			nhs_ktimiates_province = yes
+		}
+		NOT = { culture = ktimiates }
+		owner = {
+			NOT = { primary_culture = ktimiates }
+		}
+	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = psilavounoi }
+			nhs_psilavounoi_province = yes
+		}
+		NOT = { culture = psilavounoi }
+		owner = {
+			NOT = { primary_culture = psilavounoi }
+		}
 	}
 	else = {
 		always = no
@@ -542,6 +666,7 @@ to_can_spawn_roman_subculture = {
 
 to_has_potential_culture = {
 	OR = {
+		nhs_$CULTURE$_province = yes
 		has_province_flag = to_has_$CULTURE$_culture_potential
 		[[DELAYED_CHECK]
 		AND = {
@@ -557,69 +682,85 @@ to_has_correct_ely_dynamic_culture = {
 	owner = {
 		culture_group = byzantine
 	}
-	OR = {
-		AND = {
+	if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = borealian }
 			nhs_borealian_province = yes
-			culture = borealian
 		}
-		AND = {
+		culture = borealian
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = hyperborealian }
 			nhs_hyperborealian_province = yes
-			culture = hyperborealian
 		}
-		AND = {
+		culture = hyperborealian
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = hesperidian }
 			nhs_hesperidian_province = yes
-			culture = hesperidian
 		}
-		AND = {
+		culture = hesperidian
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = kykladian }
 			nhs_kykladian_province = yes
-			culture = kykladian
 		}
-		AND = {
+		culture = kykladian
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = elyric }
 			nhs_elyric_province = yes
-			culture = elyric
 		}
-		AND = {
+		culture = elyric
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = arkadian }
 			nhs_arkadian_province = yes
-			culture = arkadian
 		}
-		AND = {
+		culture = arkadian
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = eleutheroi }
 			nhs_eleutheroi_province = yes
-			culture = eleutheroi
 		}
-		AND = {
+		culture = eleutheroi
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = ketsoua }
-			OR = {
-				nhs_ketsoua_province = yes
-				AND = {
-					nhs_ketsoua_psilavounoi_merged = yes
-					nhs_psilavounoi_province = yes
-				}
-			}
-			culture = ketsoua
+			nhs_ketsoua_province = yes
 		}
-		AND = {
+		culture = ketsoua
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = kanei }
 			nhs_kanei_province = yes
-			culture = kanei
 		}
-		AND = {
+		culture = kanei
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = psilavounoi }
-			NOT = { nhs_ketsoua_psilavounoi_merged = yes }
 			nhs_psilavounoi_province = yes
-			culture = psilavounoi
 		}
-		AND = {
+		culture = psilavounoi
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = ktimiates }
 			nhs_ktimiates_province = yes
-			culture = ktimiates
 		}
+		culture = ktimiates
+	}
+	else = {
+		always = no
 	}
 }
 
@@ -628,72 +769,84 @@ to_has_incorrect_ely_dynamic_culture = {
 	owner = {
 		culture_group = byzantine
 	}
-	to_potential_ely_dynamic_culture = yes
-}
-
-to_potential_ely_dynamic_culture = {
-	OR = {
-		AND = {
+	if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = borealian }
 			nhs_borealian_province = yes
-			NOT = { culture = borealian }
 		}
-		AND = {
+		NOT = { culture = borealian }
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = hyperborealian }
 			nhs_hyperborealian_province = yes
-			NOT = { culture = hyperborealian }
 		}
-		AND = {
+		NOT = { culture = hyperborealian }
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = hesperidian }
 			nhs_hesperidian_province = yes
-			NOT = { culture = hesperidian }
 		}
-		AND = {
+		NOT = { culture = hesperidian }
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = kykladian }
 			nhs_kykladian_province = yes
-			NOT = { culture = kykladian }
 		}
-		AND = {
+		NOT = { culture = kykladian }
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = elyric }
 			nhs_elyric_province = yes
-			NOT = { culture = elyric }
 		}
-		AND = {
+		NOT = { culture = elyric }
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = arkadian }
 			nhs_arkadian_province = yes
-			NOT = { culture = arkadian }
 		}
-		AND = {
+		NOT = { culture = arkadian }
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = eleutheroi }
 			nhs_eleutheroi_province = yes
-			NOT = { culture = eleutheroi }
 		}
-		AND = {
+		NOT = { culture = eleutheroi }
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = ketsoua }
-			OR = {
-				nhs_ketsoua_province = yes
-				AND = {
-					nhs_ketsoua_psilavounoi_merged = yes
-					nhs_psilavounoi_province = yes
-				}
-			}
-			NOT = { culture = ketsoua }
+			nhs_ketsoua_province = yes
 		}
-		AND = {
+		NOT = { culture = ketsoua }
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = kanei }
 			nhs_kanei_province = yes
-			NOT = { culture = kanei }
 		}
-		AND = {
-			NOT = { nhs_ketsoua_psilavounoi_merged = yes }
+		NOT = { culture = kanei }
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = psilavounoi }
 			nhs_psilavounoi_province = yes
-			NOT = { culture = psilavounoi }
 		}
-		AND = {
+		NOT = { culture = psilavounoi }
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = ktimiates }
 			nhs_ktimiates_province = yes
-			NOT = { culture = ktimiates }
 		}
+		NOT = { culture = ktimiates }
+	}
+	else = {
+		always = no
 	}
 }

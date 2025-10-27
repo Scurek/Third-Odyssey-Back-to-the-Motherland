@@ -1668,8 +1668,8 @@ province_event = {
 		if = {
 			limit = {
 				any_country = {
-					NOT = { tag = ROOT }
 					nhs_post_fragmentation_culturally_elysian = yes
+					NOT = { tag = ROOT }
 					OR = {
 						nhs_check_all_elysian_tags = { CONDITION = tag }
 						any_owned_province = {
@@ -1682,8 +1682,8 @@ province_event = {
 			custom_tooltip = nhs_new_line_tt
 			every_country = {
 				limit = {
-					NOT = { tag = ROOT }
 					nhs_post_fragmentation_culturally_elysian = yes
+					NOT = { tag = ROOT }
 					OR = {
 						nhs_check_all_elysian_tags = { CONDITION = tag }
 						any_owned_province = {
@@ -1784,7 +1784,6 @@ country_event = {
 	
 	immediate = {
 		hidden_effect = {
-			clr_country_flag = nhs_ketsoua_psilavounoi_merged_event_bounce
 			if = {
 				limit = {
 					NOT = { has_global_flag = nhs_ketsoua_psilavounoi_merged_event_block }
@@ -1802,7 +1801,15 @@ country_event = {
 		}
 		if = {
 			limit = {
-				primary_culture = psilavounoi
+				OR = {
+					primary_culture = psilavounoi
+					capital_scope = {
+						OR = {
+							nhs_psilavounoi_areas = yes
+							nhs_ketsoua_province = yes
+						}
+					}
+				}
 			}
 			to_primary_culture_and_ruler_heir_consort_culture_if_primary = {
 				CULTURE = ketsoua
@@ -1824,26 +1831,74 @@ country_event = {
 			}
 		}
 		custom_tooltip = to_ketsoua_psilavounoi_merge_tt
-		every_country = {
+		if = {
 			limit = {
-				nhs_post_fragmentation_culturally_elysian = yes
-				OR = {
-					primary_culture = psilavounoi
-					primary_culture = ketsoua
-					nhs_check_all_elysian_tags = { CONDITION = tag }
-					any_owned_province = {
-						OR = {
-							culture = psilavounoi
-							culture = ketsoua
-							nhs_psilavounoi_province = yes
-							nhs_ketsoua_province = yes
+				NOT = { has_country_flag = nhs_ketsoua_psilavounoi_merged_event_bounce }
+				any_country = {
+					nhs_post_fragmentation_culturally_elysian = yes
+					NOT = { tag = ROOT }
+					OR = {
+						primary_culture = psilavounoi
+						primary_culture = ketsoua
+						nhs_check_all_elysian_tags = { CONDITION = tag }
+						any_owned_province = {
+							OR = {
+								culture = psilavounoi
+								culture = ketsoua
+								nhs_psilavounoi_province = yes
+								nhs_ketsoua_province = yes
+							}
 						}
 					}
 				}
 			}
-			set_country_flag = nhs_ketsoua_psilavounoi_merged_event_bounce
-			country_event = { id = nhs2_cultureevents.36 }
+			hidden_effect = {
+				every_country = {
+					limit = {
+						nhs_post_fragmentation_culturally_elysian = yes
+						NOT = { tag = ROOT }
+						OR = {
+							primary_culture = psilavounoi
+							primary_culture = ketsoua
+							nhs_check_all_elysian_tags = { CONDITION = tag }
+							any_owned_province = {
+								OR = {
+									culture = psilavounoi
+									culture = ketsoua
+									nhs_psilavounoi_province = yes
+									nhs_ketsoua_province = yes
+								}
+							}
+						}
+					}
+					set_country_flag = nhs_ketsoua_psilavounoi_merged_event_bounce
+					country_event = { id = nhs2_cultureevents.36 }
+				}
+			}
+			tooltip = {
+				every_country = {
+					limit = {
+						nhs_post_fragmentation_culturally_elysian = yes
+						NOT = { tag = ROOT }
+						OR = {
+							primary_culture = psilavounoi
+							primary_culture = ketsoua
+							nhs_check_all_elysian_tags = { CONDITION = tag }
+							any_owned_province = {
+								OR = {
+									culture = psilavounoi
+									culture = ketsoua
+									nhs_psilavounoi_province = yes
+									nhs_ketsoua_province = yes
+								}
+							}
+						}
+					}
+					country_event = { id = nhs2_cultureevents.36 }
+				}
+			}
 		}
+		clr_country_flag = nhs_ketsoua_psilavounoi_merged_event_bounce
 	}
 }
 
@@ -1959,6 +2014,7 @@ province_event = {
 		name = nhs2_cultureevents.35.a
 		change_culture = ketsoua
 		to_nhs_handle_post_disaster_tolerance_modifier_culture_integration = yes
+		to_nat_assimilate_local_tribal_development = yes
 		if = {
 			limit = {
 				owner = {
