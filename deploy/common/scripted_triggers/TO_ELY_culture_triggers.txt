@@ -106,28 +106,31 @@ nhs_ktimiates_areas = {
 		# 	NOT = { area = rio_grande_do_sol_area }
 		# }
 		region = brazil_region
-		area = beni_area
-		area = moxos_area
+		NOT = { area = guapore_area }
 	}
 }
 
-nhs_psilavounoi_areas = {
+nhs_psilavounoi_la_plata = {
 	OR = {
-		AND = {
-			region = peru_region
-			NOT = { area = iquitos_area }
-		}
-		AND = {
-			region = upper_peru_region
-			NOT = { area = moxos_area }
-			NOT = { area = beni_area }
-			NOT = { area = paraguay_area }
-			NOT = { area = chaco_area }
-		}
 		area = central_chile_area
 		area = southern_chile_area
 		area = cuyo_area
 		area = nehuenken_area
+	}	
+}
+
+nhs_psilavounoi_areas = {
+	OR = {
+		region = peru_region
+		AND = {
+			region = upper_peru_region
+			NOT = { nhs_kanei_upper_peru = yes }
+		}
+		NOT = { nhs_parantesioi_areas = yes }
+		AND = {
+			region = la_plata_region
+			nhs_psilavounoi_la_plata = yes
+		}
 	}
 }
 
@@ -154,23 +157,38 @@ nhs_ketsoua_areas = {
 	# }
 }
 
+nhs_kanei_upper_peru = {
+	area = paraguay_area
+	area = chaco_area
+}
+
 nhs_kanei_areas = {
 	OR = {
 		AND = {
 			region = la_plata_region
-			NOT = { area = central_chile_area }
-			NOT = { area = southern_chile_area }
-			NOT = { area = cuyo_area }
-			NOT = { area = nehuenken_area }
+			NOT = { nhs_psilavounoi_la_plata = yes }
 		}
 		# area = rio_grande_do_sol_area
-		area = paraguay_area
-		area = chaco_area
+		AND = {
+			region = upper_peru_region
+			nhs_kanei_upper_peru = yes
+		}
 	}
 }
 
 nhs_eleutheroi_areas = {
 	region = great_plains_region
+}
+
+nhs_parantesioi_areas = {
+	OR = {
+		area = iquitos_area
+		area = ucayali_area
+		area = moxos_area
+		area = beni_area
+		area = guapore_area
+		area = colombian_amazonas_area
+	}
 }
 
 nhs_hesperidian_province = {
@@ -242,6 +260,11 @@ nhs_hyperborealian_province = {
 
 nhs_ktimiates_province = {
 	nhs_ktimiates_areas = yes
+	NOT = { culture = shqipproi }
+}
+
+nhs_parantesioi_province = {
+	nhs_parantesioi_areas = yes
 	NOT = { culture = shqipproi }
 }
 
@@ -380,6 +403,14 @@ to_has_promoted_local_culture = {
 		NOT = { culture = psilavounoi }
 		to_has_promoted_local_culture_flag = { CULTURE = psilavounoi }
 	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = parantesioi }
+			nhs_parantesioi_province = yes
+		}
+		NOT = { culture = parantesioi }
+		to_has_promoted_local_culture_flag = { CULTURE = parantesioi }
+	}
 	else = {
 		always = no
 	}
@@ -504,6 +535,16 @@ to_potential_culture_promotion = {
 			NOT = { primary_culture = psilavounoi }
 		}
 	}
+	else_if = {
+		limit = {
+			to_has_culture_appeared = { CULTURE = parantesioi }
+			nhs_parantesioi_province = yes
+		}
+		NOT = { culture = parantesioi }
+		owner = {
+			NOT = { primary_culture = parantesioi }
+		}
+	}
 	else = {
 		always = no
 	}
@@ -532,6 +573,7 @@ to_dynamic_elysian_culture_trigger = {
 		$TRIGGER$ = psilavounoi
 		$TRIGGER$ = kanei
 		$TRIGGER$ = ktimiates
+		$TRIGGER$ = parantesioi
 	}
 }
 
@@ -747,6 +789,13 @@ to_has_correct_ely_dynamic_culture = {
 	}
 	else_if = {
 		limit = {
+			to_has_culture_appeared = { CULTURE = ktimiates }
+			nhs_ktimiates_province = yes
+		}
+		culture = ktimiates
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = psilavounoi }
 			nhs_psilavounoi_province = yes
 		}
@@ -754,10 +803,10 @@ to_has_correct_ely_dynamic_culture = {
 	}
 	else_if = {
 		limit = {
-			to_has_culture_appeared = { CULTURE = ktimiates }
-			nhs_ktimiates_province = yes
+			to_has_culture_appeared = { CULTURE = parantesioi }
+			nhs_parantesioi_province = yes
 		}
-		culture = ktimiates
+		culture = parantesioi
 	}
 	else = {
 		always = no
@@ -834,6 +883,13 @@ to_has_incorrect_ely_dynamic_culture = {
 	}
 	else_if = {
 		limit = {
+			to_has_culture_appeared = { CULTURE = ktimiates }
+			nhs_ktimiates_province = yes
+		}
+		NOT = { culture = ktimiates }
+	}
+	else_if = {
+		limit = {
 			to_has_culture_appeared = { CULTURE = psilavounoi }
 			nhs_psilavounoi_province = yes
 		}
@@ -841,10 +897,10 @@ to_has_incorrect_ely_dynamic_culture = {
 	}
 	else_if = {
 		limit = {
-			to_has_culture_appeared = { CULTURE = ktimiates }
-			nhs_ktimiates_province = yes
+			to_has_culture_appeared = { CULTURE = parantesioi }
+			nhs_parantesioi_province = yes
 		}
-		NOT = { culture = ktimiates }
+		NOT = { culture = parantesioi }
 	}
 	else = {
 		always = no
