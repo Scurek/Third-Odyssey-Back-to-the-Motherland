@@ -1038,3 +1038,112 @@ country_event = {
 		set_country_flag = had_event_nhs_exploration_5
 	}
 }
+
+
+#### Arkadia
+
+# Arrival to Arkadia
+country_event = {
+	id = nhs_exploration.6
+	title = nhs_exploration.6.t
+	desc = nhs_exploration.6.d
+	picture = caribbean_arrival_2_eventPicture
+	
+	fire_only_once = yes
+
+    trigger = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		any_owned_province = {
+			continent = south_america
+			OR = {
+				culture_group = ROOT
+				AND = {
+					is_colony = yes
+					colonysize = 600
+				}
+			}
+		}
+	}
+
+	option = {
+		name = nhs_exploration.6.a
+		add_prestige = 10
+		add_dip_power = 50
+	}
+}
+
+# Exploring the Amazon
+country_event = {
+	id = nhs_exploration.7
+	title = nhs_exploration.7.t
+	desc = nhs_exploration.7.d
+	picture = TO_EXPLORING_AMAZON_eventPicture
+	
+	fire_only_once = yes
+
+    trigger = {
+		nhs_check_all_elysian_tags = { CONDITION = tag }
+		NOT = { has_country_flag = to_had_exploring_amazon_event }
+		OR = {
+			has_country_flag = to_can_trigger_exploring_amazon_event
+			OR = {
+				amazon_area = {
+					country_or_subject_holds = ROOT
+				}
+				iquitos_area = {
+					country_or_subject_holds = ROOT
+				}
+				moxos_area = {
+					country_or_subject_holds = ROOT
+				}
+				beni_area = {
+					country_or_subject_holds = ROOT
+				}
+				guapore_area = {
+					country_or_subject_holds = ROOT
+				}
+				colombian_amazonas_area = {
+					country_or_subject_holds = ROOT
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 6
+	}
+
+	immediate = {
+		set_country_flag = to_had_exploring_amazon_event
+		clr_country_flag = to_can_trigger_exploring_amazon_event
+	}
+
+	option = {
+		name = nhs_exploration.7.a
+		add_dip_power = 50
+		if = {
+			limit = {
+				NOT = { army_tradition = 25 }
+			}
+			create_conquistador = {
+				tradition = 25
+				add_manuever = 1
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = { army_tradition = 50 }
+			}
+			create_conquistador = {
+				tradition = 50
+				add_manuever = 1
+			}
+		}
+		else = {
+			create_conquistador = {
+				tradition = 75
+				add_manuever = 1
+			}
+		}
+	}
+}
