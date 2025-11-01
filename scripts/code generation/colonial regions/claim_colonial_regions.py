@@ -84,8 +84,8 @@ colonial_treaties = [
     {
         "base_trigger": "to_can_use_pt_colonial_treaties_arkadia = yes",
         "region": "colonial_colombia",
-        "name": "Colonial Arkadia",
-        "full_name": "Colonial Arkadia",
+        "name": "Colonial Kochirakeia",
+        "full_name": "Colonial Kochirakeia",
         "base_cost": 20,
         # "cost_reduction_with": "to_cheaper¸_use_pt_colonial_treaties = yes",
         # "cost_reduction": 0.5,
@@ -93,8 +93,8 @@ colonial_treaties = [
     {
         "base_trigger": "to_can_use_pt_colonial_treaties_arkadia = yes",
         "region": "colonial_peru",
-        "name": "Colonial Andes",
-        "full_name": "Colonial Andes",
+        "name": "Colonial Antesia",
+        "full_name": "Colonial Antesia",
         "base_cost": 20,
         # "cost_reduction_with": "to_cheaper_use_pt_colonial_treaties = yes",
         # "cost_reduction": 0.5,
