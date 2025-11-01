@@ -12,5 +12,6 @@ tags={
 	"Missions and Decisions"
 	"Loading Screen"
 }
-supported_version="v1.37.*"
 picture="thumbnail.png"
+supported_version="v1.37.*"
+remote_file_id="3597464250"
