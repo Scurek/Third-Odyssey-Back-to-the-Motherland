@@ -392,6 +392,8 @@ to_ongoing_fixes = {
 
 	to_fix_culture_appeared_flags = yes
 
+	to_fix_arkadian_culture = yes
+
 	if = {
 		limit = {
 			mission_completed = to_the_promised_land_mission
@@ -464,6 +466,48 @@ to_fix_culture_appeared_flags = {
 		}
 		to_set_culture_appeared_flag = {
 			CULTURE = hyperborealian
+		}
+	}
+	if = {
+		limit = {
+			has_global_flag = nhs_arkadians_appeared
+		}
+		to_set_culture_appeared_flag = {
+			CULTURE = arkadian
+		}
+	}
+}
+
+to_fix_arkadian_culture = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = to_arkadian_culture_fix_check }
+		}
+		set_global_flag = to_arkadian_culture_fix_check
+		if = {
+			limit = {
+				to_has_culture_appeared = { CULTURE = arkadian }
+			}
+			if = {
+				limit = {
+					has_global_flag = nhs_romaic_to_elysian
+				}
+				every_province = {
+					limit = {
+						culture = arkadian
+						NOT = { nhs_arkadian_province = yes }
+					}
+					change_culture = elysian
+				}
+			}
+			else = {
+				every_province = {
+					limit = {
+						culture = arkadian
+					}
+					change_culture = romaic
+				}
+			}
 		}
 	}
 }
